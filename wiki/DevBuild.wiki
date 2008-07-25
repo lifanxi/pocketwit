@@ -1,0 +1,9 @@
+#summary Download the latest unstable development build.
+
+= Introduction =
+
+Who knows if it will work.
+
+= Details =
+
+Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Install/Release/PockeTwit%20Install.CAB here].
