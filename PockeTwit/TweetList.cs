@@ -12,14 +12,16 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
-        private List<string> LeftMenu = new List<string>(new string[] { "Public TimeLine", "Friends TimeLine", "User TimeLine", "Set Status", "Exit" });
-        private List<string> RightMenu = new List<string>(new string[] { "Reply" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Public TimeLine", "Friends TimeLine", "User TimeLine", "Set Status", "Settings", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
 
+        private string CachedResponse;
         public TweetList()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
             tmrautoUpdate.Interval = 65000;
             tmrautoUpdate.Enabled = true;
@@ -58,15 +60,27 @@ namespace PockeTwit
                 case "Set Status":
                     SetStatus();
                     break;
+                case "Settings":
+                    ChangeSettings();
+                    break;
+
                 case "Reply":
                     SendReply();
                     break;
+
 
                 case "Exit":
                     statusList.Clear();
                     this.Close();
                     break;
             }
+        }
+
+        private void ChangeSettings()
+        {
+            SettingsForm settings = new SettingsForm();
+            if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+            GetTimeLine();
         }
 
         private void SendReply()
@@ -91,14 +105,15 @@ namespace PockeTwit
             {
                 string UpdateText = StatusForm.Text;
                 Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                this.GetTimeLine();
             }
             StatusForm.Close();
             this.Show();
-            this.GetTimeLine();
         }
 
         private void GetTimeLine()
         {
+            tmrautoUpdate.Enabled = false;
             statusList.Clear();
             string response = "";
             
@@ -115,21 +130,25 @@ namespace PockeTwit
                     break;
             }
 
-            //response = GetSampleData();
-            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
-            Library.status[] statuses;
-            using (System.IO.StringReader r = new System.IO.StringReader(response))
+            if (response != CachedResponse)
             {
-                statuses = (Library.status[])s.Deserialize(r);
+                //response = GetSampleData();
+                XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
+                Library.status[] statuses;
+                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                {
+                    statuses = (Library.status[])s.Deserialize(r);
+                }
+                foreach (Library.status stat in statuses)
+                {
+                    FingerUI.StatusItem item = new FingerUI.StatusItem();
+                    item.Tweet = stat.text;
+                    item.User = stat.user.screen_name;
+                    item.UserImageURL = stat.user.profile_image_url;
+                    statusList.AddItem(item);
+                }
             }
-            foreach (Library.status stat in statuses)
-            {
-                FingerUI.StatusItem item = new FingerUI.StatusItem();
-                item.Tweet = stat.text;
-                item.User = stat.user.screen_name;
-                item.UserImageURL = stat.user.profile_image_url;
-                statusList.AddItem(item);
-            }
+            tmrautoUpdate.Enabled = true;
         }
 
         private static string GetSampleData()

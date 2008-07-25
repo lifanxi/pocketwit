@@ -17,8 +17,8 @@ namespace PockeTwit
             if (string.IsNullOrEmpty(ClientSettings.UserName) | string.IsNullOrEmpty(ClientSettings.Password))
             {
                 // SHow Settings page first
-                SettingsForm s = new SettingsForm();
-                if (s.ShowDialog() == DialogResult.Cancel) { return; }
+                SettingsForm settings = new SettingsForm();
+                if (settings.ShowDialog() == DialogResult.Cancel) { return; }
             }
             Application.Run(new TweetList());
         }

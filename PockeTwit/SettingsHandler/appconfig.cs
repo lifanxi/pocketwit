@@ -14,7 +14,7 @@ public class ConfigurationSettings
         try
         {
 
-            string AppPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase), "SettingsHandler");
+            string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             string ConfigFile = Path.Combine(AppPath, "App.config");
 
             XmlDocument oXml = new XmlDocument();

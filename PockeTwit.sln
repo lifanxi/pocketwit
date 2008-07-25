@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PockeTwit", "PockeTwit\Pock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yedda.Twitter.CF", "Yedda.Twitter.CF\Yedda.Twitter.CF.csproj", "{F37C243A-917A-468B-8012-973A3AAAB514}"
 EndProject
+Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "PockeTwit Install", "PockeTwit Install\PockeTwit Install.vddproj", "{AA23BD6F-BF35-4DAA-836A-7F0438009624}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{F37C243A-917A-468B-8012-973A3AAAB514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F37C243A-917A-468B-8012-973A3AAAB514}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F37C243A-917A-468B-8012-973A3AAAB514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA23BD6F-BF35-4DAA-836A-7F0438009624}.Debug|Any CPU.ActiveCfg = Debug
+		{AA23BD6F-BF35-4DAA-836A-7F0438009624}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
