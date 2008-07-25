@@ -731,42 +731,46 @@ namespace FingerUI
                 m_timer.Enabled = true;
             }
 
-
-            //Check if we're half-way to menu
-            if (m_offset.X > 0 && m_offset.X <= this.Width)
+            try
             {
-                m_timer.Enabled = true;
-                if (m_offset.X > (this.Width * .6))
+                //Check if we're half-way to menu
+                if (m_offset.X > 0 && m_offset.X <= this.Width)
                 {
-                    //Scroll to other side
-                    m_velocity.X = 7;
+                    m_timer.Enabled = true;
+                    if (m_offset.X > (this.Width * .6))
+                    {
+                        //Scroll to other side
+                        m_velocity.X = 7;
+                    }
+                    else
+                    {
+                        m_velocity.X = -7;
+                        //Scroll back
+                    }
                 }
-                else
+
+                if (m_offset.X < 0 && m_offset.X >= 0 - this.Width)
                 {
-                    m_velocity.X = -7;
-                    //Scroll back
+                    m_timer.Enabled = true;
+                    if (m_offset.X < (0 - (this.Width * .6)))
+                    {
+                        //Scroll to other side
+                        m_velocity.X = -7;
+                    }
+                    else
+                    {
+                        m_velocity.X = 7;
+                        //Scroll back
+                    }
                 }
+
+                m_mouseDown.Y = -1;
+                Capture = false;
+
+                Invalidate();
             }
-
-            if (m_offset.X < 0 && m_offset.X >= 0-this.Width)
-            {
-                m_timer.Enabled = true;
-                if (m_offset.X < (0-(this.Width * .6)))
-                {
-                    //Scroll to other side
-                    m_velocity.X = -7;
-                }
-                else
-                {
-                    m_velocity.X = 7;
-                    //Scroll back
-                }
-            }
-
-            m_mouseDown.Y = -1;
-            Capture = false;
-
-            Invalidate();
+            catch (ObjectDisposedException)
+            { }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
