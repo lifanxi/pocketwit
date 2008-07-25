@@ -99,22 +99,27 @@ namespace PockeTwit
             SetStatus StatusForm = new SetStatus();
             if (!string.IsNullOrEmpty(ToUser))
             {
-                StatusForm.Text = "@" + ToUser + " ";
+                StatusForm.StatusText = "@" + ToUser + " ";
             }
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
-                string UpdateText = StatusForm.Text;
+                Cursor.Current = Cursors.WaitCursor;
+                this.Show();
+                StatusForm.Hide();
+                string UpdateText = StatusForm.StatusText;
                 Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                
                 this.GetTimeLine();
             }
             StatusForm.Close();
-            this.Show();
+            
         }
 
         private void GetTimeLine()
         {
+            Cursor.Current = Cursors.WaitCursor;
             tmrautoUpdate.Enabled = false;
-            statusList.Clear();
+            
             string response = "";
             
             switch (CurrentAction)
@@ -132,7 +137,8 @@ namespace PockeTwit
 
             if (response != CachedResponse)
             {
-                //response = GetSampleData();
+                statusList.Clear();
+                CachedResponse = response;
                 XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
                 Library.status[] statuses;
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
@@ -141,14 +147,20 @@ namespace PockeTwit
                 }
                 foreach (Library.status stat in statuses)
                 {
+                    
                     FingerUI.StatusItem item = new FingerUI.StatusItem();
-                    item.Tweet = stat.text;
-                    item.User = stat.user.screen_name;
-                    item.UserImageURL = stat.user.profile_image_url;
-                    statusList.AddItem(item);
+                    if (stat.user!=null)
+                    {
+                        item.Tweet = stat.text;
+                        item.User = stat.user.screen_name;
+                        item.UserImageURL = stat.user.profile_image_url;
+
+                        statusList.AddItem(item);
+                    }
                 }
             }
             tmrautoUpdate.Enabled = true;
+            Cursor.Current = Cursors.Default;
         }
 
         private static string GetSampleData()

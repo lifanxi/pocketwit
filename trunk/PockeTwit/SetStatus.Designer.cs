@@ -64,7 +64,9 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(234, 266);
             this.textBox1.TabIndex = 0;
+            this.textBox1.Text = "Set Status";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.GotFocus += new System.EventHandler(this.textBox1_GotFocus);
             // 
             // lblCharsLeft
             // 
@@ -80,9 +82,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
+            this.ForeColor = System.Drawing.Color.LightGray;
             this.Location = new System.Drawing.Point(0, 0);
             this.Menu = this.mainMenu1;
             this.Name = "SetStatus";

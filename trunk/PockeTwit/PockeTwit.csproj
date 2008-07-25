@@ -128,7 +128,7 @@
     <Compile Include="SettingsHandler\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SettingsHandler\defaultapp.config">
+    <Content Include="defaultapp.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="unknownart-small.jpg">

@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class SetStatus : MasterForm
+    public partial class SetStatus : Form
     {
-        public string Text
+        public string StatusText
         {
             get
             {
@@ -20,14 +20,14 @@ namespace PockeTwit
             set
             {
                 textBox1.Text = value;
+                this.textBox1.SelectionStart = this.textBox1.Text.Length;
             }
         }
 
         public SetStatus()
         {
             InitializeComponent();
-            this.Text = "Set Status";
-            
+            lblCharsLeft.Text = "140";
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -39,13 +39,25 @@ namespace PockeTwit
         private void menuCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-            this.Hide();
         }
 
         private void menuSubmit_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
-            this.Hide();
+        }
+
+        private void textBox1_GotFocus(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "Set Status")
+            {
+                textBox1.SelectionStart = 0;
+                textBox1.SelectionLength = textBox1.Text.Length;
+            }
+            else
+            {
+                textBox1.SelectionStart = textBox1.Text.Length;
+                textBox1.SelectionLength = 0;
+            }
         }
     }
 }
