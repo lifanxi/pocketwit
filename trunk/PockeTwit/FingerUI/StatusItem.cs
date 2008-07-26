@@ -190,7 +190,7 @@ namespace FingerUI
                         newString = CurrentLine.Substring(0, currentPos);
                         if (g.MeasureString(newString, TextFont).Width > textBounds.Width)
                         {
-                            if (!SpaceSplit)
+                            if (!SpaceSplit | lastBreak==0)
                             {
                                 lastBreak = currentPos - 1;
                             }
