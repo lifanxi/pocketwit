@@ -63,6 +63,7 @@ namespace FingerUI
 
         public delegate void delMenuItemSelected(string ItemName);
         public event delMenuItemSelected MenuItemSelected;
+        public event StatusItem.ClickedWordDelegate WordClicked;
 
         private string LastItemSelected = null;
 
@@ -91,7 +92,17 @@ namespace FingerUI
 
             m_timer.Enabled = false;
 
+            ClearClicks();
+
             base.Dispose(disposing);
+        }
+
+        private void ClearClicks()
+        {
+            foreach (StatusItem item in m_items.Values)
+            {
+                item.WordClicked -= new StatusItem.ClickedWordDelegate(item_WordClicked);
+            }
         }
         
         
@@ -231,7 +242,16 @@ namespace FingerUI
         {
             item.Parent = this;
             item.Index = m_items.Count;
+            item.WordClicked += new StatusItem.ClickedWordDelegate(item_WordClicked);
             AddItem((IKListItem)item);
+        }
+
+        void item_WordClicked(string TextClicked)
+        {
+            if (WordClicked != null)
+            {
+                WordClicked(TextClicked);
+            }
         }
 
         /// <summary>
@@ -296,6 +316,7 @@ namespace FingerUI
         /// </summary>
         public void Clear()
         {
+            ClearClicks();
             m_items.Clear();
             Reset();
         }
