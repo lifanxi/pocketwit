@@ -59,5 +59,16 @@ namespace PockeTwit
                 textBox1.SelectionLength = 0;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            URLForm f = new URLForm();
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = textBox1.Text + " " + f.URL;
+            }
+            this.Show();
+            f.Close();
+        }
     }
 }

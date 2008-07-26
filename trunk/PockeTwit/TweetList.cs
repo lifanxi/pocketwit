@@ -13,7 +13,7 @@ namespace PockeTwit
     public partial class TweetList : MasterForm
     {
         private List<string> LeftMenu = new List<string>(new string[] { "Public TimeLine", "Friends TimeLine", "User TimeLine", "Set Status", "Settings", "Exit" });
-        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
 
@@ -67,6 +67,9 @@ namespace PockeTwit
                 case "Reply":
                     SendReply();
                     break;
+                case "Direct Message":
+                    SendDirectMessage();
+                    break;
 
 
                 case "Exit":
@@ -74,6 +77,13 @@ namespace PockeTwit
                     this.Close();
                     break;
             }
+        }
+
+        private void SendDirectMessage()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            string User = selectedItem.User;
+            SetStatus("d " + User);
         }
 
         private void ChangeSettings()
@@ -87,7 +97,7 @@ namespace PockeTwit
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
             string User = selectedItem.User;
-            SetStatus(User);
+            SetStatus("@"+User);
         }
 
         private void SetStatus()
@@ -99,7 +109,7 @@ namespace PockeTwit
             SetStatus StatusForm = new SetStatus();
             if (!string.IsNullOrEmpty(ToUser))
             {
-                StatusForm.StatusText = "@" + ToUser + " ";
+                StatusForm.StatusText = ToUser + " ";
             }
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
@@ -111,6 +121,7 @@ namespace PockeTwit
                 
                 this.GetTimeLine();
             }
+            this.Show();
             StatusForm.Close();
             
         }
