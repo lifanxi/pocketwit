@@ -176,7 +176,7 @@ namespace PockeTwit
                     response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
                     break;
                 case Yedda.Twitter.ActionType.Show:
-                    response = Twitter.GetUserTimeline(ClientSettings.Us    erName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
+                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
                     break;
             }
 
