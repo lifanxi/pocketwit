@@ -6,7 +6,7 @@ static class ClientSettings
 {
     public static string UserName { get; set; }
     public static string Password { get; set; }
-    public static int SmallArtSize = 25;
+    public static int SmallArtSize = 60;
     static ClientSettings()
     {
         LoadSettings();
