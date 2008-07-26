@@ -34,6 +34,7 @@
             this.menuSubmit = new System.Windows.Forms.MenuItem();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblCharsLeft = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -77,6 +78,18 @@
             this.lblCharsLeft.Size = new System.Drawing.Size(39, 20);
             this.lblCharsLeft.Text = "label1";
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Black;
+            this.button1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
+            this.button1.ForeColor = System.Drawing.Color.LightGray;
+            this.button1.Location = new System.Drawing.Point(4, 271);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(64, 20);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Insert URL";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SetStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -84,6 +97,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
             this.ForeColor = System.Drawing.Color.LightGray;
@@ -102,5 +116,6 @@
         private System.Windows.Forms.Label lblCharsLeft;
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuSubmit;
+        private System.Windows.Forms.Button button1;
     }
 }
