@@ -12,10 +12,11 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
-        private List<string> LeftMenu = new List<string>(new string[] { "Public TimeLine", "Friends TimeLine", "User TimeLine", "Set Status", "Settings", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "User TimeLine", "Set Status", "Settings", "Exit" });
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Profile Page", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
+        private string ShowUserID;
 
         private string CachedResponse;
         public TweetList()
@@ -35,10 +36,28 @@ namespace PockeTwit
             statusList.LeftMenuItems = LeftMenu;
             statusList.RightMenuItems = RightMenu;
             statusList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
+            statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
 
             GetTimeLine();
             
 
+        }
+
+        void statusList_WordClicked(string TextClicked)
+        {
+            if (TextClicked.StartsWith("http"))
+            {
+                ProfilePage p = new ProfilePage();
+                p.URL = TextClicked;
+                p.ShowDialog();
+                this.Show();
+            }
+            else
+            {
+                ShowUserID = TextClicked.Replace("@","");
+                CurrentAction = Yedda.Twitter.ActionType.Show;
+                GetTimeLine();
+            }
         }
 
         void statusList_MenuItemSelected(string ItemName)
@@ -156,6 +175,9 @@ namespace PockeTwit
                 case Yedda.Twitter.ActionType.User_Timeline:
                     response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
                     break;
+                case Yedda.Twitter.ActionType.Show:
+                    response = Twitter.GetUserTimeline(ClientSettings.Us    erName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
+                    break;
             }
 
             if (response != CachedResponse)
@@ -200,7 +222,10 @@ namespace PockeTwit
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("AutoUpdate!");
-            GetTimeLine();
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "GetTimeLine";
+            t.Start();
         }
     }
 }

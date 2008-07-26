@@ -10,6 +10,37 @@ namespace FingerUI
 {
     public class StatusItem : KListControl.IKListItem, IDisposable
     {
+        public delegate void ClickedWordDelegate(string TextClicked);
+        public event ClickedWordDelegate WordClicked;
+        public class Clickable
+        {
+            public string Text;
+            public RectangleF Location;
+            
+            public override bool Equals(object obj)
+            {
+                Clickable otherClick = (Clickable)obj;
+                if (otherClick.Location.Top == this.Location.Top &&
+                    otherClick.Location.Left == this.Location.Left)
+                {
+                    return true;
+                }
+                return false;
+            }
+            public void OffSet(int x, int y)
+            {
+                /*
+                Location.Left = Location.Left + x;
+                Location.Right = Location.Right - x;
+                Location.Top = Location.Top + y;
+                Location.Bottom = Location.Bottom - y;
+                */
+            }
+        }
+
+        public List<Clickable> Clickables = new List<Clickable>();
+        private Font TextFont;
+
         public string Tweet { get; set; }
         public string User { get; set; }
         public string UserImageURL { get; set; }
@@ -43,6 +74,35 @@ namespace FingerUI
             m_parent = parent;
             m_text = text;
             m_value = value;
+            TextFont = m_parent.Font;
+            //m_parent.MouseUp += new MouseEventHandler(m_parent_MouseUp);
+        }
+
+        void m_parent_MouseUp(object sender, MouseEventArgs e)
+        {
+            Point p = new Point(e.X, e.Y);
+            Rectangle CurrentPosition = new Rectangle(currentOffset.X,currentOffset.Y, m_bounds.Width, m_bounds.Height);
+            if (CurrentPosition.Contains(p))
+            {
+                System.Diagnostics.Debug.WriteLine("Parent mouseup");
+                Clickable clicked = null;
+                foreach (Clickable c in Clickables)
+                {
+                    Rectangle LocationRect = new Rectangle((int)c.Location.Left, (int)c.Location.Top, (int)c.Location.Width, (int)c.Location.Height);
+                    LocationRect.Offset(currentOffset.X + ClientSettings.SmallArtSize + 5, currentOffset.Y);
+                    if(LocationRect.Contains(p))
+                    {
+                        clicked = c;
+                    }
+                }
+                if (clicked != null)
+                {
+                    if (WordClicked != null)
+                    {
+                        WordClicked(clicked.Text);
+                    }
+                }
+            }
         }
 
 
@@ -54,6 +114,8 @@ namespace FingerUI
         /// </summary>
         public virtual void Dispose()
         {
+
+            m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
             m_parent = null;
         }
 
@@ -80,7 +142,15 @@ namespace FingerUI
         /// Gets or sets the parent.
         /// </summary>
         /// <value>The parent.</value>
-        public KListControl Parent { get { return m_parent; } set { m_parent = value; } }
+        public KListControl Parent { get { return m_parent; } 
+            set 
+            {
+                m_parent = value;
+                TextFont = m_parent.Font;
+                m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
+                m_parent.MouseUp += new MouseEventHandler(m_parent_MouseUp);
+            }
+        }
 
         /// <summary>
         /// The unscrolled bounds for this item.
@@ -115,7 +185,7 @@ namespace FingerUI
         /// <param name="bounds">The bounds.</param>
         public virtual void Render(Graphics g, Rectangle bounds)
         {
-            Font TextFont = m_parent.Font;
+            currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             Rectangle textBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
@@ -167,6 +237,49 @@ namespace FingerUI
             m_stringFormat.Alignment = StringAlignment.Near;
             
             m_stringFormat.LineAlignment = StringAlignment.Near;
+            textBounds = BreakUpTheText(g, textBounds);
+            int lineOffset = 0;
+            foreach (string Line in SplitLines)
+            {
+                float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
+                
+                g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
+                MakeClickable(Line, g, textBounds, (int)(lineOffset*(TextFont.Size+4)));
+                lineOffset++;
+            }
+            ForeBrush.Dispose();
+        }
+
+        private void MakeClickable(string Line, Graphics g, Rectangle textBounds, int lineOffSet)
+        {
+            string[] Words = Line.Split(' ');
+            StringBuilder b = new StringBuilder();
+            for (int i = 0; i < Words.Length; i++)
+            {
+                if (Words[i].StartsWith("@") | Words[i].StartsWith("http"))
+                {
+                    float startpos = g.MeasureString(b.ToString(), TextFont).Width;
+                    SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                    Clickable c = new Clickable();
+                    c.Location = new RectangleF(0, lineOffSet, WordSize.Width, WordSize.Height);
+                    c.Text = Words[i];
+                    using (Pen sPen = new Pen(Color.LightBlue))
+                    {
+                        g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top, (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+                    }
+                    System.Diagnostics.Debug.WriteLine("Clickable found in " + this.User+ " -- " + c.Text);
+                    if (!Clickables.Contains(c))
+                    {
+                        Clickables.Add(c);
+                    }
+                }
+                b.Append(Words[i]+" ");
+            }
+            
+        }
+
+        private Rectangle BreakUpTheText(Graphics g, Rectangle textBounds)
+        {
             SizeF size = g.MeasureString(this.Tweet, TextFont);
             string CurrentLine = this.Tweet;
             if (SplitLines.Count == 0)
@@ -190,7 +303,7 @@ namespace FingerUI
                         newString = CurrentLine.Substring(0, currentPos);
                         if (g.MeasureString(newString, TextFont).Width > textBounds.Width)
                         {
-                            if (!SpaceSplit | lastBreak==0)
+                            if (!SpaceSplit | lastBreak == 0)
                             {
                                 lastBreak = currentPos - 1;
                             }
@@ -204,6 +317,7 @@ namespace FingerUI
                         currentPos++;
                     }
                     SplitLines.Add(newString);
+                    if (SplitLines.Count >= 5) { break; }
                     if (lastBreak != 0)
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
@@ -213,24 +327,17 @@ namespace FingerUI
                     {
                         SplitLines.Add(CurrentLine);
                     }
-                    if (SplitLines.Count > 5) { break; }
+
                 }
             }
-            int lineOffset = 0;
-            foreach (string Line in SplitLines)
-            {
-                float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
-                
-                g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
-                lineOffset++;
-            }
-            ForeBrush.Dispose();
+            return textBounds;
         }
 
         private List<string> SplitLines = new List<string>();
         private StringFormat m_stringFormat = new StringFormat();
         private KListControl m_parent;
         private Rectangle m_bounds;
+        private Rectangle currentOffset;
         private int m_x = -1;
         private int m_y = -1;
 

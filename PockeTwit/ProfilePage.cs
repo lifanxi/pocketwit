@@ -22,9 +22,17 @@ namespace PockeTwit
                 this.webBrowser1.Navigate(new Uri("http://twitter.com/" + value));
             }
         }
+        public string URL
+        {
+            set
+            {
+                this.webBrowser1.Navigate(new Uri(value));
+            }
+        }
 
         private void menuItem1_Click(object sender, EventArgs e)
         {
+            webBrowser1.Navigate(new Uri("about:blank"));
             this.Close();
         }
     }
