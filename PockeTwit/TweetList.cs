@@ -13,7 +13,7 @@ namespace PockeTwit
     public partial class TweetList : MasterForm
     {
         private List<string> LeftMenu = new List<string>(new string[] { "Public TimeLine", "Friends TimeLine", "User TimeLine", "Set Status", "Settings", "Exit" });
-        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Profile Page", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
 
@@ -70,13 +70,25 @@ namespace PockeTwit
                 case "Direct Message":
                     SendDirectMessage();
                     break;
-
+                case "Profile Page":
+                    ShowProfile();
+                    break;
 
                 case "Exit":
                     statusList.Clear();
                     this.Close();
                     break;
             }
+        }
+
+        private void ShowProfile()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            string User = selectedItem.User;
+            ProfilePage p = new ProfilePage();
+            p.User = User;
+            p.ShowDialog();
+            this.Show();
         }
 
         private void SendDirectMessage()

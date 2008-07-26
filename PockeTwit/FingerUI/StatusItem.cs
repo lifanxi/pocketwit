@@ -119,7 +119,7 @@ namespace FingerUI
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             Rectangle textBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
-            textBounds = new Rectangle(bounds.X + 35, bounds.Y, bounds.Width - (35), bounds.Height);
+            textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize+5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize+5), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
             Image UserImage = PockeTwit.ImageBuffer.GetArt(User, UserImageURL);
 
