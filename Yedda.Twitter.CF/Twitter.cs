@@ -238,7 +238,7 @@ namespace Yedda
                     requestStream.Write(bytes, 0, bytes.Length);
                     requestStream.Flush();
                 }
-                using (WebResponse response = request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
@@ -635,41 +635,6 @@ namespace Yedda
             return null;
         }
 
-        #endregion
-
-        #region DirectMessage
-        public string NewMessage(string authUserName, string password, string toUser, string text, OutputFormatType format)
-        {
-            if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
-            {
-                throw new ArgumentException("Update support only XML and JSON output format", "format");
-            }
-
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Direct_Messages), GetActionTypeString(ActionType.New), GetFormatTypeString(format));
-            //string data = string.Format("user=(0}&text={1}", userName, HttpUtility.UrlEncode(text).ToString());
-            string data = "user=" + toUser + "&" + "text=" + HttpUtility.UrlEncode(text).ToString();
-
-            return ExecutePostCommand(url, authUserName, password, data);
-        }
-
-        public string NewMessageAsJSON(string userName, string password, string text1)
-        {
-            return Update(userName, password, text1, OutputFormatType.JSON);
-        }
-
-        public XmlDocument NewMessageAsXML(string userName, string password, string text1)
-        {
-            string output = Update(userName, password, text1, OutputFormatType.XML);
-            if (!string.IsNullOrEmpty(output))
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(output);
-
-                return xmlDocument;
-            }
-
-            return null;
-        }
         #endregion
     }
 }

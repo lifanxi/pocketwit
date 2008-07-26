@@ -204,18 +204,23 @@ namespace FingerUI
                         currentPos++;
                     }
                     SplitLines.Add(newString);
-                    CurrentLine = CurrentLine.Substring(lastBreak);
+                    if (lastBreak != 0)
+                    {
+                        CurrentLine = CurrentLine.Substring(lastBreak);
+                    }
                     size = g.MeasureString(CurrentLine, TextFont);
                     if (size.Width < textBounds.Width)
                     {
                         SplitLines.Add(CurrentLine);
                     }
+                    if (SplitLines.Count > 5) { break; }
                 }
             }
             int lineOffset = 0;
             foreach (string Line in SplitLines)
             {
                 float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
+                
                 g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
                 lineOffset++;
             }
