@@ -12,7 +12,7 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Favorites", "Set Status", "Settings", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "Exit" });
         private List<string> StandardRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Exit" });
         private List<string> FavoritesRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Destroy Favorite", "Profile Page", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
