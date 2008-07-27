@@ -559,6 +559,8 @@ namespace FingerUI
             //int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             foreach (string MenuItem in LeftMenuItems)
             {
+                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold)).Width + 5;
+
                 using (Pen whitePen = new Pen(ForeColor))
                 {
 
@@ -582,7 +584,9 @@ namespace FingerUI
                         //sFormat.Alignment = StringAlignment.Center;
                         sFormat.LineAlignment = StringAlignment.Center;
                         int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                        m_backBuffer.DrawString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, menuRect.X + 5, TextTop, sFormat);
+                        int LeftPos = menuRect.Right - TextWidth;
+                        //m_backBuffer.DrawString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, menuRect.X + 5, TextTop, sFormat);
+                        m_backBuffer.DrawString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, LeftPos, TextTop, sFormat);
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
