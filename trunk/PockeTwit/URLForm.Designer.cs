@@ -30,25 +30,15 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.txtURL = new System.Windows.Forms.TextBox();
             this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuOK = new System.Windows.Forms.MenuItem();
+            this.txtURL = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.mainMenu1.MenuItems.Add(this.menuOK);
-            // 
-            // txtURL
-            // 
-            this.txtURL.BackColor = System.Drawing.Color.Black;
-            this.txtURL.ForeColor = System.Drawing.Color.LightGray;
-            this.txtURL.Location = new System.Drawing.Point(4, 4);
-            this.txtURL.Multiline = true;
-            this.txtURL.Name = "txtURL";
-            this.txtURL.Size = new System.Drawing.Size(233, 261);
-            this.txtURL.TabIndex = 0;
             // 
             // menuCancel
             // 
@@ -59,6 +49,17 @@
             // 
             this.menuOK.Text = "OK";
             this.menuOK.Click += new System.EventHandler(this.menuOK_Click);
+            // 
+            // txtURL
+            // 
+            this.txtURL.BackColor = System.Drawing.Color.Black;
+            this.txtURL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtURL.ForeColor = System.Drawing.Color.LightGray;
+            this.txtURL.Location = new System.Drawing.Point(0, 0);
+            this.txtURL.Multiline = true;
+            this.txtURL.Name = "txtURL";
+            this.txtURL.Size = new System.Drawing.Size(240, 268);
+            this.txtURL.TabIndex = 0;
             // 
             // URLForm
             // 
