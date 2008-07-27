@@ -261,7 +261,7 @@ namespace FingerUI
                     float startpos = g.MeasureString(b.ToString(), TextFont).Width;
                     SizeF WordSize = g.MeasureString(Words[i], TextFont);
                     Clickable c = new Clickable();
-                    c.Location = new RectangleF(0, lineOffSet, WordSize.Width, WordSize.Height);
+                    c.Location = new RectangleF(startpos, lineOffSet, WordSize.Width, WordSize.Height);
                     c.Text = Words[i];
                     using (Pen sPen = new Pen(Color.LightBlue))
                     {

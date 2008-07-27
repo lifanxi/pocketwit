@@ -161,25 +161,9 @@ namespace PockeTwit
         {
             Cursor.Current = Cursors.WaitCursor;
             tmrautoUpdate.Enabled = false;
-            
-            string response = "";
-            
-            switch (CurrentAction)
-            {
-                case Yedda.Twitter.ActionType.Friends_Timeline:
-                    response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.Public_Timeline:
-                    response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.User_Timeline:
-                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.Show:
-                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-            }
 
+            string response = FetchFromTwitter();
+            
             if (response != CachedResponse)
             {
                 statusList.Clear();
@@ -208,24 +192,32 @@ namespace PockeTwit
             Cursor.Current = Cursors.Default;
         }
 
-        private static string GetSampleData()
+        private string FetchFromTwitter()
         {
-            string response;
-            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\samplestatuses.xml"))
+            string response = "";
+
+            switch (CurrentAction)
             {
-                response = r.ReadToEnd();
+                case Yedda.Twitter.ActionType.Friends_Timeline:
+                    response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                    break;
+                case Yedda.Twitter.ActionType.Public_Timeline:
+                    response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
+                    break;
+                case Yedda.Twitter.ActionType.User_Timeline:
+                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                    break;
+                case Yedda.Twitter.ActionType.Show:
+                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
+                    break;
             }
             return response;
         }
 
+        
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("AutoUpdate!");
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "GetTimeLine";
-            t.Start();
+            GetTimeLine();
         }
     }
 }

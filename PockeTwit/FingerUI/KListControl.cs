@@ -248,9 +248,12 @@ namespace FingerUI
 
         void item_WordClicked(string TextClicked)
         {
-            if (WordClicked != null)
+            if (m_velocity.X == 0 && m_velocity.Y == 0)
             {
-                WordClicked(TextClicked);
+                if (WordClicked != null)
+                {
+                    WordClicked(TextClicked);
+                }
             }
         }
 
