@@ -61,6 +61,9 @@ namespace FingerUI
             void Render(Graphics g, Rectangle bounds);
         }
 
+        public delegate void delClearMe();
+        public delegate void delAddItem(StatusItem item);
+
         public delegate void delMenuItemSelected(string ItemName);
         public event delMenuItemSelected MenuItemSelected;
         public event StatusItem.ClickedWordDelegate WordClicked;
@@ -240,10 +243,18 @@ namespace FingerUI
 
         public void AddItem(StatusItem item)
         {
-            item.Parent = this;
-            item.Index = m_items.Count;
-            item.WordClicked += new StatusItem.ClickedWordDelegate(item_WordClicked);
-            AddItem((IKListItem)item);
+            if (InvokeRequired)
+            {
+                delAddItem d = new delAddItem(AddItem);
+                this.Invoke(d, new object[] { item });
+            }
+            else
+            {
+                item.Parent = this;
+                item.Index = m_items.Count;
+                item.WordClicked += new StatusItem.ClickedWordDelegate(item_WordClicked);
+                AddItem((IKListItem)item);
+            }
         }
 
         void item_WordClicked(string TextClicked)
@@ -319,9 +330,17 @@ namespace FingerUI
         /// </summary>
         public void Clear()
         {
-            ClearClicks();
-            m_items.Clear();
-            Reset();
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(Clear);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                ClearClicks();
+                m_items.Clear();
+                Reset();
+            }
         }
 
         /// <summary>
