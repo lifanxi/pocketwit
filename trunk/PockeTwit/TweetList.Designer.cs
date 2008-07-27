@@ -55,7 +55,7 @@
             this.Controls.Add(this.statusList);
             this.Menu = this.mainMenu1;
             this.Name = "TweetList";
-            this.Text = "Form1";
+            this.Text = "PockeTwit";
             this.ResumeLayout(false);
 
         }
