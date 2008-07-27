@@ -230,14 +230,14 @@ namespace FingerUI
             }
             
             
-            textBounds.Offset(1, 1);
-            textBounds.Width--;
+            textBounds.Offset(5, 1);
+            textBounds.Width = textBounds.Width-5;
             textBounds.Height--;
 
             m_stringFormat.Alignment = StringAlignment.Near;
             
             m_stringFormat.LineAlignment = StringAlignment.Near;
-            textBounds = BreakUpTheText(g, textBounds);
+            BreakUpTheText(g, textBounds);
             int lineOffset = 0;
             foreach (string Line in SplitLines)
             {
@@ -278,7 +278,7 @@ namespace FingerUI
             
         }
 
-        private Rectangle BreakUpTheText(Graphics g, Rectangle textBounds)
+        private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
             SizeF size = g.MeasureString(this.Tweet, TextFont);
             string CurrentLine = this.Tweet;
@@ -291,7 +291,7 @@ namespace FingerUI
                 }
                 if (size.Width < textBounds.Width)
                 {
-                    SplitLines.Add(CurrentLine);
+                    SplitLines.Add(CurrentLine.TrimStart(new char[] { ' ' }));
                 }
                 while (size.Width > textBounds.Width)
                 {
@@ -316,7 +316,7 @@ namespace FingerUI
                         }
                         currentPos++;
                     }
-                    SplitLines.Add(newString);
+                    SplitLines.Add(newString.TrimStart(new char[] { ' ' }));
                     if (SplitLines.Count >= 5) { break; }
                     if (lastBreak != 0)
                     {
@@ -325,12 +325,11 @@ namespace FingerUI
                     size = g.MeasureString(CurrentLine, TextFont);
                     if (size.Width < textBounds.Width)
                     {
-                        SplitLines.Add(CurrentLine);
+                        SplitLines.Add(CurrentLine.TrimStart(new char[]{' '}));
                     }
 
                 }
             }
-            return textBounds;
         }
 
         private List<string> SplitLines = new List<string>();
