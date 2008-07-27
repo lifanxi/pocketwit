@@ -131,7 +131,7 @@ namespace Yedda
         }
 
         protected const string TwitterBaseUrlFormat = "http://twitter.com/{0}/{1}.{2}";
-        protected const string TwitterSimpleURLFormat = "http://twitter.com/{0}.xml";
+        protected const string TwitterSimpleURLFormat = "http://www.twitter.com/{0}.xml";
         protected const string TwitterFavoritesUrlFormat = "http://twitter.com/{0}/{1}/{2}.xml";
 
         protected string GetObjectTypeString(ObjectType objectType)
@@ -156,43 +156,44 @@ namespace Yedda
         /// <param name="userName">The username to use with the request</param>
         /// <param name="password">The password to use with the request</param>
         /// <returns>The response of the request, or null if we got 404 or nothing.</returns>
-        protected string ExecuteGetCommand(string url, string userName, string password)
+protected string ExecuteGetCommand(string url, string userName, string password)
+{
+    HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
+    
+    if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+    {
+        client.Credentials = new NetworkCredential(userName, password);
+    }
+    client.PreAuthenticate = true;
+
+    try
+    {
+        HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse();
+        using (Stream stream = httpResponse.GetResponseStream())
         {
-            HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
-            client.PreAuthenticate = true;
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            using (StreamReader reader = new StreamReader(stream))
             {
-                client.Credentials = new NetworkCredential(userName, password);
+                return reader.ReadToEnd();
             }
-
-            try
-            {
-                HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse();
-                using (Stream stream = httpResponse.GetResponseStream())
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                //
-                // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
-                //
-                if (ex.Response is HttpWebResponse)
-                {
-                    if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
-                    {
-                        return null;
-                    }
-                }
-
-                throw ex;
-            }
-            return null;
         }
+    }
+    catch (WebException ex)
+    {
+        //
+        // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
+        //
+        if (ex.Response is HttpWebResponse)
+        {
+            if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
+        throw ex;
+    }
+    return null;
+}
 
         /// <summary>
         /// Executes an HTTP POST command and retrives the information.		
