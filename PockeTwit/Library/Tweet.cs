@@ -11,7 +11,7 @@ namespace PockeTwit.Library
     public class status
     {
         public string created_at { get; set; }
-        public long id { get; set; }
+        public string id { get; set; }
         public string text { get; set; }
         public string source { get; set; }
         public bool truncated { get; set; }
@@ -27,7 +27,7 @@ namespace PockeTwit.Library
     [Serializable]
     public class User
     {
-        public long id { get; set; }
+        public string id { get; set; }
         public string name { get; set; }
         public string screen_name { get; set; }
         public string location { get; set; }
