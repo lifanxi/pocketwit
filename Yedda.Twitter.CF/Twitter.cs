@@ -67,7 +67,10 @@ namespace Yedda
             Account_Settings,
             Featured,
             Show,
-            New
+            New,
+            Favorites,
+            Create,
+            Destroy
         }
 
         private string source = null;
@@ -128,6 +131,8 @@ namespace Yedda
         }
 
         protected const string TwitterBaseUrlFormat = "http://twitter.com/{0}/{1}.{2}";
+        protected const string TwitterSimpleURLFormat = "http://twitter.com/{0}.xml";
+        protected const string TwitterFavoritesUrlFormat = "http://twitter.com/{0}/{1}/{2}.xml";
 
         protected string GetObjectTypeString(ObjectType objectType)
         {
@@ -635,6 +640,24 @@ namespace Yedda
             return null;
         }
 
+        #endregion
+
+        #region Favorites
+        public string SetFavorite(string userName, string password, string IDofMessage)
+        {
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage);
+            return ExecuteGetCommand(url, userName, password);
+        }
+        public string DestroyFavorite(string userName, string password, string IDofMessage)
+        {
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage);
+            return ExecuteGetCommand(url, userName, password);
+        }
+        public string GetFavorites(string userName, string password)
+        {
+            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites));
+            return ExecuteGetCommand(url, userName, password);
+        }
         #endregion
     }
 }
