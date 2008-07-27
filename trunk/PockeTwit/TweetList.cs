@@ -159,24 +159,18 @@ namespace PockeTwit
 
         private void GetTimeLine()
         {
-            Cursor.Current = Cursors.WaitCursor;
+            //Cursor.Current = Cursors.WaitCursor;
             tmrautoUpdate.Enabled = false;
 
             string response = FetchFromTwitter();
-            
+
             if (response != CachedResponse)
             {
+                Library.status[] statuses = InterpretStatuses(response);
+                
                 statusList.Clear();
-                CachedResponse = response;
-                XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
-                Library.status[] statuses;
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
-                {
-                    statuses = (Library.status[])s.Deserialize(r);
-                }
                 foreach (Library.status stat in statuses)
                 {
-                    
                     FingerUI.StatusItem item = new FingerUI.StatusItem();
                     if (stat.user!=null)
                     {
@@ -189,7 +183,19 @@ namespace PockeTwit
                 }
             }
             tmrautoUpdate.Enabled = true;
-            Cursor.Current = Cursors.Default;
+            //Cursor.Current = Cursors.Default;
+        }
+
+        private Library.status[] InterpretStatuses(string response)
+        {
+            CachedResponse = response;
+            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
+            Library.status[] statuses;
+            using (System.IO.StringReader r = new System.IO.StringReader(response))
+            {
+                statuses = (Library.status[])s.Deserialize(r);
+            }
+            return statuses;
         }
 
         private string FetchFromTwitter()
@@ -217,7 +223,11 @@ namespace PockeTwit
         
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
-            GetTimeLine();
+            System.Diagnostics.Debug.WriteLine("Autoupdate");
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Start();
+            //GetTimeLine();
         }
     }
 }
