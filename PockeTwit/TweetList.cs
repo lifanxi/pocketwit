@@ -90,8 +90,11 @@ namespace PockeTwit
                 case "Reply":
                     SendReply();
                     break;
+                case "Destroy Favorite":
+                    DestroyFavorite();
+                    break;
                 case "Make Favorite":
-                    ToggleFavorite();
+                    CreateFavorite();
                     break;
                 case "Direct Message":
                     SendDirectMessage();
@@ -107,6 +110,8 @@ namespace PockeTwit
                     break;
             }
         }
+
+        
 
         private void ShowProfile()
         {
@@ -152,7 +157,6 @@ namespace PockeTwit
             }
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
-                Cursor.Current = Cursors.WaitCursor;
                 this.Show();
                 StatusForm.Hide();
                 string UpdateText = StatusForm.StatusText;
@@ -253,7 +257,14 @@ namespace PockeTwit
             //Placeholder -- Yedda API does not support
         }
 
-        private void ToggleFavorite()
+        private void DestroyFavorite()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            string ID = selectedItem.ID;
+            Twitter.DestroyFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
+        }
+
+        private void CreateFavorite()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
             string ID = selectedItem.ID;
