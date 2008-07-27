@@ -44,6 +44,8 @@ namespace FingerUI
         public string Tweet { get; set; }
         public string User { get; set; }
         public string UserImageURL { get; set; }
+        public string ID { get; set; }
+        public bool isFavorite { get; set; }
         
         /// <summary>
         /// Initializes the <see cref="KListItem"/> class.
