@@ -6,7 +6,6 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.MainMenu mainMenu1;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -29,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.statusList = new FingerUI.KListControl();
             this.tmrautoUpdate = new System.Windows.Forms.Timer();
             this.SuspendLayout();
@@ -39,7 +37,7 @@
             this.statusList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusList.Location = new System.Drawing.Point(0, 0);
             this.statusList.Name = "statusList";
-            this.statusList.Size = new System.Drawing.Size(240, 268);
+            this.statusList.Size = new System.Drawing.Size(240, 294);
             this.statusList.TabIndex = 0;
             // 
             // tmrautoUpdate
@@ -51,9 +49,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(240, 268);
+            this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.statusList);
-            this.Menu = this.mainMenu1;
             this.Name = "TweetList";
             this.Text = "PockeTwit";
             this.ResumeLayout(false);

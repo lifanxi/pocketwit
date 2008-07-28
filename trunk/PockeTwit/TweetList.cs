@@ -117,6 +117,9 @@ namespace PockeTwit
                     StopFollowingUser();
                     break;
 
+                case "Minimize":
+                    this.Hide();
+                    break;
                 case "Exit":
                     statusList.Clear();
                     this.Close();
