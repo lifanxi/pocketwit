@@ -13,7 +13,7 @@ namespace PockeTwit
     public partial class TweetList : MasterForm
     {
         private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "Exit" });
-        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Follow", "Stop Following", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
@@ -63,6 +63,15 @@ namespace PockeTwit
                 else
                 {
                     statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Destroy Favorite", "Make Favorite");
+                }
+
+                if (selectedItem.isBeingFollowed)
+                {
+                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Follow", "Stop Following");
+                }
+                else
+                {
+                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Stop Following", "Follow");
                 }
             }
         }
