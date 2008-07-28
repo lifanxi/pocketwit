@@ -67,7 +67,7 @@ namespace PockeTwit
             {
                 ShowUserID = TextClicked.Replace("@","");
                 CurrentAction = Yedda.Twitter.ActionType.Show;
-                GetTimeLine();
+                GetTimeLineAsync();
             }
         }
 
