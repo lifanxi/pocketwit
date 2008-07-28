@@ -13,8 +13,8 @@ namespace PockeTwit
     public partial class TweetList : MasterForm
     {
         private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "Exit" });
-        private List<string> StandardRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Exit" });
-        private List<string> FavoritesRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Destroy Favorite", "Profile Page", "Exit" });
+        private List<string> StandardRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Follow", "Exit" });
+        private List<string> FavoritesRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Destroy Favorite", "Profile Page"," Follow", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
@@ -68,17 +68,17 @@ namespace PockeTwit
                 case "Public TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statusList.RightMenuItems = StandardRightMenu;
-                    GetTimeLine();
+                    GetTimeLineAsync();
                     break;
                 case "Friends TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statusList.RightMenuItems = StandardRightMenu;
-                    GetTimeLine();
+                    GetTimeLineAsync();
                     break;
                 case "Favorites":
                     CurrentAction = Yedda.Twitter.ActionType.Favorites;
                     statusList.RightMenuItems = FavoritesRightMenu;
-                    GetTimeLine();
+                    GetTimeLineAsync();
                     break;
                 case "Set Status":
                     SetStatus();
@@ -102,7 +102,9 @@ namespace PockeTwit
                 case "Profile Page":
                     ShowProfile();
                     break;
-                
+                case "Follow":
+                    FollowUser();
+                    break;
 
                 case "Exit":
                     statusList.Clear();
@@ -161,8 +163,8 @@ namespace PockeTwit
                 StatusForm.Hide();
                 string UpdateText = StatusForm.StatusText;
                 Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
-                
-                this.GetTimeLine();
+
+                GetTimeLineAsync();
             }
             this.Show();
             StatusForm.Close();
@@ -178,6 +180,7 @@ namespace PockeTwit
 
             if (response != CachedResponse)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 Library.status[] statuses = InterpretStatuses(response);
                 
                 statusList.Clear();
@@ -188,6 +191,7 @@ namespace PockeTwit
                     {
                         item.Tweet = stat.text;
                         item.User = stat.user.screen_name;
+                        item.UserID = stat.user.id;
                         item.UserImageURL = stat.user.profile_image_url;
                         item.ID = stat.id;
                         if (!string.IsNullOrEmpty(stat.favorited))
@@ -198,6 +202,7 @@ namespace PockeTwit
                         statusList.AddItem(item);
                     }
                 }
+                Cursor.Current = Cursors.Default;
             }
             tmrautoUpdate.Enabled = true;
             //Cursor.Current = Cursors.Default;
@@ -247,14 +252,20 @@ namespace PockeTwit
             return response;
         }
 
-        private void FollowUser(string UsertoFollow)
+        private void FollowUser()
         {
-            //Placeholder -- Yedda API does not support
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            string UserID = selectedItem.UserID;
+            Twitter.FollowUser(ClientSettings.UserName, ClientSettings.Password, UserID);
+
         }
 
-        private void StopFollowingUser(string UserToStop)
+        private void StopFollowingUser()
         {
-            //Placeholder -- Yedda API does not support
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            string UserID = selectedItem.UserID;
+            Twitter.StopFollowingUser(ClientSettings.UserName, ClientSettings.Password, UserID);
+
         }
 
         private void DestroyFavorite()
@@ -273,11 +284,15 @@ namespace PockeTwit
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
+            GetTimeLineAsync();
+        }
+
+        private void GetTimeLineAsync()
+        {
             System.Diagnostics.Debug.WriteLine("Autoupdate");
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Start();
-            //GetTimeLine();
         }
     }
 }
