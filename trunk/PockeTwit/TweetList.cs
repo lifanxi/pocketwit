@@ -13,8 +13,7 @@ namespace PockeTwit
     public partial class TweetList : MasterForm
     {
         private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "Exit" });
-        private List<string> StandardRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Follow", "Stop Following", "Exit" });
-        private List<string> FavoritesRightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Destroy Favorite", "Profile Page", "Follow", "Stop Following", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Follow", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
@@ -36,15 +35,36 @@ namespace PockeTwit
             statusList.HighLightForeColor = Color.Black;
             statusList.ItemHeight = 70;
             statusList.LeftMenuItems = LeftMenu;
-            statusList.RightMenuItems = StandardRightMenu;
+            statusList.RightMenuItems = RightMenu;
             statusList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
-
+            statusList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
             GetTimeLine();
             Checker = new UpdateChecker();
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             
 
+        }
+
+        void statusList_SelectedItemChanged(object sender, EventArgs e)
+        {
+            UpdateRightMenu();
+        }
+
+        private void UpdateRightMenu()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
+            if (selectedItem != null)
+            {
+                if (selectedItem.isFavorite)
+                {
+                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Make Favorite", "Destroy Favorite");
+                }
+                else
+                {
+                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Destroy Favorite", "Make Favorite");
+                }
+            }
         }
 
         void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)
@@ -77,17 +97,16 @@ namespace PockeTwit
             {
                 case "Public TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
-                    statusList.RightMenuItems = StandardRightMenu;
+                    statusList.RightMenuItems = RightMenu;
                     GetTimeLineAsync();
                     break;
                 case "Friends TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
-                    statusList.RightMenuItems = StandardRightMenu;
+                    statusList.RightMenuItems = RightMenu;
                     GetTimeLineAsync();
                     break;
                 case "Favorites":
                     CurrentAction = Yedda.Twitter.ActionType.Favorites;
-                    statusList.RightMenuItems = FavoritesRightMenu;
                     GetTimeLineAsync();
                     break;
                 case "Set Status":
@@ -134,7 +153,7 @@ namespace PockeTwit
         private void ShowProfile()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string User = selectedItem.User;
+            string User = selectedItem.Tweet.user.id;
             ProfilePage p = new ProfilePage();
             p.User = User;
             p.ShowDialog();
@@ -144,7 +163,7 @@ namespace PockeTwit
         private void SendDirectMessage()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string User = selectedItem.User;
+            string User = selectedItem.Tweet.user.screen_name;
             SetStatus("d " + User);
         }
 
@@ -162,7 +181,7 @@ namespace PockeTwit
         private void SendReply()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string User = selectedItem.User;
+            string User = selectedItem.Tweet.user.screen_name;
             SetStatus("@"+User);
         }
 
@@ -209,16 +228,18 @@ namespace PockeTwit
                     FingerUI.StatusItem item = new FingerUI.StatusItem();
                     if (stat.user!=null)
                     {
-                        item.Tweet = stat.text;
+                        item.Tweet = stat;
+                        /*
                         item.User = stat.user.screen_name;
                         item.UserID = stat.user.id;
                         item.UserImageURL = stat.user.profile_image_url;
                         item.ID = stat.id;
+                         
                         if (!string.IsNullOrEmpty(stat.favorited))
                         {
                             item.isFavorite = bool.Parse(stat.favorited);
                         }
-
+                        */
                         statusList.AddItem(item);
                     }
                 }
@@ -275,7 +296,7 @@ namespace PockeTwit
         private void FollowUser()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string UserID = selectedItem.UserID;
+            string UserID = selectedItem.Tweet.user.id;
             Twitter.FollowUser(ClientSettings.UserName, ClientSettings.Password, UserID);
 
         }
@@ -283,7 +304,7 @@ namespace PockeTwit
         private void StopFollowingUser()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string UserID = selectedItem.UserID;
+            string UserID = selectedItem.Tweet.user.id;
             Twitter.StopFollowingUser(ClientSettings.UserName, ClientSettings.Password, UserID);
 
         }
@@ -291,15 +312,19 @@ namespace PockeTwit
         private void DestroyFavorite()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string ID = selectedItem.ID;
+            string ID = selectedItem.Tweet.id;
             Twitter.DestroyFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
+            selectedItem.isFavorite = false;
+            UpdateRightMenu();
         }
 
         private void CreateFavorite()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string ID = selectedItem.ID;
+            string ID = selectedItem.Tweet.id;
             Twitter.SetFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
+            selectedItem.isFavorite = true;
+            UpdateRightMenu();
         }
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
