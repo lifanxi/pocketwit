@@ -10,6 +10,8 @@ namespace PockeTwit
     {
         private static List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
 
+        private static bool OnceLoaded = false;
+
         static Following()
         {
             GetCachedFollowers();
@@ -19,6 +21,17 @@ namespace PockeTwit
             t.Name = "FetchFollowers";
             t.Start();
             //GetFollowersFromTwitter();
+        }
+
+        public static void Reset()
+        {
+            if (OnceLoaded)
+            {
+                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
+                System.Threading.Thread t = new System.Threading.Thread(ts);
+                t.Name = "FetchFollowers";
+                t.Start();
+            }
         }
 
         private static void GetCachedFollowers()
@@ -40,6 +53,7 @@ namespace PockeTwit
             string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
             InterpretUsers(response);
             SaveUsers();
+            OnceLoaded = true;
         }
 
         private static void InterpretUsers(string response)

@@ -44,6 +44,7 @@ namespace PockeTwit
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.SaveSettings();
+                Following.Reset();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
