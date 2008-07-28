@@ -18,14 +18,15 @@ namespace PockeTwit
         Yedda.Twitter Twitter;
         private string ShowUserID;
         private UpdateChecker Checker;
-
+        private const int TimerLength = 75000;
+        //private const int TimerLength = 10000;
         private string CachedResponse;
         public TweetList()
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
-            tmrautoUpdate.Interval = 65000;
+            tmrautoUpdate.Interval = TimerLength;
             tmrautoUpdate.Enabled = true;
             statusList.BackColor = Color.Black;
             statusList.ForeColor = Color.LightGray;
@@ -222,8 +223,7 @@ namespace PockeTwit
         private void GetTimeLine()
         {
             //Cursor.Current = Cursors.WaitCursor;
-            tmrautoUpdate.Enabled = false;
-
+            
             string response = FetchFromTwitter();
 
             if (response != CachedResponse)
@@ -254,8 +254,6 @@ namespace PockeTwit
                 }
                 Cursor.Current = Cursors.Default;
             }
-            tmrautoUpdate.Enabled = true;
-            //Cursor.Current = Cursors.Default;
         }
 
         private Library.status[] InterpretStatuses(string response)
@@ -338,6 +336,7 @@ namespace PockeTwit
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("TICK");
             GetTimeLineAsync();
         }
 
