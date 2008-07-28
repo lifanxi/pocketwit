@@ -47,7 +47,19 @@ namespace FingerUI
         public string ID { get; set; }
         public string UserID { get; set; }
         public bool isBeingFollowed { get; set; }
-        public bool isFavorite { get; set; }
+        private bool _isFavorite;
+        public bool isFavorite
+        {
+            get 
+            {
+                return _isFavorite;
+            }
+            set
+            {
+                _isFavorite = value;
+                this.Highlighted = value;
+            }
+        }
         
         /// <summary>
         /// Initializes the <see cref="KListItem"/> class.
