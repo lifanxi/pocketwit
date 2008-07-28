@@ -48,7 +48,8 @@ namespace Yedda
             Statuses,
             Account,
             Users,
-            Direct_Messages
+            Direct_Messages,
+            Notifications
         }
 
         /// <summary>
@@ -70,7 +71,9 @@ namespace Yedda
             New,
             Favorites,
             Create,
-            Destroy
+            Destroy,
+            Follow,
+            Leave
         }
 
         private string source = null;
@@ -657,6 +660,19 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         public string GetFavorites(string userName, string password)
         {
             string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites));
+            return ExecuteGetCommand(url, userName, password);
+        }
+        #endregion
+
+        #region Follow
+        public string FollowUser(string userName, string password, string IDofUserToFollow)
+        {
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Follow), IDofUserToFollow);
+            return ExecuteGetCommand(url, userName, password);
+        }
+        public string StopFollowingUser(string userName, string password, string IDofUserToFollow)
+        {
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Leave), IDofUserToFollow);
             return ExecuteGetCommand(url, userName, password);
         }
         #endregion
