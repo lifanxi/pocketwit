@@ -40,8 +40,16 @@ namespace PockeTwit
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
 
             GetTimeLine();
+            UpdateChecker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             
 
+        }
+
+        void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)
+        {
+            UpdateForm uf = new UpdateForm();
+            uf.NewVersion = Info;
+            uf.ShowDialog();
         }
 
         void statusList_WordClicked(string TextClicked)
@@ -295,6 +303,7 @@ namespace PockeTwit
             System.Diagnostics.Debug.WriteLine("Autoupdate");
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
             System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "GetTimeLine";
             t.Start();
         }
     }
