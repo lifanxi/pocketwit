@@ -41,22 +41,22 @@ namespace FingerUI
         public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
-        public string Tweet { get; set; }
-        public string User { get; set; }
-        public string UserImageURL { get; set; }
-        public string ID { get; set; }
-        public string UserID { get; set; }
+        public PockeTwit.Library.status Tweet { get; set; }
+        
         public bool isBeingFollowed { get; set; }
-        private bool _isFavorite;
         public bool isFavorite
         {
             get 
             {
-                return _isFavorite;
+                if(string.IsNullOrEmpty(Tweet.favorited))
+                {
+                    return false;
+                }
+                return bool.Parse(Tweet.favorited);
             }
             set
             {
-                _isFavorite = value;
+                Tweet.favorited = value.ToString();
                 this.Highlighted = value;
             }
         }
@@ -207,7 +207,7 @@ namespace FingerUI
 
             textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize+5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize+5), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
-            Image UserImage = PockeTwit.ImageBuffer.GetArt(User, UserImageURL);
+            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
             g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
         
@@ -283,7 +283,6 @@ namespace FingerUI
                     {
                         g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top, (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
                     }
-                    System.Diagnostics.Debug.WriteLine("Clickable found in " + this.User+ " -- " + c.Text);
                     if (!Clickables.Contains(c))
                     {
                         Clickables.Add(c);
@@ -296,12 +295,12 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            SizeF size = g.MeasureString(this.Tweet, TextFont);
-            string CurrentLine = this.Tweet;
+            SizeF size = g.MeasureString(this.Tweet.text, TextFont);
+            string CurrentLine = this.Tweet.text;
             if (SplitLines.Count == 0)
             {
                 bool SpaceSplit = false;
-                if (this.Tweet.IndexOf(' ') > 0)
+                if (this.Tweet.text.IndexOf(' ') > 0)
                 {
                     SpaceSplit = true;
                 }

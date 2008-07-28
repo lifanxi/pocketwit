@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="FingerUI\KListItem.cs" />
     <Compile Include="FingerUI\StatusItem.cs" />
+    <Compile Include="Following.cs" />
     <Compile Include="ImageBuffer.cs" />
     <Compile Include="is.gd.cs" />
     <Compile Include="Library\Tweet.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="SettingsHandler\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SideMenu.cs" />
     <Compile Include="TweetList.cs">
       <SubType>Form</SubType>
     </Compile>
