@@ -45,6 +45,8 @@ namespace FingerUI
         public string User { get; set; }
         public string UserImageURL { get; set; }
         public string ID { get; set; }
+        public string UserID { get; set; }
+        public bool isBeingFollowed { get; set; }
         public bool isFavorite { get; set; }
         
         /// <summary>
