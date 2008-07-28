@@ -18,6 +18,7 @@ namespace PockeTwit
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
+        private UpdateChecker Checker;
 
         private string CachedResponse;
         public TweetList()
@@ -40,7 +41,8 @@ namespace PockeTwit
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
 
             GetTimeLine();
-            UpdateChecker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
+            Checker = new UpdateChecker();
+            Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             
 
         }
@@ -150,6 +152,10 @@ namespace PockeTwit
         {
             SettingsForm settings = new SettingsForm();
             if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+            if (ClientSettings.CheckVersion)
+            {
+                Checker.CheckForUpdate();
+            }
             GetTimeLine();
         }
 

@@ -9,14 +9,14 @@ using System.Web;
 
 namespace PockeTwit
 {
-    public static class UpdateChecker
+    public class UpdateChecker
     {
-        private static double currentVersion = .07;
-        private static string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
-        private static string XMLResponse;
-        private static UpdateInfo WebVersion;
+        private double currentVersion = .08;
+        private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
+        private string XMLResponse;
+        private UpdateInfo WebVersion;
         public delegate void delUpdateFound(UpdateInfo Info);
-        public static event delUpdateFound UpdateFound;
+        public event delUpdateFound UpdateFound;
 
 
         public struct UpdateInfo
@@ -27,7 +27,7 @@ namespace PockeTwit
         }
 
         
-        static UpdateChecker()
+        public UpdateChecker()
         {
             if (ClientSettings.CheckVersion)
             {
@@ -35,7 +35,7 @@ namespace PockeTwit
             }
         }
 
-        public static void CheckForUpdate()
+        public void CheckForUpdate()
         {
             System.Diagnostics.Debug.WriteLine("Autoupdate");
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
@@ -44,7 +44,7 @@ namespace PockeTwit
             t.Start();
         }
 
-        private static void GetWebResponse()
+        private void GetWebResponse()
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UpdateURL);
 
