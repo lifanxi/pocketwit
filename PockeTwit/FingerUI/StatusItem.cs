@@ -42,8 +42,14 @@ namespace FingerUI
         private Font TextFont;
 
         public PockeTwit.Library.status Tweet { get; set; }
-        
-        public bool isBeingFollowed { get; set; }
+
+        public bool isBeingFollowed
+        {
+            get
+            {
+                return (PockeTwit.Following.IsFollowing(Tweet.user));
+            }
+        }
         public bool isFavorite
         {
             get 
