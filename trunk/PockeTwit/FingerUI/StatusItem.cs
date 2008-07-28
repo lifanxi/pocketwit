@@ -266,37 +266,55 @@ namespace FingerUI
                 float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
                 
                 g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
-                MakeClickable(Line, g, textBounds, (int)(lineOffset*(TextFont.Size+4)));
+                MakeClickable(Line, g, textBounds);
                 lineOffset++;
             }
             ForeBrush.Dispose();
         }
 
-        private void MakeClickable(string Line, Graphics g, Rectangle textBounds, int lineOffSet)
+        private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
+            System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
             string[] Words = Line.Split(' ');
-            StringBuilder b = new StringBuilder();
+            StringBuilder LineBeforeThisWord = new StringBuilder();
             for (int i = 0; i < Words.Length; i++)
             {
-                if (Words[i].StartsWith("@") | Words[i].StartsWith("http"))
+                string WordToCheck = Words[i];
+                if (WordToCheck.StartsWith("@") | WordToCheck.StartsWith("http"))
                 {
-                    float startpos = g.MeasureString(b.ToString(), TextFont).Width;
+                    //Find out how far to the right this word will appear
+                    float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                    //Find the size of the word
                     SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                    //A structure containing info we need to know about the word.
                     Clickable c = new Clickable();
                     c.Location = new RectangleF(startpos, lineOffSet, WordSize.Width, WordSize.Height);
-                    c.Text = Words[i];
-                    using (Pen sPen = new Pen(Color.LightBlue))
-                    {
-                        g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top, (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
-                    }
+                    c.Text = WordToCheck;
+                    //Underline it
+
+                    //Put it in a collection so we can see if the user clicked it on mouseup
                     if (!Clickables.Contains(c))
                     {
                         Clickables.Add(c);
                     }
                 }
-                b.Append(Words[i]+" ");
+                LineBeforeThisWord.Append(WordToCheck + " ");
             }
+        }
+
+        //texbounds is the area we're allowed to draw within
+        //lineOffset is how many lines we've already drawn in these bounds
+        private void MakeClickable(string Line, Graphics g, Rectangle textBounds)
+        {
             
+            using (Pen sPen = new Pen(Color.LightBlue))
+            {
+                foreach (Clickable c in Clickables)
+                {
+                    g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
+                        (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+                }
+            }
         }
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
@@ -349,6 +367,12 @@ namespace FingerUI
                         SplitLines.Add(CurrentLine.TrimStart(new char[]{' '}));
                     }
 
+                }
+                int lineOffset = 0;
+                foreach (string line in SplitLines)
+                {
+                    FindClickables(line, g, (int)(lineOffset * (TextFont.Size + 4)));
+                    lineOffset++;
                 }
             }
         }
