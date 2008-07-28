@@ -9,17 +9,19 @@ using System.Web;
 
 namespace PockeTwit
 {
-    static class UpdateChecker
+    public static class UpdateChecker
     {
-        private static int currentVersion = 7;
+        private static double currentVersion = .07;
         private static string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private static string XMLResponse;
         private static UpdateInfo WebVersion;
+        public delegate void delUpdateFound(UpdateInfo Info);
+        public static event delUpdateFound UpdateFound;
 
 
         public struct UpdateInfo
         {
-            public int webVersion;
+            public double webVersion;
             public string DownloadURL;
             public string UpdateNotes;
         }
@@ -29,8 +31,17 @@ namespace PockeTwit
         {
             if (ClientSettings.CheckVersion)
             {
-                GetWebResponse();
+                CheckForUpdate();
             }
+        }
+
+        public static void CheckForUpdate()
+        {
+            System.Diagnostics.Debug.WriteLine("Autoupdate");
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "CheckUpdates";
+            t.Start();
         }
 
         private static void GetWebResponse()
@@ -52,15 +63,20 @@ namespace PockeTwit
             XmlDocument UpdateInfoDoc = new XmlDocument();
             UpdateInfoDoc.LoadXml(XMLResponse);
             WebVersion = new UpdateInfo();
-            WebVersion.webVersion = int.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
+            WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
             WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
             WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
+
+            if (WebVersion.webVersion > currentVersion)
+            {
+                if (UpdateFound != null)
+                {
+                    UpdateFound(WebVersion);
+                }
+            }
         }
     
 
-        private static bool UpdateIsAvailable()
-        {
-            return WebVersion.webVersion > currentVersion;
-        }
+        
     }
 }

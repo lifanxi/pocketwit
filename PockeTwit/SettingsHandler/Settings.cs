@@ -21,9 +21,13 @@ static class ClientSettings
         {
             UserName = ConfigurationSettings.AppSettings["UserName"];
             Password = ConfigurationSettings.AppSettings["Password"];
-            if(!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CheckVersion"]))
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CheckVersion"]))
             {
                 CheckVersion = bool.Parse(ConfigurationSettings.AppSettings["CheckVersion"]);
+            }
+            else
+            {
+                CheckVersion = true;
             }
         }
         catch{}

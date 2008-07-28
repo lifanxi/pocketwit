@@ -35,6 +35,10 @@ namespace PockeTwit
         {
             ClientSettings.UserName = txtUserName.Text;
             ClientSettings.Password = txtPassword.Text;
+            if (!ClientSettings.CheckVersion && chkVersion.Checked)
+            {
+                UpdateChecker.CheckForUpdate();
+            }
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
