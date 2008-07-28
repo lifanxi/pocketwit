@@ -61,18 +61,26 @@ namespace PockeTwit
             }
             catch{}
             XmlDocument UpdateInfoDoc = new XmlDocument();
-            UpdateInfoDoc.LoadXml(XMLResponse);
-            WebVersion = new UpdateInfo();
-            WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
-            WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
-            WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
-
-            if (WebVersion.webVersion > currentVersion)
+            if (XMLResponse != null)
             {
-                if (UpdateFound != null)
+                UpdateInfoDoc.LoadXml(XMLResponse);
+                WebVersion = new UpdateInfo();
+                WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
+                WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
+                WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
+
+                if (WebVersion.webVersion > currentVersion)
                 {
-                    UpdateFound(WebVersion);
+                    if (UpdateFound != null)
+                    {
+                        UpdateFound(WebVersion);
+                    }
                 }
+                System.Diagnostics.Debug.WriteLine("Update check complete");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Update check failed");
             }
         }
     
