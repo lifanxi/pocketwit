@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.08</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv08.CAB</url>
-  <notes>Auto-update added.</notes>
+  <version>.09</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv09.CAB</url>
+  <notes>Context-sensitive right menu
+Decode HTML entities
+Verify username/password before saving
+Favorite tweets are highlighted
+Minor scroll speed improvements
+</notes>
 </LatestRelease>
