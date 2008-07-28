@@ -319,8 +319,9 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            SizeF size = g.MeasureString(this.Tweet.text, TextFont);
-            string CurrentLine = this.Tweet.text;
+            string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
+            SizeF size = g.MeasureString(CurrentLine, TextFont);
+            
             if (SplitLines.Count == 0)
             {
                 bool SpaceSplit = false;
