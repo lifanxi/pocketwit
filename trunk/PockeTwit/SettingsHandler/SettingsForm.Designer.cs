@@ -36,6 +36,7 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkVersion = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -87,11 +88,22 @@
             this.label2.Size = new System.Drawing.Size(71, 20);
             this.label2.Text = "Password:";
             // 
+            // chkVersion
+            // 
+            this.chkVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.chkVersion.Location = new System.Drawing.Point(5, 245);
+            this.chkVersion.Name = "chkVersion";
+            this.chkVersion.Size = new System.Drawing.Size(235, 20);
+            this.chkVersion.TabIndex = 6;
+            this.chkVersion.Text = "Automatically check for new version";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkVersion);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtUserName);
@@ -111,5 +123,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuAccept;
+        private System.Windows.Forms.CheckBox chkVersion;
     }
 }

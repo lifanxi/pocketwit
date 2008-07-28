@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="SettingsHandler\appconfig.cs" />
     <Compile Include="SettingsHandler\Settings.cs" />
+    <Compile Include="UpdateChecker.cs" />
     <Compile Include="URLForm.cs">
       <SubType>Form</SubType>
     </Compile>

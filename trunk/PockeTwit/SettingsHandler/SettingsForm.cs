@@ -21,6 +21,7 @@ namespace PockeTwit
         {
             txtUserName.Text = ClientSettings.UserName;
             txtPassword.Text = ClientSettings.Password;
+            chkVersion.Checked = ClientSettings.CheckVersion;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -34,6 +35,7 @@ namespace PockeTwit
         {
             ClientSettings.UserName = txtUserName.Text;
             ClientSettings.Password = txtPassword.Text;
+            ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
             this.Close();

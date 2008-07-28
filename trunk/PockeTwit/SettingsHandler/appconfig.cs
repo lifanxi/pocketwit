@@ -73,28 +73,6 @@ public class ConfigurationSettings
             Root.AppendChild(SettingsNode);
             oXml.AppendChild(Root);
 
-            /*
-            if (File.Exists(ConfigFile))
-            {
-                oXml.Load(ConfigFile);
-            }
-            else
-            {
-                oXml.Load(Path.Combine(AppPath, "defaultapp.config"));
-            }
-
-            XmlNodeList oList = oXml.GetElementsByTagName("appSettings");
-
-            foreach (XmlNode oNode in oList)
-            {
-                foreach (XmlNode oKey in oNode.ChildNodes)
-                {
-                    string Key = oKey.Attributes["key"].Value;
-                    string Setting = AppSettings[Key];
-                    oKey.Attributes["value"].Value = Setting;
-                }
-            }
-            */
             oXml.Save(ConfigFile);
         }
         catch(Exception ex) 

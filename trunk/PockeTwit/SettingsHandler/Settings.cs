@@ -6,6 +6,7 @@ static class ClientSettings
 {
     public static string UserName { get; set; }
     public static string Password { get; set; }
+    public static bool CheckVersion { get; set; }
     public static int SmallArtSize = 60;
     static ClientSettings()
     {
@@ -20,6 +21,10 @@ static class ClientSettings
         {
             UserName = ConfigurationSettings.AppSettings["UserName"];
             Password = ConfigurationSettings.AppSettings["Password"];
+            if(!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CheckVersion"]))
+            {
+                CheckVersion = bool.Parse(ConfigurationSettings.AppSettings["CheckVersion"]);
+            }
         }
         catch{}
         
@@ -28,6 +33,7 @@ static class ClientSettings
     {
         ConfigurationSettings.AppSettings["UserName"] = UserName;
         ConfigurationSettings.AppSettings["Password"] = Password;
+        ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString() ;
         ConfigurationSettings.SaveConfig();
     }
 }
