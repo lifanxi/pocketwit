@@ -37,6 +37,7 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.chkVersion = new System.Windows.Forms.CheckBox();
+            this.lblError = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -98,11 +99,23 @@
             this.chkVersion.TabIndex = 6;
             this.chkVersion.Text = "Automatically check for new version";
             // 
+            // lblError
+            // 
+            this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblError.ForeColor = System.Drawing.Color.Tomato;
+            this.lblError.Location = new System.Drawing.Point(4, 4);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(233, 20);
+            this.lblError.Text = "Unable to verify username and password";
+            this.lblError.Visible = false;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblError);
             this.Controls.Add(this.chkVersion);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.label2);
@@ -124,5 +137,6 @@
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuAccept;
         private System.Windows.Forms.CheckBox chkVersion;
+        private System.Windows.Forms.Label lblError;
     }
 }

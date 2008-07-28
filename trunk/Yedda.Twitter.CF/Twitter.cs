@@ -73,7 +73,8 @@ namespace Yedda
             Create,
             Destroy,
             Follow,
-            Leave
+            Leave,
+            Verify_Credentials
         }
 
         private string source = null;
@@ -676,5 +677,20 @@ protected string ExecuteGetCommand(string url, string userName, string password)
             return ExecuteGetCommand(url, userName, password);
         }
         #endregion
+
+        public bool Verify(string userName, string password)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML));
+            try
+            {
+                string Response = ExecuteGetCommand(url, userName, password);
+                return (Response == "<authorized>true</authorized>");
+            }
+            catch(WebException)
+            {
+            
+            }
+            return false;
+        }
     }
 }

@@ -33,12 +33,20 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
-            ClientSettings.UserName = txtUserName.Text;
-            ClientSettings.Password = txtPassword.Text;
-            ClientSettings.CheckVersion = chkVersion.Checked;
-            ClientSettings.SaveSettings();
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            Yedda.Twitter twitter = new Yedda.Twitter();
+            if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
+            {
+                lblError.Visible = true;
+            }
+            else
+            {
+                ClientSettings.UserName = txtUserName.Text;
+                ClientSettings.Password = txtPassword.Text;
+                ClientSettings.CheckVersion = chkVersion.Checked;
+                ClientSettings.SaveSettings();
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
     }
 }
