@@ -12,8 +12,38 @@ namespace PockeTwit
 
         static Following()
         {
+            GetCachedFollowers();
+
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "FetchFollowers";
+            t.Start();
+            //GetFollowersFromTwitter();
+        }
+
+        private static void GetCachedFollowers()
+        {
+            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+            if (System.IO.File.Exists(AppPath + "\\Following.xml"))
+            {
+                using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Following.xml"))
+                {
+                    string Followers = r.ReadToEnd();
+                    InterpretUsers(Followers);
+                }
+            }
+        }
+
+        private static void GetFollowersFromTwitter()
+        {
             Yedda.Twitter twitter = new Yedda.Twitter();
             string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+            InterpretUsers(response);
+            SaveUsers();
+        }
+
+        private static void InterpretUsers(string response)
+        {
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
             Library.User[] friends;
             if (string.IsNullOrEmpty(response))
@@ -29,6 +59,18 @@ namespace PockeTwit
                 }
             }
         }
+
+        private static void SaveUsers()
+        {
+            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+
+            XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(AppPath + "\\Following.xml"))
+            {
+                s.Serialize(w, FollowedUsers.ToArray());
+            }
+        }
+
 
         public static bool IsFollowing(Library.User userToCheck)
         {
