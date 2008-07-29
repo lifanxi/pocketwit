@@ -20,6 +20,8 @@ namespace PockeTwit
         private UpdateChecker Checker;
         private const int TimerLength = 75000;
         private string CachedResponse;
+        private LocalTimeline LocalLine = new LocalTimeline();
+        private bool bUpdate = true;
 
         private delegate void delChangeCursor(Cursor CursorToset);
         public TweetList()
@@ -41,6 +43,7 @@ namespace PockeTwit
             statusList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statusList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
+            LocalLine.LoadFromCache();
             GetTimeLine();
             Checker = new UpdateChecker();
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
@@ -113,6 +116,7 @@ namespace PockeTwit
                     GetTimeLineAsync();
                     break;
                 case "Friends TimeLine":
+                    if (CurrentAction != Yedda.Twitter.ActionType.Friends_Timeline) { bUpdate = true; }
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statusList.RightMenuItems = RightMenu;
                     ChangeCursor(Cursors.WaitCursor);
@@ -234,12 +238,26 @@ namespace PockeTwit
 
         private void GetTimeLine()
         {
-            string response = FetchFromTwitter();
-
-            if (response != CachedResponse)
+            Library.status[] statuses = null;
+            if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
             {
-                Library.status[] statuses = InterpretStatuses(response);
-                
+                bUpdate = bUpdate | LocalLine.CheckForUpdates();
+                statuses = LocalLine.TimeLine;
+            }
+            else
+            {
+                string response = FetchFromTwitter();
+                if (response != CachedResponse)
+                {
+                    bUpdate = true;
+                    statuses = InterpretStatuses(response);
+                }
+            }
+
+
+
+            if (bUpdate)
+            {
                 statusList.Clear();
                 foreach (Library.status stat in statuses)
                 {
@@ -261,8 +279,9 @@ namespace PockeTwit
                         statusList.AddItem(item);
                     }
                 }
-                ChangeCursor(Cursors.Default);
+                bUpdate = false;
             }
+            ChangeCursor(Cursors.Default);
         }
 
         private Library.status[] InterpretStatuses(string response)
@@ -290,9 +309,9 @@ namespace PockeTwit
 
             switch (CurrentAction)
             {
-                case Yedda.Twitter.ActionType.Friends_Timeline:
-                    response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-                    break;
+                //case Yedda.Twitter.ActionType.Friends_Timeline:
+                //    response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                //    break;
                 case Yedda.Twitter.ActionType.Public_Timeline:
                     response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
                     break;
