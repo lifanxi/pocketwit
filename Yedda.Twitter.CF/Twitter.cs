@@ -79,8 +79,8 @@ namespace Yedda
 
         private string source = null;
 
-        private string twitterClient = "PockeTwit";
-        private string twitterClientVersion = "0.5";
+        private string twitterClient = "pocketwit";
+        private string twitterClientVersion = "0.9";
         private string twitterClientUrl = "http://code.google.com/p/pocketwit";
 
 

@@ -12,7 +12,7 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About", "Exit" });
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
@@ -128,6 +128,9 @@ namespace PockeTwit
                 case "Settings":
                     ChangeSettings();
                     break;
+                case "About":
+                    ShowAbout();
+                    break;
 
                 case "Reply":
                     SendReply();
@@ -159,6 +162,12 @@ namespace PockeTwit
                     this.Close();
                     break;
             }
+        }
+
+        private void ShowAbout()
+        {
+            AboutForm a = new AboutForm();
+            a.ShowDialog();
         }
 
         
