@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.09</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv09.CAB</url>
-  <notes>Context-sensitive right menu
-Decode HTML entities
-Verify username/password before saving
-Favorite tweets are highlighted
-Minor scroll speed improvements
+  <version>.10</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwit%20v10.CAB</url>
+  <notes>Image fetching without clicks
+Prettier favorites, better response
+About form with upgrade check
+About form can send feedback
+Notify user when unexpectedly disconnected
 </notes>
 </LatestRelease>
