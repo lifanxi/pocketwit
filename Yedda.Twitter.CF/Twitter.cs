@@ -163,7 +163,7 @@ namespace Yedda
 protected string ExecuteGetCommand(string url, string userName, string password)
 {
     HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
-    
+    client.Timeout = 5000;
     if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
     {
         client.Credentials = new NetworkCredential(userName, password);
@@ -193,7 +193,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 return null;
             }
         }
-
+        
         throw ex;
     }
     return null;
