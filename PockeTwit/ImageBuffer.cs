@@ -9,9 +9,12 @@ namespace PockeTwit
     {
         public delegate void ArtWasUpdated(string User);
         public static event ArtWasUpdated Updated;
+        public static Bitmap FavoriteImage;
         private static Dictionary<string, Image> ImageDictionary = new Dictionary<string, Image>();
         static ImageBuffer()
         {
+            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+            FavoriteImage = new Bitmap(AppPath + "\\asterisk_yellow.png");
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
         }
 

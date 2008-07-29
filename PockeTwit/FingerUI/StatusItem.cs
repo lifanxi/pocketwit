@@ -41,7 +41,22 @@ namespace FingerUI
         public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
-        public PockeTwit.Library.status Tweet { get; set; }
+        private PockeTwit.Library.status _Tweet;
+        public PockeTwit.Library.status Tweet 
+        {
+            get { return _Tweet; }
+            set
+            {
+                _Tweet = value;
+                if (string.IsNullOrEmpty(value.favorited))
+                {
+                    m_highlighted = false;
+                    return;
+                }
+                m_highlighted =  bool.Parse(value.favorited);
+            }
+
+        }
 
         public bool isBeingFollowed
         {
@@ -208,22 +223,14 @@ namespace FingerUI
 
             g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
         
-            if (m_selected | m_highlighted) 
+            if (m_selected) 
             {
                 SolidBrush FillColor;
 
-                if (m_selected)
-                {
-                    FillColor = new SolidBrush(m_parent.SelectedBackColor);
-                    TextFont = m_parent.SelectedFont;
-                    ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
-                }
-                else
-                {
-                    FillColor = new SolidBrush(m_parent.HighLightBackColor);
-                    TextFont = m_parent.HighlightedFont;
-                    ForeBrush = new SolidBrush(m_parent.HighLightForeColor);
-                }
+                FillColor = new SolidBrush(m_parent.SelectedBackColor);
+                TextFont = m_parent.SelectedFont;
+                ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
+            
                 // Draw the selection image if available, otherwise just a gray box.
                 if (m_selectionBitmap != null)
                 {
@@ -241,7 +248,14 @@ namespace FingerUI
                 }
                 FillColor.Dispose();
             }
-            
+
+            if (m_highlighted)
+            {
+                System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+                ia.SetColorKey(PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0), PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0));
+                g.DrawImage(PockeTwit.ImageBuffer.FavoriteImage, 
+                    new Rectangle(bounds.X+5, bounds.Y+5, 7, 7),0,0,7,7,GraphicsUnit.Pixel, ia);
+            }
             
             textBounds.Offset(5, 1);
             textBounds.Width = textBounds.Width-5;
