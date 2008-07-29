@@ -30,7 +30,7 @@ namespace PockeTwit
             if (e.ExceptionObject is System.Net.WebException)
             {
                 System.Net.WebException ex = (System.Net.WebException)e.ExceptionObject;
-                MessageBox.Show("Unable to connect to twitter.\r\n Either twitter is down or the network connection has been broken.", "Error");
+                MessageBox.Show("Unable to connect to twitter.\r\nEither twitter is down or the network connection has been broken.", "Error");
                 Application.Exit();
             }
         }
