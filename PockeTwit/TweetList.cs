@@ -21,7 +21,7 @@ namespace PockeTwit
         private const int TimerLength = 75000;
         private string CachedResponse;
 
-        public delegate void delChangeCursor(Cursor CursorToset);
+        private delegate void delChangeCursor(Cursor CursorToset);
         public TweetList()
         {
             InitializeComponent();
@@ -44,10 +44,9 @@ namespace PockeTwit
             GetTimeLine();
             Checker = new UpdateChecker();
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
-            
-
         }
 
+        
         void statusList_SelectedItemChanged(object sender, EventArgs e)
         {
             UpdateRightMenu();

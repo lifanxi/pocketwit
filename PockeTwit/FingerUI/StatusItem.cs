@@ -72,15 +72,6 @@ namespace FingerUI
         /// </summary>
         static StatusItem()
         {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase), "select.png");
-            try
-            {
-                m_selectionBitmap = new Bitmap(path);
-            }
-            catch
-            {
-            }
-            
         }
 
         
