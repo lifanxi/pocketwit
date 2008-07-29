@@ -83,7 +83,23 @@ namespace FingerUI
             HighlightedFont = this.Font;
             m_timer.Interval = 5;
             m_timer.Tick += new EventHandler(m_timer_Tick);
+            PockeTwit.ImageBuffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
         }
+
+        void ImageBuffer_Updated(string User)
+        {
+            if(InvokeRequired)
+            {
+                delClearMe d = new delClearMe(Refresh);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                this.Refresh();
+            }
+        }
+
+
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.Control"></see> and its child controls and optionally releases the managed resources.
@@ -96,7 +112,7 @@ namespace FingerUI
             m_timer.Enabled = false;
 
             ClearClicks();
-
+            PockeTwit.ImageBuffer.Updated -= new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
             base.Dispose(disposing);
         }
 
