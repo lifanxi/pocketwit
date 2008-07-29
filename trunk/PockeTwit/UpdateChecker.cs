@@ -11,13 +11,13 @@ namespace PockeTwit
 {
     public class UpdateChecker
     {
-        private double currentVersion = .09;
+        public double currentVersion = .09;
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private string XMLResponse;
         private UpdateInfo WebVersion;
         public delegate void delUpdateFound(UpdateInfo Info);
         public event delUpdateFound UpdateFound;
-
+        public event delUpdateFound CurrentVersion;
 
         public struct UpdateInfo
         {
@@ -30,6 +30,13 @@ namespace PockeTwit
         public UpdateChecker()
         {
             if (ClientSettings.CheckVersion)
+            {
+                CheckForUpdate();
+            }
+        }
+        public UpdateChecker(bool Auto)
+        {
+            if (Auto)
             {
                 CheckForUpdate();
             }
@@ -74,6 +81,13 @@ namespace PockeTwit
                     if (UpdateFound != null)
                     {
                         UpdateFound(WebVersion);
+                    }
+                }
+                else
+                {
+                    if (CurrentVersion != null)
+                    {
+                        CurrentVersion(WebVersion);
                     }
                 }
                 System.Diagnostics.Debug.WriteLine("Update check complete");
