@@ -21,11 +21,14 @@ namespace PockeTwit
 
         public void LoadFromCache()
         {
-            string LocationPath = ClientSettings.AppPath + "\\FriendsTime.xml";
+            string LocationPath = ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml";
             string timestring = null;
-            using (System.IO.StreamReader r = new System.IO.StreamReader(LocationPath))
+            if (System.IO.File.Exists(LocationPath))
             {
-                timestring = r.ReadToEnd();
+                using (System.IO.StreamReader r = new System.IO.StreamReader(LocationPath))
+                {
+                    timestring = r.ReadToEnd();
+                }
             }
             if (string.IsNullOrEmpty(timestring))
             {
@@ -55,7 +58,7 @@ namespace PockeTwit
         }
         public void SaveToCache()
         {
-            string LocationPath = ClientSettings.AppPath + "\\FriendsTime.xml";
+            string LocationPath = ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml";
             using (System.IO.StreamWriter w = new System.IO.StreamWriter(LocationPath))
             {
                 XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
@@ -69,11 +72,11 @@ namespace PockeTwit
             string response = null;
             if (_TimeLine.Length > 0)
             {
-                response = twitter.GetFriendsTimelineSinceID(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML, _TimeLine[0].id);
+                response = twitter.GetFriendsTimelineSinceID(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML, _TimeLine[0].id, ClientSettings.CachedTweets.ToString());
             }
             else
             {
-                response = twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                response = twitter.GetFriendsTimelineCount(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML, ClientSettings.CachedTweets.ToString());
             }
 
             Library.status[] NewLine = null;
@@ -83,17 +86,33 @@ namespace PockeTwit
                 NewLine = DeserializeTimeline(response);
                 if (NewLine.Length > 0)
                 {
-                    Library.status[] MergeLine = new Library.status[_TimeLine.Length + NewLine.Length];
+                    int ListLenght;
+                    ListLenght = (_TimeLine.Length + NewLine.Length > ClientSettings.CachedTweets) ? ClientSettings.CachedTweets : _TimeLine.Length + NewLine.Length;
+                    Library.status[] MergeLine = new Library.status[ListLenght];
                     int i = 0;
                     foreach (Library.status stat in NewLine)
                     {
-                        MergeLine[i] = stat;
-                        i++;
+                        if (stat != null)
+                        {
+                            if (i >= ClientSettings.CachedTweets) 
+                            {
+                                break; 
+                            }
+                            MergeLine[i] = stat;
+                            i++;
+                        }
                     }
                     foreach (Library.status stat in _TimeLine)
                     {
-                        MergeLine[i] = stat;
-                        i++;
+                        if (stat != null)
+                        {
+                            if (i >= ClientSettings.CachedTweets) 
+                            {
+                                break; 
+                            }
+                            MergeLine[i] = stat;
+                            i++;
+                        }
                     }
 
                     _TimeLine = MergeLine;

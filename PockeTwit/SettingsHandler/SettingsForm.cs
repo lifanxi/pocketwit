@@ -21,6 +21,7 @@ namespace PockeTwit
         {
             txtUserName.Text = ClientSettings.UserName;
             txtPassword.Text = ClientSettings.Password;
+            txtMaxTweets.Text = ClientSettings.CachedTweets.ToString();
             chkVersion.Checked = ClientSettings.CheckVersion;
             this.DialogResult = DialogResult.Cancel;
         }
@@ -33,20 +34,44 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
+            if (!VerifyTweetCacheSize())
+            {
+                lblError.Visible = true;
+                lblError.Text = "Max. Tweets must between 10 and 200";
+                return;
+            }
+
             Yedda.Twitter twitter = new Yedda.Twitter();
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {
                 lblError.Visible = true;
+                lblError.Text = "Unable to verify username and password";
+                return;
             }
             else
             {
+                lblError.Visible = false;
                 ClientSettings.UserName = txtUserName.Text;
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
+                ClientSettings.CachedTweets = int.Parse(txtMaxTweets.Text);
                 ClientSettings.SaveSettings();
                 Following.Reset();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+            }
+        }
+
+        private bool VerifyTweetCacheSize()
+        {
+            try
+            {
+                int TweetNumber = int.Parse(txtMaxTweets.Text);
+                return (TweetNumber >= 10 && TweetNumber <= 200);
+            }
+            catch
+            {
+                return false;
             }
         }
     }
