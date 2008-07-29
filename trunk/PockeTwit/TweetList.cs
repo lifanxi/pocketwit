@@ -139,7 +139,7 @@ namespace PockeTwit
                     DestroyFavorite();
                     break;
                 case "Make Favorite":
-                    CreateFavorite();
+                    CreateFavoriteAsync();
                     break;
                 case "Direct Message":
                     SendDirectMessage();
@@ -334,13 +334,25 @@ namespace PockeTwit
             UpdateRightMenu();
         }
 
-        private void CreateFavorite()
+        private void CreateFavoriteAsync()
         {
+            ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string ID = selectedItem.Tweet.id;
-            Twitter.SetFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
             selectedItem.isFavorite = true;
+
+            string ID = selectedItem.Tweet.id;
+            System.Threading.ThreadStart ts = delegate { CreateFavorite(ID); };
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "CreateFavorite";
+            t.Start();
+        }
+
+        private void CreateFavorite(string ID)
+        {
+            Twitter.SetFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
+            
             UpdateRightMenu();
+            ChangeCursor(Cursors.Default);
         }
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
