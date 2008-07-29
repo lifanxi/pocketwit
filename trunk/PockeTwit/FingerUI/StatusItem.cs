@@ -143,8 +143,13 @@ namespace FingerUI
         public virtual void Dispose()
         {
 
-            m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
+            IgnoreClick();
             m_parent = null;
+        }
+
+        public void IgnoreClick()
+        {
+            m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
         }
 
         /// <summary>

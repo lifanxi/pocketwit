@@ -201,6 +201,7 @@ namespace PockeTwit
             {
                 Checker.CheckForUpdate();
             }
+            LocalLine.LoadFromCache();
             GetTimeLine();
         }
 
@@ -247,11 +248,11 @@ namespace PockeTwit
             else
             {
                 string response = FetchFromTwitter();
-                if (response != CachedResponse)
-                {
+                //if (response != CachedResponse)
+                //{
                     bUpdate = true;
                     statuses = InterpretStatuses(response);
-                }
+                //}
             }
 
 
@@ -265,17 +266,6 @@ namespace PockeTwit
                     if (stat.user!=null)
                     {
                         item.Tweet = stat;
-                        /*
-                        item.User = stat.user.screen_name;
-                        item.UserID = stat.user.id;
-                        item.UserImageURL = stat.user.profile_image_url;
-                        item.ID = stat.id;
-                         
-                        if (!string.IsNullOrEmpty(stat.favorited))
-                        {
-                            item.isFavorite = bool.Parse(stat.favorited);
-                        }
-                        */
                         statusList.AddItem(item);
                     }
                 }

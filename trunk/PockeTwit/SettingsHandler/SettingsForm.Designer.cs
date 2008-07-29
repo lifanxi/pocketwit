@@ -38,6 +38,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.chkVersion = new System.Windows.Forms.CheckBox();
             this.lblError = new System.Windows.Forms.Label();
+            this.txtMaxTweets = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -110,11 +113,39 @@
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
+            // txtMaxTweets
+            // 
+            this.txtMaxTweets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaxTweets.Location = new System.Drawing.Point(82, 110);
+            this.txtMaxTweets.Name = "txtMaxTweets";
+            this.txtMaxTweets.Size = new System.Drawing.Size(95, 21);
+            this.txtMaxTweets.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.ForeColor = System.Drawing.Color.LightGray;
+            this.label3.Location = new System.Drawing.Point(4, 110);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 20);
+            this.label3.Text = "Max Tweets:";
+            // 
+            // label4
+            // 
+            this.label4.ForeColor = System.Drawing.Color.LightGray;
+            this.label4.Location = new System.Drawing.Point(183, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(57, 20);
+            this.label4.Text = "(10-200)";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtMaxTweets);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.chkVersion);
             this.Controls.Add(this.txtPassword);
@@ -138,5 +169,8 @@
         private System.Windows.Forms.MenuItem menuAccept;
         private System.Windows.Forms.CheckBox chkVersion;
         private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.TextBox txtMaxTweets;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
