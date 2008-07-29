@@ -163,7 +163,7 @@ namespace Yedda
 protected string ExecuteGetCommand(string url, string userName, string password)
 {
     HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
-    client.Timeout = 5000;
+    client.Timeout = 10000;
     if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
     {
         client.Credentials = new NetworkCredential(userName, password);
@@ -211,13 +211,14 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         protected string ExecutePostCommand(string url, string userName, string password, string data)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
+            
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 request.Credentials = new NetworkCredential(userName, password);
                 request.PreAuthenticate = true;
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
+                request.Timeout = 10000;
 
                 if (!string.IsNullOrEmpty(TwitterClient))
                 {
