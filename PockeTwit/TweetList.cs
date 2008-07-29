@@ -19,8 +19,9 @@ namespace PockeTwit
         private string ShowUserID;
         private UpdateChecker Checker;
         private const int TimerLength = 75000;
-        //private const int TimerLength = 10000;
         private string CachedResponse;
+
+        public delegate void delChangeCursor(Cursor CursorToset);
         public TweetList()
         {
             InitializeComponent();
@@ -95,6 +96,7 @@ namespace PockeTwit
             }
             else
             {
+                ChangeCursor(Cursors.WaitCursor);
                 ShowUserID = TextClicked.Replace("@","");
                 CurrentAction = Yedda.Twitter.ActionType.Show;
                 GetTimeLineAsync();
@@ -108,11 +110,13 @@ namespace PockeTwit
                 case "Public TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statusList.RightMenuItems = RightMenu;
+                    ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
                     break;
                 case "Friends TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statusList.RightMenuItems = RightMenu;
+                    ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
                     break;
                 case "Favorites":
@@ -222,13 +226,10 @@ namespace PockeTwit
 
         private void GetTimeLine()
         {
-            //Cursor.Current = Cursors.WaitCursor;
-            
             string response = FetchFromTwitter();
 
             if (response != CachedResponse)
             {
-                Cursor.Current = Cursors.WaitCursor;
                 Library.status[] statuses = InterpretStatuses(response);
                 
                 statusList.Clear();
@@ -252,7 +253,7 @@ namespace PockeTwit
                         statusList.AddItem(item);
                     }
                 }
-                Cursor.Current = Cursors.Default;
+                ChangeCursor(Cursors.Default);
             }
         }
 
@@ -347,6 +348,19 @@ namespace PockeTwit
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Name = "GetTimeLine";
             t.Start();
+        }
+
+        private void ChangeCursor(Cursor CursorToset)
+        {
+            if (InvokeRequired)
+            {
+                delChangeCursor d = new delChangeCursor(ChangeCursor);
+                this.Invoke(d, new object[] { CursorToset });
+            }
+            else
+            {
+                Cursor.Current = CursorToset;
+            }
         }
     }
 }
