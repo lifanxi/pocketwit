@@ -36,10 +36,9 @@ namespace PockeTwit
 
         private static void GetCachedFollowers()
         {
-            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-            if (System.IO.File.Exists(AppPath + "\\Following.xml"))
+            if (System.IO.File.Exists(ClientSettings.AppPath + "\\Following.xml"))
             {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Following.xml"))
+                using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\Following.xml"))
                 {
                     string Followers = r.ReadToEnd();
                     InterpretUsers(Followers);
@@ -80,10 +79,8 @@ namespace PockeTwit
 
         private static void SaveUsers()
         {
-            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(AppPath + "\\Following.xml"))
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\Following.xml"))
             {
                 s.Serialize(w, FollowedUsers.ToArray());
             }

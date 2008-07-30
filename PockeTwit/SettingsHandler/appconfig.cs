@@ -14,8 +14,7 @@ public class ConfigurationSettings
         try
         {
 
-            string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            string ConfigFile = Path.Combine(AppPath, "App.config");
+            string ConfigFile = Path.Combine(ClientSettings.AppPath, "App.config");
 
             XmlDocument oXml = new XmlDocument();
 
@@ -25,7 +24,7 @@ public class ConfigurationSettings
             }
             else
             {
-                oXml.Load(Path.Combine(AppPath, "defaultapp.config"));
+                oXml.Load(Path.Combine(ClientSettings.AppPath, "defaultapp.config"));
             }
 
 
@@ -49,9 +48,7 @@ public class ConfigurationSettings
     {
         try
         {
-
-            string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            string ConfigFile = Path.Combine(AppPath, "App.config");
+            string ConfigFile = Path.Combine(ClientSettings.AppPath, "App.config");
 
             XmlDocument oXml = new XmlDocument();
             XmlNode Root = oXml.CreateNode(XmlNodeType.Element, "configuration", "");

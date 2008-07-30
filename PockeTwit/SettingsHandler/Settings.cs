@@ -13,10 +13,19 @@ static class ClientSettings
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
+    public static string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
 
     static ClientSettings()
     {
+        LoadColors();
         LoadSettings();
+    }
+
+    private static void LoadColors()
+    {
+        if (System.IO.File.Exists(AppPath + "\\colors.txt"))
+        {
+        }
     }
 
     public static void LoadSettings()
