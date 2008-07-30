@@ -120,7 +120,6 @@ namespace FingerUI
         {
             foreach (StatusItem item in m_items.Values)
             {
-                item.IgnoreClick();
                 item.WordClicked -= new StatusItem.ClickedWordDelegate(item_WordClicked);
             }
         }

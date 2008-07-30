@@ -72,7 +72,6 @@
     <Compile Include="ImageBuffer.cs" />
     <Compile Include="is.gd.cs" />
     <Compile Include="Library\Tweet.cs" />
-    <Compile Include="LocalTimeline.cs" />
     <Compile Include="MasterControls\MasterForm.cs">
       <SubType>Form</SubType>
     </Compile>
