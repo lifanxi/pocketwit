@@ -57,7 +57,7 @@
             // 
             // label1
             // 
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(4, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 20);
@@ -83,7 +83,7 @@
             // 
             // label2
             // 
-            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.ForeColor = ClientSettings.ForeColor;
             this.label2.Location = new System.Drawing.Point(5, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
@@ -92,7 +92,7 @@
             // chkVersion
             // 
             this.chkVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.chkVersion.ForeColor = ClientSettings.ForeColor;
             this.chkVersion.Location = new System.Drawing.Point(5, 245);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
@@ -103,7 +103,7 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.ForeColor = System.Drawing.Color.Tomato;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(4, 4);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(233, 20);

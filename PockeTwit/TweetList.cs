@@ -57,12 +57,10 @@ namespace PockeTwit
             Twitter = new Yedda.Twitter();
             tmrautoUpdate.Interval = TimerLength;
             tmrautoUpdate.Enabled = true;
-            statusList.BackColor = Color.Black;
-            statusList.ForeColor = Color.LightGray;
-            statusList.SelectedBackColor = Color.DarkSlateGray;
-            statusList.SelectedForeColor = Color.White;
-            statusList.HighLightBackColor = Color.LightGray;
-            statusList.HighLightForeColor = Color.Black;
+            statusList.BackColor = ClientSettings.BackColor;
+            statusList.ForeColor = ClientSettings.ForeColor;
+            statusList.SelectedBackColor = ClientSettings.SelectedBackColor;
+            statusList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statusList.ItemHeight = 70;
             statusList.LeftMenuItems = LeftMenu;
             statusList.RightMenuItems = RightMenu;

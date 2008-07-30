@@ -37,9 +37,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.ForeColor = System.Drawing.Color.LightGray;
+            this.ForeColor = ClientSettings.ForeColor;
             this.Menu = this.mainMenu1;
             this.Name = "MasterForm";
             this.Text = "MasterForm";

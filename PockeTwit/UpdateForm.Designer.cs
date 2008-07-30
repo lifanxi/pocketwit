@@ -55,7 +55,7 @@
             // 
             // lblVersion
             // 
-            this.lblVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.lblVersion.ForeColor = ClientSettings.ForeColor;
             this.lblVersion.Location = new System.Drawing.Point(67, 4);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(128, 25);
@@ -66,7 +66,7 @@
             this.lblInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblInfo.ForeColor = System.Drawing.Color.LightGray;
+            this.lblInfo.ForeColor = ClientSettings.ForeColor;
             this.lblInfo.Location = new System.Drawing.Point(3, 76);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(234, 192);
@@ -75,7 +75,7 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(3, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 20);
@@ -84,7 +84,7 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.ForeColor = ClientSettings.ForeColor;
             this.label2.Location = new System.Drawing.Point(3, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 20);
@@ -95,7 +95,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

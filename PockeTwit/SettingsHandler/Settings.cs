@@ -8,6 +8,12 @@ static class ClientSettings
     public static string Password { get; set; }
     public static bool CheckVersion { get; set; }
     public static int SmallArtSize = 60;
+    public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
+    public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
+    public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
+    public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
+    public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
+
     static ClientSettings()
     {
         LoadSettings();
