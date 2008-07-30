@@ -77,13 +77,25 @@ namespace PockeTwit
         {
             
             string LocalFileName = DetermineCacheFileName(User, URL);
-            
-            System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
-            System.Net.HttpWebResponse ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
-            if (ArtResponse != null)
+            System.Net.HttpWebResponse ArtResponse = null;
+            try
             {
-                System.IO.Stream responseStream = ArtResponse.GetResponseStream();
-                System.IO.FileStream ArtWriter = new System.IO.FileStream(LocalFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read);
+                System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
+                ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
+            }
+            catch { }
+            if (ArtResponse == null)
+            {
+                DeleteTempArt(User, URL);
+                return;
+            }
+            System.IO.Stream responseStream;
+            System.IO.FileStream ArtWriter;
+            try
+            {
+                responseStream = ArtResponse.GetResponseStream();
+            
+                ArtWriter = new System.IO.FileStream(LocalFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read);
 
                 int count = 0;
                 byte[] buffer = new byte[8192];
@@ -96,23 +108,37 @@ namespace PockeTwit
                     }
                 }
                 while (count != 0);
-                ArtWriter.Close();
-                responseStream.Close();
-                
-                //Shrink it to the client size.
-                Bitmap original = new Bitmap(LocalFileName);
-                Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                Graphics g = Graphics.FromImage(resized);
-                g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
-                g.Dispose();
-                resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                if (NewArtWasDownloaded != null)
-                {
-                    NewArtWasDownloaded.Invoke(User, LocalFileName);
-                }
+            }
+            catch
+            {
+                DeleteTempArt(User, URL);
                 return;
             }
+            ArtWriter.Close();
+            responseStream.Close();
+            
+            //Shrink it to the client size.
+            Bitmap original = new Bitmap(LocalFileName);
+            Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+            Graphics g = Graphics.FromImage(resized);
+            g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
+            g.Dispose();
+            resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            if (NewArtWasDownloaded != null)
+            {
+                NewArtWasDownloaded.Invoke(User, LocalFileName);
+            }
             return;
+        }
+
+        private static void DeleteTempArt(string User, string URL)
+        {
+            string LocalFileName = DetermineCacheFileName(User, URL);
+            if (System.IO.File.Exists(LocalFileName))
+            {
+                System.IO.File.Delete(LocalFileName);
+            }
+
         }
     }
 }

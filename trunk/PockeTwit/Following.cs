@@ -50,9 +50,13 @@ namespace PockeTwit
         private static void GetFollowersFromTwitter()
         {
             Yedda.Twitter twitter = new Yedda.Twitter();
-            string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-            InterpretUsers(response);
-            SaveUsers();
+            try
+            {
+                string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                InterpretUsers(response);
+                SaveUsers();
+            }
+            catch { }
             OnceLoaded = true;
         }
 
