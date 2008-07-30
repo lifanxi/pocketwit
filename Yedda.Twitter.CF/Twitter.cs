@@ -163,7 +163,7 @@ namespace Yedda
 protected string ExecuteGetCommand(string url, string userName, string password)
 {
     HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
-    client.Timeout = 15000;
+    client.Timeout = 10000;
     if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
     {
         client.Credentials = new NetworkCredential(userName, password);
@@ -193,10 +193,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 return null;
             }
         }
-        if (ex.Message == "The remote server returned an error: (304) Not Modified.")
-        {
-            return null;
-        }
+        
         throw ex;
     }
     return null;
@@ -221,7 +218,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 request.PreAuthenticate = true;
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
-                request.Timeout = 15000;
+                request.Timeout = 10000;
 
                 if (!string.IsNullOrEmpty(TwitterClient))
                 {
@@ -401,30 +398,12 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         #endregion
 
         #region Friends_Timeline
-
-        public string GetFriendsTimelineCount(string userName, string password, OutputFormatType format, string Max)
-        {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format));
-            url = url + "?count=" + Max;
-            return ExecuteGetCommand(url, userName, password);
-        }
-
-        public string GetFriendsTimelineSinceID(string userName, string password, OutputFormatType format, string ID, string Max)
-        {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format));
-            url = url + "?since_id=" + ID + "&count=" + Max;
-            return ExecuteGetCommand(url, userName, password);
-        }
-
-
         public string GetFriendsTimeline(string userName, string password, OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format));
 
             return ExecuteGetCommand(url, userName, password);
         }
-
-
 
         public string GetFriendsTimelineAsJSON(string userName, string password)
         {
