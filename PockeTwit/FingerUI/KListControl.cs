@@ -73,6 +73,8 @@ namespace FingerUI
         public List<string> RightMenuItems = new List<string>();
         public List<string> LeftMenuItems = new List<string>();
 
+        public string Warning { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KListControl"/> class.
         /// </summary>
@@ -577,7 +579,18 @@ namespace FingerUI
                 {
                     DrawLeftMenu(m_backBuffer);
                 }
-                 
+
+                if (!string.IsNullOrEmpty(Warning))
+                {
+                    using(Brush redBrush = new SolidBrush(Color.Red))
+                    {
+                        using (Font WarningFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold))
+                        {
+                            m_backBuffer.DrawString(Warning, WarningFont, redBrush, 0, 0);
+                        }
+                    }
+                }
+
                 e.Graphics.DrawImage(m_backBufferBitmap, 0, 0);
             }
             else

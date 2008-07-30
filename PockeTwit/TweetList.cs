@@ -21,6 +21,34 @@ namespace PockeTwit
         private const int TimerLength = 75000;
         private string CachedResponse;
 
+        private bool CurrentlyConnected
+        {
+            set
+            {
+                if (value)
+                {
+                    statusList.Warning = "";
+                    SetConnectedMenus();
+                }
+                else
+                {
+                    statusList.Warning = "Disconnected";
+                    SetDisconnectedMenus();
+                }
+            }
+        }
+
+        private void SetConnectedMenus()
+        {
+            statusList.LeftMenuItems = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About", "Exit" });
+            statusList.RightMenuItems = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+        }
+        private void SetDisconnectedMenus()
+        {
+            statusList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About", "Exit" });
+            statusList.RightMenuItems = new List<string>(new string[] { "Exit" });
+        }
+        
         private delegate void delChangeCursor(Cursor CursorToset);
         public TweetList()
         {
@@ -112,6 +140,7 @@ namespace PockeTwit
                     ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
                     break;
+                case "Reconnect":
                 case "Friends TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statusList.RightMenuItems = RightMenu;
@@ -236,7 +265,7 @@ namespace PockeTwit
         {
             string response = FetchFromTwitter();
 
-            if (response != CachedResponse)
+            if (!string.IsNullOrEmpty(response) && response != CachedResponse)
             {
                 Library.status[] statuses = InterpretStatuses(response);
                 
@@ -247,22 +276,11 @@ namespace PockeTwit
                     if (stat.user!=null)
                     {
                         item.Tweet = stat;
-                        /*
-                        item.User = stat.user.screen_name;
-                        item.UserID = stat.user.id;
-                        item.UserImageURL = stat.user.profile_image_url;
-                        item.ID = stat.id;
-                         
-                        if (!string.IsNullOrEmpty(stat.favorited))
-                        {
-                            item.isFavorite = bool.Parse(stat.favorited);
-                        }
-                        */
                         statusList.AddItem(item);
                     }
                 }
-                ChangeCursor(Cursors.Default);
             }
+            ChangeCursor(Cursors.Default);
         }
 
         private Library.status[] InterpretStatuses(string response)
@@ -287,24 +305,31 @@ namespace PockeTwit
         private string FetchFromTwitter()
         {
             string response = "";
-
-            switch (CurrentAction)
+            try
             {
-                case Yedda.Twitter.ActionType.Friends_Timeline:
-                    response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.Public_Timeline:
-                    response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.User_Timeline:
-                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.Show:
-                    response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
-                    break;
-                case Yedda.Twitter.ActionType.Favorites:
-                    response = Twitter.GetFavorites(ClientSettings.UserName, ClientSettings.Password);
-                    break;
+                CurrentlyConnected = true;
+                switch (CurrentAction)
+                {
+                    case Yedda.Twitter.ActionType.Friends_Timeline:
+                        response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                        break;
+                    case Yedda.Twitter.ActionType.Public_Timeline:
+                        response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
+                        break;
+                    case Yedda.Twitter.ActionType.User_Timeline:
+                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                        break;
+                    case Yedda.Twitter.ActionType.Show:
+                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
+                        break;
+                    case Yedda.Twitter.ActionType.Favorites:
+                        response = Twitter.GetFavorites(ClientSettings.UserName, ClientSettings.Password);
+                        break;
+                }
+            }
+            catch
+            {
+                CurrentlyConnected = false;
             }
             return response;
         }
