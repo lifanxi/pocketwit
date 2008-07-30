@@ -12,7 +12,7 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
@@ -40,12 +40,12 @@ namespace PockeTwit
 
         private void SetConnectedMenus()
         {
-            statusList.LeftMenuItems = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About", "Exit" });
+            statusList.LeftMenuItems = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
             statusList.RightMenuItems = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         }
         private void SetDisconnectedMenus()
         {
-            statusList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About", "Exit" });
+            statusList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
             statusList.RightMenuItems = new List<string>(new string[] { "Exit" });
         }
         
@@ -53,7 +53,7 @@ namespace PockeTwit
         public TweetList()
         {
             InitializeComponent();
-            this.WindowState = FormWindowState.Maximized;
+            //this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
             tmrautoUpdate.Interval = TimerLength;
             tmrautoUpdate.Enabled = true;
@@ -157,7 +157,7 @@ namespace PockeTwit
                 case "Settings":
                     ChangeSettings();
                     break;
-                case "About":
+                case "About/Feedback":
                     ShowAbout();
                     break;
 
