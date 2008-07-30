@@ -33,10 +33,13 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
+            lblError.Visible = false;
+            Cursor.Current = Cursors.WaitCursor;
             Yedda.Twitter twitter = new Yedda.Twitter();
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {
                 lblError.Visible = true;
+                Cursor.Current = Cursors.Default;
             }
             else
             {
@@ -45,9 +48,11 @@ namespace PockeTwit
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.SaveSettings();
                 Following.Reset();
+                Cursor.Current = Cursors.Default;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+
         }
     }
 }
