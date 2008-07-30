@@ -51,7 +51,12 @@ namespace PockeTwit
             s.ShowDialog();
             s.Hide();
             string UpdateText = s.StatusText;
-            Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+            if (s.DialogResult == DialogResult.OK)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                Cursor.Current = Cursors.Default;
+            }
             this.Show();
             s.Close();
         }
