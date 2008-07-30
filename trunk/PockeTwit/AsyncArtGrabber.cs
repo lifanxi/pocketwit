@@ -13,17 +13,14 @@ namespace PockeTwit
         public delegate void ArtIsReady(string User, string FileName);
         public static event ArtIsReady NewArtWasDownloaded;
         
-        public static string AppPath;
         public static string CacheFolder;
         private static string UnknownArtMed;
         private static string UnknownArtSmall;
         static AsyncArtGrabber()
         {
-            AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-            CacheFolder = AppPath + "\\ArtCache";
+            CacheFolder = ClientSettings.AppPath + "\\ArtCache";
 
-            UnknownArtMed = AppPath + "\\unknownart-med.jpg";
-            UnknownArtSmall = AppPath + "\\unknownart-small.jpg";
+            UnknownArtSmall = ClientSettings.AppPath + "\\unknownart-small.jpg";
             if (!System.IO.Directory.Exists(CacheFolder))
             {
                 System.IO.Directory.CreateDirectory(CacheFolder);

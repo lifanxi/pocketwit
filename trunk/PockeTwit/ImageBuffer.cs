@@ -13,8 +13,7 @@ namespace PockeTwit
         private static Dictionary<string, Image> ImageDictionary = new Dictionary<string, Image>();
         static ImageBuffer()
         {
-            string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
-            FavoriteImage = new Bitmap(AppPath + "\\asterisk_yellow.png");
+            FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
         }
 
