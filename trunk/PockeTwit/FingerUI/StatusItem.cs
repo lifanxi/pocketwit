@@ -312,7 +312,7 @@ namespace FingerUI
         private void MakeClickable(string Line, Graphics g, Rectangle textBounds)
         {
             
-            using (Pen sPen = new Pen(Color.LightBlue))
+            using (Pen sPen = new Pen(ClientSettings.LinkColor))
             {
                 foreach (Clickable c in Clickables)
                 {

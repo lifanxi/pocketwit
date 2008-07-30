@@ -57,7 +57,7 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 20);
@@ -66,7 +66,7 @@
             // lblVersion
             // 
             this.lblVersion.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
-            this.lblVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.lblVersion.ForeColor = ClientSettings.ForeColor;
             this.lblVersion.Location = new System.Drawing.Point(96, 4);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(64, 20);
@@ -74,7 +74,7 @@
             // 
             // label3
             // 
-            this.label3.ForeColor = System.Drawing.Color.LightGray;
+            this.label3.ForeColor = ClientSettings.ForeColor;
             this.label3.Location = new System.Drawing.Point(4, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(232, 31);
@@ -82,7 +82,7 @@
             // 
             // linkLabel1
             // 
-            this.linkLabel1.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.linkLabel1.ForeColor = ClientSettings.LinkColor;
             this.linkLabel1.Location = new System.Drawing.Point(3, 95);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(233, 23);
@@ -92,7 +92,7 @@
             // 
             // linkLabel2
             // 
-            this.linkLabel2.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.linkLabel2.ForeColor = ClientSettings.LinkColor;
             this.linkLabel2.Location = new System.Drawing.Point(3, 24);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(233, 23);
@@ -104,7 +104,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.linkLabel1);

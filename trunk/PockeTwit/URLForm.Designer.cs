@@ -52,9 +52,9 @@
             // 
             // txtURL
             // 
-            this.txtURL.BackColor = System.Drawing.Color.Black;
+            this.txtURL.BackColor = ClientSettings.BackColor;
             this.txtURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtURL.ForeColor = System.Drawing.Color.LightGray;
+            this.txtURL.ForeColor = ClientSettings.ForeColor;
             this.txtURL.Location = new System.Drawing.Point(0, 0);
             this.txtURL.Multiline = true;
             this.txtURL.Name = "txtURL";
@@ -66,7 +66,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.txtURL);
             this.Menu = this.mainMenu1;

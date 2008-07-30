@@ -57,8 +57,8 @@
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.Black;
-            this.textBox1.ForeColor = System.Drawing.Color.LightGray;
+            this.textBox1.BackColor = ClientSettings.BackColor;
+            this.textBox1.ForeColor = ClientSettings.ForeColor;
             this.textBox1.Location = new System.Drawing.Point(3, 3);
             this.textBox1.MaxLength = 140;
             this.textBox1.Multiline = true;
@@ -72,7 +72,7 @@
             // lblCharsLeft
             // 
             this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCharsLeft.ForeColor = System.Drawing.Color.LightGray;
+            this.lblCharsLeft.ForeColor = ClientSettings.ForeColor;
             this.lblCharsLeft.Location = new System.Drawing.Point(198, 272);
             this.lblCharsLeft.Name = "lblCharsLeft";
             this.lblCharsLeft.Size = new System.Drawing.Size(39, 20);
@@ -81,9 +81,9 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.BackColor = System.Drawing.Color.Black;
+            this.button1.BackColor = ClientSettings.BackColor;
             this.button1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
-            this.button1.ForeColor = System.Drawing.Color.LightGray;
+            this.button1.ForeColor = ClientSettings.ForeColor;
             this.button1.Location = new System.Drawing.Point(3, 271);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(64, 20);
@@ -96,12 +96,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
-            this.ForeColor = System.Drawing.Color.LightGray;
+            this.ForeColor = ClientSettings.ForeColor;
             this.Location = new System.Drawing.Point(0, 0);
             this.Menu = this.mainMenu1;
             this.Name = "SetStatus";
