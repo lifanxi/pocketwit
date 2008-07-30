@@ -12,6 +12,7 @@ namespace FingerUI
     {
         public delegate void ClickedWordDelegate(string TextClicked);
         public event ClickedWordDelegate WordClicked;
+        [Serializable()]
         public class Clickable
         {
             public string Text;
@@ -38,7 +39,6 @@ namespace FingerUI
             }
         }
 
-        public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
         private PockeTwit.Library.status _Tweet;
@@ -114,7 +114,7 @@ namespace FingerUI
             {
                 System.Diagnostics.Debug.WriteLine("Parent mouseup");
                 Clickable clicked = null;
-                foreach (Clickable c in Clickables)
+                foreach (Clickable c in Tweet.Clickables)
                 {
                     Rectangle LocationRect = new Rectangle((int)c.Location.Left, (int)c.Location.Top, (int)c.Location.Width, (int)c.Location.Height);
                     LocationRect.Offset(currentOffset.X + ClientSettings.SmallArtSize + 5, currentOffset.Y);
@@ -193,7 +193,7 @@ namespace FingerUI
             {
                 if (value.Width != m_bounds.Width)
                 {
-                    SplitLines = new List<string>(); 
+                    this.Tweet.Lines = new List<string>(); 
                 }
                 m_bounds = value;
             }
@@ -271,7 +271,7 @@ namespace FingerUI
             m_stringFormat.LineAlignment = StringAlignment.Near;
             BreakUpTheText(g, textBounds);
             int lineOffset = 0;
-            foreach (string Line in SplitLines)
+            foreach (string Line in this.Tweet.Lines)
             {
                 float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
                 
@@ -303,9 +303,9 @@ namespace FingerUI
                     //Underline it
 
                     //Put it in a collection so we can see if the user clicked it on mouseup
-                    if (!Clickables.Contains(c))
+                    if (!Tweet.Clickables.Contains(c))
                     {
-                        Clickables.Add(c);
+                        Tweet.Clickables.Add(c);
                     }
                 }
                 LineBeforeThisWord.Append(WordToCheck + " ");
@@ -319,7 +319,7 @@ namespace FingerUI
             
             using (Pen sPen = new Pen(Color.LightBlue))
             {
-                foreach (Clickable c in Clickables)
+                foreach (Clickable c in Tweet.Clickables)
                 {
                     g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
                         (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
@@ -332,7 +332,7 @@ namespace FingerUI
             string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
             SizeF size = g.MeasureString(CurrentLine, TextFont);
             
-            if (SplitLines.Count == 0)
+            if (this.Tweet.Lines.Count == 0)
             {
                 bool SpaceSplit = false;
                 if (this.Tweet.text.IndexOf(' ') > 0)
@@ -341,7 +341,7 @@ namespace FingerUI
                 }
                 if (size.Width < textBounds.Width)
                 {
-                    SplitLines.Add(CurrentLine.TrimStart(new char[] { ' ' }));
+                    this.Tweet.Lines.Add(CurrentLine.TrimStart(new char[] { ' ' }));
                 }
                 while (size.Width > textBounds.Width)
                 {
@@ -366,8 +366,8 @@ namespace FingerUI
                         }
                         currentPos++;
                     }
-                    SplitLines.Add(newString.TrimStart(new char[] { ' ' }));
-                    if (SplitLines.Count >= 5) { break; }
+                    this.Tweet.Lines.Add(newString.TrimStart(new char[] { ' ' }));
+                    if (Tweet.Lines.Count >= 5) { break; }
                     if (lastBreak != 0)
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
@@ -375,12 +375,12 @@ namespace FingerUI
                     size = g.MeasureString(CurrentLine, TextFont);
                     if (size.Width < textBounds.Width)
                     {
-                        SplitLines.Add(CurrentLine.TrimStart(new char[]{' '}));
+                        Tweet.Lines.Add(CurrentLine.TrimStart(new char[] { ' ' }));
                     }
 
                 }
                 int lineOffset = 0;
-                foreach (string line in SplitLines)
+                foreach (string line in Tweet.Lines)
                 {
                     FindClickables(line, g, (int)(lineOffset * (TextFont.Size + 4)));
                     lineOffset++;
@@ -388,7 +388,6 @@ namespace FingerUI
             }
         }
 
-        private List<string> SplitLines = new List<string>();
         private StringFormat m_stringFormat = new StringFormat();
         private KListControl m_parent;
         private Rectangle m_bounds;

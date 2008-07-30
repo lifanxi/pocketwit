@@ -22,6 +22,38 @@ namespace PockeTwit.Library
         public string favorited { get; set; }
 
         public User user { get; set; }
+        private List<string> _Lines;
+        public List<string> Lines 
+        {
+             get
+            {
+                if (_Lines == null)
+                {
+                    _Lines = new List<string>();
+                }
+                return _Lines;
+            }
+            set
+            {
+                _Lines = value;
+            }
+        }
+        private List<FingerUI.StatusItem.Clickable> _Clickables;
+        public List<FingerUI.StatusItem.Clickable> Clickables 
+        {
+            get
+            {
+                if (_Clickables == null)
+                {
+                    _Clickables = new List<FingerUI.StatusItem.Clickable>();
+                }
+                return _Clickables;
+            }
+            set
+            {
+                _Clickables = value;
+            }
+        }
     }
 
     [Serializable]
