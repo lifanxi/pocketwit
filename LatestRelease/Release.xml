@@ -1,11 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.10</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwit%20v10.CAB</url>
-  <notes>Image fetching without clicks
-Prettier favorites, better response
-About form with upgrade check
-About form can send feedback
-Notify user when unexpectedly disconnected
+  <version>.11</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv11.CAB</url>
+  <notes>Status updates show "from PockeTwit"
+Disconnect won't close application
 </notes>
 </LatestRelease>
