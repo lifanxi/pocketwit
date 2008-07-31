@@ -67,6 +67,7 @@ namespace FingerUI
         public delegate void delMenuItemSelected(string ItemName);
         public event delMenuItemSelected MenuItemSelected;
         public event StatusItem.ClickedWordDelegate WordClicked;
+        
 
         private string LastItemSelected = null;
 
@@ -113,19 +114,10 @@ namespace FingerUI
 
             m_timer.Enabled = false;
 
-            ClearClicks();
             PockeTwit.ImageBuffer.Updated -= new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
             base.Dispose(disposing);
         }
 
-        private void ClearClicks()
-        {
-            foreach (StatusItem item in m_items.Values)
-            {
-                item.WordClicked -= new StatusItem.ClickedWordDelegate(item_WordClicked);
-            }
-        }
-        
         
         public Color SelectedForeColor { get; set; }
         public Color SelectedBackColor { get; set; }
@@ -270,21 +262,10 @@ namespace FingerUI
             {
                 item.Parent = this;
                 item.Index = m_items.Count;
-                item.WordClicked += new StatusItem.ClickedWordDelegate(item_WordClicked);
                 AddItem((IKListItem)item);
             }
         }
 
-        void item_WordClicked(string TextClicked)
-        {
-            if (m_velocity.X == 0 && m_velocity.Y == 0)
-            {
-                if (WordClicked != null)
-                {
-                    WordClicked(TextClicked);
-                }
-            }
-        }
 
         /// <summary>
         /// Adds an item.
@@ -355,7 +336,6 @@ namespace FingerUI
             }
             else
             {
-                ClearClicks();
                 m_items.Clear();
                 Reset();
             }
@@ -524,6 +504,7 @@ namespace FingerUI
         
         protected override void OnPaint(PaintEventArgs e)
         {
+            OnScreenItems.Clear();
             if (m_backBuffer != null)
             {
                 m_backBuffer.Clear(BackColor);
@@ -552,7 +533,7 @@ namespace FingerUI
                         if (Bounds.IntersectsWith(itemRect))
                         {
                             //Draw borders
-                            
+                            OnScreenItems.Add(item);
                             using (Pen whitePen = new Pen(ForeColor))
                             {
                                 m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
@@ -847,6 +828,31 @@ namespace FingerUI
             }
             catch (ObjectDisposedException)
             { }
+            CheckForClicks(new Point(e.X, e.Y));
+        }
+
+        private void CheckForClicks(Point point)
+        {
+            foreach (IKListItem Item in OnScreenItems)
+            {
+                if (Item is StatusItem)
+                {
+                    StatusItem s = (StatusItem)Item;
+                    foreach (StatusItem.Clickable c in s.Clickables)
+                    {
+                        Rectangle itemRect = s.Bounds;
+                        itemRect.Offset(-m_offset.X, -m_offset.Y);
+                        Rectangle cRect = new Rectangle(((int)c.Location.X + itemRect.Left) + (ClientSettings.SmallArtSize + 10), (int)c.Location.Y + itemRect.Top, (int)c.Location.Width, (int)c.Location.Height);
+                        if (cRect.Contains(point))
+                        {
+                            if (WordClicked != null)
+                            {
+                                WordClicked(c.Text);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -1192,6 +1198,7 @@ namespace FingerUI
         int m_itemWidth = 240;
         bool m_updating = false;
         bool m_scrollBarMove = false;
+        List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
 
         // Background drawing
         Bitmap m_backBufferBitmap;
