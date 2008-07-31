@@ -107,33 +107,7 @@ namespace FingerUI
             //m_parent.MouseUp += new MouseEventHandler(m_parent_MouseUp);
         }
 
-        void m_parent_MouseUp(object sender, MouseEventArgs e)
-        {
-            Point p = new Point(e.X, e.Y);
-            Rectangle CurrentPosition = new Rectangle(currentOffset.X,currentOffset.Y, m_bounds.Width, m_bounds.Height);
-            if (CurrentPosition.Contains(p))
-            {
-                System.Diagnostics.Debug.WriteLine("Parent mouseup");
-                Clickable clicked = null;
-                foreach (Clickable c in Clickables)
-                {
-                    Rectangle LocationRect = new Rectangle((int)c.Location.Left, (int)c.Location.Top, (int)c.Location.Width, (int)c.Location.Height);
-                    LocationRect.Offset(currentOffset.X + ClientSettings.SmallArtSize + 5, currentOffset.Y);
-                    if(LocationRect.Contains(p))
-                    {
-                        clicked = c;
-                    }
-                }
-                if (clicked != null)
-                {
-                    if (WordClicked != null)
-                    {
-                        WordClicked(clicked.Text);
-                    }
-                }
-            }
-        }
-
+ 
 
         public StatusItem()
         {
@@ -144,7 +118,6 @@ namespace FingerUI
         public virtual void Dispose()
         {
 
-            m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
             m_parent = null;
         }
 
@@ -176,8 +149,6 @@ namespace FingerUI
             {
                 m_parent = value;
                 TextFont = m_parent.Font;
-                m_parent.MouseUp -= new MouseEventHandler(m_parent_MouseUp);
-                m_parent.MouseUp += new MouseEventHandler(m_parent_MouseUp);
             }
         }
 
