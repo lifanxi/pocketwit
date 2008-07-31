@@ -63,6 +63,7 @@ namespace Yedda
             User_Timeline,
             Friends_Timeline,
             Friends,
+            Replies,
             Followers,
             Update,
             Account_Settings,
@@ -442,6 +443,15 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         public XmlDocument GetFriendsTimelineAsAtom(string userName, string password)
         {
             return GetFriendsTimelineAsXML(userName, password, OutputFormatType.Atom);
+        }
+
+        #endregion
+
+        #region Replies
+        public string GetRepliesTimeLine(string userName, string password, OutputFormatType format)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format));
+            return ExecuteGetCommand(url, userName, password);
         }
 
         #endregion
