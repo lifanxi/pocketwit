@@ -15,7 +15,7 @@ namespace PockeTwit
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
         private static extern void MessageBeep(int type);
 
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
@@ -43,8 +43,8 @@ namespace PockeTwit
 
         private void SetConnectedMenus()
         {
-            statusList.LeftMenuItems = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
-            statusList.RightMenuItems = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+            statusList.LeftMenuItems = LeftMenu;
+            statusList.RightMenuItems = RightMenu;
         }
         private void SetDisconnectedMenus()
         {
@@ -144,6 +144,12 @@ namespace PockeTwit
                 case "Reconnect":
                 case "Friends TimeLine":
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
+                    statusList.RightMenuItems = RightMenu;
+                    ChangeCursor(Cursors.WaitCursor);
+                    GetTimeLineAsync();
+                    break;
+                case "Replies":
+                    CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statusList.RightMenuItems = RightMenu;
                     ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
@@ -317,6 +323,9 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.Public_Timeline:
                         response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
+                        break;
+                    case Yedda.Twitter.ActionType.Replies:
+                        response = Twitter.GetRepliesTimeLine(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.User_Timeline:
                         response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
