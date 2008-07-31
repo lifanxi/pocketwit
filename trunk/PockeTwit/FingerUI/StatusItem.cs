@@ -233,21 +233,13 @@ namespace FingerUI
                 TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
             
-                // Draw the selection image if available, otherwise just a gray box.
-                if (m_selectionBitmap != null)
-                {
-                    g.DrawImage(m_selectionBitmap, bounds, new Rectangle(0, 0, m_selectionBitmap.Width, m_selectionBitmap.Height), GraphicsUnit.Pixel);
-                }
-                else
-                {
-                    //g.DrawRectangle(new Pen(Color.Black), bounds);
-                    Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width, textBounds.Height);
-                    InnerBounds.Offset(1, 1);
-                    InnerBounds.Width--; InnerBounds.Height--;
+                //g.DrawRectangle(new Pen(Color.Black), bounds);
+                Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width, textBounds.Height);
+                InnerBounds.Offset(1, 1);
+                InnerBounds.Width--; InnerBounds.Height--;
 
-                    g.FillRectangle(FillColor, InnerBounds);
+                g.FillRectangle(FillColor, InnerBounds);
 
-                }
                 FillColor.Dispose();
             }
 
@@ -279,35 +271,6 @@ namespace FingerUI
             ForeBrush.Dispose();
         }
 
-        private void FindClickables(string Line, Graphics g, int lineOffSet)
-        {
-            System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
-            string[] Words = Line.Split(' ');
-            StringBuilder LineBeforeThisWord = new StringBuilder();
-            for (int i = 0; i < Words.Length; i++)
-            {
-                string WordToCheck = Words[i];
-                if (WordToCheck.StartsWith("@") | WordToCheck.StartsWith("http"))
-                {
-                    //Find out how far to the right this word will appear
-                    float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
-                    //Find the size of the word
-                    SizeF WordSize = g.MeasureString(Words[i], TextFont);
-                    //A structure containing info we need to know about the word.
-                    Clickable c = new Clickable();
-                    c.Location = new RectangleF(startpos, lineOffSet, WordSize.Width, WordSize.Height);
-                    c.Text = WordToCheck;
-                    //Underline it
-
-                    //Put it in a collection so we can see if the user clicked it on mouseup
-                    if (!Clickables.Contains(c))
-                    {
-                        Clickables.Add(c);
-                    }
-                }
-                LineBeforeThisWord.Append(WordToCheck + " ");
-            }
-        }
 
         //texbounds is the area we're allowed to draw within
         //lineOffset is how many lines we've already drawn in these bounds
@@ -324,6 +287,7 @@ namespace FingerUI
             }
         }
 
+        #region Parsing Routines
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
             if (SplitLines.Count == 0)
@@ -384,6 +348,36 @@ namespace FingerUI
                 }
             }
         }
+        private void FindClickables(string Line, Graphics g, int lineOffSet)
+        {
+            System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
+            string[] Words = Line.Split(' ');
+            StringBuilder LineBeforeThisWord = new StringBuilder();
+            for (int i = 0; i < Words.Length; i++)
+            {
+                string WordToCheck = Words[i];
+                if (WordToCheck.StartsWith("@") | WordToCheck.StartsWith("http"))
+                {
+                    //Find out how far to the right this word will appear
+                    float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                    //Find the size of the word
+                    SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                    //A structure containing info we need to know about the word.
+                    Clickable c = new Clickable();
+                    c.Location = new RectangleF(startpos, lineOffSet, WordSize.Width, WordSize.Height);
+                    c.Text = WordToCheck;
+                    //Underline it
+
+                    //Put it in a collection so we can see if the user clicked it on mouseup
+                    if (!Clickables.Contains(c))
+                    {
+                        Clickables.Add(c);
+                    }
+                }
+                LineBeforeThisWord.Append(WordToCheck + " ");
+            }
+        }
+        #endregion
 
         private List<string> SplitLines = new List<string>();
         private StringFormat m_stringFormat = new StringFormat();
@@ -398,6 +392,5 @@ namespace FingerUI
         private bool m_selected = false;
         private bool m_highlighted = false;
 
-        private static Bitmap m_selectionBitmap;
     }
 }
