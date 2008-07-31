@@ -27,15 +27,6 @@ namespace FingerUI
                 }
                 return false;
             }
-            public void OffSet(int x, int y)
-            {
-                /*
-                Location.Left = Location.Left + x;
-                Location.Right = Location.Right - x;
-                Location.Top = Location.Top + y;
-                Location.Bottom = Location.Bottom - y;
-                */
-            }
         }
 
         public List<Clickable> Clickables = new List<Clickable>();
