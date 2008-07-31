@@ -11,7 +11,6 @@ namespace FingerUI
     public class StatusItem : KListControl.IKListItem, IDisposable
     {
         public delegate void ClickedWordDelegate(string TextClicked);
-        public event ClickedWordDelegate WordClicked;
         public class Clickable
         {
             public string Text;
@@ -26,6 +25,10 @@ namespace FingerUI
                     return true;
                 }
                 return false;
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
             }
         }
 
@@ -90,8 +93,6 @@ namespace FingerUI
         {
         }
 
-        
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="KListItem"/> class.
         /// </summary>
@@ -104,10 +105,7 @@ namespace FingerUI
             m_text = text;
             m_value = value;
             TextFont = m_parent.Font;
-            //m_parent.MouseUp += new MouseEventHandler(m_parent_MouseUp);
         }
-
- 
 
         public StatusItem()
         {
@@ -241,7 +239,6 @@ namespace FingerUI
             }
             ForeBrush.Dispose();
         }
-
 
         //texbounds is the area we're allowed to draw within
         //lineOffset is how many lines we've already drawn in these bounds
