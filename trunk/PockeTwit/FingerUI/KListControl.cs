@@ -582,7 +582,7 @@ namespace FingerUI
 
                 if (!string.IsNullOrEmpty(Warning))
                 {
-                    using(Brush redBrush = new SolidBrush(Color.Red))
+                    using(Brush redBrush = new SolidBrush(ClientSettings.ErrorColor))
                     {
                         using (Font WarningFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold))
                         {

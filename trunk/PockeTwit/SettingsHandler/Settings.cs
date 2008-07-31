@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Reflection;
 static class ClientSettings
 {
     public static string UserName { get; set; }
@@ -13,7 +13,8 @@ static class ClientSettings
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
-    public static string AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+    public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
+    public static string AppPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
 
     static ClientSettings()
     {
@@ -25,6 +26,21 @@ static class ClientSettings
     {
         if (System.IO.File.Exists(AppPath + "\\colors.txt"))
         {
+            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\colors.txt"))
+            {
+                while(!r.EndOfStream)
+                {
+                    string[] ColorPair = r.ReadLine().Split(new char[]{':'});
+                    string ColorType = ColorPair[0];
+
+
+                    System.Drawing.Color ColorChosen = System.Drawing.Color.FromArgb(int.Parse(ColorPair[1]), int.Parse(ColorPair[1]), int.Parse(ColorPair[1]));
+
+                    FieldInfo fi = typeof(ClientSettings).GetField(ColorType);
+                    fi.SetValue(null, ColorChosen);
+                }
+            }
+
         }
     }
 

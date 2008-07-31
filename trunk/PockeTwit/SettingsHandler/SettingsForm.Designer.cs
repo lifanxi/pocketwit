@@ -103,7 +103,7 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.ForeColor = ClientSettings.ErrorColor;
             this.lblError.Location = new System.Drawing.Point(4, 4);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(233, 20);
