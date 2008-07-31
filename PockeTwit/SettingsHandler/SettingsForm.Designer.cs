@@ -38,6 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.chkVersion = new System.Windows.Forms.CheckBox();
             this.lblError = new System.Windows.Forms.Label();
+            this.chkBeep = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -57,7 +58,7 @@
             // 
             // label1
             // 
-            this.label1.ForeColor = ClientSettings.ForeColor;
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(4, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 20);
@@ -83,7 +84,7 @@
             // 
             // label2
             // 
-            this.label2.ForeColor = ClientSettings.ForeColor;
+            this.label2.ForeColor = System.Drawing.Color.LightGray;
             this.label2.Location = new System.Drawing.Point(5, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
@@ -92,7 +93,7 @@
             // chkVersion
             // 
             this.chkVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkVersion.ForeColor = ClientSettings.ForeColor;
+            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
             this.chkVersion.Location = new System.Drawing.Point(5, 245);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
@@ -103,18 +104,29 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.ForeColor = ClientSettings.ErrorColor;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(4, 4);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(233, 20);
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
+            // chkBeep
+            // 
+            this.chkBeep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkBeep.ForeColor = ClientSettings.ForeColor;
+            this.chkBeep.Location = new System.Drawing.Point(5, 94);
+            this.chkBeep.Name = "chkBeep";
+            this.chkBeep.Size = new System.Drawing.Size(235, 20);
+            this.chkBeep.TabIndex = 9;
+            this.chkBeep.Text = "Beep on new messages";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkBeep);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.chkVersion);
             this.Controls.Add(this.txtPassword);
@@ -138,5 +150,6 @@
         private System.Windows.Forms.MenuItem menuAccept;
         private System.Windows.Forms.CheckBox chkVersion;
         private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.CheckBox chkBeep;
     }
 }

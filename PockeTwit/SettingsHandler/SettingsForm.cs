@@ -22,6 +22,7 @@ namespace PockeTwit
             txtUserName.Text = ClientSettings.UserName;
             txtPassword.Text = ClientSettings.Password;
             chkVersion.Checked = ClientSettings.CheckVersion;
+            chkBeep.Checked = ClientSettings.BeepOnNew;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -46,6 +47,7 @@ namespace PockeTwit
                 ClientSettings.UserName = txtUserName.Text;
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
+                ClientSettings.BeepOnNew = chkBeep.Checked;
                 ClientSettings.SaveSettings();
                 Following.Reset();
                 Cursor.Current = Cursors.Default;

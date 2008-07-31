@@ -147,21 +147,8 @@ namespace FingerUI
                 return m_items[index];
             }
         }
-
         
-
-        /// <summary>
-        /// The selected index.
-        /// </summary>
-        public Point SelectedIndex
-        {
-            get
-            {
-                return m_selectedIndex;
-            }
-        }
-
-        /// <summary>
+                /// <summary>
         /// Gets the selected item.
         /// </summary>
         /// <value>The selected item.</value>
@@ -512,10 +499,6 @@ namespace FingerUI
                 
                 Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
 
-                if (m_items.Count == 0)
-                {
-
-                }
                 ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
                 bool moreY = yEnumerator.MoveNext();
                 while (moreY && yEnumerator.Current.Key < startIndex.Y)

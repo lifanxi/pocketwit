@@ -7,6 +7,7 @@ static class ClientSettings
     public static string UserName { get; set; }
     public static string Password { get; set; }
     public static bool CheckVersion { get; set; }
+    public static bool BeepOnNew { get; set; }
     public static int SmallArtSize = 60;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
@@ -60,6 +61,14 @@ static class ClientSettings
             {
                 CheckVersion = true;
             }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["BeepOnNew"]))
+            {
+                BeepOnNew = bool.Parse(ConfigurationSettings.AppSettings["BeepOnNew"]);
+            }
+            else
+            {
+                BeepOnNew = false;
+            }
         }
         catch{}
         
@@ -69,6 +78,7 @@ static class ClientSettings
         ConfigurationSettings.AppSettings["UserName"] = UserName;
         ConfigurationSettings.AppSettings["Password"] = Password;
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString() ;
+        ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
         ConfigurationSettings.SaveConfig();
     }
 }

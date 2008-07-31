@@ -12,6 +12,9 @@ namespace PockeTwit
 {
     public partial class TweetList : MasterForm
     {
+        [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
+        private static extern void MessageBeep(int type);
+
         private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
@@ -277,6 +280,7 @@ namespace PockeTwit
                         statusList.AddItem(item);
                     }
                 }
+                if (ClientSettings.BeepOnNew) { MessageBeep(0); }
             }
             ChangeCursor(Cursors.Default);
         }
