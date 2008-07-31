@@ -117,10 +117,11 @@ namespace PockeTwit
         {
             if (TextClicked.StartsWith("http"))
             {
-                ProfilePage p = new ProfilePage();
-                p.URL = TextClicked;
-                p.ShowDialog();
-                this.Show();
+                System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
+                pi.FileName = "\\Windows\\iexplore.exe";
+                pi.Arguments = TextClicked;
+                pi.UseShellExecute = true;
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             }
             else
             {
@@ -211,11 +212,11 @@ namespace PockeTwit
         private void ShowProfile()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
-            string User = selectedItem.Tweet.user.id;
-            ProfilePage p = new ProfilePage();
-            p.User = User;
-            p.ShowDialog();
-            this.Show();
+            System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
+            pi.FileName = "\\Windows\\iexplore.exe";
+            pi.Arguments = "http://twitter.com/"+selectedItem.Tweet.user.screen_name;
+            pi.UseShellExecute = true;
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
         }
 
         private void SendDirectMessage()
