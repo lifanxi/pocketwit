@@ -32,6 +32,15 @@ namespace FingerUI
         public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
+        private Graphics _ParentGraphics;
+        public Graphics ParentGraphics 
+        {
+            set
+            {
+                _ParentGraphics = value;
+            }
+        }
+
         private PockeTwit.Library.status _Tweet;
         public PockeTwit.Library.status Tweet 
         {
@@ -44,6 +53,7 @@ namespace FingerUI
                     m_highlighted = false;
                     return;
                 }
+                
                 m_highlighted =  bool.Parse(value.favorited);
             }
 
@@ -182,6 +192,8 @@ namespace FingerUI
                     SplitLines = new List<string>(); 
                 }
                 m_bounds = value;
+                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + 5, 0, m_bounds.Width - (ClientSettings.SmallArtSize + 5), m_bounds.Height);
+                BreakUpTheText(_ParentGraphics, textBounds);
             }
         }
 
@@ -206,9 +218,8 @@ namespace FingerUI
         {
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
-            Rectangle textBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-
-            textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize+5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize+5), bounds.Height);
+            
+            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 5), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
@@ -315,11 +326,11 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
-            SizeF size = g.MeasureString(CurrentLine, TextFont);
-            
             if (SplitLines.Count == 0)
             {
+                string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
+                SizeF size = g.MeasureString(CurrentLine, TextFont);
+
                 bool SpaceSplit = false;
                 if (this.Tweet.text.IndexOf(' ') > 0)
                 {
