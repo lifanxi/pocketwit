@@ -15,7 +15,7 @@ namespace PockeTwit
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
         private static extern void MessageBeep(int type);
 
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback", "Exit" });
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
         private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
@@ -48,7 +48,7 @@ namespace PockeTwit
         }
         private void SetDisconnectedMenus()
         {
-            statusList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
+            statusList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback"});
             statusList.RightMenuItems = new List<string>(new string[] { "Exit" });
         }
         
