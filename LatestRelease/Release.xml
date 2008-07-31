@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.11</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv11.CAB</url>
-  <notes>Status updates show "from PockeTwit"
-Disconnect won't close application
+  <version>.12</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv12.CAB</url>
+  <notes>Replies timeline
+Scroll speed improvements
+Clickable text improvements
+  (still has wrapping issues)
+Option to beep on timeline update
+Feedback form bugfix
+Customizable colors using colors.txt
 </notes>
 </LatestRelease>
