@@ -262,6 +262,7 @@ namespace FingerUI
             {
                 item.Parent = this;
                 item.Index = m_items.Count;
+                item.ParentGraphics = m_backBuffer;
                 AddItem((IKListItem)item);
             }
         }
@@ -508,7 +509,7 @@ namespace FingerUI
             if (m_backBuffer != null)
             {
                 m_backBuffer.Clear(BackColor);
-
+                
                 Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
 
                 if (m_items.Count == 0)
