@@ -115,7 +115,8 @@
             // 
             // chkBeep
             // 
-            this.chkBeep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBeep.ForeColor = ClientSettings.ForeColor;
             this.chkBeep.Location = new System.Drawing.Point(2, 122);
             this.chkBeep.Name = "chkBeep";
