@@ -1060,6 +1060,14 @@ namespace FingerUI
 
             m_backBufferBitmap = new Bitmap(Bounds.Width, Bounds.Height);
             m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
+            foreach (IKListItem item in m_items.Values)
+            {
+                if (item is StatusItem)
+                {
+                    StatusItem sItem = (StatusItem)item;
+                    sItem.ParentGraphics = m_backBuffer;
+                }
+            }
         }
 
         /// <summary>
