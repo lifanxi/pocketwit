@@ -1,5 +1,8 @@
 ﻿using System;
-
+using System.IO;
+using System.Net;
+using System.Xml;
+using System.Web;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +11,7 @@ namespace Yedda
     public class TwitPic
     {
         protected const string TwitPicBaseURL = "http://twitpic.com/api/{0}";
+        
 
         public enum ActionType
         {

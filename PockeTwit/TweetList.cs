@@ -68,7 +68,8 @@ namespace PockeTwit
                 SettingsForm settings = new SettingsForm();
                 if (settings.ShowDialog() == DialogResult.Cancel) { return; }
             }
-            //this.WindowState = FormWindowState.Maximized;
+            
+            this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
             Twitter.CurrentServer = ClientSettings.Server;
             tmrautoUpdate.Interval = TimerLength;
@@ -78,13 +79,27 @@ namespace PockeTwit
             statusList.SelectedBackColor = ClientSettings.SelectedBackColor;
             statusList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statusList.ItemHeight = 70;
+            statusList.IsMaximized = true;
             SetConnectedMenus();
             statusList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statusList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
+            statusList.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
             GetTimeLine();
             Checker = new UpdateChecker();
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
+        }
+
+        void statusList_SwitchWindowState(bool IsMaximized)
+        {
+            if (IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+            }
         }
 
         
