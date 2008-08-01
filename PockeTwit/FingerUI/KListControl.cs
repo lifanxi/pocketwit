@@ -421,8 +421,6 @@ namespace FingerUI
                 ClipScrollPosition();
                 
                 // Slow down
-                if (((++m_timerCount) % 10) == 0)
-                {
                     if (m_velocity.Y < 0)
                     {
                         m_velocity.Y++;
@@ -439,7 +437,6 @@ namespace FingerUI
                     {
                         m_velocity.X--;
                     }
-                }
                 
                 if (m_velocity.Y == 0 && m_velocity.X == 0)
                 {

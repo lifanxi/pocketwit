@@ -9,7 +9,7 @@ static class ClientSettings
     public static bool CheckVersion { get; set; }
     public static bool BeepOnNew { get; set; }
     public static Yedda.Twitter.TwitterServer Server { get; set; }
-    public static int AnimationInterval = 50;
+    public static int AnimationInterval = 25;
 
     public static int SmallArtSize = 60;
     
