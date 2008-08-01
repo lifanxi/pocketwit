@@ -526,16 +526,7 @@ namespace FingerUI
             if (m_backBuffer != null)
             {
                 m_backBuffer.Clear(BackColor);
-
-                if (IsMaximized)
-                {
-                    DrawMaxWindowSwitcher(m_backBuffer);
-                }
-                else
-                {
-                    DrawStandardWindowSwitcher(m_backBuffer);
-                }
-
+                
                 Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
 
                 ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
@@ -573,8 +564,7 @@ namespace FingerUI
 
                     moreY = yEnumerator.MoveNext();
                 }
-                
-                DrawPointer(m_backBuffer); 
+
                 if (m_offset.X > 0)
                 {
                     DrawRightMenu(m_backBuffer);
@@ -583,6 +573,20 @@ namespace FingerUI
                 {
                     DrawLeftMenu(m_backBuffer);
                 }
+
+                DrawPointer(m_backBuffer);
+                if (m_offset.X > 15)
+                {
+                    if (IsMaximized)
+                    {
+                        DrawMaxWindowSwitcher(m_backBuffer);
+                    }
+                    else
+                    {
+                        DrawStandardWindowSwitcher(m_backBuffer);
+                    }
+                }
+                
 
                 if (!string.IsNullOrEmpty(Warning))
                 {

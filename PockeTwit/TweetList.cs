@@ -317,7 +317,9 @@ namespace PockeTwit
                         statusList.AddItem(item);
                     }
                 }
-                if (ClientSettings.BeepOnNew) { MessageBeep(0); }
+                if (ClientSettings.BeepOnNew && 
+                    (CurrentAction == Yedda.Twitter.ActionType.Friends | 
+                    CurrentAction == Yedda.Twitter.ActionType.Replies)) { MessageBeep(0); }
             }
             ChangeCursor(Cursors.Default);
         }
