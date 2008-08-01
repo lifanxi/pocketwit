@@ -89,7 +89,7 @@ namespace FingerUI
             CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
-            m_timer.Interval = 5;
+            m_timer.Interval = 50;
             m_timer.Tick += new EventHandler(m_timer_Tick);
             PockeTwit.ImageBuffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
         }
