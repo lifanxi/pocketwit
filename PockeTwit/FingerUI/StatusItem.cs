@@ -161,7 +161,7 @@ namespace FingerUI
                     SplitLines = new List<string>(); 
                 }
                 m_bounds = value;
-                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + 5, 0, m_bounds.Width - (ClientSettings.SmallArtSize + 5), m_bounds.Height);
+                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + 5, 0, m_bounds.Width - (ClientSettings.SmallArtSize + 10), m_bounds.Height);
                 BreakUpTheText(_ParentGraphics, textBounds);
             }
         }
@@ -188,7 +188,7 @@ namespace FingerUI
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             
-            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 5), bounds.Height);
+            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 10), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
