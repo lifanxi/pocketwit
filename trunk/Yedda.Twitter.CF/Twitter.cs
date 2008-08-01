@@ -26,6 +26,11 @@ namespace Yedda
 {
     public class Twitter
     {
+        public enum TwitterServer
+        {
+            twitter,
+            identica
+        }
 
         /// <summary>
         /// The output formats supported by Twitter. Not all of them can be used with all of the functions.
@@ -84,6 +89,29 @@ namespace Yedda
         private string twitterClientVersion = "0.9";
         private string twitterClientUrl = "http://code.google.com/p/pocketwit";
 
+        private TwitterServer _CurrentServer = TwitterServer.twitter;
+        public TwitterServer CurrentServer {
+            get { return _CurrentServer; }
+            set { _CurrentServer = value; }
+        }
+
+        public bool FavoritesWork
+        {
+            get
+            {
+                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+            }
+        }
+
+        public bool DirectMessagesWork
+        {
+            get
+            {
+                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+            }
+
+        }
+
 
         /// <summary>
         /// Source is an additional parameters that will be used to fill the "From" field.
@@ -135,9 +163,37 @@ namespace Yedda
             set { twitterClientUrl = value; }
         }
 
-        protected const string TwitterBaseUrlFormat = "http://twitter.com/{0}/{1}.{2}";
-        protected const string TwitterSimpleURLFormat = "http://www.twitter.com/{0}.xml";
-        protected const string TwitterFavoritesUrlFormat = "http://twitter.com/{0}/{1}/{2}.xml";
+        protected const string TwitterBaseUrlFormat = "http://{3}/{0}/{1}.{2}";
+        protected const string TwitterSimpleURLFormat = "http://{1}/{0}.xml";
+        protected const string TwitterFavoritesUrlFormat = "http://{3}/{0}/{1}/{2}.xml";
+
+        public string GetProfileURL(string User)
+        {
+            switch (this.CurrentServer)
+            {
+                case TwitterServer.twitter:
+                    return "http://twitter.com/"+User;
+                    break;
+                case TwitterServer.identica:
+                    return "http://identi.ca/"+User;
+                    break;
+            }
+            return "http://twitter.com/" + User;
+        }
+
+        protected string GetServerString(TwitterServer server)
+        {
+            switch (server)
+            {
+                case TwitterServer.twitter:
+                    return "twitter.com";
+                    break;
+                case TwitterServer.identica:
+                    return "identi.ca/api";
+                    break;
+            }
+            return "twitter.com";
+        }
 
         protected string GetObjectTypeString(ObjectType objectType)
         {
@@ -194,7 +250,6 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 return null;
             }
         }
-        
         throw ex;
     }
     return null;
@@ -266,7 +321,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
 
         public string GetPublicTimeline(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Public_Timeline), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Public_Timeline), GetFormatTypeString(format),GetServerString(CurrentServer));
             return ExecuteGetCommand(url, null, null);
         }
 
@@ -318,11 +373,11 @@ protected string ExecuteGetCommand(string url, string userName, string password)
             string url = null;
             if (string.IsNullOrEmpty(IDorScreenName))
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline), GetFormatTypeString(format));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
             }
             else
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline) + "/" + IDorScreenName, GetFormatTypeString(format));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
             }
 
             return ExecuteGetCommand(url, userName, password);
@@ -401,7 +456,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         #region Friends_Timeline
         public string GetFriendsTimeline(string userName, string password, OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
 
             return ExecuteGetCommand(url, userName, password);
         }
@@ -450,7 +505,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         #region Replies
         public string GetRepliesTimeLine(string userName, string password, OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
 
@@ -465,7 +520,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 throw new ArgumentException("GetFriends support only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
 
@@ -479,11 +534,11 @@ protected string ExecuteGetCommand(string url, string userName, string password)
             string url = null;
             if (string.IsNullOrEmpty(IDorScreenName))
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(CurrentServer));
             }
             else
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends) + "/" + IDorScreenName, GetFormatTypeString(format));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
             }
 
             return ExecuteGetCommand(url, userName, password);
@@ -529,7 +584,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 throw new ArgumentException("GetFollowers supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Followers), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Followers), GetFormatTypeString(format), GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
 
@@ -563,7 +618,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 throw new ArgumentException("Update support only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), GetServerString(CurrentServer));
             string data = string.Format("status={0}", HttpUtility.UrlEncode(status));
 
             return ExecutePostCommand(url, userName, password, data);
@@ -599,7 +654,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 throw new ArgumentException("GetFeatured supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Featured), GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Featured), GetFormatTypeString(format), GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
 
@@ -633,7 +688,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
                 throw new ArgumentException("Show supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
 
@@ -661,17 +716,17 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         #region Favorites
         public string SetFavorite(string userName, string password, string IDofMessage)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage);
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage, GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
         public string DestroyFavorite(string userName, string password, string IDofMessage)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage);
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage,GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
         public string GetFavorites(string userName, string password)
         {
-            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites));
+            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites),GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
         #endregion
@@ -679,19 +734,19 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         #region Follow
         public string FollowUser(string userName, string password, string IDofUserToFollow)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Follow), IDofUserToFollow);
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Follow), IDofUserToFollow,GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
         public string StopFollowingUser(string userName, string password, string IDofUserToFollow)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Leave), IDofUserToFollow);
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Leave), IDofUserToFollow,GetServerString(CurrentServer));
             return ExecuteGetCommand(url, userName, password);
         }
         #endregion
 
         public bool Verify(string userName, string password)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), GetServerString(CurrentServer));
             try
             {
                 string Response = ExecuteGetCommand(url, userName, password);
