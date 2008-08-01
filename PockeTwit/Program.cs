@@ -14,18 +14,11 @@ namespace PockeTwit
         static void Main()
         {
             
-            ClientSettings.LoadSettings();
-
-            if (string.IsNullOrEmpty(ClientSettings.UserName) | string.IsNullOrEmpty(ClientSettings.Password))
-            {
-                // SHow Settings page first
-                SettingsForm settings = new SettingsForm();
-                if (settings.ShowDialog() == DialogResult.Cancel) { return; }
-            }
+            
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
+
+            ClientSettings.LoadSettings();
             Application.Run(new TweetList());
-            
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
