@@ -39,6 +39,7 @@
             this.statusList.Name = "statusList";
             this.statusList.Size = new System.Drawing.Size(240, 294);
             this.statusList.TabIndex = 0;
+            this.statusList.Visible = true;
             // 
             // tmrautoUpdate
             // 
@@ -49,6 +50,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.statusList);
             this.Name = "TweetList";

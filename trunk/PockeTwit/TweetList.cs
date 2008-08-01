@@ -62,6 +62,12 @@ namespace PockeTwit
         public TweetList()
         {
             InitializeComponent();
+            if (string.IsNullOrEmpty(ClientSettings.UserName) | string.IsNullOrEmpty(ClientSettings.Password))
+            {
+                // SHow Settings page first
+                SettingsForm settings = new SettingsForm();
+                if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+            }
             //this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
             Twitter.CurrentServer = ClientSettings.Server;
