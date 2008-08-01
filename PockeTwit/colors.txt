@@ -1,0 +1,5 @@
+﻿BackColor:0:0:0
+LinkColor:150:150:255
+SelectedBackColor:47:79:79
+SelectedForeColor:255:255:255
+ErrorColor:255:0:0
