@@ -1,13 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.12</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv12.CAB</url>
-  <notes>Replies timeline
-Scroll speed improvements
-Clickable text improvements
-  (still has wrapping issues)
-Option to beep on timeline update
-Feedback form bugfix
-Customizable colors using colors.txt
+  <version>.13</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv13.CAB</url>
+  <notes>identi.ca support
+Use default browser for profiles and links
+Toggle fullscreen
 </notes>
 </LatestRelease>
