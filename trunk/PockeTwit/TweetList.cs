@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace PockeTwit
 {
-    public partial class TweetList : MasterForm
+    public partial class TweetList : Form
     {
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
         private static extern void MessageBeep(int type);
@@ -24,6 +24,7 @@ namespace PockeTwit
         private const int TimerLength = 75000;
         private string CachedResponse;
 
+        
         private bool CurrentlyConnected
         {
             set
@@ -43,6 +44,11 @@ namespace PockeTwit
 
         private void SetConnectedMenus()
         {
+            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
+            RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+
+            if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
+            if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct Message"); }
             statusList.LeftMenuItems = LeftMenu;
             statusList.RightMenuItems = RightMenu;
         }
@@ -58,6 +64,7 @@ namespace PockeTwit
             InitializeComponent();
             //this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
+            Twitter.CurrentServer = ClientSettings.Server;
             tmrautoUpdate.Interval = TimerLength;
             tmrautoUpdate.Enabled = true;
             statusList.BackColor = ClientSettings.BackColor;
@@ -65,8 +72,7 @@ namespace PockeTwit
             statusList.SelectedBackColor = ClientSettings.SelectedBackColor;
             statusList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statusList.ItemHeight = 70;
-            statusList.LeftMenuItems = LeftMenu;
-            statusList.RightMenuItems = RightMenu;
+            SetConnectedMenus();
             statusList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statusList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
@@ -86,15 +92,17 @@ namespace PockeTwit
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
             if (selectedItem != null)
             {
-                if (selectedItem.isFavorite)
+                if (Twitter.FavoritesWork)
                 {
-                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Make Favorite", "Destroy Favorite");
+                    if (selectedItem.isFavorite)
+                    {
+                        statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Make Favorite", "Destroy Favorite");
+                    }
+                    else
+                    {
+                        statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Destroy Favorite", "Make Favorite");
+                    }
                 }
-                else
-                {
-                    statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Destroy Favorite", "Make Favorite");
-                }
-
                 if (selectedItem.isBeingFollowed)
                 {
                     statusList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statusList.RightMenuItems, "Follow", "Stop Following");
@@ -214,7 +222,7 @@ namespace PockeTwit
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statusList.SelectedItem;
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
             pi.FileName = "\\Windows\\iexplore.exe";
-            pi.Arguments = "http://twitter.com/"+selectedItem.Tweet.user.screen_name;
+            pi.Arguments = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
         }
@@ -230,6 +238,7 @@ namespace PockeTwit
         {
             SettingsForm settings = new SettingsForm();
             if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+            Twitter.CurrentServer = ClientSettings.Server;
             if (ClientSettings.CheckVersion)
             {
                 Checker.CheckForUpdate();

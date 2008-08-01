@@ -8,6 +8,7 @@ static class ClientSettings
     public static string Password { get; set; }
     public static bool CheckVersion { get; set; }
     public static bool BeepOnNew { get; set; }
+    public static Yedda.Twitter.TwitterServer Server { get; set; }
     public static int SmallArtSize = 60;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
@@ -51,8 +52,14 @@ static class ClientSettings
 
         try
         {
-            UserName = ConfigurationSettings.AppSettings["UserName"];
-            Password = ConfigurationSettings.AppSettings["Password"];
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UserName"]))
+            {
+                UserName = ConfigurationSettings.AppSettings["UserName"];
+            }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["Password"]))
+            {
+                Password = ConfigurationSettings.AppSettings["Password"];
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CheckVersion"]))
             {
                 CheckVersion = bool.Parse(ConfigurationSettings.AppSettings["CheckVersion"]);
@@ -61,6 +68,7 @@ static class ClientSettings
             {
                 CheckVersion = true;
             }
+
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["BeepOnNew"]))
             {
                 BeepOnNew = bool.Parse(ConfigurationSettings.AppSettings["BeepOnNew"]);
@@ -68,6 +76,15 @@ static class ClientSettings
             else
             {
                 BeepOnNew = false;
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["Server"]))
+            {
+                Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer),ConfigurationSettings.AppSettings["Server"],true);
+            }
+            else
+            {
+                Server = Yedda.Twitter.TwitterServer.twitter;
             }
         }
         catch{}
@@ -79,6 +96,7 @@ static class ClientSettings
         ConfigurationSettings.AppSettings["Password"] = Password;
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString() ;
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
+        ConfigurationSettings.AppSettings["Server"] = Server.ToString();
         ConfigurationSettings.SaveConfig();
     }
 }
