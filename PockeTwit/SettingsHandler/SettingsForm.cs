@@ -9,12 +9,19 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class SettingsForm : MasterForm
+    public partial class SettingsForm : Form
     {
         public SettingsForm()
         {
             InitializeComponent();
+            FillServerList();
             PopulateForm();
+        }
+
+        private void FillServerList()
+        {
+            cmbServers.Items.Add("twitter");
+            cmbServers.Items.Add("identica");
         }
 
         private void PopulateForm()
@@ -23,6 +30,15 @@ namespace PockeTwit
             txtPassword.Text = ClientSettings.Password;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkBeep.Checked = ClientSettings.BeepOnNew;
+            switch (ClientSettings.Server)
+            {
+                case Yedda.Twitter.TwitterServer.twitter:
+                    cmbServers.SelectedItem = "twitter";
+                    break;
+                case Yedda.Twitter.TwitterServer.identica:
+                    cmbServers.SelectedItem = "identica";
+                    break;
+            }
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -48,7 +64,9 @@ namespace PockeTwit
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.BeepOnNew = chkBeep.Checked;
+                ClientSettings.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
                 ClientSettings.SaveSettings();
+                
                 Following.Reset();
                 Cursor.Current = Cursors.Default;
                 this.DialogResult = DialogResult.OK;

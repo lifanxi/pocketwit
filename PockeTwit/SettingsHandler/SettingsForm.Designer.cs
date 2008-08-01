@@ -39,6 +39,8 @@
             this.chkVersion = new System.Windows.Forms.CheckBox();
             this.lblError = new System.Windows.Forms.Label();
             this.chkBeep = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cmbServers = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -58,7 +60,7 @@
             // 
             // label1
             // 
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(4, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 20);
@@ -68,9 +70,9 @@
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.Location = new System.Drawing.Point(82, 40);
+            this.txtUserName.Location = new System.Drawing.Point(82, 39);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(157, 21);
+            this.txtUserName.Size = new System.Drawing.Size(155, 21);
             this.txtUserName.TabIndex = 1;
             // 
             // txtPassword
@@ -79,12 +81,12 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.Location = new System.Drawing.Point(82, 67);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(158, 21);
+            this.txtPassword.Size = new System.Drawing.Size(155, 21);
             this.txtPassword.TabIndex = 3;
             // 
             // label2
             // 
-            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.ForeColor = ClientSettings.ForeColor;
             this.label2.Location = new System.Drawing.Point(5, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
@@ -93,7 +95,7 @@
             // chkVersion
             // 
             this.chkVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.chkVersion.ForeColor = ClientSettings.ForeColor;
             this.chkVersion.Location = new System.Drawing.Point(5, 245);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
@@ -104,7 +106,7 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.ForeColor = ClientSettings.ErrorColor;
             this.lblError.Location = new System.Drawing.Point(4, 4);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(233, 20);
@@ -115,17 +117,37 @@
             // 
             this.chkBeep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkBeep.ForeColor = ClientSettings.ForeColor;
-            this.chkBeep.Location = new System.Drawing.Point(5, 94);
+            this.chkBeep.Location = new System.Drawing.Point(2, 122);
             this.chkBeep.Name = "chkBeep";
             this.chkBeep.Size = new System.Drawing.Size(235, 20);
             this.chkBeep.TabIndex = 9;
             this.chkBeep.Text = "Beep on new messages";
             // 
+            // label3
+            // 
+            this.label3.ForeColor = ClientSettings.ForeColor;
+            this.label3.Location = new System.Drawing.Point(5, 96);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 20);
+            this.label3.Text = "Server:";
+            // 
+            // cmbServers
+            // 
+            this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbServers.Location = new System.Drawing.Point(82, 94);
+            this.cmbServers.Name = "cmbServers";
+            this.cmbServers.Size = new System.Drawing.Size(155, 22);
+            this.cmbServers.TabIndex = 15;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.cmbServers);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.chkBeep);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.chkVersion);
@@ -151,5 +173,7 @@
         private System.Windows.Forms.CheckBox chkVersion;
         private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.CheckBox chkBeep;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cmbServers;
     }
 }

@@ -17,27 +17,17 @@ public class ConfigurationSettings
             string ConfigFile = Path.Combine(ClientSettings.AppPath, "App.config");
 
             XmlDocument oXml = new XmlDocument();
+            AppSettings = new NameValueCollection();
 
             if (File.Exists(ConfigFile))
             {
                 oXml.Load(ConfigFile);
+                XmlNodeList oList = oXml.SelectNodes("//appSettings/add");
+                foreach (XmlNode oNode in oList)
+                {
+                    AppSettings.Add(oNode.Attributes["key"].Value, oNode.Attributes["value"].Value);
+                }
             }
-            else
-            {
-                oXml.Load(Path.Combine(ClientSettings.AppPath, "defaultapp.config"));
-            }
-
-
-            //XmlNodeList oList = oXml.GetElementsByTagName("appSettings");
-            XmlNodeList oList = oXml.SelectNodes("//appSettings/add");
-
-            AppSettings = new NameValueCollection();
-
-            foreach (XmlNode oNode in oList)
-            {
-                AppSettings.Add(oNode.Attributes["key"].Value, oNode.Attributes["value"].Value);
-            }
-
         }
         catch (Exception ex)
         {
