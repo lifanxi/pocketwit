@@ -429,6 +429,7 @@ namespace FingerUI
                     {
                         m_velocity.Y--;
                     }
+                /*
                     if (m_velocity.X < 0)
                     {
                         m_velocity.X++;
@@ -437,7 +438,7 @@ namespace FingerUI
                     {
                         m_velocity.X--;
                     }
-                
+                */
                 if (m_velocity.Y == 0 && m_velocity.X == 0)
                 {
                     m_timer.Enabled = false;
