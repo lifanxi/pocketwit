@@ -190,27 +190,33 @@ namespace FingerUI
             
             Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 5), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
-            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
-
-            g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
+            
         
-            if (m_selected) 
-            {
-                SolidBrush FillColor;
 
+            SolidBrush FillColor;
+
+            if (m_selected)
+            {
                 FillColor = new SolidBrush(m_parent.SelectedBackColor);
                 TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
-            
-                //g.DrawRectangle(new Pen(Color.Black), bounds);
-                Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width, textBounds.Height);
-                InnerBounds.Offset(1, 1);
-                InnerBounds.Width--; InnerBounds.Height--;
-
-                g.FillRectangle(FillColor, InnerBounds);
-
-                FillColor.Dispose();
             }
+            else
+            {
+                FillColor = new SolidBrush(m_parent.BackColor);
+            }
+        
+            //g.DrawRectangle(new Pen(Color.Black), bounds);
+            Rectangle InnerBounds = new Rectangle(Bounds.X, Bounds.Top, Bounds.Width, Bounds.Height);
+            InnerBounds.Offset(1, 1);
+            InnerBounds.Width--; InnerBounds.Height--;
+
+            g.FillRectangle(FillColor, InnerBounds);
+
+            FillColor.Dispose();
+
+            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
+            g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
 
             if (m_highlighted)
             {

@@ -67,6 +67,11 @@ namespace FingerUI
         public delegate void delMenuItemSelected(string ItemName);
         public event delMenuItemSelected MenuItemSelected;
         public event StatusItem.ClickedWordDelegate WordClicked;
+
+        public delegate void delSwitchState(bool IsMaximized);
+        public event delSwitchState SwitchWindowState;
+
+        public bool IsMaximized { get; set; }
         
 
         private string LastItemSelected = null;
@@ -489,14 +494,48 @@ namespace FingerUI
             }
             
         }
-        
+
+        private void DrawStandardWindowSwitcher(Graphics g)
+        {
+            using(Pen sPen = new Pen(ClientSettings.ForeColor))
+            {
+                sPen.Width = 2;
+                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
+                Rectangle cInterior = new Rectangle(this.Width - 13, 7, 6, 6);
+                g.DrawRectangle(sPen, cLocation);
+                sPen.Width = 1;
+                g.DrawRectangle(sPen, cInterior);
+            }
+        }
+
+        private void DrawMaxWindowSwitcher(Graphics g)
+        {
+            using (Pen sPen = new Pen(ClientSettings.ForeColor))
+            {
+                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
+                Rectangle cInterior = new Rectangle(this.Width - 13, 7, 6, 6);
+                g.DrawRectangle(sPen, cLocation);
+                sPen.Width = 1;
+                g.DrawLine(sPen, cInterior.Left, cInterior.Bottom, cInterior.Right, cInterior.Bottom);
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             OnScreenItems.Clear();
             if (m_backBuffer != null)
             {
                 m_backBuffer.Clear(BackColor);
-                
+
+                if (IsMaximized)
+                {
+                    DrawMaxWindowSwitcher(m_backBuffer);
+                }
+                else
+                {
+                    DrawStandardWindowSwitcher(m_backBuffer);
+                }
+
                 Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
 
                 ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
@@ -752,6 +791,20 @@ namespace FingerUI
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
+
+            if (m_offset.X > 15)
+            {
+                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
+                if (cLocation.Contains(new Point(e.X, e.Y)))
+                {
+                    IsMaximized = !IsMaximized;
+                    if (SwitchWindowState != null)
+                    {
+                        SwitchWindowState(IsMaximized);
+                    }
+                }
+            }
+
             //If we're fast-scrolling. stop
             if (m_scrollBarMove)
             {
