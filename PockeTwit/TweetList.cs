@@ -75,15 +75,21 @@ namespace PockeTwit
         public TweetList()
         {
             InitializeComponent();
+            SetEverythingUp();
+        }
+
+        private void SetEverythingUp()
+        {
             if (string.IsNullOrEmpty(ClientSettings.UserName) | string.IsNullOrEmpty(ClientSettings.Password))
             {
                 // SHow Settings page first
                 SettingsForm settings = new SettingsForm();
                 if (settings.ShowDialog() == DialogResult.Cancel) { return; }
             }
-            
+
             this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
+            Twitter.MaxTweets = ClientSettings.MaxTweets;
             Twitter.CurrentServer = ClientSettings.Server;
             tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;

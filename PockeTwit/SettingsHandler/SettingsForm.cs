@@ -30,6 +30,7 @@ namespace PockeTwit
             txtPassword.Text = ClientSettings.Password;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkBeep.Checked = ClientSettings.BeepOnNew;
+            txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             switch (ClientSettings.Server)
             {
                 case Yedda.Twitter.TwitterServer.twitter:
@@ -52,11 +53,32 @@ namespace PockeTwit
         {
             lblError.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
+            int MaxTweets = 0;
+            try
+            {
+                MaxTweets = int.Parse(txtMaxTweets.Text);
+                if (MaxTweets > 200 || MaxTweets < 10)
+                {
+                    lblError.Text = "max tweets must be 10 to 200";
+                    lblError.Visible = true;
+                    Cursor.Current = Cursors.Default;
+                    return;
+                }
+            }
+            catch
+            {
+                lblError.Text = "max tweets must be 10 to 200";
+                lblError.Visible = true;
+                Cursor.Current = Cursors.Default;
+                return;
+            }
             Yedda.Twitter twitter = new Yedda.Twitter();
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {
+                lblError.Text = "Unable to verify username and password";
                 lblError.Visible = true;
                 Cursor.Current = Cursors.Default;
+                return;
             }
             else
             {
@@ -65,6 +87,7 @@ namespace PockeTwit
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.BeepOnNew = chkBeep.Checked;
                 ClientSettings.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+                ClientSettings.MaxTweets = MaxTweets;
                 ClientSettings.SaveSettings();
                 
                 Following.Reset();
@@ -72,6 +95,11 @@ namespace PockeTwit
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+
+        }
+
+        private void cmbServers_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }
