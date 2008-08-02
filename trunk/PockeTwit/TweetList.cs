@@ -334,8 +334,15 @@ namespace PockeTwit
                 }
                 else
                 {
-                    mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
-                    SaveStatuses(mergedstatuses);
+                    if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
+                    {
+                        mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
+                        SaveStatuses(mergedstatuses);
+                    }
+                    else
+                    {
+                        mergedstatuses = newstatuses;
+                    }
                 }
 
                 statusList.Clear();
