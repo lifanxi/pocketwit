@@ -867,7 +867,10 @@ namespace FingerUI
             }
             catch (ObjectDisposedException)
             { }
-            CheckForClicks(new Point(e.X, e.Y));
+            if (m_velocity.X == 0 && m_velocity.Y == 0)
+            {
+                CheckForClicks(new Point(e.X, e.Y));
+            }
         }
 
         private void CheckForClicks(Point point)
