@@ -11,6 +11,7 @@ static class ClientSettings
     public static Yedda.Twitter.TwitterServer Server { get; set; }
     public static int AnimationInterval;
     public static int UpdateInterval;
+    public static int MaxTweets = 200;
 
     public static int SmallArtSize = 60;
     
