@@ -11,6 +11,7 @@ namespace PockeTwit
 {
     public partial class SettingsForm : Form
     {
+        public bool NeedsReset { get; set; }
         public SettingsForm()
         {
             InitializeComponent();
@@ -82,6 +83,10 @@ namespace PockeTwit
             }
             else
             {
+                NeedsReset = ClientSettings.UserName!=txtUserName.Text | 
+                             ClientSettings.Server != (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true) | 
+                             ClientSettings.MaxTweets != MaxTweets;
+
                 ClientSettings.UserName = txtUserName.Text;
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
