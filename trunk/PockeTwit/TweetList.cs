@@ -74,9 +74,25 @@ namespace PockeTwit
         private delegate void delChangeCursor(Cursor CursorToset);
         public TweetList()
         {
+            this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
-            SetEverythingUp();
+            Application.DoEvents();
         }
+
+        private void timerStartup_Tick(object sender, EventArgs e)
+        {
+            timerStartup.Enabled = false;
+            SetEverythingUp();
+            SwitchToDone();
+        }
+
+        private void SwitchToDone()
+        {
+            lblLoading.Visible = false;
+            lblTitle.Visible = false;
+            SwitchToList(friendsStatslist);
+        }
+
 
         private void SetEverythingUp()
         {
@@ -87,24 +103,36 @@ namespace PockeTwit
                 if (settings.ShowDialog() == DialogResult.Cancel) { return; }
             }
 
-            this.WindowState = FormWindowState.Maximized;
+            
+            if (ClientSettings.CheckVersion)
+            {
+                lblLoading.Text = "Launching update checker.";
+                Application.DoEvents();
+                Checker = new UpdateChecker();
+                Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
+            }
+
             Twitter = new Yedda.Twitter();
             Twitter.MaxTweets = ClientSettings.MaxTweets;
             Twitter.CurrentServer = ClientSettings.Server;
             tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;
 
+            lblLoading.Text = "Setting up UI lists.";
+            Application.DoEvents();
             SetUpListControl(friendsStatslist);
             SetUpListControl(otherStatslist);
-            SwitchToList(friendsStatslist);
+            statList = friendsStatslist;
 
             if (Twitter.BigTimeLines)
             {
+                lblLoading.Text = "Loading cached timeline.";
+                Application.DoEvents();
                 LoadCachedtimeline();
             }
+            lblLoading.Text = "Fetching timeline from server.";
+            Application.DoEvents();
             GetTimeLine();
-            Checker = new UpdateChecker();
-            Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
         }
 
         private void SetUpListControl(FingerUI.KListControl list)
@@ -321,7 +349,14 @@ namespace PockeTwit
             {
                 Checker.CheckForUpdate();
             }
-            GetTimeLine();
+            if (settings.NeedsReset)
+            {
+                CachedResponse = "";
+                CurrentStatuses = new PockeTwit.Library.status[0];
+                GetTimeLine();
+            }
+            settings.Close();
+            
         }
 
         private void SendReply()
@@ -574,5 +609,8 @@ namespace PockeTwit
                 Cursor.Current = CursorToset;
             }
         }
+
+
+        
     }
 }

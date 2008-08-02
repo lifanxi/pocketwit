@@ -28,22 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.otherStatslist = new FingerUI.KListControl();
             this.tmrautoUpdate = new System.Windows.Forms.Timer();
+            this.timerStartup = new System.Windows.Forms.Timer();
+            this.lblLoading = new System.Windows.Forms.Label();
             this.friendsStatslist = new FingerUI.KListControl();
+            this.otherStatslist = new FingerUI.KListControl();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // otherStatslist
-            // 
-            this.otherStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.otherStatslist.Location = new System.Drawing.Point(0, 0);
-            this.otherStatslist.Name = "otherStatslist";
-            this.otherStatslist.Size = new System.Drawing.Size(240, 294);
-            this.otherStatslist.TabIndex = 0;
             // 
             // tmrautoUpdate
             // 
             this.tmrautoUpdate.Tick += new System.EventHandler(this.tmrautoUpdate_Tick);
+            // 
+            // timerStartup
+            // 
+            this.timerStartup.Enabled = true;
+            this.timerStartup.Interval = 1000;
+            this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
+            // 
+            // lblLoading
+            // 
+            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
+            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
+            this.lblLoading.Location = new System.Drawing.Point(3, 31);
+            this.lblLoading.Name = "lblLoading";
+            this.lblLoading.Size = new System.Drawing.Size(193, 55);
+            this.lblLoading.Text = "Loading. . .";
             // 
             // friendsStatslist
             // 
@@ -52,6 +62,25 @@
             this.friendsStatslist.Name = "friendsStatslist";
             this.friendsStatslist.Size = new System.Drawing.Size(240, 294);
             this.friendsStatslist.TabIndex = 1;
+            this.friendsStatslist.Visible = false;
+            // 
+            // otherStatslist
+            // 
+            this.otherStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.otherStatslist.Location = new System.Drawing.Point(0, 0);
+            this.otherStatslist.Name = "otherStatslist";
+            this.otherStatslist.Size = new System.Drawing.Size(240, 294);
+            this.otherStatslist.TabIndex = 0;
+            this.otherStatslist.Visible = false;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.lblTitle.ForeColor = System.Drawing.Color.LightGray;
+            this.lblTitle.Location = new System.Drawing.Point(3, 0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(169, 31);
+            this.lblTitle.Text = "Launching PockeTwit";
             // 
             // TweetList
             // 
@@ -60,6 +89,8 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
+            this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.lblLoading);
             this.Controls.Add(this.friendsStatslist);
             this.Controls.Add(this.otherStatslist);
             this.Name = "TweetList";
@@ -73,6 +104,9 @@
         private FingerUI.KListControl otherStatslist;
         private System.Windows.Forms.Timer tmrautoUpdate;
         private FingerUI.KListControl friendsStatslist;
+        private System.Windows.Forms.Timer timerStartup;
+        private System.Windows.Forms.Label lblLoading;
+        private System.Windows.Forms.Label lblTitle;
     }
 }
 
