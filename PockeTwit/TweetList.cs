@@ -117,7 +117,7 @@ namespace PockeTwit
 
         private void LoadCachedtimeline()
         {
-            string cachePath = ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml";
+            string cachePath = ClientSettings.AppPath + "\\" + ClientSettings.UserName + ClientSettings.Server.ToString()+"FriendsTime.xml";
             if (System.IO.File.Exists(cachePath))
             {
                 using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
@@ -383,7 +383,9 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
+            if (mergedstatuses == null) { return; }
             statList.Clear();
+            
             foreach (Library.status stat in mergedstatuses)
             {
                 FingerUI.StatusItem item = new FingerUI.StatusItem();
@@ -401,7 +403,7 @@ namespace PockeTwit
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses)
         {
             string StatusString = Library.status.Serialize(mergedstatuses);
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml"))
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + ClientSettings.UserName +ClientSettings.Server.ToString()+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
             }
