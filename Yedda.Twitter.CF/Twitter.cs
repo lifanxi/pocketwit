@@ -477,7 +477,6 @@ namespace Yedda
         public string GetFriendsTimeline(string userName, string password, OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
-
             return ExecuteGetCommand(url, userName, password);
         }
 
