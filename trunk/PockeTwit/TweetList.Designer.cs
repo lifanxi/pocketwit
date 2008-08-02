@@ -28,22 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusList = new FingerUI.KListControl();
+            this.otherStatslist = new FingerUI.KListControl();
             this.tmrautoUpdate = new System.Windows.Forms.Timer();
+            this.friendsStatslist = new FingerUI.KListControl();
             this.SuspendLayout();
             // 
-            // statusList
+            // otherStatslist
             // 
-            this.statusList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statusList.Location = new System.Drawing.Point(0, 0);
-            this.statusList.Name = "statusList";
-            this.statusList.Size = new System.Drawing.Size(240, 294);
-            this.statusList.TabIndex = 0;
-            this.statusList.Visible = true;
+            this.otherStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.otherStatslist.Location = new System.Drawing.Point(0, 0);
+            this.otherStatslist.Name = "otherStatslist";
+            this.otherStatslist.Size = new System.Drawing.Size(240, 294);
+            this.otherStatslist.TabIndex = 0;
             // 
             // tmrautoUpdate
             // 
             this.tmrautoUpdate.Tick += new System.EventHandler(this.tmrautoUpdate_Tick);
+            // 
+            // friendsStatslist
+            // 
+            this.friendsStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.friendsStatslist.Location = new System.Drawing.Point(0, 0);
+            this.friendsStatslist.Name = "friendsStatslist";
+            this.friendsStatslist.Size = new System.Drawing.Size(240, 294);
+            this.friendsStatslist.TabIndex = 1;
             // 
             // TweetList
             // 
@@ -52,7 +60,8 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
-            this.Controls.Add(this.statusList);
+            this.Controls.Add(this.friendsStatslist);
+            this.Controls.Add(this.otherStatslist);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
             this.ResumeLayout(false);
@@ -61,8 +70,9 @@
 
         #endregion
 
-        private FingerUI.KListControl statusList;
+        private FingerUI.KListControl otherStatslist;
         private System.Windows.Forms.Timer tmrautoUpdate;
+        private FingerUI.KListControl friendsStatslist;
     }
 }
 
