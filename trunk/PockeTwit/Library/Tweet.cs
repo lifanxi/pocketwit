@@ -22,6 +22,37 @@ namespace PockeTwit.Library
         public string favorited { get; set; }
 
         public User user { get; set; }
+
+        public static status[] Deserialize(string response)
+        {
+            
+            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
+            Library.status[] statuses;
+            if (string.IsNullOrEmpty(response))
+            {
+                statuses = new status[0];
+            }
+            else
+            {
+                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                {
+                    statuses = (Library.status[])s.Deserialize(r);
+                }
+            }
+            return statuses;
+        }
+        public static string Serialize(status[] List)
+        {
+            if (List.Length == 0) { return null; }
+            XmlSerializer s = new XmlSerializer(typeof(status[]));
+            StringBuilder sb = new StringBuilder();
+            using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
+            {
+                s.Serialize(w, List);
+            }
+            return sb.ToString();
+        }
+
     }
 
     [Serializable]
@@ -39,5 +70,4 @@ namespace PockeTwit.Library
         public int followers_count { get; set; }
     }
 
-   
 }

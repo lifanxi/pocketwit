@@ -88,6 +88,7 @@ namespace Yedda
         private string twitterClient = "pocketwit";
         private string twitterClientVersion = "0.9";
         private string twitterClientUrl = "http://code.google.com/p/pocketwit";
+        public int MaxTweets = 200;
 
         private TwitterServer _CurrentServer = TwitterServer.twitter;
         public TwitterServer CurrentServer {
@@ -462,6 +463,17 @@ namespace Yedda
         #endregion
 
         #region Friends_Timeline
+        public string GetFriendsTimeLineMax(string userName, string password, OutputFormatType format)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer))+"?count="+MaxTweets;
+            return ExecuteGetCommand(url, userName, password);
+        }
+        public string GetFriendsTimeLineSince(string userName, string password, OutputFormatType format, string SinceID)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer)) + "?since_id=" + SinceID;
+            return ExecuteGetCommand(url, userName, password);
+        }
+
         public string GetFriendsTimeline(string userName, string password, OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));

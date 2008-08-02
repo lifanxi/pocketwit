@@ -22,6 +22,8 @@ namespace PockeTwit
         private string ShowUserID;
         private UpdateChecker Checker;
         private string CachedResponse;
+        private string LastStatusID = "";
+        private Library.status[] CurrentStatuses =null;
 
         
         private bool CurrentlyConnected
@@ -84,9 +86,28 @@ namespace PockeTwit
             statusList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statusList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
             statusList.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
+            if (Twitter.BigTimeLines)
+            {
+                LoadCachedtimeline();
+            }
             GetTimeLine();
             Checker = new UpdateChecker();
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
+        }
+
+        private void LoadCachedtimeline()
+        {
+            string cachePath = ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml";
+            if (System.IO.File.Exists(cachePath))
+            {
+                using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
+                {
+                    string s = r.ReadToEnd();
+                    CurrentStatuses = Library.status.Deserialize(s);
+                }
+                LastStatusID = CurrentStatuses[0].id;
+            }
+            
         }
 
         void statusList_SwitchWindowState(bool IsMaximized)
@@ -304,10 +325,21 @@ namespace PockeTwit
 
             if (!string.IsNullOrEmpty(response) && response != CachedResponse)
             {
-                Library.status[] statuses = InterpretStatuses(response);
-                
+                CachedResponse = response;
+                Library.status[] newstatuses = Library.status.Deserialize(response);
+                Library.status[] mergedstatuses = null;
+                if (!Twitter.BigTimeLines)
+                {
+                    mergedstatuses = newstatuses;
+                }
+                else
+                {
+                    mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
+                    SaveStatuses(mergedstatuses);
+                }
+
                 statusList.Clear();
-                foreach (Library.status stat in statuses)
+                foreach (Library.status stat in mergedstatuses)
                 {
                     FingerUI.StatusItem item = new FingerUI.StatusItem();
                     if (stat.user!=null)
@@ -323,24 +355,48 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        private Library.status[] InterpretStatuses(string response)
+        private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses)
         {
-            CachedResponse = response;
-            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
-            Library.status[] statuses;
-            if (string.IsNullOrEmpty(response))
+            string StatusString = Library.status.Serialize(mergedstatuses);
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + ClientSettings.UserName + "FriendsTime.xml"))
             {
-                statuses = new PockeTwit.Library.status[0];
+                w.Write(StatusString);
             }
-            else
+            CurrentStatuses = mergedstatuses;
+        }
+
+        private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses)
+        {
+            if (CurrentStatuses == null)
             {
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                return newstatuses;
+            }
+            int newLength = (newstatuses.Length + CurrentStatuses.Length > ClientSettings.MaxTweets) ? ClientSettings.MaxTweets : newstatuses.Length + CurrentStatuses.Length;
+            Library.status[] MergedList = new PockeTwit.Library.status[newLength];
+            int i = 0;
+            foreach (Library.status stat in newstatuses)
+            {
+                if (stat != null)
                 {
-                    statuses = (Library.status[])s.Deserialize(r);
+                    if (i >= ClientSettings.MaxTweets) { break; }
+                    MergedList[i] = stat;
+                    i++;
                 }
             }
-            return statuses;
+            foreach (Library.status stat in CurrentStatuses)
+            {
+                if (stat != null)
+                {
+                    if (i >= ClientSettings.MaxTweets) { break; }
+                    MergedList[i] = stat;
+                    i++;
+                }
+            }
+            LastStatusID = MergedList[0].id;
+            return MergedList;
         }
+
+        
 
         private string FetchFromTwitter()
         {
@@ -351,7 +407,21 @@ namespace PockeTwit
                 switch (CurrentAction)
                 {
                     case Yedda.Twitter.ActionType.Friends_Timeline:
-                        response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                        if (!Twitter.BigTimeLines)
+                        {
+                            response = Twitter.GetFriendsTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(LastStatusID))
+                            {
+                                response = Twitter.GetFriendsTimeLineMax(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                            }
+                            else
+                            {
+                                response = Twitter.GetFriendsTimeLineSince(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML, LastStatusID);
+                            }
+                        }
                         break;
                     case Yedda.Twitter.ActionType.Public_Timeline:
                         response = Twitter.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
