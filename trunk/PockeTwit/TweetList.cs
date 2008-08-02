@@ -30,8 +30,10 @@ namespace PockeTwit
         {
             if (statList != null)
             {
-                statList.Visible = false;
+                list.XOffset = statList.XOffset;
             }
+            friendsStatslist.Visible = false;
+            otherStatslist.Visible = false;
             statList = list;
             statList.Visible = true;
         }
@@ -197,6 +199,7 @@ namespace PockeTwit
                 ChangeCursor(Cursors.WaitCursor);
                 ShowUserID = TextClicked.Replace("@","");
                 CurrentAction = Yedda.Twitter.ActionType.Show;
+                SwitchToList(otherStatslist);
                 GetTimeLineAsync();
             }
         }
