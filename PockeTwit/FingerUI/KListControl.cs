@@ -108,7 +108,17 @@ namespace FingerUI
             }
         }
 
-
+        public int XOffset
+        {
+            get
+            {
+                return m_offset.X;
+            }
+            set
+            {
+                m_offset.X = value;
+            }
+        }
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.Control"></see> and its child controls and optionally releases the managed resources.
