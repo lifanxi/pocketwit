@@ -21,7 +21,6 @@ namespace PockeTwit
         Yedda.Twitter Twitter;
         private string ShowUserID;
         private UpdateChecker Checker;
-        private const int TimerLength = 75000;
         private string CachedResponse;
 
         
@@ -72,7 +71,7 @@ namespace PockeTwit
             this.WindowState = FormWindowState.Maximized;
             Twitter = new Yedda.Twitter();
             Twitter.CurrentServer = ClientSettings.Server;
-            tmrautoUpdate.Interval = TimerLength;
+            tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;
             statusList.BackColor = ClientSettings.BackColor;
             statusList.ForeColor = ClientSettings.ForeColor;

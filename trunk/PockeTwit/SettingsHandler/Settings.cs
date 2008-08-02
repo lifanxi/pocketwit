@@ -9,7 +9,8 @@ static class ClientSettings
     public static bool CheckVersion { get; set; }
     public static bool BeepOnNew { get; set; }
     public static Yedda.Twitter.TwitterServer Server { get; set; }
-    public static int AnimationInterval = 25;
+    public static int AnimationInterval;
+    public static int UpdateInterval;
 
     public static int SmallArtSize = 60;
     
@@ -96,7 +97,15 @@ static class ClientSettings
             }
             else
             {
-                AnimationInterval = 50;
+                AnimationInterval = 25;
+            }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateInterval"]))
+            {
+                UpdateInterval = int.Parse(ConfigurationSettings.AppSettings["UpdateInterval"]);
+            }
+            else
+            {
+                UpdateInterval = 90000;
             }
         }
         catch{}
@@ -110,6 +119,7 @@ static class ClientSettings
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
         ConfigurationSettings.AppSettings["Server"] = Server.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
+        ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.SaveConfig();
     }
 }

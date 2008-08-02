@@ -261,6 +261,7 @@ namespace FingerUI
             if (SplitLines.Count == 0)
             {
                 string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
+                FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
 
                 bool SpaceSplit = false;
@@ -270,23 +271,26 @@ namespace FingerUI
                 }
                 if (size.Width < textBounds.Width)
                 {
-                    SplitLines.Add(CurrentLine.TrimStart(new char[] { ' ' }));
+                    string line = CurrentLine.TrimStart(new char[] { ' ' });
+                    SplitLines.Add(line);
+                    FindClickables(line, g, 0);
                 }
+                int LineOffset = 1;
                 while (size.Width > textBounds.Width)
                 {
                     int lastBreak = 0;
                     int currentPos = 0;
-                    string newString = "";
+                    StringBuilder newString = new StringBuilder();
                     foreach (char c in CurrentLine)
                     {
-                        newString = CurrentLine.Substring(0, currentPos);
-                        if (g.MeasureString(newString, TextFont).Width > textBounds.Width)
+                        newString.Append(c);    
+                        if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
                         {
                             if (!SpaceSplit | lastBreak == 0)
                             {
                                 lastBreak = currentPos - 1;
                             }
-                            newString = CurrentLine.Substring(0, lastBreak);
+                            newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
                             break;
                         }
                         if (c == ' ')
@@ -295,7 +299,9 @@ namespace FingerUI
                         }
                         currentPos++;
                     }
-                    SplitLines.Add(newString.TrimStart(new char[] { ' ' }));
+                    string line = newString.ToString().TrimStart(new char[] { ' ' });
+                    SplitLines.Add(line);
+                    FindClickables(line, g, LineOffset-1);
                     if (SplitLines.Count >= 5) { break; }
                     if (lastBreak != 0)
                     {
@@ -304,15 +310,25 @@ namespace FingerUI
                     size = g.MeasureString(CurrentLine, TextFont);
                     if (size.Width < textBounds.Width)
                     {
-                        SplitLines.Add(CurrentLine.TrimStart(new char[]{' '}));
+                        line = CurrentLine.TrimStart(new char[] { ' ' });
+                        SplitLines.Add(line);
+                        FindClickables(line,g,LineOffset);
                     }
-
+                    LineOffset++;
                 }
-                int lineOffset = 0;
-                foreach (string line in SplitLines)
+            }
+        }
+
+        private void FirstClickableRun(string text)
+        {
+            string[] words = text.Split(new char[] { ' ' });
+            foreach (string word in words)
+            {
+                if ((word.StartsWith("http") | word.StartsWith("@")) && word.Length>1)
                 {
-                    FindClickables(line, g, (int)(lineOffset * (TextFont.Size + 4)));
-                    lineOffset++;
+                    Clickable c = new Clickable();
+                    c.Text = word;
+                    Clickables.Add(c);
                 }
             }
         }
@@ -321,25 +337,48 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
+            float Position = ((lineOffSet * (TextFont.Size + 4)));
             for (int i = 0; i < Words.Length; i++)
             {
                 string WordToCheck = Words[i];
-                if (WordToCheck.StartsWith("@") | WordToCheck.StartsWith("http"))
+                List<Clickable> OriginalClicks = new List<Clickable>(Clickables);
+                foreach(Clickable c in OriginalClicks)
                 {
-                    //Find out how far to the right this word will appear
-                    float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
-                    //Find the size of the word
-                    SizeF WordSize = g.MeasureString(Words[i], TextFont);
-                    //A structure containing info we need to know about the word.
-                    Clickable c = new Clickable();
-                    c.Location = new RectangleF(startpos, lineOffSet, WordSize.Width, WordSize.Height);
-                    c.Text = WordToCheck;
-                    //Underline it
-
-                    //Put it in a collection so we can see if the user clicked it on mouseup
-                    if (!Clickables.Contains(c))
+                    if (i == Words.Length-1)
                     {
-                        Clickables.Add(c);
+                        if (c.Text.StartsWith(WordToCheck))
+                        {
+                            float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                            //Find the size of the word
+                            SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                            //A structure containing info we need to know about the word.
+                            c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+                            
+                            string SecondPart = c.Text.Substring(WordToCheck.Length);
+
+                            if (!string.IsNullOrEmpty(SecondPart))
+                            {
+                                Clickable wrapClick = new Clickable();
+                                wrapClick.Text = c.Text;
+                                //Find the size of the word
+                                WordSize = g.MeasureString(SecondPart, TextFont);
+                                //A structure containing info we need to know about the word.
+                                float NextPosition = (((lineOffSet + 1) * (TextFont.Size + 4)));
+                                wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
+                                Clickables.Add(wrapClick);
+                            }
+                        }
+                        System.Diagnostics.Debug.WriteLine("Last word");
+                    }
+                    else if (WordToCheck == c.Text)
+                    {
+                        //Find out how far to the right this word will appear
+                        float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                        //Find the size of the word
+                        SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                        //A structure containing info we need to know about the word.
+                        c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+                        c.Text = WordToCheck;
                     }
                 }
                 LineBeforeThisWord.Append(WordToCheck + " ");
