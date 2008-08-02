@@ -72,6 +72,7 @@ namespace FingerUI
         public event delSwitchState SwitchWindowState;
 
         public bool IsMaximized { get; set; }
+        private bool HasMoved = false;
         
 
         private string LastItemSelected = null;
@@ -711,6 +712,7 @@ namespace FingerUI
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            HasMoved = false;
             //Fast scrolling on the right 10 pixels
             if (e.X > this.Width - 10)
             {
@@ -733,6 +735,7 @@ namespace FingerUI
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            HasMoved = true;
             base.OnMouseMove(e);
             
             if (e.Button == MouseButtons.Left)
@@ -867,10 +870,11 @@ namespace FingerUI
             }
             catch (ObjectDisposedException)
             { }
-            if (m_velocity.X == 0 && m_velocity.Y == 0)
+            if (!HasMoved)
             {
                 CheckForClicks(new Point(e.X, e.Y));
             }
+            HasMoved = false;
         }
 
         private void CheckForClicks(Point point)
