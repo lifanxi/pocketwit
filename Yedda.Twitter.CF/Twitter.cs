@@ -95,6 +95,14 @@ namespace Yedda
             set { _CurrentServer = value; }
         }
 
+
+        public bool BigTimeLines
+        {
+            get
+            {
+                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+            }
+        }
         public bool FavoritesWork
         {
             get
@@ -217,43 +225,43 @@ namespace Yedda
         /// <param name="userName">The username to use with the request</param>
         /// <param name="password">The password to use with the request</param>
         /// <returns>The response of the request, or null if we got 404 or nothing.</returns>
-protected string ExecuteGetCommand(string url, string userName, string password)
-{
-    HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
-    client.Timeout = 20000;
-    if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
-    {
-        client.Credentials = new NetworkCredential(userName, password);
-    }
-    client.PreAuthenticate = true;
+        protected string ExecuteGetCommand(string url, string userName, string password)
+        {
+            HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
+            client.Timeout = 20000;
+            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            {
+                client.Credentials = new NetworkCredential(userName, password);
+            }
+            client.PreAuthenticate = true;
 
-    try
-    {
-        HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse();
-        using (Stream stream = httpResponse.GetResponseStream())
-        {
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-                return reader.ReadToEnd();
+                HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse();
+                using (Stream stream = httpResponse.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
             }
-        }
-    }
-    catch (WebException ex)
-    {
-        //
-        // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
-        //
-        if (ex.Response is HttpWebResponse)
-        {
-            if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+            catch (WebException ex)
             {
-                return null;
+                //
+                // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
+                //
+                if (ex.Response is HttpWebResponse)
+                {
+                    if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
+                }
+                throw ex;
             }
+            return null;
         }
-        throw ex;
-    }
-    return null;
-}
 
         /// <summary>
         /// Executes an HTTP POST command and retrives the information.		
@@ -744,6 +752,7 @@ protected string ExecuteGetCommand(string url, string userName, string password)
         }
         #endregion
 
+        #region Verify
         public bool Verify(string userName, string password)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), GetServerString(CurrentServer));
@@ -758,5 +767,6 @@ protected string ExecuteGetCommand(string url, string userName, string password)
             }
             return false;
         }
+        #endregion
     }
 }

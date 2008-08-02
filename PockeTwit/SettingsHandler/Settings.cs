@@ -97,7 +97,7 @@ static class ClientSettings
             }
             else
             {
-                AnimationInterval = 25;
+                AnimationInterval = 15;
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateInterval"]))
             {
