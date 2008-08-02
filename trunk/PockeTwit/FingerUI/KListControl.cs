@@ -736,7 +736,7 @@ namespace FingerUI
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            HasMoved = true;
+            
             base.OnMouseMove(e);
             
             if (e.Button == MouseButtons.Left)
@@ -777,7 +777,10 @@ namespace FingerUI
                 m_velocity.X = distanceX / 2;
                 m_velocity.Y = distanceY / 2;
 
-                
+                if (distanceX != 0 || distanceY != 0)
+                {
+                    HasMoved = true;
+                }
                 
 
                 ClipVelocity();
