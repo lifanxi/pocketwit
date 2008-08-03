@@ -14,6 +14,7 @@ static class ClientSettings
     public static int MaxTweets = 200;
 
     public static int SmallArtSize = 60;
+    public static int TextSize { get; set; }
     
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
