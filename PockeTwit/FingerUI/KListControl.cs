@@ -635,7 +635,7 @@ namespace FingerUI
                     Color BackColor = this.BackColor;
                     if (MenuItem == LastItemSelected)
                     {
-                        BackColor = this.SelectedBackColor;
+                    //    BackColor = this.SelectedBackColor;
                         LastItemSelected = null;
                     }
                     using (Brush sBrush = new SolidBrush(BackColor))
@@ -674,7 +674,7 @@ namespace FingerUI
                     Color BackColor = this.BackColor;
                     if (MenuItem == LastItemSelected)
                     {
-                        BackColor = this.SelectedBackColor;
+                    //   BackColor = this.SelectedBackColor;
                         LastItemSelected = null;
                     }
                     using (Brush sBrush = new SolidBrush(BackColor))
