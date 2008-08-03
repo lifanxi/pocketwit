@@ -11,6 +11,7 @@ namespace FingerUI
     public class StatusItem : KListControl.IKListItem, IDisposable
     {
         public delegate void ClickedWordDelegate(string TextClicked);
+        [Serializable]
         public class Clickable
         {
             public string Text;
@@ -32,7 +33,7 @@ namespace FingerUI
             }
         }
 
-        public List<Clickable> Clickables = new List<Clickable>();
+        //public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
         private Graphics _ParentGraphics;
@@ -54,10 +55,20 @@ namespace FingerUI
                 if (string.IsNullOrEmpty(value.favorited))
                 {
                     m_highlighted = false;
-                    return;
+                }
+                else
+                {
+                    m_highlighted = bool.Parse(value.favorited);
+                }
+                if (Tweet.Clickables == null)
+                {
+                    Tweet.Clickables = new List<Clickable>();
+                }
+                if (Tweet.SplitLines == null)
+                {
+                    Tweet.SplitLines = new List<string>();
                 }
                 
-                m_highlighted =  bool.Parse(value.favorited);
             }
 
         }
@@ -150,9 +161,9 @@ namespace FingerUI
         public Rectangle Bounds { get { return m_bounds; }
             set 
             {
-                if (value.Width != m_bounds.Width)
+                if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
                 {
-                    SplitLines = new List<string>(); 
+                    Tweet.SplitLines = new List<string>(); 
                 }
                 m_bounds = value;
                 Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + 5, 0, m_bounds.Width - (ClientSettings.SmallArtSize + 10), m_bounds.Height);
@@ -226,7 +237,7 @@ namespace FingerUI
             m_stringFormat.LineAlignment = StringAlignment.Near;
             BreakUpTheText(g, textBounds);
             int lineOffset = 0;
-            foreach (string Line in SplitLines)
+            foreach (string Line in Tweet.SplitLines)
             {
                 float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
                 
@@ -244,7 +255,7 @@ namespace FingerUI
             
             using (Pen sPen = new Pen(ClientSettings.LinkColor))
             {
-                foreach (Clickable c in Clickables)
+                foreach (Clickable c in Tweet.Clickables)
                 {
                     g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
                         (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
@@ -255,7 +266,7 @@ namespace FingerUI
         #region Parsing Routines
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            if (SplitLines.Count == 0)
+            if (Tweet.SplitLines.Count == 0)
             {
                 string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
                 FirstClickableRun(CurrentLine);
@@ -269,7 +280,7 @@ namespace FingerUI
                 if (size.Width < textBounds.Width)
                 {
                     string line = CurrentLine.TrimStart(new char[] { ' ' });
-                    SplitLines.Add(line);
+                    Tweet.SplitLines.Add(line);
                     FindClickables(line, g, 0);
                 }
                 int LineOffset = 1;
@@ -297,9 +308,9 @@ namespace FingerUI
                         currentPos++;
                     }
                     string line = newString.ToString().TrimStart(new char[] { ' ' });
-                    SplitLines.Add(line);
+                    Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
-                    if (SplitLines.Count >= 5) { break; }
+                    if (Tweet.SplitLines.Count >= 5) { break; }
                     if (lastBreak != 0)
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
@@ -308,7 +319,7 @@ namespace FingerUI
                     if (size.Width < textBounds.Width)
                     {
                         line = CurrentLine.TrimStart(new char[] { ' ' });
-                        SplitLines.Add(line);
+                        Tweet.SplitLines.Add(line);
                         FindClickables(line,g,LineOffset);
                     }
                     LineOffset++;
@@ -325,7 +336,7 @@ namespace FingerUI
                 {
                     Clickable c = new Clickable();
                     c.Text = word;
-                    Clickables.Add(c);
+                    Tweet.Clickables.Add(c);
                 }
             }
         }
@@ -338,7 +349,7 @@ namespace FingerUI
             for (int i = 0; i < Words.Length; i++)
             {
                 string WordToCheck = Words[i];
-                List<Clickable> OriginalClicks = new List<Clickable>(Clickables);
+                List<Clickable> OriginalClicks = new List<Clickable>(Tweet.Clickables);
                 foreach(Clickable c in OriginalClicks)
                 {
                     if (i == Words.Length-1)
@@ -362,7 +373,7 @@ namespace FingerUI
                                 //A structure containing info we need to know about the word.
                                 float NextPosition = (((lineOffSet + 1) * (TextFont.Size + 4)));
                                 wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
-                                Clickables.Add(wrapClick);
+                                Tweet.Clickables.Add(wrapClick);
                             }
                         }
                         System.Diagnostics.Debug.WriteLine("Last word");
@@ -383,7 +394,7 @@ namespace FingerUI
         }
         #endregion
 
-        private List<string> SplitLines = new List<string>();
+        //private List<string> SplitLines = new List<string>();
         private StringFormat m_stringFormat = new StringFormat();
         private KListControl m_parent;
         private Rectangle m_bounds;
