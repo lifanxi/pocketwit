@@ -190,6 +190,11 @@ namespace FingerUI
         /// <param name="bounds">The bounds.</param>
         public virtual void Render(Graphics g, Rectangle bounds)
         {
+            if (ClientSettings.TextSize == 0)
+            {
+                ClientSettings.TextSize = (int)g.MeasureString("H", TextFont).Height;
+            }
+
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             
@@ -239,7 +244,7 @@ namespace FingerUI
             int lineOffset = 0;
             foreach (string Line in Tweet.SplitLines)
             {
-                float Position = ((lineOffset * (TextFont.Size+4)) + textBounds.Top);
+                float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
                 
                 g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
                 MakeClickable(Line, g, textBounds);
