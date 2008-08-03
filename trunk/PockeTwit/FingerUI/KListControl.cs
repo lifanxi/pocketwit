@@ -281,7 +281,7 @@ namespace FingerUI
             item.Selected = false;
             item.Bounds = ItemBounds(0, item.Index);
             m_items.Add(item.Index, item);
-            Reset();
+            //Reset();
         }
 
         /// <summary>
