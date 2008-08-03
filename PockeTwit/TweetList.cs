@@ -104,7 +104,11 @@ namespace PockeTwit
             {
                 // SHow Settings page first
                 SettingsForm settings = new SettingsForm();
-                if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+                if (settings.ShowDialog() == DialogResult.Cancel) 
+                {
+                    Application.Exit();
+                    return;
+                }
             }
 
             

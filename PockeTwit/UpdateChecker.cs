@@ -11,7 +11,7 @@ namespace PockeTwit
 {
     public class UpdateChecker
     {
-        public double currentVersion = .14;
+        public double currentVersion = .15;
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private string XMLResponse;
         private UpdateInfo WebVersion;
@@ -68,33 +68,41 @@ namespace PockeTwit
             }
             catch{}
             XmlDocument UpdateInfoDoc = new XmlDocument();
-            if (XMLResponse != null)
+            try
             {
-                UpdateInfoDoc.LoadXml(XMLResponse);
-                WebVersion = new UpdateInfo();
-                WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
-                WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
-                WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
-
-                if (WebVersion.webVersion > currentVersion)
+                if (XMLResponse != null)
                 {
-                    if (UpdateFound != null)
+                    UpdateInfoDoc.LoadXml(XMLResponse);
+                    WebVersion = new UpdateInfo();
+                    WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
+                    WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
+                    WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
+
+                    if (WebVersion.webVersion > currentVersion)
                     {
-                        UpdateFound(WebVersion);
+                        if (UpdateFound != null)
+                        {
+                            UpdateFound(WebVersion);
+                        }
                     }
+                    else
+                    {
+                        if (CurrentVersion != null)
+                        {
+                            CurrentVersion(WebVersion);
+                        }
+                    }
+                    System.Diagnostics.Debug.WriteLine("Update check complete");
                 }
                 else
                 {
-                    if (CurrentVersion != null)
-                    {
-                        CurrentVersion(WebVersion);
-                    }
+                    System.Diagnostics.Debug.WriteLine("Update check failed");
                 }
-                System.Diagnostics.Debug.WriteLine("Update check complete");
             }
-            else
+            catch
             {
-                System.Diagnostics.Debug.WriteLine("Update check failed");
+                System.Windows.Forms.MessageBox.Show("Unable to check for upgrades.\r\nIf the problem persists let me know @PockeTwitdev", "Upgrade error.");
+
             }
         }
     
