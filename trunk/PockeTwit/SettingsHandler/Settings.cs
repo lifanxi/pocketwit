@@ -108,6 +108,14 @@ static class ClientSettings
             {
                 UpdateInterval = 90000;
             }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MaxTweets"]))
+            {
+                MaxTweets= int.Parse(ConfigurationSettings.AppSettings["MaxTweets"]);
+            }
+            else
+            {
+                UpdateInterval = 200;
+            }
         }
         catch{}
         
@@ -121,6 +129,7 @@ static class ClientSettings
         ConfigurationSettings.AppSettings["Server"] = Server.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
+        ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.SaveConfig();
     }
 }
