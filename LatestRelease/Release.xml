@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.14</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv14.CAB</url>
-  <notes>Nicer to twitter servers
-Display up to 200 tweets
-Fixed wrapped hyperlinks
+  <version>.15</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv15.CAB</url>
+  <notes>Don't crash if auto-upgrade
+     fails.
 </notes>
 </LatestRelease>
