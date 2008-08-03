@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.13</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv13.CAB</url>
-  <notes>identi.ca support
-Use default browser for profiles and links
-Toggle fullscreen
+  <version>.14</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv14.CAB</url>
+  <notes>Nicer to twitter servers
+Display up to 200 tweets
+Fixed wrapped hyperlinks
 </notes>
 </LatestRelease>
