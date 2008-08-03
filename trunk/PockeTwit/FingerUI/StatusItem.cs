@@ -190,9 +190,6 @@ namespace FingerUI
             
             Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 10), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
-            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
-
-            g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
         
             if (m_selected) 
             {
@@ -203,7 +200,8 @@ namespace FingerUI
                 ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
             
                 //g.DrawRectangle(new Pen(Color.Black), bounds);
-                Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width, textBounds.Height);
+                //Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width+5, textBounds.Height);
+                Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width , bounds.Height);
                 InnerBounds.Offset(1, 1);
                 InnerBounds.Width--; InnerBounds.Height--;
 
@@ -211,6 +209,11 @@ namespace FingerUI
 
                 FillColor.Dispose();
             }
+
+            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
+
+            g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
+
 
             if (m_highlighted)
             {
