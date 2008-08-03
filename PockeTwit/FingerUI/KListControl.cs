@@ -898,7 +898,7 @@ namespace FingerUI
                 if (Item is StatusItem)
                 {
                     StatusItem s = (StatusItem)Item;
-                    foreach (StatusItem.Clickable c in s.Clickables)
+                    foreach (StatusItem.Clickable c in s.Tweet.Clickables)
                     {
                         Rectangle itemRect = s.Bounds;
                         itemRect.Offset(-m_offset.X, -m_offset.Y);

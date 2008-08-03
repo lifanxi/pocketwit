@@ -411,7 +411,6 @@ namespace PockeTwit
                         if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                         {
                             mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
-                            SaveStatuses(mergedstatuses);
                         }
                         else
                         {
@@ -420,6 +419,10 @@ namespace PockeTwit
                     }
 
                     AddStatusesToList(mergedstatuses);
+                    if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
+                    {
+                        SaveStatuses(mergedstatuses);
+                    }
                 }
             }
             ChangeCursor(Cursors.Default);

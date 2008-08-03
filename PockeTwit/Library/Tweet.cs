@@ -23,6 +23,9 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
+        public List<string> SplitLines { get; set; }
+        public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
+
         
         public static status[] Deserialize(string response)
         {
