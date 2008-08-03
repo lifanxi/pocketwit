@@ -562,8 +562,9 @@ namespace PockeTwit
 
         private void CreateFavoriteAsync()
         {
-            ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return; }
+            ChangeCursor(Cursors.WaitCursor);
             selectedItem.isFavorite = true;
 
             string ID = selectedItem.Tweet.id;
