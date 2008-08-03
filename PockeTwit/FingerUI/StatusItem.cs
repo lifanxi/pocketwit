@@ -86,12 +86,6 @@ namespace FingerUI
             }
         }
         
-        /// <summary>
-        /// Initializes the <see cref="KListItem"/> class.
-        /// </summary>
-        static StatusItem()
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KListItem"/> class.
