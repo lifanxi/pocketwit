@@ -23,6 +23,7 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
+        
         public static status[] Deserialize(string response)
         {
             
@@ -36,11 +37,43 @@ namespace PockeTwit.Library
             {
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
                 {
-                    statuses = (Library.status[])s.Deserialize(r);
+                        statuses = (Library.status[])s.Deserialize(r);
+                    
                 }
             }
             return statuses;
         }
+        /*
+        public static status[] Deserialize(string XML)
+        {
+            List<status> LoadedStats = new List<status>();
+
+            using (System.IO.StringReader r = new System.IO.StringReader(XML))
+            {
+                using (System.Xml.XmlTextReader xr = new System.Xml.XmlTextReader(r))
+                {
+                    while (xr.Read())
+                    {
+                        xr.MoveToElement();
+                        if (xr.Name == "status")
+                        {
+                            status newStat = ReadStatus(xr);
+                            LoadedStats.Add(newStat);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static status ReadStatus(System.Xml.XmlTextReader xr)
+        {
+            while (xr.Read())
+            {
+
+            }
+        }
+         */
         public static string Serialize(status[] List)
         {
             if (List.Length == 0) { return null; }
@@ -56,7 +89,7 @@ namespace PockeTwit.Library
     }
 
     [Serializable]
-    public class User
+    public class User 
     {
         public string id { get; set; }
         //public string name { get; set; }
@@ -68,6 +101,9 @@ namespace PockeTwit.Library
         //[XmlElement("protected")]
         //public bool is_protected { get; set; }
         //public int followers_count { get; set; }
+
+        
+        
     }
 
 }
