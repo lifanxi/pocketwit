@@ -114,7 +114,7 @@ static class ClientSettings
             }
             else
             {
-                UpdateInterval = 200;
+                MaxTweets = 200;
             }
         }
         catch{}

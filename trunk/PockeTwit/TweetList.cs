@@ -118,9 +118,7 @@ namespace PockeTwit
             Twitter = new Yedda.Twitter();
             Twitter.MaxTweets = ClientSettings.MaxTweets;
             Twitter.CurrentServer = ClientSettings.Server;
-            tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
-            tmrautoUpdate.Enabled = true;
-
+            
             lblLoading.Text = "Setting up UI lists.";
             Application.DoEvents();
             SetUpListControl(friendsStatslist);
@@ -136,6 +134,9 @@ namespace PockeTwit
             lblLoading.Text = "Fetching timeline from server.";
             Application.DoEvents();
             GetTimeLine();
+            tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
+            tmrautoUpdate.Enabled = true;
+
         }
 
         private void SetUpListControl(FingerUI.KListControl list)
