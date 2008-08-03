@@ -915,7 +915,21 @@ namespace FingerUI
             }
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        public void HookKey()
+        {
+            this.Parent.KeyDown += new KeyEventHandler(OnKeyDown);
+        }
+
+        void Parent_KeyDown( KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        public void UnHookKey()
+        {
+            this.Parent.KeyDown -= new KeyEventHandler(OnKeyDown);
+        }
+
+        protected void OnKeyDown(object sender, KeyEventArgs e)
         {
             base.OnKeyDown(e);
             if (e.KeyCode == System.Windows.Forms.Keys.Up)

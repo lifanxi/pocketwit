@@ -31,11 +31,14 @@ namespace PockeTwit
             if (statList != null)
             {
                 list.XOffset = statList.XOffset;
+                statList.UnHookKey();
             }
             friendsStatslist.Visible = false;
             otherStatslist.Visible = false;
             statList = list;
+            statList.HookKey();
             statList.Visible = true;
+            
         }
 
         private bool CurrentlyConnected
@@ -240,17 +243,10 @@ namespace PockeTwit
 
         void statusList_MenuItemSelected(string ItemName)
         {
-            if (ItemName == "Friends TimeLine")
-            {
-                SwitchToList(friendsStatslist);
-            }
-            else
-            {
-                SwitchToList(otherStatslist);
-            }
             switch (ItemName)
             {
                 case "Public TimeLine":
+                    SwitchToList(otherStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statList.RightMenuItems = RightMenu;
                     ChangeCursor(Cursors.WaitCursor);
@@ -258,12 +254,14 @@ namespace PockeTwit
                     break;
                 case "Reconnect":
                 case "Friends TimeLine":
+                    SwitchToList(friendsStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statList.RightMenuItems = RightMenu;
                     ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
                     break;
                 case "Replies":
+                    SwitchToList(otherStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statList.RightMenuItems = RightMenu;
                     ChangeCursor(Cursors.WaitCursor);
