@@ -87,6 +87,7 @@ namespace PockeTwit
             timerStartup.Enabled = false;
             SetEverythingUp();
             SwitchToDone();
+            Following.LoadFromTwitter();
         }
 
         private void SwitchToDone()

@@ -16,11 +16,16 @@ namespace PockeTwit
         {
             GetCachedFollowers();
 
+            //LoadFromTwitter();
+            //GetFollowersFromTwitter();
+        }
+
+        public static void LoadFromTwitter()
+        {
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Name = "FetchFollowers";
             t.Start();
-            //GetFollowersFromTwitter();
         }
 
         public static void Reset()
