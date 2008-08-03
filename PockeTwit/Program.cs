@@ -23,6 +23,14 @@ namespace PockeTwit
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            string ErrorPath = ClientSettings.AppPath;
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ErrorPath + "\\error.txt"))
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                w.WriteLine(ex.Message);
+                w.WriteLine("_________________");
+                w.WriteLine(ex.StackTrace);
+            }
             if (e.ExceptionObject is System.Net.WebException)
             {
                 System.Net.WebException ex = (System.Net.WebException)e.ExceptionObject;
