@@ -150,7 +150,7 @@ namespace PockeTwit
             list.ForeColor = ClientSettings.ForeColor;
             list.SelectedBackColor = ClientSettings.SelectedBackColor;
             list.SelectedForeColor = ClientSettings.SelectedForeColor;
-            list.ItemHeight = 70;
+            list.ItemHeight = (ClientSettings.TextSize * 5)+5;
             list.IsMaximized = true;
             SetConnectedMenus(list);
             list.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);

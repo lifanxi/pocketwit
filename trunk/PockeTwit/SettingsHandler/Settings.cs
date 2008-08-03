@@ -14,7 +14,19 @@ static class ClientSettings
     public static int MaxTweets = 200;
 
     public static int SmallArtSize = 60;
-    public static int TextSize { get; set; }
+    private static int _TextSize = 0;
+    public static int TextSize 
+    {
+        get
+        {
+            return _TextSize;
+        }
+        set
+        {
+            _TextSize = value;
+            SmallArtSize = _TextSize * 5;
+        }
+    }
     
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
@@ -26,9 +38,23 @@ static class ClientSettings
 
     static ClientSettings()
     {
+        TextSize = GetTextSize();
         LoadColors();
         LoadSettings();
     }
+
+    private static int GetTextSize()
+    {
+        using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(100, 100))
+        {
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))
+            {
+                return (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Regular)).Height - 1);
+            }
+        }
+
+    }
+
 
     private static void LoadColors()
     {

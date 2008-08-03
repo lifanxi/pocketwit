@@ -190,10 +190,6 @@ namespace FingerUI
         /// <param name="bounds">The bounds.</param>
         public virtual void Render(Graphics g, Rectangle bounds)
         {
-            if (ClientSettings.TextSize == 0)
-            {
-                ClientSettings.TextSize = (int)g.MeasureString("H", TextFont).Height;
-            }
 
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
