@@ -248,25 +248,27 @@ namespace PockeTwit
             switch (ItemName)
             {
                 case "Public TimeLine":
+                    ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(otherStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statList.RightMenuItems = RightMenu;
-                    ChangeCursor(Cursors.WaitCursor);
                     GetTimeLineAsync();
                     break;
                 case "Reconnect":
                 case "Friends TimeLine":
+                    ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(friendsStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statList.RightMenuItems = RightMenu;
-                    ChangeCursor(Cursors.WaitCursor);
+                    
                     GetTimeLineAsync();
                     break;
                 case "Replies":
+                    ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(otherStatslist);
                     CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statList.RightMenuItems = RightMenu;
-                    ChangeCursor(Cursors.WaitCursor);
+                    
                     GetTimeLineAsync();
                     break;
                 case "Favorites":
@@ -373,6 +375,7 @@ namespace PockeTwit
         private void SetStatus(string ToUser)
         {
             SetStatus StatusForm = new SetStatus();
+            this.Hide();
             if (!string.IsNullOrEmpty(ToUser))
             {
                 StatusForm.StatusText = ToUser + " ";
