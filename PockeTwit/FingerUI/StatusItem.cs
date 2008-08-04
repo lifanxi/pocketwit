@@ -221,6 +221,18 @@ namespace FingerUI
             g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
 
+            if (Tweet.text.Split(new char[]{' '})[0].StartsWith("@"))
+            {
+                string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[]{'@'});
+                Image ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
+                if (ReplyImage != null)
+                {
+                    Rectangle ReplyRect = new Rectangle(bounds.X+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), bounds.Y+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2));
+                    g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
+                }
+            }
+
+
             if (m_highlighted)
             {
                 System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
