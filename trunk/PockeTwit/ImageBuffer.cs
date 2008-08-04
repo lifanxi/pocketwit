@@ -21,7 +21,22 @@ namespace PockeTwit
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
-        }   
+        }
+
+        public static bool HasArt(string User)
+        {
+            if (ImageDictionary.ContainsKey(User))
+            {
+                return true;
+            }
+            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            if (System.IO.File.Exists(ArtPath))
+            {
+                LoadArt(User);
+                return true;
+            }
+            return false;
+        }
 
         public static Image GetArt(string User)
         {
@@ -42,6 +57,13 @@ namespace PockeTwit
                 return UnknownArt;
             }
             return ImageDictionary[User];
+        }
+
+        private static void LoadArt(string User)
+        {
+            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            Bitmap NewArt = new Bitmap(ArtPath);
+            ImageDictionary.Add(User, NewArt);
         }
 
         private static void LoadArt(string User, string URL)

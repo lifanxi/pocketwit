@@ -35,6 +35,7 @@ namespace FingerUI
 
         //public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
+        private PockeTwit.Library.User ReplyUser = null;
 
         private Graphics _ParentGraphics;
         public Graphics ParentGraphics 
@@ -220,11 +221,25 @@ namespace FingerUI
 
             g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
-
             if (Tweet.text.Split(new char[]{' '})[0].StartsWith("@"))
             {
                 string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[]{'@'});
-                Image ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
+                Image ReplyImage;
+                if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
+                {
+                    if (ReplyUser == null)
+                    {
+                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
+                        System.Diagnostics.Debug.WriteLine("Fetched " + ReplyTo + " from twitter");
+                    }
+                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(ReplyTo + " already existed in image dictionary");
+                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
+                }
+                
                 if (ReplyImage != null)
                 {
                     Rectangle ReplyRect = new Rectangle(bounds.X+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), bounds.Y+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2));
