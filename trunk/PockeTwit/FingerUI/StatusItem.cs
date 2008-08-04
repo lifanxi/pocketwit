@@ -164,7 +164,8 @@ namespace FingerUI
             {
                 if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
                 {
-                    Tweet.SplitLines = new List<string>(); 
+                    Tweet.SplitLines = new List<string>();
+                    Tweet.Clickables = new List<Clickable>();
                 }
                 m_bounds = value;
                 Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
@@ -270,15 +271,15 @@ namespace FingerUI
                 float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
                 
                 g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
-                MakeClickable(Line, g, textBounds);
                 lineOffset++;
             }
+            MakeClickable(g, textBounds);
             ForeBrush.Dispose();
         }
 
         //texbounds is the area we're allowed to draw within
         //lineOffset is how many lines we've already drawn in these bounds
-        private void MakeClickable(string Line, Graphics g, Rectangle textBounds)
+        private void MakeClickable(Graphics g, Rectangle textBounds)
         {
             
             using (Pen sPen = new Pen(ClientSettings.LinkColor))
@@ -382,7 +383,7 @@ namespace FingerUI
                 {
                     if (i == Words.Length-1)
                     {
-                        if (c.Text.StartsWith(WordToCheck))
+                        if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck))
                         {
                             float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
                             //Find the size of the word

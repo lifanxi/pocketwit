@@ -23,7 +23,9 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
+        [XmlIgnore]
         public List<string> SplitLines { get; set; }
+        [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
         
