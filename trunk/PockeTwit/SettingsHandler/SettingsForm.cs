@@ -15,6 +15,7 @@ namespace PockeTwit
         public SettingsForm()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
             FillServerList();
             PopulateForm();
         }
