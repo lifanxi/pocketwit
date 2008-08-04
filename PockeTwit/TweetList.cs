@@ -450,7 +450,7 @@ namespace PockeTwit
                 }
             }
             if (ClientSettings.BeepOnNew &&
-                (CurrentAction == Yedda.Twitter.ActionType.Friends |
+                (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
                 CurrentAction == Yedda.Twitter.ActionType.Replies)) { MessageBeep(0); }
         }
 
