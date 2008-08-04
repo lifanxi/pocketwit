@@ -225,7 +225,7 @@ namespace FingerUI
             if (Tweet.text.Split(new char[]{' '})[0].StartsWith("@"))
             {
                 string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[]{'@'});
-                Image ReplyImage;
+                Image ReplyImage = null;
                 if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
                 {
                     if (ReplyUser == null)
@@ -233,7 +233,10 @@ namespace FingerUI
                         ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
                         System.Diagnostics.Debug.WriteLine("Fetched " + ReplyTo + " from twitter");
                     }
-                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                    if (ReplyUser != null)
+                    {
+                        ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                    }
                 }
                 else
                 {
