@@ -74,6 +74,8 @@ namespace PockeTwit
                 return;
             }
             Yedda.Twitter twitter = new Yedda.Twitter();
+            Yedda.Twitter.TwitterServer SelectedServer = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+            twitter.CurrentServer = SelectedServer;
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {
                 lblError.Text = "Unable to verify username and password";
@@ -83,15 +85,15 @@ namespace PockeTwit
             }
             else
             {
-                NeedsReset = ClientSettings.UserName!=txtUserName.Text | 
-                             ClientSettings.Server != (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true) | 
+                NeedsReset = ClientSettings.UserName!=txtUserName.Text |
+                             ClientSettings.Server != SelectedServer | 
                              ClientSettings.MaxTweets != MaxTweets;
 
                 ClientSettings.UserName = txtUserName.Text;
                 ClientSettings.Password = txtPassword.Text;
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.BeepOnNew = chkBeep.Checked;
-                ClientSettings.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+                ClientSettings.Server = SelectedServer;
                 ClientSettings.MaxTweets = MaxTweets;
                 ClientSettings.SaveSettings();
                 
