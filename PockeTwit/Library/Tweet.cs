@@ -17,7 +17,7 @@ namespace PockeTwit.Library
         //public bool truncated { get; set; }
 
         //public string in_reply_to_status_id { get; set; }
-        //public string in_reply_to_user_id { get; set; }
+        public string in_reply_to_user_id { get; set; }
 
         public string favorited { get; set; }
 
@@ -46,37 +46,6 @@ namespace PockeTwit.Library
             }
             return statuses;
         }
-        /*
-        public static status[] Deserialize(string XML)
-        {
-            List<status> LoadedStats = new List<status>();
-
-            using (System.IO.StringReader r = new System.IO.StringReader(XML))
-            {
-                using (System.Xml.XmlTextReader xr = new System.Xml.XmlTextReader(r))
-                {
-                    while (xr.Read())
-                    {
-                        xr.MoveToElement();
-                        if (xr.Name == "status")
-                        {
-                            status newStat = ReadStatus(xr);
-                            LoadedStats.Add(newStat);
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        private static status ReadStatus(System.Xml.XmlTextReader xr)
-        {
-            while (xr.Read())
-            {
-
-            }
-        }
-         */
         public static string Serialize(status[] List)
         {
             if (List.Length == 0) { return null; }
@@ -105,7 +74,22 @@ namespace PockeTwit.Library
         //public bool is_protected { get; set; }
         //public int followers_count { get; set; }
 
-        
+        public static User FromId(string ID)
+        {
+            Yedda.Twitter Twitter = new Yedda.Twitter();
+            Twitter.CurrentServer = ClientSettings.Server;
+            string Response = Twitter.Show(ClientSettings.UserName, ClientSettings.Password, ID, Yedda.Twitter.OutputFormatType.XML);
+
+            XmlSerializer s = new XmlSerializer(typeof(User));
+            if (string.IsNullOrEmpty(Response))
+            {
+                return null;
+            }
+            using (System.IO.StringReader r = new System.IO.StringReader(Response))
+            {
+                return (User)s.Deserialize(r);
+            }
+        }
         
     }
 
