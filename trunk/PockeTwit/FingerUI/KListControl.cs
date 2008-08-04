@@ -957,9 +957,8 @@ namespace FingerUI
             {
                 try
                 {
-                    if (m_selectedIndex.Y < m_items.Count)
+                    if (m_selectedIndex.Y < m_items.Count-1)
                     {
-                        UnselectCurrentItem();
                         m_selectedIndex.Y = m_selectedIndex.Y + 1;
                         SelectAndJump();
                     }
