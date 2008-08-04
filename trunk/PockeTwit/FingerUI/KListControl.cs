@@ -432,24 +432,14 @@ namespace FingerUI
                 ClipScrollPosition();
                 
                 // Slow down
-                    if (m_velocity.Y < 0)
-                    {
-                        m_velocity.Y++;
-                    }
-                    else if (m_velocity.Y > 0)
-                    {
-                        m_velocity.Y--;
-                    }
-                /*
-                    if (m_velocity.X < 0)
-                    {
-                        m_velocity.X++;
-                    }
-                    else if (m_velocity.X > 0)
-                    {
-                        m_velocity.X--;
-                    }
-                */
+                if (m_velocity.Y < 0)
+                {
+                    m_velocity.Y++;
+                }
+                else if (m_velocity.Y > 0)
+                {
+                    m_velocity.Y--;
+                }
                 if (m_velocity.Y == 0 && m_velocity.X == 0)
                 {
                     m_timer.Enabled = false;
@@ -585,15 +575,18 @@ namespace FingerUI
                 }
 
                 DrawPointer(m_backBuffer);
-                if (m_offset.X > 15)
+                if (this.Width < this.Height)
                 {
-                    if (IsMaximized)
+                    if (m_offset.X > 15)
                     {
-                        DrawMaxWindowSwitcher(m_backBuffer);
-                    }
-                    else
-                    {
-                        DrawStandardWindowSwitcher(m_backBuffer);
+                        if (IsMaximized)
+                        {
+                            DrawMaxWindowSwitcher(m_backBuffer);
+                        }
+                        else
+                        {
+                            DrawStandardWindowSwitcher(m_backBuffer);
+                        }
                     }
                 }
                 
@@ -620,17 +613,17 @@ namespace FingerUI
         private void DrawLeftMenu(Graphics m_backBuffer)
         {
             int TopOfItem = (this.Height / 2) - ((LeftMenuItems.Count / 2) * 30);
-            int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
+            int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+ClientSettings.SmallArtSize;
 
             //int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             foreach (string MenuItem in LeftMenuItems)
             {
-                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold)).Width + 5;
+                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold)).Width + ClientSettings.Margin;
 
                 using (Pen whitePen = new Pen(ForeColor))
                 {
 
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-50, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-ClientSettings.SmallArtSize, 30);
 
                     Color BackColor = this.BackColor;
                     if (MenuItem == LastItemSelected)
@@ -669,7 +662,7 @@ namespace FingerUI
             {
                 using (Pen whitePen = new Pen(ForeColor))
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem+1, TopOfItem, ItemWidth, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, 30);
 
                     Color BackColor = this.BackColor;
                     if (MenuItem == LastItemSelected)
