@@ -151,7 +151,7 @@
     </Content>
     <Content Include="MyIco.ico" />
     <Content Include="unknownart-small.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

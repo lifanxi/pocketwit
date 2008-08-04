@@ -14,13 +14,12 @@ namespace PockeTwit
         public static event ArtIsReady NewArtWasDownloaded;
         
         public static string CacheFolder;
-        private static string UnknownArtMed;
-        private static string UnknownArtSmall;
+        //private static string UnknownArtSmall;
         static AsyncArtGrabber()
         {
             CacheFolder = ClientSettings.AppPath + "\\ArtCache";
 
-            UnknownArtSmall = ClientSettings.AppPath + "\\unknownart-small.jpg";
+            //UnknownArtSmall = ClientSettings.AppPath + "\\unknownart-small.jpg";
             if (!System.IO.Directory.Exists(CacheFolder))
             {
                 System.IO.Directory.CreateDirectory(CacheFolder);
@@ -37,7 +36,7 @@ namespace PockeTwit
         {
             return "file://" + Filename.Replace("\\", "/");
         }
-        public static string DetermineCacheFileName(string User, string URL)
+        public static string DetermineCacheFileName(string User)
         {
             System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
 
@@ -56,24 +55,24 @@ namespace PockeTwit
             }
         }
 
+       
         public static string CopyTempFile(string User, string URL)
         {
-            string FileName = DetermineCacheFileName(User, URL);
+            string FileName = DetermineCacheFileName(User);
             if (!System.IO.File.Exists(FileName))
             {
-                System.IO.File.Copy(UnknownArtSmall, FileName);
-                
                 Thread t = new Thread(delegate() { GetArtFromURL(User, URL); });
                 t.IsBackground = true;
                 t.Priority = ThreadPriority.BelowNormal;
                 t.Start();
+                return null;
             }
             return FileName;
         }
         private static void GetArtFromURL(string User, string URL)
         {
             
-            string LocalFileName = DetermineCacheFileName(User, URL);
+            string LocalFileName = DetermineCacheFileName(User);
             System.Net.HttpWebResponse ArtResponse = null;
             try
             {
@@ -130,7 +129,7 @@ namespace PockeTwit
 
         private static void DeleteTempArt(string User, string URL)
         {
-            string LocalFileName = DetermineCacheFileName(User, URL);
+            string LocalFileName = DetermineCacheFileName(User);
             if (System.IO.File.Exists(LocalFileName))
             {
                 System.IO.File.Delete(LocalFileName);
