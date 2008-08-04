@@ -166,7 +166,7 @@ namespace FingerUI
                     Tweet.SplitLines = new List<string>(); 
                 }
                 m_bounds = value;
-                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + 5, 0, m_bounds.Width - (ClientSettings.SmallArtSize + 10), m_bounds.Height);
+                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
                 BreakUpTheText(_ParentGraphics, textBounds);
             }
         }
@@ -194,7 +194,7 @@ namespace FingerUI
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             
-            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + 5), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + 10), bounds.Height);
+            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), bounds.Height);
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
         
             if (m_selected) 
@@ -218,7 +218,7 @@ namespace FingerUI
 
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
-            g.DrawImage(UserImage, bounds.X + 5, bounds.Y + 5);
+            g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
 
             if (m_highlighted)
@@ -346,7 +346,7 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
-            float Position = ((lineOffSet * (TextFont.Size + 4)));
+            float Position = ((lineOffSet * (ClientSettings.TextSize)));
             for (int i = 0; i < Words.Length; i++)
             {
                 string WordToCheck = Words[i];
@@ -372,7 +372,7 @@ namespace FingerUI
                                 //Find the size of the word
                                 WordSize = g.MeasureString(SecondPart, TextFont);
                                 //A structure containing info we need to know about the word.
-                                float NextPosition = (((lineOffSet + 1) * (TextFont.Size + 4)));
+                                float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
                                 wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
                                 Tweet.Clickables.Add(wrapClick);
                             }

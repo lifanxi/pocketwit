@@ -13,6 +13,7 @@ static class ClientSettings
     public static int UpdateInterval;
     public static int MaxTweets = 200;
 
+    public static int Margin = 5;
     public static int SmallArtSize = 60;
     private static int _TextSize = 0;
     public static int TextSize 
