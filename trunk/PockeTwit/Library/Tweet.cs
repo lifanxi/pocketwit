@@ -85,7 +85,9 @@ namespace PockeTwit.Library
             XmlSerializer s = new XmlSerializer(typeof(User));
             if (string.IsNullOrEmpty(Response))
             {
-                return null;
+                User toReturn = new User();
+                toReturn.screen_name = "PockeTwitUnknownUser";
+                return toReturn;
             }
             using (System.IO.StringReader r = new System.IO.StringReader(Response))
             {
