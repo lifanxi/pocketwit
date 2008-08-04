@@ -347,8 +347,10 @@ namespace PockeTwit
 
         private void ChangeSettings()
         {
+            this.statList.Visible = false;
             SettingsForm settings = new SettingsForm();
-            if (settings.ShowDialog() == DialogResult.Cancel) { return; }
+            if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; return; }
+            this.statList.Visible = true;
             Twitter.CurrentServer = ClientSettings.Server;
             if (ClientSettings.CheckVersion)
             {
@@ -378,21 +380,22 @@ namespace PockeTwit
         private void SetStatus(string ToUser)
         {
             SetStatus StatusForm = new SetStatus();
-            this.Hide();
+            this.statList.Visible = false;
             if (!string.IsNullOrEmpty(ToUser))
             {
                 StatusForm.StatusText = ToUser + " ";
             }
+            
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
-                this.Show();
+                this.statList.Visible = true;
                 StatusForm.Hide();
                 string UpdateText = StatusForm.StatusText;
                 Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
 
                 GetTimeLineAsync();
             }
-            this.Show();
+            this.statList.Visible = true;
             StatusForm.Close();
             
         }
