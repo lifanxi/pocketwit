@@ -33,6 +33,7 @@ namespace PockeTwit
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkBeep.Checked = ClientSettings.BeepOnNew;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
+            chkReplyImages.Checked = ClientSettings.ShowReplyImages;
             switch (ClientSettings.Server)
             {
                 case Yedda.Twitter.TwitterServer.twitter:
@@ -96,6 +97,7 @@ namespace PockeTwit
                 ClientSettings.BeepOnNew = chkBeep.Checked;
                 ClientSettings.Server = SelectedServer;
                 ClientSettings.MaxTweets = MaxTweets;
+                ClientSettings.ShowReplyImages = chkReplyImages.Checked;
                 ClientSettings.SaveSettings();
                 
                 Following.Reset();
@@ -106,9 +108,5 @@ namespace PockeTwit
 
         }
 
-        private void cmbServers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
