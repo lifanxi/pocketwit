@@ -345,6 +345,19 @@ namespace FingerUI
             }
         }
 
+        public void Redraw()
+        {
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(Redraw);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                this.Invalidate();
+            }
+        }
+
         /// <summary>
         /// Invalidates the item (when visible).
         /// </summary>

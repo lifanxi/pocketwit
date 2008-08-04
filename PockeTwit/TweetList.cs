@@ -38,7 +38,6 @@ namespace PockeTwit
             statList = list;
             statList.HookKey();
             statList.Visible = true;
-            
         }
 
         private bool CurrentlyConnected
@@ -449,6 +448,7 @@ namespace PockeTwit
                     statList.AddItem(item);
                 }
             }
+            statList.Redraw();
             if (ClientSettings.BeepOnNew &&
                 (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
                 CurrentAction == Yedda.Twitter.ActionType.Replies)) { MessageBeep(0); }
