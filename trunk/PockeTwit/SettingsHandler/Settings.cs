@@ -12,6 +12,7 @@ static class ClientSettings
     public static int AnimationInterval;
     public static int UpdateInterval;
     public static int MaxTweets = 200;
+    public static bool ShowReplyImages { get; set; }
 
     public static int Margin = 5;
     public static int SmallArtSize = 60;
@@ -144,6 +145,15 @@ static class ClientSettings
             {
                 MaxTweets = 200;
             }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowReplyImages"]))
+            {
+                ShowReplyImages = bool.Parse(ConfigurationSettings.AppSettings["ShowReplyImages"]);
+            }
+            else
+            {
+                ShowReplyImages = false;
+            }
+
         }
         catch{}
         
@@ -158,6 +168,7 @@ static class ClientSettings
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
+        ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
         ConfigurationSettings.SaveConfig();
     }
 }

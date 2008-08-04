@@ -222,35 +222,10 @@ namespace FingerUI
 
             g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
-            if (Tweet.text.Split(new char[]{' '})[0].StartsWith("@"))
+            if (ClientSettings.ShowReplyImages)
             {
-                string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[]{'@'});
-                Image ReplyImage = null;
-                if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
-                {
-                    if (ReplyUser == null)
-                    {
-                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
-                        System.Diagnostics.Debug.WriteLine("Fetched " + ReplyTo + " from twitter");
-                    }
-                    if (ReplyUser != null)
-                    {
-                        ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine(ReplyTo + " already existed in image dictionary");
-                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
-                }
-                
-                if (ReplyImage != null)
-                {
-                    Rectangle ReplyRect = new Rectangle(bounds.X+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), bounds.Y+ClientSettings.Margin + (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2), (ClientSettings.SmallArtSize/2));
-                    g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
-                }
+                bounds = DrawReplyImage(g, bounds);
             }
-
 
             if (m_highlighted)
             {
@@ -278,6 +253,39 @@ namespace FingerUI
             }
             MakeClickable(g, textBounds);
             ForeBrush.Dispose();
+        }
+
+        private Rectangle DrawReplyImage(Graphics g, Rectangle bounds)
+        {
+            if (Tweet.text.Split(new char[] { ' ' })[0].StartsWith("@"))
+            {
+                string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[] { '@' });
+                Image ReplyImage = null;
+                if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
+                {
+                    if (ReplyUser == null)
+                    {
+                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
+                        System.Diagnostics.Debug.WriteLine("Fetched " + ReplyTo + " from twitter");
+                    }
+                    if (ReplyUser != null)
+                    {
+                        ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(ReplyTo + " already existed in image dictionary");
+                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
+                }
+
+                if (ReplyImage != null)
+                {
+                    Rectangle ReplyRect = new Rectangle(bounds.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), bounds.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
+                    g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
+                }
+            }
+            return bounds;
         }
 
         //texbounds is the area we're allowed to draw within

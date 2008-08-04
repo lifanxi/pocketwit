@@ -44,6 +44,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtMaxTweets = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.chkReplyImages = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -63,8 +64,8 @@
             // 
             // label1
             // 
-            this.label1.ForeColor = ClientSettings.ForeColor;
-            this.label1.Location = new System.Drawing.Point(4, 40);
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.Location = new System.Drawing.Point(4, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 20);
             this.label1.Text = "User:";
@@ -73,7 +74,7 @@
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.Location = new System.Drawing.Point(82, 39);
+            this.txtUserName.Location = new System.Drawing.Point(82, 27);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(155, 21);
             this.txtUserName.TabIndex = 0;
@@ -82,24 +83,23 @@
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.Location = new System.Drawing.Point(82, 67);
+            this.txtPassword.Location = new System.Drawing.Point(82, 55);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(155, 21);
             this.txtPassword.TabIndex = 1;
             // 
             // label2
             // 
-            this.label2.ForeColor = ClientSettings.ForeColor;
-            this.label2.Location = new System.Drawing.Point(5, 67);
+            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.Location = new System.Drawing.Point(5, 55);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
             this.label2.Text = "Password:";
             // 
             // chkVersion
             // 
-            this.chkVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkVersion.ForeColor = ClientSettings.ForeColor;
-            this.chkVersion.Location = new System.Drawing.Point(2, 245);
+            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.chkVersion.Location = new System.Drawing.Point(2, 189);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
             this.chkVersion.TabIndex = 5;
@@ -109,7 +109,7 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.ForeColor = ClientSettings.ErrorColor ;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(4, 4);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(233, 20);
@@ -118,8 +118,8 @@
             // 
             // chkBeep
             // 
-            this.chkBeep.ForeColor = ClientSettings.ForeColor;
-            this.chkBeep.Location = new System.Drawing.Point(2, 149);
+            this.chkBeep.ForeColor = System.Drawing.Color.LightGray;
+            this.chkBeep.Location = new System.Drawing.Point(2, 137);
             this.chkBeep.Name = "chkBeep";
             this.chkBeep.Size = new System.Drawing.Size(235, 20);
             this.chkBeep.TabIndex = 4;
@@ -127,8 +127,8 @@
             // 
             // label3
             // 
-            this.label3.ForeColor = ClientSettings.ForeColor;
-            this.label3.Location = new System.Drawing.Point(5, 96);
+            this.label3.ForeColor = System.Drawing.Color.LightGray;
+            this.label3.Location = new System.Drawing.Point(5, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 20);
             this.label3.Text = "Server:";
@@ -137,16 +137,15 @@
             // 
             this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbServers.Location = new System.Drawing.Point(82, 94);
+            this.cmbServers.Location = new System.Drawing.Point(82, 82);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(155, 22);
             this.cmbServers.TabIndex = 2;
-            this.cmbServers.SelectedIndexChanged += new System.EventHandler(this.cmbServers_SelectedIndexChanged);
             // 
             // label4
             // 
-            this.label4.ForeColor = ClientSettings.ForeColor;
-            this.label4.Location = new System.Drawing.Point(5, 123);
+            this.label4.ForeColor = System.Drawing.Color.LightGray;
+            this.label4.Location = new System.Drawing.Point(5, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 20);
             this.label4.Text = "Max Length:";
@@ -155,7 +154,7 @@
             // 
             this.txtMaxTweets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMaxTweets.Location = new System.Drawing.Point(82, 122);
+            this.txtMaxTweets.Location = new System.Drawing.Point(82, 110);
             this.txtMaxTweets.Name = "txtMaxTweets";
             this.txtMaxTweets.Size = new System.Drawing.Size(92, 21);
             this.txtMaxTweets.TabIndex = 3;
@@ -163,18 +162,28 @@
             // label5
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.ForeColor = ClientSettings.ForeColor;
-            this.label5.Location = new System.Drawing.Point(180, 123);
+            this.label5.ForeColor = System.Drawing.Color.LightGray;
+            this.label5.Location = new System.Drawing.Point(180, 111);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 20);
             this.label5.Text = "(10-200)";
+            // 
+            // chkReplyImages
+            // 
+            this.chkReplyImages.ForeColor = System.Drawing.Color.LightGray;
+            this.chkReplyImages.Location = new System.Drawing.Point(2, 163);
+            this.chkReplyImages.Name = "chkReplyImages";
+            this.chkReplyImages.Size = new System.Drawing.Size(235, 20);
+            this.chkReplyImages.TabIndex = 9;
+            this.chkReplyImages.Text = "Show reply images";
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkReplyImages);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtMaxTweets);
             this.Controls.Add(this.label4);
@@ -210,5 +219,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtMaxTweets;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox chkReplyImages;
     }
 }
