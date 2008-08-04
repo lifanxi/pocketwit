@@ -613,7 +613,7 @@ namespace FingerUI
         private void DrawLeftMenu(Graphics m_backBuffer)
         {
             int TopOfItem = (this.Height / 2) - ((LeftMenuItems.Count / 2) * 30);
-            int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+ClientSettings.SmallArtSize;
+            int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
 
             //int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             foreach (string MenuItem in LeftMenuItems)
@@ -623,7 +623,7 @@ namespace FingerUI
                 using (Pen whitePen = new Pen(ForeColor))
                 {
 
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-ClientSettings.SmallArtSize, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-50, 30);
 
                     Color BackColor = this.BackColor;
                     if (MenuItem == LastItemSelected)
