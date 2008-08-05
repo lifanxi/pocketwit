@@ -283,6 +283,10 @@ namespace FingerUI
                 {
                     Rectangle ReplyRect = new Rectangle(bounds.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), bounds.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
                     g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
+                    using (Pen sPen = new Pen(ClientSettings.ForeColor))
+                    {
+                        g.DrawRectangle(sPen, ReplyRect);
+                    }
                 }
             }
             return bounds;
