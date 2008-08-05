@@ -82,13 +82,26 @@ namespace PockeTwit
 
         private void btnPic_Click(object sender, EventArgs e)
         {
-            Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog();
-            if (c.ShowDialog() == DialogResult.OK)
+            try
             {
-                TwitPicFile = c.FileName;
-                UseTwitPic = true;
+                using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
+                {
+                    if (c.ShowDialog() == DialogResult.OK)
+                    {
+                        TwitPicFile = c.FileName;
+                        UseTwitPic = true;
+                    }
+                }
             }
-            c.Dispose();
+            catch 
+            {
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    TwitPicFile = openFileDialog1.FileName;
+                    UseTwitPic = true;
+                }
+            }
+            
         }
     }
 }
