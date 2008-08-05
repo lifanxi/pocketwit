@@ -11,7 +11,7 @@ namespace PockeTwit
 {
     public class UpdateChecker
     {
-        public double currentVersion = .15;
+        public double currentVersion = .16;
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private string XMLResponse;
         private UpdateInfo WebVersion;
