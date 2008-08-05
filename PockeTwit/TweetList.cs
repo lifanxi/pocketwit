@@ -362,7 +362,13 @@ namespace PockeTwit
             if (settings.NeedsReset)
             {
                 CachedResponse = "";
+                LastStatusID = "";
                 CurrentStatuses = new PockeTwit.Library.status[0];
+                friendsStatslist.Clear();
+                otherStatslist.Clear();
+                LoadCachedtimeline();
+                SwitchToList(friendsStatslist);
+                CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                 GetTimeLine();
             }
             settings.Close();
