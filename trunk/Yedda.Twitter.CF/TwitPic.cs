@@ -47,6 +47,13 @@ namespace Yedda
                 contents.Append(password);
                 contents.Append("\r\n");
 
+                contents.Append(header);
+                contents.Append("\r\n");
+                contents.Append("Content-Disposition: form-data;name=\"source\"\r\n");
+                contents.Append("\r\n");
+                contents.Append("pocketwit");
+                contents.Append("\r\n");
+
                 if (!string.IsNullOrEmpty(message))
                 {
                     contents.Append(header);
