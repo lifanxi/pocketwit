@@ -35,6 +35,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblCharsLeft = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.btnPic = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -90,6 +92,23 @@
             this.button1.Text = "Insert URL";
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // btnPic
+            // 
+            this.btnPic.BackColor = System.Drawing.Color.Black;
+            this.btnPic.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
+            this.btnPic.ForeColor = System.Drawing.Color.LightGray;
+            this.btnPic.Location = new System.Drawing.Point(73, 3);
+            this.btnPic.Name = "btnPic";
+            this.btnPic.Size = new System.Drawing.Size(90, 20);
+            this.btnPic.TabIndex = 3;
+            this.btnPic.Text = "Include Picture";
+            this.btnPic.Click += new System.EventHandler(this.btnPic_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Images | *.jpg;*.jpeg";
+            // 
             // SetStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -97,6 +116,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
+            this.Controls.Add(this.btnPic);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
@@ -117,5 +137,7 @@
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuSubmit;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnPic;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

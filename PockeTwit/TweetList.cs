@@ -380,6 +380,7 @@ namespace PockeTwit
         private void SetStatus(string ToUser)
         {
             SetStatus StatusForm = new SetStatus();
+            StatusForm.AllowTwitPic = Twitter.AllowTwitPic;
             this.statList.Visible = false;
             if (!string.IsNullOrEmpty(ToUser))
             {
@@ -391,8 +392,14 @@ namespace PockeTwit
                 this.statList.Visible = true;
                 StatusForm.Hide();
                 string UpdateText = StatusForm.StatusText;
-                Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
-
+                if (StatusForm.UseTwitPic)
+                {
+                    Yedda.TwitPic.SendStoredPic(ClientSettings.UserName, ClientSettings.Password, UpdateText, StatusForm.TwitPicFile);
+                }
+                else
+                {
+                    Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                }
                 GetTimeLineAsync();
             }
             this.statList.Visible = true;

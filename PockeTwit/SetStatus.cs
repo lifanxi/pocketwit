@@ -11,6 +11,15 @@ namespace PockeTwit
 {
     public partial class SetStatus : Form
     {
+        public bool AllowTwitPic
+        {
+            set
+            {
+                btnPic.Visible = value;
+            }
+        }
+        public bool UseTwitPic = false;
+        public string TwitPicFile = null;
         public string StatusText
         {
             get
@@ -69,6 +78,15 @@ namespace PockeTwit
             }
             this.Show();
             f.Close();
+        }
+
+        private void btnPic_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                TwitPicFile = openFileDialog1.FileName;
+                UseTwitPic = true;
+            }
         }
     }
 }
