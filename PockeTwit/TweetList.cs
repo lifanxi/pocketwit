@@ -27,7 +27,6 @@ namespace PockeTwit
         private FingerUI.KListControl statList;
         private bool InitialLoad = true;
 
-
         private void SwitchToList(FingerUI.KListControl list)
         {
             if (statList != null)
@@ -76,7 +75,7 @@ namespace PockeTwit
         }
         
         private delegate void delChangeCursor(Cursor CursorToset);
-        private delegate void delNotify();
+        private delegate void delNotify(int Count);
         public TweetList()
         {
             this.WindowState = FormWindowState.Maximized;
@@ -175,7 +174,7 @@ namespace PockeTwit
                 }
                 LastStatusID = CurrentStatuses[0].id;
             }
-            AddStatusesToList(CurrentStatuses);
+            AddStatusesToList(CurrentStatuses,0);
         }
 
         void statusList_SwitchWindowState(bool IsMaximized)
@@ -390,7 +389,6 @@ namespace PockeTwit
             {
                 StatusForm.StatusText = ToUser + " ";
             }
-            
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
                 this.statList.Visible = true;
@@ -438,7 +436,7 @@ namespace PockeTwit
                         }
                     }
 
-                    AddStatusesToList(mergedstatuses);
+                    AddStatusesToList(mergedstatuses, newstatuses.Length);
                     if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                     {
                         SaveStatuses(mergedstatuses);
@@ -448,7 +446,7 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        private void AddStatusesToList(Library.status[] mergedstatuses)
+        private void AddStatusesToList(Library.status[] mergedstatuses, int NewCount)
         {
             if (mergedstatuses == null) { return; }
             statList.Clear();
@@ -467,26 +465,33 @@ namespace PockeTwit
                 (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
                 CurrentAction == Yedda.Twitter.ActionType.Replies)) 
             {
-                NotifyTweets();
+                NotifyTweets(NewCount);
             }
             
         }
 
-        private void NotifyTweets()
+        private void NotifyTweets(int NewCount)
         {
             if (InvokeRequired)
             {
                 delNotify d = new delNotify(NotifyTweets);
-                this.Invoke(d, null);
+                this.Invoke(d, new object[]{NewCount});
             }
             else
             {
+                if (this.Focused)
+                {
+                    MessageBeep(0);
+                    return;
+                }
                 System.Text.StringBuilder HTMLString = new StringBuilder();
                 HTMLString.Append("<html><body>");
-                HTMLString.Append("New tweets are available!");
+                HTMLString.Append(NewCount.ToString() + " new tweets are available!");
                 HTMLString.Append("<form method=\'GET\' action=notify>");
-                HTMLString.Append("<a href=\"Show\">Show</a>&nbsp;");
-                HTMLString.Append("<a href=\"Dismiss\">Dismiss</a>&nbsp;");
+                HTMLString.Append("<p align=\"right\">");
+                HTMLString.Append("<input type=button name='Show' value='Show'>");
+                HTMLString.Append("<input type=button name='Dismiss' value='Dismiss'>");
+                HTMLString.Append("</p>");
                 HTMLString.Append("</form>");
                 HTMLString.Append("</body></html>");
                 notification1.Text = HTMLString.ToString();
