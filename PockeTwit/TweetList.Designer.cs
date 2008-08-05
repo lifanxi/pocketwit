@@ -30,10 +30,11 @@
         {
             this.tmrautoUpdate = new System.Windows.Forms.Timer();
             this.timerStartup = new System.Windows.Forms.Timer();
-            this.lblLoading = new System.Windows.Forms.Label();
             this.friendsStatslist = new FingerUI.KListControl();
             this.otherStatslist = new FingerUI.KListControl();
+            this.notification1 = new Microsoft.WindowsCE.Forms.Notification();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.lblLoading = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tmrautoUpdate
@@ -45,15 +46,6 @@
             this.timerStartup.Enabled = true;
             this.timerStartup.Interval = 1000;
             this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
-            // 
-            // lblLoading
-            // 
-            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
-            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
-            this.lblLoading.Location = new System.Drawing.Point(3, 31);
-            this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(193, 55);
-            this.lblLoading.Text = "Loading. . .";
             // 
             // friendsStatslist
             // 
@@ -73,6 +65,12 @@
             this.otherStatslist.TabIndex = 0;
             this.otherStatslist.Visible = false;
             // 
+            // notification1
+            // 
+            this.notification1.Caption = "New tweets!";
+            this.notification1.Text = "notification1";
+            this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
+            // 
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
@@ -81,6 +79,15 @@
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(169, 31);
             this.lblTitle.Text = "Launching PockeTwit";
+            // 
+            // lblLoading
+            // 
+            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
+            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
+            this.lblLoading.Location = new System.Drawing.Point(3, 31);
+            this.lblLoading.Name = "lblLoading";
+            this.lblLoading.Size = new System.Drawing.Size(193, 55);
+            this.lblLoading.Text = "Loading. . .";
             // 
             // TweetList
             // 
@@ -105,8 +112,9 @@
         private System.Windows.Forms.Timer tmrautoUpdate;
         private FingerUI.KListControl friendsStatslist;
         private System.Windows.Forms.Timer timerStartup;
-        private System.Windows.Forms.Label lblLoading;
+        private Microsoft.WindowsCE.Forms.Notification notification1;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblLoading;
     }
 }
 

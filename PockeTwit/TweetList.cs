@@ -25,6 +25,8 @@ namespace PockeTwit
         private string LastStatusID = "";
         private Library.status[] CurrentStatuses =null;
         private FingerUI.KListControl statList;
+        private bool InitialLoad = true;
+
 
         private void SwitchToList(FingerUI.KListControl list)
         {
@@ -74,6 +76,7 @@ namespace PockeTwit
         }
         
         private delegate void delChangeCursor(Cursor CursorToset);
+        private delegate void delNotify();
         public TweetList()
         {
             this.WindowState = FormWindowState.Maximized;
@@ -93,6 +96,7 @@ namespace PockeTwit
         {
             lblLoading.Visible = false;
             lblTitle.Visible = false;
+            InitialLoad = false;
             SwitchToList(friendsStatslist);
         }
 
@@ -459,9 +463,36 @@ namespace PockeTwit
                 }
             }
             statList.Redraw();
-            if (ClientSettings.BeepOnNew &&
+            if (ClientSettings.BeepOnNew && !InitialLoad && 
                 (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
-                CurrentAction == Yedda.Twitter.ActionType.Replies)) { MessageBeep(0); }
+                CurrentAction == Yedda.Twitter.ActionType.Replies)) 
+            {
+                NotifyTweets();
+            }
+            
+        }
+
+        private void NotifyTweets()
+        {
+            if (InvokeRequired)
+            {
+                delNotify d = new delNotify(NotifyTweets);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                System.Text.StringBuilder HTMLString = new StringBuilder();
+                HTMLString.Append("<html><body>");
+                HTMLString.Append("New tweets are available!");
+                HTMLString.Append("<form method=\'GET\' action=notify>");
+                HTMLString.Append("<a href=\"Show\">Show</a>&nbsp;");
+                HTMLString.Append("<a href=\"Dismiss\">Dismiss</a>&nbsp;");
+                HTMLString.Append("</form>");
+                HTMLString.Append("</body></html>");
+                notification1.Text = HTMLString.ToString();
+                
+                notification1.Visible = true;
+            }
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses)
@@ -630,6 +661,16 @@ namespace PockeTwit
                 Cursor.Current = CursorToset;
             }
         }
+
+        private void notification1_ResponseSubmitted(object sender, Microsoft.WindowsCE.Forms.ResponseSubmittedEventArgs e)
+        {
+            if (e.Response == "Show")
+            {
+                this.Show();
+            }
+            notification1.Visible = false;
+        }
+
 
 
         
