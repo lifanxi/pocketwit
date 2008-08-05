@@ -695,7 +695,13 @@ namespace FingerUI
                         //sFormat.Alignment = StringAlignment.Center;
                         sFormat.LineAlignment = StringAlignment.Center;
                         int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                        m_backBuffer.DrawString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, menuRect.X+5, TextTop, sFormat);
+                        StatusItem SelectedStatus = (StatusItem)SelectedItem;
+                        string DisplayItem = MenuItem;
+                        if(SelectedStatus !=null)
+                        {
+                            DisplayItem = MenuItem.Replace("@User", "@"+SelectedStatus.Tweet.user.screen_name);
+                        }
+                        m_backBuffer.DrawString(DisplayItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, menuRect.X + 5, TextTop, sFormat);
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);

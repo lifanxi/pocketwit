@@ -16,7 +16,7 @@ namespace PockeTwit
         private static extern void MessageBeep(int type);
 
         private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
-        private List<string> RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+        private List<string> RightMenu = new List<string>(new string[] { "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
@@ -61,10 +61,10 @@ namespace PockeTwit
         private void SetConnectedMenus(FingerUI.KListControl list)
         {
             LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
-            RightMenu = new List<string>(new string[] { "Reply", "Direct Message", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+            RightMenu = new List<string>(new string[] { "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
 
             if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
-            if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct Message"); }
+            if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
             list.LeftMenuItems = LeftMenu;
             list.RightMenuItems = RightMenu;
         }
@@ -291,7 +291,7 @@ namespace PockeTwit
                     ShowAbout();
                     break;
 
-                case "Reply":
+                case "Reply @User":
                     SendReply();
                     break;
                 case "Destroy Favorite":
@@ -300,7 +300,7 @@ namespace PockeTwit
                 case "Make Favorite":
                     CreateFavoriteAsync();
                     break;
-                case "Direct Message":
+                case "Direct @User":
                     SendDirectMessage();
                     break;
                 case "Profile Page":
@@ -404,6 +404,7 @@ namespace PockeTwit
                 }
                 GetTimeLineAsync();
             }
+            this.statList.Redraw();
             this.statList.Visible = true;
             StatusForm.Close();
             
