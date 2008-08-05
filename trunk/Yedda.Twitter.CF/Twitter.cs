@@ -111,12 +111,19 @@ namespace Yedda
                 return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
             }
         }
-
         public bool DirectMessagesWork
         {
             get
             {
                 return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+            }
+
+        }
+        public bool AllowTwitPic
+        {
+            get
+            {
+                return CurrentServer == Yedda.Twitter.TwitterServer.twitter;
             }
 
         }
