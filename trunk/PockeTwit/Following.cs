@@ -54,6 +54,7 @@ namespace PockeTwit
         private static void GetFollowersFromTwitter()
         {
             Yedda.Twitter twitter = new Yedda.Twitter();
+            twitter.CurrentServer = ClientSettings.Server;
             try
             {
                 string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
