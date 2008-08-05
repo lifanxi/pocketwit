@@ -74,7 +74,7 @@ namespace PockeTwit
                 {
                     UpdateInfoDoc.LoadXml(XMLResponse);
                     WebVersion = new UpdateInfo();
-                    WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText);
+                    WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText,System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
                     WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
                     WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
 
