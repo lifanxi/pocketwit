@@ -88,13 +88,6 @@ namespace PockeTwit
                 TwitPicFile = c.FileName;
                 UseTwitPic = true;
             }
-            /*
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                TwitPicFile = openFileDialog1.FileName;
-                UseTwitPic = true;
-            }
-             */
         }
     }
 }
