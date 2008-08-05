@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.15</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv15.CAB</url>
-  <notes>Don't crash if auto-upgrade
-     fails.
+  <version>.16</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv16.CAB</url>
+  <notes>VGA Support
+Reply tweets show both avatars
+   (Off by default, that's a lot of images)
+Several bugfixes
 </notes>
 </LatestRelease>
