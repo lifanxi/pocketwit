@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.16</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv16.CAB</url>
-  <notes>VGA Support
-Reply tweets show both avatars
-   (Off by default, that's a lot of images)
-Several bugfixes
+  <version>.17</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv17.CAB</url>
+  <notes>TwitPic support!
 </notes>
 </LatestRelease>
