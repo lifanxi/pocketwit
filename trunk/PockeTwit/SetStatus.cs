@@ -88,6 +88,7 @@ namespace PockeTwit
                 TwitPicFile = c.FileName;
                 UseTwitPic = true;
             }
+            c.Dispose();
         }
     }
 }
