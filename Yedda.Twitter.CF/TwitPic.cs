@@ -8,75 +8,98 @@ using System.Text;
 
 namespace Yedda
 {
-    public class TwitPic
+    public static class TwitPic
     {
-        protected const string TwitPicBaseURL = "http://twitpic.com/api/{0}";
         
-
-        public enum ActionType
-        {
-            uploadAndPost,
-            upload
-        }
-
-        protected string GetActionTypeString(ActionType actionType)
-        {
-            return actionType.ToString();
-        }
-
-        protected string ExecutePostCommand(string url, string userName, string password, string data)
+        private static string ExecutePostCommand(string url, string userName, string password, byte[] photo, string message)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
+
+                string boundary = System.Guid.NewGuid().ToString();
                 request.Credentials = new NetworkCredential(userName, password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
                 request.PreAuthenticate = true;
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+
+                //request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
                 request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string footer = header + "--";
 
-                /*
-                if (!string.IsNullOrEmpty(TwitterClient))
+                StringBuilder contents = new StringBuilder();
+
+                
+                contents.Append(header);
+                contents.Append("\r\n");
+                contents.Append("Content-Disposition: form-data;name=\"username\"\r\n");
+                contents.Append("\r\n");
+                contents.Append(userName);
+                contents.Append("\r\n");
+
+                contents.Append(header);
+                contents.Append("\r\n");
+                contents.Append("Content-Disposition: form-data;name=\"password\"\r\n");
+                contents.Append("\r\n");
+                contents.Append(password);
+                contents.Append("\r\n");
+
+                if (!string.IsNullOrEmpty(message))
                 {
-                    request.Headers.Add("X-Twitter-Client", TwitterClient);
+                    contents.Append(header);
+                    contents.Append("\r\n");
+                    contents.Append("Content-Disposition: form-data;name=\"message\"\r\n");
+                    contents.Append("\r\n");
+                    contents.Append(message);
+                    contents.Append("\r\n");
                 }
-
-                if (!string.IsNullOrEmpty(TwitterClientVersion))
-                {
-                    request.Headers.Add("X-Twitter-Version", TwitterClientVersion);
-                }
-
-                if (!string.IsNullOrEmpty(TwitterClientUrl))
-                {
-                    request.Headers.Add("X-Twitter-URL", TwitterClientUrl);
-                }
-
-
-                if (!string.IsNullOrEmpty(Source))
-                {
-                    data += "&source=" + HttpUtility.UrlEncode(Source);
-                }
-                 */
-
-                byte[] bytes = Encoding.UTF8.GetBytes(data);
-
-                request.ContentLength = bytes.Length;
+                
+                contents.Append(header);
+                contents.Append("\r\n");
+                contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"image.jpg\"\r\n"));
+                contents.Append("Content-Type: image/jpeg\r\n");
+                contents.Append("\r\n");
+                
+                string End = "\r\n" + header + "\r\n";
+                byte[] bytes = Encoding.ASCII.GetBytes(contents.ToString());
+                byte[] footBytes = Encoding.ASCII.GetBytes(End);
+                request.ContentLength = bytes.Length + photo.Length + footBytes.Length ;
+                
                 using (Stream requestStream = request.GetRequestStream())
                 {
                     requestStream.Write(bytes, 0, bytes.Length);
+                    requestStream.Write(photo, 0, photo.Length);
+                    requestStream.Write(footBytes, 0, footBytes.Length);
                     requestStream.Flush();
-                }
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
                     {
-                        return reader.ReadToEnd();
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            System.Diagnostics.Debug.Write(reader.ReadToEnd());
+                            return reader.ReadToEnd();
+                        }
                     }
                 }
             }
 
             return null;
+        }
+
+        public static string SendStoredPic(string userName, string password, string Message, string Path)
+        {
+
+            using(System.IO.FileStream f = new FileStream(Path,FileMode.Open, FileAccess.Read))
+            {
+                byte[] incoming = new byte[f.Length];
+                f.Read(incoming, 0, incoming.Length);
+                return ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);    
+            }
+            
         }
     }
 }
