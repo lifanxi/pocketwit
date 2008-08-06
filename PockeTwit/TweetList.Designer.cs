@@ -102,6 +102,7 @@
             this.Controls.Add(this.otherStatslist);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TweetList_KeyDown);
             this.ResumeLayout(false);
 
         }

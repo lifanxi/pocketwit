@@ -338,6 +338,7 @@ namespace PockeTwit
             pi.Arguments = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
+            statList.HookKey();
         }
 
         private void SendDirectMessage()
@@ -681,6 +682,11 @@ namespace PockeTwit
                 this.Show();
             }
             notification1.Visible = false;
+        }
+
+        private void TweetList_KeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
 
 
