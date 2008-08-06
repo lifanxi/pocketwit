@@ -265,10 +265,41 @@ namespace Yedda
                     {
                         return null;
                     }
+                    HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                    string ErrorText;
+                    using (Stream stream = errorResponse.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            ErrorText = reader.ReadToEnd();
+                            XmlDocument doc = new XmlDocument();
+                            doc.LoadXml(ErrorText);
+                            
+                            if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                            {
+                                DateTime NewTime = GetTimeOutTime(userName, password);
+                                throw new Exception("Timeout until " + NewTime.ToString());
+                            }
+                            
+                        }
+                    }
+
+                    
                 }
                 throw ex;
             }
-            return null;
+        }
+
+        private DateTime GetTimeOutTime(string userName, string password)
+        {
+            string URL = "http://twitter.com/account/rate_limit_status.xml";
+            string Response = ExecuteGetCommand(URL, userName, password);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Response);
+            string strTime = doc.SelectSingleNode("//reset-time").InnerText;
+            DateTime t = DateTime.Parse(strTime);
+            return t;
+
         }
 
         /// <summary>
