@@ -44,9 +44,4 @@ namespace PockeTwit
             MessageBox.Show("An unexpected error has occured.  If this continues please contact @PockeTwitDev.", "Error");
             }
         }
-
-        
-        
-
-    }
 }
