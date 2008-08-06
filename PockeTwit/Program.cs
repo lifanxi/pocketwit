@@ -30,12 +30,18 @@ namespace PockeTwit
                 w.WriteLine(ex.Message);
                 w.WriteLine("_________________");
                 w.WriteLine(ex.StackTrace);
+
+                if(ex.InnerException!=null)
+                {
+                    w.WriteLine();
+                    w.WriteLine();
+                    w.WriteLine("Inner exception:");
+                    w.WriteLine(ex.InnerException.Message);
+                    w.WriteLine("_______________________");
+                    w.WriteLine(ex.InnerException.StackTrace);
+                }
             }
-            if (e.ExceptionObject is System.Net.WebException)
-            {
-                System.Net.WebException ex = (System.Net.WebException)e.ExceptionObject;
-                MessageBox.Show("Unable to connect to twitter.\r\nEither twitter is down or the network connection has been broken.", "Error");
-                Application.Exit();
+            MessageBox.Show("An unexpected error has occured.  If this continues please contact @PockeTwitDev.", "Error");
             }
         }
 
