@@ -323,6 +323,10 @@ namespace FingerUI
                 {
                     this.m_offset.Y = this.m_offset.Y - ItemHeight;
                 }
+
+                if(m_offset.Y<0){m_offset.Y=0;}
+                if(m_offset.Y>(m_items.Values.Count-1)*ItemHeight){m_offset.Y=m_items.Values.Count*ItemHeight;}
+
                 VisibleBounds = new Rectangle(0, m_offset.Y, this.Width, this.Height);
             }
         }
@@ -952,6 +956,7 @@ namespace FingerUI
                     {
                         UnselectCurrentItem();
                         m_selectedIndex.Y = m_selectedIndex.Y - 1;
+                        m_selectedItem = m_items[m_selectedIndex.Y];
                         SelectAndJump();
                     }
                 }
@@ -965,7 +970,9 @@ namespace FingerUI
                 {
                     if (m_selectedIndex.Y < m_items.Count-1)
                     {
+                        UnselectCurrentItem();
                         m_selectedIndex.Y = m_selectedIndex.Y + 1;
+                        m_selectedItem = m_items[m_selectedIndex.Y];
                         SelectAndJump();
                     }
                 }
@@ -990,6 +997,7 @@ namespace FingerUI
 
         private void SelectAndJump()
         {
+            m_selectedItem.Selected = false;
             IKListItem item;
             item = m_items[m_selectedIndex.Y];
             item.Selected = true;
