@@ -12,6 +12,13 @@ namespace FingerUI
     /// </summary>
     public class KListControl : UserControl
     {
+        private enum SideShown
+        {
+            Left,
+            Middle,
+            Right
+        }
+
         /// <summary>
         /// Interface for items contained within the list.
         /// </summary>
@@ -75,12 +82,15 @@ namespace FingerUI
         private bool HasMoved = false;
         
 
-        private string LastItemSelected = null;
-
         public List<string> RightMenuItems = new List<string>();
         public List<string> LeftMenuItems = new List<string>();
 
         public string Warning { get; set; }
+
+        private string MenuItemFocused = null;
+        private int MenuItemFocusedIndex = 0;
+        private SideShown CurrentlyViewing = SideShown.Middle;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KListControl"/> class.
@@ -633,6 +643,7 @@ namespace FingerUI
             int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
 
             //int LeftOfItem = this.Width - Math.Abs(m_offset.X);
+            int i = 0;
             foreach (string MenuItem in LeftMenuItems)
             {
                 int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold)).Width + ClientSettings.Margin;
@@ -642,11 +653,14 @@ namespace FingerUI
 
                     Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-50, 30);
 
-                    Color BackColor = this.BackColor;
-                    if (MenuItem == LastItemSelected)
+                    Color BackColor;
+                    if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
                     {
-                    //    BackColor = this.SelectedBackColor;
-                        LastItemSelected = null;
+                        BackColor = ClientSettings.SelectedBackColor;
+                    }
+                    else
+                    {
+                        BackColor = ClientSettings.BackColor;
                     }
                     using (Brush sBrush = new SolidBrush(BackColor))
                     {
@@ -668,6 +682,7 @@ namespace FingerUI
                     m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
                     TopOfItem = TopOfItem + 30;
                 }
+                i++;
             }
         }
 
@@ -675,17 +690,20 @@ namespace FingerUI
         {
             int TopOfItem = (this.Height / 2) - ((RightMenuItems.Count / 2) * 30);
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
+            int i = 0;
             foreach (string MenuItem in RightMenuItems)
             {
                 using (Pen whitePen = new Pen(ForeColor))
                 {
                     Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, 30);
-
-                    Color BackColor = this.BackColor;
-                    if (MenuItem == LastItemSelected)
+                    Color BackColor;
+                    if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
                     {
-                    //   BackColor = this.SelectedBackColor;
-                        LastItemSelected = null;
+                        BackColor = ClientSettings.SelectedBackColor;
+                    }
+                    else
+                    {
+                        BackColor = ClientSettings.BackColor;
                     }
                     using (Brush sBrush = new SolidBrush(BackColor))
                     {
@@ -711,6 +729,7 @@ namespace FingerUI
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
                     TopOfItem = TopOfItem + 30;
                 }
+                i++;
             }
         }
 
@@ -948,50 +967,133 @@ namespace FingerUI
         protected void OnKeyDown(object sender, KeyEventArgs e)
         {
             base.OnKeyDown(e);
+            if (e.KeyCode == (Keys.LButton | Keys.MButton | Keys.Back))
+            {
+                switch (CurrentlyViewing)
+                {
+                    case SideShown.Left:
+                        {
+                            MenuItemSelected(LeftMenuItems[MenuItemFocusedIndex]);
+                            break;
+                        }
+                    case SideShown.Right:
+                        {
+                            MenuItemSelected(RightMenuItems[MenuItemFocusedIndex]);
+                            break;
+                        }
+                    case SideShown.Middle:
+                        {
+                            break;
+                        }
+                }
+            }
             if (e.KeyCode == System.Windows.Forms.Keys.Up)
             {
-                try
+                if (CurrentlyViewing == SideShown.Middle)
                 {
-                    if (m_selectedIndex.Y >0 )
+                    try
                     {
-                        UnselectCurrentItem();
-                        m_selectedIndex.Y = m_selectedIndex.Y - 1;
-                        m_selectedItem = m_items[m_selectedIndex.Y];
-                        SelectAndJump();
+                        if (m_selectedIndex.Y > 0)
+                        {
+                            UnselectCurrentItem();
+                            m_selectedIndex.Y = m_selectedIndex.Y - 1;
+                            m_selectedItem = m_items[m_selectedIndex.Y];
+                            SelectAndJump();
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-                catch
+                else
                 {
+                    if (CurrentlyViewing == SideShown.Right)
+                    {
+                        if (MenuItemFocusedIndex >0)
+                        {
+                            MenuItemFocusedIndex--;
+                        }
+                    }
+                    if (CurrentlyViewing == SideShown.Left)
+                    {
+                        if (MenuItemFocusedIndex >0)
+                        {
+                            MenuItemFocusedIndex--;
+                        }
+                    }
                 }
             }
             if (e.KeyCode == System.Windows.Forms.Keys.Down)
             {
-                try
+                if (CurrentlyViewing == SideShown.Middle)
                 {
-                    if (m_selectedIndex.Y < m_items.Count-1)
+                    try
                     {
-                        UnselectCurrentItem();
-                        m_selectedIndex.Y = m_selectedIndex.Y + 1;
-                        m_selectedItem = m_items[m_selectedIndex.Y];
-                        SelectAndJump();
+                        if (m_selectedIndex.Y < m_items.Count - 1)
+                        {
+                            UnselectCurrentItem();
+                            m_selectedIndex.Y = m_selectedIndex.Y + 1;
+                            m_selectedItem = m_items[m_selectedIndex.Y];
+                            SelectAndJump();
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-                catch
+                if (CurrentlyViewing == SideShown.Right)
                 {
+                    if (MenuItemFocusedIndex < RightMenuItems.Count-1)
+                    {
+                        MenuItemFocusedIndex++;
+                    }
+                }
+                if (CurrentlyViewing == SideShown.Left)
+                {
+                    if (MenuItemFocusedIndex < LeftMenuItems.Count-1)
+                    {
+                        MenuItemFocusedIndex++;
+                    }
                 }
             }
             if (e.KeyCode == Keys.Right)
             {
-                m_velocity.X = 15;
-                m_offset.X = m_offset.X + 3;
-                m_timer.Enabled = true;
+                if (CurrentlyViewing != SideShown.Right)
+                {
+                    MenuItemFocusedIndex = 0;
+                    m_velocity.X = 15;
+                    m_offset.X = m_offset.X + 3;
+                    m_timer.Enabled = true;
+                    if (CurrentlyViewing == SideShown.Middle)
+                    {
+                        CurrentlyViewing = SideShown.Right;
+                    }
+                    else
+                    {
+                        CurrentlyViewing = SideShown.Middle;
+                    }
+                }
             }
             if (e.KeyCode == Keys.Left)
             {
-                m_velocity.X = -15;
-                m_offset.X = m_offset.X - 3;
-                m_timer.Enabled = true;
+                if (CurrentlyViewing != SideShown.Left)
+                {
+                    MenuItemFocusedIndex = 0;
+                    m_velocity.X = -15;
+                    m_offset.X = m_offset.X - 3;
+                    m_timer.Enabled = true;
+                    if (CurrentlyViewing == SideShown.Middle)
+                    {
+                        CurrentlyViewing = SideShown.Left;
+                    }
+                    else
+                    {
+                        CurrentlyViewing = SideShown.Middle;
+                    }
+                }
             }
+            
+
             Invalidate();
         }
 
@@ -1026,7 +1128,6 @@ namespace FingerUI
                     if (!String.IsNullOrEmpty(ItemName))
                     {
                         MenuItemSelected(ItemName);
-                        LastItemSelected = ItemName;
                     }
                 }
             }
@@ -1038,7 +1139,6 @@ namespace FingerUI
                     if (!String.IsNullOrEmpty(ItemName))
                     {
                         MenuItemSelected(ItemName);
-                        LastItemSelected = ItemName;
                     }
                 }
             }
