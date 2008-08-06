@@ -53,32 +53,46 @@ namespace PockeTwit
             if (!ImageDictionary.ContainsKey(User))
             {
                 System.Diagnostics.Debug.WriteLine("New item in dictionary -- " + User);
-                LoadArt(User, URL);
-                return UnknownArt;
+                if (!LoadArt(User, URL))
+                {
+                    return UnknownArt;
+                }
             }
             return ImageDictionary[User];
         }
 
-        private static void LoadArt(string User)
+        private static bool LoadArt(string User)
         {
             string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
-            Bitmap NewArt = new Bitmap(ArtPath);
+            Bitmap NewArt;
+            try
+            {
+                NewArt = new Bitmap(ArtPath);
+            }
+            catch (System.IO.IOException)
+            {
+                return false;
+            }
             ImageDictionary.Add(User, NewArt);
+            return true;
         }
 
-        private static void LoadArt(string User, string URL)
+        private static bool LoadArt(string User, string URL)
         {
             string ArtPath = AsyncArtGrabber.CopyTempFile(User, URL);
             Bitmap NewArt;
+            bool bFound = false;
             if (ArtPath != null)
             {
                 NewArt = new Bitmap(ArtPath);
+                bFound = true;
             }
             else
             {
                 NewArt = UnknownArt;
             }
             ImageDictionary.Add(User, NewArt);
+            return bFound;
         }
 
         private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
