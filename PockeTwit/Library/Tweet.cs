@@ -80,7 +80,17 @@ namespace PockeTwit.Library
         {
             Yedda.Twitter Twitter = new Yedda.Twitter();
             Twitter.CurrentServer = ClientSettings.Server;
-            string Response = Twitter.Show(ClientSettings.UserName, ClientSettings.Password, ID, Yedda.Twitter.OutputFormatType.XML);
+            string Response = null;
+            try
+            {
+                Response = Twitter.Show(ClientSettings.UserName, ClientSettings.Password, ID, Yedda.Twitter.OutputFormatType.XML);
+            }
+            catch
+            {
+                User toReturn = new User();
+                toReturn.screen_name = "PockeTwitUnknownUser";
+                return toReturn;
+            }
 
             XmlSerializer s = new XmlSerializer(typeof(User));
             if (string.IsNullOrEmpty(Response))

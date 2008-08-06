@@ -52,7 +52,6 @@ namespace PockeTwit
                 }
                 else
                 {
-                    statList.Warning = "Disconnected";
                     SetDisconnectedMenus(statList);
                 }
             }
@@ -592,8 +591,9 @@ namespace PockeTwit
                         break;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                statList.Warning = ex.Message;
                 CurrentlyConnected = false;
             }
             return response;
