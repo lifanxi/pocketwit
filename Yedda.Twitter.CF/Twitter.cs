@@ -54,7 +54,8 @@ namespace Yedda
             Account,
             Users,
             Direct_Messages,
-            Notifications
+            Notifications,
+            Friendships
         }
 
         /// <summary>
@@ -182,6 +183,7 @@ namespace Yedda
         protected const string TwitterBaseUrlFormat = "http://{3}/{0}/{1}.{2}";
         protected const string TwitterSimpleURLFormat = "http://{1}/{0}.xml";
         protected const string TwitterFavoritesUrlFormat = "http://{3}/{0}/{1}/{2}.xml";
+        
 
         public string GetProfileURL(string User)
         {
@@ -323,6 +325,8 @@ namespace Yedda
                 request.Method = "POST";
                 request.Timeout = 20000;
 
+                request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password))); 
+
                 if (!string.IsNullOrEmpty(TwitterClient))
                 {
                     request.Headers.Add("X-Twitter-Client", TwitterClient);
@@ -352,12 +356,49 @@ namespace Yedda
                     requestStream.Write(bytes, 0, bytes.Length);
                     requestStream.Flush();
                 }
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                try
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                     {
-                        return reader.ReadToEnd();
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            return reader.ReadToEnd();
+                        }
                     }
+                }
+                catch (WebException ex)
+                {
+                    //
+                    // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
+                    //
+                    if (ex.Response is HttpWebResponse)
+                    {
+                        if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return null;
+                        }
+                        HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                        string ErrorText;
+                        using (Stream stream = errorResponse.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                ErrorText = reader.ReadToEnd();
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(ErrorText);
+
+                                if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                                {
+                                    DateTime NewTime = GetTimeOutTime(userName, password);
+                                    throw new Exception("Timeout until " + NewTime.ToString());
+                                }
+
+                            }
+                        }
+
+
+                    }
+                    throw ex;
                 }
             }
 
@@ -774,12 +815,12 @@ namespace Yedda
         public string SetFavorite(string userName, string password, string IDofMessage)
         {
             string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage, GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecutePostCommand(url, userName, password,"");
         }
         public string DestroyFavorite(string userName, string password, string IDofMessage)
         {
             string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage,GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecutePostCommand(url, userName, password, "");
         }
         public string GetFavorites(string userName, string password)
         {
@@ -791,13 +832,14 @@ namespace Yedda
         #region Follow
         public string FollowUser(string userName, string password, string IDofUserToFollow)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Follow), IDofUserToFollow,GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Create), IDofUserToFollow,GetServerString(CurrentServer));
+            return ExecutePostCommand(url, userName, password, "");
         }
         public string StopFollowingUser(string userName, string password, string IDofUserToFollow)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Notifications), GetActionTypeString(ActionType.Leave), IDofUserToFollow,GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Destroy), IDofUserToFollow,GetServerString(CurrentServer));
+            return ExecutePostCommand(url, userName, password, "");
         }
         #endregion
 
