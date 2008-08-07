@@ -15,8 +15,8 @@ namespace PockeTwit
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
         private static extern void MessageBeep(int type);
 
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
-        private List<string> RightMenu = new List<string>(new string[] { "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+        private List<string> LeftMenu;
+        private List<string> RightMenu; 
         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         Yedda.Twitter Twitter;
         private string ShowUserID;
@@ -26,7 +26,7 @@ namespace PockeTwit
         private Library.status[] CurrentStatuses =null;
         private FingerUI.KListControl statList;
         private bool InitialLoad = true;
-
+        
         
 
         private void SwitchToList(FingerUI.KListControl list)
@@ -62,7 +62,7 @@ namespace PockeTwit
         private void SetConnectedMenus(FingerUI.KListControl list)
         {
             LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
-            RightMenu = new List<string>(new string[] { "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
 
             if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
@@ -221,6 +221,7 @@ namespace PockeTwit
                     statList.RightMenuItems = SideMenuFunctions.ReplaceMenuItem(statList.RightMenuItems, "Stop Following", "Follow");
                 }
             }
+            statList.Redraw();
         }
 
         void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)
@@ -292,6 +293,15 @@ namespace PockeTwit
                     ShowAbout();
                     break;
 
+                case "@User TimeLine":
+                    ChangeCursor(Cursors.WaitCursor);
+                    FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+                    ShowUserID = selectedItem.Tweet.user.id;
+                    CurrentAction = Yedda.Twitter.ActionType.Show;
+                    SwitchToList(otherStatslist);
+                    GetTimeLineAsync();
+
+                    break;
                 case "Reply @User":
                     SendReply();
                     break;
@@ -584,7 +594,8 @@ namespace PockeTwit
                         response = Twitter.GetRepliesTimeLine(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.User_Timeline:
-                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                        FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, selectedItem.Tweet.user.id, Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.Show:
                         response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
@@ -604,27 +615,36 @@ namespace PockeTwit
 
         private void FollowUser()
         {
+            ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string UserID = selectedItem.Tweet.user.id;
             Twitter.FollowUser(ClientSettings.UserName, ClientSettings.Password, UserID);
 
+            Following.AddUser(selectedItem.Tweet.user);
+            UpdateRightMenu();
+            ChangeCursor(Cursors.Default);
         }
 
         private void StopFollowingUser()
         {
+            ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string UserID = selectedItem.Tweet.user.id;
             Twitter.StopFollowingUser(ClientSettings.UserName, ClientSettings.Password, UserID);
-
+            Following.StopFollowing(selectedItem.Tweet.user);
+            UpdateRightMenu();
+            ChangeCursor(Cursors.Default);
         }
 
         private void DestroyFavorite()
         {
+            ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string ID = selectedItem.Tweet.id;
             Twitter.DestroyFavorite(ClientSettings.UserName, ClientSettings.Password, ID);
             selectedItem.isFavorite = false;
             UpdateRightMenu();
+            ChangeCursor(Cursors.Default);
         }
 
         private void CreateFavoriteAsync()

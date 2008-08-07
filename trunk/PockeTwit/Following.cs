@@ -92,6 +92,24 @@ namespace PockeTwit
             }
         }
 
+        public static void AddUser(Library.User userToAdd)
+        {
+            FollowedUsers.Add(userToAdd);
+            SaveUsers();
+        }
+
+        public static void StopFollowing(Library.User usertoStop)
+        {
+            foreach(Library.User User in FollowedUsers)
+            {
+                if(User.id == usertoStop.id)
+                {
+                    FollowedUsers.Remove(User);
+                    break;
+                }
+            }
+            SaveUsers();
+        }
 
         public static bool IsFollowing(Library.User userToCheck)
         {
