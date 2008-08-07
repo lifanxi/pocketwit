@@ -27,6 +27,8 @@ namespace PockeTwit
         private FingerUI.KListControl statList;
         private bool InitialLoad = true;
 
+        
+
         private void SwitchToList(FingerUI.KListControl list)
         {
             if (statList != null)
@@ -684,13 +686,10 @@ namespace PockeTwit
             notification1.Visible = false;
         }
 
-        private void TweetList_KeyDown(object sender, KeyEventArgs e)
+
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            
+            base.OnKeyDown(e);
         }
-
-
-
-        
     }
 }

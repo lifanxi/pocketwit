@@ -87,9 +87,22 @@ namespace FingerUI
 
         public string Warning { get; set; }
 
-        private string MenuItemFocused = null;
         private int MenuItemFocusedIndex = 0;
-        private SideShown CurrentlyViewing = SideShown.Middle;
+        private SideShown CurrentlyViewing
+        {
+            get
+            {
+                if (m_offset.X < 0)
+                {
+                    return SideShown.Left;
+                }
+                else if (m_offset.X> 0)
+                {
+                    return SideShown.Right;
+                }
+                return SideShown.Middle;
+            }
+        }
 
 
         /// <summary>
@@ -1064,14 +1077,6 @@ namespace FingerUI
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
-                    if (CurrentlyViewing == SideShown.Middle)
-                    {
-                        CurrentlyViewing = SideShown.Right;
-                    }
-                    else
-                    {
-                        CurrentlyViewing = SideShown.Middle;
-                    }
                 }
             }
             if (e.KeyCode == Keys.Left)
@@ -1082,14 +1087,6 @@ namespace FingerUI
                     m_velocity.X = -15;
                     m_offset.X = m_offset.X - 3;
                     m_timer.Enabled = true;
-                    if (CurrentlyViewing == SideShown.Middle)
-                    {
-                        CurrentlyViewing = SideShown.Left;
-                    }
-                    else
-                    {
-                        CurrentlyViewing = SideShown.Middle;
-                    }
                 }
             }
             
