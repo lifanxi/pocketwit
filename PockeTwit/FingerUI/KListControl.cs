@@ -1191,7 +1191,7 @@ namespace FingerUI
                 foreach (string MenuItem in RightMenuItems)
                 {
                     Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
-                    TopOfItem = TopOfItem + 30;
+                    TopOfItem = TopOfItem + MenuHeight;
                     if (menuRect.Contains(X))
                     {
                         Invalidate(menuRect);
@@ -1207,8 +1207,8 @@ namespace FingerUI
                 LeftOfItem = 0;
                 foreach (string MenuItem in LeftMenuItems)
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, Math.Abs(m_offset.X), 30);
-                    TopOfItem = TopOfItem + 30;
+                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, Math.Abs(m_offset.X), MenuHeight);
+                    TopOfItem = TopOfItem + MenuHeight;
                     if (menuRect.Contains(X))
                     {
                         Invalidate(menuRect);
