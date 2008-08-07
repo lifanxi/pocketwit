@@ -615,7 +615,7 @@ namespace FingerUI
                 }
 
                 DrawPointer(m_backBuffer);
-                if (this.Width < this.Height)
+                if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional &&  this.Width < this.Height)
                 {
                     if (m_offset.X > 15)
                     {

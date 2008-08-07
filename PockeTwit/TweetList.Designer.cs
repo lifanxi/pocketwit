@@ -32,7 +32,6 @@
             this.timerStartup = new System.Windows.Forms.Timer();
             this.friendsStatslist = new FingerUI.KListControl();
             this.otherStatslist = new FingerUI.KListControl();
-            this.notification1 = new Microsoft.WindowsCE.Forms.Notification();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -64,12 +63,6 @@
             this.otherStatslist.Size = new System.Drawing.Size(240, 294);
             this.otherStatslist.TabIndex = 0;
             this.otherStatslist.Visible = false;
-            // 
-            // notification1
-            // 
-            this.notification1.Caption = "New tweets!";
-            this.notification1.Text = "notification1";
-            this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
             // 
             // lblTitle
             // 

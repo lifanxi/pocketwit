@@ -26,8 +26,8 @@ namespace PockeTwit
         private Library.status[] CurrentStatuses =null;
         private FingerUI.KListControl statList;
         private bool InitialLoad = true;
-        
-        
+
+        private DeviceType DeviceType;
 
         private void SwitchToList(FingerUI.KListControl list)
         {
@@ -103,6 +103,14 @@ namespace PockeTwit
 
         private void SetEverythingUp()
         {
+            DeviceType = DetectDevice.DeviceType;
+            if (DeviceType == DeviceType.Professional)
+            {
+                this.notification1 = new Microsoft.WindowsCE.Forms.Notification();
+                this.notification1.Caption = "New tweets!";
+                this.notification1.Text = "notification1";
+                this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
+            }
             if (string.IsNullOrEmpty(ClientSettings.UserName) | string.IsNullOrEmpty(ClientSettings.Password))
             {
                 // SHow Settings page first
