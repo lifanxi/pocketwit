@@ -1181,13 +1181,16 @@ namespace FingerUI
         private string GetMenuItemForPoint(MouseEventArgs e)
         {
             Point X = new Point(e.X, e.Y);
-            int TopOfItem = (this.Height / 2) - ((RightMenuItems.Count / 2) * 30);
+            
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
+            int MenuHeight;
             if (m_offset.X > 0)
             {
+                MenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / RightMenuItems.Count;
+                int TopOfItem = ((this.Height / 2) - ((RightMenuItems.Count * MenuHeight) / 2));
                 foreach (string MenuItem in RightMenuItems)
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
                     TopOfItem = TopOfItem + 30;
                     if (menuRect.Contains(X))
                     {
@@ -1199,7 +1202,8 @@ namespace FingerUI
             }
             else if (m_offset.X < 0)
             {
-                TopOfItem = (this.Height / 2) - ((LeftMenuItems.Count / 2) * 30);
+                MenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / LeftMenuItems.Count;
+                int TopOfItem = ((this.Height / 2) - ((LeftMenuItems.Count * MenuHeight) / 2));
                 LeftOfItem = 0;
                 foreach (string MenuItem in LeftMenuItems)
                 {
