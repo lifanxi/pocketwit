@@ -79,7 +79,7 @@ namespace PockeTwit
         private delegate void delNotify(int Count);
         public TweetList()
         {
-            this.WindowState = FormWindowState.Maximized;
+            //this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
             Application.DoEvents();
         }

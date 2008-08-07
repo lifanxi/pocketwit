@@ -652,7 +652,10 @@ namespace FingerUI
 
         private void DrawLeftMenu(Graphics m_backBuffer)
         {
-            int TopOfItem = (this.Height / 2) - ((LeftMenuItems.Count / 2) * 30);
+            int MenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / LeftMenuItems.Count;
+
+
+            int TopOfItem = ((this.Height / 2) - ((LeftMenuItems.Count * MenuHeight) / 2));
             int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
 
             //int LeftOfItem = this.Width - Math.Abs(m_offset.X);
@@ -664,7 +667,7 @@ namespace FingerUI
                 using (Pen whitePen = new Pen(ForeColor))
                 {
 
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth-50, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, MenuHeight);
 
                     Color BackColor;
                     if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
@@ -693,7 +696,7 @@ namespace FingerUI
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
-                    TopOfItem = TopOfItem + 30;
+                    TopOfItem = TopOfItem + MenuHeight;
                 }
                 i++;
             }
@@ -701,14 +704,17 @@ namespace FingerUI
 
         private void DrawRightMenu(Graphics graphics)
         {
-            int TopOfItem = (this.Height / 2) - ((RightMenuItems.Count / 2) * 30);
+            int MenuHeight = (this.Height-(ClientSettings.TextSize*5)) / RightMenuItems.Count;
+
+
+            int TopOfItem = ((this.Height / 2) - ((RightMenuItems.Count * MenuHeight) / 2));
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             int i = 0;
             foreach (string MenuItem in RightMenuItems)
             {
                 using (Pen whitePen = new Pen(ForeColor))
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, 30);
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, MenuHeight);
                     Color BackColor;
                     if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
                     {
@@ -740,7 +746,7 @@ namespace FingerUI
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                    TopOfItem = TopOfItem + 30;
+                    TopOfItem = TopOfItem + MenuHeight;
                 }
                 i++;
             }
