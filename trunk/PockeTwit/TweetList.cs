@@ -79,7 +79,7 @@ namespace PockeTwit
         private delegate void delNotify(int Count);
         public TweetList()
         {
-            //this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
             Application.DoEvents();
         }
@@ -714,6 +714,29 @@ namespace PockeTwit
             notification1.Visible = false;
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            //base.OnLostFocus(e);
+        }
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+        }
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (!InitialLoad)
+            {
+                
+            }
+        }
+
+        
+
+        void TweetList_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnKeyDown(e);
+        }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
