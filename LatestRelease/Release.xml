@@ -1,12 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.18</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv18.CAB</url>
-  <notes>Use Windows notifications
-   (when running in the background)
-Better account switching
-Better d-pad support
-  (still needs some work)
-Improved right menu
+  <version>.19</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv19.CAB</url>
+  <notes>Smartphone (no-touchscreen) support
+All functions can be accessed through D-Pad
+The usual bugfixes and UI tweaks
 </notes>
 </LatestRelease>
