@@ -79,8 +79,9 @@ namespace PockeTwit
         {
             int ItemHeight = (ClientSettings.TextSize * 2);
             int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
-            
 
+            Region originalClip = g.Clip;
+            g.Clip = new Region(new Rectangle(this.Left, this.Top, this.Width+1, this.Height+1));
             int i = 0;
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
@@ -105,6 +106,7 @@ namespace PockeTwit
                         sFormat.LineAlignment = StringAlignment.Center;
                         using (Brush c = new SolidBrush(ClientSettings.ForeColor))
                         {
+                            
                             g.DrawString(Item, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), c, r.Left + 4, TextTop, sFormat);
                         }
                     }
@@ -112,6 +114,7 @@ namespace PockeTwit
                     i++;
                 }
             }
+            g.Clip = originalClip;
         }
     }
 }
