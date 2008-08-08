@@ -11,7 +11,7 @@ static class ClientSettings
     public static Yedda.Twitter.TwitterServer Server { get; set; }
     public static int AnimationInterval;
     public static int UpdateInterval;
-    public static int MaxTweets = 200;
+    public static int MaxTweets = 50;
     public static bool ShowReplyImages { get; set; }
 
     public static int Margin = 5;
@@ -143,7 +143,7 @@ static class ClientSettings
             }
             else
             {
-                MaxTweets = 200;
+                MaxTweets = 50;
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowReplyImages"]))
             {

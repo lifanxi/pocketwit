@@ -68,6 +68,8 @@ namespace FingerUI
             void Render(Graphics g, Rectangle bounds);
         }
 
+        private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
+
         public delegate void delClearMe();
         public delegate void delAddItem(StatusItem item);
 
@@ -101,6 +103,27 @@ namespace FingerUI
                     return SideShown.Right;
                 }
                 return SideShown.Middle;
+            }
+        }
+
+        private void ShowClickablesControl()
+        {
+            StatusItem s = (StatusItem)m_selectedItem;
+            ClickablesControl.Items = s.Tweet.Clickables;
+            ClickablesControl.Visible = true;
+        }
+
+        public void SetSelectedIndexToZero()
+        {
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(SetSelectedIndexToZero);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                m_selectedIndex.Y = 0;
+                m_items[0].Selected = true;
             }
         }
 
@@ -160,6 +183,19 @@ namespace FingerUI
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
             PockeTwit.ImageBuffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
+
+            
+            ClickablesControl.Visible = false;
+            ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
+
+        }
+
+        void ClickablesControl_WordClicked(string TextClicked)
+        {
+            if (WordClicked != null)
+            {
+                WordClicked(TextClicked);
+            }
         }
 
         void ImageBuffer_Updated(string User)
@@ -466,6 +502,12 @@ namespace FingerUI
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+
+            ClickablesControl.Top = this.Top + 20;
+            ClickablesControl.Left = this.Left + 20;
+            ClickablesControl.Width = this.Width - 40;
+            ClickablesControl.Height = this.Height - 40;
+
             this.ItemWidth = this.Width;
             foreach (IKListItem item in m_items.Values)
             {
@@ -684,6 +726,11 @@ namespace FingerUI
                             m_backBuffer.DrawString(Warning, WarningFont, redBrush, 0, 0);
                         }
                     }
+                }
+
+                if (ClickablesControl.Visible)
+                {
+                    ClickablesControl.Render(m_backBuffer);
                 }
 
                 e.Graphics.DrawImage(m_backBufferBitmap, 0, 0);
@@ -1018,10 +1065,6 @@ namespace FingerUI
             this.Parent.KeyDown += new KeyEventHandler(OnKeyDown);
         }
 
-        void Parent_KeyDown( KeyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
         public void UnHookKey()
         {
             this.Parent.KeyDown -= new KeyEventHandler(OnKeyDown);
@@ -1030,6 +1073,12 @@ namespace FingerUI
         protected void OnKeyDown(object sender, KeyEventArgs e)
         {
             base.OnKeyDown(e);
+            if (ClickablesControl.Visible)
+            {
+                ClickablesControl.KeyDown(e);
+                Invalidate();
+                return;
+            }
             if (e.KeyCode == (Keys.LButton | Keys.MButton | Keys.Back))
             {
                 switch (CurrentlyViewing)
@@ -1046,6 +1095,7 @@ namespace FingerUI
                         }
                     case SideShown.Middle:
                         {
+                            ShowClickablesControl();
                             break;
                         }
                 }
@@ -1139,8 +1189,6 @@ namespace FingerUI
                     m_timer.Enabled = true;
                 }
             }
-            
-
             Invalidate();
         }
 
@@ -1220,6 +1268,8 @@ namespace FingerUI
             m_velocity.X = 0;
             m_velocity.Y = 0;
         }
+
+
 
         private string GetMenuItemForPoint(MouseEventArgs e)
         {
@@ -1463,7 +1513,6 @@ namespace FingerUI
         Point m_mouseDown = new Point(-1, -1);
         Point m_mousePrev = new Point(-1, -1);
         Timer m_timer = new Timer();
-        int m_timerCount = 0;
         Point m_offset = new Point();
 
     }

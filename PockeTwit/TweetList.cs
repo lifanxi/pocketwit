@@ -491,6 +491,7 @@ namespace PockeTwit
                     statList.AddItem(item);
                 }
             }
+            statList.SetSelectedIndexToZero();
             statList.Redraw();
             if (ClientSettings.BeepOnNew && !InitialLoad && 
                 (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
