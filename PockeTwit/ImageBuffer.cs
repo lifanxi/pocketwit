@@ -55,6 +55,14 @@ namespace PockeTwit
             {
                 if (!LoadArt(User, URL))
                 {
+                    if (string.IsNullOrEmpty(URL))
+                    {
+                        System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
+                        Library.User newUser = Library.User.FromId(User);
+                        if (newUser == null) { return UnknownArt; }
+                        URL = newUser.profile_image_url;
+                        LoadArt(User, URL);
+                    }
                     return UnknownArt;
                 }
             }
@@ -90,6 +98,10 @@ namespace PockeTwit
             else
             {
                 NewArt = UnknownArt;
+            }
+            if (ImageDictionary.ContainsKey(User))
+            {
+                ImageDictionary.Remove(User);
             }
             ImageDictionary.Add(User, NewArt);
             return bFound;
