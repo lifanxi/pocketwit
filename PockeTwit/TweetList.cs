@@ -246,8 +246,9 @@ namespace PockeTwit
             if (TextClicked.StartsWith("http"))
             {
                 System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-                pi.FileName = "\\Windows\\iexplore.exe";
-                pi.Arguments = TextClicked;
+                //pi.FileName = "\\Windows\\iexplore.exe";
+                pi.FileName = TextClicked;
+                //pi.Arguments = TextClicked;
                 pi.UseShellExecute = true;
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             }
@@ -389,8 +390,9 @@ namespace PockeTwit
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-            pi.FileName = "\\Windows\\iexplore.exe";
-            pi.Arguments = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
+            //pi.FileName = "\\Windows\\iexplore.exe";
+            pi.FileName = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
+            //pi.Arguments = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             statList.HookKey();
