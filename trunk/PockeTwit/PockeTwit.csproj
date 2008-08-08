@@ -63,6 +63,8 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AsyncArtGrabber.cs" />
+    <Compile Include="Clickables.cs">
+    </Compile>
     <Compile Include="DetectDevice.cs" />
     <Compile Include="FingerUI\GestureDefiner.cs" />
     <Compile Include="FingerUI\GestureRecognizer.cs" />
