@@ -355,8 +355,12 @@ namespace PockeTwit
             
             SearchForm f = new SearchForm();
             this.statList.Visible = false;
-            if (f.ShowDialog() == DialogResult.Cancel) { f.Close(); return; }
-            this.Show();
+            if (f.ShowDialog() == DialogResult.Cancel)
+            {
+                this.statList.Visible = true;
+                f.Close(); 
+                return; 
+            }
             this.statList.Visible = true;
             f.Hide();
             ShowUserID = f.SearchText;
