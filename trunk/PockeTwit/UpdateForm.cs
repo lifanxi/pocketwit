@@ -29,8 +29,7 @@ namespace PockeTwit
         private void menuUpdate_Click(object sender, EventArgs e)
         {
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-            pi.FileName = "\\Windows\\iexplore.exe";
-            pi.Arguments = _NewVersion.DownloadURL;
+            pi.FileName = _NewVersion.DownloadURL;
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             Application.Exit();
