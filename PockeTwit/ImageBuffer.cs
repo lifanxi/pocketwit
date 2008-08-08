@@ -109,11 +109,14 @@ namespace PockeTwit
 
         private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
         {
-            Bitmap NewArt = new Bitmap(Filename);
-            ImageDictionary[User] = NewArt;
-            if (Updated != null)
+            if (System.IO.File.Exists(Filename))
             {
-                Updated(User);
+                Bitmap NewArt = new Bitmap(Filename);
+                ImageDictionary[User] = NewArt;
+                if (Updated != null)
+                {
+                    Updated(User);
+                }
             }
         }
     }
