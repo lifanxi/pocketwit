@@ -87,7 +87,6 @@ namespace Yedda
                     {
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
-                            System.Diagnostics.Debug.Write(reader.ReadToEnd());
                             return reader.ReadToEnd();
                         }
                     }

@@ -44,7 +44,6 @@ namespace PockeTwit
 
         public void CheckForUpdate()
         {
-            System.Diagnostics.Debug.WriteLine("Autoupdate");
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Name = "CheckUpdates";
