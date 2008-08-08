@@ -123,6 +123,7 @@ namespace FingerUI
             else
             {
                 m_selectedIndex.Y = 0;
+                m_selectedItem = m_items[0];
                 m_items[0].Selected = true;
             }
         }
@@ -275,7 +276,11 @@ namespace FingerUI
         {
             get
             {
-                return m_selectedItem;
+                if (m_items.Count > 0)
+                {
+                    return (IKListItem)m_items[m_selectedIndex.Y];
+                }
+                return null;
             }
         }
 
@@ -1330,7 +1335,7 @@ namespace FingerUI
                     m_selectedItem.Selected = false;
                     m_selectedItem = null;
                 }
-                m_selectedIndex = new Point(-1, -1);
+                m_selectedIndex = new Point(0, 0);
                 Capture = false;
                 m_velocity.X = 0;
                 m_velocity.Y = 0;
@@ -1507,7 +1512,7 @@ namespace FingerUI
         Dictionary<string, Rectangle> m_AlbumCacheLocations = new Dictionary<string, Rectangle>();
 
         // Motion variables
-        Point m_selectedIndex = new Point(-1, -1);
+        Point m_selectedIndex = new Point(0,0);
         IKListItem m_selectedItem = null;
         Point m_velocity = new Point(0, 0);
         Point m_mouseDown = new Point(-1, -1);
