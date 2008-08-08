@@ -218,6 +218,12 @@ namespace FingerUI
                 FillColor.Dispose();
             }
 
+            /*
+            if (Tweet.user.profile_image_url == null)
+            {
+                Tweet.user = PockeTwit.Library.User.FromId(Tweet.user.screen_name);
+            }
+             */
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
             g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
