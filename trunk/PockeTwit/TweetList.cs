@@ -151,6 +151,7 @@ namespace PockeTwit
             lblLoading.Text = "Fetching timeline from server.";
             Application.DoEvents();
             GetTimeLine();
+            statList.SetSelectedIndexToZero();
             tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;
 
