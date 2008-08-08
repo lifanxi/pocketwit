@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 
@@ -28,6 +29,35 @@ namespace PockeTwit.Library
         [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
+        public static status[] DeserializeFromAtom(string response)
+        {
+            List<status> resultList = new List<status>();
+            
+            XmlDocument results = new XmlDocument();
+            
+            results.LoadXml(response);
+            XmlNamespaceManager nm = new XmlNamespaceManager(results.NameTable);
+            nm.AddNamespace("google", "http://base.google.com/ns/1.0");
+            nm.AddNamespace("openSearch", "http://a9.com/-/spec/opensearch/1.1/");
+            nm.AddNamespace("s", "http://www.w3.org/2005/Atom");
+            XmlNodeList entries = results.SelectNodes("//s:entry", nm);
+            System.Diagnostics.Debug.WriteLine(entries.Count);
+            foreach (XmlNode entry in entries)
+            {
+                status newStat = new status();
+                newStat.text = entry.SelectSingleNode("s:title",nm).InnerText;
+                string userName = entry.SelectSingleNode("s:author/s:name",nm).InnerText;
+                string userscreenName = userName.Split(new char[]{' '})[0];
+                newStat.user = new User();
+                newStat.user.screen_name = userscreenName;
+                
+                resultList.Add(newStat);
+                
+            }
+            return resultList.ToArray();
+
+
+        }
         
         public static status[] Deserialize(string response)
         {
@@ -65,7 +95,7 @@ namespace PockeTwit.Library
     [Serializable]
     public class User 
     {
-        public string id { get; set; }
+        //public string id { get; set; }
         //public string name { get; set; }
         public string screen_name { get; set; }
         //public string location { get; set; }
