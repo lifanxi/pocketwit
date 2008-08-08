@@ -82,7 +82,6 @@ namespace PockeTwit
             catch { }
             if (ArtResponse == null)
             {
-                DeleteTempArt(User, URL);
                 return;
             }
             System.IO.Stream responseStream;
@@ -107,7 +106,6 @@ namespace PockeTwit
             }
             catch
             {
-                DeleteTempArt(User, URL);
                 return;
             }
             ArtWriter.Close();
@@ -127,14 +125,5 @@ namespace PockeTwit
             return;
         }
 
-        private static void DeleteTempArt(string User, string URL)
-        {
-            string LocalFileName = DetermineCacheFileName(User);
-            if (System.IO.File.Exists(LocalFileName))
-            {
-                System.IO.File.Delete(LocalFileName);
-            }
-
-        }
     }
 }
