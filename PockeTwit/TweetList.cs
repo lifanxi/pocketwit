@@ -61,7 +61,7 @@ namespace PockeTwit
 
         private void SetConnectedMenus(FingerUI.KListControl list)
         {
-            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Public TimeLine", "Set Status", "Settings", "About/Feedback"});
+            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search", "Set Status", "Settings", "About/Feedback"});
             RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
 
             if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
@@ -265,6 +265,9 @@ namespace PockeTwit
         {
             switch (ItemName)
             {
+                case "Search":
+                    TwitterSearch();
+                    break;
                 case "Public TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(otherStatslist);
@@ -309,7 +312,7 @@ namespace PockeTwit
                 case "@User TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
                     FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    ShowUserID = selectedItem.Tweet.user.id;
+                    ShowUserID = selectedItem.Tweet.user.screen_name;
                     CurrentAction = Yedda.Twitter.ActionType.Show;
                     SwitchToList(otherStatslist);
                     GetTimeLineAsync();
@@ -345,6 +348,23 @@ namespace PockeTwit
                     this.Close();
                     break;
             }
+        }
+
+        private void TwitterSearch()
+        {
+            
+            SearchForm f = new SearchForm();
+            this.Hide();
+            if (f.ShowDialog() == DialogResult.Cancel) { f.Close(); return; }
+            ShowUserID = f.SearchText;
+            this.Show();
+            ChangeCursor(Cursors.WaitCursor);
+            f.Close();
+            SwitchToList(otherStatslist);
+            otherStatslist.SetSelectedMenu("Search");
+            CurrentAction = Yedda.Twitter.ActionType.Search;
+            statList.RightMenuItems = RightMenu;
+            GetTimeLineAsync();
         }
 
         private void ShowAbout()
@@ -448,7 +468,15 @@ namespace PockeTwit
             if (!string.IsNullOrEmpty(response) && response != CachedResponse)
             {
                 CachedResponse = response;
-                Library.status[] newstatuses = Library.status.Deserialize(response);
+                Library.status[] newstatuses;
+                if (CurrentAction == Yedda.Twitter.ActionType.Search)
+                {
+                    newstatuses = Library.status.DeserializeFromAtom(response);
+                }
+                else
+                {
+                    newstatuses = Library.status.Deserialize(response);
+                }
                 if (newstatuses.Length > 0)
                 {
                     Library.status[] mergedstatuses = null;
@@ -585,6 +613,9 @@ namespace PockeTwit
                 CurrentlyConnected = true;
                 switch (CurrentAction)
                 {
+                    case Yedda.Twitter.ActionType.Search:
+                        response = Twitter.SearchFor(ShowUserID);
+                        break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         if (!Twitter.BigTimeLines)
                         {
@@ -610,7 +641,7 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.User_Timeline:
                         FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, selectedItem.Tweet.user.id, Yedda.Twitter.OutputFormatType.XML);
+                        response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, selectedItem.Tweet.user.screen_name, Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.Show:
                         response = Twitter.GetUserTimeline(ClientSettings.UserName, ClientSettings.Password, ShowUserID, Yedda.Twitter.OutputFormatType.XML);
@@ -632,7 +663,7 @@ namespace PockeTwit
         {
             ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            string UserID = selectedItem.Tweet.user.id;
+            string UserID = selectedItem.Tweet.user.screen_name;
             Twitter.FollowUser(ClientSettings.UserName, ClientSettings.Password, UserID);
 
             Following.AddUser(selectedItem.Tweet.user);
@@ -644,7 +675,7 @@ namespace PockeTwit
         {
             ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            string UserID = selectedItem.Tweet.user.id;
+            string UserID = selectedItem.Tweet.user.screen_name;
             Twitter.StopFollowingUser(ClientSettings.UserName, ClientSettings.Password, UserID);
             Following.StopFollowing(selectedItem.Tweet.user);
             UpdateRightMenu();

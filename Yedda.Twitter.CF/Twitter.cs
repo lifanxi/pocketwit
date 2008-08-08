@@ -65,6 +65,7 @@ namespace Yedda
         /// </summary>
         public enum ActionType
         {
+            Search,
             Public_Timeline,
             User_Timeline,
             Friends_Timeline,
@@ -89,6 +90,7 @@ namespace Yedda
         private string twitterClient = "pocketwit";
         private string twitterClientVersion = "0.9";
         private string twitterClientUrl = "http://code.google.com/p/pocketwit";
+        
         public int MaxTweets = 200;
 
         private TwitterServer _CurrentServer = TwitterServer.twitter;
@@ -183,7 +185,7 @@ namespace Yedda
         protected const string TwitterBaseUrlFormat = "http://{3}/{0}/{1}.{2}";
         protected const string TwitterSimpleURLFormat = "http://{1}/{0}.xml";
         protected const string TwitterFavoritesUrlFormat = "http://{3}/{0}/{1}/{2}.xml";
-        
+        protected const string TwitterSearchUrlFormat = "http://search.{1}/search.atom?q={0}";
 
         public string GetProfileURL(string User)
         {
@@ -857,6 +859,14 @@ namespace Yedda
             
             }
             return false;
+        }
+        #endregion
+
+        #region Search
+        public string SearchFor(string textToSearch)
+        {
+            string url = string.Format(TwitterSearchUrlFormat, textToSearch, GetServerString(CurrentServer));
+            return ExecuteGetCommand(url, "", "");
         }
         #endregion
     }

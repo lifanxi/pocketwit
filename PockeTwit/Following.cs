@@ -102,7 +102,7 @@ namespace PockeTwit
         {
             foreach(Library.User User in FollowedUsers)
             {
-                if(User.id == usertoStop.id)
+                if(User.screen_name == usertoStop.screen_name)
                 {
                     FollowedUsers.Remove(User);
                     break;
@@ -116,7 +116,7 @@ namespace PockeTwit
             bool bFound = false;
             foreach (Library.User User in FollowedUsers)
             {
-                if (User.id == userToCheck.id)
+                if (User.screen_name == userToCheck.screen_name)
                 {
                     bFound = true;
                     break;
