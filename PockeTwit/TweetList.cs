@@ -267,6 +267,7 @@ namespace PockeTwit
                 case "Public TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(otherStatslist);
+                    otherStatslist.SetSelectedMenu("Public TimeLine");
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statList.RightMenuItems = RightMenu;
                     GetTimeLineAsync();
@@ -275,6 +276,7 @@ namespace PockeTwit
                 case "Friends TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(friendsStatslist);
+                    friendsStatslist.SetSelectedMenu("Friends TimeLine");
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statList.RightMenuItems = RightMenu;
                     
@@ -283,6 +285,7 @@ namespace PockeTwit
                 case "Replies":
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList(otherStatslist);
+                    otherStatslist.SetSelectedMenu("Replies");
                     CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statList.RightMenuItems = RightMenu;
                     

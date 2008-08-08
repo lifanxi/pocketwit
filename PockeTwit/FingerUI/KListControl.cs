@@ -104,6 +104,32 @@ namespace FingerUI
             }
         }
 
+        public void SetSelectedMenu(string RequestedMenuItem)
+        {
+            int i = 0;
+            foreach (string MenuItem in RightMenuItems)
+            {
+                if (MenuItem == RequestedMenuItem)
+                {
+                    MenuItemFocusedIndex = i;
+                    this.Redraw();
+                    return;
+                }
+                i++;
+            }
+            i=0;
+            foreach (string MenuItem in LeftMenuItems)
+            {
+                if (MenuItem == RequestedMenuItem)
+                {
+                    MenuItemFocusedIndex = i;
+                    this.Redraw();
+                    return;
+                }
+                i++;
+            }
+        }
+
         private bool InFocus = false;
         protected override void OnGotFocus(EventArgs e)
         {
