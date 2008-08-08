@@ -87,6 +87,7 @@ namespace PockeTwit
         private void timerStartup_Tick(object sender, EventArgs e)
         {
             timerStartup.Enabled = false;
+            timerStartup.Tick -= new EventHandler(timerStartup_Tick);
             SetEverythingUp();
             SwitchToDone();
             Following.LoadFromTwitter();
@@ -481,7 +482,7 @@ namespace PockeTwit
             foreach (Library.status stat in mergedstatuses)
             {
                 FingerUI.StatusItem item = new FingerUI.StatusItem();
-                if (stat.user != null)
+                if (stat.user.screen_name != null)
                 {
                     item.Tweet = stat;
                     statList.AddItem(item);
@@ -511,6 +512,7 @@ namespace PockeTwit
                     MessageBeep(0);
                     return;
                 }
+                 
                 System.Text.StringBuilder HTMLString = new StringBuilder();
                 HTMLString.Append("<html><body>");
                 HTMLString.Append(NewCount.ToString() + " new tweets are available!");
@@ -679,13 +681,11 @@ namespace PockeTwit
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("TICK");
             GetTimeLineAsync();
         }
 
         private void GetTimeLineAsync()
         {
-            System.Diagnostics.Debug.WriteLine("Autoupdate");
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Name = "GetTimeLine";
@@ -714,33 +714,7 @@ namespace PockeTwit
             notification1.Visible = false;
         }
 
-        protected override void OnLostFocus(EventArgs e)
-        {
-            //base.OnLostFocus(e);
-        }
-        protected override void OnGotFocus(EventArgs e)
-        {
-            base.OnGotFocus(e);
-        }
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-            if (!InitialLoad)
-            {
-                
-            }
-        }
-
         
 
-        void TweetList_KeyDown(object sender, KeyEventArgs e)
-        {
-            OnKeyDown(e);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-        }
     }
 }

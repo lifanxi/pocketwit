@@ -50,9 +50,9 @@ namespace PockeTwit
 
         public static Image GetArt(string User, string URL)
         {
+            if (User == null) { return null; }
             if (!ImageDictionary.ContainsKey(User))
             {
-                System.Diagnostics.Debug.WriteLine("New item in dictionary -- " + User);
                 if (!LoadArt(User, URL))
                 {
                     return UnknownArt;
@@ -97,7 +97,6 @@ namespace PockeTwit
 
         private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
         {
-            System.Diagnostics.Debug.WriteLine("New album art was fetched -- " + Filename);
             Bitmap NewArt = new Bitmap(Filename);
             ImageDictionary[User] = NewArt;
             if (Updated != null)

@@ -266,7 +266,6 @@ namespace FingerUI
                     if (ReplyUser == null)
                     {
                         ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
-                        System.Diagnostics.Debug.WriteLine("Fetched " + ReplyTo + " from twitter");
                     }
                     if (ReplyUser != null)
                     {
@@ -275,7 +274,6 @@ namespace FingerUI
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(ReplyTo + " already existed in image dictionary");
                     ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
                 }
 
@@ -386,7 +384,6 @@ namespace FingerUI
         }
         private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
-            System.Diagnostics.Debug.WriteLine("Find clickables in " + Tweet.id);
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
             float Position = ((lineOffSet * (ClientSettings.TextSize)));
@@ -420,7 +417,6 @@ namespace FingerUI
                                 Tweet.Clickables.Add(wrapClick);
                             }
                         }
-                        System.Diagnostics.Debug.WriteLine("Last word");
                     }
                     else if (WordToCheck == c.Text)
                     {

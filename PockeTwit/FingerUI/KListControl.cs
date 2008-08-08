@@ -104,6 +104,24 @@ namespace FingerUI
             }
         }
 
+        private bool InFocus = false;
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            InFocus = true;
+        }
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            InFocus = false;
+        }
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (InFocus)
+            {
+                OnKeyDown(null, e);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KListControl"/> class.
@@ -1121,7 +1139,6 @@ namespace FingerUI
 
         private void SelectItemOrMenu(MouseEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("SelectItemOrMenu");
             if (e.X > this.Width-m_offset.X)
             {
                 //MenuItem selected
