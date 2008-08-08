@@ -22,14 +22,12 @@ namespace PockeTwit
         private void menuCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-            this.Hide();
         }
 
         private void menuSearch_Click(object sender, EventArgs e)
         {
             this.SearchText = txtSearch.Text;
             this.DialogResult = DialogResult.OK;
-            this.Hide();
         }
     }
 }
