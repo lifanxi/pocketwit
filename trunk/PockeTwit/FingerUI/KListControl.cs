@@ -109,7 +109,12 @@ namespace FingerUI
         private void ShowClickablesControl()
         {
             StatusItem s = (StatusItem)m_selectedItem;
+            if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
+            if (s.Clipped)
+            {
+                ClickablesControl.ShowClipped = true;
+            }
             ClickablesControl.Visible = true;
         }
 
@@ -193,7 +198,13 @@ namespace FingerUI
 
         void ClickablesControl_WordClicked(string TextClicked)
         {
-            if (WordClicked != null)
+            if (TextClicked == "Full Text")
+            {
+                //Show the full tweet somehow.
+                StatusItem s = (StatusItem)SelectedItem;
+                MessageBox.Show(s.Tweet.text, s.Tweet.user.screen_name);
+            }
+            else if (WordClicked != null)
             {
                 WordClicked(TextClicked);
             }

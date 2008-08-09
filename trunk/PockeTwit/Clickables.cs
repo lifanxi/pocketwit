@@ -16,6 +16,26 @@ namespace PockeTwit
         public int Top { get; set; }
         public int Left { get; set; }
         public bool Visible { get; set; }
+        public bool ShowClipped
+        {
+            set
+            {
+                if (value)
+                {
+                    if (TextItems[0] != "Full Text")
+                    {
+                        TextItems.Insert(0, "Full Text");
+                    }
+                }
+                else
+                {
+                    if (TextItems[0] == "Full Text")
+                    {
+                        TextItems.Remove("Full Text");
+                    }
+                }
+            }
+        }
         public event FingerUI.StatusItem.ClickedWordDelegate WordClicked;
 
 

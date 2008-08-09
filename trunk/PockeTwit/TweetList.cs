@@ -390,9 +390,7 @@ namespace PockeTwit
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-            //pi.FileName = "\\Windows\\iexplore.exe";
             pi.FileName = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
-            //pi.Arguments = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             statList.HookKey();
