@@ -435,7 +435,7 @@ namespace FingerUI
                         CurrentLine = CurrentLine.Substring(lastBreak);
                     }
                     size = g.MeasureString(CurrentLine, TextFont);
-                    if (size.Width < textBounds.Width)
+                    if (size.Width <= textBounds.Width)
                     {
                         line = CurrentLine.TrimStart(new char[] { ' ' });
                         Tweet.SplitLines.Add(line);
