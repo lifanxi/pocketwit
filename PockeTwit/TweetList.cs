@@ -62,7 +62,7 @@ namespace PockeTwit
         private void SetConnectedMenus(FingerUI.KListControl list)
         {
             LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search", "Set Status", "Settings", "About/Feedback", "Exit" });
-            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following" });
+            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
 
             if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
