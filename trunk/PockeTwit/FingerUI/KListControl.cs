@@ -19,12 +19,12 @@ namespace FingerUI
         private bool HasMoved = false;
         private bool InFocus = false;
         public List<string> LeftMenuItems = new List<string>();
-        Dictionary<string, Rectangle> m_AlbumCacheLocations = new Dictionary<string, Rectangle>();
         Graphics m_backBuffer;
         // Background drawing
         Bitmap m_backBufferBitmap;
         int m_itemHeight = 40;
         ItemList m_items = new ItemList();
+        Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
         int m_itemWidth = 240;
         // Properties
         int m_maxVelocity = 15;
@@ -32,13 +32,14 @@ namespace FingerUI
         Point m_mousePrev = new Point(-1, -1);
         Point m_offset = new Point();
         bool m_scrollBarMove = false;
-        // Motion variables
+        
         Point m_selectedIndex = new Point(0,0);
         IKListItem m_selectedItem = null;
         Timer m_timer = new Timer();
         bool m_updating = false;
         Point m_velocity = new Point(0, 0);
-        private int MenuItemFocusedIndex = 0;
+        private int LeftMenuItemFocusedIndex = 0;
+        private int RightMenuItemFocusedIndex = 0;
         List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
         public List<string> RightMenuItems = new List<string>();
 
@@ -83,10 +84,8 @@ namespace FingerUI
 
 		#region Properties (19) 
 
-        /// <summary>
-        /// Gets the item count.
-        /// </summary>
-        /// <value>The count.</value>
+        
+
         public int Count
         {
             get
@@ -294,11 +293,16 @@ namespace FingerUI
 
 		// Public Methods (16) 
 
-        /// <summary>
-        /// Adds an item.
-        /// </summary>
-        /// <param name="text">The text for the item.</param>
-        /// <param name="value">A value related to the item.</param>
+        public void SwitchTolist(string ListName)
+        {
+            if (!ItemLists.ContainsKey(ListName))
+            {
+                ItemLists.Add(ListName, new ItemList());
+            }
+            m_items = ItemLists[ListName];
+            Reset();
+        }
+
         public void AddItem(string text, object value)
         {
             
@@ -475,7 +479,7 @@ namespace FingerUI
             {
                 if (MenuItem == RequestedMenuItem)
                 {
-                    MenuItemFocusedIndex = i;
+                    RightMenuItemFocusedIndex = i;
                     this.Redraw();
                     return;
                 }
@@ -486,7 +490,7 @@ namespace FingerUI
             {
                 if (MenuItem == RequestedMenuItem)
                 {
-                    MenuItemFocusedIndex = i;
+                    LeftMenuItemFocusedIndex = i;
                     this.Redraw();
                     return;
                 }
@@ -546,12 +550,12 @@ namespace FingerUI
                 {
                     case SideShown.Left:
                         {
-                            MenuItemSelected(LeftMenuItems[MenuItemFocusedIndex]);
+                            MenuItemSelected(LeftMenuItems[LeftMenuItemFocusedIndex]);
                             break;
                         }
                     case SideShown.Right:
                         {
-                            MenuItemSelected(RightMenuItems[MenuItemFocusedIndex]);
+                            MenuItemSelected(RightMenuItems[RightMenuItemFocusedIndex]);
                             break;
                         }
                     case SideShown.Middle:
@@ -583,16 +587,16 @@ namespace FingerUI
                 {
                     if (CurrentlyViewing == SideShown.Right)
                     {
-                        if (MenuItemFocusedIndex >0)
+                        if (RightMenuItemFocusedIndex >0)
                         {
-                            MenuItemFocusedIndex--;
+                            RightMenuItemFocusedIndex--;
                         }
                     }
                     if (CurrentlyViewing == SideShown.Left)
                     {
-                        if (MenuItemFocusedIndex >0)
+                        if (LeftMenuItemFocusedIndex >0)
                         {
-                            MenuItemFocusedIndex--;
+                            LeftMenuItemFocusedIndex--;
                         }
                     }
                 }
@@ -617,16 +621,16 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing == SideShown.Right)
                 {
-                    if (MenuItemFocusedIndex < RightMenuItems.Count-1)
+                    if (RightMenuItemFocusedIndex < RightMenuItems.Count-1)
                     {
-                        MenuItemFocusedIndex++;
+                        RightMenuItemFocusedIndex++;
                     }
                 }
                 if (CurrentlyViewing == SideShown.Left)
                 {
-                    if (MenuItemFocusedIndex < LeftMenuItems.Count-1)
+                    if (LeftMenuItemFocusedIndex < LeftMenuItems.Count-1)
                     {
-                        MenuItemFocusedIndex++;
+                        LeftMenuItemFocusedIndex++;
                     }
                 }
             }
@@ -634,7 +638,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    MenuItemFocusedIndex = 0;
+                    //RightMenuItemFocusedIndex = 0;
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
@@ -644,7 +648,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    MenuItemFocusedIndex = 0;
+                    //LeftMenuItemFocusedIndex = 0;
                     m_velocity.X = -15;
                     m_offset.X = m_offset.X - 3;
                     m_timer.Enabled = true;
@@ -1127,7 +1131,7 @@ namespace FingerUI
                     Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, MenuHeight);
 
                     Color BackColor;
-                    if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
+                    if (i == LeftMenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
                     {
                         BackColor = ClientSettings.SelectedBackColor;
                     }
@@ -1205,7 +1209,7 @@ namespace FingerUI
                 {
                     Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, MenuHeight);
                     Color BackColor;
-                    if (i == MenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
+                    if (i == RightMenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
                     {
                         BackColor = ClientSettings.SelectedBackColor;
                     }
