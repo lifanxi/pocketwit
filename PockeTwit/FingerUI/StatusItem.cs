@@ -37,6 +37,8 @@ namespace FingerUI
         private Font TextFont;
         private PockeTwit.Library.User ReplyUser = null;
 
+        public bool Clipped = false;
+
         private Graphics _ParentGraphics;
         public Graphics ParentGraphics 
         {
@@ -358,7 +360,11 @@ namespace FingerUI
                     string line = newString.ToString().TrimStart(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
-                    if (Tweet.SplitLines.Count >= 5) { break; }
+                    if (Tweet.SplitLines.Count >= 5) 
+                    {
+                        Clipped = true;
+                        break; 
+                    }
                     if (lastBreak != 0)
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
