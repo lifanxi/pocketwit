@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.19</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv19.CAB</url>
-  <notes>Smartphone (no-touchscreen) support
-All functions can be accessed through D-Pad
-The usual bugfixes and UI tweaks
+  <version>.20</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv20.CAB</url>
+  <notes>Uses search.twitter.com for searches
+Exit menu on both sides
+Pop-up for clipped tweets
+Even more bugfixes, as usual
 </notes>
 </LatestRelease>
