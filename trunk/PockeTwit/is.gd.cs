@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Net;
 using System.Web;
 using System.Collections.Generic;
@@ -8,6 +8,12 @@ namespace PockeTwit
 {
     class isgd
     {
+
+		#region Methods (1) 
+
+
+		// Public Methods (1) 
+
         public static string ShortenURL(string URL)
         {
             string TotalURL = "http://is.gd/api.php?longurl=" + URL;
@@ -20,5 +26,9 @@ namespace PockeTwit
                 }
             }
         }
+
+
+		#endregion Methods 
+
     }
 }

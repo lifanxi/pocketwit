@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,9 @@ namespace PockeTwit
 {
     public partial class SettingsForm : Form
     {
-        public bool NeedsReset { get; set; }
+
+		#region Constructors (1) 
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -20,36 +22,23 @@ namespace PockeTwit
             PopulateForm();
         }
 
+		#endregion Constructors 
+
+		#region Properties (1) 
+
+        public bool NeedsReset { get; set; }
+
+		#endregion Properties 
+
+		#region Methods (4) 
+
+
+		// Private Methods (4) 
+
         private void FillServerList()
         {
             cmbServers.Items.Add("twitter");
             cmbServers.Items.Add("identica");
-        }
-
-        private void PopulateForm()
-        {
-            txtUserName.Text = ClientSettings.UserName;
-            txtPassword.Text = ClientSettings.Password;
-            chkVersion.Checked = ClientSettings.CheckVersion;
-            chkBeep.Checked = ClientSettings.BeepOnNew;
-            txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
-            chkReplyImages.Checked = ClientSettings.ShowReplyImages;
-            switch (ClientSettings.Server)
-            {
-                case Yedda.Twitter.TwitterServer.twitter:
-                    cmbServers.SelectedItem = "twitter";
-                    break;
-                case Yedda.Twitter.TwitterServer.identica:
-                    cmbServers.SelectedItem = "identica";
-                    break;
-            }
-            this.DialogResult = DialogResult.Cancel;
-        }
-
-        private void menuCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
         }
 
         private void menuAccept_Click(object sender, EventArgs e)
@@ -107,6 +96,35 @@ namespace PockeTwit
             }
 
         }
+
+        private void menuCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        private void PopulateForm()
+        {
+            txtUserName.Text = ClientSettings.UserName;
+            txtPassword.Text = ClientSettings.Password;
+            chkVersion.Checked = ClientSettings.CheckVersion;
+            chkBeep.Checked = ClientSettings.BeepOnNew;
+            txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
+            chkReplyImages.Checked = ClientSettings.ShowReplyImages;
+            switch (ClientSettings.Server)
+            {
+                case Yedda.Twitter.TwitterServer.twitter:
+                    cmbServers.SelectedItem = "twitter";
+                    break;
+                case Yedda.Twitter.TwitterServer.identica:
+                    cmbServers.SelectedItem = "identica";
+                    break;
+            }
+            this.DialogResult = DialogResult.Cancel;
+        }
+
+
+		#endregion Methods 
 
     }
 }

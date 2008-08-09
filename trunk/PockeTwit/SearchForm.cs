@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,13 +11,27 @@ namespace PockeTwit
 {
     public partial class SearchForm : Form
     {
-        public string SearchText{get;set;}
+
+		#region Constructors (1) 
 
         public SearchForm()
         {
             InitializeComponent();
             this.DialogResult = DialogResult.Cancel;
         }
+
+		#endregion Constructors 
+
+		#region Properties (1) 
+
+        public string SearchText{get;set;}
+
+		#endregion Properties 
+
+		#region Methods (2) 
+
+
+		// Private Methods (2) 
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
@@ -29,5 +43,9 @@ namespace PockeTwit
             this.SearchText = txtSearch.Text;
             this.DialogResult = DialogResult.OK;
         }
+
+
+		#endregion Methods 
+
     }
 }

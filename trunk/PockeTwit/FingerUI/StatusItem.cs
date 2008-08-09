@@ -10,36 +10,115 @@ namespace FingerUI
 {
     public class StatusItem : KListControl.IKListItem, IDisposable
     {
-        public delegate void ClickedWordDelegate(string TextClicked);
-        [Serializable]
-        public class Clickable
+
+		#region�Fields�(15)�
+
+        private Graphics _ParentGraphics;
+        private PockeTwit.Library.status _Tweet;
+        public bool Clipped = false;
+        private Rectangle currentOffset;
+        private Rectangle m_bounds;
+        private bool m_highlighted = false;
+        private KListControl m_parent;
+        private bool m_selected = false;
+        //private List<string> SplitLines = new List<string>();
+        private StringFormat m_stringFormat = new StringFormat();
+        private string m_text;
+        private object m_value;
+        private int m_x = -1;
+        private int m_y = -1;
+        private PockeTwit.Library.User ReplyUser = null;
+        //public List<Clickable> Clickables = new List<Clickable>();
+        private Font TextFont;
+
+		#endregion�Fields�
+
+		#region�Constructors�(2)�
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KListItem"/> class.
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="value">The value.</param>
+        public StatusItem(KListControl parent, string text, object value)
         {
-            public string Text;
-            public RectangleF Location;
-            
-            public override bool Equals(object obj)
+            m_parent = parent;
+            m_text = text;
+            m_value = value;
+            TextFont = m_parent.Font;
+        }
+
+        public StatusItem()
+        {
+        }
+
+		#endregion�Constructors�
+
+		#region�Properties�(12)�
+
+        /// <summary>
+        /// The unscrolled bounds for this item.
+        /// </summary>
+        public Rectangle Bounds { get { return m_bounds; }
+            set 
             {
-                Clickable otherClick = (Clickable)obj;
-                if (otherClick.Location.Top == this.Location.Top &&
-                    otherClick.Location.Left == this.Location.Left)
+                if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
                 {
-                    return true;
+                    Tweet.SplitLines = new List<string>();
+                    Tweet.Clickables = new List<Clickable>();
                 }
-                return false;
-            }
-            public override int GetHashCode()
-            {
-                return base.GetHashCode();
+                m_bounds = value;
+                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
+                BreakUpTheText(_ParentGraphics, textBounds);
             }
         }
 
-        //public List<Clickable> Clickables = new List<Clickable>();
-        private Font TextFont;
-        private PockeTwit.Library.User ReplyUser = null;
+        public bool Highlighted { get { return m_highlighted; } set { m_highlighted = value; } }
 
-        public bool Clipped = false;
+        /// <summary>
+        /// Gets or sets the Y.
+        /// </summary>
+        /// <value>The Y.</value>
+        public int Index { get { return m_y; } set { m_y = value; } }
 
-        private Graphics _ParentGraphics;
+        public bool isBeingFollowed
+        {
+            get
+            {
+                return (PockeTwit.Following.IsFollowing(Tweet.user));
+            }
+        }
+
+        public bool isFavorite
+        {
+            get 
+            {
+                if(string.IsNullOrEmpty(Tweet.favorited))
+                {
+                    return false;
+                }
+                return bool.Parse(Tweet.favorited);
+            }
+            set
+            {
+                Tweet.favorited = value.ToString();
+                this.Highlighted = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        /// <value>The parent.</value>
+        public KListControl Parent { get { return m_parent; } 
+            set 
+            {
+                m_parent = value;
+                TextFont = m_parent.Font;
+            }
+        }
+
         public Graphics ParentGraphics 
         {
             set
@@ -48,7 +127,18 @@ namespace FingerUI
             }
         }
 
-        private PockeTwit.Library.status _Tweet;
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="KListItem"/> is selected.
+        /// </summary>
+        /// <value><c>true</c> if selected; otherwise, <c>false</c>.</value>
+        public bool Selected { get { return m_selected;  } set { m_selected = value; } }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        /// <value>The text.</value>
+        public string Text { get { return m_text; } set { m_text = value; } }
+
         public PockeTwit.Library.status Tweet 
         {
             get { return _Tweet; }
@@ -76,48 +166,34 @@ namespace FingerUI
 
         }
 
-        public bool isBeingFollowed
-        {
-            get
-            {
-                return (PockeTwit.Following.IsFollowing(Tweet.user));
-            }
-        }
-        public bool isFavorite
-        {
-            get 
-            {
-                if(string.IsNullOrEmpty(Tweet.favorited))
-                {
-                    return false;
-                }
-                return bool.Parse(Tweet.favorited);
-            }
-            set
-            {
-                Tweet.favorited = value.ToString();
-                this.Highlighted = value;
-            }
-        }
-        
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
+        public object Value { get { return m_value; } set { m_value = value; } }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KListItem"/> class.
+        /// Gets or sets the X.
         /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <param name="text">The text.</param>
-        /// <param name="value">The value.</param>
-        public StatusItem(KListControl parent, string text, object value)
-        {
-            m_parent = parent;
-            m_text = text;
-            m_value = value;
-            TextFont = m_parent.Font;
-        }
+        /// <value>The X.</value>
+        public int XIndex { get { return m_x; } set { m_x = value; } }
 
-        public StatusItem()
-        {
-        }
+		#endregion�Properties�
+
+		#region�Delegates�and�Events�(1)�
+
+
+		//�Delegates�(1)�
+
+        public delegate void ClickedWordDelegate(string TextClicked);
+
+		#endregion�Delegates�and�Events�
+
+		#region�Methods�(4)�
+
+
+		//�Public�Methods�(2)�
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -126,66 +202,6 @@ namespace FingerUI
 
             m_parent = null;
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="KListItem"/> is selected.
-        /// </summary>
-        /// <value><c>true</c> if selected; otherwise, <c>false</c>.</value>
-        public bool Selected { get { return m_selected;  } set { m_selected = value; } }
-
-        public bool Highlighted { get { return m_highlighted; } set { m_highlighted = value; } }
-        /// <summary>
-        /// Gets or sets the text.
-        /// </summary>
-        /// <value>The text.</value>
-        public string Text { get { return m_text; } set { m_text = value; } }
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public object Value { get { return m_value; } set { m_value = value; } }
-
-        /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
-        /// <value>The parent.</value>
-        public KListControl Parent { get { return m_parent; } 
-            set 
-            {
-                m_parent = value;
-                TextFont = m_parent.Font;
-            }
-        }
-
-        /// <summary>
-        /// The unscrolled bounds for this item.
-        /// </summary>
-        public Rectangle Bounds { get { return m_bounds; }
-            set 
-            {
-                if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
-                {
-                    Tweet.SplitLines = new List<string>();
-                    Tweet.Clickables = new List<Clickable>();
-                }
-                m_bounds = value;
-                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
-                BreakUpTheText(_ParentGraphics, textBounds);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the X.
-        /// </summary>
-        /// <value>The X.</value>
-        public int XIndex { get { return m_x; } set { m_x = value; } }
-
-        /// <summary>
-        /// Gets or sets the Y.
-        /// </summary>
-        /// <value>The Y.</value>
-        public int Index { get { return m_y; } set { m_y = value; } }
 
         /// <summary>
         /// Renders to the specified graphics.
@@ -263,6 +279,10 @@ namespace FingerUI
             ForeBrush.Dispose();
         }
 
+
+
+		//�Private�Methods�(2)�
+
         private Rectangle DrawReplyImage(Graphics g, Rectangle bounds)
         {
             if (Tweet.text.Split(new char[] { ' ' })[0].StartsWith("@"))
@@ -312,6 +332,51 @@ namespace FingerUI
                 }
             }
         }
+
+
+		#endregion�Methods�
+
+		#region�Nested�Classes�(1)�
+
+
+        [Serializable]
+        public class Clickable
+        {
+
+		#region�Fields�(2)�
+
+            public RectangleF Location;
+            public string Text;
+
+		#endregion�Fields�
+
+		#region�Methods�(2)�
+
+
+		//�Public�Methods�(2)�
+
+                        public override bool Equals(object obj)
+            {
+                Clickable otherClick = (Clickable)obj;
+                if (otherClick.Location.Top == this.Location.Top &&
+                    otherClick.Location.Left == this.Location.Left)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
+
+		#endregion�Methods�
+
+        }
+		#endregion�Nested�Classes�
+
 
         #region Parsing Routines
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
@@ -445,19 +510,5 @@ namespace FingerUI
             }
         }
         #endregion
-
-        //private List<string> SplitLines = new List<string>();
-        private StringFormat m_stringFormat = new StringFormat();
-        private KListControl m_parent;
-        private Rectangle m_bounds;
-        private Rectangle currentOffset;
-        private int m_x = -1;
-        private int m_y = -1;
-
-        private string m_text;
-        private object m_value;
-        private bool m_selected = false;
-        private bool m_highlighted = false;
-
     }
 }

@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,34 +11,15 @@ namespace PockeTwit
 {
     public partial class SetStatus : Form
     {
-        public bool AllowTwitPic
-        {
-            set
-            {
-                if (DetectDevice.DeviceType == DeviceType.Professional)
-                {
-                    btnPic.Visible = value;
-                }
-                else
-                {
-                    //TODO -- ADD MENU ITEM
-                }
-            }
-        }
-        public bool UseTwitPic = false;
+
+		#region Fields (2) 
+
         public string TwitPicFile = null;
-        public string StatusText
-        {
-            get
-            {
-                return textBox1.Text;
-            }
-            set
-            {
-                textBox1.Text = value;
-                this.textBox1.SelectionStart = this.textBox1.Text.Length;
-            }
-        }
+        public bool UseTwitPic = false;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
         public SetStatus()
         {
@@ -55,30 +36,110 @@ namespace PockeTwit
             lblCharsLeft.Text = "140";
         }
 
-        private void SetupStandard()
+		#endregion Constructors 
+
+		#region Properties (2) 
+
+        public bool AllowTwitPic
         {
-            this.menuSubmit = new System.Windows.Forms.MenuItem();
-            this.menuSubmit.Text = "Submit";
-            this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
-
-            this.menuURL = new MenuItem();
-            menuURL.Text = "URL...";
-            menuURL.Click += new EventHandler(menuURL_Click);
-
-            this.menuPic = new MenuItem();
-            menuPic.Text = "Picture";
-            menuPic.Click += new EventHandler(menuPic_Click);
-
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem1.Text = "Action";
-
-            this.menuItem1.MenuItems.Add(this.menuSubmit);
-            this.menuItem1.MenuItems.Add(menuURL);
-            this.menuItem1.MenuItems.Add(menuPic);
-            this.mainMenu1.MenuItems.Add(menuItem1);
+            set
+            {
+                if (DetectDevice.DeviceType == DeviceType.Professional)
+                {
+                    btnPic.Visible = value;
+                }
+                else
+                {
+                    //TODO -- ADD MENU ITEM
+                }
+            }
         }
 
-        
+        public string StatusText
+        {
+            get
+            {
+                return textBox1.Text;
+            }
+            set
+            {
+                textBox1.Text = value;
+                this.textBox1.SelectionStart = this.textBox1.Text.Length;
+            }
+        }
+
+		#endregion Properties 
+
+		#region Methods (12) 
+
+
+		// Private Methods (12) 
+
+        private void btnPic_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                InsertPicture();
+            }
+            catch 
+            {
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    TwitPicFile = openFileDialog1.FileName;
+                    UseTwitPic = true;
+                }
+            }
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            InsertURL();
+        }
+
+        private void InsertPicture()
+        {
+            using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
+            {
+                if (c.ShowDialog() == DialogResult.OK)
+                {
+                    TwitPicFile = c.FileName;
+                    UseTwitPic = true;
+                }
+            }
+        }
+
+        private void InsertURL()
+        {
+            URLForm f = new URLForm();
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = textBox1.Text + " " + f.URL;
+            }
+            this.Show();
+            f.Close();
+        }
+
+        private void menuCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+        }
+
+        void menuPic_Click(object sender, EventArgs e)
+        {
+            InsertPicture();
+        }
+
+        private void menuSubmit_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
+
+        void menuURL_Click(object sender, EventArgs e)
+        {
+            InsertURL();
+        }
+
         private void SetupProfessional()
         {
             this.btnURL = new System.Windows.Forms.Button();
@@ -119,30 +180,27 @@ namespace PockeTwit
             
         }
 
-        void menuPic_Click(object sender, EventArgs e)
+        private void SetupStandard()
         {
-            InsertPicture();
-        }
-        void menuURL_Click(object sender, EventArgs e)
-        {
-            InsertURL();
-        }
+            this.menuSubmit = new System.Windows.Forms.MenuItem();
+            this.menuSubmit.Text = "Submit";
+            this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
 
+            this.menuURL = new MenuItem();
+            menuURL.Text = "URL...";
+            menuURL.Click += new EventHandler(menuURL_Click);
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            int lengthLeft = 140-textBox1.Text.Length;
-            lblCharsLeft.Text = lengthLeft.ToString();
-        }
+            this.menuPic = new MenuItem();
+            menuPic.Text = "Picture";
+            menuPic.Click += new EventHandler(menuPic_Click);
 
-        private void menuCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-        }
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem1.Text = "Action";
 
-        private void menuSubmit_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
+            this.menuItem1.MenuItems.Add(this.menuSubmit);
+            this.menuItem1.MenuItems.Add(menuURL);
+            this.menuItem1.MenuItems.Add(menuPic);
+            this.mainMenu1.MenuItems.Add(menuItem1);
         }
 
         private void textBox1_GotFocus(object sender, EventArgs e)
@@ -159,49 +217,14 @@ namespace PockeTwit
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            InsertURL();
+            int lengthLeft = 140-textBox1.Text.Length;
+            lblCharsLeft.Text = lengthLeft.ToString();
         }
 
-        private void InsertURL()
-        {
-            URLForm f = new URLForm();
-            if (f.ShowDialog() == DialogResult.OK)
-            {
-                textBox1.Text = textBox1.Text + " " + f.URL;
-            }
-            this.Show();
-            f.Close();
-        }
 
-        private void btnPic_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                InsertPicture();
-            }
-            catch 
-            {
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    TwitPicFile = openFileDialog1.FileName;
-                    UseTwitPic = true;
-                }
-            }
-            
-        }
+		#endregion Methods 
 
-        private void InsertPicture()
-        {
-            using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
-            {
-                if (c.ShowDialog() == DialogResult.OK)
-                {
-                    TwitPicFile = c.FileName;
-                    UseTwitPic = true;
-                }
-            }
-        }
     }
 }

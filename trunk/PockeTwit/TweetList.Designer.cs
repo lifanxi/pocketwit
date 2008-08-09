@@ -1,11 +1,28 @@
-ï»¿namespace PockeTwit
+namespace PockeTwit
 {
     partial class TweetList
     {
+
+		#region Fields (8) 
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private FingerUI.KListControl friendsStatslist;
+        private System.Windows.Forms.Label lblLoading;
+        private System.Windows.Forms.Label lblTitle;
+        private Microsoft.WindowsCE.Forms.Notification notification1;
+        private FingerUI.KListControl otherStatslist;
+        private System.Windows.Forms.Timer timerStartup;
+        private System.Windows.Forms.Timer tmrautoUpdate;
+
+		#endregion Fields 
+
+		#region Methods (1) 
+
+
+		// Protected Methods (1) 
 
         /// <summary>
         /// Clean up any resources being used.
@@ -19,6 +36,10 @@
             }
             base.Dispose(disposing);
         }
+
+
+		#endregion Methods 
+
 
         #region Windows Form Designer generated code
 
@@ -100,14 +121,6 @@
         }
 
         #endregion
-
-        private FingerUI.KListControl otherStatslist;
-        private System.Windows.Forms.Timer tmrautoUpdate;
-        private FingerUI.KListControl friendsStatslist;
-        private System.Windows.Forms.Timer timerStartup;
-        private Microsoft.WindowsCE.Forms.Notification notification1;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label lblLoading;
     }
 }
 

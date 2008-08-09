@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,24 @@ namespace PockeTwit
 {
     public partial class UpdateForm : Form
     {
+
+		#region Fields (1) 
+
         private UpdateChecker.UpdateInfo _NewVersion;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        public UpdateForm()
+        {
+            InitializeComponent();
+        }
+
+		#endregion Constructors 
+
+		#region Properties (1) 
+
         public UpdateChecker.UpdateInfo NewVersion 
         {
             set
@@ -21,9 +38,17 @@ namespace PockeTwit
                 _NewVersion = value;
             }
         }
-        public UpdateForm()
+
+		#endregion Properties 
+
+		#region Methods (2) 
+
+
+		// Private Methods (2) 
+
+        private void menuIgnore_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
+            this.Close();
         }
 
         private void menuUpdate_Click(object sender, EventArgs e)
@@ -35,11 +60,8 @@ namespace PockeTwit
             Application.Exit();
         }
 
-        private void menuIgnore_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
-        
+		#endregion Methods 
+
     }
 }

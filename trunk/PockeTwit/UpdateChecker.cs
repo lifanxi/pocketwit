@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.Text;
@@ -11,29 +11,18 @@ namespace PockeTwit
 {
     public class UpdateChecker
     {
+
+		#region Fields (4) 
+
         public double currentVersion = .20;
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
-        private string XMLResponse;
         private UpdateInfo WebVersion;
-        public delegate void delUpdateFound(UpdateInfo Info);
-        public event delUpdateFound UpdateFound;
-        public event delUpdateFound CurrentVersion;
+        private string XMLResponse;
 
-        public struct UpdateInfo
-        {
-            public double webVersion;
-            public string DownloadURL;
-            public string UpdateNotes;
-        }
+		#endregion Fields 
 
-        
-        public UpdateChecker()
-        {
-            if (ClientSettings.CheckVersion)
-            {
-                CheckForUpdate();
-            }
-        }
+		#region Constructors (2) 
+
         public UpdateChecker(bool Auto)
         {
             if (Auto)
@@ -42,6 +31,38 @@ namespace PockeTwit
             }
         }
 
+        public UpdateChecker()
+        {
+            if (ClientSettings.CheckVersion)
+            {
+                CheckForUpdate();
+            }
+        }
+
+		#endregion Constructors 
+
+		#region Delegates and Events (3) 
+
+
+		// Delegates (1) 
+
+        public delegate void delUpdateFound(UpdateInfo Info);
+
+
+		// Events (2) 
+
+        public event delUpdateFound CurrentVersion;
+
+        public event delUpdateFound UpdateFound;
+
+
+		#endregion Delegates and Events 
+
+		#region Methods (2) 
+
+
+		// Public Methods (1) 
+
         public void CheckForUpdate()
         {
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
@@ -49,6 +70,10 @@ namespace PockeTwit
             t.Name = "CheckUpdates";
             t.Start();
         }
+
+
+
+		// Private Methods (1) 
 
         private void GetWebResponse()
         {
@@ -104,8 +129,15 @@ namespace PockeTwit
 
             }
         }
-    
 
-        
+
+		#endregion Methods 
+        public struct UpdateInfo
+        {
+            public double webVersion;
+            public string DownloadURL;
+            public string UpdateNotes;
+        }
+
     }
 }

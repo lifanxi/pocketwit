@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,15 @@ namespace PockeTwit
 {
     public partial class AboutForm : Form
     {
+
+		#region Fields (1) 
+
         private UpdateChecker Checker = new UpdateChecker(false);
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public AboutForm()
         {
             InitializeComponent();
@@ -19,6 +27,13 @@ namespace PockeTwit
             Checker.CurrentVersion += new UpdateChecker.delUpdateFound(Checker_CurrentVersion);
             lblVersion.Text = Checker.currentVersion.ToString();
         }
+
+		#endregion Constructors 
+
+		#region Methods (5) 
+
+
+		// Private Methods (5) 
 
         void Checker_CurrentVersion(UpdateChecker.UpdateInfo Info)
         {
@@ -30,17 +45,6 @@ namespace PockeTwit
             UpdateForm uf = new UpdateForm();
             uf.NewVersion = Info;
             uf.ShowDialog();
-        }
-
-        private void menuUpdate_Click(object sender, EventArgs e)
-        {
-            
-            Checker.CheckForUpdate();
-        }
-
-        private void menuClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void linkLabel1_Click(object sender, EventArgs e)
@@ -61,8 +65,19 @@ namespace PockeTwit
             s.Close();
         }
 
-        
+        private void menuClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
-        
+        private void menuUpdate_Click(object sender, EventArgs e)
+        {
+            
+            Checker.CheckForUpdate();
+        }
+
+
+		#endregion Methods 
+
     }
 }

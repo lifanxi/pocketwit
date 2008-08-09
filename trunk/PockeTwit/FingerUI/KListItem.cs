@@ -13,22 +13,23 @@ namespace FingerUI
     /// </summary>
     public class KListItem : KListControl.IKListItem, IDisposable
     {
-        /// <summary>
-        /// Initializes the <see cref="KListItem"/> class.
-        /// </summary>
-        static KListItem()
-        {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase), "select.png");
-            try
-            {
-                m_selectionBitmap = new Bitmap(path);
-            }
-            catch
-            {
-            }
-        }
 
-        
+		#region Fields (9) 
+
+        private Rectangle m_bounds;
+        private KListControl m_parent;
+        private bool m_selected = false;
+        private static Bitmap m_selectionBitmap;
+        private StringFormat m_stringFormat = new StringFormat();
+        private string m_text;
+        private object m_value;
+        private int m_x = -1;
+        private int m_y = -1;
+
+		#endregion Fields 
+
+		#region Constructors (2) 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KListItem"/> class.
         /// </summary>
@@ -45,12 +46,40 @@ namespace FingerUI
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Initializes the <see cref="KListItem"/> class.
         /// </summary>
-        public virtual void Dispose()
+        static KListItem()
         {
-            m_parent = null;
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase), "select.png");
+            try
+            {
+                m_selectionBitmap = new Bitmap(path);
+            }
+            catch
+            {
+            }
         }
+
+		#endregion Constructors 
+
+		#region Properties (7) 
+
+        /// <summary>
+        /// The unscrolled bounds for this item.
+        /// </summary>
+        public Rectangle Bounds { get { return m_bounds; } set { m_bounds = value; } }
+
+        /// <summary>
+        /// Gets or sets the Y.
+        /// </summary>
+        /// <value>The Y.</value>
+        public int Index { get { return m_y; } set { m_y = value; } }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        /// <value>The parent.</value>
+        public KListControl Parent { get { return m_parent; } set { m_parent = value; } }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="KListItem"/> is selected.
@@ -71,27 +100,25 @@ namespace FingerUI
         public object Value { get { return m_value; } set { m_value = value; } }
 
         /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
-        /// <value>The parent.</value>
-        public KListControl Parent { get { return m_parent; } set { m_parent = value; } }
-
-        /// <summary>
-        /// The unscrolled bounds for this item.
-        /// </summary>
-        public Rectangle Bounds { get { return m_bounds; } set { m_bounds = value; } }
-
-        /// <summary>
         /// Gets or sets the X.
         /// </summary>
         /// <value>The X.</value>
         public int XIndex { get { return m_x; } set { m_x = value; } }
 
+		#endregion Properties 
+
+		#region Methods (2) 
+
+
+		// Public Methods (2) 
+
         /// <summary>
-        /// Gets or sets the Y.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <value>The Y.</value>
-        public int Index { get { return m_y; } set { m_y = value; } }
+        public virtual void Dispose()
+        {
+            m_parent = null;
+        }
 
         /// <summary>
         /// Renders to the specified graphics.
@@ -138,16 +165,8 @@ namespace FingerUI
             }
         }
 
-        private StringFormat m_stringFormat = new StringFormat();
-        private KListControl m_parent;
-        private Rectangle m_bounds;
-        private int m_x = -1;
-        private int m_y = -1;
 
-        private string m_text;
-        private object m_value;
-        private bool m_selected = false;
+		#endregion Methods 
 
-        private static Bitmap m_selectionBitmap;
     }
 }
