@@ -86,6 +86,7 @@ namespace PockeTwit.Library
                 status newStat = new status();
                 newStat.text = entry.SelectSingleNode("s:title",nm).InnerText;
                 string userName = entry.SelectSingleNode("s:author/s:name",nm).InnerText;
+                newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                 string userscreenName = userName.Split(new char[]{' '})[0];
                 newStat.user = new User();
                 newStat.user.screen_name = userscreenName;

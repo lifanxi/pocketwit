@@ -409,9 +409,12 @@ namespace FingerUI
             }
             else
             {
-                m_selectedIndex.Y = 0;
-                m_selectedItem = m_items[0];
-                m_items[0].Selected = true;
+                if (m_items != null && m_items.Count>0)
+                {
+                    m_selectedIndex.Y = 0;
+                    m_selectedItem = m_items[0];
+                    m_items[0].Selected = true;
+                }
             }
         }
 
@@ -1307,12 +1310,14 @@ namespace FingerUI
                 //m_offset.X = 0;
                 m_offset.Y = 0;
 
+                SetSelectedIndexToZero();
                 Invalidate();
 
                 if (SelectedItemChanged != null)
                 {
                     SelectedItemChanged(this, new EventArgs());
                 }
+                
             }
         }
 
