@@ -66,8 +66,6 @@
     <Compile Include="Clickables.cs">
     </Compile>
     <Compile Include="DetectDevice.cs" />
-    <Compile Include="FingerUI\GestureDefiner.cs" />
-    <Compile Include="FingerUI\GestureRecognizer.cs" />
     <Compile Include="FingerUI\KListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -89,6 +87,7 @@
     <Compile Include="SetStatus.Designer.cs">
       <DependentUpon>SetStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsHandler\AccountInfo.cs" />
     <Compile Include="SettingsHandler\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
