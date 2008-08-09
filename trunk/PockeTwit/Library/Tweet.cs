@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace PockeTwit.Library
 {
     [Serializable]
-    public class status
+    public class status : IComparable
     {
 
 		#region Properties (7) 
@@ -19,7 +19,14 @@ namespace PockeTwit.Library
 
         public string favorited { get; set; }
 
-        //public string created_at { get; set; }
+        private DateTime createdAt
+        {
+            get
+            {
+                return DateTime.Parse(created_at);
+            }
+        }
+        public string created_at { get; set; }
         public string id { get; set; }
 
         //public string source { get; set; }
@@ -106,6 +113,16 @@ namespace PockeTwit.Library
 
 		#endregion Methods 
 
+    
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            status otherStat = (status)obj;
+            return otherStat.createdAt.CompareTo(this.createdAt);
+        }
+
+        #endregion
     }
 
     [Serializable]

@@ -18,7 +18,6 @@ namespace FingerUI
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
         private bool InFocus = false;
-        public List<string> LeftMenuItems = new List<string>();
         Graphics m_backBuffer;
         // Background drawing
         Bitmap m_backBufferBitmap;
@@ -41,8 +40,8 @@ namespace FingerUI
         private int LeftMenuItemFocusedIndex = 0;
         private int RightMenuItemFocusedIndex = 0;
         List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
+        public List<string> LeftMenuItems = new List<string>();
         public List<string> RightMenuItems = new List<string>();
-
 		#endregion Fields 
 
 		#region Enums (2) 
@@ -74,10 +73,8 @@ namespace FingerUI
             m_timer.Tick += new EventHandler(m_timer_Tick);
             PockeTwit.ImageBuffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
 
-            
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
-
         }
 
 		#endregion Constructors 
@@ -117,11 +114,7 @@ namespace FingerUI
         public Color HighLightForeColor { get; set; }
 
         public bool IsMaximized { get; set; }
-
-        /// <summary>
-        /// Gets or sets the height of items in the control.
-        /// </summary>
-        /// <value>The height of the items.</value>
+        
         public int ItemHeight
         {
             get
@@ -136,10 +129,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Gets or sets the height of items in the control.
-        /// </summary>
-        /// <value>The height of the items.</value>
         public int ItemWidth
         {
             get
@@ -154,10 +143,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Gets or sets the maximum scroll velocity.
-        /// </summary>
-        /// <value>The maximum velocity.</value>
         public int MaxVelocity
         {
             get
@@ -170,10 +155,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Gets the maximum x offset.
-        /// </summary>
-        /// <value>The maximum x offset.</value>
         private int MaxXOffset
         {
             get
@@ -183,10 +164,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Gets the maximum y offset.
-        /// </summary>
-        /// <value>The maximum y offset.</value>
         private int MaxYOffset
         {
             get
@@ -213,10 +190,6 @@ namespace FingerUI
 
         public Color SelectedForeColor { get; set; }
 
-                /// <summary>
-        /// Gets the selected item.
-        /// </summary>
-        /// <value>The selected item.</value>
         public IKListItem SelectedItem
         {
             get
@@ -229,9 +202,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Gets the <see cref="Scroller.KListControl.IKListItem"/> at the specified index.
-        /// </summary>
         public IKListItem this[int index]
         {
             get
@@ -271,14 +241,8 @@ namespace FingerUI
 
         public event delMenuItemSelected MenuItemSelected;
 
-        /// <summary>
-        /// Occurs when the selected item changes.
-        /// </summary>
         public event EventHandler SelectedItemChanged;
 
-        /// <summary>
-        /// Occurs when the selected item is clicked on (after already being selected).
-        /// </summary>
         public event EventHandler SelectedItemClicked;
 
         public event delSwitchState SwitchWindowState;
@@ -327,10 +291,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Adds an item.
-        /// </summary>
-        /// <param name="item">The item.</param>
         public void AddItem(IKListItem item)
         {
             item.Parent = this;
@@ -340,17 +300,11 @@ namespace FingerUI
             //Reset();
         }
 
-        /// <summary>
-        /// Begins updates - suspending layout recalculation.
-        /// </summary>
         public void BeginUpdate()
         {
             m_updating = true;
         }
 
-        /// <summary>
-        /// Clears the list.
-        /// </summary>
         public void Clear()
         {
             if (InvokeRequired)
@@ -365,9 +319,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Ends updates - re-enabling layout recalculation.
-        /// </summary>
         public void EndUpdate()
         {
             m_updating = false;
@@ -379,10 +330,6 @@ namespace FingerUI
             this.Parent.KeyDown += new KeyEventHandler(OnKeyDown);
         }
 
-        /// <summary>
-        /// Invalidates the item (when visible).
-        /// </summary>
-        /// <param name="item">The item.</param>
         public void Invalidate(IKListItem item)
         {
             Rectangle itemBounds = item.Bounds;
@@ -439,10 +386,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Removes an item.
-        /// </summary>
-        /// <param name="item">The item.</param>
         public void RemoveItem(IKListItem item)
         {
             if (m_items.ContainsKey(item.Index))
@@ -503,14 +446,8 @@ namespace FingerUI
             this.Parent.KeyDown -= new KeyEventHandler(OnKeyDown);
         }
 
-
-
 		// Protected Methods (11) 
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.Control"></see> and its child controls and optionally releases the managed resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             CleanupBackBuffer();
@@ -663,9 +600,6 @@ namespace FingerUI
             InFocus = false;
         }
 
-        /// <summary>
-        /// Called when the user clicks on the control with the mouse.
-        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             HasMoved = false;
@@ -686,9 +620,6 @@ namespace FingerUI
             
         }
 
-        /// <summary>
-        /// Called when the user moves the mouse over the control.
-        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             
@@ -749,9 +680,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Called when the user releases a mouse button.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
@@ -931,17 +859,11 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Paints the background of the control.
-        /// </summary>
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             // Do nothing
         }
 
-        /// <summary>
-        /// Called when the control is resized.
-        /// </summary>
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -988,9 +910,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Cleans up the background paint buffer.
-        /// </summary>
         private void CleanupBackBuffer()
         {
             if (m_backBufferBitmap != null)
@@ -1016,9 +935,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Clips the scroll position.
-        /// </summary>
         private void ClipScrollPosition()
         {
             if (m_offset.X < MinXOffset)
@@ -1043,9 +959,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Clips the velocity.
-        /// </summary>
         private void ClipVelocity()
         {
             m_velocity.X = Math.Min(m_velocity.X, m_maxVelocity);
@@ -1055,9 +968,6 @@ namespace FingerUI
             m_velocity.Y = Math.Max(m_velocity.Y, -m_maxVelocity);
         }
 
-        /// <summary>
-        /// Creates the background paint buffer.
-        /// </summary>
         private void CreateBackBuffer()
         {
             CleanupBackBuffer();
@@ -1258,12 +1168,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Finds the index for the specified y offset.
-        /// </summary>
-        /// <param name="x">The x offset.</param>
-        /// <param name="y">The y offset.</param>
-        /// <returns></returns>
         private Point FindIndex(int x, int y)
         {
             Point index = new Point(0, 0);
@@ -1327,12 +1231,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Finds the bounds for the specified item.
-        /// </summary>
-        /// <param name="x">The item x index.</param>
-        /// <param name="y">The item y index.</param>
-        /// <returns>The item bounds.</returns>
         private Rectangle ItemBounds(int x, int y)
         {
             int itemY = Bounds.Top + (m_itemHeight * y);
@@ -1341,9 +1239,6 @@ namespace FingerUI
             
         }
 
-/// <summary>
-        /// Handles the Tick event of the m_timer control.
-        /// </summary>
         private void m_timer_Tick(object sender, EventArgs e)
         {
             
@@ -1395,9 +1290,6 @@ namespace FingerUI
             }
         }
 
-        /// <summary>
-        /// Resets the drawing of the list.
-        /// </summary>
         private void Reset()
         {
             if (!m_updating)
@@ -1516,12 +1408,9 @@ namespace FingerUI
 		#endregion Methods 
 
 		#region Nested Classes (1) 
-
-
-        // The items!
         class ItemList : Dictionary<int, IKListItem>
         {
-}
+        }
 		#endregion Nested Classes 
         public interface IKListItem
         {
