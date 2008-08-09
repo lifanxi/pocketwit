@@ -9,11 +9,10 @@ namespace PockeTwit
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private FingerUI.KListControl friendsStatslist;
         private System.Windows.Forms.Label lblLoading;
         private System.Windows.Forms.Label lblTitle;
         private Microsoft.WindowsCE.Forms.Notification notification1;
-        private FingerUI.KListControl otherStatslist;
+        private FingerUI.KListControl statList;
         private System.Windows.Forms.Timer timerStartup;
         private System.Windows.Forms.Timer tmrautoUpdate;
 
@@ -51,8 +50,7 @@ namespace PockeTwit
         {
             this.tmrautoUpdate = new System.Windows.Forms.Timer();
             this.timerStartup = new System.Windows.Forms.Timer();
-            this.friendsStatslist = new FingerUI.KListControl();
-            this.otherStatslist = new FingerUI.KListControl();
+            this.statList = new FingerUI.KListControl();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -67,23 +65,14 @@ namespace PockeTwit
             this.timerStartup.Interval = 1000;
             this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
             // 
-            // friendsStatslist
+            // statList
             // 
-            this.friendsStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.friendsStatslist.Location = new System.Drawing.Point(0, 0);
-            this.friendsStatslist.Name = "friendsStatslist";
-            this.friendsStatslist.Size = new System.Drawing.Size(240, 294);
-            this.friendsStatslist.TabIndex = 1;
-            this.friendsStatslist.Visible = false;
-            // 
-            // otherStatslist
-            // 
-            this.otherStatslist.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.otherStatslist.Location = new System.Drawing.Point(0, 0);
-            this.otherStatslist.Name = "otherStatslist";
-            this.otherStatslist.Size = new System.Drawing.Size(240, 294);
-            this.otherStatslist.TabIndex = 0;
-            this.otherStatslist.Visible = false;
+            this.statList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statList.Location = new System.Drawing.Point(0, 0);
+            this.statList.Name = "statList";
+            this.statList.Size = new System.Drawing.Size(240, 294);
+            this.statList.TabIndex = 0;
+            this.statList.Visible = false;
             // 
             // lblTitle
             // 
@@ -112,8 +101,7 @@ namespace PockeTwit
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblLoading);
-            this.Controls.Add(this.friendsStatslist);
-            this.Controls.Add(this.otherStatslist);
+            this.Controls.Add(this.statList);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
             this.ResumeLayout(false);

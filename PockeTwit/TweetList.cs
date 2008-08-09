@@ -25,7 +25,6 @@ namespace PockeTwit
         private List<string> LeftMenu;
         private List<string> RightMenu;
         private string ShowUserID;
-        private FingerUI.KListControl statList;
         Yedda.Twitter Twitter;
 
 		#endregion�Fields�
@@ -50,11 +49,11 @@ namespace PockeTwit
                 if (value)
                 {
                     statList.Warning = "";
-                    SetConnectedMenus(statList);
+                    SetConnectedMenus();
                 }
                 else
                 {
-                    SetDisconnectedMenus(statList);
+                    SetDisconnectedMenus();
                 }
             }
         }
@@ -130,10 +129,9 @@ namespace PockeTwit
                 CachedResponse = "";
                 LastStatusID = "";
                 CurrentStatuses = new PockeTwit.Library.status[0];
-                friendsStatslist.Clear();
-                otherStatslist.Clear();
+                statList.Clear();
                 LoadCachedtimeline();
-                SwitchToList(friendsStatslist);
+                SwitchToList("Friends_TimeLine");
                 CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                 GetTimeLine();
             }
@@ -406,21 +404,21 @@ namespace PockeTwit
             SetStatus("@"+User);
         }
 
-        private void SetConnectedMenus(FingerUI.KListControl list)
+        private void SetConnectedMenus()
         {
             LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search", "Set Status", "Settings", "About/Feedback", "Exit" });
             RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
 
             if (!Twitter.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!Twitter.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
-            list.LeftMenuItems = LeftMenu;
-            list.RightMenuItems = RightMenu;
+            statList.LeftMenuItems = LeftMenu;
+            statList.RightMenuItems = RightMenu;
         }
 
-        private void SetDisconnectedMenus(FingerUI.KListControl list)
+        private void SetDisconnectedMenus()
         {
-            list.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
-            list.RightMenuItems = new List<string>(new string[] { "Exit" });
+            statList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
+            statList.RightMenuItems = new List<string>(new string[] { "Exit" });
         }
 
         private void SetEverythingUp()
@@ -458,10 +456,10 @@ namespace PockeTwit
             Twitter.CurrentServer = ClientSettings.Server;
             
             lblLoading.Text = "Setting up UI lists.";
+            SetUpListControl();
+            
+            statList.SwitchTolist("Friends_TimeLine");
             Application.DoEvents();
-            SetUpListControl(friendsStatslist);
-            SetUpListControl(otherStatslist);
-            statList = friendsStatslist;
 
             if (Twitter.BigTimeLines)
             {
@@ -471,8 +469,11 @@ namespace PockeTwit
             }
             lblLoading.Text = "Fetching timeline from server.";
             Application.DoEvents();
+            
             GetTimeLine();
+            
             statList.SetSelectedIndexToZero();
+            statList.Visible = true;
             tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;
 
@@ -513,20 +514,20 @@ namespace PockeTwit
             
         }
 
-        private void SetUpListControl(FingerUI.KListControl list)
+        private void SetUpListControl()
         {
-            list.BackColor = ClientSettings.BackColor;
-            list.ForeColor = ClientSettings.ForeColor;
-            list.SelectedBackColor = ClientSettings.SelectedBackColor;
-            list.SelectedForeColor = ClientSettings.SelectedForeColor;
-            list.ItemHeight = (ClientSettings.TextSize * 5)+5;
-            list.IsMaximized = true;
-            SetConnectedMenus(list);
-            list.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
-            list.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
-            list.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
-            list.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
-            
+            statList.BackColor = ClientSettings.BackColor;
+            statList.ForeColor = ClientSettings.ForeColor;
+            statList.SelectedBackColor = ClientSettings.SelectedBackColor;
+            statList.SelectedForeColor = ClientSettings.SelectedForeColor;
+            statList.ItemHeight = (ClientSettings.TextSize * 5) + 5;
+            statList.IsMaximized = true;
+            SetConnectedMenus();
+            statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
+            statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
+            statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
+            statList.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
+            statList.HookKey();
         }
 
         private void ShowAbout()
@@ -542,7 +543,6 @@ namespace PockeTwit
             pi.FileName = Twitter.GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
-            statList.HookKey();
         }
 
         void statusList_MenuItemSelected(string ItemName)
@@ -554,8 +554,8 @@ namespace PockeTwit
                     break;
                 case "Public TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList(otherStatslist);
-                    otherStatslist.SetSelectedMenu("Public TimeLine");
+                    SwitchToList("Public_TimeLine");
+                    statList.SetSelectedMenu("Public TimeLine");
                     CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statList.RightMenuItems = RightMenu;
                     GetTimeLineAsync();
@@ -563,8 +563,8 @@ namespace PockeTwit
                 case "Reconnect":
                 case "Friends TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList(friendsStatslist);
-                    friendsStatslist.SetSelectedMenu("Friends TimeLine");
+                    SwitchToList("Friends_TimeLine");
+                    statList.SetSelectedMenu("Friends TimeLine");
                     CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statList.RightMenuItems = RightMenu;
                     
@@ -572,8 +572,8 @@ namespace PockeTwit
                     break;
                 case "Replies":
                     ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList(otherStatslist);
-                    otherStatslist.SetSelectedMenu("Replies");
+                    SwitchToList("Replies_TimeLine");
+                    statList.SetSelectedMenu("Replies");
                     CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statList.RightMenuItems = RightMenu;
                     
@@ -597,7 +597,7 @@ namespace PockeTwit
                     ChangeCursor(Cursors.WaitCursor);
                     ShowUserID = ClientSettings.UserName;
                     CurrentAction = Yedda.Twitter.ActionType.Show;
-                    SwitchToList(otherStatslist);
+                    SwitchToList("Archived_TimeLine");
                     GetTimeLineAsync();
                     break;
                 case "@User TimeLine":
@@ -605,7 +605,7 @@ namespace PockeTwit
                     FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
                     ShowUserID = selectedItem.Tweet.user.screen_name;
                     CurrentAction = Yedda.Twitter.ActionType.Show;
-                    SwitchToList(otherStatslist);
+                    SwitchToList("@User_TimeLine");
                     GetTimeLineAsync();
 
                     break;
@@ -674,7 +674,7 @@ namespace PockeTwit
                 ChangeCursor(Cursors.WaitCursor);
                 ShowUserID = TextClicked.Replace("@","");
                 CurrentAction = Yedda.Twitter.ActionType.Show;
-                SwitchToList(otherStatslist);
+                SwitchToList("@User_TimeLine");
                 GetTimeLineAsync();
             }
         }
@@ -695,21 +695,12 @@ namespace PockeTwit
             lblLoading.Visible = false;
             lblTitle.Visible = false;
             InitialLoad = false;
-            SwitchToList(friendsStatslist);
+            SwitchToList("Friends_TimeLine");
         }
 
-        private void SwitchToList(FingerUI.KListControl list)
+        private void SwitchToList(string ListName)
         {
-            if (statList != null)
-            {
-                list.XOffset = statList.XOffset;
-                statList.UnHookKey();
-            }
-            friendsStatslist.Visible = false;
-            otherStatslist.Visible = false;
-            statList = list;
-            statList.HookKey();
-            statList.Visible = true;
+            statList.SwitchTolist(ListName);
         }
 
         private void timerStartup_Tick(object sender, EventArgs e)
@@ -746,8 +737,8 @@ namespace PockeTwit
             this.statList.Visible = true;
 
             f.Close();
-            SwitchToList(otherStatslist);
-            otherStatslist.SetSelectedMenu("Search");
+            SwitchToList("Search_TimeLine");
+            statList.SetSelectedMenu("Search");
             CurrentAction = Yedda.Twitter.ActionType.Search;
             statList.RightMenuItems = RightMenu;
             GetTimeLineAsync();
