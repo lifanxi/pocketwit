@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace FingerUI
 {
-    public class StatusItem : KListControl.IKListItem, IDisposable
+    public class StatusItem : KListControl.IKListItem, IDisposable, IComparable
     {
 
 		#region�Fields�(15)�
@@ -131,7 +131,17 @@ namespace FingerUI
         /// Gets or sets a value indicating whether this <see cref="KListItem"/> is selected.
         /// </summary>
         /// <value><c>true</c> if selected; otherwise, <c>false</c>.</value>
-        public bool Selected { get { return m_selected;  } set { m_selected = value; } }
+        public bool Selected
+        { 
+            get 
+            { 
+                return m_selected;  
+            } 
+            set 
+            {
+                m_selected = value; 
+            } 
+        }
 
         /// <summary>
         /// Gets or sets the text.
@@ -509,6 +519,16 @@ namespace FingerUI
                 LineBeforeThisWord.Append(WordToCheck + " ");
             }
         }
+        #endregion
+
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            StatusItem otherItem = (StatusItem)obj;
+            return otherItem.Tweet.CompareTo(this.Tweet);
+        }
+
         #endregion
     }
 }
