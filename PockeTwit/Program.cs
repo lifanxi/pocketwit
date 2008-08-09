@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -7,19 +7,11 @@ namespace PockeTwit
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [MTAThread]
-        static void Main()
-        {
-            
-            
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            ClientSettings.LoadSettings();
-            Application.Run(new TweetList());
-        }
+		#region Methods (2) 
+
+
+		// Private Methods (2) 
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
@@ -43,5 +35,23 @@ namespace PockeTwit
             }
             MessageBox.Show("An unexpected error has occured.  If this continues please contact @PockeTwitDev.", "Error");
             }
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [MTAThread]
+        static void Main()
+        {
+            
+            
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            ClientSettings.LoadSettings();
+            Application.Run(new TweetList());
+        }
+
+
+		#endregion Methods 
+
         }
 }

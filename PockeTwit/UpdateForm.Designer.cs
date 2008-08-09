@@ -1,12 +1,28 @@
-ï»¿namespace PockeTwit
+namespace PockeTwit
 {
     partial class UpdateForm
     {
+
+		#region Fields (8) 
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuIgnore;
+        private System.Windows.Forms.MenuItem menuUpdate;
+
+		#endregion Fields 
+
+		#region Methods (1) 
+
+
+		// Protected Methods (1) 
 
         /// <summary>
         /// Clean up any resources being used.
@@ -20,6 +36,10 @@
             }
             base.Dispose(disposing);
         }
+
+
+		#endregion Methods 
+
 
         #region Windows Form Designer generated code
 
@@ -109,12 +129,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblVersion;
-        private System.Windows.Forms.MenuItem menuIgnore;
-        private System.Windows.Forms.MenuItem menuUpdate;
-        private System.Windows.Forms.Label lblInfo;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
     }
 }

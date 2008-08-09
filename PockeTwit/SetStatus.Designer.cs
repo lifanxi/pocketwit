@@ -1,12 +1,32 @@
-ï»¿namespace PockeTwit
+namespace PockeTwit
 {
     partial class SetStatus
     {
+
+		#region Fields (12) 
+
+        private System.Windows.Forms.Button btnPic;
+        private System.Windows.Forms.Button btnURL;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label lblCharsLeft;
         private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuCancel;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuPic;
+        private System.Windows.Forms.MenuItem menuSubmit;
+        private System.Windows.Forms.MenuItem menuURL;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox textBox1;
+
+		#endregion Fields 
+
+		#region Methods (1) 
+
+
+		// Protected Methods (1) 
 
         /// <summary>
         /// Clean up any resources being used.
@@ -20,6 +40,10 @@
             }
             base.Dispose(disposing);
         }
+
+
+		#endregion Methods 
+
 
         #region Windows Form Designer generated code
 
@@ -95,17 +119,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label lblCharsLeft;
-        private System.Windows.Forms.MenuItem menuCancel;
-        private System.Windows.Forms.MenuItem menuSubmit;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuURL;
-        private System.Windows.Forms.MenuItem menuPic;
-
-        private System.Windows.Forms.Button btnURL;
-        private System.Windows.Forms.Button btnPic;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

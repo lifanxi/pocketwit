@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +8,15 @@ namespace PockeTwit
 {
     public static class Following
     {
-        private static List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
 
+		#region Fields (2) 
+
+        private static List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
         private static bool OnceLoaded = false;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
         static Following()
         {
@@ -18,6 +24,33 @@ namespace PockeTwit
 
             //LoadFromTwitter();
             //GetFollowersFromTwitter();
+        }
+
+		#endregion Constructors 
+
+		#region Methods (9) 
+
+
+		// Public Methods (5) 
+
+        public static void AddUser(Library.User userToAdd)
+        {
+            FollowedUsers.Add(userToAdd);
+            SaveUsers();
+        }
+
+        public static bool IsFollowing(Library.User userToCheck)
+        {
+            bool bFound = false;
+            foreach (Library.User User in FollowedUsers)
+            {
+                if (User.screen_name == userToCheck.screen_name)
+                {
+                    bFound = true;
+                    break;
+                }
+            }
+            return bFound;
         }
 
         public static void LoadFromTwitter()
@@ -38,6 +71,23 @@ namespace PockeTwit
                 t.Start();
             }
         }
+
+        public static void StopFollowing(Library.User usertoStop)
+        {
+            foreach(Library.User User in FollowedUsers)
+            {
+                if(User.screen_name == usertoStop.screen_name)
+                {
+                    FollowedUsers.Remove(User);
+                    break;
+                }
+            }
+            SaveUsers();
+        }
+
+
+
+		// Private Methods (4) 
 
         private static void GetCachedFollowers()
         {
@@ -92,37 +142,8 @@ namespace PockeTwit
             }
         }
 
-        public static void AddUser(Library.User userToAdd)
-        {
-            FollowedUsers.Add(userToAdd);
-            SaveUsers();
-        }
 
-        public static void StopFollowing(Library.User usertoStop)
-        {
-            foreach(Library.User User in FollowedUsers)
-            {
-                if(User.screen_name == usertoStop.screen_name)
-                {
-                    FollowedUsers.Remove(User);
-                    break;
-                }
-            }
-            SaveUsers();
-        }
+		#endregion Methods 
 
-        public static bool IsFollowing(Library.User userToCheck)
-        {
-            bool bFound = false;
-            foreach (Library.User User in FollowedUsers)
-            {
-                if (User.screen_name == userToCheck.screen_name)
-                {
-                    bFound = true;
-                    break;
-                }
-            }
-            return bFound;
-        }
     }
 }

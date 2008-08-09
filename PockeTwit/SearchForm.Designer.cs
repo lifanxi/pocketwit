@@ -1,12 +1,26 @@
-ï»¿namespace PockeTwit
+namespace PockeTwit
 {
     partial class SearchForm
     {
+
+		#region Fields (6) 
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuCancel;
+        private System.Windows.Forms.MenuItem menuSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+
+		#endregion Fields 
+
+		#region Methods (1) 
+
+
+		// Protected Methods (1) 
 
         /// <summary>
         /// Clean up any resources being used.
@@ -20,6 +34,10 @@
             }
             base.Dispose(disposing);
         }
+
+
+		#endregion Methods 
+
 
         #region Windows Form Designer generated code
 
@@ -91,10 +109,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblSearch;
-        private System.Windows.Forms.MenuItem menuCancel;
-        private System.Windows.Forms.MenuItem menuSearch;
-        private System.Windows.Forms.TextBox txtSearch;
     }
 }

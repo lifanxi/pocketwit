@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +8,15 @@ namespace PockeTwit
 {
     public static class AsyncArtGrabber
     {
-       
-        public delegate void GrabArtdelegate(string User, string URL);
-        public delegate void ArtIsReady(string User, string FileName);
-        public static event ArtIsReady NewArtWasDownloaded;
-        
+
+		#region Fields (1) 
+
         public static string CacheFolder;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         //private static string UnknownArtSmall;
         static AsyncArtGrabber()
         {
@@ -26,36 +29,34 @@ namespace PockeTwit
             }
         }
 
-        public static string GetArtFileName(string User, string URL)
-        {
-            string FileName = CopyTempFile(User, URL);
-            
-            return FileName;
-        }
+		#endregion Constructors 
+
+		#region Delegates and Events (3) 
+
+
+		// Delegates (2) 
+
+        public delegate void ArtIsReady(string User, string FileName);
+        public delegate void GrabArtdelegate(string User, string URL);
+
+
+		// Events (1) 
+
+        public static event ArtIsReady NewArtWasDownloaded;
+
+
+		#endregion Delegates and Events 
+
+		#region Methods (6) 
+
+
+		// Public Methods (4) 
+
         public static string ConvertFileToUrl(string Filename)
         {
             return "file://" + Filename.Replace("\\", "/");
         }
-        public static string DetermineCacheFileName(string User)
-        {
-            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
 
-            string UserFileName = r.Replace(User, "");
-
-
-            string FileName = CacheFolder + "\\" + UserFileName;
-            return FileName;
-        }
-
-        private static void CheckCacheFolderExists(string Folder)
-        {
-            if (!System.IO.Directory.Exists(CacheFolder + "\\" + Folder))
-            {
-                System.IO.Directory.CreateDirectory(CacheFolder + "\\" + Folder);
-            }
-        }
-
-        
         public static string CopyTempFile(string User, string URL)
         {
             string FileName = DetermineCacheFileName(User);
@@ -69,6 +70,37 @@ namespace PockeTwit
             }
             return FileName;
         }
+
+        public static string DetermineCacheFileName(string User)
+        {
+            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
+
+            string UserFileName = r.Replace(User, "");
+
+
+            string FileName = CacheFolder + "\\" + UserFileName;
+            return FileName;
+        }
+
+        public static string GetArtFileName(string User, string URL)
+        {
+            string FileName = CopyTempFile(User, URL);
+            
+            return FileName;
+        }
+
+
+
+		// Private Methods (2) 
+
+        private static void CheckCacheFolderExists(string Folder)
+        {
+            if (!System.IO.Directory.Exists(CacheFolder + "\\" + Folder))
+            {
+                System.IO.Directory.CreateDirectory(CacheFolder + "\\" + Folder);
+            }
+        }
+
         private static void GetArtFromURL(string User, string URL)
         {
             
@@ -124,6 +156,9 @@ namespace PockeTwit
             }
             return;
         }
+
+
+		#endregion Methods 
 
     }
 }

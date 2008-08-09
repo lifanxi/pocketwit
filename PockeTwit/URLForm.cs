@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,12 +11,24 @@ namespace PockeTwit
 {
     public partial class URLForm : Form
     {
+
+		#region Fields (1) 
+
+        private string _URL;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public URLForm()
         {
             InitializeComponent();
         }
 
-        private string _URL;
+		#endregion Constructors 
+
+		#region Properties (1) 
+
         public string URL
         {
             get
@@ -24,6 +36,13 @@ namespace PockeTwit
                 return _URL;
             }
         }
+
+		#endregion Properties 
+
+		#region Methods (2) 
+
+
+		// Private Methods (2) 
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
@@ -37,5 +56,9 @@ namespace PockeTwit
             this.DialogResult = DialogResult.OK;
             this.Hide();
         }
+
+
+		#endregion Methods 
+
     }
 }

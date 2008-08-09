@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.Text;
@@ -11,23 +11,55 @@ namespace PockeTwit.Library
     [Serializable]
     public class status
     {
-        //public string created_at { get; set; }
-        public string id { get; set; }
-        public string text { get; set; }
-        //public string source { get; set; }
-        //public bool truncated { get; set; }
 
-        //public string in_reply_to_status_id { get; set; }
-        public string in_reply_to_user_id { get; set; }
+		#region Properties (7) 
+
+        [XmlIgnore]
+        public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
         public string favorited { get; set; }
 
-        public User user { get; set; }
+        //public string created_at { get; set; }
+        public string id { get; set; }
+
+        //public string source { get; set; }
+        //public bool truncated { get; set; }
+        //public string in_reply_to_status_id { get; set; }
+        public string in_reply_to_user_id { get; set; }
 
         [XmlIgnore]
         public List<string> SplitLines { get; set; }
-        [XmlIgnore]
-        public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
+
+        public string text { get; set; }
+
+        public User user { get; set; }
+
+		#endregion Properties 
+
+		#region Methods (3) 
+
+
+		// Public Methods (3) 
+
+        public static status[] Deserialize(string response)
+        {
+            
+            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
+            Library.status[] statuses;
+            if (string.IsNullOrEmpty(response))
+            {
+                statuses = new status[0];
+            }
+            else
+            {
+                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                {
+                        statuses = (Library.status[])s.Deserialize(r);
+                    
+                }
+            }
+            return statuses;
+        }
 
         public static status[] DeserializeFromAtom(string response)
         {
@@ -58,26 +90,7 @@ namespace PockeTwit.Library
 
 
         }
-        
-        public static status[] Deserialize(string response)
-        {
-            
-            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
-            Library.status[] statuses;
-            if (string.IsNullOrEmpty(response))
-            {
-                statuses = new status[0];
-            }
-            else
-            {
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
-                {
-                        statuses = (Library.status[])s.Deserialize(r);
-                    
-                }
-            }
-            return statuses;
-        }
+
         public static string Serialize(status[] List)
         {
             if (List.Length == 0) { return null; }
@@ -90,22 +103,36 @@ namespace PockeTwit.Library
             return sb.ToString();
         }
 
+
+		#endregion Methods 
+
     }
 
     [Serializable]
     public class User 
     {
-        //public string id { get; set; }
-        //public string name { get; set; }
-        public string screen_name { get; set; }
+
+		#region Properties (2) 
+
         //public string location { get; set; }
         //public string description { get; set; }
         public string profile_image_url { get; set; }
+
+        //public string id { get; set; }
+        //public string name { get; set; }
+        public string screen_name { get; set; }
+
+		#endregion Properties 
+
+		#region Methods (1) 
+
+
+		// Public Methods (1) 
+
         //public string url { get; set; }
         //[XmlElement("protected")]
         //public bool is_protected { get; set; }
         //public int followers_count { get; set; }
-
         public static User FromId(string ID)
         {
             Yedda.Twitter Twitter = new Yedda.Twitter();
@@ -134,7 +161,10 @@ namespace PockeTwit.Library
                 return (User)s.Deserialize(r);
             }
         }
-        
+
+
+		#endregion Methods 
+
     }
 
 }

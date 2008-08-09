@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
@@ -7,11 +7,17 @@ namespace PockeTwit
 {
     public static class ImageBuffer
     {
-        public delegate void ArtWasUpdated(string User);
-        public static event ArtWasUpdated Updated;
+
+		#region Fields (3) 
+
         public static Bitmap FavoriteImage;
-        public static Bitmap UnknownArt;
         private static Dictionary<string, Image> ImageDictionary = new Dictionary<string, Image>();
+        public static Bitmap UnknownArt;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         static ImageBuffer()
         {
             FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
@@ -23,20 +29,27 @@ namespace PockeTwit
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
         }
 
-        public static bool HasArt(string User)
-        {
-            if (ImageDictionary.ContainsKey(User))
-            {
-                return true;
-            }
-            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
-            if (System.IO.File.Exists(ArtPath))
-            {
-                LoadArt(User);
-                return true;
-            }
-            return false;
-        }
+		#endregion Constructors 
+
+		#region Delegates and Events (2) 
+
+
+		// Delegates (1) 
+
+        public delegate void ArtWasUpdated(string User);
+
+
+		// Events (1) 
+
+        public static event ArtWasUpdated Updated;
+
+
+		#endregion Delegates and Events 
+
+		#region Methods (6) 
+
+
+		// Public Methods (3) 
 
         public static Image GetArt(string User)
         {
@@ -67,6 +80,38 @@ namespace PockeTwit
                 }
             }
             return ImageDictionary[User];
+        }
+
+        public static bool HasArt(string User)
+        {
+            if (ImageDictionary.ContainsKey(User))
+            {
+                return true;
+            }
+            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            if (System.IO.File.Exists(ArtPath))
+            {
+                LoadArt(User);
+                return true;
+            }
+            return false;
+        }
+
+
+
+		// Private Methods (3) 
+
+        private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
+        {
+            if (System.IO.File.Exists(Filename))
+            {
+                Bitmap NewArt = new Bitmap(Filename);
+                ImageDictionary[User] = NewArt;
+                if (Updated != null)
+                {
+                    Updated(User);
+                }
+            }
         }
 
         private static bool LoadArt(string User)
@@ -107,17 +152,8 @@ namespace PockeTwit
             return bFound;
         }
 
-        private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
-        {
-            if (System.IO.File.Exists(Filename))
-            {
-                Bitmap NewArt = new Bitmap(Filename);
-                ImageDictionary[User] = NewArt;
-                if (Updated != null)
-                {
-                    Updated(User);
-                }
-            }
-        }
+
+		#endregion Methods 
+
     }
 }

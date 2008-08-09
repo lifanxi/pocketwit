@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +11,45 @@ namespace PockeTwit
 {
     public class Clickables
     {
+
+		#region Fields (2) 
+
+        private int _CurrentlyFocused = 0;
+        private List<string> TextItems = new List<string>(new string[]{"Exit"});
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        public Clickables()
+        {
+            
+        }
+
+		#endregion Constructors 
+
+		#region Properties (7) 
+
         public int Height { get; set; }
-        public int Width { get; set; }
-        public int Top { get; set; }
+
+        public List<FingerUI.StatusItem.Clickable> Items
+        {
+            set
+            {
+                TextItems = new List<string>();
+                foreach (FingerUI.StatusItem.Clickable c in value)
+                {
+                    if (!TextItems.Contains(c.Text))
+                    {
+                        TextItems.Add(c.Text);
+                    }
+                }
+                TextItems.Add("Exit");
+            }
+        }
+
         public int Left { get; set; }
-        public bool Visible { get; set; }
+
         public bool ShowClipped
         {
             set
@@ -36,30 +70,29 @@ namespace PockeTwit
                 }
             }
         }
+
+        public int Top { get; set; }
+
+        public bool Visible { get; set; }
+
+        public int Width { get; set; }
+
+		#endregion Properties 
+
+		#region Delegates and Events (1) 
+
+
+		// Events (1) 
+
         public event FingerUI.StatusItem.ClickedWordDelegate WordClicked;
 
 
-        public List<FingerUI.StatusItem.Clickable> Items
-        {
-            set
-            {
-                TextItems = new List<string>();
-                foreach (FingerUI.StatusItem.Clickable c in value)
-                {
-                    if (!TextItems.Contains(c.Text))
-                    {
-                        TextItems.Add(c.Text);
-                    }
-                }
-                TextItems.Add("Exit");
-            }
-        }
-        private List<string> TextItems = new List<string>(new string[]{"Exit"});
-        private int _CurrentlyFocused = 0;
-        public Clickables()
-        {
-            
-        }
+		#endregion Delegates and Events 
+
+		#region Methods (2) 
+
+
+		// Public Methods (2) 
 
         public void KeyDown(KeyEventArgs e)
         {
@@ -94,7 +127,7 @@ namespace PockeTwit
             }
             
         }
-        
+
         public void Render(Graphics g)
         {
             int ItemHeight = (ClientSettings.TextSize * 2);
@@ -136,5 +169,9 @@ namespace PockeTwit
             }
             g.Clip = originalClip;
         }
+
+
+		#endregion Methods 
+
     }
 }

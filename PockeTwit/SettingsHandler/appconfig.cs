@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Specialized;
 using System.Xml;
 using System.IO;
@@ -7,7 +7,16 @@ using System.Reflection;
 public class ConfigurationSettings
 {
 
+		#region Fields (1) 
+
     public static NameValueCollection AppSettings;
+
+		#endregion Fields 
+
+		#region Methods (2) 
+
+
+		// Public Methods (2) 
 
     public static void LoadConfig()
     {
@@ -66,5 +75,8 @@ public class ConfigurationSettings
         {
         }
     }
+
+
+		#endregion Methods 
 
 }
