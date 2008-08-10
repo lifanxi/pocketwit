@@ -37,6 +37,11 @@ namespace Yedda
                 Account otherAccount = (Account)obj;
                 return (otherAccount.UserName == this.UserName && otherAccount.Server == this.Server);
             }
+
+            public override string ToString()
+            {
+                return Server.ToString() + "-" + UserName;
+            }
         }
 
 
@@ -105,7 +110,7 @@ namespace Yedda
         private string twitterClientVersion = "0.9";
         private string twitterClientUrl = "http://code.google.com/p/pocketwit";
         
-        public int MaxTweets = 200;
+        public int MaxTweets = 50;
 
         private TwitterServer _CurrentServer = TwitterServer.twitter;
 

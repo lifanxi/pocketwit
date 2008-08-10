@@ -18,7 +18,6 @@ namespace PockeTwit
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
-            FillServerList();
             PopulateForm();
         }
 
@@ -35,11 +34,7 @@ namespace PockeTwit
 
 		// Private Methods (4) 
 
-        private void FillServerList()
-        {
-            cmbServers.Items.Add("twitter");
-            cmbServers.Items.Add("identica");
-        }
+        
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
@@ -64,37 +59,16 @@ namespace PockeTwit
                 Cursor.Current = Cursors.Default;
                 return;
             }
-            Yedda.Twitter twitter = new Yedda.Twitter();
-            Yedda.Twitter.TwitterServer SelectedServer = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
-            twitter.AccountInfo.Server = SelectedServer;
-            /*
-            if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
-            {
-                lblError.Text = "Unable to verify username and password";
-                lblError.Visible = true;
-                Cursor.Current = Cursors.Default;
-                return;
-            }
-            else
-            {
-                NeedsReset = ClientSettings.UserName!=txtUserName.Text |
-                             ClientSettings.Server != SelectedServer | 
-                             ClientSettings.MaxTweets != MaxTweets;
-
-                ClientSettings.UserName = txtUserName.Text;
-                ClientSettings.Password = txtPassword.Text;
-                 */
-                ClientSettings.CheckVersion = chkVersion.Checked;
-                ClientSettings.BeepOnNew = chkBeep.Checked;
-                //ClientSettings.Server = SelectedServer;
-                ClientSettings.MaxTweets = MaxTweets;
-                ClientSettings.ShowReplyImages = chkReplyImages.Checked;
-                ClientSettings.SaveSettings();
-                
-                //Following.Reset();
-                Cursor.Current = Cursors.Default;
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+            if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
+            ClientSettings.CheckVersion = chkVersion.Checked;
+            ClientSettings.BeepOnNew = chkBeep.Checked;
+            ClientSettings.MaxTweets = MaxTweets;
+            ClientSettings.ShowReplyImages = chkReplyImages.Checked;
+            ClientSettings.SaveSettings();
+            
+            Cursor.Current = Cursors.Default;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
 
         }
 
@@ -106,28 +80,24 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
-            //txtUserName.Text = ClientSettings.UserName;
-            //txtPassword.Text = ClientSettings.Password;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkBeep.Checked = ClientSettings.BeepOnNew;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkReplyImages.Checked = ClientSettings.ShowReplyImages;
-            /*
-            switch (ClientSettings.Server)
-            {
-                case Yedda.Twitter.TwitterServer.twitter:
-                    cmbServers.SelectedItem = "twitter";
-                    break;
-                case Yedda.Twitter.TwitterServer.identica:
-                    cmbServers.SelectedItem = "identica";
-                    break;
-            }
-             */
             this.DialogResult = DialogResult.Cancel;
         }
 
 
 		#endregion Methods 
+
+        private void btnAccounts_Click(object sender, EventArgs e)
+        {
+            AccountsForm af = new AccountsForm();
+            if (af.ShowDialog() == DialogResult.OK)
+            {
+                NeedsReset = true;
+            }
+        }
 
     }
 }

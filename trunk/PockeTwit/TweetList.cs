@@ -24,6 +24,7 @@ namespace PockeTwit
         private string LastStatusID = "";
         private List<string> LeftMenu;
         private List<string> RightMenu;
+        private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private string ShowUserID;
@@ -317,22 +318,29 @@ namespace PockeTwit
                     {
                         string s = r.ReadToEnd();
                         CurrentStatuses = Library.status.Deserialize(s);
+                        if (CurrentStatuses == null) { return; }
                     }
                     LastStatusID = CurrentStatuses[0].id;
-                }
-                if (CurrentStatuses[0].Account == null)
-                {
-                    foreach(Library.status s in CurrentStatuses)
+
+                    if (CurrentStatuses[0].Account == null)
                     {
-                        s.Account = ClientSettings.AccountsList[0];
+                        foreach (Library.status s in CurrentStatuses)
+                        {
+                            s.Account = ClientSettings.AccountsList[0];
+                        }
                     }
+                    AddStatusesToList(CurrentStatuses, 0);
                 }
-                AddStatusesToList(CurrentStatuses, 0);
             }
         }
 
         private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses)
         {
+            TimeLine t = new TimeLine(CurrentStatuses);
+            t.MergeIn(new TimeLine(newstatuses));
+            LastStatusID = t[0].id;
+            return t.ToArray();
+            /*
             if (CurrentStatuses == null)
             {
                 return newstatuses;
@@ -360,6 +368,7 @@ namespace PockeTwit
             }
             LastStatusID = MergedList[0].id;
             return MergedList;
+             */
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
@@ -481,6 +490,8 @@ namespace PockeTwit
                 Following f = new Following(TwitterConn);
                 FollowingDictionary.Add(TwitterConn,f);
             }
+            
+            CurrentlySelectedAccount = ClientSettings.AccountsList[0];
 
             
             if (ClientSettings.CheckVersion)
@@ -522,6 +533,7 @@ namespace PockeTwit
         {
 
             SetStatus StatusForm = new SetStatus();
+            StatusForm.AccountToSet = CurrentlySelectedAccount;
             this.statList.Visible = false;
             if (!string.IsNullOrEmpty(ToUser))
             {
@@ -535,7 +547,7 @@ namespace PockeTwit
                 if (UpdateText != "Set Status")
                 {
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
-                    if (t.AllowTwitPic)
+                    if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
                         Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
                     }
@@ -674,6 +686,9 @@ namespace PockeTwit
 
         void statusList_SelectedItemChanged(object sender, EventArgs e)
         {
+            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (statItem == null) { return; }
+            CurrentlySelectedAccount = statItem.Tweet.Account;
             UpdateRightMenu();
         }
 

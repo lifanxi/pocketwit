@@ -20,11 +20,13 @@ namespace PockeTwit.Library
 
         public string favorited { get; set; }
 
+
+
         private DateTime createdAt
         {
             get
             {
-                return DateTime.Parse(created_at);
+                return DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", null);
             }
         }
         public string created_at { get; set; }
