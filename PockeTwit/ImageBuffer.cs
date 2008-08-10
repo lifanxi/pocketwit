@@ -72,7 +72,7 @@ namespace PockeTwit
                     {
                         System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
                         Library.User newUser = null;
-                        foreach (ClientSettings.Account Account in ClientSettings.AccountsList)
+                        foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
                         {
                             newUser = Library.User.FromId(User, Account);
                             if (newUser != null) { break; }

@@ -26,6 +26,20 @@ namespace Yedda
 {
     public class Twitter
     {
+        public class Account
+        {
+            public string UserName { get; set; }
+            public string Password { get; set; }
+            public Yedda.Twitter.TwitterServer Server { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                Account otherAccount = (Account)obj;
+                return (otherAccount.UserName == this.UserName && otherAccount.Server == this.Server);
+            }
+        }
+
+
         public enum TwitterServer
         {
             twitter,
@@ -94,33 +108,29 @@ namespace Yedda
         public int MaxTweets = 200;
 
         private TwitterServer _CurrentServer = TwitterServer.twitter;
-        public TwitterServer CurrentServer {
-            get { return _CurrentServer; }
-            set { _CurrentServer = value; }
-        }
-
-        public string userName { get; set; }
-        public string password { get; set; }
+        
+        
+        public Account AccountInfo { get; set; }
 
         public bool BigTimeLines
         {
             get
             {
-                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+                return AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter; 
             }
         }
         public bool FavoritesWork
         {
             get
             {
-                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+                return AccountInfo.Server== Yedda.Twitter.TwitterServer.twitter; 
             }
         }
         public bool DirectMessagesWork
         {
             get
             {
-                return CurrentServer == Yedda.Twitter.TwitterServer.twitter; 
+                return AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter; 
             }
 
         }
@@ -128,7 +138,7 @@ namespace Yedda
         {
             get
             {
-                return CurrentServer == Yedda.Twitter.TwitterServer.twitter;
+                return AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter;
             }
 
         }
@@ -191,7 +201,7 @@ namespace Yedda
 
         public string GetProfileURL(string User)
         {
-            switch (this.CurrentServer)
+            switch (AccountInfo.Server)
             {
                 case TwitterServer.twitter:
                     return "http://twitter.com/"+User;
@@ -236,9 +246,9 @@ namespace Yedda
         {
             HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
             client.Timeout = 20000;
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(AccountInfo.UserName) && !string.IsNullOrEmpty(AccountInfo.Password))
             {
-                client.Credentials = new NetworkCredential(userName, password);
+                client.Credentials = new NetworkCredential(AccountInfo.UserName, AccountInfo.Password);
             }
             client.PreAuthenticate = true;
 
@@ -314,15 +324,15 @@ namespace Yedda
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(AccountInfo.UserName) && !string.IsNullOrEmpty(AccountInfo.Password))
             {
-                request.Credentials = new NetworkCredential(userName, password);
+                request.Credentials = new NetworkCredential(AccountInfo.UserName, AccountInfo.Password);
                 request.PreAuthenticate = true;
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
                 request.Timeout = 20000;
 
-                request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(userName + ":" + password))); 
+                request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(AccountInfo.UserName + ":" + AccountInfo.Password))); 
 
                 if (!string.IsNullOrEmpty(TwitterClient))
                 {
@@ -406,7 +416,7 @@ namespace Yedda
 
         public string GetPublicTimeline(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Public_Timeline), GetFormatTypeString(format),GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Public_Timeline), GetFormatTypeString(format),GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -458,11 +468,11 @@ namespace Yedda
             string url = null;
             if (string.IsNullOrEmpty(IDorScreenName))
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             }
             else
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             }
 
             return ExecuteGetCommand(url);
@@ -541,18 +551,18 @@ namespace Yedda
         #region Friends_Timeline
         public string GetFriendsTimeLineMax(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer))+"?count="+MaxTweets;
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(AccountInfo.Server))+"?count="+MaxTweets;
             return ExecuteGetCommand(url);
         }
         public string GetFriendsTimeLineSince(OutputFormatType format, string SinceID)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer)) + "?since_id=" + SinceID;
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(AccountInfo.Server)) + "?since_id=" + SinceID;
             return ExecuteGetCommand(url);
         }
 
         public string GetFriendsTimeline(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -600,7 +610,7 @@ namespace Yedda
         #region Replies
         public string GetRepliesTimeLine(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -615,7 +625,7 @@ namespace Yedda
                 throw new ArgumentException("GetFriends support only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -629,11 +639,11 @@ namespace Yedda
             string url = null;
             if (string.IsNullOrEmpty(IDorScreenName))
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(CurrentServer));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             }
             else
             {
-                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             }
 
             return ExecuteGetCommand(url);
@@ -679,7 +689,7 @@ namespace Yedda
                 throw new ArgumentException("GetFollowers supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Followers), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Followers), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -713,7 +723,7 @@ namespace Yedda
                 throw new ArgumentException("Update support only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             string data = string.Format("status={0}", HttpUtility.UrlEncode(status));
 
             return ExecutePostCommand(url, data);
@@ -749,7 +759,7 @@ namespace Yedda
                 throw new ArgumentException("GetFeatured supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Featured), GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Featured), GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -783,7 +793,7 @@ namespace Yedda
                 throw new ArgumentException("Show supports only XML and JSON output format", "format");
             }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
 
@@ -811,17 +821,17 @@ namespace Yedda
         #region Favorites
         public string SetFavorite(string IDofMessage)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage, GetServerString(CurrentServer));
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage, GetServerString(AccountInfo.Server));
             return ExecutePostCommand(url, "");
         }
         public string DestroyFavorite(string IDofMessage)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage,GetServerString(CurrentServer));
+            string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage,GetServerString(AccountInfo.Server));
             return ExecutePostCommand(url, "");
         }
         public string GetFavorites()
         {
-            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites),GetServerString(CurrentServer));
+            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites),GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
         #endregion
@@ -829,13 +839,13 @@ namespace Yedda
         #region Follow
         public string FollowUser(string IDofUserToFollow)
         {
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Create), IDofUserToFollow,GetServerString(CurrentServer));
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Create), IDofUserToFollow,GetServerString(AccountInfo.Server));
             return ExecutePostCommand(url, "");
         }
         public string StopFollowingUser(string IDofUserToFollow)
         {
             
-            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Destroy), IDofUserToFollow,GetServerString(CurrentServer));
+            string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Destroy), IDofUserToFollow,GetServerString(AccountInfo.Server));
             return ExecutePostCommand(url, "");
         }
         #endregion
@@ -843,7 +853,7 @@ namespace Yedda
         #region Verify
         public bool Verify()
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), GetServerString(CurrentServer));
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), GetServerString(AccountInfo.Server));
             try
             {
                 string Response = ExecuteGetCommand(url);
@@ -860,7 +870,7 @@ namespace Yedda
         #region Search
         public string SearchFor(string textToSearch)
         {
-            string url = string.Format(TwitterSearchUrlFormat, textToSearch, GetServerString(CurrentServer));
+            string url = string.Format(TwitterSearchUrlFormat, textToSearch, GetServerString(AccountInfo.Server));
             return ExecuteGetCommand(url);
         }
         #endregion

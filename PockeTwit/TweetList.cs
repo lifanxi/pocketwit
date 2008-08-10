@@ -76,7 +76,7 @@ namespace PockeTwit
 
 		//�Private�Methods�(38)�
 
-        private Yedda.Twitter GetMatchingConnection(ClientSettings.Account AccountInfo)
+        private Yedda.Twitter GetMatchingConnection(Yedda.Twitter.Account AccountInfo)
         {
             if (AccountInfo == null)
             {
@@ -84,8 +84,7 @@ namespace PockeTwit
             }
             foreach (Yedda.Twitter conn in TwitterConnections)
             {
-                if (conn.userName == AccountInfo.UserName &&
-                    conn.CurrentServer == AccountInfo.Server)
+                if (conn.AccountInfo== AccountInfo)
                 {
                     return conn;
                 }
@@ -157,7 +156,7 @@ namespace PockeTwit
             
         }
 
-        private void CreateFavorite(string ID, ClientSettings.Account AccountInfo)
+        private void CreateFavorite(string ID, Yedda.Twitter.Account AccountInfo)
         {
             GetMatchingConnection(AccountInfo).SetFavorite(ID);
             UpdateRightMenu();
@@ -167,7 +166,7 @@ namespace PockeTwit
         private void CreateFavoriteAsync()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            ClientSettings.Account ChosenAccount = selectedItem.Tweet.Account;
+            Yedda.Twitter.Account ChosenAccount = selectedItem.Tweet.Account;
             if (selectedItem == null) { return; }
             ChangeCursor(Cursors.WaitCursor);
             selectedItem.isFavorite = true;
@@ -268,30 +267,25 @@ namespace PockeTwit
                     Library.status[] newstatuses;
                     if (CurrentAction == Yedda.Twitter.ActionType.Search)
                     {
-                        newstatuses = Library.status.DeserializeFromAtom(response);
+                        newstatuses = Library.status.DeserializeFromAtom(response, t.AccountInfo);
                     }
                     else
                     {
-                        newstatuses = Library.status.Deserialize(response);
+                        newstatuses = Library.status.Deserialize(response, t.AccountInfo);
                     }
                     if (newstatuses.Length > 0)
                     {
                         Library.status[] mergedstatuses = null;
-                        if (!t.BigTimeLines)
+                        
+                        if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                         {
-                            mergedstatuses = newstatuses;
+                            mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
                         }
                         else
                         {
-                            if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
-                            {
-                                mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
-                            }
-                            else
-                            {
-                                mergedstatuses = newstatuses;
-                            }
+                            mergedstatuses = newstatuses;
                         }
+                        
 
                         AddStatusesToList(mergedstatuses, newstatuses.Length);
                         if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
@@ -314,7 +308,7 @@ namespace PockeTwit
 
         private void LoadCachedtimeline()
         {
-            foreach (ClientSettings.Account a in ClientSettings.AccountsList)
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 string cachePath = ClientSettings.AppPath + "\\" + a.UserName+ a.Server.ToString() + "FriendsTime.xml";
                 if (System.IO.File.Exists(cachePath))
@@ -414,7 +408,7 @@ namespace PockeTwit
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses, Yedda.Twitter t)
         {
             string StatusString = Library.status.Serialize(mergedstatuses);
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.userName +t.CurrentServer.ToString()+ "FriendsTime.xml"))
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
             }
@@ -477,12 +471,12 @@ namespace PockeTwit
                     return;
                 }
             }
-            foreach (ClientSettings.Account a in ClientSettings.AccountsList)
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 Yedda.Twitter TwitterConn = new Yedda.Twitter();
-                TwitterConn.CurrentServer = a.Server;
-                TwitterConn.userName = a.UserName;
-                TwitterConn.password = a.Password;
+                TwitterConn.AccountInfo.Server = a.Server;
+                TwitterConn.AccountInfo.UserName = a.UserName;
+                TwitterConn.AccountInfo.Password = a.Password;
                 TwitterConnections.Add(TwitterConn);
                 Following f = new Following(TwitterConn);
                 FollowingDictionary.Add(TwitterConn,f);
