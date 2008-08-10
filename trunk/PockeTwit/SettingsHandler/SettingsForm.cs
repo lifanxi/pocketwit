@@ -66,7 +66,7 @@ namespace PockeTwit
             }
             Yedda.Twitter twitter = new Yedda.Twitter();
             Yedda.Twitter.TwitterServer SelectedServer = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
-            twitter.CurrentServer = SelectedServer;
+            twitter.AccountInfo.Server = SelectedServer;
             /*
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {

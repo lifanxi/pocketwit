@@ -42,7 +42,7 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
-        public ClientSettings.Account Account { get; set; }
+        public Yedda.Twitter.Account Account { get; set; }
 
 		#endregion Properties 
 
@@ -52,6 +52,10 @@ namespace PockeTwit.Library
 		// Public Methods (3) 
 
         public static status[] Deserialize(string response)
+        {
+            return Deserialize(response, null);
+        }
+        public static status[] Deserialize(string response, Yedda.Twitter.Account Account)
         {
             
             XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
@@ -64,14 +68,21 @@ namespace PockeTwit.Library
             {
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
                 {
-                        statuses = (Library.status[])s.Deserialize(r);
-                    
+                        statuses = (Library.status[])s.Deserialize(r);                    
                 }
+            }
+            foreach (Library.status stat in statuses)
+            {
+                stat.Account = Account;
             }
             return statuses;
         }
 
         public static status[] DeserializeFromAtom(string response)
+        {
+            return Deserialize(response, null);
+        }
+        public static status[] DeserializeFromAtom(string response, Yedda.Twitter.Account Account)
         {
             List<status> resultList = new List<status>();
             
@@ -96,6 +107,10 @@ namespace PockeTwit.Library
                 
                 resultList.Add(newStat);
                 
+            }
+            foreach (status stat in resultList)
+            {
+                stat.Account = Account;
             }
             return resultList.ToArray();
 
@@ -154,12 +169,10 @@ namespace PockeTwit.Library
         //[XmlElement("protected")]
         //public bool is_protected { get; set; }
         //public int followers_count { get; set; }
-        public static User FromId(string ID, ClientSettings.Account Account)
+        public static User FromId(string ID, Yedda.Twitter.Account Account)
         {
             Yedda.Twitter t = new Yedda.Twitter();
-            t.userName = Account.UserName;
-            t.password = Account.Password;
-            t.CurrentServer = Account.Server;
+            t.AccountInfo = Account;
             string Response = null;
             try
             {

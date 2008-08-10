@@ -10,7 +10,7 @@ public class ConfigurationSettings
 		#region Fields (1) 
 
     public static NameValueCollection AppSettings;
-    public static System.Collections.Generic.List<ClientSettings.Account> Accounts;
+    public static System.Collections.Generic.List<Yedda.Twitter.Account> Accounts;
 		#endregion Fields 
 
 		#region Methods (2) 
@@ -27,7 +27,7 @@ public class ConfigurationSettings
 
             XmlDocument oXml = new XmlDocument();
             AppSettings = new NameValueCollection();
-            Accounts = new System.Collections.Generic.List<ClientSettings.Account>();
+            Accounts = new System.Collections.Generic.List<Yedda.Twitter.Account>();
 
             if (File.Exists(ConfigFile))
             {
@@ -41,7 +41,7 @@ public class ConfigurationSettings
                 oList = oXml.SelectNodes("//accounts/add");
                 foreach (XmlNode oNode in oList)
                 {
-                    ClientSettings.Account a = new ClientSettings.Account();
+                    Yedda.Twitter.Account a = new Yedda.Twitter.Account();
                     a.UserName = oNode.Attributes["user"].Value;
                     a.Password = oNode.Attributes["password"].Value;
                     a.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), ConfigurationSettings.AppSettings["Server"], true);
@@ -77,7 +77,7 @@ public class ConfigurationSettings
             }
 
             XmlNode AccountsNode = oXml.CreateNode(XmlNodeType.Element, "accounts", "");
-            foreach (ClientSettings.Account Account in Accounts)
+            foreach (Yedda.Twitter.Account Account in Accounts)
             {
                 XmlNode AccountNode = oXml.CreateNode(XmlNodeType.Element, "add", "");
                 XmlAttribute userAtt = oXml.CreateAttribute("user");

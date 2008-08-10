@@ -4,12 +4,6 @@ using System.Text;
 using System.Reflection;
 public static class ClientSettings
 {
-    public class Account
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public Yedda.Twitter.TwitterServer Server { get; set; }
-    }
 
 
 		#region Fields (13) 
@@ -68,7 +62,7 @@ public static class ClientSettings
 
     //public static string UserName { get; set; }
 
-    public static List<Account> AccountsList { get; set; }
+    public static List<Yedda.Twitter.Account> AccountsList { get; set; }
 		#endregion Properties 
 
 		#region Methods (4) 
@@ -80,8 +74,8 @@ public static class ClientSettings
     {
         ConfigurationSettings.LoadConfig();
 
-        AccountsList = new List<Account>();
-        Account LegacySettingsAccount = new Account();
+        AccountsList = new List<Yedda.Twitter.Account>();
+        Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UserName"]))
@@ -152,7 +146,7 @@ public static class ClientSettings
                 AccountsList.Add(LegacySettingsAccount);
             }
 
-            foreach (Account a in ConfigurationSettings.Accounts)
+            foreach (Yedda.Twitter.Account a in ConfigurationSettings.Accounts)
             {
                 AccountsList.Add(a);
             }
