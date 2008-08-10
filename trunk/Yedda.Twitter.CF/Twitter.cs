@@ -108,9 +108,13 @@ namespace Yedda
         public int MaxTweets = 200;
 
         private TwitterServer _CurrentServer = TwitterServer.twitter;
-        
-        
-        public Account AccountInfo { get; set; }
+
+        private Account _AccountInfo = new Account();
+        public Account AccountInfo 
+        {
+            get { return _AccountInfo; }
+            set { _AccountInfo = value; }
+        }
 
         public bool BigTimeLines
         {
