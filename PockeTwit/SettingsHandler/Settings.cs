@@ -163,6 +163,15 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
+        if (ConfigurationSettings.AppSettings["UserName"] != null)
+        {
+            ConfigurationSettings.AppSettings.Remove("UserName");
+        }
+        if (ConfigurationSettings.AppSettings["Password"] != null)
+        {
+            ConfigurationSettings.AppSettings.Remove("Password");
+        }
+
         ConfigurationSettings.Accounts = AccountsList;
         ConfigurationSettings.SaveConfig();
     }

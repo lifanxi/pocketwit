@@ -44,7 +44,7 @@ public class ConfigurationSettings
                     Yedda.Twitter.Account a = new Yedda.Twitter.Account();
                     a.UserName = oNode.Attributes["user"].Value;
                     a.Password = oNode.Attributes["password"].Value;
-                    a.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), ConfigurationSettings.AppSettings["Server"], true);
+                    a.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), oNode.Attributes["server"].Value, true);
                     Accounts.Add(a);
                 }
             }
