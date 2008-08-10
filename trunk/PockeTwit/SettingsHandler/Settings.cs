@@ -151,7 +151,8 @@ public static class ClientSettings
                 AccountsList.Add(a);
             }
         }
-        catch{}
+        catch(Exception e)
+        {}
         
     }
 

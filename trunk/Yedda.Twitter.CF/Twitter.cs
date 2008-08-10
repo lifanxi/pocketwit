@@ -31,6 +31,18 @@ namespace Yedda
             public string UserName { get; set; }
             public string Password { get; set; }
             public Yedda.Twitter.TwitterServer Server { get; set; }
+            private bool _Enabled = true;
+            public bool Enabled 
+            {
+                get
+                {
+                    return _Enabled;
+                }
+                set
+                {
+                    _Enabled = value;
+                }
+            }
 
             public override bool Equals(object obj)
             {
@@ -40,7 +52,10 @@ namespace Yedda
 
             public override string ToString()
             {
-                return Server.ToString() + "-" + UserName;
+                string Indicator;
+                if (Enabled) { Indicator = "+"; }
+                else { Indicator = "-"; }
+                return Indicator + "  "+ Server.ToString() + "-" + UserName;
             }
         }
 

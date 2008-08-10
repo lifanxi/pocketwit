@@ -37,6 +37,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.btnToggle = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -63,8 +64,9 @@
             this.lstAccounts.ForeColor = System.Drawing.Color.LightGray;
             this.lstAccounts.Location = new System.Drawing.Point(4, 32);
             this.lstAccounts.Name = "lstAccounts";
-            this.lstAccounts.Size = new System.Drawing.Size(193, 226);
+            this.lstAccounts.Size = new System.Drawing.Size(173, 226);
             this.lstAccounts.TabIndex = 0;
+            this.lstAccounts.SelectedIndexChanged += new System.EventHandler(this.lstAccounts_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -80,9 +82,9 @@
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.BackColor = System.Drawing.Color.DimGray;
             this.btnAdd.ForeColor = System.Drawing.Color.LightGray;
-            this.btnAdd.Location = new System.Drawing.Point(203, 32);
+            this.btnAdd.Location = new System.Drawing.Point(183, 32);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(34, 20);
+            this.btnAdd.Size = new System.Drawing.Size(54, 20);
             this.btnAdd.TabIndex = 2;
             this.btnAdd.Text = "+";
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -92,9 +94,9 @@
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEdit.BackColor = System.Drawing.Color.DimGray;
             this.btnEdit.ForeColor = System.Drawing.Color.LightGray;
-            this.btnEdit.Location = new System.Drawing.Point(203, 84);
+            this.btnEdit.Location = new System.Drawing.Point(183, 132);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(34, 42);
+            this.btnEdit.Size = new System.Drawing.Size(54, 42);
             this.btnEdit.TabIndex = 3;
             this.btnEdit.Text = "Edit";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -104,12 +106,24 @@
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemove.BackColor = System.Drawing.Color.DimGray;
             this.btnRemove.ForeColor = System.Drawing.Color.LightGray;
-            this.btnRemove.Location = new System.Drawing.Point(203, 58);
+            this.btnRemove.Location = new System.Drawing.Point(183, 58);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(34, 20);
+            this.btnRemove.Size = new System.Drawing.Size(54, 20);
             this.btnRemove.TabIndex = 4;
             this.btnRemove.Text = "-";
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // btnToggle
+            // 
+            this.btnToggle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnToggle.BackColor = System.Drawing.Color.DimGray;
+            this.btnToggle.ForeColor = System.Drawing.Color.LightGray;
+            this.btnToggle.Location = new System.Drawing.Point(183, 84);
+            this.btnToggle.Name = "btnToggle";
+            this.btnToggle.Size = new System.Drawing.Size(54, 42);
+            this.btnToggle.TabIndex = 6;
+            this.btnToggle.Text = "Toggle";
+            this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
             // 
             // AccountsForm
             // 
@@ -118,6 +132,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.btnToggle);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
@@ -140,5 +155,6 @@
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuAccept;
         private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Button btnToggle;
     }
 }

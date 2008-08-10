@@ -11,6 +11,7 @@ namespace PockeTwit
 {
     public partial class AccountsForm : Form
     {
+        public bool IsDirty = false;
         public AccountsForm()
         {
             InitializeComponent();
@@ -18,6 +19,7 @@ namespace PockeTwit
         }
         private void ListAccounts()
         {
+            lstAccounts.Items.Clear();
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 lstAccounts.Items.Add(a);
@@ -31,6 +33,7 @@ namespace PockeTwit
             if (ai.ShowDialog() == DialogResult.OK)
             {
                 lstAccounts.Items.Add(ai.AccountInfo);
+                IsDirty = true;
             }
             ai.Close();
         }
@@ -42,6 +45,7 @@ namespace PockeTwit
             {
                 ClientSettings.AccountsList.Remove(a);
                 lstAccounts.Items.Remove(a);
+                IsDirty = true;
             }
         }
 
@@ -60,16 +64,32 @@ namespace PockeTwit
         private void menuAccept_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
-            ClientSettings.AccountsList.Clear();
-            foreach (Yedda.Twitter.Account a in lstAccounts.Items)
+            if (IsDirty)
             {
-                ClientSettings.AccountsList.Add(a);
+                ClientSettings.AccountsList.Clear();
+                foreach (Yedda.Twitter.Account a in lstAccounts.Items)
+                {
+                    ClientSettings.AccountsList.Add(a);
+                }
             }
         }
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void lstAccounts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnToggle_Click(object sender, EventArgs e)
+        {
+            Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
+            a.Enabled = !a.Enabled;
+            ListAccounts();
+            IsDirty = true;
         }
     }
 }
