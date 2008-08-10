@@ -2,8 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
-static class ClientSettings
+public static class ClientSettings
 {
+    public class Account
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public Yedda.Twitter.TwitterServer Server { get; set; }
+    }
+
 
 		#region Fields (13) 
 
@@ -40,9 +47,9 @@ static class ClientSettings
 
     public static bool CheckVersion { get; set; }
 
-    public static string Password { get; set; }
+    //public static string Password { get; set; }
 
-    public static Yedda.Twitter.TwitterServer Server { get; set; }
+    //public static Yedda.Twitter.TwitterServer Server { get; set; }
 
     public static bool ShowReplyImages { get; set; }
 
@@ -59,8 +66,9 @@ static class ClientSettings
         }
     }
 
-    public static string UserName { get; set; }
+    //public static string UserName { get; set; }
 
+    public static List<Account> AccountsList { get; set; }
 		#endregion Properties 
 
 		#region Methods (4) 
@@ -72,15 +80,17 @@ static class ClientSettings
     {
         ConfigurationSettings.LoadConfig();
 
+        AccountsList = new List<Account>();
+        Account LegacySettingsAccount = new Account();
         try
         {
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UserName"]))
             {
-                UserName = ConfigurationSettings.AppSettings["UserName"];
+                LegacySettingsAccount.UserName = ConfigurationSettings.AppSettings["UserName"];
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["Password"]))
             {
-                Password = ConfigurationSettings.AppSettings["Password"];
+                LegacySettingsAccount.Password = ConfigurationSettings.AppSettings["Password"];
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CheckVersion"]))
             {
@@ -102,11 +112,7 @@ static class ClientSettings
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["Server"]))
             {
-                Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer),ConfigurationSettings.AppSettings["Server"],true);
-            }
-            else
-            {
-                Server = Yedda.Twitter.TwitterServer.twitter;
+                LegacySettingsAccount.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), ConfigurationSettings.AppSettings["Server"], true);
             }
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AnimationInterval"]))
@@ -141,7 +147,15 @@ static class ClientSettings
             {
                 ShowReplyImages = false;
             }
+            if (!string.IsNullOrEmpty(LegacySettingsAccount.UserName))
+            {
+                AccountsList.Add(LegacySettingsAccount);
+            }
 
+            foreach (Account a in ConfigurationSettings.Accounts)
+            {
+                AccountsList.Add(a);
+            }
         }
         catch{}
         
@@ -149,15 +163,13 @@ static class ClientSettings
 
     public static void SaveSettings()
     {
-        ConfigurationSettings.AppSettings["UserName"] = UserName;
-        ConfigurationSettings.AppSettings["Password"] = Password;
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString() ;
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
-        ConfigurationSettings.AppSettings["Server"] = Server.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
+        ConfigurationSettings.Accounts = AccountsList;
         ConfigurationSettings.SaveConfig();
     }
 

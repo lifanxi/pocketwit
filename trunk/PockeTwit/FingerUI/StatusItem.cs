@@ -82,14 +82,6 @@ namespace FingerUI
         /// <value>The Y.</value>
         public int Index { get { return m_y; } set { m_y = value; } }
 
-        public bool isBeingFollowed
-        {
-            get
-            {
-                return (PockeTwit.Following.IsFollowing(Tweet.user));
-            }
-        }
-
         public bool isFavorite
         {
             get 
@@ -303,7 +295,7 @@ namespace FingerUI
                 {
                     if (ReplyUser == null)
                     {
-                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo);
+                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo, this.Tweet.Account);
                     }
                     if (ReplyUser != null)
                     {

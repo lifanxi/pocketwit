@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace PockeTwit.Library
 {
+    
     [Serializable]
     public class status : IComparable
     {
@@ -40,6 +41,8 @@ namespace PockeTwit.Library
         public string text { get; set; }
 
         public User user { get; set; }
+
+        public ClientSettings.Account Account { get; set; }
 
 		#endregion Properties 
 
@@ -151,14 +154,16 @@ namespace PockeTwit.Library
         //[XmlElement("protected")]
         //public bool is_protected { get; set; }
         //public int followers_count { get; set; }
-        public static User FromId(string ID)
+        public static User FromId(string ID, ClientSettings.Account Account)
         {
-            Yedda.Twitter Twitter = new Yedda.Twitter();
-            Twitter.CurrentServer = ClientSettings.Server;
+            Yedda.Twitter t = new Yedda.Twitter();
+            t.userName = Account.UserName;
+            t.password = Account.Password;
+            t.CurrentServer = Account.Server;
             string Response = null;
             try
             {
-                Response = Twitter.Show(ClientSettings.UserName, ClientSettings.Password, ID, Yedda.Twitter.OutputFormatType.XML);
+                Response = t.Show(ID, Yedda.Twitter.OutputFormatType.XML);
             }
             catch
             {

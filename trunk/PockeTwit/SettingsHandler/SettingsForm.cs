@@ -67,6 +67,7 @@ namespace PockeTwit
             Yedda.Twitter twitter = new Yedda.Twitter();
             Yedda.Twitter.TwitterServer SelectedServer = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
             twitter.CurrentServer = SelectedServer;
+            /*
             if (!twitter.Verify(txtUserName.Text, txtPassword.Text))
             {
                 lblError.Text = "Unable to verify username and password";
@@ -82,18 +83,18 @@ namespace PockeTwit
 
                 ClientSettings.UserName = txtUserName.Text;
                 ClientSettings.Password = txtPassword.Text;
+                 */
                 ClientSettings.CheckVersion = chkVersion.Checked;
                 ClientSettings.BeepOnNew = chkBeep.Checked;
-                ClientSettings.Server = SelectedServer;
+                //ClientSettings.Server = SelectedServer;
                 ClientSettings.MaxTweets = MaxTweets;
                 ClientSettings.ShowReplyImages = chkReplyImages.Checked;
                 ClientSettings.SaveSettings();
                 
-                Following.Reset();
+                //Following.Reset();
                 Cursor.Current = Cursors.Default;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
-            }
 
         }
 
@@ -105,12 +106,13 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
-            txtUserName.Text = ClientSettings.UserName;
-            txtPassword.Text = ClientSettings.Password;
+            //txtUserName.Text = ClientSettings.UserName;
+            //txtPassword.Text = ClientSettings.Password;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkBeep.Checked = ClientSettings.BeepOnNew;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkReplyImages.Checked = ClientSettings.ShowReplyImages;
+            /*
             switch (ClientSettings.Server)
             {
                 case Yedda.Twitter.TwitterServer.twitter:
@@ -120,6 +122,7 @@ namespace PockeTwit
                     cmbServers.SelectedItem = "identica";
                     break;
             }
+             */
             this.DialogResult = DialogResult.Cancel;
         }
 

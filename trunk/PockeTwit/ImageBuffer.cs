@@ -71,7 +71,12 @@ namespace PockeTwit
                     if (string.IsNullOrEmpty(URL))
                     {
                         System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
-                        Library.User newUser = Library.User.FromId(User);
+                        Library.User newUser = null;
+                        foreach (ClientSettings.Account Account in ClientSettings.AccountsList)
+                        {
+                            newUser = Library.User.FromId(User, Account);
+                            if (newUser != null) { break; }
+                        }
                         if (newUser == null) { return UnknownArt; }
                         URL = newUser.profile_image_url;
                         LoadArt(User, URL);
