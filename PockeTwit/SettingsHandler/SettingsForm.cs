@@ -93,10 +93,12 @@ namespace PockeTwit
         private void btnAccounts_Click(object sender, EventArgs e)
         {
             AccountsForm af = new AccountsForm();
-            if (af.ShowDialog() == DialogResult.OK)
+            af.ShowDialog();
+            if (af.IsDirty)
             {
                 NeedsReset = true;
             }
+            af.Close();
         }
 
     }

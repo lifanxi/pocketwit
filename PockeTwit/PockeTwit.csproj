@@ -99,7 +99,6 @@
     <Compile Include="SetStatus.Designer.cs">
       <DependentUpon>SetStatus.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingsHandler\AccountInfo.cs" />
     <Compile Include="SettingsHandler\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

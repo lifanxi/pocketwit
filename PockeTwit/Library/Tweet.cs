@@ -134,6 +134,11 @@ namespace PockeTwit.Library
 
 		#endregion Methods 
 
+        public override bool Equals(object obj)
+        {
+            status otherStat = (status)obj;
+            return otherStat.id.Equals(this.id);
+        }
     
         #region IComparable Members
 
