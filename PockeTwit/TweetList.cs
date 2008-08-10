@@ -498,15 +498,18 @@ namespace PockeTwit
                 this.statList.Visible = true;
                 StatusForm.Hide();
                 string UpdateText = StatusForm.StatusText;
-                if (StatusForm.UseTwitPic)
+                if (UpdateText != "Set Status")
                 {
-                    Yedda.TwitPic.SendStoredPic(ClientSettings.UserName, ClientSettings.Password, UpdateText, StatusForm.TwitPicFile);
+                    if (StatusForm.UseTwitPic)
+                    {
+                        Yedda.TwitPic.SendStoredPic(ClientSettings.UserName, ClientSettings.Password, UpdateText, StatusForm.TwitPicFile);
+                    }
+                    else
+                    {
+                        Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                    }
+                    GetTimeLineAsync();
                 }
-                else
-                {
-                    Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
-                }
-                GetTimeLineAsync();
             }
             this.statList.Redraw();
             this.statList.Visible = true;
