@@ -1312,11 +1312,6 @@ namespace FingerUI
 
                 SetSelectedIndexToZero();
                 Invalidate();
-
-                if (SelectedItemChanged != null)
-                {
-                    SelectedItemChanged(this, new EventArgs());
-                }
                 
             }
         }

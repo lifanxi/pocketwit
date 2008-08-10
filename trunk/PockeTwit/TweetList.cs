@@ -530,12 +530,14 @@ namespace PockeTwit
             FollowingDictionary.Clear();
             LastStatusID.Clear();
             CachedResponse.Clear();
+            TwitterConnections.Clear();
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 Yedda.Twitter TwitterConn = new Yedda.Twitter();
                 TwitterConn.AccountInfo.Server = a.Server;
                 TwitterConn.AccountInfo.UserName = a.UserName;
                 TwitterConn.AccountInfo.Password = a.Password;
+                TwitterConn.AccountInfo.Enabled = a.Enabled;
                 TwitterConnections.Add(TwitterConn);
                 Following f = new Following(TwitterConn);
                 FollowingDictionary.Add(TwitterConn, f);
