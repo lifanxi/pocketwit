@@ -6,20 +6,23 @@ using System.Xml.Serialization;
 
 namespace PockeTwit
 {
-    public static class Following
+    public  class Following
     {
+
+        public Yedda.Twitter TwitterConnection { get; set; }
 
 		#region Fields (2) 
 
-        private static List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
-        private static bool OnceLoaded = false;
+        private  List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
+        private  bool OnceLoaded = false;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
-        static Following()
+        public Following(Yedda.Twitter Connection )
         {
+            TwitterConnection = Connection;
             GetCachedFollowers();
 
             //LoadFromTwitter();
@@ -33,13 +36,13 @@ namespace PockeTwit
 
 		// Public Methods (5) 
 
-        public static void AddUser(Library.User userToAdd)
+        public void AddUser(Library.User userToAdd)
         {
             FollowedUsers.Add(userToAdd);
             SaveUsers();
         }
 
-        public static bool IsFollowing(Library.User userToCheck)
+        public bool IsFollowing(Library.User userToCheck)
         {
             bool bFound = false;
             foreach (Library.User User in FollowedUsers)
@@ -53,7 +56,7 @@ namespace PockeTwit
             return bFound;
         }
 
-        public static void LoadFromTwitter()
+        public  void LoadFromTwitter()
         {
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
             System.Threading.Thread t = new System.Threading.Thread(ts);
@@ -61,7 +64,7 @@ namespace PockeTwit
             t.Start();
         }
 
-        public static void Reset()
+        public  void Reset()
         {
             if (OnceLoaded)
             {
@@ -72,7 +75,7 @@ namespace PockeTwit
             }
         }
 
-        public static void StopFollowing(Library.User usertoStop)
+        public void StopFollowing(Library.User usertoStop)
         {
             foreach(Library.User User in FollowedUsers)
             {
@@ -89,11 +92,12 @@ namespace PockeTwit
 
 		// Private Methods (4) 
 
-        private static void GetCachedFollowers()
+        private  void GetCachedFollowers()
         {
-            if (System.IO.File.Exists(ClientSettings.AppPath + "\\Following" + ClientSettings.UserName + ClientSettings.Server.ToString() + ".xml"))
+            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.userName + TwitterConnection.CurrentServer.ToString() + ".xml";
+            if (System.IO.File.Exists(location))
             {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\Following"+ ClientSettings.UserName +ClientSettings.Server.ToString()+".xml"))
+                using (System.IO.StreamReader r = new System.IO.StreamReader(location))
                 {
                     string Followers = r.ReadToEnd();
                     InterpretUsers(Followers);
@@ -101,13 +105,11 @@ namespace PockeTwit
             }
         }
 
-        private static void GetFollowersFromTwitter()
+        private  void GetFollowersFromTwitter()
         {
-            Yedda.Twitter twitter = new Yedda.Twitter();
-            twitter.CurrentServer = ClientSettings.Server;
             try
             {
-                string response = twitter.GetFriends(ClientSettings.UserName, ClientSettings.Password, Yedda.Twitter.OutputFormatType.XML);
+                string response = this.TwitterConnection.GetFriends(Yedda.Twitter.OutputFormatType.XML);
                 InterpretUsers(response);
                 SaveUsers();
             }
@@ -115,7 +117,7 @@ namespace PockeTwit
             OnceLoaded = true;
         }
 
-        private static void InterpretUsers(string response)
+        private  void InterpretUsers(string response)
         {
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
             Library.User[] friends;
@@ -133,10 +135,12 @@ namespace PockeTwit
             }
         }
 
-        private static void SaveUsers()
+        private  void SaveUsers()
         {
+            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.userName + TwitterConnection.CurrentServer.ToString() + ".xml";
+            
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\Following" + ClientSettings.UserName + ClientSettings.Server.ToString() + ".xml"))
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(location))
             {
                 s.Serialize(w, FollowedUsers.ToArray());
             }

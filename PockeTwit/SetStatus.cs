@@ -40,6 +40,8 @@ namespace PockeTwit
 
 		#region Properties (2) 
 
+        public ClientSettings.Account AccountToSet { get; set; }
+
         public bool AllowTwitPic
         {
             set

@@ -58,7 +58,10 @@ namespace PockeTwit
             if (s.DialogResult == DialogResult.OK)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                Twitter.Update(ClientSettings.UserName, ClientSettings.Password, UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                Twitter.userName = s.AccountToSet.UserName;
+                Twitter.password = s.AccountToSet.Password;
+                Twitter.CurrentServer = s.AccountToSet.Server;
+                Twitter.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
                 Cursor.Current = Cursors.Default;
             }
             this.Show();

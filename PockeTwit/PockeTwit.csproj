@@ -95,6 +95,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SideMenu.cs" />
+    <Compile Include="TimeLine.cs" />
     <Compile Include="TweetList.cs">
       <SubType>Form</SubType>
     </Compile>

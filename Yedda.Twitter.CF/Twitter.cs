@@ -99,6 +99,8 @@ namespace Yedda
             set { _CurrentServer = value; }
         }
 
+        public string userName { get; set; }
+        public string password { get; set; }
 
         public bool BigTimeLines
         {
@@ -230,14 +232,7 @@ namespace Yedda
             return format.ToString().ToLower();
         }
 
-        /// <summary>
-        /// Executes an HTTP GET command and retrives the information.		
-        /// </summary>
-        /// <param name="url">The URL to perform the GET operation</param>
-        /// <param name="userName">The username to use with the request</param>
-        /// <param name="password">The password to use with the request</param>
-        /// <returns>The response of the request, or null if we got 404 or nothing.</returns>
-        protected string ExecuteGetCommand(string url, string userName, string password)
+        protected string ExecuteGetCommand(string url)
         {
             HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
             client.Timeout = 20000;
@@ -281,7 +276,7 @@ namespace Yedda
                             
                             if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
                             {
-                                DateTime NewTime = GetTimeOutTime(userName, password);
+                                DateTime NewTime = GetTimeOutTime();
                                 throw new Exception("Timeout until " + NewTime.ToString());
                             }
                             
@@ -294,10 +289,10 @@ namespace Yedda
             }
         }
 
-        private DateTime GetTimeOutTime(string userName, string password)
+        private DateTime GetTimeOutTime()
         {
             string URL = "http://twitter.com/account/rate_limit_status.xml";
-            string Response = ExecuteGetCommand(URL, userName, password);
+            string Response = ExecuteGetCommand(URL);
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(Response);
             string strTime = doc.SelectSingleNode("//reset-time").InnerText;
@@ -315,7 +310,7 @@ namespace Yedda
         /// <param name="password">The password to use with the request</param>
         /// <param name="data">The data to post</param> 
         /// <returns>The response of the request, or null if we got 404 or nothing.</returns>
-        protected string ExecutePostCommand(string url, string userName, string password, string data)
+        protected string ExecutePostCommand(string url, string data)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             
@@ -391,7 +386,7 @@ namespace Yedda
 
                                 if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
                                 {
-                                    DateTime NewTime = GetTimeOutTime(userName, password);
+                                    DateTime NewTime = GetTimeOutTime();
                                     throw new Exception("Timeout until " + NewTime.ToString());
                                 }
 
@@ -412,7 +407,7 @@ namespace Yedda
         public string GetPublicTimeline(OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Public_Timeline), GetFormatTypeString(format),GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, null, null);
+            return ExecuteGetCommand(url);
         }
 
         public string GetPublicTimelineAsJSON()
@@ -458,7 +453,7 @@ namespace Yedda
 
         #region User_Timeline
 
-        public string GetUserTimeline(string userName, string password, string IDorScreenName, OutputFormatType format)
+        public string GetUserTimeline(string IDorScreenName, OutputFormatType format)
         {
             string url = null;
             if (string.IsNullOrEmpty(IDorScreenName))
@@ -470,32 +465,32 @@ namespace Yedda
                 url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.User_Timeline) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
             }
 
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetUserTimeline(string userName, string password, OutputFormatType format)
+        public string GetUserTimeline(OutputFormatType format)
         {
-            return GetUserTimeline(userName, password, null, format);
+            return GetUserTimeline(null, format);
         }
 
-        public string GetUserTimelineAsJSON(string userName, string password)
+        public string GetUserTimelineAsJSON()
         {
-            return GetUserTimeline(userName, password, OutputFormatType.JSON);
+            return GetUserTimeline(OutputFormatType.JSON);
         }
 
-        public string GetUserTimelineAsJSON(string userName, string password, string IDorScreenName)
+        public string GetUserTimelineAsJSON(string IDorScreenName)
         {
-            return GetUserTimeline(userName, password, IDorScreenName, OutputFormatType.JSON);
+            return GetUserTimeline(IDorScreenName, OutputFormatType.JSON);
         }
 
-        public XmlDocument GetUserTimelineAsXML(string userName, string password, string IDorScreenName, OutputFormatType format)
+        public XmlDocument GetUserTimelineAsXML(string IDorScreenName, OutputFormatType format)
         {
             if (format == OutputFormatType.JSON)
             {
                 throw new ArgumentException("GetUserTimelineAsXML supports only XML based formats (XML, RSS, Atom)", "format");
             }
 
-            string output = GetUserTimeline(userName, password, IDorScreenName, format);
+            string output = GetUserTimeline(IDorScreenName, format);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -507,73 +502,73 @@ namespace Yedda
             return null;
         }
 
-        public XmlDocument GetUserTimelineAsXML(string userName, string password, OutputFormatType format)
+        public XmlDocument GetUserTimelineAsXML(OutputFormatType format)
         {
-            return GetUserTimelineAsXML(userName, password, null, format);
+            return GetUserTimelineAsXML(null, format);
         }
 
-        public XmlDocument GetUserTimelineAsXML(string userName, string password, string IDorScreenName)
+        public XmlDocument GetUserTimelineAsXML(string IDorScreenName)
         {
-            return GetUserTimelineAsXML(userName, password, IDorScreenName, OutputFormatType.XML);
+            return GetUserTimelineAsXML(IDorScreenName, OutputFormatType.XML);
         }
 
-        public XmlDocument GetUserTimelineAsXML(string userName, string password)
+        public XmlDocument GetUserTimelineAsXML()
         {
-            return GetUserTimelineAsXML(userName, password, null);
+            return GetUserTimelineAsXML(null);
         }
 
-        public XmlDocument GetUserTimelineAsRSS(string userName, string password, string IDorScreenName)
+        public XmlDocument GetUserTimelineAsRSS(string IDorScreenName)
         {
-            return GetUserTimelineAsXML(userName, password, IDorScreenName, OutputFormatType.RSS);
+            return GetUserTimelineAsXML(IDorScreenName, OutputFormatType.RSS);
         }
 
-        public XmlDocument GetUserTimelineAsRSS(string userName, string password)
+        public XmlDocument GetUserTimelineAsRSS()
         {
-            return GetUserTimelineAsXML(userName, password, OutputFormatType.RSS);
+            return GetUserTimelineAsXML(OutputFormatType.RSS);
         }
 
-        public XmlDocument GetUserTimelineAsAtom(string userName, string password, string IDorScreenName)
+        public XmlDocument GetUserTimelineAsAtom(string IDorScreenName)
         {
-            return GetUserTimelineAsXML(userName, password, IDorScreenName, OutputFormatType.Atom);
+            return GetUserTimelineAsXML(IDorScreenName, OutputFormatType.Atom);
         }
 
-        public XmlDocument GetUserTimelineAsAtom(string userName, string password)
+        public XmlDocument GetUserTimelineAsAtom()
         {
-            return GetUserTimelineAsXML(userName, password, OutputFormatType.Atom);
+            return GetUserTimelineAsXML(OutputFormatType.Atom);
         }
         #endregion
 
         #region Friends_Timeline
-        public string GetFriendsTimeLineMax(string userName, string password, OutputFormatType format)
+        public string GetFriendsTimeLineMax(OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer))+"?count="+MaxTweets;
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
-        public string GetFriendsTimeLineSince(string userName, string password, OutputFormatType format, string SinceID)
+        public string GetFriendsTimeLineSince(OutputFormatType format, string SinceID)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer)) + "?since_id=" + SinceID;
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFriendsTimeline(string userName, string password, OutputFormatType format)
+        public string GetFriendsTimeline(OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFriendsTimelineAsJSON(string userName, string password)
+        public string GetFriendsTimelineAsJSON()
         {
-            return GetFriendsTimeline(userName, password, OutputFormatType.JSON);
+            return GetFriendsTimeline(OutputFormatType.JSON);
         }
 
-        public XmlDocument GetFriendsTimelineAsXML(string userName, string password, OutputFormatType format)
+        public XmlDocument GetFriendsTimelineAsXML(OutputFormatType format)
         {
             if (format == OutputFormatType.JSON)
             {
                 throw new ArgumentException("GetFriendsTimelineAsXML supports only XML based formats (XML, RSS, Atom)", "format");
             }
 
-            string output = GetFriendsTimeline(userName, password, format);
+            string output = GetFriendsTimeline(format);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -585,35 +580,35 @@ namespace Yedda
             return null;
         }
 
-        public XmlDocument GetFriendsTimelineAsXML(string userName, string password)
+        public XmlDocument GetFriendsTimelineAsXML()
         {
-            return GetFriendsTimelineAsXML(userName, password, OutputFormatType.XML);
+            return GetFriendsTimelineAsXML(OutputFormatType.XML);
         }
 
-        public XmlDocument GetFriendsTimelineAsRSS(string userName, string password)
+        public XmlDocument GetFriendsTimelineAsRSS()
         {
-            return GetFriendsTimelineAsXML(userName, password, OutputFormatType.RSS);
+            return GetFriendsTimelineAsXML(OutputFormatType.RSS);
         }
 
-        public XmlDocument GetFriendsTimelineAsAtom(string userName, string password)
+        public XmlDocument GetFriendsTimelineAsAtom()
         {
-            return GetFriendsTimelineAsXML(userName, password, OutputFormatType.Atom);
+            return GetFriendsTimelineAsXML(OutputFormatType.Atom);
         }
 
         #endregion
 
         #region Replies
-        public string GetRepliesTimeLine(string userName, string password, OutputFormatType format)
+        public string GetRepliesTimeLine(OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
         #endregion
 
         #region Friends
 
-        public string GetFriends(string userName, string password, OutputFormatType format)
+        public string GetFriends(OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -621,10 +616,10 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFriends(string userName, string password, string IDorScreenName, OutputFormatType format)
+        public string GetFriends(string IDorScreenName, OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -641,22 +636,22 @@ namespace Yedda
                 url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
             }
 
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFriendsAsJSON(string userName, string password, string IDorScreenName)
+        public string GetFriendsAsJSON(string IDorScreenName)
         {
-            return GetFriends(userName, password, IDorScreenName, OutputFormatType.JSON);
+            return GetFriends(IDorScreenName, OutputFormatType.JSON);
         }
 
-        public string GetFriendsAsJSON(string userName, string password)
+        public string GetFriendsAsJSON()
         {
-            return GetFriendsAsJSON(userName, password, null);
+            return GetFriendsAsJSON(null);
         }
 
-        public XmlDocument GetFriendsAsXML(string userName, string password, string IDorScreenName)
+        public XmlDocument GetFriendsAsXML(string IDorScreenName)
         {
-            string output = GetFriends(userName, password, IDorScreenName, OutputFormatType.XML);
+            string output = GetFriends(IDorScreenName, OutputFormatType.XML);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -668,16 +663,16 @@ namespace Yedda
             return null;
         }
 
-        public XmlDocument GetFriendsAsXML(string userName, string password)
+        public XmlDocument GetFriendsAsXML()
         {
-            return GetFriendsAsXML(userName, password, null);
+            return GetFriendsAsXML(null);
         }
 
         #endregion
 
         #region Followers
 
-        public string GetFollowers(string userName, string password, OutputFormatType format)
+        public string GetFollowers(OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -685,17 +680,17 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Followers), GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFollowersAsJSON(string userName, string password)
+        public string GetFollowersAsJSON()
         {
-            return GetFollowers(userName, password, OutputFormatType.JSON);
+            return GetFollowers(OutputFormatType.JSON);
         }
 
-        public XmlDocument GetFollowersAsXML(string userName, string password)
+        public XmlDocument GetFollowersAsXML()
         {
-            string output = GetFollowers(userName, password, OutputFormatType.XML);
+            string output = GetFollowers(OutputFormatType.XML);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -711,7 +706,7 @@ namespace Yedda
 
         #region Update
 
-        public string Update(string userName, string password, string status, OutputFormatType format)
+        public string Update(string status, OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -721,17 +716,17 @@ namespace Yedda
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), GetServerString(CurrentServer));
             string data = string.Format("status={0}", HttpUtility.UrlEncode(status));
 
-            return ExecutePostCommand(url, userName, password, data);
+            return ExecutePostCommand(url, data);
         }
 
-        public string UpdateAsJSON(string userName, string password, string text)
+        public string UpdateAsJSON(string text)
         {
-            return Update(userName, password, text, OutputFormatType.JSON);
+            return Update(text, OutputFormatType.JSON);
         }
 
-        public XmlDocument UpdateAsXML(string userName, string password, string text)
+        public XmlDocument UpdateAsXML(string text)
         {
-            string output = Update(userName, password, text, OutputFormatType.XML);
+            string output = Update(text, OutputFormatType.XML);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -747,7 +742,7 @@ namespace Yedda
 
         #region Featured
 
-        public string GetFeatured(string userName, string password, OutputFormatType format)
+        public string GetFeatured(OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -755,17 +750,17 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Featured), GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string GetFeaturedAsJSON(string userName, string password)
+        public string GetFeaturedAsJSON()
         {
-            return GetFeatured(userName, password, OutputFormatType.JSON);
+            return GetFeatured(OutputFormatType.JSON);
         }
 
-        public XmlDocument GetFeaturedAsXML(string userName, string password)
+        public XmlDocument GetFeaturedAsXML()
         {
-            string output = GetFeatured(userName, password, OutputFormatType.XML);
+            string output = GetFeatured(OutputFormatType.XML);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -781,7 +776,7 @@ namespace Yedda
 
         #region Show
 
-        public string Show(string userName, string password, string IDorScreenName, OutputFormatType format)
+        public string Show(string IDorScreenName, OutputFormatType format)
         {
             if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
             {
@@ -789,17 +784,17 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format), GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
 
-        public string ShowAsJSON(string userName, string password, string IDorScreenName)
+        public string ShowAsJSON(string IDorScreenName)
         {
-            return Show(userName, password, IDorScreenName, OutputFormatType.JSON);
+            return Show(IDorScreenName, OutputFormatType.JSON);
         }
 
-        public XmlDocument ShowAsXML(string userName, string password, string IDorScreenName)
+        public XmlDocument ShowAsXML(string IDorScreenName)
         {
-            string output = Show(userName, password, IDorScreenName, OutputFormatType.XML);
+            string output = Show(IDorScreenName, OutputFormatType.XML);
             if (!string.IsNullOrEmpty(output))
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -814,44 +809,44 @@ namespace Yedda
         #endregion
 
         #region Favorites
-        public string SetFavorite(string userName, string password, string IDofMessage)
+        public string SetFavorite(string IDofMessage)
         {
             string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Create), IDofMessage, GetServerString(CurrentServer));
-            return ExecutePostCommand(url, userName, password,"");
+            return ExecutePostCommand(url, "");
         }
-        public string DestroyFavorite(string userName, string password, string IDofMessage)
+        public string DestroyFavorite(string IDofMessage)
         {
             string url = string.Format(TwitterFavoritesUrlFormat, GetActionTypeString(ActionType.Favorites), GetActionTypeString(ActionType.Destroy), IDofMessage,GetServerString(CurrentServer));
-            return ExecutePostCommand(url, userName, password, "");
+            return ExecutePostCommand(url, "");
         }
-        public string GetFavorites(string userName, string password)
+        public string GetFavorites()
         {
             string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Favorites),GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, userName, password);
+            return ExecuteGetCommand(url);
         }
         #endregion
 
         #region Follow
-        public string FollowUser(string userName, string password, string IDofUserToFollow)
+        public string FollowUser(string IDofUserToFollow)
         {
             string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Create), IDofUserToFollow,GetServerString(CurrentServer));
-            return ExecutePostCommand(url, userName, password, "");
+            return ExecutePostCommand(url, "");
         }
-        public string StopFollowingUser(string userName, string password, string IDofUserToFollow)
+        public string StopFollowingUser(string IDofUserToFollow)
         {
             
             string url = string.Format(TwitterFavoritesUrlFormat, GetObjectTypeString(ObjectType.Friendships), GetActionTypeString(ActionType.Destroy), IDofUserToFollow,GetServerString(CurrentServer));
-            return ExecutePostCommand(url, userName, password, "");
+            return ExecutePostCommand(url, "");
         }
         #endregion
 
         #region Verify
-        public bool Verify(string userName, string password)
+        public bool Verify()
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), GetServerString(CurrentServer));
             try
             {
-                string Response = ExecuteGetCommand(url, userName, password);
+                string Response = ExecuteGetCommand(url);
                 return (Response == "<authorized>true</authorized>");
             }
             catch(WebException)
@@ -866,7 +861,7 @@ namespace Yedda
         public string SearchFor(string textToSearch)
         {
             string url = string.Format(TwitterSearchUrlFormat, textToSearch, GetServerString(CurrentServer));
-            return ExecuteGetCommand(url, "", "");
+            return ExecuteGetCommand(url);
         }
         #endregion
     }
