@@ -386,6 +386,7 @@ namespace PockeTwit
             using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + ClientSettings.UserName +ClientSettings.Server.ToString()+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
+                w.Flush();
             }
             CurrentStatuses = mergedstatuses;
         }
