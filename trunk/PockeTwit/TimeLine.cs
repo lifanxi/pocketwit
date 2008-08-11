@@ -13,15 +13,29 @@ namespace PockeTwit
             this.Clear();
             if (items != null)
             {
-                this.AddRange(items);
+                AddUnique(items);
+            }
+        }
+
+        private void AddUnique(IEnumerable<Library.status> items)
+        {
+            foreach (Library.status s in items)
+            {
+                if (!this.Contains(s))
+                {
+                    this.Add(s);
+                }
             }
         }
         public void MergeIn(TimeLine otherLine)
         {
-            this.AddRange(otherLine);
+            this.AddUnique(otherLine);
             this.Sort();
             int overage = this.Count - ClientSettings.MaxTweets;
-            this.RemoveRange(ClientSettings.MaxTweets, overage);
+            if (overage > 0)
+            {
+                this.RemoveRange(ClientSettings.MaxTweets, overage);
+            }
         }
     }
 }

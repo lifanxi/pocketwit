@@ -291,6 +291,7 @@ namespace PockeTwit
                                 FriendsLines[t] = MergeIn(newstatuses, FriendsLines[t]);
                                 SaveStatuses(FriendsLines[t], t);
                                 mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
+                                CurrentStatuses = mergedstatuses;
                             }
                             else
                             {
@@ -432,8 +433,8 @@ namespace PockeTwit
             {
                 w.Write(StatusString);
                 w.Flush();
+                w.Close();
             }
-            CurrentStatuses = mergedstatuses;
         }
 
         private void SendDirectMessage()
@@ -545,6 +546,7 @@ namespace PockeTwit
                 FollowingDictionary.Add(TwitterConn, f);
                 LastStatusID.Add(TwitterConn, "");
                 CachedResponse.Add(TwitterConn, "");
+                FriendsLines.Add(TwitterConn, null);
             }
         }
 
