@@ -34,13 +34,33 @@ namespace PockeTwit
                     break;
             }
             lblCharsLeft.Text = "140";
+            PopulateAccountList();
         }
 
+        private void PopulateAccountList()
+        {
+            foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
+            {
+                cmbAccount.Items.Add(Account);
+            }
+        }
 		#endregion Constructors 
 
 		#region Properties (2) 
 
-        public Yedda.Twitter.Account AccountToSet { get; set; }
+        private Yedda.Twitter.Account _AccountToSet = ClientSettings.AccountsList[0];
+        public Yedda.Twitter.Account AccountToSet 
+        { 
+            get
+            {
+                return _AccountToSet;
+            }
+            set
+            {
+                _AccountToSet = value;
+                cmbAccount.SelectedItem = _AccountToSet;
+            }
+        }
 
         public bool AllowTwitPic
         {
@@ -149,7 +169,7 @@ namespace PockeTwit
             this.btnURL.BackColor = System.Drawing.Color.Black;
             this.btnURL.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
             this.btnURL.ForeColor = System.Drawing.Color.LightGray;
-            this.btnURL.Location = new System.Drawing.Point(3, 3);
+            this.btnURL.Location = new System.Drawing.Point(3, 31);
             this.btnURL.Name = "button1";
             this.btnURL.Size = new System.Drawing.Size(64, 20);
             this.btnURL.TabIndex = 1;
@@ -160,7 +180,7 @@ namespace PockeTwit
             this.btnPic.BackColor = System.Drawing.Color.Black;
             this.btnPic.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
             this.btnPic.ForeColor = System.Drawing.Color.LightGray;
-            this.btnPic.Location = new System.Drawing.Point(73, 3);
+            this.btnPic.Location = new System.Drawing.Point(73, 31);
             this.btnPic.Name = "btnPic";
             this.btnPic.Size = new System.Drawing.Size(90, 20);
             this.btnPic.TabIndex = 3;
@@ -227,6 +247,11 @@ namespace PockeTwit
 
 
 		#endregion Methods 
+
+        private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
+        }
 
     }
 }

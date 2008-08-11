@@ -57,21 +57,17 @@ namespace PockeTwit
             this.menuCancel = new System.Windows.Forms.MenuItem();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblCharsLeft = new System.Windows.Forms.Label();
-            
+            this.cmbAccount = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.Add(this.menuCancel);
-            
             // 
             // menuCancel
             // 
             this.menuCancel.Text = "Cancel";
             this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
-            // 
-            // menuSubmit
-            // 
             // 
             // textBox1
             // 
@@ -80,11 +76,11 @@ namespace PockeTwit
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.ForeColor = System.Drawing.Color.LightGray;
-            this.textBox1.Location = new System.Drawing.Point(3, 26);
+            this.textBox1.Location = new System.Drawing.Point(3, 65);
             this.textBox1.MaxLength = 140;
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(234, 265);
+            this.textBox1.Size = new System.Drawing.Size(234, 226);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "Set Status";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -99,6 +95,14 @@ namespace PockeTwit
             this.lblCharsLeft.Size = new System.Drawing.Size(39, 20);
             this.lblCharsLeft.Text = "label1";
             // 
+            // cmbAccount
+            // 
+            this.cmbAccount.Location = new System.Drawing.Point(3, 3);
+            this.cmbAccount.Name = "cmbAccount";
+            this.cmbAccount.Size = new System.Drawing.Size(100, 22);
+            this.cmbAccount.TabIndex = 1;
+            this.cmbAccount.SelectedIndexChanged += new System.EventHandler(this.cmbAccount_SelectedIndexChanged);
+            // 
             // SetStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -106,6 +110,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 294);
+            this.Controls.Add(this.cmbAccount);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
             this.ForeColor = System.Drawing.Color.LightGray;
@@ -119,5 +124,7 @@ namespace PockeTwit
         }
 
         #endregion
+
+        private System.Windows.Forms.ComboBox cmbAccount;
     }
 }
