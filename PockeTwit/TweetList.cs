@@ -89,7 +89,7 @@ namespace PockeTwit
             }
             foreach (Yedda.Twitter conn in TwitterConnections)
             {
-                if (conn.AccountInfo== AccountInfo)
+                if (conn.AccountInfo.Equals(AccountInfo))
                 {
                     return conn;
                 }
@@ -141,7 +141,7 @@ namespace PockeTwit
             SettingsForm settings = new SettingsForm();
             if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; return; }
             this.statList.Visible = true;
-            //Twitter.CurrentServer = ClientSettings.Server;
+            
             if (ClientSettings.CheckVersion)
             {
                 Checker.CheckForUpdate();
@@ -318,6 +318,7 @@ namespace PockeTwit
 
         private void LoadCachedtimeline()
         {
+            Library.status[] LoadedStats = null;
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 if (a.Enabled)
@@ -328,22 +329,21 @@ namespace PockeTwit
                         using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
                         {
                             string s = r.ReadToEnd();
-                            CurrentStatuses = Library.status.Deserialize(s);
-                            if (CurrentStatuses == null) { return; }
+                            LoadedStats = Library.status.Deserialize(s);
                         }
-                        LastStatusID[GetMatchingConnection(a)] = CurrentStatuses[0].id;
-
-                        if (CurrentStatuses[0].Account == null)
+                        if (LoadedStats != null)
                         {
-                            foreach (Library.status s in CurrentStatuses)
+                            LastStatusID[GetMatchingConnection(a)] = LoadedStats[0].id;
+                            foreach (Library.status s in LoadedStats)
                             {
-                                s.Account = ClientSettings.AccountsList[0];
+                                s.Account = a;
                             }
+                            CurrentStatuses = MergeIn(LoadedStats, CurrentStatuses);
                         }
-                        AddStatusesToList(CurrentStatuses, 0);
                     }
                 }
             }
+            AddStatusesToList(CurrentStatuses, 0);
         }
 
         private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses)
