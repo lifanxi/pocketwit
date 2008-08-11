@@ -21,7 +21,7 @@ namespace PockeTwit.Library
         public string favorited { get; set; }
 
 
-
+        [XmlIgnore]
         private DateTime createdAt
         {
             get
@@ -29,6 +29,7 @@ namespace PockeTwit.Library
                 return DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", null);
             }
         }
+
         public string created_at { get; set; }
         public string id { get; set; }
 
@@ -44,6 +45,7 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
+        [XmlIgnore]
         public Yedda.Twitter.Account Account { get; set; }
 
 		#endregion Properties 
@@ -126,7 +128,11 @@ namespace PockeTwit.Library
             StringBuilder sb = new StringBuilder();
             using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
             {
-                s.Serialize(w, List);
+                try
+                {
+                    s.Serialize(w, List);
+                }
+                catch { }
             }
             return sb.ToString();
         }

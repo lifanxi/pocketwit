@@ -346,6 +346,7 @@ namespace PockeTwit
         {
             TimeLine t = new TimeLine(CurrentStatuses);
             t.MergeIn(new TimeLine(newstatuses));
+            t.TrimExcess();
             if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
             {
                 SaveStatuses(t.ToArray(), twitter);
@@ -431,6 +432,7 @@ namespace PockeTwit
             using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
+                w.Flush();
             }
             CurrentStatuses = mergedstatuses;
         }
