@@ -102,22 +102,22 @@ namespace PockeTwit
             // 
             // cmbAccount
             // 
-            this.cmbAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAccount.BackColor = System.Drawing.Color.DimGray;
             this.cmbAccount.ForeColor = System.Drawing.Color.LightGray;
-            this.cmbAccount.Location = new System.Drawing.Point(91, 3);
+            this.cmbAccount.Location = new System.Drawing.Point(97, 3);
             this.cmbAccount.Name = "cmbAccount";
-            this.cmbAccount.Size = new System.Drawing.Size(146, 22);
+            this.cmbAccount.Size = new System.Drawing.Size(140, 22);
             this.cmbAccount.TabIndex = 0;
             this.cmbAccount.SelectedIndexChanged += new System.EventHandler(this.cmbAccount_SelectedIndexChanged);
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(3, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 20);
+            this.label1.Size = new System.Drawing.Size(88, 20);
             this.label1.Text = "From Account:";
             // 
             // pictureBox1
