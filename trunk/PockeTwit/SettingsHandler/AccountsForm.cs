@@ -87,6 +87,7 @@ namespace PockeTwit
         private void btnToggle_Click(object sender, EventArgs e)
         {
             Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
+            if (a == null) { return; }
             a.Enabled = !a.Enabled;
             ListAccounts();
             IsDirty = true;
