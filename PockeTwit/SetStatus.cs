@@ -41,7 +41,10 @@ namespace PockeTwit
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
             {
-                cmbAccount.Items.Add(Account);
+                if (Account.Enabled)
+                {
+                    cmbAccount.Items.Add(Account);
+                }
             }
         }
 		#endregion Constructors 
@@ -101,7 +104,7 @@ namespace PockeTwit
         {
             try
             {
-                InsertPicture();
+                InsertPictureFromCamera();
             }
             catch 
             {
@@ -114,22 +117,34 @@ namespace PockeTwit
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            InsertURL();
-        }
-
-        private void InsertPicture()
+        private void InsertPictureFromCamera()
         {
             using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
             {
-                if (c.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    TwitPicFile = c.FileName;
-                    UseTwitPic = true;
+                    if (c.ShowDialog() == DialogResult.OK)
+                    {
+                        TwitPicFile = c.FileName;
+                        UseTwitPic = true;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("The camera is not available.", "PockeTwit");
                 }
             }
         }
+
+        private void InsertPictureFromFile()
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                TwitPicFile = openFileDialog1.FileName;
+                UseTwitPic = true;
+            }
+        }
+
 
         private void InsertURL()
         {
@@ -149,7 +164,7 @@ namespace PockeTwit
 
         void menuPic_Click(object sender, EventArgs e)
         {
-            InsertPicture();
+            InsertPictureFromCamera();
         }
 
         private void menuSubmit_Click(object sender, EventArgs e)
@@ -164,29 +179,6 @@ namespace PockeTwit
 
         private void SetupProfessional()
         {
-            this.btnURL = new System.Windows.Forms.Button();
-            this.btnPic = new System.Windows.Forms.Button();
-            this.btnURL.BackColor = System.Drawing.Color.Black;
-            this.btnURL.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
-            this.btnURL.ForeColor = System.Drawing.Color.LightGray;
-            this.btnURL.Location = new System.Drawing.Point(3, 31);
-            this.btnURL.Name = "button1";
-            this.btnURL.Size = new System.Drawing.Size(64, 20);
-            this.btnURL.TabIndex = 1;
-            this.btnURL.Text = "Insert URL";
-            this.btnURL.Click += new System.EventHandler(this.button1_Click);
-
-
-            this.btnPic.BackColor = System.Drawing.Color.Black;
-            this.btnPic.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular);
-            this.btnPic.ForeColor = System.Drawing.Color.LightGray;
-            this.btnPic.Location = new System.Drawing.Point(73, 31);
-            this.btnPic.Name = "btnPic";
-            this.btnPic.Size = new System.Drawing.Size(90, 20);
-            this.btnPic.TabIndex = 3;
-            this.btnPic.Text = "Include Picture";
-            this.btnPic.Click += new System.EventHandler(this.btnPic_Click);
-
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images | *.jpg;*.jpeg";
@@ -196,10 +188,6 @@ namespace PockeTwit
             this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
             
             this.mainMenu1.MenuItems.Add(this.menuSubmit);
-
-            this.Controls.Add(this.btnPic);
-            this.Controls.Add(this.btnURL);
-            
         }
 
         private void SetupStandard()
@@ -252,6 +240,22 @@ namespace PockeTwit
         {
             this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromCamera();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromFile();
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            InsertURL();
+        }
+
 
     }
 }
