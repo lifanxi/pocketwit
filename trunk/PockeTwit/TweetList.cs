@@ -30,6 +30,7 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, string> CachedResponse = new Dictionary<Yedda.Twitter, string>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
+        private Dictionary<Yedda.Twitter, Library.status[]> FriendsLines = new Dictionary<Yedda.Twitter, PockeTwit.Library.status[]>();
         private string ShowUserID;
 
         #endregion�Fields�
@@ -287,7 +288,9 @@ namespace PockeTwit
 
                             if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                             {
-                                mergedstatuses = MergeIn(newstatuses, CurrentStatuses,t);
+                                FriendsLines[t] = MergeIn(newstatuses, FriendsLines[t]);
+                                SaveStatuses(FriendsLines[t], t);
+                                mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
                             }
                             else
                             {
@@ -342,15 +345,11 @@ namespace PockeTwit
             }
         }
 
-        private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses, Yedda.Twitter twitter)
+        private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses)
         {
             TimeLine t = new TimeLine(CurrentStatuses);
             t.MergeIn(new TimeLine(newstatuses));
             t.TrimExcess();
-            if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
-            {
-                SaveStatuses(t.ToArray(), twitter);
-            }
             return t.ToArray();
             /*
             if (CurrentStatuses == null)
@@ -529,6 +528,7 @@ namespace PockeTwit
 
         private void ResetDictionaries()
         {
+            FriendsLines.Clear();
             FollowingDictionary.Clear();
             LastStatusID.Clear();
             CachedResponse.Clear();
