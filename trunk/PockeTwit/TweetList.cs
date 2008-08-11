@@ -499,23 +499,23 @@ namespace PockeTwit
             
             if (ClientSettings.CheckVersion)
             {
-                lblLoading.Text = "Launching update checker.";
+                lblLoading.Text = "Launching update checker";
                 Application.DoEvents();
                 Checker = new UpdateChecker();
                 Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             }
             
-            lblLoading.Text = "Setting up UI lists.";
+            lblLoading.Text = "Setting up the UI";
             SetUpListControl();
             
             statList.SwitchTolist("Friends_TimeLine");
             Application.DoEvents();
 
-            lblLoading.Text = "Loading cached timeline.";
+            lblLoading.Text = "Loading cached timelines";
             Application.DoEvents();
             LoadCachedtimeline();
 
-            lblLoading.Text = "Fetching timeline from server.";
+            lblLoading.Text = "Fetching timelines from server";
             Application.DoEvents();
             
             GetTimeLine();
