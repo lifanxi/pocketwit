@@ -156,7 +156,7 @@ namespace PockeTwit
                 LoadCachedtimeline();
                 SwitchToList("Friends_TimeLine");
                 CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
-                GetTimeLine();
+                GetAllTimeLines();
             }
             settings.Close();
             
@@ -261,8 +261,40 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        private void GetTimeLine()
+        private void GetSingleTimeLine()
         {
+            Yedda.Twitter Connection = GetMatchingConnection(CurrentlySelectedAccount);
+            Library.status[] mergedstatuses = null;
+            string response = FetchFromTwitter(Connection);
+
+            if (!string.IsNullOrEmpty(response) && response != CachedResponse[Connection])
+            {
+                CachedResponse[Connection] = response;
+                Library.status[] newstatuses;
+                if (CurrentAction == Yedda.Twitter.ActionType.Search)
+                {
+                    newstatuses = Library.status.DeserializeFromAtom(response, Connection.AccountInfo);
+                }
+                else
+                {
+                    newstatuses = Library.status.Deserialize(response, Connection.AccountInfo);
+                }
+                if (newstatuses.Length > 0)
+                {
+                    mergedstatuses = MergeIn(mergedstatuses, newstatuses);
+                    AddStatusesToList(mergedstatuses, newstatuses.Length);
+                }
+            }
+            ChangeCursor(Cursors.Default);
+        }
+
+        private void GetAllTimeLines()
+        {
+            if (CurrentAction == Yedda.Twitter.ActionType.Show)
+            {
+                GetSingleTimeLine();
+                return;
+            }
             Library.status[] mergedstatuses = null;
 
             foreach (Yedda.Twitter t in TwitterConnections)
@@ -285,10 +317,11 @@ namespace PockeTwit
                         }
                         if (newstatuses.Length > 0)
                         {
-                            LastStatusID[t] = newstatuses[0].id;
+                            
 
                             if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                             {
+                                LastStatusID[t] = newstatuses[0].id;
                                 FriendsLines[t] = MergeIn(newstatuses, FriendsLines[t]);
                                 SaveStatuses(FriendsLines[t], t);
                                 mergedstatuses = MergeIn(newstatuses, CurrentStatuses);
@@ -311,7 +344,15 @@ namespace PockeTwit
 
         private void GetTimeLineAsync()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetTimeLine);
+            System.Threading.ThreadStart ts;
+            if (CurrentAction == Yedda.Twitter.ActionType.Show)
+            {
+                ts = new System.Threading.ThreadStart(GetSingleTimeLine);
+            }
+            else
+            {
+                ts = new System.Threading.ThreadStart(GetAllTimeLines);
+            }
             System.Threading.Thread t = new System.Threading.Thread(ts);
             t.Name = "GetTimeLine";
             t.Start();
@@ -519,7 +560,7 @@ namespace PockeTwit
             lblLoading.Text = "Fetching timelines from server";
             Application.DoEvents();
             
-            GetTimeLine();
+            GetAllTimeLines();
             
             statList.SetSelectedIndexToZero();
             statList.Visible = true;
