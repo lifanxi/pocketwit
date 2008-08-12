@@ -26,7 +26,14 @@ namespace PockeTwit.Library
         {
             get
             {
-                return DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", null);
+                try
+                {
+                    return DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", null);
+                }
+                catch
+                {
+                    return DateTime.Parse(created_at);
+                }
             }
         }
 
@@ -103,11 +110,14 @@ namespace PockeTwit.Library
             {
                 status newStat = new status();
                 newStat.text = entry.SelectSingleNode("s:title",nm).InnerText;
+                newStat.id = entry.SelectSingleNode("s:id", nm).InnerText;
+                newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                 string userName = entry.SelectSingleNode("s:author/s:name",nm).InnerText;
                 newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                 string userscreenName = userName.Split(new char[]{' '})[0];
                 newStat.user = new User();
                 newStat.user.screen_name = userscreenName;
+                
                 
                 resultList.Add(newStat);
                 
@@ -128,11 +138,7 @@ namespace PockeTwit.Library
             StringBuilder sb = new StringBuilder();
             using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
             {
-                try
-                {
-                    s.Serialize(w, List);
-                }
-                catch { }
+                s.Serialize(w, List);
             }
             return sb.ToString();
         }
@@ -142,8 +148,15 @@ namespace PockeTwit.Library
 
         public override bool Equals(object obj)
         {
-            status otherStat = (status)obj;
-            return otherStat.id.Equals(this.id);
+            try
+            {
+                status otherStat = (status)obj;
+                return otherStat.id.Equals(this.id);
+            }
+            catch
+            {
+                return false;
+            }
         }
     
         #region IComparable Members
