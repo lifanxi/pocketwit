@@ -263,6 +263,8 @@ namespace PockeTwit
 
         private void GetTimeLine()
         {
+            Library.status[] mergedstatuses = null;
+
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 if (t.AccountInfo.Enabled)
@@ -284,7 +286,6 @@ namespace PockeTwit
                         if (newstatuses.Length > 0)
                         {
                             LastStatusID[t] = newstatuses[0].id;
-                            Library.status[] mergedstatuses = null;
 
                             if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                             {
@@ -295,7 +296,7 @@ namespace PockeTwit
                             }
                             else
                             {
-                                mergedstatuses = newstatuses;
+                                mergedstatuses = MergeIn(mergedstatuses, newstatuses);
                             }
 
 
@@ -429,11 +430,11 @@ namespace PockeTwit
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses, Yedda.Twitter t)
         {
             string StatusString = Library.status.Serialize(mergedstatuses);
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
+            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
                 w.Flush();
-                w.Close();
+                w.Close();  //Shouldn't need this in using, but I'm desperate
             }
         }
 
