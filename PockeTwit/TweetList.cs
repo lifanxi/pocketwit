@@ -380,6 +380,8 @@ namespace PockeTwit
                             {
                                 s.Account = a;
                             }
+                            Yedda.Twitter t = GetMatchingConnection(a);
+                            FriendsLines[t] = LoadedStats;
                             CurrentStatuses = MergeIn(LoadedStats, CurrentStatuses);
                         }
                     }
@@ -470,6 +472,11 @@ namespace PockeTwit
 
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses, Yedda.Twitter t)
         {
+            if (mergedstatuses.Length <=20)
+            {
+                //No need to cache less than 20 tweets.  
+                return;
+            }
             string StatusString = Library.status.Serialize(mergedstatuses);
             
             using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
