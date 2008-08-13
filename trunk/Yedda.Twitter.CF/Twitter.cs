@@ -56,7 +56,7 @@ namespace Yedda
                 string Indicator;
                 if (Enabled) { Indicator = "+"; }
                 else { Indicator = "-"; }
-                return Indicator + "  "+ Server.ToString() + "-" + UserName;
+                return Indicator + "  " + UserName + " (" +Server.ToString() + ")";
             }
         }
 
