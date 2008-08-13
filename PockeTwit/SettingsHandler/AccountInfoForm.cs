@@ -67,9 +67,21 @@ namespace PockeTwit
 
         private void menuItem2_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+            Application.DoEvents();
+            lblError.Visible = false;
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
             _AccountInfo.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+            Yedda.Twitter T = new Yedda.Twitter();
+            T.AccountInfo = _AccountInfo;
+            Cursor.Current = Cursors.Default;
+            if (!T.Verify())
+            {
+                lblError.Text = "Invalid credentials.";
+                lblError.Visible = true;
+                return;
+            }
             this.DialogResult = DialogResult.OK;
         }
     }

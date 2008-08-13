@@ -63,6 +63,11 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
+            if (lstAccounts.Items.Count == 0)
+            {
+                MessageBox.Show("You must enter at least one account or cancel.");
+                return;
+            }
             this.DialogResult = DialogResult.OK;
             if (IsDirty)
             {

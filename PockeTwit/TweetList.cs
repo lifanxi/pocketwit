@@ -148,6 +148,7 @@ namespace PockeTwit
             }
             if (settings.NeedsReset)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 ResetDictionaries();
                 CurrentlySelectedAccount = ClientSettings.AccountsList[0];
 
@@ -157,6 +158,7 @@ namespace PockeTwit
                 SwitchToList("Friends_TimeLine");
                 CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                 GetAllTimeLines();
+                Cursor.Current = Cursors.Default;
             }
             settings.Close();
             
@@ -522,8 +524,9 @@ namespace PockeTwit
             statList.RightMenuItems = new List<string>(new string[] { "Exit" });
         }
 
-        private void SetEverythingUp()
+        private bool SetEverythingUp()
         {
+            bool ret = true;
             DeviceType = DetectDevice.DeviceType;
             if (DeviceType == DeviceType.Professional)
             {
@@ -539,7 +542,7 @@ namespace PockeTwit
                 if (settings.ShowDialog() == DialogResult.Cancel) 
                 {
                     Application.Exit();
-                    return;
+                    return false;
                 }
             }
             ResetDictionaries();
@@ -574,7 +577,7 @@ namespace PockeTwit
             statList.Visible = true;
             tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
             tmrautoUpdate.Enabled = true;
-
+            return ret;
         }
 
         private void ResetDictionaries()
@@ -829,7 +832,11 @@ namespace PockeTwit
         {
             timerStartup.Enabled = false;
             timerStartup.Tick -= new EventHandler(timerStartup_Tick);
-            SetEverythingUp();
+            if (!SetEverythingUp())
+            {
+                Application.Exit();
+                return;
+            }
             SwitchToDone();
             foreach (Following f in FollowingDictionary.Values)
             {
