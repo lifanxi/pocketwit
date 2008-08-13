@@ -12,6 +12,7 @@ namespace PockeTwit
     public partial class SettingsForm : Form
     {
 
+        private bool Initialized = false;
 		#region Constructors (1) 
 
         public SettingsForm()
@@ -92,13 +93,34 @@ namespace PockeTwit
 
         private void btnAccounts_Click(object sender, EventArgs e)
         {
+            ShowAccounts();
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (!Initialized)
+            {
+                Initialized = true;Cursor.Current = Cursors.WaitCursor;
+                if (ClientSettings.AccountsList.Count == 0)
+                {
+                    if (ShowAccounts() == DialogResult.Cancel)
+                    {
+                        this.DialogResult = DialogResult.Cancel;
+                    }
+                }
+            }
+        }
+        private DialogResult ShowAccounts()
+        {
             AccountsForm af = new AccountsForm();
-            af.ShowDialog();
+            DialogResult ret = af.ShowDialog();
             if (af.IsDirty)
             {
                 NeedsReset = true;
             }
             af.Close();
+            return ret;
         }
 
     }
