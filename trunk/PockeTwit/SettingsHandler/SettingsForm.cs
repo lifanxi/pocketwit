@@ -101,7 +101,7 @@ namespace PockeTwit
             base.OnActivated(e);
             if (!Initialized)
             {
-                Initialized = true;Cursor.Current = Cursors.WaitCursor;
+                Initialized = true;
                 if (ClientSettings.AccountsList.Count == 0)
                 {
                     if (ShowAccounts() == DialogResult.Cancel)
