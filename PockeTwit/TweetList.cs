@@ -42,6 +42,17 @@ namespace PockeTwit
             this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
             Application.DoEvents();
+            if (ClientSettings.AccountsList.Count == 0)
+            {
+                // SHow Settings page first
+                SettingsForm settings = new SettingsForm();
+                if (settings.ShowDialog() == DialogResult.Cancel)
+                {
+                    Application.Exit();
+                    this.Close();
+                }
+            }
+            timerStartup.Enabled = true;
         }
 
 		#endregion�Constructors�
@@ -535,16 +546,7 @@ namespace PockeTwit
                 this.notification1.Text = "notification1";
                 this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
             }
-            if (ClientSettings.AccountsList.Count==0)
-            {
-                // SHow Settings page first
-                SettingsForm settings = new SettingsForm();
-                if (settings.ShowDialog() == DialogResult.Cancel) 
-                {
-                    Application.Exit();
-                    return false;
-                }
-            }
+            
             ResetDictionaries();
             
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];

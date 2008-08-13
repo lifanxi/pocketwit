@@ -28,7 +28,7 @@ namespace PockeTwit.Library
             {
                 try
                 {
-                    return DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", null);
+                    return DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", null);
                 }
                 catch
                 {

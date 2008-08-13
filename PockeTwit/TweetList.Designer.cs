@@ -61,7 +61,6 @@ namespace PockeTwit
             // 
             // timerStartup
             // 
-            this.timerStartup.Enabled = true;
             this.timerStartup.Interval = 1000;
             this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
             // 

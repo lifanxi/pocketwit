@@ -13,15 +13,21 @@ namespace PockeTwit
     {
         public bool IsDirty = false;
         public bool Initialized = false;
+        private List<Yedda.Twitter.Account> LocalList = new List<Yedda.Twitter.Account>();
         public AccountsForm()
         {
             InitializeComponent();
+            foreach(Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            {
+                LocalList.Add(a);
+            }
             ListAccounts();
         }
         private void ListAccounts()
         {
+            
             lstAccounts.Items.Clear();
-            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            foreach (Yedda.Twitter.Account a in LocalList)
             {
                 lstAccounts.Items.Add(a);
             }
@@ -53,8 +59,9 @@ namespace PockeTwit
             ai.Hide();
             if (ai.ShowDialog() == DialogResult.OK)
             {
-                lstAccounts.Items.Add(ai.AccountInfo);
+                LocalList.Add(ai.AccountInfo);
                 IsDirty = true;
+                ListAccounts();
                 ai.Close();
                 return true;
             }
@@ -71,8 +78,8 @@ namespace PockeTwit
             Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
             if (a != null)
             {
-                ClientSettings.AccountsList.Remove(a);
-                lstAccounts.Items.Remove(a);
+                LocalList.Remove(a);
+                ListAccounts();
                 IsDirty = true;
             }
         }
@@ -83,8 +90,9 @@ namespace PockeTwit
             AccountInfoForm ai = new AccountInfoForm(a);
             if (ai.ShowDialog() == DialogResult.OK)
             {
-                lstAccounts.Items.Remove(a);
-                lstAccounts.Items.Add(ai.AccountInfo);
+                LocalList.Remove(a);
+                LocalList.Add(ai.AccountInfo);
+                ListAccounts();
             }
             ai.Close();
         }
@@ -100,7 +108,7 @@ namespace PockeTwit
             if (IsDirty)
             {
                 ClientSettings.AccountsList.Clear();
-                foreach (Yedda.Twitter.Account a in lstAccounts.Items)
+                foreach (Yedda.Twitter.Account a in LocalList)
                 {
                     ClientSettings.AccountsList.Add(a);
                 }
