@@ -63,7 +63,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbServers.BackColor = System.Drawing.Color.DimGray;
             this.cmbServers.ForeColor = System.Drawing.Color.LightGray;
-            this.cmbServers.Location = new System.Drawing.Point(5, 141);
+            this.cmbServers.Location = new System.Drawing.Point(5, 126);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(232, 22);
             this.cmbServers.TabIndex = 2;
@@ -73,7 +73,7 @@
             // 
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.ForeColor = System.Drawing.Color.LightGray;
-            this.label3.Location = new System.Drawing.Point(4, 118);
+            this.label3.Location = new System.Drawing.Point(4, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 20);
             this.label3.Text = "Server:";
@@ -84,8 +84,9 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.BackColor = System.Drawing.Color.DimGray;
             this.txtPassword.ForeColor = System.Drawing.Color.LightGray;
-            this.txtPassword.Location = new System.Drawing.Point(5, 94);
+            this.txtPassword.Location = new System.Drawing.Point(5, 79);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(232, 21);
             this.txtPassword.TabIndex = 1;
             // 
@@ -93,7 +94,7 @@
             // 
             this.label2.BackColor = System.Drawing.Color.Black;
             this.label2.ForeColor = System.Drawing.Color.LightGray;
-            this.label2.Location = new System.Drawing.Point(4, 71);
+            this.label2.Location = new System.Drawing.Point(4, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
             this.label2.Text = "Password:";
@@ -104,7 +105,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.BackColor = System.Drawing.Color.DimGray;
             this.txtUserName.ForeColor = System.Drawing.Color.LightGray;
-            this.txtUserName.Location = new System.Drawing.Point(5, 47);
+            this.txtUserName.Location = new System.Drawing.Point(3, 28);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(232, 21);
             this.txtUserName.TabIndex = 0;
@@ -113,7 +114,7 @@
             // 
             this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.ForeColor = System.Drawing.Color.LightGray;
-            this.label4.Location = new System.Drawing.Point(4, 24);
+            this.label4.Location = new System.Drawing.Point(3, 5);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 20);
             this.label4.Text = "User:";
@@ -124,20 +125,18 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblError.BackColor = System.Drawing.Color.Black;
             this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(4, 0);
+            this.lblError.Location = new System.Drawing.Point(83, 154);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(233, 20);
+            this.lblError.Size = new System.Drawing.Size(152, 20);
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
             // chkEnabled
             // 
-            this.chkEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.chkEnabled.ForeColor = System.Drawing.Color.LightGray;
-            this.chkEnabled.Location = new System.Drawing.Point(3, 169);
+            this.chkEnabled.Location = new System.Drawing.Point(3, 154);
             this.chkEnabled.Name = "chkEnabled";
-            this.chkEnabled.Size = new System.Drawing.Size(233, 20);
+            this.chkEnabled.Size = new System.Drawing.Size(72, 20);
             this.chkEnabled.TabIndex = 6;
             this.chkEnabled.Text = "Enabled";
             // 

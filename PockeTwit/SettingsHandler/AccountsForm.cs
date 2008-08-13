@@ -124,6 +124,7 @@ namespace PockeTwit
                     LocalList.Remove(toEdit);
                     LocalList.Add(ai.AccountInfo);
                     ListAccounts();
+                    IsDirty = true;
                 }
                 ai.Close();
             }
