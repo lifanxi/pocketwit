@@ -299,7 +299,12 @@ namespace Yedda
                     {
                         return null;
                     }
+                    
                     HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                    if (errorResponse.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return null;
+                    }
                     string ErrorText;
                     using (Stream stream = errorResponse.GetResponseStream())
                     {

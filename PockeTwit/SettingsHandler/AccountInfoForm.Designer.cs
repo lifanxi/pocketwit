@@ -60,7 +60,7 @@
             // 
             this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbServers.BackColor = System.Drawing.Color.Black;
+            this.cmbServers.BackColor = System.Drawing.Color.DimGray;
             this.cmbServers.ForeColor = System.Drawing.Color.LightGray;
             this.cmbServers.Location = new System.Drawing.Point(82, 78);
             this.cmbServers.Name = "cmbServers";
@@ -82,7 +82,7 @@
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.BackColor = System.Drawing.Color.Black;
+            this.txtPassword.BackColor = System.Drawing.Color.DimGray;
             this.txtPassword.ForeColor = System.Drawing.Color.LightGray;
             this.txtPassword.Location = new System.Drawing.Point(82, 51);
             this.txtPassword.Name = "txtPassword";
@@ -104,7 +104,7 @@
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.BackColor = System.Drawing.Color.Black;
+            this.txtUserName.BackColor = System.Drawing.Color.DimGray;
             this.txtUserName.ForeColor = System.Drawing.Color.LightGray;
             this.txtUserName.Location = new System.Drawing.Point(82, 23);
             this.txtUserName.Name = "txtUserName";
