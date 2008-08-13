@@ -91,11 +91,6 @@ namespace PockeTwit
 
 		#endregion Methods 
 
-        private void btnAccounts_Click(object sender, EventArgs e)
-        {
-            ShowAccounts();
-        }
-
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -121,6 +116,11 @@ namespace PockeTwit
             }
             af.Close();
             return ret;
+        }
+
+        private void lnkAccounts_Click(object sender, EventArgs e)
+        {
+            ShowAccounts();
         }
 
     }

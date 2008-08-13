@@ -39,6 +39,7 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
+            this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -62,18 +63,17 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbServers.BackColor = System.Drawing.Color.DimGray;
             this.cmbServers.ForeColor = System.Drawing.Color.LightGray;
-            this.cmbServers.Location = new System.Drawing.Point(82, 78);
+            this.cmbServers.Location = new System.Drawing.Point(5, 141);
             this.cmbServers.Name = "cmbServers";
-            this.cmbServers.Size = new System.Drawing.Size(155, 22);
+            this.cmbServers.Size = new System.Drawing.Size(232, 22);
             this.cmbServers.TabIndex = 2;
+            this.cmbServers.SelectedIndexChanged += new System.EventHandler(this.cmbServers_SelectedIndexChanged);
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.ForeColor = System.Drawing.Color.LightGray;
-            this.label3.Location = new System.Drawing.Point(5, 80);
+            this.label3.Location = new System.Drawing.Point(4, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 20);
             this.label3.Text = "Server:";
@@ -84,18 +84,16 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.BackColor = System.Drawing.Color.DimGray;
             this.txtPassword.ForeColor = System.Drawing.Color.LightGray;
-            this.txtPassword.Location = new System.Drawing.Point(82, 51);
+            this.txtPassword.Location = new System.Drawing.Point(5, 94);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(155, 21);
+            this.txtPassword.Size = new System.Drawing.Size(232, 21);
             this.txtPassword.TabIndex = 1;
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.BackColor = System.Drawing.Color.Black;
             this.label2.ForeColor = System.Drawing.Color.LightGray;
-            this.label2.Location = new System.Drawing.Point(5, 51);
+            this.label2.Location = new System.Drawing.Point(4, 71);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
             this.label2.Text = "Password:";
@@ -106,15 +104,13 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.BackColor = System.Drawing.Color.DimGray;
             this.txtUserName.ForeColor = System.Drawing.Color.LightGray;
-            this.txtUserName.Location = new System.Drawing.Point(82, 23);
+            this.txtUserName.Location = new System.Drawing.Point(5, 47);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(155, 21);
+            this.txtUserName.Size = new System.Drawing.Size(232, 21);
             this.txtUserName.TabIndex = 0;
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.ForeColor = System.Drawing.Color.LightGray;
             this.label4.Location = new System.Drawing.Point(4, 24);
@@ -134,6 +130,17 @@
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
+            // chkEnabled
+            // 
+            this.chkEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkEnabled.ForeColor = System.Drawing.Color.LightGray;
+            this.chkEnabled.Location = new System.Drawing.Point(3, 169);
+            this.chkEnabled.Name = "chkEnabled";
+            this.chkEnabled.Size = new System.Drawing.Size(233, 20);
+            this.chkEnabled.TabIndex = 6;
+            this.chkEnabled.Text = "Enabled";
+            // 
             // AccountInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -141,6 +148,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.cmbServers);
             this.Controls.Add(this.label3);
@@ -166,5 +174,6 @@
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.CheckBox chkEnabled;
     }
 }
