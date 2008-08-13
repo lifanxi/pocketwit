@@ -770,6 +770,7 @@ namespace PockeTwit
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
             CurrentlySelectedAccount = statItem.Tweet.Account;
+            SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount));
             UpdateRightMenu();
         }
 
