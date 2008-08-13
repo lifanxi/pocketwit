@@ -61,7 +61,7 @@ namespace PockeTwit
             this.label5 = new System.Windows.Forms.Label();
             this.chkReplyImages = new System.Windows.Forms.CheckBox();
             this.lblError = new System.Windows.Forms.Label();
-            this.btnAccounts = new System.Windows.Forms.Button();
+            this.lnkAccounts = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -144,15 +144,16 @@ namespace PockeTwit
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
-            // btnAccounts
+            // lnkAccounts
             // 
-            this.btnAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAccounts.Location = new System.Drawing.Point(163, 245);
-            this.btnAccounts.Name = "btnAccounts";
-            this.btnAccounts.Size = new System.Drawing.Size(72, 20);
-            this.btnAccounts.TabIndex = 6;
-            this.btnAccounts.Text = "Accounts";
-            this.btnAccounts.Click += new System.EventHandler(this.btnAccounts_Click);
+            this.lnkAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkAccounts.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkAccounts.Location = new System.Drawing.Point(126, 245);
+            this.lnkAccounts.Name = "lnkAccounts";
+            this.lnkAccounts.Size = new System.Drawing.Size(109, 20);
+            this.lnkAccounts.TabIndex = 10;
+            this.lnkAccounts.Text = "Manage Accounts";
+            this.lnkAccounts.Click += new System.EventHandler(this.lnkAccounts_Click);
             // 
             // SettingsForm
             // 
@@ -160,7 +161,7 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.btnAccounts);
+            this.Controls.Add(this.lnkAccounts);
             this.Controls.Add(this.chkReplyImages);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtMaxTweets);
@@ -178,7 +179,7 @@ namespace PockeTwit
         #endregion
 
         private System.Windows.Forms.Label lblError;
-        private System.Windows.Forms.Button btnAccounts;
+        private System.Windows.Forms.LinkLabel lnkAccounts;
 
     }
 }

@@ -29,7 +29,7 @@ namespace PockeTwit
             lstAccounts.Items.Clear();
             foreach (Yedda.Twitter.Account a in LocalList)
             {
-                lstAccounts.Items.Add(a);
+                lstAccounts.Items.Add(new ListViewItem(a.ToString()));
             }
         }
         protected override void OnActivated(EventArgs e)
@@ -73,29 +73,8 @@ namespace PockeTwit
             
         }
 
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
-            if (a != null)
-            {
-                LocalList.Remove(a);
-                ListAccounts();
-                IsDirty = true;
-            }
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
-            AccountInfoForm ai = new AccountInfoForm(a);
-            if (ai.ShowDialog() == DialogResult.OK)
-            {
-                LocalList.Remove(a);
-                LocalList.Add(ai.AccountInfo);
-                ListAccounts();
-            }
-            ai.Close();
-        }
+        
+       
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
@@ -120,18 +99,54 @@ namespace PockeTwit
             this.DialogResult = DialogResult.Cancel;
         }
 
-        private void lstAccounts_SelectedIndexChanged(object sender, EventArgs e)
+        
+        private void lnkAdd_Click(object sender, EventArgs e)
         {
-
+            AddAccount();
         }
 
-        private void btnToggle_Click(object sender, EventArgs e)
+        private void lnkEdit_Click(object sender, EventArgs e)
         {
-            Yedda.Twitter.Account a = (Yedda.Twitter.Account)lstAccounts.SelectedItem;
-            if (a == null) { return; }
-            a.Enabled = !a.Enabled;
-            ListAccounts();
-            IsDirty = true;
+            string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
+            Yedda.Twitter.Account toEdit = null;
+            foreach (Yedda.Twitter.Account a in LocalList)
+            {
+                if (a.ToString() == selectedText)
+                {
+                    toEdit = a;
+                }
+            }
+            if (toEdit != null)
+            {
+                AccountInfoForm ai = new AccountInfoForm(toEdit);
+                if (ai.ShowDialog() == DialogResult.OK)
+                {
+                    LocalList.Remove(toEdit);
+                    LocalList.Add(ai.AccountInfo);
+                    ListAccounts();
+                }
+                ai.Close();
+            }
         }
+
+        private void lnkRemove_Click(object sender, EventArgs e)
+        {
+            string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
+            Yedda.Twitter.Account toRemove = null;
+            foreach (Yedda.Twitter.Account a in LocalList)
+            {
+                if (a.ToString() == selectedText)
+                {
+                    toRemove = a;
+                }
+            }
+            if (toRemove != null)
+            {
+                LocalList.Remove(toRemove);
+                ListAccounts();
+                IsDirty = true;
+            }
+        }
+
     }
 }

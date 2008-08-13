@@ -43,7 +43,7 @@ namespace PockeTwit
         {
             txtUserName.Text = _AccountInfo.UserName;
             txtPassword.Text = _AccountInfo.Password;
-
+            chkEnabled.Checked = _AccountInfo.Enabled;
             switch (_AccountInfo.Server)
             {
                 case Yedda.Twitter.TwitterServer.twitter:
@@ -73,6 +73,7 @@ namespace PockeTwit
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
             _AccountInfo.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+            _AccountInfo.Enabled = chkEnabled.Checked;
             Yedda.Twitter T = new Yedda.Twitter();
             T.AccountInfo = _AccountInfo;
             Cursor.Current = Cursors.Default;
@@ -83,6 +84,11 @@ namespace PockeTwit
                 return;
             }
             this.DialogResult = DialogResult.OK;
+        }
+
+        private void cmbServers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
