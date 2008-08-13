@@ -12,6 +12,7 @@ namespace PockeTwit
     public partial class AccountsForm : Form
     {
         public bool IsDirty = false;
+        public bool Initialized = false;
         public AccountsForm()
         {
             InitializeComponent();
@@ -25,8 +26,28 @@ namespace PockeTwit
                 lstAccounts.Items.Add(a);
             }
         }
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (!Initialized)
+            {
+                Initialized = true;
+                if (ClientSettings.AccountsList.Count == 0)
+                {
+                    if (!AddAccount())
+                    {
+                        this.DialogResult = DialogResult.Cancel;
+                    }
+                }
+            }
+        }
 
         private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddAccount();
+        }
+
+        private bool AddAccount()
         {
             AccountInfoForm ai = new AccountInfoForm();
             ai.Hide();
@@ -34,8 +55,15 @@ namespace PockeTwit
             {
                 lstAccounts.Items.Add(ai.AccountInfo);
                 IsDirty = true;
+                ai.Close();
+                return true;
             }
-            ai.Close();
+            else
+            {
+                ai.Close();
+                return false;
+            }
+            
         }
 
         private void btnRemove_Click(object sender, EventArgs e)

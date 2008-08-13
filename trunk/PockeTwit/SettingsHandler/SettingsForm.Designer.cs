@@ -109,6 +109,7 @@ namespace PockeTwit
             // 
             this.txtMaxTweets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaxTweets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.txtMaxTweets.Location = new System.Drawing.Point(81, 23);
             this.txtMaxTweets.Name = "txtMaxTweets";
             this.txtMaxTweets.Size = new System.Drawing.Size(92, 21);
