@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.22</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv22.CAB</url>
-  <notes>Merge multiple accounts.
-Take a new picture or use an existing image
+  <version>.23</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv23.CAB</url>
+  <notes>VGA Layout Fix
+Faster Load
+Fix crash on startup with old caches
 </notes>
 </LatestRelease>
