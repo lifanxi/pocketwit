@@ -29,6 +29,7 @@ namespace PockeTwit
         {
             InitializeComponent();
             _AccountInfo.Enabled = true;
+            chkEnabled.Checked = true;
             FillServerList();
         }
 
