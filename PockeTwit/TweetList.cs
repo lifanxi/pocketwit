@@ -28,7 +28,6 @@ namespace PockeTwit
         private List<string> RightMenu;
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
-        private Dictionary<Yedda.Twitter, string> CachedResponse = new Dictionary<Yedda.Twitter, string>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private Dictionary<Yedda.Twitter, Library.status[]> FriendsLines = new Dictionary<Yedda.Twitter, PockeTwit.Library.status[]>();
         private string ShowUserID;
@@ -280,9 +279,8 @@ namespace PockeTwit
             Library.status[] mergedstatuses = null;
             string response = FetchFromTwitter(Connection);
 
-            if (!string.IsNullOrEmpty(response) && response != CachedResponse[Connection])
+            if (!string.IsNullOrEmpty(response))
             {
-                CachedResponse[Connection] = response;
                 Library.status[] newstatuses;
                 if (CurrentAction == Yedda.Twitter.ActionType.Search)
                 {
@@ -316,9 +314,8 @@ namespace PockeTwit
                 {
                     string response = FetchFromTwitter(t);
 
-                    if (!string.IsNullOrEmpty(response) && response != CachedResponse[t])
+                    if (!string.IsNullOrEmpty(response))
                     {
-                        CachedResponse[t] = response;
                         Library.status[] newstatuses;
                         if (CurrentAction == Yedda.Twitter.ActionType.Search)
                         {
@@ -587,7 +584,6 @@ namespace PockeTwit
             FriendsLines.Clear();
             FollowingDictionary.Clear();
             LastStatusID.Clear();
-            CachedResponse.Clear();
             TwitterConnections.Clear();
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
@@ -600,7 +596,6 @@ namespace PockeTwit
                 Following f = new Following(TwitterConn);
                 FollowingDictionary.Add(TwitterConn, f);
                 LastStatusID.Add(TwitterConn, "");
-                CachedResponse.Add(TwitterConn, "");
                 FriendsLines.Add(TwitterConn, null);
             }
             foreach (Following f in FollowingDictionary.Values)

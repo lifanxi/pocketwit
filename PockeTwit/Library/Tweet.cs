@@ -12,6 +12,9 @@ namespace PockeTwit.Library
     [Serializable]
     public class status : IComparable
     {
+        [XmlIgnore]
+        private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
+
 
 		#region Properties (7) 
 
@@ -69,7 +72,7 @@ namespace PockeTwit.Library
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account)
         {
             
-            XmlSerializer s = new XmlSerializer(typeof(Library.status[]));
+            
             Library.status[] statuses;
             if (string.IsNullOrEmpty(response))
             {
@@ -79,7 +82,7 @@ namespace PockeTwit.Library
             {
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
                 {
-                        statuses = (Library.status[])s.Deserialize(r);                    
+                    statuses = (Library.status[])statusSerializer.Deserialize(r);                    
                 }
             }
             foreach (Library.status stat in statuses)
@@ -134,11 +137,10 @@ namespace PockeTwit.Library
         public static string Serialize(status[] List)
         {
             if (List.Length == 0) { return null; }
-            XmlSerializer s = new XmlSerializer(typeof(status[]));
             StringBuilder sb = new StringBuilder();
             using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
             {
-                s.Serialize(w, List);
+                statusSerializer.Serialize(w, List);
             }
             return sb.ToString();
         }
