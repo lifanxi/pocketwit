@@ -35,7 +35,14 @@ namespace PockeTwit.Library
                 }
                 catch
                 {
-                    return DateTime.Parse(created_at);
+                    try
+                    {
+                        return DateTime.Parse(created_at);
+                    }
+                    catch
+                    {
+                        return new DateTime(2000, 1, 1);
+                    }
                 }
             }
         }
