@@ -14,7 +14,7 @@ namespace PockeTwit
 
 		#region Fields (4) 
 
-        public double currentVersion = .21;
+        public double currentVersion = .22;
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private UpdateInfo WebVersion;
         private string XMLResponse;
