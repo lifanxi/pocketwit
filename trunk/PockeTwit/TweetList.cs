@@ -603,6 +603,10 @@ namespace PockeTwit
                 CachedResponse.Add(TwitterConn, "");
                 FriendsLines.Add(TwitterConn, null);
             }
+            foreach (Following f in FollowingDictionary.Values)
+            {
+                f.LoadFromTwitter();
+            }
         }
 
         private void SetStatus()
@@ -841,10 +845,6 @@ namespace PockeTwit
                 return;
             }
             SwitchToDone();
-            foreach (Following f in FollowingDictionary.Values)
-            {
-                f.LoadFromTwitter();
-            }
         }
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
