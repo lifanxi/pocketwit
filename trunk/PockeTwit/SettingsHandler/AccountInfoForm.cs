@@ -28,6 +28,7 @@ namespace PockeTwit
         public AccountInfoForm()
         {
             InitializeComponent();
+            _AccountInfo.Enabled = true;
             FillServerList();
         }
 
