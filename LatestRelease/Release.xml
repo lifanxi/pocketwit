@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.21</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv21.CAB</url>
-  <notes>No new features, just bugfixes
+  <version>.22</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv22.CAB</url>
+  <notes>Merge multiple accounts.
+Take a new picture or use an existing image
 </notes>
 </LatestRelease>
