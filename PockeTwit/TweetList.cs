@@ -461,7 +461,7 @@ namespace PockeTwit
             }
             else
             {
-                if (this.Focused)
+                if (this.Focused || statList.Focused)
                 {
                     MessageBeep(0);
                     return;
