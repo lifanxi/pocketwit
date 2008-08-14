@@ -94,7 +94,7 @@ namespace PockeTwit
             // 
             this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCharsLeft.ForeColor = System.Drawing.Color.LightGray;
-            this.lblCharsLeft.Location = new System.Drawing.Point(198, 42);
+            this.lblCharsLeft.Location = new System.Drawing.Point(198, ClientSettings.TextSize + 20);
             this.lblCharsLeft.Name = "lblCharsLeft";
             this.lblCharsLeft.Size = new System.Drawing.Size(39, 20);
             this.lblCharsLeft.Text = "label1";
