@@ -25,29 +25,32 @@ namespace PockeTwit.Library
 
 
         [XmlIgnore]
-        private DateTime createdAt
+        private DateTime createdAt;
+
+        private string _created_at;
+        public string created_at 
         {
-            get
+            get { return _created_at; }
+            set
             {
+                _created_at = value;
                 try
                 {
-                    return DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", null);
+                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", null);
                 }
                 catch
                 {
                     try
                     {
-                        return DateTime.Parse(created_at);
+                        createdAt = DateTime.Parse(created_at);
                     }
                     catch
                     {
-                        return new DateTime(2000, 1, 1);
+                        createdAt = new DateTime(2000, 1, 1);
                     }
                 }
             }
         }
-
-        public string created_at { get; set; }
         public string id { get; set; }
 
         //public string source { get; set; }
