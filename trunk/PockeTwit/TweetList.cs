@@ -406,35 +406,6 @@ namespace PockeTwit
             t.MergeIn(new TimeLine(newstatuses));
             t.TrimExcess();
             return t.ToArray();
-            /*
-            if (CurrentStatuses == null)
-            {
-                return newstatuses;
-            }
-            int newLength = (newstatuses.Length + CurrentStatuses.Length > ClientSettings.MaxTweets) ? ClientSettings.MaxTweets : newstatuses.Length + CurrentStatuses.Length;
-            Library.status[] MergedList = new PockeTwit.Library.status[newLength];
-            int i = 0;
-            foreach (Library.status stat in newstatuses)
-            {
-                if (stat != null)
-                {
-                    if (i >= ClientSettings.MaxTweets) { break; }
-                    MergedList[i] = stat;
-                    i++;
-                }
-            }
-            foreach (Library.status stat in CurrentStatuses)
-            {
-                if (stat != null)
-                {
-                    if (i >= ClientSettings.MaxTweets) { break; }
-                    MergedList[i] = stat;
-                    i++;
-                }
-            }
-            LastStatusID = MergedList[0].id;
-            return MergedList;
-             */
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
