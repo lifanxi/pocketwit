@@ -302,7 +302,15 @@ namespace FingerUI
 
         public void BeginUpdate()
         {
-            m_updating = true;
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(BeginUpdate);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                m_updating = true;
+            }
         }
 
         public void Clear()
@@ -321,8 +329,16 @@ namespace FingerUI
 
         public void EndUpdate()
         {
-            m_updating = false;
-            Reset();
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(EndUpdate);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                m_updating = false;
+                Reset();
+            }
         }
 
         public void HookKey()
