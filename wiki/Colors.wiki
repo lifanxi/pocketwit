@@ -1,0 +1,13 @@
+#summary How to customize the colors.
+
+= Introduction =
+
+I believe that with every application eventually someone wants skins.  I haven't put in a full-blown skinning engine, but you can easily change the color set for the application
+
+*Note:*  Right now I haven't extended the colors throughout the application, they will only affect the main screen.  If there's enough demand, I can make the other screens comply as well.
+
+= Details =
+
+If you want to customize the colors, look for the "colors.txt" file in the program folder.  It contains a list of element styles and the R:G:B values for their color.  Modify those values and restart PockeTwit to see the results.
+
+If you've come up with something nice, let me know!  If enough people want, I can look into extending the customization capabilities in future releases.
