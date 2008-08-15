@@ -162,7 +162,7 @@ namespace PockeTwit.Library
             try
             {
                 status otherStat = (status)obj;
-                return otherStat.id.Equals(this.id);
+                return (otherStat.id.Equals(this.id) && otherStat.Account.Equals(this.Account));
             }
             catch
             {
