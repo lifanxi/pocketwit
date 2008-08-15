@@ -380,6 +380,65 @@ namespace FingerUI
 
 
         #region Parsing Routines
+        private void BreakUpTheTextWithoutSpaces(Graphics g, Rectangle textBounds)
+        {
+            string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
+            SizeF size = g.MeasureString(CurrentLine, TextFont);
+
+            bool SpaceSplit = false;
+            if (size.Width < textBounds.Width)
+            {
+                string line = CurrentLine.TrimStart(new char[] { ' ' });
+                Tweet.SplitLines.Add(line);
+                FindClickables(line, g, 0);
+            }
+            int LineOffset = 1;
+            while (size.Width > textBounds.Width)
+            {
+                int lastBreak = 0;
+                int currentPos = 0;
+                StringBuilder newString = new StringBuilder();
+                foreach (char c in CurrentLine)
+                {
+                    newString.Append(c);
+                    if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
+                    {
+                        if (!SpaceSplit | lastBreak == 0)
+                        {
+                            lastBreak = currentPos - 1;
+                        }
+                        newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
+                        break;
+                    }
+                    if (c == ' ')
+                    {
+                        lastBreak = currentPos;
+                    }
+                    currentPos++;
+                }
+                string line = newString.ToString().TrimStart(new char[] { ' ' });
+                Tweet.SplitLines.Add(line);
+                FindClickables(line, g, LineOffset - 1);
+                if (Tweet.SplitLines.Count >= 5)
+                {
+                    Tweet.Clipped = true;
+                    break;
+                }
+                if (lastBreak != 0)
+                {
+                    CurrentLine = CurrentLine.Substring(lastBreak);
+                }
+                size = g.MeasureString(CurrentLine, TextFont);
+                if (size.Width <= textBounds.Width)
+                {
+                    line = CurrentLine.TrimStart(new char[] { ' ' });
+                    Tweet.SplitLines.Add(line);
+                    FindClickables(line, g, LineOffset);
+                }
+                LineOffset++;
+            }
+        }
+
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
             if (Tweet.SplitLines.Count == 0)
@@ -388,10 +447,11 @@ namespace FingerUI
                 FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
 
-                bool SpaceSplit = false;
-                if (this.Tweet.text.IndexOf(' ') > 0)
+                bool SpaceSplit = true;
+                if (this.Tweet.text.IndexOf(' ') == 0)
                 {
-                    SpaceSplit = true;
+                    BreakUpTheTextWithoutSpaces(g, textBounds);
+                    return;
                 }
                 if (size.Width < textBounds.Width)
                 {
@@ -405,23 +465,20 @@ namespace FingerUI
                     int lastBreak = 0;
                     int currentPos = 0;
                     StringBuilder newString = new StringBuilder();
-                    foreach (char c in CurrentLine)
+                    string[] Words = CurrentLine.Split(new char[]{' '});
+                    foreach (string word in Words)
                     {
-                        newString.Append(c);    
+                        newString.Append(word + ' ');    
                         if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
                         {
                             if (!SpaceSplit | lastBreak == 0)
                             {
-                                lastBreak = currentPos - 1;
+                                lastBreak = currentPos;
                             }
                             newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
                             break;
                         }
-                        if (c == ' ')
-                        {
-                            lastBreak = currentPos;
-                        }
-                        currentPos++;
+                        currentPos = currentPos + word.Length + 1;
                     }
                     string line = newString.ToString().TrimStart(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
