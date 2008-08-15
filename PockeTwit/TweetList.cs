@@ -307,7 +307,7 @@ namespace PockeTwit
                 return;
             }
             Library.status[] mergedstatuses = null;
-
+            statList.BeginUpdate();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 if (t.AccountInfo.Enabled)
@@ -349,6 +349,7 @@ namespace PockeTwit
                     }
                 }
             }
+            statList.EndUpdate();
             ChangeCursor(Cursors.Default);
         }
 
