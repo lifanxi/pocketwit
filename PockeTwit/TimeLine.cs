@@ -7,10 +7,12 @@ namespace PockeTwit
 {
     class TimeLine : List<Library.status>
     {
+        private Dictionary<string, Library.status> InternalDictionary = new Dictionary<string, PockeTwit.Library.status>();
         public TimeLine(IEnumerable<Library.status> items)
         {
 
             this.Clear();
+            InternalDictionary.Clear();
             if (items != null)
             {
                 AddUnique(items);
@@ -21,8 +23,9 @@ namespace PockeTwit
         {
             foreach (Library.status s in items)
             {
-                if (!this.Contains(s))
+                if (!InternalDictionary.ContainsKey(s.id))
                 {
+                    InternalDictionary.Add(s.id, s);
                     this.Add(s);
                 }
             }
@@ -34,6 +37,10 @@ namespace PockeTwit
             int overage = this.Count - ClientSettings.MaxTweets;
             if (overage > 0)
             {
+                for (int i = overage; i < this.Count; i++)
+                {
+                    InternalDictionary.Remove(this[i].id);
+                }
                 this.RemoveRange(ClientSettings.MaxTweets, overage);
             }
         }
