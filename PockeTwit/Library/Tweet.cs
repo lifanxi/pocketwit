@@ -17,16 +17,16 @@ namespace PockeTwit.Library
 
 
 		#region Properties (7) 
-
+        [XmlIgnore]
+        public bool Clipped = false;
+        [XmlIgnore]
+        public List<string> SplitLines { get; set; }
         [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
         public string favorited { get; set; }
-
-
         [XmlIgnore]
         private DateTime createdAt;
-
         private string _created_at;
         public string created_at 
         {
@@ -58,8 +58,7 @@ namespace PockeTwit.Library
         //public string in_reply_to_status_id { get; set; }
         public string in_reply_to_user_id { get; set; }
 
-        [XmlIgnore]
-        public List<string> SplitLines { get; set; }
+        
 
         public string text { get; set; }
 

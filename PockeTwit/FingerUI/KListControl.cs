@@ -1388,7 +1388,7 @@ namespace FingerUI
             StatusItem s = (StatusItem)m_selectedItem;
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
-            if (s.Clipped)
+            if (s.Tweet.Clipped)
             {
                 ClickablesControl.ShowClipped = true;
             }

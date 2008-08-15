@@ -15,7 +15,6 @@ namespace FingerUI
 
         private Graphics _ParentGraphics;
         private PockeTwit.Library.status _Tweet;
-        public bool Clipped = false;
         private Rectangle currentOffset;
         private Rectangle m_bounds;
         private bool m_highlighted = false;
@@ -429,7 +428,7 @@ namespace FingerUI
                     FindClickables(line, g, LineOffset-1);
                     if (Tweet.SplitLines.Count >= 5) 
                     {
-                        Clipped = true;
+                        Tweet.Clipped = true;
                         break; 
                     }
                     if (lastBreak != 0)
