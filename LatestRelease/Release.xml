@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.23</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv23.CAB</url>
-  <notes>VGA Layout Fix
-Faster Load
-Fix crash on startup with old caches
+  <version>.24</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv24.CAB</url>
+  <notes>Option to show times
+Can clear the avatar cache from settings screen
 </notes>
 </LatestRelease>
