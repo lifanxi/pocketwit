@@ -38,7 +38,7 @@ namespace PockeTwit.Library
                     Diff = Math.Round(Difference.TotalDays);
                     if (Diff > 1) { Span = "days"; } else { Span = "day"; }
                 }
-                if (Difference.TotalHours > 1)
+                else if (Difference.TotalHours > 1)
                 {
                     Diff = Math.Round(Difference.TotalHours);
                     if (Diff > 1) { Span = "hours"; } else { Span = "hour"; }
