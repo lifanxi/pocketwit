@@ -45,6 +45,11 @@ public class ConfigurationSettings
                     a.UserName = oNode.Attributes["user"].Value;
                     a.Password = oNode.Attributes["password"].Value;
                     a.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), oNode.Attributes["server"].Value, true);
+                    if (oNode.Attributes["serverName"] != null)
+                    {
+                        string ServerName = oNode.Attributes["servername"].Value;
+                        a.ServerURL = Yedda.Servers.ServerList[ServerName];
+                    }
                     a.Enabled = bool.Parse(oNode.Attributes["enabled"].Value);
                     Accounts.Add(a);
                 }
@@ -87,15 +92,15 @@ public class ConfigurationSettings
                 XmlAttribute passAtt = oXml.CreateAttribute("password");
                 passAtt.Value = Account.Password;
 
-                XmlAttribute serverAtt = oXml.CreateAttribute("server");
-                serverAtt.Value = Account.Server.ToString();
+                XmlAttribute serverNameAtt = oXml.CreateAttribute("servername");
+                serverNameAtt.Value = Account.ServerURL.Name;
 
                 XmlAttribute enabledAtt = oXml.CreateAttribute("enabled");
                 enabledAtt.Value = Account.Enabled.ToString();
 
                 AccountNode.Attributes.Append(userAtt);
                 AccountNode.Attributes.Append(passAtt);
-                AccountNode.Attributes.Append(serverAtt);
+                AccountNode.Attributes.Append(serverNameAtt);
                 AccountNode.Attributes.Append(enabledAtt);
                 AccountsNode.AppendChild(AccountNode);
             }
