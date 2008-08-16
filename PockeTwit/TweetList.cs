@@ -351,6 +351,8 @@ namespace PockeTwit
                 }
             }
             statList.EndUpdate();
+            FingerUI.StatusItem s = (FingerUI.StatusItem)statList.SelectedItem;
+            CurrentlySelectedAccount = s.Tweet.Account;
             ChangeCursor(Cursors.Default);
         }
 
