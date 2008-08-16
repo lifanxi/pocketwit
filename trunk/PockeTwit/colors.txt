@@ -2,5 +2,6 @@
 LinkColor:150:150:255
 SelectedBackColor:47:79:79
 SelectedForeColor:255:255:255
+SelectedSmallTextColor:200:200:200
 SmallTextColor:128:128:128
 ErrorColor:255:0:0

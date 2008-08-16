@@ -243,7 +243,10 @@ namespace FingerUI
             {
                 using (Font smallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular))
                 {
-                    using (Brush dateBrush = new SolidBrush(ClientSettings.SmallTextColor))
+                    Color SmallColor = ClientSettings.SmallTextColor;
+                    if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
+                    
+                    using (Brush dateBrush = new SolidBrush(SmallColor))
                     {
                         //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
                         g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
