@@ -22,7 +22,7 @@ public static class ClientSettings
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static int SmallArtSize = 60;
     public static int UpdateInterval;
-    public static bool ShowExtra = true;
+
     public static int LinesOfText
     {
         get
@@ -61,6 +61,13 @@ public static class ClientSettings
     //public static Yedda.Twitter.TwitterServer Server { get; set; }
 
     public static bool ShowReplyImages { get; set; }
+
+    public static bool _ShowExtra = true;
+    public static bool ShowExtra
+    {
+        get { return _ShowExtra; }
+        set { _ShowExtra = value; }
+    }
 
     private static int _SmallTextSize;
     public static int SmallTextSize
@@ -120,6 +127,10 @@ public static class ClientSettings
             else
             {
                 BeepOnNew = false;
+            }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowExtra"]))
+            {
+                ShowExtra = bool.Parse(ConfigurationSettings.AppSettings["ShowExtra"]);
             }
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["Server"]))
@@ -190,7 +201,7 @@ public static class ClientSettings
         {
             ConfigurationSettings.AppSettings.Remove("Password");
         }
-
+        ConfigurationSettings.AppSettings["ShowExtra"] = ShowExtra.ToString();
         ConfigurationSettings.Accounts = AccountsList;
         ConfigurationSettings.SaveConfig();
     }
