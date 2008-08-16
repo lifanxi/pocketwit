@@ -358,6 +358,11 @@ namespace PockeTwit
 
         private void GetTimeLineAsync()
         {
+            //Reset the timer
+            tmrautoUpdate.Enabled = false;
+            tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
+            tmrautoUpdate.Enabled = true;
+
             System.Threading.ThreadStart ts;
             if (CurrentAction == Yedda.Twitter.ActionType.Show)
             {
