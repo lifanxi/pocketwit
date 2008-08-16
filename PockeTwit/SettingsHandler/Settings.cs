@@ -16,6 +16,7 @@ public static class ClientSettings
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
+    public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
     public static int Margin = 5;
     public static int MaxTweets = 50;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
@@ -234,7 +235,7 @@ public static class ClientSettings
                     string ColorType = ColorPair[0];
 
 
-                    System.Drawing.Color ColorChosen = System.Drawing.Color.FromArgb(int.Parse(ColorPair[1]), int.Parse(ColorPair[1]), int.Parse(ColorPair[1]));
+                    System.Drawing.Color ColorChosen = System.Drawing.Color.FromArgb(int.Parse(ColorPair[1]), int.Parse(ColorPair[2]), int.Parse(ColorPair[3]));
 
                     FieldInfo fi = typeof(ClientSettings).GetField(ColorType);
                     fi.SetValue(null, ColorChosen);
