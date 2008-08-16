@@ -29,6 +29,7 @@ namespace PockeTwit
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
         }
 
+
 		#endregion Constructors 
 
 		#region Delegates and Events (2) 
@@ -50,6 +51,11 @@ namespace PockeTwit
 
 
 		// Public Methods (3) 
+
+        public static void Clear()
+        {
+            ImageDictionary.Clear();
+        }
 
         public static Image GetArt(string User)
         {

@@ -126,5 +126,15 @@ namespace PockeTwit
             ShowAccounts();
         }
 
+        private void lnkClearAvatars_Click(object sender, EventArgs e)
+        {
+            foreach(string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
+            {
+                System.IO.File.Delete(Avatar);
+            }
+            ImageBuffer.Clear();
+            MessageBox.Show("The avatar cache was cleared.","PockeTwit");
+        }
+
     }
 }
