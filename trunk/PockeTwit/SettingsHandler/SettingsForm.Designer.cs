@@ -63,6 +63,7 @@ namespace PockeTwit
             this.lblError = new System.Windows.Forms.Label();
             this.lnkAccounts = new System.Windows.Forms.LinkLabel();
             this.chkTimestamps = new System.Windows.Forms.CheckBox();
+            this.lnkClearAvatars = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -149,7 +150,7 @@ namespace PockeTwit
             // 
             this.lnkAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkAccounts.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.lnkAccounts.Location = new System.Drawing.Point(126, 245);
+            this.lnkAccounts.Location = new System.Drawing.Point(127, 228);
             this.lnkAccounts.Name = "lnkAccounts";
             this.lnkAccounts.Size = new System.Drawing.Size(109, 20);
             this.lnkAccounts.TabIndex = 5;
@@ -165,12 +166,24 @@ namespace PockeTwit
             this.chkTimestamps.TabIndex = 3;
             this.chkTimestamps.Text = "Show times";
             // 
+            // lnkClearAvatars
+            // 
+            this.lnkClearAvatars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkClearAvatars.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkClearAvatars.Location = new System.Drawing.Point(126, 248);
+            this.lnkClearAvatars.Name = "lnkClearAvatars";
+            this.lnkClearAvatars.Size = new System.Drawing.Size(109, 20);
+            this.lnkClearAvatars.TabIndex = 6;
+            this.lnkClearAvatars.Text = "Clear Avatar Cache";
+            this.lnkClearAvatars.Click += new System.EventHandler(this.lnkClearAvatars_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lnkClearAvatars);
             this.Controls.Add(this.chkTimestamps);
             this.Controls.Add(this.lnkAccounts);
             this.Controls.Add(this.chkReplyImages);
@@ -192,6 +205,7 @@ namespace PockeTwit
         private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.LinkLabel lnkAccounts;
         private System.Windows.Forms.CheckBox chkTimestamps;
+        private System.Windows.Forms.LinkLabel lnkClearAvatars;
 
     }
 }
