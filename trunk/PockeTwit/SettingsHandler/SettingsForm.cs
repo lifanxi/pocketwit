@@ -61,10 +61,12 @@ namespace PockeTwit
                 return;
             }
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
+            if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsReset = true; }
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.BeepOnNew = chkBeep.Checked;
             ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.ShowReplyImages = chkReplyImages.Checked;
+            ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.SaveSettings();
             
             Cursor.Current = Cursors.Default;
@@ -85,6 +87,7 @@ namespace PockeTwit
             chkBeep.Checked = ClientSettings.BeepOnNew;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkReplyImages.Checked = ClientSettings.ShowReplyImages;
+            chkTimestamps.Checked = ClientSettings.ShowExtra;
             this.DialogResult = DialogResult.Cancel;
         }
 

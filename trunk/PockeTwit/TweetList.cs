@@ -163,6 +163,7 @@ namespace PockeTwit
                 CurrentlySelectedAccount = ClientSettings.AccountsList[0];
 
                 CurrentStatuses = new PockeTwit.Library.status[0];
+                statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
                 statList.Clear();
                 LoadCachedtimeline();
                 SwitchToList("Friends_TimeLine");
