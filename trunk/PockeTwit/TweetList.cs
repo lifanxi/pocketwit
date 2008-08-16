@@ -384,7 +384,7 @@ namespace PockeTwit
             {
                 if (a.Enabled)
                 {
-                    string cachePath = ClientSettings.AppPath + "\\" + a.UserName + a.Server.ToString() + "FriendsTime.xml";
+                    string cachePath = ClientSettings.AppPath + "\\" + a.UserName + a.ServerURL.Name + "FriendsTime.xml";
                     if (System.IO.File.Exists(cachePath))
                     {
                         using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
@@ -469,7 +469,7 @@ namespace PockeTwit
             }
             string StatusString = Library.status.Serialize(mergedstatuses);
             
-            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.Server.ToString()+ "FriendsTime.xml"))
+            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName +t.AccountInfo.ServerURL.Name+ "FriendsTime.xml"))
             {
                 w.Write(StatusString);
                 w.Flush();
@@ -568,7 +568,7 @@ namespace PockeTwit
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 Yedda.Twitter TwitterConn = new Yedda.Twitter();
-                TwitterConn.AccountInfo.Server = a.Server;
+                TwitterConn.AccountInfo.ServerURL= a.ServerURL;
                 TwitterConn.AccountInfo.UserName = a.UserName;
                 TwitterConn.AccountInfo.Password = a.Password;
                 TwitterConn.AccountInfo.Enabled = a.Enabled;

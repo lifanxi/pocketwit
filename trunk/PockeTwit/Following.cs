@@ -94,7 +94,7 @@ namespace PockeTwit
 
         private  void GetCachedFollowers()
         {
-            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.Server.ToString() + ".xml";
+            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
             if (System.IO.File.Exists(location))
             {
                 using (System.IO.StreamReader r = new System.IO.StreamReader(location))
@@ -137,7 +137,7 @@ namespace PockeTwit
 
         private  void SaveUsers()
         {
-            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.Server.ToString() + ".xml";
+            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
             
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
             using (System.IO.StreamWriter w = new System.IO.StreamWriter(location))

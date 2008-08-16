@@ -46,20 +46,15 @@ namespace PockeTwit
             txtUserName.Text = _AccountInfo.UserName;
             txtPassword.Text = _AccountInfo.Password;
             chkEnabled.Checked = _AccountInfo.Enabled;
-            switch (_AccountInfo.Server)
-            {
-                case Yedda.Twitter.TwitterServer.twitter:
-                    cmbServers.SelectedItem = "twitter";
-                    break;
-                case Yedda.Twitter.TwitterServer.identica:
-                    cmbServers.SelectedItem = "identica";
-                    break;
-            }
+            cmbServers.SelectedItem = _AccountInfo.ServerURL.Name;
         }
         private void FillServerList()
         {
             cmbServers.Items.Add("twitter");
-            cmbServers.Items.Add("identica");
+            foreach (string ServerName in Yedda.Servers.ServerList.Keys)
+            {
+                cmbServers.Items.Add(ServerName);
+            }
         }
 
         private void menuItem1_Click(object sender, EventArgs e)
@@ -74,7 +69,8 @@ namespace PockeTwit
             lblError.Visible = false;
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
-            _AccountInfo.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+            //_AccountInfo.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
+            _AccountInfo.ServerURL = Yedda.Servers.ServerList[(string)cmbServers.SelectedItem];
             _AccountInfo.Enabled = chkEnabled.Checked;
             Yedda.Twitter T = new Yedda.Twitter();
             T.AccountInfo = _AccountInfo;
