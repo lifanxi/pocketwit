@@ -15,20 +15,35 @@ public static class ClientSettings
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
+    public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static int Margin = 5;
     public static int MaxTweets = 50;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static int SmallArtSize = 60;
     public static int UpdateInterval;
-
+    public static bool ShowExtra = true;
+    public static int LinesOfText
+    {
+        get
+        {
+            if (ShowExtra)
+            {
+                return 6;
+            }
+            else
+            {
+                return 5;
+            }
+        }
+    }
 		#endregion Fields 
 
 		#region Constructors (1) 
 
     static ClientSettings()
     {
-        TextSize = GetTextSize();
+        GetTextSizes();
         LoadColors();
         LoadSettings();
     }
@@ -47,6 +62,9 @@ public static class ClientSettings
 
     public static bool ShowReplyImages { get; set; }
 
+    private static int _SmallTextSize;
+    public static int SmallTextSize
+    { get; set; }
     public static int TextSize 
     {
         get
@@ -181,16 +199,16 @@ public static class ClientSettings
 
 		// Private Methods (2) 
 
-    private static int GetTextSize()
+    private static void GetTextSizes()
     {
         using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(100, 100))
         {
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))
             {
-                return (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Regular)).Height - 1);
+                TextSize = (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Regular)).Height - 1);
+                SmallTextSize = (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 5, System.Drawing.FontStyle.Regular)).Height - 1);
             }
         }
-
     }
 
     private static void LoadColors()

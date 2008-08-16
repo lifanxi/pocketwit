@@ -622,7 +622,7 @@ namespace PockeTwit
             statList.ForeColor = ClientSettings.ForeColor;
             statList.SelectedBackColor = ClientSettings.SelectedBackColor;
             statList.SelectedForeColor = ClientSettings.SelectedForeColor;
-            statList.ItemHeight = (ClientSettings.TextSize * 5) + 5;
+            statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
             statList.IsMaximized = true;
             SetConnectedMenus();
             statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);

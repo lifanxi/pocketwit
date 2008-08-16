@@ -237,19 +237,26 @@ namespace FingerUI
                 FillColor.Dispose();
             }
 
-            /*
-            if (Tweet.user.profile_image_url == null)
+            Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
+            if (ClientSettings.ShowExtra)
             {
-                Tweet.user = PockeTwit.Library.User.FromId(Tweet.user.screen_name);
+                using (Font smallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular))
+                {
+                    using (Brush dateBrush = new SolidBrush(ClientSettings.SmallTextColor))
+                    {
+                        g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
+                    }
+                }
+                ImageLocation.Y = ImageLocation.Y + ClientSettings.SmallTextSize;
             }
-             */
+
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
-            g.DrawImage(UserImage, bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
+            g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
 
             if (ClientSettings.ShowReplyImages)
             {
-                bounds = DrawReplyImage(g, bounds);
+                DrawReplyImage(g, ImageLocation);
             }
 
             if (m_highlighted)
@@ -260,8 +267,8 @@ namespace FingerUI
                     new Rectangle(bounds.X+5, bounds.Y+5, 7, 7),0,0,7,7,GraphicsUnit.Pixel, ia);
             }
             
-            textBounds.Offset(5, 1);
-            textBounds.Width = textBounds.Width-5;
+            textBounds.Offset(ClientSettings.Margin, 1);
+            textBounds.Width = textBounds.Width = ClientSettings.Margin;
             textBounds.Height--;
 
             m_stringFormat.Alignment = StringAlignment.Near;
@@ -269,6 +276,9 @@ namespace FingerUI
             m_stringFormat.LineAlignment = StringAlignment.Near;
             BreakUpTheText(g, textBounds);
             int lineOffset = 0;
+
+            
+
             foreach (string Line in Tweet.SplitLines)
             {
                 float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
@@ -284,8 +294,9 @@ namespace FingerUI
 
 		//�Private�Methods�(2)�
 
-        private Rectangle DrawReplyImage(Graphics g, Rectangle bounds)
+        private void DrawReplyImage(Graphics g, Point ImageLocation)
         {
+            ImageLocation.Offset(-5, -5);
             if (Tweet.text.Split(new char[] { ' ' })[0].StartsWith("@"))
             {
                 string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[] { '@' });
@@ -308,7 +319,7 @@ namespace FingerUI
 
                 if (ReplyImage != null)
                 {
-                    Rectangle ReplyRect = new Rectangle(bounds.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), bounds.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
+                    Rectangle ReplyRect = new Rectangle(ImageLocation.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), ImageLocation.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
                     g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
                     using (Pen sPen = new Pen(ClientSettings.ForeColor))
                     {
@@ -316,7 +327,6 @@ namespace FingerUI
                     }
                 }
             }
-            return bounds;
         }
 
         //texbounds is the area we're allowed to draw within
@@ -483,7 +493,7 @@ namespace FingerUI
                     string line = newString.ToString().TrimStart(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
-                    if (Tweet.SplitLines.Count >= 5) 
+                    if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText) 
                     {
                         Tweet.Clipped = true;
                         break; 
