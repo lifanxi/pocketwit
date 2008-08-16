@@ -26,6 +26,31 @@ namespace PockeTwit.Library
 
         public string favorited { get; set; }
         [XmlIgnore]
+        public string TimeStamp
+        {
+            get
+            {
+                TimeSpan Difference = DateTime.Now - createdAt;
+                double Diff;
+                string Span = "";
+                if (Difference.TotalDays > 1)
+                {
+                    Diff = Math.Round(Difference.TotalDays);
+                    if (Diff > 1) { Span = "days"; } else { Span = "day"; }
+                }
+                if (Difference.TotalHours > 1)
+                {
+                    Diff = Math.Round(Difference.TotalHours);
+                    if (Diff > 1) { Span = "hours"; } else { Span = "hour"; }
+                }
+                else
+                {
+                    Diff = Math.Round(Difference.TotalMinutes);
+                    Span = "min";
+                }
+                return "about " + Diff.ToString() + " " + Span +  " ago.";
+            }
+        }
         private DateTime createdAt;
         private string _created_at;
         public string created_at 
@@ -53,7 +78,7 @@ namespace PockeTwit.Library
         }
         public string id { get; set; }
 
-        //public string source { get; set; }
+        public string source { get; set; }
         //public bool truncated { get; set; }
         //public string in_reply_to_status_id { get; set; }
         public string in_reply_to_user_id { get; set; }
