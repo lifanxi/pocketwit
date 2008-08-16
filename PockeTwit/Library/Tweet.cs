@@ -82,7 +82,7 @@ namespace PockeTwit.Library
         //public bool truncated { get; set; }
         //public string in_reply_to_status_id { get; set; }
         public string in_reply_to_user_id { get; set; }
-
+        public bool isDirect { get; set; }
         
 
         public string text { get; set; }

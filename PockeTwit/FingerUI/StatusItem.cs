@@ -467,7 +467,7 @@ namespace FingerUI
                 }
                 if (size.Width < textBounds.Width)
                 {
-                    string line = CurrentLine.TrimStart(new char[] { ' ' });
+                    string line = CurrentLine.TrimStart(new char[] { ' '});
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, 0);
                 }
@@ -477,7 +477,7 @@ namespace FingerUI
                     int lastBreak = 0;
                     int currentPos = 0;
                     StringBuilder newString = new StringBuilder();
-                    string[] Words = CurrentLine.Split(new char[]{' '});
+                    string[] Words = CurrentLine.Split(new char[]{' ','-'});
                     foreach (string word in Words)
                     {
                         newString.Append(word + ' ');    
