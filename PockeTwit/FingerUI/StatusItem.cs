@@ -238,16 +238,18 @@ namespace FingerUI
             }
 
             Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
+
             if (ClientSettings.ShowExtra)
             {
                 using (Font smallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular))
                 {
                     using (Brush dateBrush = new SolidBrush(ClientSettings.SmallTextColor))
                     {
-                        g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
+                        //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
+                        g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
                     }
                 }
-                ImageLocation.Y = ImageLocation.Y + ClientSettings.SmallTextSize;
+            //    ImageLocation.Y = ImageLocation.Y + ClientSettings.SmallTextSize;
             }
 
             Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
