@@ -63,6 +63,13 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NotificationHandler.cs" />
+    <Compile Include="NotificationSoftKeys\NotificationMessageWindow.cs" />
+    <Compile Include="NotificationSoftKeys\NotificationSoftKey.cs" />
+    <Compile Include="NotificationSoftKeys\NotificationWithSoftKeys.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NotificationSoftKeys\SHNOTIFICATIONDATA.cs" />
+    <Compile Include="NotificationSoftKeys\SpinnerClickEventHandler.cs" />
     <Compile Include="SettingsHandler\AccountInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
