@@ -58,20 +58,28 @@ namespace PockeTwit.Library
             get { return _created_at; }
             set
             {
+                IFormatProvider format = new System.Globalization.CultureInfo(1033);
                 _created_at = value;
                 try
                 {
-                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", null);
+                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
                 }
-                catch
+                catch(Exception ex)
                 {
                     try
                     {
-                        createdAt = DateTime.Parse(created_at);
+                        createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
                     }
-                    catch
+                    catch (Exception exx)
                     {
-                        createdAt = new DateTime(2000, 1, 1);
+                        try
+                        {
+                            createdAt = DateTime.Parse(created_at);
+                        }
+                        catch
+                        {
+                            createdAt = new DateTime(2000, 1, 1);
+                        }
                     }
                 }
             }
