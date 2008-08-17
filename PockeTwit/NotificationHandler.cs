@@ -52,6 +52,10 @@ namespace PockeTwit
         {
             RegistryKey FriendsKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
             RegistryKey MessageKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
+            if (FriendsKey == null)
+            {
+                return;
+            }
             Friends.Sound = (string)FriendsKey.GetValue("Wave");
             Messages.Sound = (string)MessageKey.GetValue("Wave");
             Friends.Options = (Options)FriendsKey.GetValue("Options");
