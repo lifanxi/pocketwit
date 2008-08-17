@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.24</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv24.CAB</url>
-  <notes>Option to show times
-Can clear the avatar cache from settings screen
+  <version>.25</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv25.CAB</url>
+  <notes>Fix timeline for non-english locales
+Support for alternate laconica sites
 </notes>
 </LatestRelease>
