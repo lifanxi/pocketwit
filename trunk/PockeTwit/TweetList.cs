@@ -22,6 +22,8 @@ namespace PockeTwit
         private DeviceType DeviceType;
         private bool InitialLoad = true;
         private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
+        private Dictionary<Yedda.Twitter, string> LastReplyID = new Dictionary<Yedda.Twitter, string>();
+        private Dictionary<Yedda.Twitter, string> LastMessageID = new Dictionary<Yedda.Twitter, string>();
         
 
         private List<string> LeftMenu;
@@ -110,7 +112,7 @@ namespace PockeTwit
             return TwitterConnections[0];
         }
 
-        private void AddStatusesToList(Library.status[] mergedstatuses, int NewCount)
+        private void AddStatusesToList(Library.status[] mergedstatuses)
         {
             if (mergedstatuses == null) { return; }
             statList.Clear();
@@ -126,13 +128,6 @@ namespace PockeTwit
             }
             statList.SetSelectedIndexToZero();
             statList.Redraw();
-            if (ClientSettings.BeepOnNew && !InitialLoad && 
-                (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline |
-                CurrentAction == Yedda.Twitter.ActionType.Replies)) 
-            {
-                NotifyTweets(NewCount);
-            }
-            
         }
 
         private void ChangeCursor(Cursor CursorToset)
@@ -302,7 +297,7 @@ namespace PockeTwit
                 if (newstatuses.Length > 0)
                 {
                     mergedstatuses = MergeIn(mergedstatuses, newstatuses);
-                    AddStatusesToList(mergedstatuses, newstatuses.Length);
+                    AddStatusesToList(mergedstatuses);
                 }
             }
             ChangeCursor(Cursors.Default);
@@ -330,7 +325,26 @@ namespace PockeTwit
                         {
                             newstatuses = Library.status.Deserialize(response, t.AccountInfo);
                         }
-                        UpdatedCount = newstatuses.Length;
+                        if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+                        {
+                            UpdatedCount = newstatuses.Length;
+                        }
+                        else
+                        {
+                            string NewestID = newstatuses[0].id;
+                            if (NewestID != LastMessageID[t])
+                            {
+                                for (int i = 0; i < newstatuses.Length; i++)
+                                {
+                                    if (LastMessageID[t] == newstatuses[i].id)
+                                    {
+                                        break;
+                                    }
+                                    UpdatedCount++;
+                                }
+                                LastMessageID[t] = newstatuses[0].id;
+                            }
+                        }
                         if (UpdatedCount > 0)
                         {
                             if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
@@ -346,31 +360,47 @@ namespace PockeTwit
                                 mergedstatuses = MergeIn(mergedstatuses, newstatuses);
                             }
 
-                            if (Action == CurrentAction)
-                            {
-                                statList.BeginUpdate();
-                                AddStatusesToList(mergedstatuses, newstatuses.Length);
-                                statList.EndUpdate();
-                                FingerUI.StatusItem s = (FingerUI.StatusItem)statList.SelectedItem;
-                                CurrentlySelectedAccount = s.Tweet.Account;
-                                MessageBeep(0);
-                            }
-                            else
-                            {
-                                if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
-                                {
-                                    this.NotificationHandler.NewFriendMessages(UpdatedCount);
-                                }
-                                else
-                                {
-                                    this.NotificationHandler.NewMessages(UpdatedCount);
-                                }
-                            }
+
                         }
                     }
                 }
             }
+            if (UpdatedCount > 0)
+            {
+                if (Action == CurrentAction)
+                {
+                    statList.BeginUpdate();
+                    AddStatusesToList(mergedstatuses);
+                    statList.EndUpdate();
+                    FingerUI.StatusItem s = (FingerUI.StatusItem)statList.SelectedItem;
+                    CurrentlySelectedAccount = s.Tweet.Account;
+                    if (this.Focused || statList.Focused)
+                    {
+                        MessageBeep(0);
+                    }
+                    else
+                    {
+                        NotifyUser(Action, UpdatedCount);
+                    }
+                }
+                else
+                {
+                    NotifyUser(Action, UpdatedCount);
+                }
+            }
             ChangeCursor(Cursors.Default);
+        }
+
+        private void NotifyUser(Yedda.Twitter.ActionType Action, int UpdatedCount)
+        {
+            if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+            {
+                this.NotificationHandler.NewFriendMessages(UpdatedCount);
+            }
+            else
+            {
+                this.NotificationHandler.NewMessages(UpdatedCount);
+            }
         }
 
         private void GetAllTimeLines()
@@ -417,7 +447,7 @@ namespace PockeTwit
                             }
 
 
-                            AddStatusesToList(mergedstatuses, newstatuses.Length);
+                            AddStatusesToList(mergedstatuses);
                             
                         }
                     }
@@ -479,7 +509,7 @@ namespace PockeTwit
                     }
                 }
             }
-            AddStatusesToList(CurrentStatuses, 0);
+            AddStatusesToList(CurrentStatuses);
         }
 
         private PockeTwit.Library.status[] MergeIn(PockeTwit.Library.status[] newstatuses, PockeTwit.Library.status[] CurrentStatuses)
@@ -500,37 +530,6 @@ namespace PockeTwit
                 this.Show();
             }
             notification1.Visible = false;
-        }
-
-        private void NotifyTweets(int NewCount)
-        {
-            if (InvokeRequired)
-            {
-                delNotify d = new delNotify(NotifyTweets);
-                this.Invoke(d, new object[]{NewCount});
-            }
-            else
-            {
-                if (this.Focused || statList.Focused)
-                {
-                    MessageBeep(0);
-                    return;
-                }
-                 
-                System.Text.StringBuilder HTMLString = new StringBuilder();
-                HTMLString.Append("<html><body>");
-                HTMLString.Append(NewCount.ToString() + " new tweets are available!");
-                HTMLString.Append("<form method=\'GET\' action=notify>");
-                HTMLString.Append("<p align=\"right\">");
-                HTMLString.Append("<input type=button name='Show' value='Show'>");
-                HTMLString.Append("<input type=button name='Dismiss' value='Dismiss'>");
-                HTMLString.Append("</p>");
-                HTMLString.Append("</form>");
-                HTMLString.Append("</body></html>");
-                notification1.Text = HTMLString.ToString();
-                
-                notification1.Visible = true;
-            }
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] mergedstatuses, Yedda.Twitter t)
@@ -587,16 +586,11 @@ namespace PockeTwit
 
         private bool SetEverythingUp()
         {
-            NotificationHandler.LoadSettings();
+
+            NotificationHandler.FriendsNotificationClicked += new NotificationHandler.delNotificationClicked(NotificationHandler_FriendsNotificationClicked);
+            NotificationHandler.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(NotificationHandler_MessagesNotificationClicked);
             bool ret = true;
-            DeviceType = DetectDevice.DeviceType;
-            if (DeviceType == DeviceType.Professional)
-            {
-                this.notification1 = new Microsoft.WindowsCE.Forms.Notification();
-                this.notification1.Caption = "New tweets!";
-                this.notification1.Text = "notification1";
-                this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
-            }
+            
             ResetDictionaries();
             
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];
@@ -632,6 +626,22 @@ namespace PockeTwit
             return ret;
         }
 
+        void NotificationHandler_MessagesNotificationClicked()
+        {
+            this.Show();
+            this.CurrentAction = Yedda.Twitter.ActionType.Replies;
+            Cursor.Current = Cursors.WaitCursor;
+            GetTimeLineAsync();
+        }
+
+        void NotificationHandler_FriendsNotificationClicked()
+        {
+            this.Show();
+            this.CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
+            Cursor.Current = Cursors.WaitCursor;
+            GetTimeLineAsync();
+        }
+
         private void ResetDictionaries()
         {
             FriendsLines.Clear();
@@ -650,6 +660,8 @@ namespace PockeTwit
                 FollowingDictionary.Add(TwitterConn, f);
                 LastStatusID.Add(TwitterConn, "");
                 FriendsLines.Add(TwitterConn, null);
+                LastMessageID.Add(GetMatchingConnection(a), "");
+                LastReplyID.Add(GetMatchingConnection(a), "");
             }
             foreach (Following f in FollowingDictionary.Values)
             {
@@ -899,10 +911,12 @@ namespace PockeTwit
 
         private void tmrautoUpdate_Tick(object sender, EventArgs e)
         {
+            tmrautoUpdate.Enabled = false;
             System.Diagnostics.Debug.WriteLine("TICK");
             GetSpecifiedTimeLines(Yedda.Twitter.ActionType.Friends_Timeline);
             GetSpecifiedTimeLines(Yedda.Twitter.ActionType.Replies);
             System.Diagnostics.Debug.WriteLine("ENDTICK");
+            tmrautoUpdate.Enabled = true;
         }
 
         private void TwitterSearch()
