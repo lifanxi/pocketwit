@@ -32,6 +32,7 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private Dictionary<Yedda.Twitter, Library.status[]> FriendsLines = new Dictionary<Yedda.Twitter, PockeTwit.Library.status[]>();
+        
         private string ShowUserID;
 
         #endregion�Fields�
@@ -306,10 +307,11 @@ namespace PockeTwit
         private void GetSpecifiedTimeLines(Yedda.Twitter.ActionType Action)
         {
             Library.status[] mergedstatuses = null;
-            int UpdatedCount = 0;
+            int TotalUpdatedCount = 0;
             //
             foreach (Yedda.Twitter t in TwitterConnections)
             {
+                int UpdatedCount = 0;
                 if (t.AccountInfo.Enabled)
                 {
                     string response = FetchSpecificFromTwitter(t, Action);
@@ -325,24 +327,40 @@ namespace PockeTwit
                         {
                             newstatuses = Library.status.Deserialize(response, t.AccountInfo);
                         }
-                        if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+                        if (Action == Yedda.Twitter.ActionType.Friends_Timeline && t.BigTimeLines)
                         {
                             UpdatedCount = newstatuses.Length;
                         }
                         else
                         {
+                            string IDToMatch = "";
+                            if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+                            {
+                                IDToMatch = LastStatusID[t];
+                            }
+                            else
+                            {
+                                IDToMatch = LastMessageID[t];
+                            }
                             string NewestID = newstatuses[0].id;
-                            if (NewestID != LastMessageID[t])
+                            if (NewestID != IDToMatch)
                             {
                                 for (int i = 0; i < newstatuses.Length; i++)
                                 {
-                                    if (LastMessageID[t] == newstatuses[i].id)
+                                    if (LastMessageID[t] == IDToMatch)
                                     {
                                         break;
                                     }
                                     UpdatedCount++;
                                 }
-                                LastMessageID[t] = newstatuses[0].id;
+                                if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+                                {
+                                    LastStatusID[t] = NewestID;
+                                }
+                                else
+                                {
+                                    LastMessageID[t] = NewestID;
+                                }
                             }
                         }
                         if (UpdatedCount > 0)
@@ -360,15 +378,15 @@ namespace PockeTwit
                                 mergedstatuses = MergeIn(mergedstatuses, newstatuses);
                             }
 
-
+                            TotalUpdatedCount = TotalUpdatedCount = UpdatedCount;
                         }
                     }
                 }
             }
-            if (UpdatedCount > 0)
+            if (TotalUpdatedCount > 0)
             {
                 if (Action == CurrentAction)
-                {
+                {                    
                     statList.BeginUpdate();
                     AddStatusesToList(mergedstatuses);
                     statList.EndUpdate();
@@ -380,12 +398,12 @@ namespace PockeTwit
                     }
                     else
                     {
-                        NotifyUser(Action, UpdatedCount);
+                        NotifyUser(Action, TotalUpdatedCount);
                     }
                 }
                 else
                 {
-                    NotifyUser(Action, UpdatedCount);
+                    NotifyUser(Action, TotalUpdatedCount);
                 }
             }
             ChangeCursor(Cursors.Default);
