@@ -53,6 +53,8 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static bool IsMaximized { get; set; }
+
     public static bool BeepOnNew { get; set; }
 
     public static bool CheckVersion { get; set; }
@@ -104,6 +106,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["IsMaximized"]))
+            {
+                IsMaximized = bool.Parse(ConfigurationSettings.AppSettings["IsMaximized"]);
+            }
+            else
+            {
+                IsMaximized = true;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UserName"]))
             {
                 LegacySettingsAccount.UserName = ConfigurationSettings.AppSettings["UserName"];
@@ -188,7 +198,8 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
-        ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString() ;
+        ConfigurationSettings.AppSettings["IsMaximized"] = IsMaximized.ToString();
+        ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();

@@ -38,7 +38,10 @@ namespace PockeTwit
 
         public TweetList()
         {
-            this.WindowState = FormWindowState.Maximized;
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             InitializeComponent();
             Application.DoEvents();
             if (ClientSettings.AccountsList.Count == 0)
@@ -631,7 +634,7 @@ namespace PockeTwit
             statList.SelectedBackColor = ClientSettings.SelectedBackColor;
             statList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
-            statList.IsMaximized = true;
+            statList.IsMaximized = ClientSettings.IsMaximized;
             SetConnectedMenus();
             statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
@@ -755,6 +758,8 @@ namespace PockeTwit
 
         void statusList_SwitchWindowState(bool IsMaximized)
         {
+            ClientSettings.IsMaximized = IsMaximized;
+            ClientSettings.SaveSettings();
             if (IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
