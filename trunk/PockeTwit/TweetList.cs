@@ -523,7 +523,6 @@ namespace PockeTwit
                 this.notification1.Text = "notification1";
                 this.notification1.ResponseSubmitted += new Microsoft.WindowsCE.Forms.ResponseSubmittedEventHandler(this.notification1_ResponseSubmitted);
             }
-            
             ResetDictionaries();
             
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];

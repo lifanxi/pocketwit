@@ -50,7 +50,6 @@ namespace PockeTwit
         }
         private void FillServerList()
         {
-            cmbServers.Items.Add("twitter");
             foreach (string ServerName in Yedda.Servers.ServerList.Keys)
             {
                 cmbServers.Items.Add(ServerName);
