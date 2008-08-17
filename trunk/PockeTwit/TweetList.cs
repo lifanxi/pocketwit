@@ -342,16 +342,28 @@ namespace PockeTwit
                             {
                                 IDToMatch = LastMessageID[t];
                             }
+                            if (string.IsNullOrEmpty(IDToMatch))
+                            {
+                               if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
+                                {
+                                    LastStatusID[t] = newstatuses[0].id;
+                                }
+                                else
+                                {
+                                    LastMessageID[t] = newstatuses[0].id;
+                                }
+                               IDToMatch = newstatuses[0].id;
+                            }
                             string NewestID = newstatuses[0].id;
                             if (NewestID != IDToMatch)
                             {
                                 for (int i = 0; i < newstatuses.Length; i++)
                                 {
-                                    if (LastMessageID[t] == IDToMatch)
+                                    UpdatedCount++;
+                                    if (newstatuses[i].id == IDToMatch)
                                     {
                                         break;
                                     }
-                                    UpdatedCount++;
                                 }
                                 if (Action == Yedda.Twitter.ActionType.Friends_Timeline)
                                 {
@@ -449,7 +461,14 @@ namespace PockeTwit
                         }
                         if (newstatuses.Length > 0)
                         {
-                            
+                            if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
+                            {
+                                LastStatusID[t] = newstatuses[0].id;
+                            }
+                            else
+                            {
+                                LastMessageID[t] = newstatuses[0].id;
+                            }
 
                             if (CurrentAction == Yedda.Twitter.ActionType.Friends_Timeline)
                             {
