@@ -32,6 +32,10 @@ namespace Yedda
             string appPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
             using (System.IO.StreamReader r = new StreamReader(appPath + "\\laconicaservers.txt"))
             {
+                Twitter.ServerURL tServer = new Twitter.ServerURL();
+                tServer.Name = "twitter";
+                tServer.URL = "http://twitter.com/";
+                ServerList.Add(tServer.Name, tServer);
                 while (!r.EndOfStream)
                 {
                     string URL = r.ReadLine();
@@ -40,6 +44,7 @@ namespace Yedda
                     Pair.Name = URL.Replace("http://","").Replace(".","").Replace("/","");
                     ServerList.Add(Pair.Name, Pair);
                 }
+
             }
         }
     }
