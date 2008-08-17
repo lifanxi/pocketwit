@@ -1,4 +1,5 @@
-﻿http://analyti.cc/
+﻿http://identi.ca/
+http://analyti.cc/
 http://auttr.com/
 http://baratin.filyb.info/
 http://bartle.doomicile.de/
@@ -8,7 +9,6 @@ http://downlode.org/Laconica/
 http://foaf2foaf.org/
 http://georgology.com/laconica/
 http://grupr.us/
-http://identi.ca/
 http://janene.de/
 http://laconica.kamleitner.com/
 http://laconica.kshep.net/

@@ -68,7 +68,6 @@ namespace PockeTwit
             lblError.Visible = false;
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
-            //_AccountInfo.Server = (Yedda.Twitter.TwitterServer)Enum.Parse(typeof(Yedda.Twitter.TwitterServer), (string)cmbServers.SelectedItem, true);
             _AccountInfo.ServerURL = Yedda.Servers.ServerList[(string)cmbServers.SelectedItem];
             _AccountInfo.Enabled = chkEnabled.Checked;
             Yedda.Twitter T = new Yedda.Twitter();
