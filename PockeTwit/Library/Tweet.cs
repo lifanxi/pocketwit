@@ -74,7 +74,7 @@ namespace PockeTwit.Library
                     {
                         try
                         {
-                            createdAt = DateTime.Parse(created_at);
+                            createdAt = DateTime.Parse(created_at, format, System.Globalization.DateTimeStyles.AssumeUniversal);
                         }
                         catch
                         {
