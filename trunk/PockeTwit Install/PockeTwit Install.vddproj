@@ -429,7 +429,7 @@
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_E79667C3D66DB477E6FC8E35A5AE0E34"
             {
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3140.36917, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3150.34820, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_E79667C3D66DB477E6FC8E35A5AE0E34"
@@ -648,6 +648,92 @@
             {
                 "Keys"
                 {
+                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_07E2C1E6E5744533B18433F7A377AC3F"
+                    {
+                    "Name" = "8:ControlPanel"
+                    "Condition" = "8:"
+                        "Keys"
+                        {
+                            "{B1EBC968-6B66-4532-A885-748B79AF4477}:_BBA44BDCE9FD4A488A116E3C19A34BA0"
+                            {
+                            "Name" = "8:Notifications"
+                            "Condition" = "8:"
+                                "Keys"
+                                {
+                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_769AB2EAC46641A5A67F1B2989975E71"
+                                    {
+                                    "Name" = "8:{DF293090-5095-49ce-A626-AE6D6629437F}"
+                                    "Condition" = "8:"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_9C3D52174B4D4661814E9F09D2176536"
+                                            {
+                                            "Name" = "8:Duration"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_BD157A64772E4DB7873C7CAB586B2059"
+                                            {
+                                            "Name" = "8:Options"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD5DB34743E740BCB9B0AF6690F7570E"
+                                            {
+                                            "Name" = "8:Default"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:PockeTwit Updates"
+                                            }
+                                        }
+                                    }
+                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_96173830BB09439EA9CBE9BBC686525B"
+                                    {
+                                    "Name" = "8:{B4D35E62-A83F-4add-B421-F7FC28E14310}"
+                                    "Condition" = "8:"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_7274A66BFE5046349397A4DBF5892858"
+                                            {
+                                            "Name" = "8:Options"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DAA01E8DEDB2493A8A5D4C9E085E644B"
+                                            {
+                                            "Name" = "8:Duration"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DFB9B7253D354E61A4E1608BAEF2A7AB"
+                                            {
+                                            "Name" = "8:Default"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:PockeTwit Messages"
+                                            }
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                        }
+                    }
                 }
             }
             "HKCR"
