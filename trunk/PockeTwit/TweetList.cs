@@ -15,7 +15,7 @@ namespace PockeTwit
 
 		#region�Fields�(12)�
 
-        
+        private NotificationHandler NotificationHandler = new NotificationHandler();
         private UpdateChecker Checker;
          private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         private Library.status[] CurrentStatuses =null;
@@ -514,6 +514,7 @@ namespace PockeTwit
 
         private bool SetEverythingUp()
         {
+            NotificationHandler.LoadSettings();
             bool ret = true;
             DeviceType = DetectDevice.DeviceType;
             if (DeviceType == DeviceType.Professional)
