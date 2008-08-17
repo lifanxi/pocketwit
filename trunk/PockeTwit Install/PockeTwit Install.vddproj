@@ -669,6 +669,13 @@
                                         }
                                         "Values"
                                         {
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_8F9A226FE3AD44EC93DAF73A4178F346"
+                                            {
+                                            "Name" = "8:AvailableOptions"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:13"
+                                            }
                                             "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_9C3D52174B4D4661814E9F09D2176536"
                                             {
                                             "Name" = "8:Duration"
@@ -714,6 +721,13 @@
                                             "Condition" = "8:"
                                             "ValueTypes" = "3:3"
                                             "Value" = "3:0"
+                                            }
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD695DDA461B4C8C97CF3B89A8D19E2B"
+                                            {
+                                            "Name" = "8:AvailableOptions"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:13"
                                             }
                                             "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DFB9B7253D354E61A4E1608BAEF2A7AB"
                                             {
