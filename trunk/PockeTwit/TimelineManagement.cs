@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,8 +14,8 @@ namespace PockeTwit
         public event delMessagesUpdated MessagesUpdated;
         #endregion
 
-        private System.Windows.Forms.Timer timerUpdate = new System.Windows.Forms.Timer();
-
+        
+        
         public enum TimeLineType
         {
             Friends,
@@ -23,7 +23,7 @@ namespace PockeTwit
         }
         public Dictionary<TimeLineType, TimeLine> TimeLines = new Dictionary<TimeLineType, TimeLine>();
         private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
-
+        private System.Threading.Timer timerUpdate;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         
 
@@ -40,20 +40,26 @@ namespace PockeTwit
             LoadCachedtimeline();
             GetFriendsTimeLine();
             GetMessagesTimeLine();
-            timerUpdate.Interval = ClientSettings.UpdateInterval;
-            timerUpdate.Tick += new EventHandler(timerUpdate_Tick);
-            timerUpdate.Enabled = true;
+            timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
         }
 
 
 
 
-        void timerUpdate_Tick(object sender, EventArgs e)
+        void timerUpdate_Tick(object state)
         {
-            timerUpdate.Enabled = false;
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(BackgroundUpdate);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "BackgroundUpdate";
+            t.IsBackground = true;
+            t.Start();
+        }
+
+        private void BackgroundUpdate()
+        {
             GetFriendsTimeLine();
             GetMessagesTimeLine();
-            timerUpdate.Enabled = true;
+            System.Diagnostics.Debug.WriteLine("*****************Done updating");
         }
 
 
