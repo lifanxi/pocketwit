@@ -9,11 +9,13 @@ namespace PockeTwit
 {
     class NotificationHandler
     {
+        private int NewMessagesCount = 0;
+        private int NewFriendsCount = 0;
+        private int CurrentSpinner = 0;
         public delegate void delNotificationClicked();
         public event delNotificationClicked FriendsNotificationClicked;
         public event delNotificationClicked MessagesNotificationClicked;
         private Timer t_StopVibrate = new Timer();
-        private christec.windowsce.forms.NotificationWithSoftKeys FriendsBubbler;
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
         [Flags]
         private enum Options
@@ -39,24 +41,51 @@ namespace PockeTwit
         {
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                FriendsBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
-                FriendsBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
-                FriendsBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
-                FriendsBubbler.RightSoftKeyClick += new EventHandler(FriendsBubbler_RightSoftKeyClick);
-                FriendsBubbler.Silent = true;
-
                 MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
                 MessagesBubbler.RightSoftKeyClick += new EventHandler(MessagesBubbler_RightSoftKeyClick);
+                MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
                 MessagesBubbler.Silent = true;
 
             }
             t_StopVibrate.Tick += new EventHandler(t_StopVibrate_Tick);
         }
 
+        void MessagesBubbler_SpinnerClick(object sender, christec.windowsce.forms.SpinnerClickEventArgs e)
+        {
+            if (e.Forward)
+            {
+                CurrentSpinner = 1;
+            }
+            else
+            {
+                CurrentSpinner = 0;
+            }
+
+            ShowMessageForSpinner();
+        }
+
+        private void ShowMessageForSpinner()
+        {
+            switch (CurrentSpinner)
+            {
+                case 0:
+                    MessagesBubbler.Text = GetMessagesText();
+                    MessagesBubbler.Caption = "PockeTwit\t1 of 2";
+                    break;
+                case 1:
+                    MessagesBubbler.Text = GetFriendsText();
+                    MessagesBubbler.Caption = "PockeTwit\t2 of 2";
+                    break;
+
+            }
+        }
+
         void MessagesBubbler_RightSoftKeyClick(object sender, EventArgs e)
         {
+            NewMessagesCount = 0;
+            NewFriendsCount = 0;
             MessagesBubbler.Visible = false;
             if (MessagesNotificationClicked != null)
             {
@@ -64,14 +93,6 @@ namespace PockeTwit
             }
         }
 
-        void FriendsBubbler_RightSoftKeyClick(object sender, EventArgs e)
-        {
-            MessagesBubbler.Visible = false;
-            if (FriendsNotificationClicked != null)
-            {
-                FriendsNotificationClicked();
-            }
-        }
 
         void t_StopVibrate_Tick(object sender, EventArgs e)
         {
@@ -92,8 +113,39 @@ namespace PockeTwit
             Messages.Options = (Options)MessageKey.GetValue("Options");
         }
 
+
+        private void ShowNotifications()
+        {
+            if (NewFriendsCount > 0 && NewMessagesCount > 0)
+            {
+                MessagesBubbler.Spinners = true;
+                MessagesBubbler.Caption = "PockeTwit\t1 of 2";
+            }
+            else
+            {
+                MessagesBubbler.Caption = "PockeTwit";
+            }
+            if (!MessagesBubbler.Visible)
+            {
+                if (NewFriendsCount > 0)
+                {
+                    MessagesBubbler.Text = GetFriendsText();
+                }
+                else
+                {
+                    MessagesBubbler.Text = GetMessagesText();
+                }
+                CurrentSpinner = 0;
+                MessagesBubbler.Visible = true;
+            }
+            else
+            {
+                ShowMessageForSpinner();
+            }
+        }
         public void NewFriendMessages(int Count)
         {
+            NewFriendsCount += Count;
             LoadSettings();
             if ((Friends.Options & Options.Sound) == Options.Sound)
             {
@@ -108,18 +160,14 @@ namespace PockeTwit
             }
             if ((Friends.Options & Options.Message) == Options.Message)
             {
-                System.Text.StringBuilder HTMLString = new StringBuilder();
-                HTMLString.Append("<html><body>");
-                HTMLString.Append(Count.ToString() + " new friend updates are available!");
-                HTMLString.Append("</body></html>");
-                FriendsBubbler.Text = HTMLString.ToString();
-                FriendsBubbler.Caption = "PockeTwit";
-                FriendsBubbler.Visible = true;
+                ShowNotifications();
             }
         }
 
+
         public void NewMessages(int Count)
         {
+            NewMessagesCount += Count;
             LoadSettings();
             if ((Messages.Options & Options.Sound) == Options.Sound)
             {
@@ -134,15 +182,27 @@ namespace PockeTwit
             }
             if ((Messages.Options & Options.Message) == Options.Message)
             {
-                System.Text.StringBuilder HTMLString = new StringBuilder();
-                HTMLString.Append("<html><body>");
-                HTMLString.Append(Count.ToString() + " new messages are available!");
-                HTMLString.Append("<form method=\'GET\' action=notify>");
-                HTMLString.Append("</body></html>");
-                MessagesBubbler.Text = HTMLString.ToString();
-                MessagesBubbler.Caption = "PockeTwit";
-                MessagesBubbler.Visible = true;
+                ShowNotifications();
             }
+        }
+
+        private string GetFriendsText()
+        {
+            System.Text.StringBuilder HTMLString = new StringBuilder();
+            HTMLString.Append("<html><body>");
+            HTMLString.Append(NewFriendsCount.ToString() + " new friend updates are available!");
+            HTMLString.Append("</body></html>");
+            return HTMLString.ToString();
+        }
+        private string GetMessagesText()
+        {
+            System.Text.StringBuilder HTMLString = new StringBuilder();
+            HTMLString.Append("<html><body>");
+            HTMLString.Append(NewMessagesCount.ToString() + " new messages are available!");
+            HTMLString.Append("<form method=\'GET\' action=notify>");
+            HTMLString.Append("</body></html>");
+
+            return HTMLString.ToString();
         }
 
 
