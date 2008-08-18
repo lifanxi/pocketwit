@@ -14,8 +14,7 @@ namespace PockeTwit
         private Microsoft.WindowsCE.Forms.Notification notification1;
         private FingerUI.KListControl statList;
         private System.Windows.Forms.Timer timerStartup;
-        private System.Windows.Forms.Timer tmrautoUpdate;
-
+        
 		#endregion Fields 
 
 		#region Methods (1) 
@@ -48,16 +47,11 @@ namespace PockeTwit
         /// </summary>
         private void InitializeComponent()
         {
-            this.tmrautoUpdate = new System.Windows.Forms.Timer();
             this.timerStartup = new System.Windows.Forms.Timer();
             this.statList = new FingerUI.KListControl();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // tmrautoUpdate
-            // 
-            this.tmrautoUpdate.Tick += new System.EventHandler(this.tmrautoUpdate_Tick);
             // 
             // timerStartup
             // 
