@@ -257,12 +257,18 @@ namespace FingerUI
 
 		// Public Methods (16) 
 
+        private string _CurrentList = null;
+        public string CurrentList()
+        {
+            return _CurrentList;
+        }
         public void SwitchTolist(string ListName)
         {
             if (!ItemLists.ContainsKey(ListName))
             {
                 ItemLists.Add(ListName, new ItemList());
             }
+            _CurrentList = ListName;
             m_items = ItemLists[ListName];
             Reset();
         }

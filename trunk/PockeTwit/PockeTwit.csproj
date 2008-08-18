@@ -116,6 +116,7 @@
     <Compile Include="SideMenu.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="TimeLine.cs" />
+    <Compile Include="TimelineManagement.cs" />
     <Compile Include="TweetList.cs">
       <SubType>Form</SubType>
     </Compile>
