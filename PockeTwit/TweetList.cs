@@ -607,7 +607,7 @@ namespace PockeTwit
         private void SetConnectedMenus(Yedda.Twitter t)
         {
             LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search", "Set Status", "Settings", "About/Feedback", "Exit" });
-            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Exit" });
+            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
@@ -618,7 +618,7 @@ namespace PockeTwit
         private void SetDisconnectedMenus()
         {
             statList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
-            statList.RightMenuItems = new List<string>(new string[] { "Exit" });
+            statList.RightMenuItems = new List<string>(new string[] { "Minimize" });
         }
 
         private bool SetEverythingUp()
@@ -857,7 +857,7 @@ namespace PockeTwit
                     break;
 
                 case "Minimize":
-                    this.Hide();
+                    Minimize();
                     break;
                 case "Exit":
                     statList.Clear();
@@ -1020,9 +1020,40 @@ namespace PockeTwit
             }
             statList.Redraw();
         }
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+            }
+        }
 
+        [System.Runtime.InteropServices.DllImport("coredll.dll")]
+        static extern int ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_MINIMIZED = 6;
+
+        void Minimize()
+        {
+            // The Taskbar must be enabled to be able to do a Smart Minimize
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.WindowState = FormWindowState.Normal;
+            this.ControlBox = true;
+            this.MinimizeBox = true;
+            this.MaximizeBox = true;
+
+            // Since there is no WindowState.Minimize, we have to P/Invoke ShowWindow
+            ShowWindow(this.Handle, SW_MINIMIZED);
+        }
 
 		#endregion�Methods�
 
     }
+
+    
 }
