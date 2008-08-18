@@ -69,49 +69,10 @@ namespace PockeTwit
                 for (int i = overage; i < this.Count; i++)
                 {
                     InternalDictionary.Remove(this[i].id);
-                    System.Diagnostics.Debug.WriteLine("Trim " + i.ToString() + ": " + this[i].id);
                 }
                 this.RemoveRange(ClientSettings.MaxTweets, overage);
                 this.TrimExcess();
             }
-        }
-
-        public void OutputDebug()
-        {
-            foreach (Library.status s in this)
-            {
-                System.Diagnostics.Debug.WriteLine(s.text);
-            }
-        }
-
-        public void OutputDebugTimes()
-        {
-            foreach (Library.status s in this)
-            {
-                System.Diagnostics.Debug.WriteLine(s.created_at);
-            }
-        }
-        public Library.status FindByDate(string created_at)
-        {
-            foreach (Library.status s in this)
-            {
-                if (s.created_at == created_at)
-                {
-                    return s;
-                }
-            }
-            return null;
-        }
-        public Library.status FindStartingWith(string startingWith)
-        {
-            foreach (Library.status s in this)
-            {
-                if (s.text.StartsWith(startingWith))
-                {
-                    return s;
-                }
-            }
-            return null;
         }
     }
 }
