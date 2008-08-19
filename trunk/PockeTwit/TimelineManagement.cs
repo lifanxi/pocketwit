@@ -59,9 +59,25 @@ namespace PockeTwit
         {
             GetFriendsTimeLine();
             GetMessagesTimeLine();
-            System.Diagnostics.Debug.WriteLine("*****************Done updating");
         }
 
+        public void RefreshFriendsTimeLine()
+        {
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFriendsTimeLine);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "BackgroundUpdate";
+            t.IsBackground = true;
+            t.Start();
+        }
+
+        public void RefreshMessagesTimeLine()
+        {
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetMessagesTimeLine);
+            System.Threading.Thread t = new System.Threading.Thread(ts);
+            t.Name = "BackgroundUpdate";
+            t.IsBackground = true;
+            t.Start();
+        }
 
         private void LoadCachedtimeline()
         {
@@ -87,7 +103,17 @@ namespace PockeTwit
             TimeLines[TimeLineType.Friends] = CachedLines;
         }
 
-        
+
+        public Library.status[] GetUserTimeLine(Yedda.Twitter t, string UserID)
+        {
+            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Show, UserID);
+            if (string.IsNullOrEmpty(response))
+            {
+                return null;
+            }
+            return Library.status.Deserialize(response, t.AccountInfo);
+        }
+
         private void GetMessagesTimeLine()
         {
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
@@ -122,8 +148,12 @@ namespace PockeTwit
                     if (!string.IsNullOrEmpty(response))
                     {
                         Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
-                        SaveStatuses(NewStats, t);
                         TempLine.AddRange(NewStats);
+                        if (NewStats.Length > 0)
+                        {
+                            SaveStatuses(NewStats, t);
+                            LastStatusID[t] = NewStats[0].id;
+                        }
                     }
                 }
             }
@@ -150,7 +180,12 @@ namespace PockeTwit
                 w.Close();  //Shouldn't need this in using, but I'm desperate   
             }
         }
+
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)
+        {
+            return FetchSpecificFromTwitter(t, TimelineType, null);
+        }
+        private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType, string AdditionalParameter)
         {
             string response = "";
             try
@@ -180,15 +215,13 @@ namespace PockeTwit
                     case Yedda.Twitter.ActionType.Replies:
                         response = t.GetRepliesTimeLine(Yedda.Twitter.OutputFormatType.XML);
                         break;
-                        /*
+                       
                     case Yedda.Twitter.ActionType.User_Timeline:
-                        FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-                        response = t.GetUserTimeline(selectedItem.Tweet.user.screen_name, Yedda.Twitter.OutputFormatType.XML);
+                        response = t.GetUserTimeline(AdditionalParameter, Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.Show:
-                        response = t.GetUserTimeline(ShowUserID, Yedda.Twitter.OutputFormatType.XML);
+                        response = t.GetUserTimeline(AdditionalParameter, Yedda.Twitter.OutputFormatType.XML);
                         break;
-                         */
                     case Yedda.Twitter.ActionType.Favorites:
                         response = t.GetFavorites();
                         break;
