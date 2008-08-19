@@ -103,6 +103,15 @@ namespace PockeTwit
             TimeLines[TimeLineType.Friends] = CachedLines;
         }
 
+        public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
+        {
+            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Search, SearchString);
+            if (string.IsNullOrEmpty(response))
+            {
+                return null;
+            }
+            return Library.status.DeserializeFromAtom(response, t.AccountInfo);
+        }
 
         public Library.status[] GetUserTimeLine(Yedda.Twitter t, string UserID)
         {
@@ -224,6 +233,9 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.Favorites:
                         response = t.GetFavorites();
+                        break;
+                    case Yedda.Twitter.ActionType.Search:
+                        response = t.SearchFor(AdditionalParameter);
                         break;
                 }
             }
