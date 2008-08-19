@@ -42,11 +42,13 @@ namespace PockeTwit
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
+                MessagesBubbler.Icon = Properties.Resources.MyIco;
                 MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
                 MessagesBubbler.RightSoftKeyClick += new EventHandler(MessagesBubbler_RightSoftKeyClick);
                 MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
                 MessagesBubbler.Silent = true;
+                
             }
             t_StopVibrate.Tick += new EventHandler(t_StopVibrate_Tick);
         }
@@ -127,13 +129,13 @@ namespace PockeTwit
             }
             if (!MessagesBubbler.Visible)
             {
-                if (NewFriendsCount > 0)
+                if (NewMessagesCount > 0)
                 {
-                    MessagesBubbler.Text = GetFriendsText();
+                    MessagesBubbler.Text = GetMessagesText();
                 }
                 else
                 {
-                    MessagesBubbler.Text = GetMessagesText();
+                    MessagesBubbler.Text = GetFriendsText();
                 }
                 CurrentSpinner = 0;
                 MessagesBubbler.Visible = true;
