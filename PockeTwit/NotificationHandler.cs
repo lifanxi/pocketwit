@@ -110,8 +110,15 @@ namespace PockeTwit
             }
             Friends.Sound = (string)FriendsKey.GetValue("Wave");
             Messages.Sound = (string)MessageKey.GetValue("Wave");
-            Friends.Options = (Options)FriendsKey.GetValue("Options");
-            Messages.Options = (Options)MessageKey.GetValue("Options");
+
+            if (FriendsKey.GetValue("Options")!=null)
+            {
+                Friends.Options = (Options)FriendsKey.GetValue("Options");
+            }
+            if (MessageKey.GetValue("Options") != null)
+            {
+                Messages.Options = (Options)MessageKey.GetValue("Options");
+            }
         }
 
 
@@ -145,6 +152,17 @@ namespace PockeTwit
                 ShowMessageForSpinner();
             }
         }
+
+        public void NewBoth(int MessagesCount, int FriendsCount)
+        {
+            MessagesBubbler.Visible = false;
+            NewMessagesCount += MessagesCount;
+            NewFriendsCount += FriendsCount;
+            LoadSettings();
+            NewFriendMessages(0);
+            NewMessages(0);
+            ShowNotifications();
+        }
         public void NewFriendMessages(int Count)
         {
             MessagesBubbler.Visible = false;
@@ -161,9 +179,12 @@ namespace PockeTwit
                 t_StopVibrate.Enabled = true;
                 VibrateStart();
             }
-            if ((Friends.Options & Options.Message) == Options.Message)
+            if (Count > 0)
             {
-                ShowNotifications();
+                if ((Friends.Options & Options.Message) == Options.Message)
+                {
+                    ShowNotifications();
+                }
             }
         }
 
@@ -183,9 +204,12 @@ namespace PockeTwit
                 t_StopVibrate.Enabled = true;
                 VibrateStart();
             }
-            if ((Messages.Options & Options.Message) == Options.Message)
+            if (Count > 0)
             {
-                ShowNotifications();
+                if ((Messages.Options & Options.Message) == Options.Message)
+                {
+                    ShowNotifications();
+                }
             }
         }
 

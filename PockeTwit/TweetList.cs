@@ -82,7 +82,7 @@ namespace PockeTwit
 
 
 		//�Delegates�(2)�
-
+        private delegate void delAddStatuses(Library.status[] arrayOfStats);
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
         private delegate bool delBool();
@@ -127,21 +127,29 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
-            if (mergedstatuses == null) { return; }
-            statList.Clear();
-            
-            foreach (Library.status stat in mergedstatuses)
+            if(InvokeRequired)
             {
-                FingerUI.StatusItem item = new FingerUI.StatusItem();
-                if (stat.user.screen_name != null)
-                {
-                    item.Tweet = stat;
-                    statList.AddItem(item);
-                }
+                delAddStatuses d = new delAddStatuses(AddStatusesToList);
+                this.Invoke(d, new object[] {mergedstatuses});
             }
-            statList.SetSelectedIndexToZero();
-            UpdateRightMenu();
-            statList.Redraw();
+            else
+            {
+                if (mergedstatuses == null) { return; }
+                statList.Clear();
+                
+                foreach (Library.status stat in mergedstatuses)
+                {
+                    FingerUI.StatusItem item = new FingerUI.StatusItem();
+                    if (stat.user.screen_name != null)
+                    {
+                        item.Tweet = stat;
+                        statList.AddItem(item);
+                    }
+                }
+                statList.SetSelectedIndexToZero();
+                UpdateRightMenu();
+                statList.Redraw();
+            }
         }
 
         private void ChangeCursor(Cursor CursorToset)
@@ -313,6 +321,7 @@ namespace PockeTwit
             SetUpListControl();
             Notifyer.FriendsNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_FriendsNotificationClicked);
             Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
+            
             statList.SwitchTolist("Friends_TimeLine");
             Application.DoEvents();
 
@@ -357,9 +366,28 @@ namespace PockeTwit
             Manager = new TimelineManagement(TwitterConnections);
             Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
             Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
+            Manager.BothUpdated += new TimelineManagement.delBothUpdated(Manager_BothUpdated);
             foreach (Following f in FollowingDictionary.Values)
             {
                 f.LoadFromTwitter();
+            }
+        }
+
+        void Manager_BothUpdated(int Messagecount, int FreindsCount)
+        {
+            
+            Notifyer.NewBoth(Messagecount, FreindsCount);
+            
+            if(this.IsFocused())
+            {
+                if (statList.CurrentList() == "Replies")
+                {
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                }
+                else if (statList.CurrentList() == "Friends_TimeLine")
+                {
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                }
             }
         }
 

@@ -10,8 +10,10 @@ namespace PockeTwit
         #region Events
         public delegate void delFriendsUpdated(int count);
         public delegate void delMessagesUpdated(int count);
+        public delegate void delBothUpdated(int Messagecount, int FreindsCount);
         public event delFriendsUpdated FriendsUpdated;
         public event delMessagesUpdated MessagesUpdated;
+        public event delBothUpdated BothUpdated;
         #endregion
 
         
@@ -25,7 +27,8 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
         private System.Threading.Timer timerUpdate;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
-        
+        private int HoldNewMessages = 0;
+        private int HoldNewFriends = 0;
 
 
         public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
@@ -57,8 +60,31 @@ namespace PockeTwit
 
         private void BackgroundUpdate()
         {
-            GetFriendsTimeLine();
-            GetMessagesTimeLine();
+            GetFriendsTimeLine(false);
+            GetMessagesTimeLine(false);
+            if (HoldNewMessages > 0 && HoldNewFriends > 0)
+            {
+                if (BothUpdated != null)
+                {
+                    BothUpdated(HoldNewMessages, HoldNewFriends);
+                }
+            }
+            else if (HoldNewMessages > 0)
+            {
+                if (MessagesUpdated != null)
+                {
+                    MessagesUpdated(HoldNewMessages);
+                }
+            }
+            else if (HoldNewFriends > 0)
+            {
+                if (FriendsUpdated != null)
+                {
+                    FriendsUpdated(HoldNewFriends);
+                }
+            }
+            HoldNewFriends = 0;
+            HoldNewMessages = 0;
         }
 
         public void RefreshFriendsTimeLine()
@@ -125,6 +151,10 @@ namespace PockeTwit
 
         private void GetMessagesTimeLine()
         {
+            GetMessagesTimeLine(true);
+        }
+        private void GetMessagesTimeLine(bool Notify)
+        {
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
@@ -141,11 +171,22 @@ namespace PockeTwit
             int NewItems = TimeLines[TimeLineType.Messages].MergeIn(new TimeLine(TempLine));
             if (MessagesUpdated != null && NewItems>0)
             {
-                MessagesUpdated(NewItems);
+                if (Notify)
+                {
+                    MessagesUpdated(NewItems);
+                }
+                else
+                {
+                    HoldNewMessages = NewItems;
+                }
             }
         }
 
         private void GetFriendsTimeLine()
+        {
+            GetFriendsTimeLine(true);
+        }
+        private void GetFriendsTimeLine(bool Notify)
         {
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
@@ -169,7 +210,14 @@ namespace PockeTwit
             int NewItems = TimeLines[TimeLineType.Friends].MergeIn(new TimeLine(TempLine));
             if (FriendsUpdated != null && NewItems>0)
             {
-                FriendsUpdated(NewItems);
+                if (Notify)
+                {
+                    FriendsUpdated(NewItems);
+                }
+                else
+                {
+                    HoldNewFriends = NewItems;
+                }
             }
         }
 
