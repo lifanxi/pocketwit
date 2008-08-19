@@ -11,7 +11,6 @@ namespace PockeTwit
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label lblLoading;
         private System.Windows.Forms.Label lblTitle;
-        private Microsoft.WindowsCE.Forms.Notification notification1;
         private FingerUI.KListControl statList;
         private System.Windows.Forms.Timer timerStartup;
         
