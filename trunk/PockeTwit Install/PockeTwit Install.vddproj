@@ -429,7 +429,7 @@
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_E79667C3D66DB477E6FC8E35A5AE0E34"
             {
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3150.34820, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3153.11158, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_E79667C3D66DB477E6FC8E35A5AE0E34"
@@ -676,13 +676,6 @@
                                             "ValueTypes" = "3:3"
                                             "Value" = "3:11"
                                             }
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_BD157A64772E4DB7873C7CAB586B2059"
-                                            {
-                                            "Name" = "8:Options"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:3"
-                                            "Value" = "3:0"
-                                            }
                                             "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD5DB34743E740BCB9B0AF6690F7570E"
                                             {
                                             "Name" = "8:Default"
@@ -701,13 +694,6 @@
                                         }
                                         "Values"
                                         {
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_7274A66BFE5046349397A4DBF5892858"
-                                            {
-                                            "Name" = "8:Options"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:3"
-                                            "Value" = "3:0"
-                                            }
                                             "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD695DDA461B4C8C97CF3B89A8D19E2B"
                                             {
                                             "Name" = "8:AvailableOptions"
