@@ -27,6 +27,7 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private TimelineManagement Manager;
+        private NotificationHandler Notifyer = new NotificationHandler();
         
         private string ShowUserID;
 
@@ -310,7 +311,8 @@ namespace PockeTwit
             
             lblLoading.Text = "Setting up the UI";
             SetUpListControl();
-            
+            Notifyer.FriendsNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_FriendsNotificationClicked);
+            Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
             statList.SwitchTolist("Friends_TimeLine");
             Application.DoEvents();
 
@@ -325,6 +327,16 @@ namespace PockeTwit
             statList.SetSelectedIndexToZero();
             statList.Visible = true;
             return ret;
+        }
+
+        void Notifyer_MessagesNotificationClicked()
+        {
+            this.Show();
+        }
+
+        void Notifyer_FriendsNotificationClicked()
+        {
+            this.Show();
         }
 
         private void ResetDictionaries()
@@ -355,11 +367,19 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Replies")
             {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                if (this.IsFocused())
+                {
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                    if (ClientSettings.BeepOnNew) { MessageBeep(0); }
+                }
+                else
+                {
+                    Notifyer.NewMessages(count);
+                }
             }
             else
             {
-                //Raise Notification
+                Notifyer.NewMessages(count);
             }
         }
 
@@ -374,7 +394,12 @@ namespace PockeTwit
                 }
                 else
                 {
+                    Notifyer.NewFriendMessages(count);
                 }
+            }
+            else
+            {
+                Notifyer.NewFriendMessages(count);
             }
         }
 
@@ -751,6 +776,7 @@ namespace PockeTwit
             this.MaximizeBox = true;
 
             // Since there is no WindowState.Minimize, we have to P/Invoke ShowWindow
+            ImageBuffer.Clear();
             ShowWindow(this.Handle, SW_MINIMIZED);
         }
 
