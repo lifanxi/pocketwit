@@ -53,6 +53,14 @@ namespace FingerUI
             set
             {
                 _LeftMenuItems = value;
+                SetLeftMenuHeight();
+            }
+        }
+
+        private void SetLeftMenuHeight()
+        {
+            if (_LeftMenuItems.Count > 0)
+            {
                 LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
                 TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
             }
@@ -70,7 +78,15 @@ namespace FingerUI
             set
             {
                 _RightMenuItems = value;
-                RightMenuHeight = (this.Height-(ClientSettings.TextSize*5)) / _RightMenuItems.Count;
+                SetRightMenuHeight();
+            }
+        }
+
+        private void SetRightMenuHeight()
+        {
+            if (_RightMenuItems.Count > 0)
+            {
+                RightMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _RightMenuItems.Count;
                 TopOfRightMenu = ((this.Height / 2) - ((_RightMenuItems.Count * RightMenuHeight) / 2));
             }
         }
@@ -936,6 +952,8 @@ namespace FingerUI
                 item.Bounds = ItemBounds(0, item.Index);
             }
             CreateBackBuffer();
+            SetLeftMenuHeight();
+            SetRightMenuHeight();
             Reset();
         }
 
