@@ -36,7 +36,8 @@ namespace PockeTwit
                 }
             }
         }
-        public int MergeIn(TimeLine otherLine)
+        
+        public int MergeIn(IEnumerable<Library.status> otherLine)
         {
             int NewItems = 0;
             this.AddUnique(otherLine);
@@ -66,7 +67,7 @@ namespace PockeTwit
             int overage = this.Count - ClientSettings.MaxTweets;
             if (overage > 0)
             {
-                for (int i = overage; i < this.Count; i++)
+                for (int i = this.Count-overage; i < this.Count; i++)
                 {
                     InternalDictionary.Remove(this[i].id);
                 }

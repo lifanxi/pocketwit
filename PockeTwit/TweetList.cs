@@ -16,10 +16,7 @@ namespace PockeTwit
 		#region�Fields�(12)�
 
         private UpdateChecker Checker;
-         private Yedda.Twitter.ActionType CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
         private Library.status[] CurrentStatuses =null;
-        private DeviceType DeviceType;
-        private bool InitialLoad = true;
 
         private List<string> LeftMenu;
         private List<string> RightMenu;
@@ -186,7 +183,6 @@ namespace PockeTwit
                 statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
                 statList.Clear();
                 SwitchToList("Friends_TimeLine");
-                CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                 Cursor.Current = Cursors.Default;
             }
             settings.Close();
@@ -319,7 +315,6 @@ namespace PockeTwit
             
             lblLoading.Text = "Setting up the UI";
             SetUpListControl();
-            Notifyer.FriendsNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_FriendsNotificationClicked);
             Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
             
             statList.SwitchTolist("Friends_TimeLine");
@@ -341,7 +336,7 @@ namespace PockeTwit
         void Notifyer_MessagesNotificationClicked()
         {
             this.Show();
-        }
+        } 
 
         void Notifyer_FriendsNotificationClicked()
         {
@@ -513,7 +508,6 @@ namespace PockeTwit
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList("Public_TimeLine");
                     statList.SetSelectedMenu("Public TimeLine");
-                    CurrentAction = Yedda.Twitter.ActionType.Public_Timeline;
                     statList.RightMenuItems = RightMenu;
                     statList.Redraw();
                     //GetTimeLineAsync();
@@ -523,7 +517,6 @@ namespace PockeTwit
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList("Friends_TimeLine");
                     statList.SetSelectedMenu("Friends TimeLine");
-                    CurrentAction = Yedda.Twitter.ActionType.Friends_Timeline;
                     statList.RightMenuItems = RightMenu;
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                     statList.Redraw();
@@ -534,7 +527,6 @@ namespace PockeTwit
                     ChangeCursor(Cursors.WaitCursor);
                     SwitchToList("Replies_TimeLine");
                     statList.SetSelectedMenu("Replies");
-                    CurrentAction = Yedda.Twitter.ActionType.Replies;
                     statList.RightMenuItems = RightMenu;
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                     statList.Redraw();
@@ -542,7 +534,6 @@ namespace PockeTwit
                     //GetTimeLineAsync();
                     break;
                 case "Favorites":
-                    CurrentAction = Yedda.Twitter.ActionType.Favorites;
                     //GetTimeLineAsync();
                     break;
                 case "Set Status":
@@ -557,7 +548,6 @@ namespace PockeTwit
 
                 case "@User TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
-                    CurrentAction = Yedda.Twitter.ActionType.Show;
                     FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
                     if (statItem == null) { return; }
                     ShowUserID = statItem.Tweet.user.screen_name;
@@ -639,7 +629,6 @@ namespace PockeTwit
             {
                 ChangeCursor(Cursors.WaitCursor);
                 ShowUserID = TextClicked.Replace("@","");
-                CurrentAction = Yedda.Twitter.ActionType.Show;
                 FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
                 if (statItem == null) { return; }
                 CurrentlySelectedAccount = statItem.Tweet.Account;
@@ -665,7 +654,6 @@ namespace PockeTwit
         {
             lblLoading.Visible = false;
             lblTitle.Visible = false;
-            InitialLoad = false;
             SwitchToList("Friends_TimeLine");
         }
 
@@ -704,7 +692,6 @@ namespace PockeTwit
             this.statList.Visible = true;
             
             ChangeCursor(Cursors.WaitCursor);
-            CurrentAction = Yedda.Twitter.ActionType.Search;
             statList.SetSelectedMenu("Search");
             statList.RightMenuItems = RightMenu;
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);

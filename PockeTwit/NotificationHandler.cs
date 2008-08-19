@@ -13,7 +13,6 @@ namespace PockeTwit
         private int NewFriendsCount = 0;
         private int CurrentSpinner = 0;
         public delegate void delNotificationClicked();
-        public event delNotificationClicked FriendsNotificationClicked;
         public event delNotificationClicked MessagesNotificationClicked;
         private Timer t_StopVibrate = new Timer();
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;

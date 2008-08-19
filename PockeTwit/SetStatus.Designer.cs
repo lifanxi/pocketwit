@@ -8,8 +8,6 @@ namespace PockeTwit
 
 		#region Fields (12) 
 
-        private System.Windows.Forms.Button btnPic;
-        private System.Windows.Forms.Button btnURL;
         /// <summary>
         /// Required designer variable.
         /// </summary>

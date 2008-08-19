@@ -26,7 +26,7 @@ namespace PockeTwit
         public Dictionary<TimeLineType, TimeLine> TimeLines = new Dictionary<TimeLineType, TimeLine>();
         private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
         private System.Threading.Timer timerUpdate;
-        private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
+        private Yedda.Twitter[] TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
 
@@ -35,7 +35,7 @@ namespace PockeTwit
         {
             TimeLines.Add(TimeLineType.Friends, new TimeLine());
             TimeLines.Add(TimeLineType.Messages, new TimeLine());
-            TwitterConnections = TwitterConnectionsToFollow;
+            TwitterConnections = TwitterConnectionsToFollow.ToArray();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 LastStatusID.Add(t, "");
@@ -46,9 +46,6 @@ namespace PockeTwit
             timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
         }
 
-
-
-
         void timerUpdate_Tick(object state)
         {
             System.Threading.ThreadStart ts = new System.Threading.ThreadStart(BackgroundUpdate);
@@ -57,7 +54,7 @@ namespace PockeTwit
             t.IsBackground = true;
             t.Start();
         }
-
+    
         private void BackgroundUpdate()
         {
             GetFriendsTimeLine(false);
@@ -163,12 +160,11 @@ namespace PockeTwit
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                     if (!string.IsNullOrEmpty(response))
                     {
-                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
-                        TempLine.AddRange(NewStats);
+                        TempLine.AddRange(Library.status.Deserialize(response, t.AccountInfo));
                     }
                 }
             }
-            int NewItems = TimeLines[TimeLineType.Messages].MergeIn(new TimeLine(TempLine));
+            int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
             if (MessagesUpdated != null && NewItems>0)
             {
                 if (Notify)
@@ -207,7 +203,7 @@ namespace PockeTwit
                     }
                 }
             }
-            int NewItems = TimeLines[TimeLineType.Friends].MergeIn(new TimeLine(TempLine));
+            int NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
             if (FriendsUpdated != null && NewItems>0)
             {
                 if (Notify)
