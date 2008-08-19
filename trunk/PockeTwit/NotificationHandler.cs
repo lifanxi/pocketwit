@@ -47,7 +47,6 @@ namespace PockeTwit
                 MessagesBubbler.RightSoftKeyClick += new EventHandler(MessagesBubbler_RightSoftKeyClick);
                 MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
                 MessagesBubbler.Silent = true;
-
             }
             t_StopVibrate.Tick += new EventHandler(t_StopVibrate_Tick);
         }
@@ -116,6 +115,7 @@ namespace PockeTwit
 
         private void ShowNotifications()
         {
+            MessagesBubbler.Visible = false;
             if (NewFriendsCount > 0 && NewMessagesCount > 0)
             {
                 MessagesBubbler.Spinners = true;
@@ -145,6 +145,7 @@ namespace PockeTwit
         }
         public void NewFriendMessages(int Count)
         {
+            MessagesBubbler.Visible = false;
             NewFriendsCount += Count;
             LoadSettings();
             if ((Friends.Options & Options.Sound) == Options.Sound)
@@ -190,7 +191,16 @@ namespace PockeTwit
         {
             System.Text.StringBuilder HTMLString = new StringBuilder();
             HTMLString.Append("<html><body>");
-            HTMLString.Append(NewFriendsCount.ToString() + " new friend updates are available!");
+            HTMLString.Append(NewFriendsCount.ToString() + " new ");
+            if (NewFriendsCount > 1)
+            {
+                HTMLString.Append("friend updates are available!");
+            }
+            else
+            {
+                HTMLString.Append("friend update is available!");
+            }
+
             HTMLString.Append("</body></html>");
             return HTMLString.ToString();
         }
@@ -198,7 +208,16 @@ namespace PockeTwit
         {
             System.Text.StringBuilder HTMLString = new StringBuilder();
             HTMLString.Append("<html><body>");
-            HTMLString.Append(NewMessagesCount.ToString() + " new messages are available!");
+            HTMLString.Append(NewMessagesCount.ToString() + " new ");
+            if(NewMessagesCount>1)
+            {
+                HTMLString.Append("messages are available!");
+            }
+            else
+            {
+                HTMLString.Append("message is available!");
+            }
+            
             HTMLString.Append("<form method=\'GET\' action=notify>");
             HTMLString.Append("</body></html>");
 
