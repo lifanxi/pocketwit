@@ -84,6 +84,7 @@ namespace PockeTwit
 
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
+        private delegate bool delBool();
 
 		#endregion�Delegates�and�Events�
 
@@ -91,6 +92,21 @@ namespace PockeTwit
 
 
 		//�Private�Methods�(38)�
+
+        private bool IsFocused()
+        {
+            if (InvokeRequired)
+            {
+                delBool d = new delBool(IsFocused);
+                bool invokeRetured = (bool)this.Invoke(d, null);
+                return invokeRetured;
+            }
+            else
+            {
+                return this.Focused | statList.Focused;
+            }
+
+        }
 
         private Yedda.Twitter GetMatchingConnection(Yedda.Twitter.Account AccountInfo)
         {
@@ -123,6 +139,7 @@ namespace PockeTwit
                 }
             }
             statList.SetSelectedIndexToZero();
+            UpdateRightMenu();
             statList.Redraw();
         }
 
@@ -350,11 +367,14 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Friends_TimeLine")
             {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-            }
-            else
-            {
-                //Raise Notification
+                if (this.IsFocused())
+                {
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                    if (ClientSettings.BeepOnNew) { MessageBeep(0); }
+                }
+                else
+                {
+                }
             }
         }
 
@@ -389,7 +409,7 @@ namespace PockeTwit
                     {
                         t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
                     }
-                    //GetTimeLineAsync();
+                    Manager.RefreshFriendsTimeLine();
                 }
             }
             this.statList.Redraw();
@@ -562,8 +582,13 @@ namespace PockeTwit
                 ChangeCursor(Cursors.WaitCursor);
                 ShowUserID = TextClicked.Replace("@","");
                 CurrentAction = Yedda.Twitter.ActionType.Show;
+                FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+                if (statItem == null) { return; }
+                CurrentlySelectedAccount = statItem.Tweet.Account;
+                Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
                 SwitchToList("@User_TimeLine");
-                //GetTimeLineAsync();
+                AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
+                ChangeCursor(Cursors.Default);
             }
         }
 
@@ -677,6 +702,19 @@ namespace PockeTwit
             else
             {
                 this.WindowState = FormWindowState.Normal;
+            }
+            if (statList.CurrentList() == "Friends_TimeLine")
+            {
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                statList.SetSelectedIndexToZero();
+                statList.Visible = true;
+            }
+            else if (statList.CurrentList() == "Replies_TimeLine")
+            {
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                statList.SetSelectedIndexToZero();
+                statList.Visible = true;
+            
             }
         }
 
