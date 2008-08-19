@@ -284,7 +284,7 @@ namespace Yedda
         protected const string TwitterBaseUrlFormat = "{3}/{0}/{1}.{2}";
         protected const string TwitterSimpleURLFormat = "{1}/{0}.xml";
         protected const string TwitterFavoritesUrlFormat = "{3}/{0}/{1}/{2}.xml";
-        protected const string TwitterSearchUrlFormat = "search.{1}/search.atom?q={0}";
+        protected const string TwitterSearchUrlFormat = "http://search.twitter.com/search.atom?q={0}";
 
         public string GetProfileURL(string User)
         {

@@ -504,11 +504,16 @@ namespace PockeTwit
 
                 case "@User TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
-                    FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    ShowUserID = selectedItem.Tweet.user.screen_name;
                     CurrentAction = Yedda.Twitter.ActionType.Show;
+                    FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+                    if (statItem == null) { return; }
+                    ShowUserID = statItem.Tweet.user.screen_name;
+                    CurrentlySelectedAccount = statItem.Tweet.Account;
+                    Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
                     SwitchToList("@User_TimeLine");
-                    //GetTimeLineAsync();
+                    AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
+                    ChangeCursor(Cursors.Default);
+
 
                     break;
                 case "Reply @User":
@@ -641,8 +646,20 @@ namespace PockeTwit
             }
             this.statList.Visible = true;
             f.Hide();
-            ShowUserID = f.SearchText;
+            string SearchString = f.SearchText;
+            f.Close();
+            this.statList.Visible = true;
             
+            ChangeCursor(Cursors.WaitCursor);
+            CurrentAction = Yedda.Twitter.ActionType.Search;
+            statList.SetSelectedMenu("Search");
+            statList.RightMenuItems = RightMenu;
+            Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
+            SwitchToList("Search_TimeLine");
+            AddStatusesToList(Manager.SearchTwitter(Conn, SearchString));
+            ChangeCursor(Cursors.Default);
+
+            /*
             ChangeCursor(Cursors.WaitCursor);
             this.statList.Redraw();
             this.statList.Visible = true;
@@ -653,6 +670,7 @@ namespace PockeTwit
             CurrentAction = Yedda.Twitter.ActionType.Search;
             statList.RightMenuItems = RightMenu;
             //GetTimeLineAsync();
+             */
         }
 
         void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)
