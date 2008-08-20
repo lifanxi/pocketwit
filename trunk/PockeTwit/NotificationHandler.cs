@@ -174,9 +174,9 @@ namespace PockeTwit
             }
             if ((Friends.Options & Options.Vibrate) == Options.Vibrate)
             {
-                t_StopVibrate.Interval = 1000;
-                t_StopVibrate.Enabled = true;
                 VibrateStart();
+                System.Threading.Thread.Sleep(500);
+                VibrateStop();
             }
             if (Count > 0)
             {
@@ -251,18 +251,16 @@ namespace PockeTwit
 
 
         #region VibrateCode
-        [System.Runtime.InteropServices.DllImport("aygshell.dll")]
-        private static extern int Vibrate(int cvn, IntPtr rgvn, bool fRepeat, uint dwTimeout);
-
-        [System.Runtime.InteropServices.DllImport("aygshell.dll")]
-        public static extern int VibrateStop();
-
-        const uint INFINITE = (uint)0xffffffffL;
-
+        private void VibrateStop()
+        {
+            vib.SetLedStatus(1, Led.LedState.Off);
+        }
+        
         void VibrateStart() 
         {
-            Vibrate(0, IntPtr.Zero, true, INFINITE);
+            vib.SetLedStatus(1, Led.LedState.On);
         }
         #endregion
+        private Led vib = new Led();
     }
 }

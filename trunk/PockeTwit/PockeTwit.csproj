@@ -62,6 +62,7 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LED.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="NotificationSoftKeys\NotificationMessageWindow.cs" />
     <Compile Include="NotificationSoftKeys\NotificationSoftKey.cs" />
