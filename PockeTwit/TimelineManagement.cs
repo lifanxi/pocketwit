@@ -25,6 +25,8 @@ namespace PockeTwit
         }
         public Dictionary<TimeLineType, TimeLine> TimeLines = new Dictionary<TimeLineType, TimeLine>();
         private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
+        private Dictionary<Yedda.Twitter, string> LastReplyID = new Dictionary<Yedda.Twitter, string>();
+        private Dictionary<Yedda.Twitter, string> LastDirectID = new Dictionary<Yedda.Twitter, string>();
         private System.Threading.Timer timerUpdate;
         private Yedda.Twitter[] TwitterConnections;
         private int HoldNewMessages = 0;
@@ -39,6 +41,7 @@ namespace PockeTwit
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 LastStatusID.Add(t, "");
+                LastReplyID.Add(t, "");
             }
             LoadCachedtimeline();
             GetFriendsTimeLine();
@@ -160,8 +163,14 @@ namespace PockeTwit
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                     if (!string.IsNullOrEmpty(response))
                     {
-                        TempLine.AddRange(Library.status.Deserialize(response, t.AccountInfo));
+                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                        TempLine.AddRange(NewStats);
+                        if (NewStats.Length > 0)
+                        {
+                            LastReplyID[t] = NewStats[0].id;
+                        }
                     }
+                    
                 }
             }
             int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
@@ -176,6 +185,8 @@ namespace PockeTwit
                     HoldNewMessages = NewItems;
                 }
             }
+            TempLine.Clear();
+            TempLine.TrimExcess();
         }
 
         private void GetFriendsTimeLine()
@@ -215,6 +226,8 @@ namespace PockeTwit
                     HoldNewFriends = NewItems;
                 }
             }
+            TempLine.Clear();
+            TempLine.TrimExcess();
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] statuses, Yedda.Twitter t)
@@ -266,9 +279,22 @@ namespace PockeTwit
                         response = t.GetPublicTimeline(Yedda.Twitter.OutputFormatType.XML);
                         break;
                     case Yedda.Twitter.ActionType.Replies:
-                        response = t.GetRepliesTimeLine(Yedda.Twitter.OutputFormatType.XML);
+                        if (!t.BigTimeLines)
+                        {
+                            response = t.GetRepliesTimeLine(Yedda.Twitter.OutputFormatType.XML);
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(LastReplyID[t]))
+                            {
+                                response = t.GetRepliesTimeLine(Yedda.Twitter.OutputFormatType.XML);
+                            }
+                            else
+                            {
+                                response = t.GetRepliesTimeLineSince(Yedda.Twitter.OutputFormatType.XML, LastReplyID[t]);
+                            }
+                        }
                         break;
-                       
                     case Yedda.Twitter.ActionType.User_Timeline:
                         response = t.GetUserTimeline(AdditionalParameter, Yedda.Twitter.OutputFormatType.XML);
                         break;

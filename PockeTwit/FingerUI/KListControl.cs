@@ -376,7 +376,10 @@ namespace FingerUI
             }
             else
             {
-                m_items.Clear();
+                foreach (ItemList items in this.ItemLists.Values)
+                {
+                    items.Clear();
+                }
                 Reset();
             }
         }
