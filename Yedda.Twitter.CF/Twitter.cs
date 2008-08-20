@@ -152,7 +152,6 @@ namespace Yedda
             Statuses,
             Account,
             Users,
-            Direct_Messages,
             Notifications,
             Friendships
         }
@@ -164,6 +163,7 @@ namespace Yedda
         /// </summary>
         public enum ActionType
         {
+            Direct_Messages,
             Search,
             Public_Timeline,
             User_Timeline,
@@ -623,6 +623,13 @@ namespace Yedda
         }
         #endregion
 
+        #region Direct_Messages
+        public string GetDirectTimeLineSince(string SinceID)
+        {
+            string url = string.Format(TwitterSimpleURLFormat, GetActionTypeString(ActionType.Direct_Messages),  AccountInfo.ServerURL.URL) + "?since_id=" + SinceID;
+            return ExecuteGetCommand(url);
+        }
+        #endregion
         #region Friends_Timeline
         public string GetFriendsTimeLineMax(OutputFormatType format)
         {

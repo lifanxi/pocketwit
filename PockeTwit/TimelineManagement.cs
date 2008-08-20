@@ -51,6 +51,7 @@ namespace PockeTwit
             {
                 LastStatusID.Add(t, "");
                 LastReplyID.Add(t, "");
+                LastDirectID.Add(t, "");
             }
             Progress(0, "Loading Cache");
             LoadCachedtimeline();
@@ -183,7 +184,22 @@ namespace PockeTwit
                             LastReplyID[t] = NewStats[0].id;
                         }
                     }
-                    
+                    ////I HATE DIRECT MESSAGES
+                    /*
+                    if (t.DirectMessagesWork)
+                    {
+                        response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                        if (!string.IsNullOrEmpty(response))
+                        {
+                            Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                            TempLine.AddRange(NewStats);
+                            if (NewStats.Length > 0)
+                            {
+                                LastStatusID[t] = NewStats[0].id;
+                            }
+                        }
+                    }
+                     */
                 }
             }
             int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
@@ -271,6 +287,9 @@ namespace PockeTwit
             {
                 switch (TimelineType)
                 {
+                    case Yedda.Twitter.ActionType.Direct_Messages:
+                        response = t.GetDirectTimeLineSince(LastDirectID[t]);
+                        break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         if (!t.BigTimeLines)
                         {
