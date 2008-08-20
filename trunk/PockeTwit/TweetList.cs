@@ -144,6 +144,8 @@ namespace PockeTwit
                     }
                 }
                 statList.SetSelectedIndexToZero();
+                FingerUI.StatusItem currentItem = (FingerUI.StatusItem)statList[0];
+                CurrentlySelectedAccount = currentItem.Tweet.Account;
                 UpdateRightMenu();
                 statList.Redraw();
             }
@@ -299,12 +301,7 @@ namespace PockeTwit
         private bool SetEverythingUp()
         {
             bool ret = true;
-            
-            ResetDictionaries();
-            
-            CurrentlySelectedAccount = ClientSettings.AccountsList[0];
 
-            
             if (ClientSettings.CheckVersion)
             {
                 lblLoading.Text = "Launching update checker";
@@ -312,25 +309,16 @@ namespace PockeTwit
                 Checker = new UpdateChecker();
                 Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             }
+
+            ResetDictionaries();
             
-            lblLoading.Text = "Setting up the UI";
+            CurrentlySelectedAccount = ClientSettings.AccountsList[0];
+            
             SetUpListControl();
             Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
             
-            statList.SwitchTolist("Friends_TimeLine");
-            Application.DoEvents();
-
-            lblLoading.Text = "Loading cached timelines";
-            Application.DoEvents();
-            
-            lblLoading.Text = "Fetching timelines from server";
-            Application.DoEvents();
-
-            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());            
-
-            statList.SetSelectedIndexToZero();
-            statList.Visible = true;
             return ret;
+            
         }
 
         void Notifyer_MessagesNotificationClicked()
@@ -359,6 +347,9 @@ namespace PockeTwit
                 FollowingDictionary.Add(TwitterConn, f);
             }
             Manager = new TimelineManagement(TwitterConnections);
+            Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
+            Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
+            Manager.Startup(TwitterConnections);
             Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
             Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
             Manager.BothUpdated += new TimelineManagement.delBothUpdated(Manager_BothUpdated);
@@ -366,6 +357,22 @@ namespace PockeTwit
             {
                 f.LoadFromTwitter();
             }
+        }
+
+        void Manager_CompleteLoaded()
+        {
+            lblLoading.Text = "Preparing UI";
+            statList.SwitchTolist("Friends_TimeLine");
+            
+            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+            
+            statList.SetSelectedIndexToZero();
+        }
+
+        void Manager_Progress(int percentage, string Status)
+        {
+            lblLoading.Text = Status;
+            Application.DoEvents();
         }
 
         void Manager_BothUpdated(int Messagecount, int FreindsCount)
@@ -654,6 +661,7 @@ namespace PockeTwit
         {
             lblLoading.Visible = false;
             lblTitle.Visible = false;
+            statList.Visible = true;
             SwitchToList("Friends_TimeLine");
         }
 
@@ -698,19 +706,6 @@ namespace PockeTwit
             SwitchToList("Search_TimeLine");
             AddStatusesToList(Manager.SearchTwitter(Conn, SearchString));
             ChangeCursor(Cursors.Default);
-
-            /*
-            ChangeCursor(Cursors.WaitCursor);
-            this.statList.Redraw();
-            this.statList.Visible = true;
-
-            f.Close();
-            SwitchToList("Search_TimeLine");
-            statList.SetSelectedMenu("Search");
-            CurrentAction = Yedda.Twitter.ActionType.Search;
-            statList.RightMenuItems = RightMenu;
-            //GetTimeLineAsync();
-             */
         }
 
         void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)

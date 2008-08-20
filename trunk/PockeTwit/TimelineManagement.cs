@@ -11,9 +11,13 @@ namespace PockeTwit
         public delegate void delFriendsUpdated(int count);
         public delegate void delMessagesUpdated(int count);
         public delegate void delBothUpdated(int Messagecount, int FreindsCount);
+        public delegate void delProgress(int percentage, string Status);
+        public delegate void delComplete();
         public event delFriendsUpdated FriendsUpdated;
         public event delMessagesUpdated MessagesUpdated;
         public event delBothUpdated BothUpdated;
+        public event delProgress Progress;
+        public event delComplete CompleteLoaded;
         #endregion
 
         
@@ -28,24 +32,33 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter, string> LastReplyID = new Dictionary<Yedda.Twitter, string>();
         private Dictionary<Yedda.Twitter, string> LastDirectID = new Dictionary<Yedda.Twitter, string>();
         private System.Threading.Timer timerUpdate;
-        private Yedda.Twitter[] TwitterConnections;
+        private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
 
 
         public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
+        }
+
+        public void Startup(List<Yedda.Twitter> TwitterConnectionsToFollow)
+        {
+            Progress(0, "Starting");
             TimeLines.Add(TimeLineType.Friends, new TimeLine());
             TimeLines.Add(TimeLineType.Messages, new TimeLine());
-            TwitterConnections = TwitterConnectionsToFollow.ToArray();
+            TwitterConnections = TwitterConnectionsToFollow;
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 LastStatusID.Add(t, "");
                 LastReplyID.Add(t, "");
             }
+            Progress(0, "Loading Cache");
             LoadCachedtimeline();
+            Progress(0, "Fetching Friends TimeLine");
             GetFriendsTimeLine();
+            Progress(0, "Fetching Messages TimeLine");
             GetMessagesTimeLine();
+            CompleteLoaded();
             timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
         }
 
