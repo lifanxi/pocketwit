@@ -429,7 +429,7 @@
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_E79667C3D66DB477E6FC8E35A5AE0E34"
             {
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3153.11158, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3154.14611, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_E79667C3D66DB477E6FC8E35A5AE0E34"
@@ -642,13 +642,7 @@
             {
                 "Keys"
                 {
-                }
-            }
-            "HKCU"
-            {
-                "Keys"
-                {
-                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_07E2C1E6E5744533B18433F7A377AC3F"
+                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_19A27ABE203141BAB986C24B4F706FC9"
                     {
                     "Name" = "8:ControlPanel"
                     "Condition" = "8:"
@@ -720,6 +714,12 @@
                         {
                         }
                     }
+                }
+            }
+            "HKCU"
+            {
+                "Keys"
+                {
                 }
             }
             "HKCR"
