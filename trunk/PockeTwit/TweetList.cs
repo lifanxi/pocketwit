@@ -527,6 +527,7 @@ namespace PockeTwit
                     statList.RightMenuItems = RightMenu;
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                     statList.Redraw();
+                    Manager.RefreshFriendsTimeLine();
                     ChangeCursor(Cursors.Default);
                     //GetTimeLineAsync();
                     break;
@@ -537,6 +538,7 @@ namespace PockeTwit
                     statList.RightMenuItems = RightMenu;
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                     statList.Redraw();
+                    Manager.RefreshMessagesTimeLine();
                     ChangeCursor(Cursors.Default);
                     //GetTimeLineAsync();
                     break;
