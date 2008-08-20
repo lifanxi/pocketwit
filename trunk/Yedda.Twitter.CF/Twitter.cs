@@ -683,6 +683,11 @@ namespace Yedda
         #endregion
 
         #region Replies
+        public string GetRepliesTimeLineSince(OutputFormatType format, string SinceID)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), AccountInfo.ServerURL.URL) + "?since_id=" + SinceID;
+            return ExecuteGetCommand(url);
+        }
         public string GetRepliesTimeLine(OutputFormatType format)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Replies), GetFormatTypeString(format), AccountInfo.ServerURL.URL);

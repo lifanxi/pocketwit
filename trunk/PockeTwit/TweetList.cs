@@ -791,8 +791,10 @@ namespace PockeTwit
             this.MaximizeBox = true;
 
             // Since there is no WindowState.Minimize, we have to P/Invoke ShowWindow
+            statList.Clear();
             ImageBuffer.Clear();
             ShowWindow(this.Handle, SW_MINIMIZED);
+            GC.Collect();
         }
 
 		#endregion�Methods�
