@@ -47,6 +47,7 @@ namespace PockeTwit
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             position = args.Position;
+            
             if (position.LatitudeValid && position.LongitudeValid)
             {
                 MessageBox.Show(position.Latitude + "," + position.Longitude);
