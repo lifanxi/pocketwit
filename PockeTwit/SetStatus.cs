@@ -40,6 +40,7 @@ namespace PockeTwit
         {
             label1.Visible = false;
             this.Controls.Add(lblGPS);
+            lblGPS.ForeColor = Color.LightGray;
             lblGPS.Location = new Point(0, 0);
             lblGPS.Size = new Size(100, 10);
             lblGPS.Visible = true;
