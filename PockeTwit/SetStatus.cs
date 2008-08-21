@@ -41,7 +41,7 @@ namespace PockeTwit
             gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
             gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
 
-            
+            gps.Open();
         }
 
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
@@ -53,6 +53,7 @@ namespace PockeTwit
         void gps_DeviceStateChanged(object sender, PockeTwit.GPS.DeviceStateChangedEventArgs args)
         {
             device = args.DeviceState;
+            MessageBox.Show(device.FriendlyName);
         }
 
         
