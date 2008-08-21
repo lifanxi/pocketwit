@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.25</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv25.CAB</url>
-  <notes>Fix timeline for non-english locales
-Support for alternate laconica sites
+  <version>.26</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv26.CAB</url>
+  <notes>Remember full-screen state between runs.
+Minimize on right-menu.
+Use system notifications for friends
+  updates and new replies.
 </notes>
 </LatestRelease>
