@@ -38,10 +38,12 @@ namespace PockeTwit
 
         private void GetGPS()
         {
+            label1.Visible = false;
+            this.Controls.Add(lblGPS);
             lblGPS.Location = new Point(0, 0);
             lblGPS.Size = new Size(100, 10);
             lblGPS.Visible = true;
-            this.Controls.Add(lblGPS);
+            
             gps = new PockeTwit.GPS.Gps();
             gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
             gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
