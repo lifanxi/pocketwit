@@ -2,11 +2,13 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 //
-// Use of this source code is subject to the terms of the Microsoft end-user
-// license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
-// If you did not accept the terms of the EULA, you are not authorized to use
-// this source code. For a copy of the EULA, please see the LICENSE.RTF on your
-// install media.
+// Use of this sample source code is subject to the terms of the Microsoft
+// license agreement under which you licensed this sample source code. If
+// you did not accept the terms of the license agreement, you are not
+// authorized to use this sample source code. For the terms of the license,
+// please see the license agreement between you and Microsoft or, if applicable,
+// see the LICENSE.RTF on your install media or the root of your tools installation.
+// THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
 //
 #region Using directives
 
@@ -407,14 +409,14 @@ namespace PockeTwit.GPS
         /// </summary>
         public double Latitude
         {
-            get { return ParseDegreesMinutesSeconds(dblLatitude).ToDecimalDegrees(); }
+            get { return dblLatitude; }
         }
         /// <summary>
         /// Latitude in degrees, minutes, seconds.  North is positive
         /// </summary>
         public DegreesMinutesSeconds LatitudeInDegreesMinutesSeconds
         {
-            get { return ParseDegreesMinutesSeconds(dblLatitude); }
+            get { return new DegreesMinutesSeconds(dblLatitude); }
         }
 
         /// <summary>
@@ -430,7 +432,7 @@ namespace PockeTwit.GPS
         /// </summary>
         public double Longitude
         {
-            get { return ParseDegreesMinutesSeconds(dblLongitude).ToDecimalDegrees(); }
+            get { return dblLongitude; }
         }
 
         /// <summary>
@@ -438,7 +440,7 @@ namespace PockeTwit.GPS
         /// </summary>
         public DegreesMinutesSeconds LongitudeInDegreesMinutesSeconds
         {
-            get { return ParseDegreesMinutesSeconds(dblLongitude); }
+            get { return new DegreesMinutesSeconds(dblLongitude); }
         }
         /// <summary>
         /// True if the Longitude property is valid, false if invalid
@@ -506,28 +508,6 @@ namespace PockeTwit.GPS
         public bool VerticalDilutionOfPrecisionValid
         {
             get { return (dwValidFields & GPS_VALID_VERTICAL_DILUTION_OF_PRECISION) != 0; }
-        }
-
-        /// <summary>
-        /// Parses out the degrees, minutes, seconds from the double format returned by
-        /// the NMEA GPS device
-        /// </summary>
-        /// <param name="val">degrees, minutes, seconds as a double</param>
-        /// <returns>DegreesMinutesSeconds structure</returns>
-        private DegreesMinutesSeconds ParseDegreesMinutesSeconds(double val)
-        {
-            if (val > 0)
-            {
-                double degrees = (val / 100.0);
-                double minutes = (Math.Abs(degrees) - Math.Abs((double)(int)(degrees))) * 100;
-                double seconds = (Math.Abs(val) - Math.Abs((double)(int)val)) * 60.0;
-
-                return new DegreesMinutesSeconds((int)degrees, (int)minutes, seconds);
-            }
-            else
-            {
-                return new DegreesMinutesSeconds(0, 0, 0);
-            }
         }
     }
 

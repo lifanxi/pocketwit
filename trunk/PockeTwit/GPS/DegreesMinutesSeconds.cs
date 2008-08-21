@@ -1,3 +1,15 @@
+//
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//
+//
+// Use of this sample source code is subject to the terms of the Microsoft
+// license agreement under which you licensed this sample source code. If
+// you did not accept the terms of the license agreement, you are not
+// authorized to use this sample source code. For the terms of the license,
+// please see the license agreement between you and Microsoft or, if applicable,
+// see the LICENSE.RTF on your install media or the root of your tools installation.
+// THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+//
 #region Using directives
 
 using System;
@@ -11,20 +23,31 @@ namespace PockeTwit.GPS
     /// </summary>
     public class DegreesMinutesSeconds
     {
-        int degrees;
+
+        bool isPositive;
+        /// <summary>
+        /// Returns true if the degrees, minutes and seconds refer to a positive value,
+        /// false otherwise.
+        /// </summary>
+        public bool IsPositive
+        {
+            get { return isPositive; }
+        }
+
+        uint degrees;
         /// <summary>
         /// The degrees unit of the coordinate
         /// </summary>
-        public int Degrees
+        public uint Degrees
         {
             get { return degrees; }
         }
 
-        int minutes;
+        uint minutes;
         /// <summary>
         /// The minutes unit of the coordinate
         /// </summary>
-        public int Minutes
+        public uint Minutes
         {
             get { return minutes; }
         }
@@ -45,22 +68,27 @@ namespace PockeTwit.GPS
         /// <param name="decimalDegrees">Initial value as decimal degrees</param>
         public DegreesMinutesSeconds(double decimalDegrees)
         {
-            degrees = (int)decimalDegrees;
+            isPositive = (decimalDegrees > 0);
+            
+            degrees = (uint) Math.Abs(decimalDegrees);
             
             double doubleMinutes = (Math.Abs(decimalDegrees) - Math.Abs((double)degrees)) * 60.0;
+            minutes = (uint) doubleMinutes;
 
-            minutes = (int)doubleMinutes;
             seconds = (doubleMinutes - (double)minutes) * 60.0;
         }
 
         /// <summary>
         /// Constructs a new instance of DegreesMinutesSeconds
         /// </summary>
+        /// <param name="isPositive">True if the coordinates are positive coordinate, false if they
+        /// are negative coordinates.</param>
         /// <param name="degrees">Degrees unit of the coordinate</param>
         /// <param name="minutes">Minutes unit of the coordinate</param>
-        /// <param name="seconds">Seconds unit of the coordinate</param>
-        public DegreesMinutesSeconds(int degrees, int minutes, double seconds)
+        /// <param name="seconds">Seconds unit of the coordinate. This should be a positive value.</param>
+        public DegreesMinutesSeconds(bool isPositive, uint degrees, uint minutes, double seconds)
         {
+            this.isPositive = isPositive;
             this.degrees = degrees;
             this.minutes = minutes;
             this.seconds = seconds;
@@ -73,11 +101,9 @@ namespace PockeTwit.GPS
         /// <returns></returns>
         public double ToDecimalDegrees()
         {
-            int absDegrees = Math.Abs(degrees);
-
-            double val = (double)absDegrees + ((double)minutes / 60.0) + ((double)seconds / 3600.0);
-
-            return val * (absDegrees / degrees);
+            double val = (double)degrees + ((double)minutes / 60.0) + ((double)seconds / 3600.0);
+            val = isPositive ? val : val * -1;
+            return val;
         }
 
         /// <summary>
