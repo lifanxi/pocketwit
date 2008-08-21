@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.26</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv26.CAB</url>
-  <notes>Remember full-screen state between runs.
-Minimize on right-menu.
-Use system notifications for friends
-  updates and new replies.
+  <version>.27</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv27.CAB</url>
+  <notes>Fix program icon
+Fix vibrate on friend status updates
+Fix vibrate on longer sounds
+Fix some rare status rendering issues
 </notes>
 </LatestRelease>
