@@ -30,10 +30,12 @@ namespace PockeTwit
             
             lblCharsLeft.Text = "140";
             PopulateAccountList();
+            /*
             if (ClientSettings.UseGPS)
             {
                 GetGPS();
             }
+             */
         }
 
         private void GetGPS()
