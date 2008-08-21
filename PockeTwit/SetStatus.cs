@@ -16,7 +16,9 @@ namespace PockeTwit
 
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
-
+        public GPS.GpsPosition position = null;
+        private GPS.GpsDeviceState device = null;
+        private GPS.Gps gps = null;
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -27,8 +29,33 @@ namespace PockeTwit
             
             lblCharsLeft.Text = "140";
             PopulateAccountList();
+            if (ClientSettings.UseGPS)
+            {
+                GetGPS();
+            }
         }
 
+        private void GetGPS()
+        {
+            gps = new PockeTwit.GPS.Gps();
+            gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
+            gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+
+            
+        }
+
+        void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
+        {
+            position = args.Position;
+            MessageBox.Show(position.Latitude + "," + position.Longitude);
+        }
+
+        void gps_DeviceStateChanged(object sender, PockeTwit.GPS.DeviceStateChangedEventArgs args)
+        {
+            device = args.DeviceState;
+        }
+
+        
         private void PopulateAccountList()
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)

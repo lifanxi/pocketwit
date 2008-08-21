@@ -53,6 +53,8 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static bool UseGPS { get; set; }
+
     public static bool IsMaximized { get; set; }
 
     public static bool BeepOnNew { get; set; }
@@ -106,6 +108,15 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseGPS"]))
+            {
+                UseGPS = bool.Parse(ConfigurationSettings.AppSettings["UseGPS"]);
+            }
+            else
+            {
+                UseGPS = true;
+            }
+
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["IsMaximized"]))
             {
                 IsMaximized = bool.Parse(ConfigurationSettings.AppSettings["IsMaximized"]);

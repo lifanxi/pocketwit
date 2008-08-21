@@ -62,6 +62,13 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GPS\DegreesMinutesSeconds.cs" />
+    <Compile Include="GPS\DeviceStateChangedEventArgs.cs" />
+    <Compile Include="GPS\GPS.cs" />
+    <Compile Include="GPS\GpsDeviceState.cs" />
+    <Compile Include="GPS\GpsPosition.cs" />
+    <Compile Include="GPS\LocationChangedEventArgs.cs" />
+    <Compile Include="GPS\Utils.cs" />
     <Compile Include="LED.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="NotificationSoftKeys\NotificationMessageWindow.cs" />
