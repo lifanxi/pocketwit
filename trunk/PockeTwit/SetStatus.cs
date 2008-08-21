@@ -13,7 +13,7 @@ namespace PockeTwit
     {
 
 		#region Fields (2) 
-
+        private delegate void delUpdateText(string text);
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
         public GPS.GpsPosition position = null;
@@ -49,6 +49,18 @@ namespace PockeTwit
             gps.Open();
         }
 
+        private void Updatelbl(string tText)
+        {
+            if (InvokeRequired)
+            {
+                delUpdateText d = new delUpdateText(Updatelbl);
+                this.Invoke(d, new object[] { tText });
+            }
+            else
+            {
+                lblGPS.Text = tText;
+            }
+        }
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             position = args.Position;
@@ -56,16 +68,16 @@ namespace PockeTwit
             {
                 if (position.LatitudeValid && position.LongitudeValid)
                 {
-                    lblGPS.Text = position.Latitude.ToString() + "," + position.Longitude.ToString();
+                    Updatelbl(position.Latitude.ToString() + "," + position.Longitude.ToString());
                 }
                 else
                 {
-                    lblGPS.Text = "Bad position";
+                    Updatelbl("Bad position");
                 }
             }
             catch(DivideByZeroException ex)
             {
-                lblGPS.Text = "0 position";
+                Updatelbl("0 position");
             }
         }
 
