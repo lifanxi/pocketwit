@@ -57,7 +57,10 @@ namespace PockeTwit
                     NewItems++;
                 }
             }
-            this.LastReadID = this[0].id;
+            if (this.Count > 0)
+            {
+                this.LastReadID = this[0].id;
+            }
             return NewItems;
         }
 
