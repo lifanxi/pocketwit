@@ -53,7 +53,6 @@ namespace PockeTwit
         void gps_DeviceStateChanged(object sender, PockeTwit.GPS.DeviceStateChangedEventArgs args)
         {
             device = args.DeviceState;
-            MessageBox.Show(device.FriendlyName);
         }
 
         
