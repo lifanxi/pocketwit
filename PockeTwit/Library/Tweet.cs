@@ -92,7 +92,6 @@ namespace PockeTwit.Library
         public string in_reply_to_user_id { get; set; }
         public bool isDirect { get; set; }
         
-
         public string text { get; set; }
 
         public User user { get; set; }
