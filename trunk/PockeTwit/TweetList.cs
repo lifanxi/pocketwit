@@ -774,7 +774,6 @@ namespace PockeTwit
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                 statList.SetSelectedIndexToZero();
                 statList.Visible = true;
-            
             }
         }
 
