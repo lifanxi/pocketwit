@@ -25,7 +25,7 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private TimelineManagement Manager;
         private NotificationHandler Notifyer = new NotificationHandler();
-        
+        private bool IsLoaded = false;
         private string ShowUserID;
 
         #endregion�Fields�
@@ -665,6 +665,7 @@ namespace PockeTwit
             lblTitle.Visible = false;
             statList.Visible = true;
             SwitchToList("Friends_TimeLine");
+            IsLoaded = true;
         }
 
         private void SwitchToList(string ListName)
@@ -749,6 +750,10 @@ namespace PockeTwit
         }
         protected override void OnActivated(EventArgs e)
         {
+            if (!IsLoaded)
+            {
+                return;
+            }
             base.OnActivated(e);
             if (ClientSettings.IsMaximized)
             {
