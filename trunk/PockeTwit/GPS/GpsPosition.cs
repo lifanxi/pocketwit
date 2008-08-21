@@ -516,11 +516,18 @@ namespace PockeTwit.GPS
         /// <returns>DegreesMinutesSeconds structure</returns>
         private DegreesMinutesSeconds ParseDegreesMinutesSeconds(double val)
         {
-            double degrees = (val / 100.0);
-            double minutes = (Math.Abs(degrees) - Math.Abs((double)(int)(degrees))) * 100;
-            double seconds = (Math.Abs(val) - Math.Abs((double)(int)val)) * 60.0;
+            if (val > 0)
+            {
+                double degrees = (val / 100.0);
+                double minutes = (Math.Abs(degrees) - Math.Abs((double)(int)(degrees))) * 100;
+                double seconds = (Math.Abs(val) - Math.Abs((double)(int)val)) * 60.0;
 
-            return new DegreesMinutesSeconds((int)degrees, (int)minutes, seconds);
+                return new DegreesMinutesSeconds((int)degrees, (int)minutes, seconds);
+            }
+            else
+            {
+                return new DegreesMinutesSeconds(0, 0, 0);
+            }
         }
     }
 
