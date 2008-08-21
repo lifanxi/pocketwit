@@ -19,6 +19,7 @@ namespace PockeTwit
         public GPS.GpsPosition position = null;
         private GPS.GpsDeviceState device = null;
         private GPS.Gps gps = null;
+        private Label lblGPS = new Label();
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -37,6 +38,10 @@ namespace PockeTwit
 
         private void GetGPS()
         {
+            lblGPS.Location = new Point(0, 0);
+            lblGPS.Size = new Size(100, 10);
+            lblGPS.Visible = true;
+            this.Controls.Add(lblGPS);
             gps = new PockeTwit.GPS.Gps();
             gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
             gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
@@ -47,14 +52,20 @@ namespace PockeTwit
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             position = args.Position;
-            
-            if (position.LatitudeValid && position.LongitudeValid)
+            try
             {
-                MessageBox.Show(position.Latitude + "," + position.Longitude);
+                if (position.LatitudeValid && position.LongitudeValid)
+                {
+                    lblGPS.Text = position.Latitude.ToString() + "," + position.Longitude.ToString();
+                }
+                else
+                {
+                    lblGPS.Text = "Bad position";
+                }
             }
-            else
+            catch(DivideByZeroException ex)
             {
-                MessageBox.Show("Bad position");
+                lblGPS.Text = "0 position";
             }
         }
 
