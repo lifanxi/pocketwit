@@ -442,7 +442,14 @@ namespace PockeTwit
         {
 
             SetStatus StatusForm = new SetStatus();
-            StatusForm.AccountToSet = CurrentlySelectedAccount;
+            if (CurrentlySelectedAccount == null)
+            {
+                StatusForm.AccountToSet = ClientSettings.AccountsList[0];
+            }
+            else
+            {
+                StatusForm.AccountToSet = CurrentlySelectedAccount;
+            }
             this.statList.Visible = false;
             if (!string.IsNullOrEmpty(ToUser))
             {
