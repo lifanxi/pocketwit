@@ -163,6 +163,7 @@ namespace PockeTwit
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox ImagePreview;
 
         private void SetupProfessional()
         {
@@ -180,6 +181,7 @@ namespace PockeTwit
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.ImagePreview = new System.Windows.Forms.PictureBox();
 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(66, ClientSettings.TextSize + 20);
@@ -202,9 +204,17 @@ namespace PockeTwit
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(25, 25);
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+
+            ImagePreview.Size = new System.Drawing.Size(25, 25);
+            ImagePreview.SizeMode = PictureBoxSizeMode.StretchImage;
+            ImagePreview.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            ImagePreview.Location = new System.Drawing.Point(lblCharsLeft.Left - 30, ClientSettings.TextSize + 20);
+            ImagePreview.Visible = false;
+
             this.Controls.Add(pictureBox1);
             this.Controls.Add(pictureBox2);
             this.Controls.Add(pictureBox3);
+            this.Controls.Add(ImagePreview);
 
         }
 
