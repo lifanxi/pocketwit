@@ -107,6 +107,7 @@ namespace PockeTwit
                     {
                         TwitPicFile = c.FileName;
                         UseTwitPic = true;
+                        AddPictureToForm(c.FileName);
                     }
                 }
                 catch
@@ -122,9 +123,21 @@ namespace PockeTwit
             {
                 TwitPicFile = openFileDialog1.FileName;
                 UseTwitPic = true;
+                AddPictureToForm(openFileDialog1.FileName);
             }
         }
 
+        private void AddPictureToForm(string ImageFile)
+        {
+            PictureBox ImageIndicator = new PictureBox();
+            ImageIndicator.Size = new System.Drawing.Size(25, 25);
+            ImageIndicator.SizeMode = PictureBoxSizeMode.StretchImage;
+            ImageIndicator.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            ImageIndicator.Image = new System.Drawing.Bitmap(ImageFile);
+            this.Controls.Add(ImageIndicator);
+            ImageIndicator.Location = new Point(lblCharsLeft.Left- 30, ClientSettings.TextSize + 20);
+            
+        }
 
         private void InsertURL()
         {
