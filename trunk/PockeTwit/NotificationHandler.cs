@@ -14,7 +14,6 @@ namespace PockeTwit
         private int CurrentSpinner = 0;
         public delegate void delNotificationClicked();
         public event delNotificationClicked MessagesNotificationClicked;
-        private Timer t_StopVibrate = new Timer();
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
         [Flags]
         private enum Options
@@ -46,10 +45,8 @@ namespace PockeTwit
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
                 MessagesBubbler.RightSoftKeyClick += new EventHandler(MessagesBubbler_RightSoftKeyClick);
                 MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
-                MessagesBubbler.Silent = true;
-                
+                MessagesBubbler.Silent = true;   
             }
-            t_StopVibrate.Tick += new EventHandler(t_StopVibrate_Tick);
         }
 
         void MessagesBubbler_SpinnerClick(object sender, christec.windowsce.forms.SpinnerClickEventArgs e)
@@ -175,7 +172,7 @@ namespace PockeTwit
             if ((Friends.Options & Options.Vibrate) == Options.Vibrate)
             {
                 VibrateStart();
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(1000);
                 VibrateStop();
             }
             if (Count > 0)
@@ -199,9 +196,9 @@ namespace PockeTwit
             }
             if ((Messages.Options & Options.Vibrate) == Options.Vibrate)
             {
-                t_StopVibrate.Interval = 1000;
-                t_StopVibrate.Enabled = true;
                 VibrateStart();
+                System.Threading.Thread.Sleep(1000);
+                VibrateStop();
             }
             if (Count > 0)
             {
