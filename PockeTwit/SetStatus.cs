@@ -30,12 +30,10 @@ namespace PockeTwit
             
             lblCharsLeft.Text = "140";
             PopulateAccountList();
-            /*
             if (ClientSettings.UseGPS)
             {
                 GetGPS();
             }
-             */
         }
 
         private void GetGPS()
@@ -44,7 +42,7 @@ namespace PockeTwit
             this.Controls.Add(lblGPS);
             lblGPS.ForeColor = Color.LightGray;
             lblGPS.Location = new Point(0, 0);
-            lblGPS.Size = new Size(100, 10);
+            lblGPS.Size = new Size(200, 20);
             lblGPS.Visible = true;
             
             gps = new PockeTwit.GPS.Gps();
@@ -68,21 +66,17 @@ namespace PockeTwit
         }
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
-            position = args.Position;
+            
             try
             {
-                if (position.LatitudeValid && position.LongitudeValid)
+                if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
+                    position = args.Position;
                     Updatelbl(position.Latitude.ToString() + "," + position.Longitude.ToString());
-                }
-                else
-                {
-                    Updatelbl("Bad position");
                 }
             }
             catch(DivideByZeroException ex)
             {
-                Updatelbl("0 position");
             }
         }
 
@@ -209,6 +203,10 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
+            if (ClientSettings.UseGPS)
+            {
+                gps.Close();
+            }
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -223,6 +221,10 @@ namespace PockeTwit
 
         private void menuSubmit_Click(object sender, EventArgs e)
         {
+            if (ClientSettings.UseGPS)
+            {
+                gps.Close();
+            }
             this.DialogResult = DialogResult.OK;
         }
 

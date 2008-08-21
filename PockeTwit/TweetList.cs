@@ -463,6 +463,12 @@ namespace PockeTwit
                 if (UpdateText != "Set Status")
                 {
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
+                    if (StatusForm.position != null)
+                    {
+                        GPS.GpsPosition mylocation = StatusForm.position;
+                        t.SetLocation(mylocation.Latitude.ToString() + "," + mylocation.Longitude.ToString());
+                    }
+
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
                         Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);

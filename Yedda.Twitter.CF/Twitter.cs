@@ -181,7 +181,8 @@ namespace Yedda
             Destroy,
             Follow,
             Leave,
-            Verify_Credentials
+            Verify_Credentials,
+            Update_Location
         }
 
         private string source = "pocketwit";
@@ -959,6 +960,16 @@ namespace Yedda
         {
             string url = string.Format(TwitterSearchUrlFormat, textToSearch, AccountInfo.ServerURL.URL);
             return ExecuteGetCommand(url);
+        }
+        #endregion
+
+        #region Location
+        public void SetLocation(string Location)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Update_Location), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
+            string data = string.Format("location={0}", HttpUtility.UrlEncode(Location));
+
+            ExecutePostCommand(url, data);
         }
         #endregion
     }
