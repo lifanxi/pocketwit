@@ -16,13 +16,12 @@ namespace PockeTwit
         private delegate void delUpdateText(string text);
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
-        /*
+        
         public GPS.GpsPosition position = null;
         private GPS.GpsDeviceState device = null;
         private GPS.Gps gps = null;
         private Label lblGPS = new Label();
-         */
-		#endregion Fields 
+        #endregion Fields 
 
 		#region Constructors (1) 
 
@@ -32,14 +31,12 @@ namespace PockeTwit
             
             lblCharsLeft.Text = "140";
             PopulateAccountList();
-            /*
+            
             if (ClientSettings.UseGPS)
             {
                 GetGPS();
             }
-             */
         }
-        /*
         private void GetGPS()
         {
             label1.Visible = false;
@@ -89,7 +86,6 @@ namespace PockeTwit
             device = args.DeviceState;
         }
 
-       */
         private void PopulateAccountList()
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
