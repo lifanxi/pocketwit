@@ -49,6 +49,7 @@ namespace PockeTwit
                     Application.Exit();
                     this.Close();
                 }
+                
             }
             timerStartup.Enabled = true;
         }
@@ -168,7 +169,9 @@ namespace PockeTwit
         {
             this.statList.Visible = false;
             SettingsForm settings = new SettingsForm();
-            if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; return; }
+            IsLoaded = false;
+            if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; IsLoaded = true; return; }
+            IsLoaded = true;
             this.statList.Visible = true;
             
             if (ClientSettings.CheckVersion)
@@ -455,20 +458,23 @@ namespace PockeTwit
             {
                 StatusForm.StatusText = ToUser + " ";
             }
+            IsLoaded = false;
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
                 this.statList.Visible = true;
                 StatusForm.Hide();
+                IsLoaded = false;
                 string UpdateText = StatusForm.StatusText;
                 if (UpdateText != "Set Status")
                 {
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
+                    /*
                     if (StatusForm.position != null)
                     {
                         GPS.GpsPosition mylocation = StatusForm.position;
                         t.SetLocation(mylocation.Latitude.ToString() + "," + mylocation.Longitude.ToString());
                     }
-
+                    */
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
                         Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
@@ -480,6 +486,7 @@ namespace PockeTwit
                     Manager.RefreshFriendsTimeLine();
                 }
             }
+            IsLoaded = true;
             this.statList.Redraw();
             this.statList.Visible = true;
             StatusForm.Close();
@@ -505,7 +512,9 @@ namespace PockeTwit
         private void ShowAbout()
         {
             AboutForm a = new AboutForm();
+            IsLoaded = false;
             a.ShowDialog();
+            IsLoaded = true;
         }
 
         private void ShowProfile()
@@ -703,12 +712,15 @@ namespace PockeTwit
             
             SearchForm f = new SearchForm();
             this.statList.Visible = false;
+            IsLoaded = false;
             if (f.ShowDialog() == DialogResult.Cancel)
             {
+                IsLoaded = true;
                 this.statList.Visible = true;
                 f.Close(); 
                 return; 
             }
+            IsLoaded = true;
             this.statList.Visible = true;
             f.Hide();
             string SearchString = f.SearchText;
