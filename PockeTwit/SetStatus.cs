@@ -16,10 +16,12 @@ namespace PockeTwit
         private delegate void delUpdateText(string text);
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
+        /*
         public GPS.GpsPosition position = null;
         private GPS.GpsDeviceState device = null;
         private GPS.Gps gps = null;
         private Label lblGPS = new Label();
+         */
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -30,12 +32,14 @@ namespace PockeTwit
             
             lblCharsLeft.Text = "140";
             PopulateAccountList();
+            /*
             if (ClientSettings.UseGPS)
             {
                 GetGPS();
             }
+             */
         }
-
+        /*
         private void GetGPS()
         {
             label1.Visible = false;
@@ -51,7 +55,7 @@ namespace PockeTwit
 
             gps.Open();
         }
-
+        
         private void Updatelbl(string tText)
         {
             if (InvokeRequired)
@@ -85,7 +89,7 @@ namespace PockeTwit
             device = args.DeviceState;
         }
 
-        
+       */
         private void PopulateAccountList()
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
@@ -164,7 +168,12 @@ namespace PockeTwit
                     {
                         TwitPicFile = c.FileName;
                         UseTwitPic = true;
-                        AddPictureToForm(c.FileName);
+                        if (pictureBox1.Visible)
+                        {
+                            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
+                            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+                            AddPictureToForm(c.FileName, pictureBox1);
+                        }
                     }
                 }
                 catch
@@ -180,14 +189,18 @@ namespace PockeTwit
             {
                 TwitPicFile = openFileDialog1.FileName;
                 UseTwitPic = true;
-                AddPictureToForm(openFileDialog1.FileName);
+                if (pictureBox1.Visible)
+                {
+                    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
+                    this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+                    AddPictureToForm(openFileDialog1.FileName, pictureBox2);
+                }
             }
         }
 
-        private void AddPictureToForm(string ImageFile)
+        private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
         {
-            ImagePreview.Visible = true;
-            ImagePreview.Image = new System.Drawing.Bitmap(ImageFile);
+            BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
         }
 
         private void InsertURL()
@@ -203,10 +216,12 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
+            /*
             if (ClientSettings.UseGPS)
             {
                 gps.Close();
             }
+             */
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -221,10 +236,12 @@ namespace PockeTwit
 
         private void menuSubmit_Click(object sender, EventArgs e)
         {
+            /*
             if (ClientSettings.UseGPS)
             {
                 gps.Close();
             }
+             */
             this.DialogResult = DialogResult.OK;
         }
 
