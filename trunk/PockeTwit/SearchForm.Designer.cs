@@ -76,6 +76,8 @@ namespace PockeTwit
             // 
             // lblSearch
             // 
+            this.lblSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSearch.BackColor = System.Drawing.Color.Black;
             this.lblSearch.ForeColor = System.Drawing.Color.LightGray;
             this.lblSearch.Location = new System.Drawing.Point(3, 9);
