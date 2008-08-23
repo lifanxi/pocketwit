@@ -76,14 +76,15 @@ namespace PockeTwit
                 lblGPS.ForeColor = System.Drawing.Color.Red;
                 this.lblGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+
+                this.chkGPS.Text = "GPS";
+                this.chkGPS.ForeColor = ClientSettings.ForeColor;
+                this.chkGPS.Visible = false;
+                this.chkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                            | System.Windows.Forms.AnchorStyles.Right)));
             
             }
 
-            this.chkGPS.Text = "GPS";
-            this.chkGPS.ForeColor = ClientSettings.ForeColor;
-            this.chkGPS.Visible = false;
-            this.chkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             
 
             // 
@@ -230,10 +231,10 @@ namespace PockeTwit
 
             this.chkGPS.Text = "Update GPS";
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
-            this.chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize+20);
-            this.chkGPS.Size = new System.Drawing.Size(100, 20);
             this.chkGPS.Checked = ClientSettings.UseGPS;
 
+            chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize + 20);
+            chkGPS.Size = new System.Drawing.Size(100, 20);
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
@@ -265,6 +266,12 @@ namespace PockeTwit
 
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem1.Text = "Action";
+
+            chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize + 20);
+            chkGPS.Size = new System.Drawing.Size(100, 20);
+            lblGPS.Location = chkGPS.Location;
+            lblGPS.Size = chkGPS.Size;
+
 
             this.menuItem1.MenuItems.Add(this.menuSubmit);
             this.menuItem1.MenuItems.Add(menuURL);
