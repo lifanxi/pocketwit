@@ -80,7 +80,7 @@ namespace PockeTwit
             this.lblSearch.ForeColor = System.Drawing.Color.LightGray;
             this.lblSearch.Location = new System.Drawing.Point(3, 9);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(166, 20);
+            this.lblSearch.Size = new System.Drawing.Size(234, 20);
             this.lblSearch.Text = "Search Twitter:";
             // 
             // txtSearch
@@ -143,6 +143,8 @@ namespace PockeTwit
             // 
             // lblGPSStatus
             // 
+            this.lblGPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGPSStatus.ForeColor = System.Drawing.Color.Red;
             this.lblGPSStatus.Location = new System.Drawing.Point(3, 29);
             this.lblGPSStatus.Name = "lblGPSStatus";

@@ -39,7 +39,7 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
-            lblError.Visible = false;
+            lblTweets.ForeColor = ClientSettings.ForeColor;
             Cursor.Current = Cursors.WaitCursor;
             int MaxTweets = 0;
             try
@@ -47,16 +47,14 @@ namespace PockeTwit
                 MaxTweets = int.Parse(txtMaxTweets.Text);
                 if (MaxTweets > 200 || MaxTweets < 10)
                 {
-                    lblError.Text = "max tweets must be 10 to 200";
-                    lblError.Visible = true;
+                    lblTweets.ForeColor = ClientSettings.ErrorColor;
                     Cursor.Current = Cursors.Default;
                     return;
                 }
             }
             catch
             {
-                lblError.Text = "max tweets must be 10 to 200";
-                lblError.Visible = true;
+                lblTweets.ForeColor = ClientSettings.ErrorColor;
                 Cursor.Current = Cursors.Default;
                 return;
             }

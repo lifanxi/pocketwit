@@ -74,11 +74,17 @@ namespace PockeTwit
                 lblGPS.Visible = true;
                 lblGPS.Text = "Seeking GPS...";
                 lblGPS.ForeColor = System.Drawing.Color.Red;
+                this.lblGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            
             }
 
             this.chkGPS.Text = "GPS";
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
             this.chkGPS.Visible = false;
+            this.chkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            
 
             // 
             // mainMenu1
@@ -222,7 +228,7 @@ namespace PockeTwit
             this.pictureBox3.Size = new System.Drawing.Size(25, 25);
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
 
-            this.chkGPS.Text = "GPS";
+            this.chkGPS.Text = "Update GPS";
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
             this.chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize+20);
             this.chkGPS.Size = new System.Drawing.Size(100, 20);
@@ -235,6 +241,7 @@ namespace PockeTwit
             this.Controls.Add(pictureBox2);
             this.Controls.Add(pictureBox3);
             this.Controls.Add(chkGPS);
+            this.Controls.Add(lblGPS);
         }
 
         private void SetupStandard()

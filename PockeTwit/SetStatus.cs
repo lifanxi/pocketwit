@@ -67,7 +67,7 @@ namespace PockeTwit
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
-                    
+                    SwitchOnGPS();
                     position = args.Position;
                 }
             }
