@@ -120,7 +120,7 @@ namespace PockeTwit
             {
                 b.Append("q=");
                 b.Append(txtSearch.Text);
-                if(!string.IsNullOrEmpty((string)cmbDistance.SelectedValue))
+                if(!string.IsNullOrEmpty(cmbDistance.Text))
                 {
                     b.Append("&");
                 }
