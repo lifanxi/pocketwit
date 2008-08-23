@@ -20,7 +20,6 @@ namespace PockeTwit
         public GPS.GpsPosition position = null;
         private GPS.GpsDeviceState device = null;
         private GPS.Gps gps = null;
-        private Label lblGPS = new Label();
         #endregion Fields 
 
 		#region Constructors (1) 
@@ -34,37 +33,19 @@ namespace PockeTwit
             
             if (ClientSettings.UseGPS)
             {
+                chkGPS.Visible = true;
                 GetGPS();
             }
         }
         private void GetGPS()
         {
-            label1.Visible = false;
-            this.Controls.Add(lblGPS);
-            lblGPS.ForeColor = Color.LightGray;
-            lblGPS.Location = new Point(0, 0);
-            lblGPS.Size = new Size(200, 20);
-            lblGPS.Visible = true;
-            
             gps = new PockeTwit.GPS.Gps();
             gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
             gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
 
             gps.Open();
         }
-        
-        private void Updatelbl(string tText)
-        {
-            if (InvokeRequired)
-            {
-                delUpdateText d = new delUpdateText(Updatelbl);
-                this.Invoke(d, new object[] { tText });
-            }
-            else
-            {
-                lblGPS.Text = tText;
-            }
-        }
+
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             
@@ -73,7 +54,6 @@ namespace PockeTwit
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
                     position = args.Position;
-                    Updatelbl(position.Latitude.ToString() + "," + position.Longitude.ToString());
                 }
             }
             catch(DivideByZeroException ex)
@@ -212,12 +192,10 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            /*
             if (ClientSettings.UseGPS)
             {
                 gps.Close();
             }
-             */
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -232,12 +210,14 @@ namespace PockeTwit
 
         private void menuSubmit_Click(object sender, EventArgs e)
         {
-            /*
             if (ClientSettings.UseGPS)
             {
                 gps.Close();
             }
-             */
+            if (!chkGPS.Checked)
+            {
+                this.position = null;
+            }
             this.DialogResult = DialogResult.OK;
         }
 
