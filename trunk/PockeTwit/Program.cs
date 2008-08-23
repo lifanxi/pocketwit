@@ -55,6 +55,7 @@ namespace PockeTwit
             if(res == DialogResult.Yes)
             {
                 SendError(b.ToString());
+                MessageBox.Show("Please open Pocket Outlook and Send/Recieve to transmit the error report.", "Error Report");
             }
         }
         /// <summary>
