@@ -27,10 +27,15 @@ namespace PockeTwit
 
             if (ClientSettings.UseGPS)
             {
+                lblGPSStatus.Text = "Searching for GPS...";
                 gps = new PockeTwit.GPS.Gps();
                 gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
                 gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
                 gps.Open();
+            }
+            else
+            {
+                lblGPSStatus.Text = "GPS disabled.";
             }
         }
 
@@ -50,6 +55,19 @@ namespace PockeTwit
                 cmbMeasurement.Enabled = true;
             }
         }
+        private delegate void delSetLabelVisible();
+        private void SetLabelVisible()
+        {
+            if (InvokeRequired)
+            {
+                delSetLabelVisible d = new delSetLabelVisible(SetLabelVisible);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                lblGPSStatus.Visible = false;
+            }
+        }
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             if (args.Position == null) { return; }
@@ -57,6 +75,7 @@ namespace PockeTwit
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
+                    SetLabelVisible();
                     position = args.Position;
                     EnableDistance();
                 }

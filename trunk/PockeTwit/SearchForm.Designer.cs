@@ -56,6 +56,7 @@ namespace PockeTwit
             this.cmbDistance = new System.Windows.Forms.ComboBox();
             this.cmbMeasurement = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblGPSStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -140,6 +141,14 @@ namespace PockeTwit
             this.label1.Size = new System.Drawing.Size(48, 20);
             this.label1.Text = "for:";
             // 
+            // lblGPSStatus
+            // 
+            this.lblGPSStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblGPSStatus.Location = new System.Drawing.Point(3, 29);
+            this.lblGPSStatus.Name = "lblGPSStatus";
+            this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);
+            this.lblGPSStatus.Text = "label2";
+            // 
             // SearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -147,6 +156,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblGPSStatus);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbMeasurement);
             this.Controls.Add(this.cmbDistance);
@@ -167,5 +177,6 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbDistance;
         private System.Windows.Forms.ComboBox cmbMeasurement;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblGPSStatus;
     }
 }
