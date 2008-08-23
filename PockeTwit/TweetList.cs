@@ -126,6 +126,7 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
+            if (mergedstatuses.Length == 0) { return; }
             if(InvokeRequired)
             {
                 delAddStatuses d = new delAddStatuses(AddStatusesToList);

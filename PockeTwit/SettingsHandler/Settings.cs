@@ -209,6 +209,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["UseGPS"] = UseGPS.ToString();
         ConfigurationSettings.AppSettings["IsMaximized"] = IsMaximized.ToString();
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();

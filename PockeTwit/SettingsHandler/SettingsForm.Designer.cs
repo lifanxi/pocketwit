@@ -64,6 +64,7 @@ namespace PockeTwit
             this.lnkAccounts = new System.Windows.Forms.LinkLabel();
             this.chkTimestamps = new System.Windows.Forms.CheckBox();
             this.lnkClearAvatars = new System.Windows.Forms.LinkLabel();
+            this.chkGPS = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -177,12 +178,22 @@ namespace PockeTwit
             this.lnkClearAvatars.Text = "Clear Avatar Cache";
             this.lnkClearAvatars.Click += new System.EventHandler(this.lnkClearAvatars_Click);
             // 
+            // chkGPS
+            // 
+            this.chkGPS.ForeColor = System.Drawing.Color.LightGray;
+            this.chkGPS.Location = new System.Drawing.Point(1, 154);
+            this.chkGPS.Name = "chkGPS";
+            this.chkGPS.Size = new System.Drawing.Size(235, 20);
+            this.chkGPS.TabIndex = 10;
+            this.chkGPS.Text = "Use GPS";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkGPS);
             this.Controls.Add(this.lnkClearAvatars);
             this.Controls.Add(this.chkTimestamps);
             this.Controls.Add(this.lnkAccounts);
@@ -206,6 +217,7 @@ namespace PockeTwit
         private System.Windows.Forms.LinkLabel lnkAccounts;
         private System.Windows.Forms.CheckBox chkTimestamps;
         private System.Windows.Forms.LinkLabel lnkClearAvatars;
+        private System.Windows.Forms.CheckBox chkGPS;
 
     }
 }

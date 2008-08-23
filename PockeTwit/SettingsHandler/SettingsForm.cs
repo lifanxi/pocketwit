@@ -62,6 +62,7 @@ namespace PockeTwit
             }
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
             if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsReset = true; }
+            ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.BeepOnNew = chkBeep.Checked;
             ClientSettings.MaxTweets = MaxTweets;
@@ -88,6 +89,7 @@ namespace PockeTwit
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkReplyImages.Checked = ClientSettings.ShowReplyImages;
             chkTimestamps.Checked = ClientSettings.ShowExtra;
+            chkGPS.Checked = ClientSettings.UseGPS;
             this.DialogResult = DialogResult.Cancel;
         }
 
