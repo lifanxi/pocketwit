@@ -80,6 +80,7 @@ namespace PockeTwit
 
 
 		//�Delegates�(2)�
+        private delegate void delSetWindowState(FormWindowState state);
         private delegate void delAddStatuses(Library.status[] arrayOfStats);
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
@@ -771,6 +772,20 @@ namespace PockeTwit
             }
             statList.Redraw();
         }
+
+        private void SetWindowState(FormWindowState State)
+        {
+            if (InvokeRequired)
+            {
+                delSetWindowState d = new delSetWindowState(SetWindowState);
+                this.Invoke(d, new object[] { State });
+            }
+            else
+            {
+                this.WindowState = State;
+            }
+        }
+
         protected override void OnActivated(EventArgs e)
         {
             if (!IsLoaded)
@@ -780,11 +795,11 @@ namespace PockeTwit
             base.OnActivated(e);
             if (ClientSettings.IsMaximized)
             {
-                this.WindowState = FormWindowState.Maximized;
+                SetWindowState(FormWindowState.Maximized);
             }
             else
             {
-                this.WindowState = FormWindowState.Normal;
+                SetWindowState(FormWindowState.Normal);
             }
             if (statList.CurrentList() == "Friends_TimeLine")
             {
@@ -807,6 +822,9 @@ namespace PockeTwit
 
         void Minimize()
         {
+            int i = 0;
+            int x = 100 / i;
+            MessageBox.Show(x.ToString());
             // The Taskbar must be enabled to be able to do a Smart Minimize
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.WindowState = FormWindowState.Normal;
@@ -815,7 +833,9 @@ namespace PockeTwit
             this.MaximizeBox = true;
 
             // Since there is no WindowState.Minimize, we have to P/Invoke ShowWindow
+            /*
             statList.Clear();
+             */
             ImageBuffer.Clear();
             ShowWindow(this.Handle, SW_MINIMIZED);
             GC.Collect();
