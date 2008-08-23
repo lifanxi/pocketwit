@@ -46,6 +46,21 @@ namespace PockeTwit
             gps.Open();
         }
 
+        private delegate void delSwitchOnGPS();
+        private void SwitchOnGPS()
+        {
+            if (InvokeRequired)
+            {
+                delSwitchOnGPS d = new delSwitchOnGPS(SwitchOnGPS);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                lblGPS.Visible = false;
+                chkGPS.Visible = true;
+            }
+        }
+
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             
@@ -53,6 +68,7 @@ namespace PockeTwit
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
+                    
                     position = args.Position;
                 }
             }
