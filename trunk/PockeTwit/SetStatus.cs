@@ -33,7 +33,6 @@ namespace PockeTwit
             
             if (ClientSettings.UseGPS)
             {
-                chkGPS.Visible = true;
                 GetGPS();
             }
         }
