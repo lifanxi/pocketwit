@@ -87,8 +87,8 @@ namespace PockeTwit
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.BackColor = System.Drawing.Color.DimGray;
-            this.txtSearch.ForeColor = System.Drawing.Color.LightGray;
+            this.txtSearch.BackColor = System.Drawing.Color.White;
+            this.txtSearch.ForeColor = System.Drawing.Color.Black;
             this.txtSearch.Location = new System.Drawing.Point(57, 57);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(180, 21);
@@ -105,7 +105,7 @@ namespace PockeTwit
             // 
             // cmbDistance
             // 
-            this.cmbDistance.BackColor = System.Drawing.Color.DimGray;
+            this.cmbDistance.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.cmbDistance.Enabled = false;
             this.cmbDistance.Items.Add("1");
             this.cmbDistance.Items.Add("3");
@@ -123,7 +123,7 @@ namespace PockeTwit
             // 
             this.cmbMeasurement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbMeasurement.BackColor = System.Drawing.Color.DimGray;
+            this.cmbMeasurement.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.cmbMeasurement.Enabled = false;
             this.cmbMeasurement.Items.Add("Miles");
             this.cmbMeasurement.Items.Add("Kilometers");
