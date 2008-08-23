@@ -822,9 +822,6 @@ namespace PockeTwit
 
         void Minimize()
         {
-            int i = 0;
-            int x = 100 / i;
-            MessageBox.Show(x.ToString());
             // The Taskbar must be enabled to be able to do a Smart Minimize
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.WindowState = FormWindowState.Normal;
