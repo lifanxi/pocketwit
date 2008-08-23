@@ -22,6 +22,7 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuURL;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox chkGPS;
 
 		#endregion Fields 
 
@@ -62,8 +63,13 @@ namespace PockeTwit
             this.lblCharsLeft = new System.Windows.Forms.Label();
             this.cmbAccount = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkGPS = new CheckBox();
             
             this.SuspendLayout();
+
+            this.chkGPS.Text = "GPS";
+            this.chkGPS.ForeColor = ClientSettings.ForeColor;
+
             // 
             // mainMenu1
             // 
@@ -206,10 +212,16 @@ namespace PockeTwit
             this.pictureBox3.Size = new System.Drawing.Size(25, 25);
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
 
+            this.chkGPS.Text = "GPS";
+            this.chkGPS.ForeColor = ClientSettings.ForeColor;
+            this.chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize+20);
+            this.chkGPS.Size = new System.Drawing.Size(100, 20);
+            this.chkGPS.Checked = ClientSettings.UseGPS;
+            this.chkGPS.Visible = false;
             this.Controls.Add(pictureBox1);
             this.Controls.Add(pictureBox2);
             this.Controls.Add(pictureBox3);
-
+            this.Controls.Add(chkGPS);
         }
 
         private void SetupStandard()
