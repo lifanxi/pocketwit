@@ -475,24 +475,33 @@ namespace FingerUI
                     FindClickables(line, g, 0);
                 }
                 int LineOffset = 1;
+                bool bMulti;
                 while (size.Width > textBounds.Width)
                 {
                     int lastBreak = 0;
                     int currentPos = 0;
                     StringBuilder newString = new StringBuilder();
                     string[] Words = CurrentLine.Split(new char[]{' ','-'});
+                    bMulti = false;
                     foreach (string word in Words)
                     {
                         newString.Append(word + ' ');    
                         if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
                         {
-                            if (!SpaceSplit | lastBreak == 0)
+                            if (bMulti && lastBreak == 0)
                             {
                                 lastBreak = currentPos;
+                                newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
                             }
-                            newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
+                            else
+                            {
+                                currentPos = currentPos + word.Length + 1;
+                                lastBreak = currentPos;
+                            }
+                            
                             break;
                         }
+                        bMulti = true;
                         currentPos = currentPos + word.Length + 1;
                     }
                     string line = newString.ToString().TrimStart(new char[] { ' ' });
