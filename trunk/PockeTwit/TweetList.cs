@@ -24,7 +24,7 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
         private TimelineManagement Manager;
-        private NotificationHandler Notifyer = new NotificationHandler();
+        private NotificationHandler Notifyer;
         private bool IsLoaded = false;
         private string ShowUserID;
 
@@ -126,6 +126,7 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
+            if (mergedstatuses == null) { return; }
             if (mergedstatuses.Length == 0) { return; }
             if(InvokeRequired)
             {
@@ -320,7 +321,11 @@ namespace PockeTwit
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];
             
             SetUpListControl();
-            Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                Notifyer = new NotificationHandler();
+                Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
+            }
             
             return ret;
             
@@ -330,11 +335,6 @@ namespace PockeTwit
         {
             this.Show();
         } 
-
-        void Notifyer_FriendsNotificationClicked()
-        {
-            this.Show();
-        }
 
         private void ResetDictionaries()
         {
