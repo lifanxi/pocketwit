@@ -149,7 +149,7 @@ namespace PockeTwit
             Graphics g = Graphics.FromImage(resized);
             g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
             g.Dispose();
-            resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
             if (NewArtWasDownloaded != null)
             {
                 NewArtWasDownloaded.Invoke(User, LocalFileName);

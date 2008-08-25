@@ -24,9 +24,6 @@ namespace PockeTwit
         {
             TwitterConnection = Connection;
             GetCachedFollowers();
-
-            //LoadFromTwitter();
-            //GetFollowersFromTwitter();
         }
 
 		#endregion Constructors 

@@ -59,10 +59,18 @@ namespace FingerUI
 
         private void SetLeftMenuHeight()
         {
-            if (_LeftMenuItems.Count > 0)
+            if (InvokeRequired)
             {
-                LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
-                TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
+                delClearMe d = new delClearMe(SetLeftMenuHeight);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                if (_LeftMenuItems.Count > 0)
+                {
+                    LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
+                    TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
+                }
             }
         }
 
@@ -84,10 +92,18 @@ namespace FingerUI
 
         private void SetRightMenuHeight()
         {
-            if (_RightMenuItems.Count > 0)
+            if (InvokeRequired)
             {
-                RightMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _RightMenuItems.Count;
-                TopOfRightMenu = ((this.Height / 2) - ((_RightMenuItems.Count * RightMenuHeight) / 2));
+                delClearMe d = new delClearMe(SetRightMenuHeight);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                if (_RightMenuItems.Count > 0)
+                {
+                    RightMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _RightMenuItems.Count;
+                    TopOfRightMenu = ((this.Height / 2) - ((_RightMenuItems.Count * RightMenuHeight) / 2));
+                }
             }
         }
 		#endregion Fields 
