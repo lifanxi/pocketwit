@@ -134,6 +134,7 @@ namespace PockeTwit
             this.cmbMeasurement.Size = new System.Drawing.Size(130, 22);
             this.cmbMeasurement.TabIndex = 5;
             this.cmbMeasurement.Visible = false;
+            this.cmbMeasurement.SelectedValueChanged += new System.EventHandler(this.cmbMeasurement_SelectedValueChanged);
             // 
             // label1
             // 
