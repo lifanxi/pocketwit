@@ -71,8 +71,8 @@ namespace Yedda
                 contents.Append("\r\n");
                 
                 string End = "\r\n" + header + "\r\n";
-                byte[] bytes = Encoding.ASCII.GetBytes(contents.ToString());
-                byte[] footBytes = Encoding.ASCII.GetBytes(End);
+                byte[] bytes = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footBytes = Encoding.UTF8.GetBytes(End);
                 request.ContentLength = bytes.Length + photo.Length + footBytes.Length ;
                 
                 using (Stream requestStream = request.GetRequestStream())
