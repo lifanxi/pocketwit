@@ -61,6 +61,8 @@ public static class ClientSettings
 
     public static bool CheckVersion { get; set; }
 
+    public static string DistancePreference { get; set; }
+
     //public static string Password { get; set; }
 
     //public static Yedda.Twitter.TwitterServer Server { get; set; }
@@ -108,6 +110,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["DistancePreference"]))
+            {
+                DistancePreference = ConfigurationSettings.AppSettings["DistancePreference"];
+            }
+            else
+            {
+                DistancePreference = "Miles";
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseGPS"]))
             {
                 UseGPS = bool.Parse(ConfigurationSettings.AppSettings["UseGPS"]);
@@ -217,6 +227,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
+        ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
             ConfigurationSettings.AppSettings.Remove("UserName");

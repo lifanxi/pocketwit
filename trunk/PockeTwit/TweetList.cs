@@ -288,7 +288,7 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t)
         {
-            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search", "Set Status", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
             RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
@@ -530,7 +530,7 @@ namespace PockeTwit
         {
             switch (ItemName)
             {
-                case "Search":
+                case "Search/Local":
                     TwitterSearch();
                     break;
                 case "Public TimeLine":
@@ -728,7 +728,7 @@ namespace PockeTwit
             this.statList.Visible = true;
             
             ChangeCursor(Cursors.WaitCursor);
-            statList.SetSelectedMenu("Search");
+            statList.SetSelectedMenu("Search/Local");
             statList.RightMenuItems = RightMenu;
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             SwitchToList("Search_TimeLine");

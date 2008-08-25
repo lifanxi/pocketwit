@@ -32,6 +32,7 @@ namespace PockeTwit
                 gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
                 gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
                 gps.Open();
+                cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
             }
             else
             {
@@ -151,6 +152,12 @@ namespace PockeTwit
 
 
 		#endregion Methods 
+
+        private void cmbMeasurement_SelectedValueChanged(object sender, EventArgs e)
+        {
+            ClientSettings.DistancePreference = (string)cmbMeasurement.SelectedValue;
+            ClientSettings.SaveSettings();
+        }
 
     }
 }

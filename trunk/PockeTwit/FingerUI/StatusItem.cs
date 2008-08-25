@@ -512,6 +512,10 @@ namespace FingerUI
                         Tweet.Clipped = true;
                         break; 
                     }
+                    if (lastBreak > CurrentLine.Length)
+                    {
+                        lastBreak = CurrentLine.Length;
+                    }
                     if (lastBreak != 0)
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
