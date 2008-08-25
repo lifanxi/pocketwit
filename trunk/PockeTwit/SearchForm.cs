@@ -33,6 +33,7 @@ namespace PockeTwit
                 gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
                 gps.Open();
                 cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
+                cmbMeasurement.Text = ClientSettings.DistancePreference;
             }
             else
             {
