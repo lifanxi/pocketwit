@@ -267,6 +267,10 @@ namespace PockeTwit
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem1.Text = "Action";
 
+            this.chkGPS.Text = "Update GPS";
+            this.chkGPS.ForeColor = ClientSettings.ForeColor;
+            this.chkGPS.Checked = ClientSettings.UseGPS;
+
             chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize + 20);
             chkGPS.Size = new System.Drawing.Size(100, 20);
             lblGPS.Location = chkGPS.Location;
