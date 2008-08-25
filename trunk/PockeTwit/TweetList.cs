@@ -316,11 +316,13 @@ namespace PockeTwit
                 Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
             }
 
+            SetUpListControl();
+
             ResetDictionaries();
             
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];
             
-            SetUpListControl();
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 Notifyer = new NotificationHandler();
@@ -351,6 +353,7 @@ namespace PockeTwit
                 Following f = new Following(TwitterConn);
                 FollowingDictionary.Add(TwitterConn, f);
             }
+            SetConnectedMenus();
             Manager = new TimelineManagement(TwitterConnections);
             Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
             Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
@@ -501,7 +504,6 @@ namespace PockeTwit
             statList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
             statList.IsMaximized = ClientSettings.IsMaximized;
-            SetConnectedMenus();
             statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
