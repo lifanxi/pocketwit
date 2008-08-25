@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.28</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv28.CAB</url>
-  <notes>TwitPic picture indicator/preview
-Fix some UI crashes
+  <version>.29</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv29.CAB</url>
+  <notes>GPS Support --
+  Automatically update profile w/ location
+  Search for nearby tweets.
+Crash Reporter -- 
+  Asks to email crash reports to dev
 </notes>
 </LatestRelease>
