@@ -176,15 +176,16 @@ namespace PockeTwit
 
         private void InsertPictureFromFile()
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
+            if (s.ShowDialog() == DialogResult.OK)
             {
-                TwitPicFile = openFileDialog1.FileName;
+                TwitPicFile = s.FileName;
                 UseTwitPic = true;
                 if (pictureBox1.Visible)
                 {
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
                     this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-                    AddPictureToForm(openFileDialog1.FileName, pictureBox2);
+                    AddPictureToForm(s.FileName, pictureBox2);
                 }
             }
         }
