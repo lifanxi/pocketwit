@@ -59,7 +59,7 @@ public class ConfigurationSettings
                 }
             }
         }
-        catch (Exception ex)
+        catch
         {
         }
     }
