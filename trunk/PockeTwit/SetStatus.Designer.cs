@@ -271,8 +271,8 @@ namespace PockeTwit
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
             this.chkGPS.Checked = ClientSettings.UseGPS;
 
-            chkGPS.Location = new System.Drawing.Point(97, ClientSettings.TextSize + 20);
-            chkGPS.Size = new System.Drawing.Size(100, 20);
+            chkGPS.Location = new System.Drawing.Point(57, ClientSettings.TextSize + 20);
+            chkGPS.Size = new System.Drawing.Size(140, 20);
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
@@ -282,6 +282,9 @@ namespace PockeTwit
             this.menuItem1.MenuItems.Add(menuExist);
             this.menuItem1.MenuItems.Add(menuCamera);
             this.mainMenu1.MenuItems.Add(menuItem1);
+
+            this.Controls.Add(chkGPS);
+            this.Controls.Add(lblGPS);
         }
 
     }

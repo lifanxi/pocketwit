@@ -181,10 +181,10 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.chkGPS);
             this.Controls.Add(this.lnkClearAvatars);
-            this.Controls.Add(this.chkTimestamps);
             this.Controls.Add(this.lnkAccounts);
+            this.Controls.Add(this.chkGPS);
+            this.Controls.Add(this.chkTimestamps);
             this.Controls.Add(this.chkReplyImages);
             this.Controls.Add(this.lblTweets);
             this.Controls.Add(this.txtMaxTweets);
