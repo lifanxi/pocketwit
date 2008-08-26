@@ -254,16 +254,25 @@ namespace PockeTwit.Library
                 return toReturn;
             }
 
-            XmlSerializer s = new XmlSerializer(typeof(User));
-            if (string.IsNullOrEmpty(Response))
+            try
+            {
+                XmlSerializer s = new XmlSerializer(typeof(User));
+                if (string.IsNullOrEmpty(Response))
+                {
+                    User toReturn = new User();
+                    toReturn.screen_name = "PockeTwitUnknownUser";
+                    return toReturn;
+                }
+                using (System.IO.StringReader r = new System.IO.StringReader(Response))
+                {
+                    return (User)s.Deserialize(r);
+                }
+            }
+            catch
             {
                 User toReturn = new User();
                 toReturn.screen_name = "PockeTwitUnknownUser";
                 return toReturn;
-            }
-            using (System.IO.StringReader r = new System.IO.StringReader(Response))
-            {
-                return (User)s.Deserialize(r);
             }
         }
 
