@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.Drawing;
 public static class ClientSettings
 {
 
@@ -21,6 +22,8 @@ public static class ClientSettings
     public static int MaxTweets = 50;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
+    public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
+    public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
     public static int SmallArtSize = 65;
     public static int UpdateInterval;
 

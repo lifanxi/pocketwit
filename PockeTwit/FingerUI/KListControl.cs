@@ -1122,7 +1122,8 @@ namespace FingerUI
             int i = 0;
             foreach (string MenuItem in LeftMenuItems)
             {
-                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold)).Width + ClientSettings.Margin;
+                
+                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
 
                 using (Pen whitePen = new Pen(ForeColor))
                 {
@@ -1150,7 +1151,7 @@ namespace FingerUI
                         sFormat.LineAlignment = StringAlignment.Center;
                         int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
                         int LeftPos = menuRect.Right - TextWidth;
-                        m_backBuffer.DrawString(MenuItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, LeftPos, TextTop, sFormat);
+                        m_backBuffer.DrawString(MenuItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
@@ -1229,7 +1230,7 @@ namespace FingerUI
                         {
                             DisplayItem = MenuItem.Replace("@User", "@"+SelectedStatus.Tweet.user.screen_name);
                         }
-                        m_backBuffer.DrawString(DisplayItem, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), sBrush, menuRect.X + 5, TextTop, sFormat);
+                        m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, menuRect.X + 5, TextTop, sFormat);
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);

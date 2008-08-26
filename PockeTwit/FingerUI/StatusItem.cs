@@ -64,6 +64,7 @@ namespace FingerUI
             {
                 if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
                 {
+                    Tweet.text = string.Join(" ", Tweet.SplitLines.ToArray());
                     Tweet.SplitLines = new List<string>();
                     Tweet.Clickables = new List<Clickable>();
                 }
@@ -241,17 +242,13 @@ namespace FingerUI
 
             if (ClientSettings.ShowExtra)
             {
-                using (Font smallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular))
+                Color SmallColor = ClientSettings.SmallTextColor;
+                if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
+                using (Brush dateBrush = new SolidBrush(SmallColor))
                 {
-                    Color SmallColor = ClientSettings.SmallTextColor;
-                    if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
-                    using (Brush dateBrush = new SolidBrush(SmallColor))
-                    {
-                        //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
-                        g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
-                    }
+                    //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
+                    g.DrawString(Tweet.TimeStamp, ClientSettings.SmallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
                 }
-            //    ImageLocation.Y = ImageLocation.Y + ClientSettings.SmallTextSize;
             }
 
             if (ClientSettings.ShowAvatars)
@@ -295,13 +292,16 @@ namespace FingerUI
             BreakUpTheText(g, textBounds);
             int lineOffset = 0;
 
-            
 
-            foreach (string Line in Tweet.SplitLines)
+            for (int i = 0; i < Tweet.SplitLines.Count; i++)
             {
+                if (i > ClientSettings.LinesOfText)
+                {
+                    break;
+                }
                 float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
-                
-                g.DrawString(Line, TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
+
+                g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
                 lineOffset++;
             }
             MakeClickable(g, textBounds);
@@ -447,10 +447,9 @@ namespace FingerUI
                 string line = newString.ToString().TrimStart(new char[] { ' ' });
                 Tweet.SplitLines.Add(line);
                 FindClickables(line, g, LineOffset - 1);
-                if (Tweet.SplitLines.Count >= 5)
+                if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText)
                 {
                     Tweet.Clipped = true;
-                    break;
                 }
                 if (lastBreak != 0)
                 {
@@ -465,6 +464,7 @@ namespace FingerUI
                 }
                 LineOffset++;
             }
+            Tweet.text = null;
         }
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
@@ -522,7 +522,6 @@ namespace FingerUI
                     if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText) 
                     {
                         Tweet.Clipped = true;
-                        break; 
                     }
                     if (lastBreak > CurrentLine.Length)
                     {
@@ -542,6 +541,7 @@ namespace FingerUI
                     LineOffset++;
                 }
             }
+            Tweet.text = null;
         }
 
         private void FirstClickableRun(string text)
