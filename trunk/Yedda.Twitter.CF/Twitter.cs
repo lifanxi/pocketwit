@@ -481,7 +481,6 @@ namespace Yedda
 
 
                     }
-                    throw ex;
                 }
             }
 
