@@ -75,8 +75,6 @@ public static class ClientSettings
         get { return _ShowExtra; }
         set { _ShowExtra = value; }
     }
-
-    private static int _SmallTextSize;
     public static int SmallTextSize
     { get; set; }
     public static int TextSize 

@@ -82,7 +82,7 @@ namespace PockeTwit
                     EnableDistance();
                 }
             }
-            catch (DivideByZeroException ex)
+            catch (DivideByZeroException)
             {
             }
         }

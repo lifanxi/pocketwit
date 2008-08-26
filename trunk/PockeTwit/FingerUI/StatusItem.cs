@@ -462,7 +462,6 @@ namespace FingerUI
                 FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
 
-                bool SpaceSplit = true;
                 if (this.Tweet.text.IndexOf(' ') <= 0)
                 {
                     BreakUpTheTextWithoutSpaces(g, textBounds);

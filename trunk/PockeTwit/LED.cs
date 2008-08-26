@@ -8,7 +8,6 @@ namespace PockeTwit
     public class Led
     {
         // Fields
-        private int m_count;
         private const int NLED_COUNT_INFO_ID = 0;
         private const int NLED_SETTINGS_INFO_ID = 2;
         private const int NLED_SUPPORTS_INFO_ID = 1;
