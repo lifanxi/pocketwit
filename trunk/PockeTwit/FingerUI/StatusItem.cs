@@ -245,7 +245,6 @@ namespace FingerUI
                 {
                     Color SmallColor = ClientSettings.SmallTextColor;
                     if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
-                    
                     using (Brush dateBrush = new SolidBrush(SmallColor))
                     {
                         //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
@@ -255,15 +254,29 @@ namespace FingerUI
             //    ImageLocation.Y = ImageLocation.Y + ClientSettings.SmallTextSize;
             }
 
-            Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
-
-            g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
-
-            if (ClientSettings.ShowReplyImages)
+            if (ClientSettings.ShowAvatars)
             {
-                DrawReplyImage(g, ImageLocation);
-            }
+                Image UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
 
+                g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
+
+                if (ClientSettings.ShowReplyImages)
+                {
+                    DrawReplyImage(g, ImageLocation);
+                }
+            }
+            else
+            {
+                using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                {
+                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                    g.FillRectangle(bBrush, ImageRect);
+                    using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                    {
+                        g.DrawString(this.Tweet.user.screen_name, TextFont, sBrush, ImageRect);
+                    }
+                }
+            }
             if (m_highlighted)
             {
                 System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();

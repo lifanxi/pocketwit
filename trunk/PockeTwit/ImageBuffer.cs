@@ -7,12 +7,17 @@ namespace PockeTwit
 {
     public static class ImageBuffer
     {
-
+        class ImageInfo
+        {
+            public Image Image;
+            public DateTime LastRequested;
+        }
 		#region Fields (3) 
 
         public static Bitmap FavoriteImage;
-        private static Dictionary<string, Image> ImageDictionary = new Dictionary<string, Image>();
+        private static Dictionary<string, ImageInfo> ImageDictionary = new Dictionary<string, ImageInfo>();
         public static Bitmap UnknownArt;
+        private static System.Threading.Timer timerUpdate;
 
 		#endregion Fields 
 
@@ -27,6 +32,7 @@ namespace PockeTwit
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
+            timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(Trim), null, 30000, 30000);
         }
 
 
@@ -64,7 +70,8 @@ namespace PockeTwit
                 //How do we find art for a user by name alone?
                 return UnknownArt;
             }
-            return ImageDictionary[User];
+            ImageDictionary[User].LastRequested = DateTime.Now;
+            return ImageDictionary[User].Image;
         }
 
         public static Image GetArt(string User, string URL)
@@ -90,7 +97,8 @@ namespace PockeTwit
                     return UnknownArt;
                 }
             }
-            return ImageDictionary[User];
+            ImageDictionary[User].LastRequested = DateTime.Now;
+            return ImageDictionary[User].Image;
         }
 
         public static bool HasArt(string User)
@@ -108,7 +116,21 @@ namespace PockeTwit
             return false;
         }
 
+        public static void Trim(object state)
+        {
+            DateTime runTime = DateTime.Now;
+            List<string> Keys = new List<string>(ImageDictionary.Keys);
 
+            foreach (string infoKey in Keys)
+            {
+                ImageInfo info = ImageDictionary[infoKey];
+                if (runTime.Ticks - info.LastRequested.Ticks > 30000)
+                {
+                    System.Diagnostics.Debug.WriteLine("Removing " + infoKey + " from imagebuffer");
+                    ImageDictionary.Remove(infoKey);
+                }
+            }
+        }
 
 		// Private Methods (3) 
 
@@ -119,7 +141,10 @@ namespace PockeTwit
                 try
                 {
                     Bitmap NewArt = new Bitmap(Filename);
-                    ImageDictionary[User] = NewArt;
+                    ImageInfo newInfo = new ImageInfo();
+                    newInfo.Image = NewArt;
+                    newInfo.LastRequested = DateTime.Now;
+                    ImageDictionary[User] = newInfo;
                     if (Updated != null)
                     {
                         Updated(User);
@@ -136,6 +161,7 @@ namespace PockeTwit
         private static bool LoadArt(string User)
         {
             string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            
             Bitmap NewArt;
             try
             {
@@ -145,7 +171,10 @@ namespace PockeTwit
             {
                 return false;
             }
-            ImageDictionary.Add(User, NewArt);
+            ImageInfo newInfo = new ImageInfo();
+            newInfo.LastRequested = DateTime.Now;
+            newInfo.Image = NewArt;
+            ImageDictionary.Add(User, newInfo);
             return true;
         }
 
@@ -167,7 +196,10 @@ namespace PockeTwit
             {
                 ImageDictionary.Remove(User);
             }
-            ImageDictionary.Add(User, NewArt);
+            ImageInfo newInfo = new ImageInfo();
+            newInfo.LastRequested = DateTime.Now;
+            newInfo.Image = NewArt;
+            ImageDictionary.Add(User, newInfo);
             return bFound;
         }
 

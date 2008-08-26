@@ -53,6 +53,8 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static bool ShowAvatars { get; set; }
+
     public static bool UseGPS { get; set; }
 
     public static bool IsMaximized { get; set; }
@@ -62,10 +64,6 @@ public static class ClientSettings
     public static bool CheckVersion { get; set; }
 
     public static string DistancePreference { get; set; }
-
-    //public static string Password { get; set; }
-
-    //public static Yedda.Twitter.TwitterServer Server { get; set; }
 
     public static bool ShowReplyImages { get; set; }
 
@@ -108,6 +106,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowAvatars"]))
+            {
+                ShowAvatars = bool.Parse(ConfigurationSettings.AppSettings["ShowAvatars"]);
+            }
+            else
+            {
+                ShowAvatars = true;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["DistancePreference"]))
             {
                 DistancePreference = ConfigurationSettings.AppSettings["DistancePreference"];
@@ -217,6 +223,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["ShowAvatars"] = ShowAvatars.ToString();
         ConfigurationSettings.AppSettings["UseGPS"] = UseGPS.ToString();
         ConfigurationSettings.AppSettings["IsMaximized"] = IsMaximized.ToString();
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
