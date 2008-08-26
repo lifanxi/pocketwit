@@ -116,11 +116,19 @@ namespace PockeTwit
         {
             if (System.IO.File.Exists(Filename))
             {
-                Bitmap NewArt = new Bitmap(Filename);
-                ImageDictionary[User] = NewArt;
-                if (Updated != null)
+                try
                 {
-                    Updated(User);
+                    Bitmap NewArt = new Bitmap(Filename);
+                    ImageDictionary[User] = NewArt;
+                    if (Updated != null)
+                    {
+                        Updated(User);
+                    }
+                }
+                catch
+                {
+                    //Try again next time.
+                    System.IO.File.Delete(Filename);
                 }
             }
         }
