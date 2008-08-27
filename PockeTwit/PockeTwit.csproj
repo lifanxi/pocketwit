@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -140,12 +140,6 @@
     <Compile Include="SettingsHandler\MainSettings.Designer.cs">
       <DependentUpon>MainSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingsHandler\SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsHandler\SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SideMenu.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="TimeLine.cs" />
@@ -181,10 +175,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SetStatus.resx">
       <DependentUpon>SetStatus.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsHandler\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TweetList.resx">

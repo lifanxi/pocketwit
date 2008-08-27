@@ -60,7 +60,10 @@ namespace PockeTwit
             Progress(0, "Fetching Messages TimeLine");
             GetMessagesTimeLine();
             CompleteLoaded();
-            timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+            if (ClientSettings.UpdateInterval > 0)
+            {
+                timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+            }
         }
 
         void timerUpdate_Tick(object state)
