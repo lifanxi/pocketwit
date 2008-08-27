@@ -89,8 +89,8 @@ namespace PockeTwit
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.BackColor = ClientSettings.ForeColor;
-            this.txtSearch.ForeColor = ClientSettings.BackColor;
+            this.txtSearch.BackColor = ClientSettings.FieldBackColor;
+            this.txtSearch.ForeColor = ClientSettings.FieldForeColor;
             this.txtSearch.Location = new System.Drawing.Point(57, 57);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(180, 21);

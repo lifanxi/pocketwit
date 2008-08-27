@@ -81,8 +81,8 @@
             this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstAccounts.BackColor = ClientSettings.ForeColor;
-            this.lstAccounts.ForeColor = ClientSettings.BackColor;
+            this.lstAccounts.BackColor = ClientSettings.FieldBackColor;
+            this.lstAccounts.ForeColor = ClientSettings.FieldForeColor;
             this.lstAccounts.FullRowSelect = true;
             this.lstAccounts.Location = new System.Drawing.Point(4, 27);
             this.lstAccounts.Name = "lstAccounts";
