@@ -52,7 +52,7 @@
             this.lnkManageAccounts.Name = "lnkManageAccounts";
             this.lnkManageAccounts.Size = new System.Drawing.Size(234, 20);
             this.lnkManageAccounts.TabIndex = 0;
-            this.lnkManageAccounts.Text = "1. Manage Accounts";
+            this.lnkManageAccounts.Text = "Manage Accounts";
             this.lnkManageAccounts.Click += new System.EventHandler(this.lnkManageAccounts_Click);
             // 
             // lnkAvatar
@@ -61,7 +61,7 @@
             this.lnkAvatar.Name = "lnkAvatar";
             this.lnkAvatar.Size = new System.Drawing.Size(234, 20);
             this.lnkAvatar.TabIndex = 1;
-            this.lnkAvatar.Text = "2. Avatar Settings";
+            this.lnkAvatar.Text = "Avatar Settings";
             this.lnkAvatar.Click += new System.EventHandler(this.lnkAvatar_Click);
             // 
             // lnkUI
@@ -70,7 +70,7 @@
             this.lnkUI.Name = "lnkUI";
             this.lnkUI.Size = new System.Drawing.Size(234, 20);
             this.lnkUI.TabIndex = 2;
-            this.lnkUI.Text = "3. UI Settings";
+            this.lnkUI.Text = "UI Settings";
             this.lnkUI.Click += new System.EventHandler(this.lnkUI_Click);
             // 
             // lnkGPS
@@ -79,7 +79,7 @@
             this.lnkGPS.Name = "lnkGPS";
             this.lnkGPS.Size = new System.Drawing.Size(234, 20);
             this.lnkGPS.TabIndex = 3;
-            this.lnkGPS.Text = "4. Other Settings";
+            this.lnkGPS.Text = "Other Settings";
             this.lnkGPS.Click += new System.EventHandler(this.lnkGPS_Click);
             // 
             // MainSettings
@@ -87,7 +87,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.lnkGPS);
             this.Controls.Add(this.lnkUI);
@@ -97,6 +97,9 @@
             this.Name = "MainSettings";
             this.Text = "PockeTwit Settings";
             this.Activated += new System.EventHandler(this.MainSettings_Activated);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainSettings_KeyPress);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainSettings_KeyUp);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainSettings_KeyDown);
             this.ResumeLayout(false);
 
         }

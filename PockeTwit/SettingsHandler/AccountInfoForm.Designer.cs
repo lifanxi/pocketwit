@@ -62,7 +62,7 @@
             this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbServers.BackColor = System.Drawing.Color.DimGray;
-            this.cmbServers.ForeColor = System.Drawing.Color.LightGray;
+            this.cmbServers.ForeColor = ClientSettings.ForeColor;
             this.cmbServers.Location = new System.Drawing.Point(5, 126);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(232, 22);
@@ -71,8 +71,8 @@
             // 
             // label3
             // 
-            this.label3.BackColor = System.Drawing.Color.Black;
-            this.label3.ForeColor = System.Drawing.Color.LightGray;
+            this.label3.BackColor = ClientSettings.BackColor;
+            this.label3.ForeColor = ClientSettings.ForeColor;
             this.label3.Location = new System.Drawing.Point(4, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 20);
@@ -83,7 +83,7 @@
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.BackColor = System.Drawing.Color.DimGray;
-            this.txtPassword.ForeColor = System.Drawing.Color.LightGray;
+            this.txtPassword.ForeColor = ClientSettings.ForeColor;
             this.txtPassword.Location = new System.Drawing.Point(5, 79);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
@@ -92,8 +92,8 @@
             // 
             // label2
             // 
-            this.label2.BackColor = System.Drawing.Color.Black;
-            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.BackColor = ClientSettings.BackColor;
+            this.label2.ForeColor = ClientSettings.ForeColor;
             this.label2.Location = new System.Drawing.Point(4, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 20);
@@ -104,7 +104,7 @@
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.BackColor = System.Drawing.Color.DimGray;
-            this.txtUserName.ForeColor = System.Drawing.Color.LightGray;
+            this.txtUserName.ForeColor = ClientSettings.ForeColor;
             this.txtUserName.Location = new System.Drawing.Point(3, 28);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(232, 21);
@@ -112,8 +112,8 @@
             // 
             // label4
             // 
-            this.label4.BackColor = System.Drawing.Color.Black;
-            this.label4.ForeColor = System.Drawing.Color.LightGray;
+            this.label4.BackColor = ClientSettings.BackColor;
+            this.label4.ForeColor = ClientSettings.ForeColor;
             this.label4.Location = new System.Drawing.Point(3, 5);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 20);
@@ -123,7 +123,7 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.BackColor = System.Drawing.Color.Black;
+            this.lblError.BackColor = ClientSettings.BackColor;
             this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(83, 154);
             this.lblError.Name = "lblError";
@@ -133,7 +133,7 @@
             // 
             // chkEnabled
             // 
-            this.chkEnabled.ForeColor = System.Drawing.Color.LightGray;
+            this.chkEnabled.ForeColor = ClientSettings.ForeColor;
             this.chkEnabled.Location = new System.Drawing.Point(3, 154);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(72, 20);
@@ -145,7 +145,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.lblError);

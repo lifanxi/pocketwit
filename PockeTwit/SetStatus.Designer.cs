@@ -102,8 +102,8 @@ namespace PockeTwit
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = System.Drawing.Color.Black;
-            this.textBox1.ForeColor = System.Drawing.Color.LightGray;
+            this.textBox1.BackColor = ClientSettings.BackColor;
+            this.textBox1.ForeColor = ClientSettings.ForeColor;
             this.textBox1.Location = new System.Drawing.Point(3, 65);
             this.textBox1.MaxLength = 140;
             this.textBox1.Multiline = true;
@@ -117,7 +117,7 @@ namespace PockeTwit
             // lblCharsLeft
             // 
             this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCharsLeft.ForeColor = System.Drawing.Color.LightGray;
+            this.lblCharsLeft.ForeColor = ClientSettings.ForeColor;
             this.lblCharsLeft.Location = new System.Drawing.Point(198, ClientSettings.TextSize + 20);
             this.lblCharsLeft.Name = "lblCharsLeft";
             this.lblCharsLeft.Size = new System.Drawing.Size(39, 20);
@@ -128,7 +128,7 @@ namespace PockeTwit
             this.cmbAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAccount.BackColor = System.Drawing.Color.DimGray;
-            this.cmbAccount.ForeColor = System.Drawing.Color.LightGray;
+            this.cmbAccount.ForeColor = ClientSettings.ForeColor;
             this.cmbAccount.Location = new System.Drawing.Point(97, 3);
             this.cmbAccount.Name = "cmbAccount";
             this.cmbAccount.Size = new System.Drawing.Size(140, 22);
@@ -137,7 +137,7 @@ namespace PockeTwit
             // 
             // label1
             // 
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(3, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 20);
@@ -149,7 +149,7 @@ namespace PockeTwit
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox2);
@@ -158,7 +158,7 @@ namespace PockeTwit
             this.Controls.Add(this.cmbAccount);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.textBox1);
-            this.ForeColor = System.Drawing.Color.LightGray;
+            this.ForeColor = ClientSettings.ForeColor;
             this.Location = new System.Drawing.Point(0, 0);
             this.Menu = this.mainMenu1;
             this.Name = "SetStatus";

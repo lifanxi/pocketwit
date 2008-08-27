@@ -12,9 +12,9 @@ public static class ClientSettings
     private static int _TextSize = 0;
     public static int AnimationInterval;
     public static string AppPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-    public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
+    public static System.Drawing.Color BackColor = ClientSettings.BackColor;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
-    public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
+    public static System.Drawing.Color ForeColor = ClientSettings.ForeColor;
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;

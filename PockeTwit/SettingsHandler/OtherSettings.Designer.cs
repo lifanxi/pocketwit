@@ -72,7 +72,7 @@ namespace PockeTwit
             // 
             // chkGPS
             // 
-            this.chkGPS.ForeColor = System.Drawing.Color.LightGray;
+            this.chkGPS.ForeColor = ClientSettings.ForeColor;
             this.chkGPS.Location = new System.Drawing.Point(2, 29);
             this.chkGPS.Name = "chkGPS";
             this.chkGPS.Size = new System.Drawing.Size(235, 20);
@@ -81,7 +81,7 @@ namespace PockeTwit
             // 
             // chkVersion
             // 
-            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
+            this.chkVersion.ForeColor = ClientSettings.ForeColor;
             this.chkVersion.Location = new System.Drawing.Point(2, 3);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
@@ -90,7 +90,7 @@ namespace PockeTwit
             // 
             // lblUpDates
             // 
-            this.lblUpDates.ForeColor = System.Drawing.Color.LightGray;
+            this.lblUpDates.ForeColor = ClientSettings.ForeColor;
             this.lblUpDates.Location = new System.Drawing.Point(3, 52);
             this.lblUpDates.Name = "lblUpDates";
             this.lblUpDates.Size = new System.Drawing.Size(234, 20);
@@ -105,7 +105,7 @@ namespace PockeTwit
             // 
             // label1
             // 
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(99, 76);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 20);
@@ -115,7 +115,7 @@ namespace PockeTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtUpdate);

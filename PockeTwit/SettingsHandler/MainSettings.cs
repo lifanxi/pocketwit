@@ -22,22 +22,7 @@ namespace PockeTwit.SettingsHandler
             }
         }
 
-        private void lnkManageAccounts_Click(object sender, EventArgs e)
-        {
-            ShowAccounts();
-        }
-
-        private DialogResult ShowAccounts()
-        {
-            AccountsForm af = new AccountsForm();
-            DialogResult ret = af.ShowDialog();
-            if (af.IsDirty)
-            {
-                NeedsReset = true;
-            }
-            af.Close();
-            return ret;
-        }
+        
 
         private void MainSettings_Activated(object sender, EventArgs e)
         {
@@ -59,14 +44,41 @@ namespace PockeTwit.SettingsHandler
             this.DialogResult = DialogResult.OK;
         }
 
+        private void lnkManageAccounts_Click(object sender, EventArgs e)
+        {
+            ShowAccounts();
+        }
         private void lnkAvatar_Click(object sender, EventArgs e)
+        {
+            ShowAvatar();
+        }
+        private void lnkUI_Click(object sender, EventArgs e)
+        {
+            ShowUI();
+        }
+        private void lnkGPS_Click(object sender, EventArgs e)
+        {
+            ShowOther();
+        }
+
+        private DialogResult ShowAccounts()
+        {
+            AccountsForm af = new AccountsForm();
+            DialogResult ret = af.ShowDialog();
+            if (af.IsDirty)
+            {
+                NeedsReset = true;
+            }
+            af.Close();
+            return ret;
+        }
+        private void ShowAvatar()
         {
             AvatarSettings avsettings = new AvatarSettings();
             DialogResult ret = avsettings.ShowDialog();
             avsettings.Close();
         }
-
-        private void lnkUI_Click(object sender, EventArgs e)
+        private void ShowUI()
         {
             UISettings UI = new UISettings();
             DialogResult ret = UI.ShowDialog();
@@ -79,12 +91,26 @@ namespace PockeTwit.SettingsHandler
             }
             UI.Close();
         }
-
-        private void lnkGPS_Click(object sender, EventArgs e)
+        private void ShowOther()
         {
             OtherSettings O = new OtherSettings();
             DialogResult ret = O.ShowDialog();
             O.Close();
+        }
+
+        private void MainSettings_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void MainSettings_KeyUp(object sender, KeyEventArgs e)
+        {
+            
+        }
+
+        private void MainSettings_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

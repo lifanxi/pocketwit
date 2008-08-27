@@ -69,7 +69,7 @@ namespace PockeTwit
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-            this.lblTitle.ForeColor = System.Drawing.Color.LightGray;
+            this.lblTitle.ForeColor = ClientSettings.ForeColor;
             this.lblTitle.Location = new System.Drawing.Point(3, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(169, 31);
@@ -78,7 +78,7 @@ namespace PockeTwit
             // lblLoading
             // 
             this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
-            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
+            this.lblLoading.ForeColor = ClientSettings.ForeColor;
             this.lblLoading.Location = new System.Drawing.Point(3, 31);
             this.lblLoading.Name = "lblLoading";
             this.lblLoading.Size = new System.Drawing.Size(193, 55);
@@ -89,7 +89,7 @@ namespace PockeTwit
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblLoading);
