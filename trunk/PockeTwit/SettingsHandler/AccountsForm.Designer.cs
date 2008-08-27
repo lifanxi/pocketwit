@@ -78,7 +78,8 @@
             // lstAccounts
             // 
             this.lstAccounts.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstAccounts.BackColor = System.Drawing.Color.DimGray;
             this.lstAccounts.ForeColor = System.Drawing.Color.LightGray;

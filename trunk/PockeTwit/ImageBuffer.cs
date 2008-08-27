@@ -183,24 +183,31 @@ namespace PockeTwit
             string ArtPath = AsyncArtGrabber.CopyTempFile(User, URL);
             Bitmap NewArt;
             bool bFound = false;
-            if (ArtPath != null)
+            try
             {
-                NewArt = new Bitmap(ArtPath);
-                bFound = true;
+                if (ArtPath != null)
+                {
+                    NewArt = new Bitmap(ArtPath);
+                    bFound = true;
+                }
+                else
+                {
+                    NewArt = UnknownArt;
+                }
+                if (ImageDictionary.ContainsKey(User))
+                {
+                    ImageDictionary.Remove(User);
+                }
+                ImageInfo newInfo = new ImageInfo();
+                newInfo.LastRequested = DateTime.Now;
+                newInfo.Image = NewArt;
+                ImageDictionary.Add(User, newInfo);
+                return bFound;
             }
-            else
+            catch
             {
-                NewArt = UnknownArt;
+                return false;
             }
-            if (ImageDictionary.ContainsKey(User))
-            {
-                ImageDictionary.Remove(User);
-            }
-            ImageInfo newInfo = new ImageInfo();
-            newInfo.LastRequested = DateTime.Now;
-            newInfo.Image = NewArt;
-            ImageDictionary.Add(User, newInfo);
-            return bFound;
         }
 
 

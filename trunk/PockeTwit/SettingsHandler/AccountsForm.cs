@@ -91,6 +91,7 @@ namespace PockeTwit
                 {
                     ClientSettings.AccountsList.Add(a);
                 }
+                ClientSettings.SaveSettings();
             }
         }
 
@@ -132,20 +133,23 @@ namespace PockeTwit
 
         private void lnkRemove_Click(object sender, EventArgs e)
         {
-            string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
-            Yedda.Twitter.Account toRemove = null;
-            foreach (Yedda.Twitter.Account a in LocalList)
+            if (lstAccounts.SelectedIndices.Count > 0)
             {
-                if (a.ToString() == selectedText)
+                string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
+                Yedda.Twitter.Account toRemove = null;
+                foreach (Yedda.Twitter.Account a in LocalList)
                 {
-                    toRemove = a;
+                    if (a.ToString() == selectedText)
+                    {
+                        toRemove = a;
+                    }
                 }
-            }
-            if (toRemove != null)
-            {
-                LocalList.Remove(toRemove);
-                ListAccounts();
-                IsDirty = true;
+                if (toRemove != null)
+                {
+                    LocalList.Remove(toRemove);
+                    ListAccounts();
+                    IsDirty = true;
+                }
             }
         }
 
