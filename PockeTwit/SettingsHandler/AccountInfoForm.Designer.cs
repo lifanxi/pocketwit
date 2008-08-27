@@ -61,8 +61,8 @@
             // 
             this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbServers.BackColor = ClientSettings.ForeColor;
-            this.cmbServers.ForeColor = ClientSettings.BackColor;
+            this.cmbServers.BackColor = ClientSettings.FieldBackColor;
+            this.cmbServers.ForeColor = ClientSettings.FieldForeColor;
             this.cmbServers.Location = new System.Drawing.Point(5, 126);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(232, 22);
@@ -82,8 +82,8 @@
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.BackColor = ClientSettings.ForeColor;
-            this.txtPassword.ForeColor = ClientSettings.BackColor;
+            this.txtPassword.BackColor = ClientSettings.FieldBackColor;
+            this.txtPassword.ForeColor = ClientSettings.FieldForeColor;
             this.txtPassword.Location = new System.Drawing.Point(5, 79);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
@@ -103,8 +103,8 @@
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.BackColor = ClientSettings.ForeColor;
-            this.txtUserName.ForeColor = ClientSettings.BackColor;
+            this.txtUserName.BackColor = ClientSettings.FieldBackColor;
+            this.txtUserName.ForeColor = ClientSettings.FieldForeColor;
             this.txtUserName.Location = new System.Drawing.Point(3, 28);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(232, 21);

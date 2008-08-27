@@ -20,7 +20,9 @@ public static class ClientSettings
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
-    
+    public static System.Drawing.Color FieldBackColor = System.Drawing.Color.White;
+    public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;
+
     public static int Margin = 5;
     public static int MaxTweets = 50;
     public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
