@@ -67,7 +67,7 @@
             // 
             this.lnkAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkAdd.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkAdd.ForeColor = ClientSettings.LinkColor;
             this.lnkAdd.Location = new System.Drawing.Point(4, 129);
             this.lnkAdd.Name = "lnkAdd";
             this.lnkAdd.Size = new System.Drawing.Size(149, 20);
@@ -81,8 +81,8 @@
             this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstAccounts.BackColor = System.Drawing.Color.DimGray;
-            this.lstAccounts.ForeColor = ClientSettings.ForeColor;
+            this.lstAccounts.BackColor = ClientSettings.ForeColor;
+            this.lstAccounts.ForeColor = ClientSettings.BackColor;
             this.lstAccounts.FullRowSelect = true;
             this.lstAccounts.Location = new System.Drawing.Point(4, 27);
             this.lstAccounts.Name = "lstAccounts";
@@ -94,7 +94,7 @@
             // 
             this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkEdit.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkEdit.ForeColor = ClientSettings.LinkColor;
             this.lnkEdit.Location = new System.Drawing.Point(4, 149);
             this.lnkEdit.Name = "lnkEdit";
             this.lnkEdit.Size = new System.Drawing.Size(149, 20);
@@ -106,7 +106,7 @@
             // 
             this.lnkRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkRemove.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkRemove.ForeColor = ClientSettings.LinkColor;
             this.lnkRemove.Location = new System.Drawing.Point(4, 169);
             this.lnkRemove.Name = "lnkRemove";
             this.lnkRemove.Size = new System.Drawing.Size(149, 20);

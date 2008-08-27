@@ -89,7 +89,7 @@ namespace PockeTwit
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.BackColor = System.Drawing.Color.White;
+            this.txtSearch.BackColor = ClientSettings.ForeColor;
             this.txtSearch.ForeColor = ClientSettings.BackColor;
             this.txtSearch.Location = new System.Drawing.Point(57, 57);
             this.txtSearch.Name = "txtSearch";
@@ -148,7 +148,7 @@ namespace PockeTwit
             // 
             this.lblGPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblGPSStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblGPSStatus.ForeColor = ClientSettings.ErrorColor;
             this.lblGPSStatus.Location = new System.Drawing.Point(3, 29);
             this.lblGPSStatus.Name = "lblGPSStatus";
             this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);

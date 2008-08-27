@@ -81,7 +81,7 @@ namespace PockeTwit
             // lnkClearAvatars
             // 
             this.lnkClearAvatars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkClearAvatars.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lnkClearAvatars.ForeColor = ClientSettings.LinkColor;
             this.lnkClearAvatars.Location = new System.Drawing.Point(126, 248);
             this.lnkClearAvatars.Name = "lnkClearAvatars";
             this.lnkClearAvatars.Size = new System.Drawing.Size(109, 20);

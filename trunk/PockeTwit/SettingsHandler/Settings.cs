@@ -12,16 +12,17 @@ public static class ClientSettings
     private static int _TextSize = 0;
     public static int AnimationInterval;
     public static string AppPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-    public static System.Drawing.Color BackColor = ClientSettings.BackColor;
+    public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
-    public static System.Drawing.Color ForeColor = ClientSettings.ForeColor;
+    public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
-    public static int Margin = 5;
-    public static int MaxTweets = 50;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
+    
+    public static int Margin = 5;
+    public static int MaxTweets = 50;
     public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
     public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
     public static int SmallArtSize = 65;

@@ -73,7 +73,7 @@ namespace PockeTwit
             {
                 lblGPS.Visible = true;
                 lblGPS.Text = "Seeking GPS...";
-                lblGPS.ForeColor = System.Drawing.Color.Red;
+                lblGPS.ForeColor = ClientSettings.ErrorColor;
                 this.lblGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
 
@@ -127,8 +127,8 @@ namespace PockeTwit
             // 
             this.cmbAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbAccount.BackColor = System.Drawing.Color.DimGray;
-            this.cmbAccount.ForeColor = ClientSettings.ForeColor;
+            this.cmbAccount.BackColor = ClientSettings.ForeColor;
+            this.cmbAccount.ForeColor = ClientSettings.BackColor;
             this.cmbAccount.Location = new System.Drawing.Point(97, 3);
             this.cmbAccount.Name = "cmbAccount";
             this.cmbAccount.Size = new System.Drawing.Size(140, 22);
