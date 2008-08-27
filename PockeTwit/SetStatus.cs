@@ -82,9 +82,12 @@ namespace PockeTwit
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
-                    SwitchOnGPS();
-                    position = args.Position;
-                    MSG(position.Latitude.ToString() + "," + position.Longitude.ToString());
+                    if (args.Position.Longitude > 0 && args.Position.Latitude > 0)
+                    {
+                        SwitchOnGPS();
+                        position = args.Position;
+                        MSG(position.Latitude.ToString() + "," + position.Longitude.ToString());
+                    }
                 }
             }
             catch(DivideByZeroException ex)
