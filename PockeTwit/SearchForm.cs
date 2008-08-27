@@ -77,9 +77,12 @@ namespace PockeTwit
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
                 {
-                    SetLabelVisible();
-                    position = args.Position;
-                    EnableDistance();
+                    if (!Double.IsNaN(args.Position.Longitude) && !Double.IsNaN(args.Position.Latitude))
+                    {
+                        SetLabelVisible();
+                        position = args.Position;
+                        EnableDistance();
+                    }
                 }
             }
             catch (DivideByZeroException)
