@@ -62,7 +62,7 @@ namespace PockeTwit
 
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
-            
+            if (args.Position == null) { return; }   
             try
             {
                 if (args.Position.LatitudeValid && args.Position.LongitudeValid)
