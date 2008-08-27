@@ -5,5 +5,5 @@ SelectedForeColor:255:255:255
 SelectedSmallTextColor:200:200:200
 SmallTextColor:128:128:128
 ErrorColor:255:0:0
-FieldBackColor:0:0:0
-FieldForeColor:255:255:255
+FieldBackColor:255:255:255
+FieldForeColor:0:0:0

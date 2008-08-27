@@ -60,6 +60,21 @@ namespace PockeTwit
             }
         }
 
+        private delegate void delMSG(string message);
+        private void MSG(string message)
+        {
+            if (InvokeRequired)
+            {
+                delMSG d = new delMSG(MSG);
+                this.Invoke(d, new object[] { message });
+            }
+            else
+            {
+                MessageBox.Show(message);
+            }
+        }
+
+
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
             if (args.Position == null) { return; }   
@@ -69,6 +84,7 @@ namespace PockeTwit
                 {
                     SwitchOnGPS();
                     position = args.Position;
+                    MSG(position.Latitude.ToString() + "," + position.Longitude.ToString());
                 }
             }
             catch(DivideByZeroException ex)
