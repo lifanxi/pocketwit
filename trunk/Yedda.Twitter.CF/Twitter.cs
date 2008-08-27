@@ -341,37 +341,41 @@ namespace Yedda
                 //
                 if (ex.Response is HttpWebResponse)
                 {
-                    if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    try
                     {
-                        return null;
-                    }
-                    
-                    HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
-                    if (errorResponse.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        return null;
-                    }
-                    string ErrorText;
-                    using (Stream stream = errorResponse.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
+                        if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                         {
-                            ErrorText = reader.ReadToEnd();
-                            XmlDocument doc = new XmlDocument();
-                            doc.LoadXml(ErrorText);
-                            
-                            if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                            return null;
+                        }
+
+                        HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                        if (errorResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            return null;
+                        }
+                        string ErrorText;
+                        using (Stream stream = errorResponse.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(stream))
                             {
-                                DateTime NewTime = GetTimeOutTime();
-                                throw new Exception("Timeout until " + NewTime.ToString());
+                                ErrorText = reader.ReadToEnd();
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(ErrorText);
+
+                                if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                                {
+                                    DateTime NewTime = GetTimeOutTime();
+                                    throw new Exception("Timeout until " + NewTime.ToString());
+                                }
+
                             }
-                            
                         }
                     }
+                    catch { }
 
                     
                 }
-                throw ex;
+                
             }
         }
 
