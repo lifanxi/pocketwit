@@ -50,6 +50,9 @@ namespace PockeTwit
             this.menuAccept = new System.Windows.Forms.MenuItem();
             this.chkGPS = new System.Windows.Forms.CheckBox();
             this.chkVersion = new System.Windows.Forms.CheckBox();
+            this.lblUpDates = new System.Windows.Forms.Label();
+            this.txtUpdate = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -73,7 +76,7 @@ namespace PockeTwit
             this.chkGPS.Location = new System.Drawing.Point(2, 29);
             this.chkGPS.Name = "chkGPS";
             this.chkGPS.Size = new System.Drawing.Size(235, 20);
-            this.chkGPS.TabIndex = 5;
+            this.chkGPS.TabIndex = 2;
             this.chkGPS.Text = "Use GPS";
             // 
             // chkVersion
@@ -82,8 +85,31 @@ namespace PockeTwit
             this.chkVersion.Location = new System.Drawing.Point(2, 3);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
-            this.chkVersion.TabIndex = 6;
+            this.chkVersion.TabIndex = 1;
             this.chkVersion.Text = "Automatically check for new version";
+            // 
+            // lblUpDates
+            // 
+            this.lblUpDates.ForeColor = System.Drawing.Color.LightGray;
+            this.lblUpDates.Location = new System.Drawing.Point(3, 52);
+            this.lblUpDates.Name = "lblUpDates";
+            this.lblUpDates.Size = new System.Drawing.Size(234, 20);
+            this.lblUpDates.Text = "Automatic Update (Milliseconds)";
+            // 
+            // txtUpdate
+            // 
+            this.txtUpdate.Location = new System.Drawing.Point(3, 75);
+            this.txtUpdate.Name = "txtUpdate";
+            this.txtUpdate.Size = new System.Drawing.Size(90, 21);
+            this.txtUpdate.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.Location = new System.Drawing.Point(99, 76);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(124, 20);
+            this.label1.Text = "0 to disable";
             // 
             // OtherSettings
             // 
@@ -91,6 +117,9 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtUpdate);
+            this.Controls.Add(this.lblUpDates);
             this.Controls.Add(this.chkVersion);
             this.Controls.Add(this.chkGPS);
             this.Menu = this.mainMenu1;
@@ -104,6 +133,9 @@ namespace PockeTwit
 
         private System.Windows.Forms.CheckBox chkGPS;
         private System.Windows.Forms.CheckBox chkVersion;
+        private System.Windows.Forms.Label lblUpDates;
+        private System.Windows.Forms.TextBox txtUpdate;
+        private System.Windows.Forms.Label label1;
 
     }
 }

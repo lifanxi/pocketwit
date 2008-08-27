@@ -105,7 +105,7 @@ namespace PockeTwit
             this.chkTimestamps.Location = new System.Drawing.Point(2, 30);
             this.chkTimestamps.Name = "chkTimestamps";
             this.chkTimestamps.Size = new System.Drawing.Size(235, 20);
-            this.chkTimestamps.TabIndex = 3;
+            this.chkTimestamps.TabIndex = 1;
             this.chkTimestamps.Text = "Show times";
             // 
             // UISettings
