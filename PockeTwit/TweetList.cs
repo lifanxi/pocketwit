@@ -43,7 +43,8 @@ namespace PockeTwit
             if (ClientSettings.AccountsList.Count == 0)
             {
                 // SHow Settings page first
-                SettingsForm settings = new SettingsForm();
+                SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
+                //SettingsForm settings = new SettingsForm();
                 if (settings.ShowDialog() == DialogResult.Cancel)
                 {
                     Application.Exit();
@@ -171,7 +172,8 @@ namespace PockeTwit
         private void ChangeSettings()
         {
             this.statList.Visible = false;
-            SettingsForm settings = new SettingsForm();
+            SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
+            //SettingsForm settings = new SettingsForm();
             IsLoaded = false;
             if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; IsLoaded = true; return; }
             IsLoaded = true;
