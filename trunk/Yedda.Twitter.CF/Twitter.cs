@@ -460,28 +460,31 @@ namespace Yedda
                         {
                             return null;
                         }
-                        HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
-                        string ErrorText;
-                        using (Stream stream = errorResponse.GetResponseStream())
+                        try
                         {
-                            using (StreamReader reader = new StreamReader(stream))
+                            HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                            string ErrorText;
+                            using (Stream stream = errorResponse.GetResponseStream())
                             {
-                                ErrorText = reader.ReadToEnd();
-                                XmlDocument doc = new XmlDocument();
-                                doc.LoadXml(ErrorText);
-
-                                if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                                using (StreamReader reader = new StreamReader(stream))
                                 {
-                                    DateTime NewTime = GetTimeOutTime();
-                                    throw new Exception("Timeout until " + NewTime.ToString());
-                                }
+                                    ErrorText = reader.ReadToEnd();
+                                    XmlDocument doc = new XmlDocument();
+                                    doc.LoadXml(ErrorText);
 
+                                    if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                                    {
+                                        DateTime NewTime = GetTimeOutTime();
+                                        throw new Exception("Timeout until " + NewTime.ToString());
+                                    }
+
+                                }
                             }
                         }
-
-
+                        catch { }
                     }
                 }
+                catch { }
             }
 
             return null;
