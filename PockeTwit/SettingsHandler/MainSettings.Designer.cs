@@ -54,6 +54,7 @@
             this.lnkManageAccounts.TabIndex = 0;
             this.lnkManageAccounts.Text = "Manage Accounts";
             this.lnkManageAccounts.Click += new System.EventHandler(this.lnkManageAccounts_Click);
+            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkAvatar
             // 
@@ -63,6 +64,7 @@
             this.lnkAvatar.TabIndex = 1;
             this.lnkAvatar.Text = "Avatar Settings";
             this.lnkAvatar.Click += new System.EventHandler(this.lnkAvatar_Click);
+            this.lnkAvatar.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkUI
             // 
@@ -72,6 +74,7 @@
             this.lnkUI.TabIndex = 2;
             this.lnkUI.Text = "UI Settings";
             this.lnkUI.Click += new System.EventHandler(this.lnkUI_Click);
+            this.lnkUI.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkGPS
             // 
@@ -81,6 +84,7 @@
             this.lnkGPS.TabIndex = 3;
             this.lnkGPS.Text = "Other Settings";
             this.lnkGPS.Click += new System.EventHandler(this.lnkGPS_Click);
+            this.lnkGPS.ForeColor = ClientSettings.LinkColor;
             // 
             // MainSettings
             // 
