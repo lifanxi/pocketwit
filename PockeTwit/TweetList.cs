@@ -478,6 +478,7 @@ namespace PockeTwit
                     if (StatusForm.position != null)
                     {
                         GPS.GpsPosition mylocation = StatusForm.position;
+                        MessageBox.Show(mylocation.Latitude.ToString() + "," + mylocation.Longitude.ToString());
                         t.SetLocation(mylocation.Latitude.ToString() + "," + mylocation.Longitude.ToString());
                     }
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)

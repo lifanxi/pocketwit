@@ -127,8 +127,8 @@ namespace PockeTwit
             // 
             this.cmbAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbAccount.BackColor = ClientSettings.ForeColor;
-            this.cmbAccount.ForeColor = ClientSettings.BackColor;
+            this.cmbAccount.BackColor = ClientSettings.FieldBackColor;
+            this.cmbAccount.ForeColor = ClientSettings.FieldForeColor;
             this.cmbAccount.Location = new System.Drawing.Point(97, 3);
             this.cmbAccount.Name = "cmbAccount";
             this.cmbAccount.Size = new System.Drawing.Size(140, 22);
