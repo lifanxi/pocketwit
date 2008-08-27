@@ -41,6 +41,11 @@ namespace PockeTwit
             
             ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
+            if (ClientSettings.UpdateInterval != int.Parse(txtUpdate.Text))
+            {
+                MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
+                ClientSettings.UpdateInterval = int.Parse(txtUpdate.Text);
+            }
             ClientSettings.SaveSettings();
             
             this.DialogResult = DialogResult.OK;
@@ -59,6 +64,7 @@ namespace PockeTwit
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
             this.DialogResult = DialogResult.Cancel;
+            txtUpdate.Text = ClientSettings.UpdateInterval.ToString();
         }
 
 
