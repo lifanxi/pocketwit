@@ -116,6 +116,30 @@
     <Compile Include="SetStatus.Designer.cs">
       <DependentUpon>SetStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsHandler\AvatarSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\AvatarSettings.Designer.cs">
+      <DependentUpon>AvatarSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\OtherSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\OtherSettings.Designer.cs">
+      <DependentUpon>OtherSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\UISettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\UISettings.Designer.cs">
+      <DependentUpon>UISettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\MainSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\MainSettings.Designer.cs">
+      <DependentUpon>MainSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsHandler\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -207,6 +231,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\MyIco.ico" />
+    <EmbeddedResource Include="SettingsHandler\AvatarSettings.resx">
+      <DependentUpon>AvatarSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\OtherSettings.resx">
+      <DependentUpon>OtherSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\UISettings.resx">
+      <DependentUpon>UISettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\MainSettings.resx">
+      <DependentUpon>MainSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="PockeTwit.ico" />
     <Content Include="unknownart-small.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

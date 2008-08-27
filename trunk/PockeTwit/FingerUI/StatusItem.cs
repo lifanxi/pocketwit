@@ -315,9 +315,9 @@ namespace FingerUI
         private void DrawReplyImage(Graphics g, Point ImageLocation)
         {
             ImageLocation.Offset(-5, -5);
-            if (Tweet.text.Split(new char[] { ' ' })[0].StartsWith("@"))
+            if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
             {
-                string ReplyTo = Tweet.text.Split(new char[] { ' ' })[0].TrimStart(new char[] { '@' });
+                string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimStart(new char[] { '@' });
                 Image ReplyImage = null;
                 if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
                 {
