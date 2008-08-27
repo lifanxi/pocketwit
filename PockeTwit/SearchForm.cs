@@ -109,6 +109,9 @@ namespace PockeTwit
         {
             if (ClientSettings.UseGPS)
             {
+                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
+                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                
                 gps.Close();
             }
             this.DialogResult = DialogResult.Cancel;
@@ -146,6 +149,9 @@ namespace PockeTwit
             this.SearchText = b.ToString();
             if (ClientSettings.UseGPS)
             {
+                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
+                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                
                 gps.Close();
             }
             this.DialogResult = DialogResult.OK;
