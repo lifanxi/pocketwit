@@ -56,8 +56,8 @@
             // 
             // label1
             // 
-            this.label1.BackColor = System.Drawing.Color.Black;
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.BackColor = ClientSettings.BackColor;
+            this.label1.ForeColor = ClientSettings.ForeColor;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 20);
@@ -82,7 +82,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstAccounts.BackColor = System.Drawing.Color.DimGray;
-            this.lstAccounts.ForeColor = System.Drawing.Color.LightGray;
+            this.lstAccounts.ForeColor = ClientSettings.ForeColor;
             this.lstAccounts.FullRowSelect = true;
             this.lstAccounts.Location = new System.Drawing.Point(4, 27);
             this.lstAccounts.Name = "lstAccounts";
@@ -119,14 +119,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.lnkRemove);
             this.Controls.Add(this.lnkEdit);
             this.Controls.Add(this.lstAccounts);
             this.Controls.Add(this.lnkAdd);
             this.Controls.Add(this.label1);
-            this.ForeColor = System.Drawing.Color.LightGray;
+            this.ForeColor = ClientSettings.ForeColor;
             this.Menu = this.mainMenu1;
             this.Name = "AccountsForm";
             this.Text = "Accounts";

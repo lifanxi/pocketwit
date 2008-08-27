@@ -71,7 +71,7 @@ namespace PockeTwit
             // 
             // chkReplyImages
             // 
-            this.chkReplyImages.ForeColor = System.Drawing.Color.LightGray;
+            this.chkReplyImages.ForeColor = ClientSettings.ForeColor;
             this.chkReplyImages.Location = new System.Drawing.Point(2, 29);
             this.chkReplyImages.Name = "chkReplyImages";
             this.chkReplyImages.Size = new System.Drawing.Size(235, 20);
@@ -91,7 +91,7 @@ namespace PockeTwit
             // 
             // chkAvatar
             // 
-            this.chkAvatar.ForeColor = System.Drawing.Color.LightGray;
+            this.chkAvatar.ForeColor = ClientSettings.ForeColor;
             this.chkAvatar.Location = new System.Drawing.Point(2, 3);
             this.chkAvatar.Name = "chkAvatar";
             this.chkAvatar.Size = new System.Drawing.Size(235, 20);
@@ -102,7 +102,7 @@ namespace PockeTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.chkAvatar);
             this.Controls.Add(this.lnkClearAvatars);

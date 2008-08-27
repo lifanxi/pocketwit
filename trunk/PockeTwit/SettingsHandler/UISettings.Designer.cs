@@ -74,7 +74,7 @@ namespace PockeTwit
             // 
             // label4
             // 
-            this.label4.ForeColor = System.Drawing.Color.LightGray;
+            this.label4.ForeColor = ClientSettings.ForeColor;
             this.label4.Location = new System.Drawing.Point(4, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 20);
@@ -93,7 +93,7 @@ namespace PockeTwit
             // lblTweets
             // 
             this.lblTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTweets.ForeColor = System.Drawing.Color.LightGray;
+            this.lblTweets.ForeColor = ClientSettings.ForeColor;
             this.lblTweets.Location = new System.Drawing.Point(179, 4);
             this.lblTweets.Name = "lblTweets";
             this.lblTweets.Size = new System.Drawing.Size(57, 20);
@@ -101,7 +101,7 @@ namespace PockeTwit
             // 
             // chkTimestamps
             // 
-            this.chkTimestamps.ForeColor = System.Drawing.Color.LightGray;
+            this.chkTimestamps.ForeColor = ClientSettings.ForeColor;
             this.chkTimestamps.Location = new System.Drawing.Point(2, 30);
             this.chkTimestamps.Name = "chkTimestamps";
             this.chkTimestamps.Size = new System.Drawing.Size(235, 20);
@@ -112,7 +112,7 @@ namespace PockeTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.chkTimestamps);
             this.Controls.Add(this.lblTweets);
