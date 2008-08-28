@@ -399,6 +399,19 @@ namespace FingerUI
                 Reset();
             }
         }
+        public void ClearVisible()
+        {
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(ClearVisible);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                m_items.Clear();
+                Reset();
+            }
+        }
 
         public void EndUpdate()
         {

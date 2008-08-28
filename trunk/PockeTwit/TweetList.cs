@@ -736,6 +736,7 @@ namespace PockeTwit
             statList.RightMenuItems = RightMenu;
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             SwitchToList("Search_TimeLine");
+            this.statList.ClearVisible();
             AddStatusesToList(Manager.SearchTwitter(Conn, SearchString));
             ChangeCursor(Cursors.Default);
         }
