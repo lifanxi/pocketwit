@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.30</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv30.CAB</url>
-  <notes>many bugfixes--
-Please keep submitting your crash reports!
+  <version>.31</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv31.CAB</url>
+  <notes>More bugfixes
+Slightly better memory management
+More configuration settings
 </notes>
 </LatestRelease>
