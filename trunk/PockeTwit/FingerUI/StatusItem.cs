@@ -20,14 +20,12 @@ namespace FingerUI
         private bool m_highlighted = false;
         private KListControl m_parent;
         private bool m_selected = false;
-        //private List<string> SplitLines = new List<string>();
         private StringFormat m_stringFormat = new StringFormat();
         private string m_text;
         private object m_value;
         private int m_x = -1;
         private int m_y = -1;
         private PockeTwit.Library.User ReplyUser = null;
-        //public List<Clickable> Clickables = new List<Clickable>();
         private Font TextFont;
 
 		#endregion�Fields�
@@ -304,7 +302,10 @@ namespace FingerUI
                 g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
                 lineOffset++;
             }
-            MakeClickable(g, textBounds);
+            if (ClientSettings.UseClickables)
+            {
+                MakeClickable(g, textBounds);
+            }
             ForeBrush.Dispose();
         }
 
@@ -559,6 +560,7 @@ namespace FingerUI
         }
         private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
+            if (!ClientSettings.UseClickables) { return; }
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
             float Position = ((lineOffSet * (ClientSettings.TextSize)));

@@ -86,7 +86,6 @@ namespace PockeTwit
                     {
                         SwitchOnGPS();
                         position = args.Position;
-                        MSG(position.Latitude.ToString() + "," + position.Longitude.ToString());
                     }
                 }
             }
