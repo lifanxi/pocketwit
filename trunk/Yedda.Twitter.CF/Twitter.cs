@@ -289,7 +289,7 @@ namespace Yedda
 
         public string GetProfileURL(string User)
         {
-            return AccountInfo.ServerURL.URL + User;
+            return AccountInfo.ServerURL.URL.Replace("api/", "") + User;
         }
 
         protected string GetServerString()
