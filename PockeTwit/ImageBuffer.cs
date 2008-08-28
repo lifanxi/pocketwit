@@ -15,7 +15,7 @@ namespace PockeTwit
 		#region Fields (3) 
 
         public static Bitmap FavoriteImage;
-        private static Dictionary<string, ImageInfo> ImageDictionary = new Dictionary<string, ImageInfo>();
+        private static SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
         public static Bitmap UnknownArt;
         private static System.Threading.Timer timerUpdate;
 
@@ -77,6 +77,7 @@ namespace PockeTwit
         public static Image GetArt(string User, string URL)
         {
             if (User == null) { return null; }
+            
             if (!ImageDictionary.ContainsKey(User))
             {
                 if (!LoadArt(User, URL))
