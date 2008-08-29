@@ -58,6 +58,7 @@ public static class ClientSettings
 		#endregion Constructors 
 
 		#region Properties (7) 
+    public static bool HighQualityAvatars { get; set; }
     public static bool UseClickables { get; set; }
 
     public static bool ShowAvatars { get; set; }
@@ -113,6 +114,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["HighQualityAvatars"]))
+            {
+                HighQualityAvatars = bool.Parse(ConfigurationSettings.AppSettings["HighQualityAvatars"]);
+            }
+            else
+            {
+                HighQualityAvatars = true;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseClickables"]))
             {
                 UseClickables = bool.Parse(ConfigurationSettings.AppSettings["UseClickables"]);
