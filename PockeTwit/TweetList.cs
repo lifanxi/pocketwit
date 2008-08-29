@@ -394,9 +394,10 @@ namespace PockeTwit
 
         void Manager_BothUpdated(int Messagecount, int FreindsCount)
         {
-            
-            Notifyer.NewBoth(Messagecount, FreindsCount);
-            
+            if (Notifyer != null)
+            {
+                Notifyer.NewBoth(Messagecount, FreindsCount);
+            }
             if(this.IsFocused())
             {
                 if (statList.CurrentList() == "Replies")
