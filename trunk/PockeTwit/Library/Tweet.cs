@@ -224,7 +224,6 @@ namespace PockeTwit.Library
         public string profile_image_url { get; set; }
 
         private string _high_profile_image_url;
-        [XmlIgnore]
         public string high_profile_image_url
         {
             get

@@ -58,7 +58,9 @@ namespace PockeTwit
             }
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
             if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsReset = true; }
+            ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.UseClickables = chkClickables.Checked;
+            ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
             this.Close();
