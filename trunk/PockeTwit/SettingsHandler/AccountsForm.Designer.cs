@@ -68,25 +68,24 @@
             this.lnkAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkAdd.ForeColor = ClientSettings.LinkColor;
-            this.lnkAdd.Location = new System.Drawing.Point(4, 129);
+            this.lnkAdd.Location = new System.Drawing.Point(4, 98);
             this.lnkAdd.Name = "lnkAdd";
-            this.lnkAdd.Size = new System.Drawing.Size(149, 20);
+            this.lnkAdd.Size = new System.Drawing.Size(234, 20);
             this.lnkAdd.TabIndex = 1;
-            this.lnkAdd.Text = "Add New Account";
+            this.lnkAdd.Text = "Add New";
             this.lnkAdd.Click += new System.EventHandler(this.lnkAdd_Click);
             // 
             // lstAccounts
             // 
             this.lstAccounts.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
+            this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstAccounts.BackColor = ClientSettings.FieldBackColor;
             this.lstAccounts.ForeColor = ClientSettings.FieldForeColor;
             this.lstAccounts.FullRowSelect = true;
             this.lstAccounts.Location = new System.Drawing.Point(4, 27);
             this.lstAccounts.Name = "lstAccounts";
-            this.lstAccounts.Size = new System.Drawing.Size(233, 96);
+            this.lstAccounts.Size = new System.Drawing.Size(233, 68);
             this.lstAccounts.TabIndex = 9;
             this.lstAccounts.View = System.Windows.Forms.View.List;
             // 
@@ -95,11 +94,11 @@
             this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkEdit.ForeColor = ClientSettings.LinkColor;
-            this.lnkEdit.Location = new System.Drawing.Point(4, 149);
+            this.lnkEdit.Location = new System.Drawing.Point(4, 118);
             this.lnkEdit.Name = "lnkEdit";
-            this.lnkEdit.Size = new System.Drawing.Size(149, 20);
+            this.lnkEdit.Size = new System.Drawing.Size(234, 20);
             this.lnkEdit.TabIndex = 2;
-            this.lnkEdit.Text = "Edit Selected Account";
+            this.lnkEdit.Text = "Edit Selected";
             this.lnkEdit.Click += new System.EventHandler(this.lnkEdit_Click);
             // 
             // lnkRemove
@@ -107,11 +106,11 @@
             this.lnkRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkRemove.ForeColor = ClientSettings.LinkColor;
-            this.lnkRemove.Location = new System.Drawing.Point(4, 169);
+            this.lnkRemove.Location = new System.Drawing.Point(4, 138);
             this.lnkRemove.Name = "lnkRemove";
-            this.lnkRemove.Size = new System.Drawing.Size(149, 20);
+            this.lnkRemove.Size = new System.Drawing.Size(234, 20);
             this.lnkRemove.TabIndex = 3;
-            this.lnkRemove.Text = "Remove Selected Account";
+            this.lnkRemove.Text = "Remove Selected";
             this.lnkRemove.Click += new System.EventHandler(this.lnkRemove_Click);
             // 
             // AccountsForm

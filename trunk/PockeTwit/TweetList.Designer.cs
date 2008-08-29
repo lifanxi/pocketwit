@@ -47,9 +47,9 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.timerStartup = new System.Windows.Forms.Timer();
-            this.statList = new FingerUI.KListControl();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
+            this.statList = new FingerUI.KListControl();
             this.SuspendLayout();
             // 
             // timerStartup
@@ -57,32 +57,38 @@ namespace PockeTwit
             this.timerStartup.Interval = 1000;
             this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
             // 
+            // lblTitle
+            // 
+            this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
+            this.lblTitle.ForeColor = ClientSettings.ForeColor;
+            this.lblTitle.Location = new System.Drawing.Point(3, 0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(234, 31);
+            this.lblTitle.Text = "Launching PockeTwit";
+            // 
+            // lblLoading
+            // 
+            this.lblLoading.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
+            this.lblLoading.ForeColor = ClientSettings.ForeColor;
+            this.lblLoading.Location = new System.Drawing.Point(3, 31);
+            this.lblLoading.Name = "lblLoading";
+            this.lblLoading.Size = new System.Drawing.Size(234, 55);
+            this.lblLoading.Text = "Loading. . .";
+            // 
             // statList
             // 
-            this.statList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.statList.Location = new System.Drawing.Point(0, 0);
             this.statList.Name = "statList";
             this.statList.Size = new System.Drawing.Size(240, 294);
             this.statList.TabIndex = 0;
             this.statList.Visible = false;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-            this.lblTitle.ForeColor = ClientSettings.ForeColor;
-            this.lblTitle.Location = new System.Drawing.Point(3, 0);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(169, 31);
-            this.lblTitle.Text = "Launching PockeTwit";
-            // 
-            // lblLoading
-            // 
-            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
-            this.lblLoading.ForeColor = ClientSettings.ForeColor;
-            this.lblLoading.Location = new System.Drawing.Point(3, 31);
-            this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(193, 55);
-            this.lblLoading.Text = "Loading. . .";
             // 
             // TweetList
             // 

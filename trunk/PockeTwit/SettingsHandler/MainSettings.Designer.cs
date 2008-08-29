@@ -48,43 +48,51 @@
             // 
             // lnkManageAccounts
             // 
+            this.lnkManageAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor;
             this.lnkManageAccounts.Location = new System.Drawing.Point(3, 9);
             this.lnkManageAccounts.Name = "lnkManageAccounts";
             this.lnkManageAccounts.Size = new System.Drawing.Size(234, 20);
             this.lnkManageAccounts.TabIndex = 0;
             this.lnkManageAccounts.Text = "Manage Accounts";
             this.lnkManageAccounts.Click += new System.EventHandler(this.lnkManageAccounts_Click);
-            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkAvatar
             // 
+            this.lnkAvatar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkAvatar.ForeColor = ClientSettings.LinkColor;
             this.lnkAvatar.Location = new System.Drawing.Point(3, 29);
             this.lnkAvatar.Name = "lnkAvatar";
             this.lnkAvatar.Size = new System.Drawing.Size(234, 20);
             this.lnkAvatar.TabIndex = 1;
             this.lnkAvatar.Text = "Avatar Settings";
             this.lnkAvatar.Click += new System.EventHandler(this.lnkAvatar_Click);
-            this.lnkAvatar.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkUI
             // 
+            this.lnkUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkUI.ForeColor = ClientSettings.LinkColor;
             this.lnkUI.Location = new System.Drawing.Point(3, 49);
             this.lnkUI.Name = "lnkUI";
             this.lnkUI.Size = new System.Drawing.Size(234, 20);
             this.lnkUI.TabIndex = 2;
             this.lnkUI.Text = "UI Settings";
             this.lnkUI.Click += new System.EventHandler(this.lnkUI_Click);
-            this.lnkUI.ForeColor = ClientSettings.LinkColor;
             // 
             // lnkGPS
             // 
+            this.lnkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkGPS.ForeColor = ClientSettings.LinkColor;
             this.lnkGPS.Location = new System.Drawing.Point(3, 69);
             this.lnkGPS.Name = "lnkGPS";
             this.lnkGPS.Size = new System.Drawing.Size(234, 20);
             this.lnkGPS.TabIndex = 3;
             this.lnkGPS.Text = "Other Settings";
             this.lnkGPS.Click += new System.EventHandler(this.lnkGPS_Click);
-            this.lnkGPS.ForeColor = ClientSettings.LinkColor;
             // 
             // MainSettings
             // 
