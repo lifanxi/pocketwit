@@ -27,6 +27,8 @@ namespace PockeTwit
             Exception ex = (Exception)e.ExceptionObject;
 
             System.Text.StringBuilder b = new System.Text.StringBuilder();
+            b.Append("From v" + UpdateChecker.currentVersion.ToString());
+            b.Append("\r\n");
             b.Append(ex.Message);
             b.Append("\r\n");
             b.Append("_________________");
