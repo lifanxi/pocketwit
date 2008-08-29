@@ -223,6 +223,19 @@ namespace PockeTwit.Library
         //public string description { get; set; }
         public string profile_image_url { get; set; }
 
+        private string _high_profile_image_url;
+        [XmlIgnore]
+        public string high_profile_image_url
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_high_profile_image_url))
+                {
+                    _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger").Replace("-48-","-96");
+                }
+                return _high_profile_image_url;
+            }
+        }
         //public string id { get; set; }
         //public string name { get; set; }
         public string screen_name { get; set; }

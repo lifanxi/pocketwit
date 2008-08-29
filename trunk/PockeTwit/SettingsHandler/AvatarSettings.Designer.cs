@@ -52,6 +52,7 @@ namespace PockeTwit
             this.chkReplyImages = new System.Windows.Forms.CheckBox();
             this.lnkClearAvatars = new System.Windows.Forms.LinkLabel();
             this.chkAvatar = new System.Windows.Forms.CheckBox();
+            this.chkHighQuality = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -72,10 +73,10 @@ namespace PockeTwit
             // chkReplyImages
             // 
             this.chkReplyImages.ForeColor = ClientSettings.ForeColor;
-            this.chkReplyImages.Location = new System.Drawing.Point(2, 29);
+            this.chkReplyImages.Location = new System.Drawing.Point(3, 55);
             this.chkReplyImages.Name = "chkReplyImages";
             this.chkReplyImages.Size = new System.Drawing.Size(235, 20);
-            this.chkReplyImages.TabIndex = 1;
+            this.chkReplyImages.TabIndex = 2;
             this.chkReplyImages.Text = "Show Reply Avatars";
             // 
             // lnkClearAvatars
@@ -98,12 +99,22 @@ namespace PockeTwit
             this.chkAvatar.TabIndex = 0;
             this.chkAvatar.Text = "Show Avatars";
             // 
+            // chkHighQuality
+            // 
+            this.chkHighQuality.ForeColor = ClientSettings.ForeColor;
+            this.chkHighQuality.Location = new System.Drawing.Point(3, 29);
+            this.chkHighQuality.Name = "chkHighQuality";
+            this.chkHighQuality.Size = new System.Drawing.Size(235, 20);
+            this.chkHighQuality.TabIndex = 1;
+            this.chkHighQuality.Text = "High-Quality Avatars";
+            // 
             // AvatarSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkHighQuality);
             this.Controls.Add(this.chkAvatar);
             this.Controls.Add(this.lnkClearAvatars);
             this.Controls.Add(this.chkReplyImages);
@@ -118,6 +129,7 @@ namespace PockeTwit
 
         private System.Windows.Forms.LinkLabel lnkClearAvatars;
         private System.Windows.Forms.CheckBox chkAvatar;
+        private System.Windows.Forms.CheckBox chkHighQuality;
 
     }
 }

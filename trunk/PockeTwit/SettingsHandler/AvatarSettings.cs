@@ -30,6 +30,7 @@ namespace PockeTwit
         {
             ClientSettings.ShowAvatars = chkAvatar.Checked;
             ClientSettings.ShowReplyImages = chkReplyImages.Checked;
+            ClientSettings.HighQualityAvatars = chkHighQuality.Checked;
             ClientSettings.SaveSettings();
             
             this.DialogResult = DialogResult.OK;
@@ -47,6 +48,7 @@ namespace PockeTwit
         {
             chkAvatar.Checked = ClientSettings.ShowAvatars;
             chkReplyImages.Checked = ClientSettings.ShowReplyImages;
+            chkHighQuality.Checked = ClientSettings.HighQualityAvatars;
             this.DialogResult = DialogResult.Cancel;
         }
 
