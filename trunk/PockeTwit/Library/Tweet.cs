@@ -231,7 +231,21 @@ namespace PockeTwit.Library
             {
                 if (string.IsNullOrEmpty(_high_profile_image_url))
                 {
-                    _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger").Replace("-48-","-96-");
+                    if (!string.IsNullOrEmpty(profile_image_url))
+                    {
+                        if (profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0)
+                        {
+                            _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger");
+                        }
+                        else
+                        {
+                            _high_profile_image_url = profile_image_url.Substring(0, profile_image_url.LastIndexOf('/')).Replace("avatar.", "") + "/" + this.screen_name + "/avatar/96";
+                        }
+                    }
+                    else
+                    {
+                        _high_profile_image_url = "";
+                    }
                 }
                 return _high_profile_image_url;
             }
