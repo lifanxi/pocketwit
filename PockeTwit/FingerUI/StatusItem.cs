@@ -470,8 +470,9 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            if (Tweet.SplitLines.Count == 0)
+            if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
+                Tweet.SplitLines = new List<string>();
                 string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text).Replace('\n', ' ');
                 FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
