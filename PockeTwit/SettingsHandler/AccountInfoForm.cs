@@ -63,6 +63,10 @@ namespace PockeTwit
 
         private void menuItem2_Click(object sender, EventArgs e)
         {
+            if (cmbServers.SelectedItem == null)
+            {
+                return;
+            }
             Cursor.Current = Cursors.WaitCursor;
             Application.DoEvents();
             lblError.Visible = false;
