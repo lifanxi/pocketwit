@@ -819,6 +819,7 @@ namespace PockeTwit
                 return;
             }
             base.OnActivated(e);
+            /*
             if (ClientSettings.IsMaximized)
             {
                 SetWindowState(FormWindowState.Maximized);
@@ -827,6 +828,7 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
+             */
             if (statList.CurrentList() == "Friends_TimeLine")
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
