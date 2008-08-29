@@ -144,16 +144,21 @@ namespace PockeTwit
             responseStream.Close();
             
             //Shrink it to the client size.
-            Bitmap original = new Bitmap(LocalFileName);
-            Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-            Graphics g = Graphics.FromImage(resized);
-            g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
-            g.Dispose();
-            resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
-            if (NewArtWasDownloaded != null)
+            try
             {
-                NewArtWasDownloaded.Invoke(User, LocalFileName);
+                Bitmap original = new Bitmap(LocalFileName);
+                Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                Graphics g = Graphics.FromImage(resized);
+                g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
+                g.Dispose();
+                
+                resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                if (NewArtWasDownloaded != null)
+                {
+                    NewArtWasDownloaded.Invoke(User, LocalFileName);
+                }
             }
+            catch { }
             return;
         }
 
