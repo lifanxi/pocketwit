@@ -28,6 +28,13 @@ namespace PockeTwit
         // Private Methods (4) 
         private void menuAccept_Click(object sender, EventArgs e)
         {
+            if (chkHighQuality.Checked != ClientSettings.HighQualityAvatars)
+            {
+                if (MessageBox.Show("You should clear the cache when switching avatars.  Would you like to do that now?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    ClearCache();
+                }
+            }
             ClientSettings.ShowAvatars = chkAvatar.Checked;
             ClientSettings.ShowReplyImages = chkReplyImages.Checked;
             ClientSettings.HighQualityAvatars = chkHighQuality.Checked;
@@ -59,12 +66,17 @@ namespace PockeTwit
 
         private void lnkClearAvatars_Click(object sender, EventArgs e)
         {
-            foreach(string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
+            ClearCache();
+        }
+
+        private static void ClearCache()
+        {
+            foreach (string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
             {
                 System.IO.File.Delete(Avatar);
             }
             ImageBuffer.Clear();
-            MessageBox.Show("The avatar cache was cleared.","PockeTwit");
+            MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
 
     }

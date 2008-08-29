@@ -231,7 +231,7 @@ namespace PockeTwit.Library
             {
                 if (string.IsNullOrEmpty(_high_profile_image_url))
                 {
-                    _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger").Replace("-48-","-96");
+                    _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger").Replace("-48-","-96-");
                 }
                 return _high_profile_image_url;
             }
