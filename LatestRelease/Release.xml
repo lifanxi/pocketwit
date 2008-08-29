@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.32</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv32.CAB</url>
-  <notes>Setting for high-quality avatars
-   (Clear the avatar cache to see them!)
-More bugfixes of course
+  <version>.33</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv33.CAB</url>
+  <notes>More bugfixes --
+  Lots of SmartPhone fixes
+  High-quality avatars in laconica fix
 </notes>
 </LatestRelease>
