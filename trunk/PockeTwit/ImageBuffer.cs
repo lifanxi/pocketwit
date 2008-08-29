@@ -17,7 +17,7 @@ namespace PockeTwit
         public static Bitmap FavoriteImage;
         private static SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
         public static Bitmap UnknownArt;
-        private static System.Threading.Timer timerUpdate;
+        //private static System.Threading.Timer timerUpdate;
 
 		#endregion Fields 
 
@@ -32,7 +32,7 @@ namespace PockeTwit
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
             AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
-            timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(Trim), null, 30000, 30000);
+            //timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(Trim), null, 30000, 30000);
         }
 
 
@@ -117,7 +117,7 @@ namespace PockeTwit
             return false;
         }
 
-        public static void Trim(object state)
+        public static void Trim()
         {
             DateTime runTime = DateTime.Now;
             List<string> Keys = new List<string>(ImageDictionary.Keys);
@@ -125,7 +125,7 @@ namespace PockeTwit
             foreach (string infoKey in Keys)
             {
                 ImageInfo info = ImageDictionary[infoKey];
-                if (runTime.Ticks - info.LastRequested.Ticks > 30000)
+                if (runTime.Ticks - info.LastRequested.Ticks > 1000)
                 {
                     System.Diagnostics.Debug.WriteLine("Removing " + infoKey + " from imagebuffer");
                     ImageDictionary.Remove(infoKey);

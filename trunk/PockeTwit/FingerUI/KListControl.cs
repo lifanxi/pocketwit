@@ -12,7 +12,45 @@ namespace FingerUI
     /// </summary>
     public class KListControl : UserControl
     {
-
+        private class Velocity
+        {
+            private int _X = 0;
+            public int X
+            {
+                get
+                {
+                    return _X;
+                }
+                set
+                {
+                    _X = value;
+                }
+            }
+            private int _Y = 0;
+            public int Y
+            {
+                get
+                {
+                    return _Y;
+                }
+                set
+                {
+                    _Y = value;
+                    if (value == 0)
+                    {
+                        CheckForClear();
+                    }
+                }
+            }
+            private void CheckForClear()
+            {
+                if (_X == 0 && _Y == 0)
+                {
+                    PockeTwit.ImageBuffer.Trim();
+                }
+            }
+            
+        }
 		#region Fields (23) 
 
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
@@ -36,7 +74,9 @@ namespace FingerUI
         IKListItem m_selectedItem = null;
         Timer m_timer = new Timer();
         bool m_updating = false;
-        Point m_velocity = new Point(0, 0);
+        private Velocity _m_velocity = new Velocity();
+        private Velocity m_velocity = new Velocity();
+        
         private int LeftMenuItemFocusedIndex = 0;
         private int RightMenuItemFocusedIndex = 0;
         List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();

@@ -104,7 +104,14 @@ namespace PockeTwit
             }
             else
             {
-                return this.Focused | statList.Focused;
+                try
+                {
+                    return this.Focused | statList.Focused;
+                }
+                catch (ObjectDisposedException)
+                {
+                    return false;
+                }
             }
 
         }
