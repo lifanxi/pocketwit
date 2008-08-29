@@ -421,12 +421,18 @@ namespace PockeTwit
                 }
                 else
                 {
-                    Notifyer.NewMessages(count);
+                    if (Notifyer != null)
+                    {
+                        Notifyer.NewMessages(count);
+                    }
                 }
             }
             else
             {
-                Notifyer.NewMessages(count);
+                if (Notifyer != null)
+                {
+                    Notifyer.NewMessages(count);
+                }
             }
         }
 
@@ -441,12 +447,18 @@ namespace PockeTwit
                 }
                 else
                 {
-                    Notifyer.NewFriendMessages(count);
+                    if (Notifyer != null)
+                    {
+                        Notifyer.NewFriendMessages(count);
+                    }
                 }
             }
             else
             {
-                Notifyer.NewFriendMessages(count);
+                if (Notifyer != null)
+                {
+                    Notifyer.NewFriendMessages(count);
+                }
             }
         }
 
