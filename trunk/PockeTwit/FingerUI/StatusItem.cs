@@ -300,7 +300,7 @@ namespace FingerUI
 
             for (int i = 0; i < Tweet.SplitLines.Count; i++)
             {
-                if (i > ClientSettings.LinesOfText)
+                if (i >= ClientSettings.LinesOfText)
                 {
                     break;
                 }
