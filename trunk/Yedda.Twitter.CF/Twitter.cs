@@ -56,25 +56,56 @@ namespace Yedda
         {
             public string UserName { get; set; }
             public string Password { get; set; }
+            private Yedda.Twitter.TwitterServer _Server;
             public Yedda.Twitter.TwitterServer Server
             {
                 set
                 {
                     if (value == TwitterServer.twitter)
                     {
-                        ServerURL = new ServerURL();
-                        ServerURL.URL = "http://twitter.com/";
-                        ServerURL.Name = "twitter";
+                        _ServerURL = new ServerURL();
+                        _ServerURL.URL = "http://twitter.com/";
+                        _ServerURL.Name = "twitter";
                     }
                     else
                     {
-                        ServerURL = new ServerURL();
-                        ServerURL.URL = "http://identi.ca/api/";
-                        ServerURL.Name = "identica";
+                        _ServerURL = new ServerURL();
+                        _ServerURL.URL = "http://identi.ca/api/";
+                        _ServerURL.Name = "identica";
                     }
+                    _Server = value;
+                }
+                get
+                {
+                    return _Server;
                 }
             }
-            public Yedda.Twitter.ServerURL ServerURL { get; set; }
+            private Yedda.Twitter.ServerURL _ServerURL;
+            public Yedda.Twitter.ServerURL ServerURL { 
+                get
+                {
+                    if (_ServerURL == null)
+                    {
+                        if (this.Server == TwitterServer.twitter)
+                        {
+                            _ServerURL = new ServerURL();
+                            _ServerURL.URL = "http://twitter.com/";
+                            _ServerURL.Name = "twitter";
+                        }
+                        else
+                        {
+                            _ServerURL = new ServerURL();
+                            _ServerURL.URL = "http://identi.ca/api/";
+                            _ServerURL.Name = "identica";
+                        }
+                    }
+                    return _ServerURL;
+                }
+                set
+                {
+                    _ServerURL = value;
+                }
+            }
             private bool _Enabled = true;
             public bool Enabled 
             {
