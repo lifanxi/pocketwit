@@ -44,9 +44,9 @@ namespace PockeTwit
             {
                 w.Write(b.ToString());
             }
+            Application.DoEvents();
 
-            ChooseAccount form = new ChooseAccount(b.ToString());
-            form.ShowDialog();
+            Application.Run(new ChooseAccount(b.ToString()));
 
             DialogResult res;
             
