@@ -44,7 +44,7 @@ namespace PockeTwit
             {
                 w.Write(b.ToString());
             }
-            MessageBox.Show("An unexpected error has occured and PockeTwit must shut down.", "PockeTwit");
+            MessageBox.Show("An unexpected error has occured and PockeTwit must shut down.\r\n\r\nYou will have an opportunity to submit a crash report to the developer on the next run.", "PockeTwit");
             
         }
         /// <summary>
