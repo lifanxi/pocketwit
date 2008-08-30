@@ -14,7 +14,6 @@ namespace PockeTwit
     {
 
 		#region�Fields�(12)�
-
         private UpdateChecker Checker;
         private Library.status[] CurrentStatuses =null;
 
@@ -814,10 +813,12 @@ namespace PockeTwit
 
         protected override void OnActivated(EventArgs e)
         {
+            inputPanel1.Enabled = false;
             if (!IsLoaded)
             {
                 return;
             }
+            
             base.OnActivated(e);
             /*
             if (ClientSettings.IsMaximized)
