@@ -23,6 +23,10 @@ namespace PockeTwit
         public SearchForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             this.DialogResult = DialogResult.Cancel;
 
             if (ClientSettings.UseGPS)

@@ -23,6 +23,10 @@ namespace PockeTwit
         public AboutForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(Checker_UpdateFound);
             Checker.CurrentVersion += new UpdateChecker.delUpdateFound(Checker_CurrentVersion);
             lblVersion.Text = UpdateChecker.currentVersion.ToString();

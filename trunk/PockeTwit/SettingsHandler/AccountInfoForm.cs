@@ -28,6 +28,10 @@ namespace PockeTwit
         public AccountInfoForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             _AccountInfo.Enabled = true;
             chkEnabled.Checked = true;
             FillServerList();
