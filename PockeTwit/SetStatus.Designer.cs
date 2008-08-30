@@ -102,8 +102,8 @@ namespace PockeTwit
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BackColor = ClientSettings.BackColor;
-            this.textBox1.ForeColor = ClientSettings.ForeColor;
+            this.textBox1.BackColor = ClientSettings.FieldBackColor;
+            this.textBox1.ForeColor = ClientSettings.FieldForeColor;
             this.textBox1.Location = new System.Drawing.Point(3, 65);
             this.textBox1.MaxLength = 140;
             this.textBox1.Multiline = true;
