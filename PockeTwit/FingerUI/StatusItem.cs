@@ -335,7 +335,14 @@ namespace FingerUI
                     }
                     if (ReplyUser != null)
                     {
-                        ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                        if (ClientSettings.HighQualityAvatars)
+                        {
+                            ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
+                        }
+                        else
+                        {
+                            ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                        }
                     }
                 }
                 else

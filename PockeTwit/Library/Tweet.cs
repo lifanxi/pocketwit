@@ -238,7 +238,7 @@ namespace PockeTwit.Library
                         }
                         else
                         {
-                            _high_profile_image_url = profile_image_url.Substring(0, profile_image_url.LastIndexOf('/')).Replace("avatar.", "") + "/" + this.screen_name + "/avatar/96";
+                            _high_profile_image_url = profile_image_url;
                         }
                     }
                     else
