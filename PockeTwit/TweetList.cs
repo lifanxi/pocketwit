@@ -314,6 +314,12 @@ namespace PockeTwit
 
         private bool SetEverythingUp()
         {
+            if(System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
+            {
+                ChooseAccount errorForm = new ChooseAccount();
+                errorForm.ShowDialog();
+            }
+            this.Show();
             bool ret = true;
 
             if (ClientSettings.CheckVersion)

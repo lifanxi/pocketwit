@@ -40,15 +40,11 @@ namespace PockeTwit
                 b.Append(ex.InnerException.StackTrace);
                 b.Append("\r\n");
             }
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ErrorPath + "\\error.txt"))
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ErrorPath + "\\crash.txt"))
             {
                 w.Write(b.ToString());
             }
-            Application.DoEvents();
-
-            Application.Run(new ChooseAccount(b.ToString()));
-
-            DialogResult res;
+            MessageBox.Show("An unexpected error has occured and PockeTwit must shut down.", "PockeTwit");
             
         }
         /// <summary>
