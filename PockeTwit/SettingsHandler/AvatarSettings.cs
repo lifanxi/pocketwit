@@ -17,7 +17,10 @@ namespace PockeTwit
         public AvatarSettings()
         {
             InitializeComponent();
-            this.WindowState = FormWindowState.Maximized;
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             PopulateForm();
         }
 

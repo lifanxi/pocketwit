@@ -23,6 +23,10 @@ namespace PockeTwit
         public URLForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
         }
 
 		#endregion Constructors 
@@ -52,9 +56,14 @@ namespace PockeTwit
 
         private void menuOK_Click(object sender, EventArgs e)
         {
-            _URL = isgd.ShortenURL(this.txtURL.Text);
-            this.DialogResult = DialogResult.OK;
-            this.Hide();
+            try
+            {
+                _URL = isgd.ShortenURL(this.txtURL.Text);
+                this.DialogResult = DialogResult.OK;
+                this.Hide();
+            }
+            catch { }
+            
         }
 
 

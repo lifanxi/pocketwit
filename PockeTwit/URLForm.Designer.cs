@@ -50,6 +50,7 @@ namespace PockeTwit
             this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuOK = new System.Windows.Forms.MenuItem();
             this.txtURL = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -69,14 +70,25 @@ namespace PockeTwit
             // 
             // txtURL
             // 
-            this.txtURL.BackColor = ClientSettings.BackColor;
-            this.txtURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtURL.ForeColor = ClientSettings.ForeColor;
-            this.txtURL.Location = new System.Drawing.Point(0, 0);
+            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtURL.BackColor = ClientSettings.FieldBackColor;
+            this.txtURL.ForeColor = ClientSettings.FieldForeColor;
+            this.txtURL.Location = new System.Drawing.Point(0, 29);
             this.txtURL.Multiline = true;
             this.txtURL.Name = "txtURL";
-            this.txtURL.Size = new System.Drawing.Size(240, 268);
+            this.txtURL.Size = new System.Drawing.Size(240, 91);
             this.txtURL.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(233, 20);
+            this.label1.Text = "Enter the URL:";
+            this.label1.ForeColor = ClientSettings.ForeColor;
             // 
             // URLForm
             // 
@@ -85,6 +97,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.txtURL);
             this.Menu = this.mainMenu1;
             this.Name = "URLForm";
@@ -94,5 +107,7 @@ namespace PockeTwit
         }
 
         #endregion
+
+        private System.Windows.Forms.Label label1;
     }
 }

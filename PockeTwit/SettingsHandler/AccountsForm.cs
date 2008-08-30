@@ -17,6 +17,10 @@ namespace PockeTwit
         public AccountsForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             foreach(Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 LocalList.Add(a);

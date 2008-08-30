@@ -27,7 +27,10 @@ namespace PockeTwit
         public SetStatus()
         {
             InitializeComponent();
-            
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
             lblCharsLeft.Text = "140";
             PopulateAccountList();
             

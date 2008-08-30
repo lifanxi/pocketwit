@@ -23,6 +23,10 @@ namespace PockeTwit
         public UpdateForm()
         {
             InitializeComponent();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
         }
 
 		#endregion Constructors 
