@@ -15,6 +15,23 @@ namespace PockeTwit
         
         private Microsoft.WindowsMobile.PocketOutlook.OutlookSession sess = new Microsoft.WindowsMobile.PocketOutlook.OutlookSession();
         private Microsoft.WindowsMobile.PocketOutlook.EmailAccountCollection accounts;
+        public ChooseAccount()
+        {
+            InitializeComponent();
+            accounts = sess.EmailAccounts;
+
+            using(System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\crash.txt"))
+            {
+                ErrorText = r.ReadToEnd();
+            }
+
+            System.IO.File.Delete(ClientSettings.AppPath + "\\crash.txt");
+
+            foreach (Microsoft.WindowsMobile.PocketOutlook.EmailAccount acc in accounts)
+            {
+                comboBox1.Items.Add(acc.Name);
+            }
+        }
         public ChooseAccount(string Error)
         {
             InitializeComponent();

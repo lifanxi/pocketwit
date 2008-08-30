@@ -11,6 +11,8 @@ namespace FingerUI
     public class StatusItem : KListControl.IKListItem, IDisposable, IComparable
     {
 
+        private static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~' };
+
 		#region�Fields�(15)�
 
         private Graphics _ParentGraphics;
@@ -568,7 +570,7 @@ namespace FingerUI
                 if ((word.StartsWith("http") | word.StartsWith("@")) && word.Length>1)
                 {
                     Clickable c = new Clickable();
-                    c.Text = word;
+                    c.Text = word.TrimEnd(IgnoredAtChars);
                     Tweet.Clickables.Add(c);
                 }
             }
@@ -587,7 +589,7 @@ namespace FingerUI
                 {
                     if (i == Words.Length-1)
                     {
-                        if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck))
+                        if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck.TrimEnd(IgnoredAtChars)))
                         {
                             float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
                             //Find the size of the word
@@ -610,7 +612,7 @@ namespace FingerUI
                             }
                         }
                     }
-                    else if (WordToCheck == c.Text)
+                    else if (WordToCheck.TrimEnd(IgnoredAtChars) == c.Text)
                     {
                         //Find out how far to the right this word will appear
                         float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
