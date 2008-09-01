@@ -33,7 +33,6 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             _AccountInfo.Enabled = true;
-            chkEnabled.Checked = true;
             FillServerList();
         }
 
@@ -49,7 +48,6 @@ namespace PockeTwit
         {
             txtUserName.Text = _AccountInfo.UserName;
             txtPassword.Text = _AccountInfo.Password;
-            chkEnabled.Checked = _AccountInfo.Enabled;
             cmbServers.SelectedItem = _AccountInfo.ServerURL.Name;
         }
         private void FillServerList()
@@ -77,7 +75,7 @@ namespace PockeTwit
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
             _AccountInfo.ServerURL = Yedda.Servers.ServerList[(string)cmbServers.SelectedItem];
-            _AccountInfo.Enabled = chkEnabled.Checked;
+            _AccountInfo.Enabled = true;
             Yedda.Twitter T = new Yedda.Twitter();
             T.AccountInfo = _AccountInfo;
             Cursor.Current = Cursors.Default;
@@ -92,7 +90,35 @@ namespace PockeTwit
 
         private void cmbServers_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            string server = (string)cmbServers.SelectedItem;
+            if (server == "ping.fm")
+            {
+                txtPassword.Visible = false;
+                lblPassword.Visible = false;
+                lblUser.Text = "Ping.FM Key";
+                if (DetectDevice.DeviceType == DeviceType.Professional)
+                {
+                    txtUserName.ContextMenu = copyPasteMenu;
+                }
+            }
+            else
+            {
+                txtPassword.Visible = true;
+                lblPassword.Visible = true;
+                lblUser.Text = "User";
+                if (DetectDevice.DeviceType == DeviceType.Professional)
+                {
+                    txtUserName.ContextMenu = null;
+                }
+            }
+        }
+        void PasteItem_Click(object sender, System.EventArgs e)
+        {
+            IDataObject iData = Clipboard.GetDataObject();
+            if (iData.GetDataPresent(DataFormats.Text))
+            {
+                txtUserName.Text = (string)iData.GetData(DataFormats.Text);
+            }
         }
     }
 }

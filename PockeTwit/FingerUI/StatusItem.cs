@@ -11,7 +11,7 @@ namespace FingerUI
     public class StatusItem : KListControl.IKListItem, IDisposable, IComparable
     {
 
-        private static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~' };
+        private static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>' };
 
 		#region�Fields�(15)�
 
@@ -620,7 +620,7 @@ namespace FingerUI
                         SizeF WordSize = g.MeasureString(Words[i], TextFont);
                         //A structure containing info we need to know about the word.
                         c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-                        c.Text = WordToCheck;
+                        c.Text = WordToCheck.TrimEnd(IgnoredAtChars);
                     }
                 }
                 LineBeforeThisWord.Append(WordToCheck + " ");

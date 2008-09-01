@@ -24,7 +24,7 @@ namespace PockeTwit
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox chkGPS;
         private System.Windows.Forms.Label lblGPS;
-
+        private System.Windows.Forms.ContextMenu Context;
 		#endregion Fields 
 
 		#region Methods (1) 
@@ -163,7 +163,6 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "SetStatus";
             this.Text = "Set Status";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 
             switch (DetectDevice.DeviceType)
             {

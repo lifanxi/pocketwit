@@ -33,13 +33,12 @@
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.cmbServers = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblServer = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblPassword = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblUser = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
-            this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -56,6 +55,17 @@
             // 
             this.menuItem2.Text = "Accept";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            
+            // 
+            // lblServer
+            // 
+            this.lblServer.BackColor = ClientSettings.BackColor;
+            this.lblServer.ForeColor = ClientSettings.ForeColor;
+            this.lblServer.Location = new System.Drawing.Point(5, 5);
+            //this.lblServer.Location = new System.Drawing.Point(5, 103);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(71, 20);
+            this.lblServer.Text = "Server:";
             // 
             // cmbServers
             // 
@@ -63,20 +73,12 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbServers.BackColor = ClientSettings.FieldBackColor;
             this.cmbServers.ForeColor = ClientSettings.FieldForeColor;
-            this.cmbServers.Location = new System.Drawing.Point(5, 126);
+            //this.cmbServers.Location = new System.Drawing.Point(5, 126);
+            this.cmbServers.Location = new System.Drawing.Point(5, 28);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(232, 22);
-            this.cmbServers.TabIndex = 2;
+            this.cmbServers.TabIndex = 0;
             this.cmbServers.SelectedIndexChanged += new System.EventHandler(this.cmbServers_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.BackColor = ClientSettings.BackColor;
-            this.label3.ForeColor = ClientSettings.ForeColor;
-            this.label3.Location = new System.Drawing.Point(4, 103);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 20);
-            this.label3.Text = "Server:";
             // 
             // txtPassword
             // 
@@ -84,20 +86,22 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.BackColor = ClientSettings.FieldBackColor;
             this.txtPassword.ForeColor = ClientSettings.FieldForeColor;
-            this.txtPassword.Location = new System.Drawing.Point(5, 79);
+            //this.txtPassword.Location = new System.Drawing.Point(5, 79);
+            this.txtPassword.Location = new System.Drawing.Point(5, 126);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(232, 21);
-            this.txtPassword.TabIndex = 1;
+            this.txtPassword.TabIndex = 2;
             // 
-            // label2
+            // lblPassword
             // 
-            this.label2.BackColor = ClientSettings.BackColor;
-            this.label2.ForeColor = ClientSettings.ForeColor;
-            this.label2.Location = new System.Drawing.Point(4, 56);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 20);
-            this.label2.Text = "Password:";
+            this.lblPassword.BackColor = ClientSettings.BackColor;
+            this.lblPassword.ForeColor = ClientSettings.ForeColor;
+            //this.lblPassword.Location = new System.Drawing.Point(5, 56);
+            this.lblPassword.Location = new System.Drawing.Point(5, 103); 
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(71, 20);
+            this.lblPassword.Text = "Password:";
             // 
             // txtUserName
             // 
@@ -105,19 +109,21 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserName.BackColor = ClientSettings.FieldBackColor;
             this.txtUserName.ForeColor = ClientSettings.FieldForeColor;
-            this.txtUserName.Location = new System.Drawing.Point(3, 28);
+            //this.txtUserName.Location = new System.Drawing.Point(5, 28);
+            this.txtUserName.Location = new System.Drawing.Point(5, 79);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(232, 21);
-            this.txtUserName.TabIndex = 0;
+            this.txtUserName.TabIndex = 1;
             // 
-            // label4
+            // lblUser
             // 
-            this.label4.BackColor = ClientSettings.BackColor;
-            this.label4.ForeColor = ClientSettings.ForeColor;
-            this.label4.Location = new System.Drawing.Point(3, 5);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 20);
-            this.label4.Text = "User:";
+            this.lblUser.BackColor = ClientSettings.BackColor;
+            this.lblUser.ForeColor = ClientSettings.ForeColor;
+            this.lblUser.Location = new System.Drawing.Point(5, 56);
+            //this.lblUser.Location = new System.Drawing.Point(5, 5);
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(72, 20);
+            this.lblUser.Text = "User:";
             // 
             // lblError
             // 
@@ -131,15 +137,6 @@
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
-            // chkEnabled
-            // 
-            this.chkEnabled.ForeColor = ClientSettings.ForeColor;
-            this.chkEnabled.Location = new System.Drawing.Point(3, 154);
-            this.chkEnabled.Name = "chkEnabled";
-            this.chkEnabled.Size = new System.Drawing.Size(72, 20);
-            this.chkEnabled.TabIndex = 6;
-            this.chkEnabled.Text = "Enabled";
-            // 
             // AccountInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -147,17 +144,27 @@
             this.AutoScroll = true;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.cmbServers);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblServer);
             this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtUserName);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lblUser);
             this.Menu = this.mainMenu1;
             this.Name = "AccountInfoForm";
             this.Text = "Account Info";
+            
+            switch (DetectDevice.DeviceType)
+            {
+                case DeviceType.Professional:
+                    SetupProfessional();
+                    break;
+                case DeviceType.Standard:
+                    //SetupStandard();
+                    break;
+            }
+            
             this.ResumeLayout(false);
 
         }
@@ -165,14 +172,26 @@
         #endregion
 
         private System.Windows.Forms.ComboBox cmbServers;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblServer;
         private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtUserName;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblUser;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.Label lblError;
-        private System.Windows.Forms.CheckBox chkEnabled;
+        private System.Windows.Forms.ContextMenu copyPasteMenu;
+        private System.Windows.Forms.MenuItem PasteItem;
+        private void SetupProfessional()
+        {
+            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
+            this.PasteItem = new System.Windows.Forms.MenuItem();
+            PasteItem.Text = "Paste";
+            copyPasteMenu.MenuItems.Add(PasteItem);
+            PasteItem.Click += new System.EventHandler(PasteItem_Click);
+        }
+
+        
+		
     }
 }
