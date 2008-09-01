@@ -36,6 +36,11 @@ namespace Yedda
                 tServer.Name = "twitter";
                 tServer.URL = "http://twitter.com/";
                 ServerList.Add(tServer.Name, tServer);
+
+                Twitter.ServerURL pServer = new Twitter.ServerURL();
+                pServer.Name = "ping.fm";
+                pServer.URL = "http://api.ping.fm/";
+                ServerList.Add(pServer.Name, pServer);
                 while (!r.EndOfStream)
                 {
                     string URL = r.ReadLine();
@@ -146,6 +151,10 @@ namespace Yedda
                     {
                         return TwitterServer.twitter;
                     }
+                    else if(URL=="http://api.ping.fm/")
+                    {
+                        return TwitterServer.pingfm;
+                    }
                     return TwitterServer.identica;
                 }
             }
@@ -158,6 +167,7 @@ namespace Yedda
 
         public enum TwitterServer
         {
+            pingfm,
             twitter,
             identica
         }
@@ -844,15 +854,24 @@ namespace Yedda
 
         public string Update(string status, OutputFormatType format)
         {
-            if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
+            if (this.AccountInfo.ServerURL.ServerType == TwitterServer.pingfm)
             {
-                throw new ArgumentException("Update support only XML and JSON output format", "format");
+                string url = "http://api.ping.fm/v1/user.post";
+                string data = string.Format("user_app_key={0}&api_key={1}&post_method=microblog&body={2}", this.AccountInfo.UserName,this.AccountInfo.Password,HttpUtility.UrlEncode(status));
+                return ExecutePostCommand(url, data);
             }
+            else
+            {
+                if (format != OutputFormatType.JSON && format != OutputFormatType.XML)
+                {
+                    throw new ArgumentException("Update support only XML and JSON output format", "format");
+                }
 
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), AccountInfo.ServerURL.URL);
-            string data = string.Format("status={0}", HttpUtility.UrlEncode(status));
+                string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Update), GetFormatTypeString(format), AccountInfo.ServerURL.URL);
+                string data = string.Format("status={0}", HttpUtility.UrlEncode(status));
 
-            return ExecutePostCommand(url, data);
+                return ExecutePostCommand(url, data);
+            }
         }
 
         public string UpdateAsJSON(string text)
@@ -979,11 +998,22 @@ namespace Yedda
         #region Verify
         public bool Verify()
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
-            try
+            string url;
+            if (this.AccountInfo.ServerURL.ServerType == TwitterServer.pingfm)
             {
+                url = "http://api.ping.fm/v1/user.validate";
+                string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName,this.AccountInfo.Password));
+                
+            }
+            else
+            {
+                url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
                 string Response = ExecuteGetCommand(url);
                 return (Response == "<authorized>true</authorized>");
+            }
+            try
+            {
+                
             }
             catch(WebException)
             {
