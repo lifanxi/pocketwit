@@ -286,6 +286,7 @@ namespace PockeTwit
 
         private void SendReply()
         {
+            if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
             SetStatus("@"+User);
@@ -548,7 +549,9 @@ namespace PockeTwit
 
         private void ShowProfile()
         {
+            if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
             pi.FileName = GetMatchingConnection(selectedItem.Tweet.Account).GetProfileURL(selectedItem.Tweet.user.screen_name);
             pi.UseShellExecute = true;
