@@ -106,10 +106,7 @@ namespace PockeTwit
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
             {
-                if (Account.Enabled)
-                {
-                    cmbAccount.Items.Add(Account);
-                }
+                cmbAccount.Items.Add(Account);
             }
         }
 		#endregion Constructors 
@@ -213,7 +210,13 @@ namespace PockeTwit
 
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
         {
-            BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
+            try
+            {
+                BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
+            }
+            catch (OutOfMemoryException)
+            {
+            }
         }
 
         private void InsertURL()

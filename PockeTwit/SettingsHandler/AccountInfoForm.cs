@@ -75,7 +75,7 @@ namespace PockeTwit
             _AccountInfo.UserName = txtUserName.Text;
             _AccountInfo.Password = txtPassword.Text;
             _AccountInfo.ServerURL = Yedda.Servers.ServerList[(string)cmbServers.SelectedItem];
-            _AccountInfo.Enabled = true;
+            _AccountInfo.Enabled = _AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm;
             Yedda.Twitter T = new Yedda.Twitter();
             T.AccountInfo = _AccountInfo;
             Cursor.Current = Cursors.Default;
