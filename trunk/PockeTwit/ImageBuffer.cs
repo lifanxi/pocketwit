@@ -131,6 +131,8 @@ namespace PockeTwit
                     ImageDictionary.Remove(infoKey);
                 }
             }
+            Keys.Clear();
+            Keys.TrimExcess();
         }
 
 		// Private Methods (3) 
