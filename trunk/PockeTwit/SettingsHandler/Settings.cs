@@ -22,7 +22,7 @@ public static class ClientSettings
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldBackColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;
-    public static string PingApi = "61c16e1f8bb62bff4cd61597545bb174-1220118271";
+    public static string PingApi = "07fcca78e725fa4d3b27ea552ef06b3b";
 
     public static int Margin = 5;
     public static int MaxTweets = 50;

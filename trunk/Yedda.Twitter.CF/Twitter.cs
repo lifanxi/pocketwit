@@ -133,9 +133,16 @@ namespace Yedda
             public override string ToString()
             {
                 string Indicator;
-                if (Enabled) { Indicator = "+"; }
-                else { Indicator = "-"; }
-                return Indicator + "  " + UserName + " (" +ServerURL.Name + ")";
+                if (ServerURL.ServerType == TwitterServer.pingfm)
+                {
+                    return "+ ping.fm";
+                }
+                else
+                {
+                    if (Enabled) { Indicator = "+"; }
+                    else { Indicator = "-"; }
+                    return Indicator + " " + UserName + " (" + ServerURL.Name + ")";
+                }
             }
         }
 
@@ -1011,7 +1018,7 @@ namespace Yedda
             {
                 url = "http://api.ping.fm/v1/user.validate";
                 string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName,this.AccountInfo.Password));
-                string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName, this.AccountInfo.Password);
+                return Response.IndexOf("<rsp status=\"OK\">") > 0;
             }
             else
             {

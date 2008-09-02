@@ -29,11 +29,14 @@ namespace PockeTwit
             public string Sound;
         }
 
+        private static Options FriendsOptions;
+        private static Options MessagesOptions;
         public static bool NotifyOfFriends
         {
             get
             {
-                return false;   
+                CheckSettings();
+                return (FriendsOptions != 0);
             }
         }
 
@@ -41,7 +44,8 @@ namespace PockeTwit
         {
             get
             {
-                return true;
+                CheckSettings();
+                return (MessagesOptions != 0);
             }
         }
 
@@ -112,6 +116,23 @@ namespace PockeTwit
             VibrateStop();
         }
 
+        private static void CheckSettings()
+        {
+            RegistryKey FriendsKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
+            RegistryKey MessageKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
+            if (FriendsKey == null)
+            {
+                return;
+            }
+            if (FriendsKey.GetValue("Options") != null)
+            {
+                FriendsOptions = (Options)FriendsKey.GetValue("Options");
+            }
+            if (MessageKey.GetValue("Options") != null)
+            {
+                MessagesOptions = (Options)MessageKey.GetValue("Options");
+            }
+        }
         public void LoadSettings()
         {
             RegistryKey FriendsKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
@@ -126,10 +147,12 @@ namespace PockeTwit
             if (FriendsKey.GetValue("Options")!=null)
             {
                 Friends.Options = (Options)FriendsKey.GetValue("Options");
+                FriendsOptions = Friends.Options;
             }
             if (MessageKey.GetValue("Options") != null)
             {
                 Messages.Options = (Options)MessageKey.GetValue("Options");
+                MessagesOptions = Messages.Options;
             }
         }
 

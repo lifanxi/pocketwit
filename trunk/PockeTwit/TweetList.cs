@@ -341,6 +341,7 @@ namespace PockeTwit
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 Notifyer = new NotificationHandler();
+                Notifyer.LoadSettings();
                 Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
             }
             
