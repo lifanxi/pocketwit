@@ -112,26 +112,29 @@ namespace PockeTwit
 
         private void lnkEdit_Click(object sender, EventArgs e)
         {
-            string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
-            Yedda.Twitter.Account toEdit = null;
-            foreach (Yedda.Twitter.Account a in LocalList)
+            if (lstAccounts.SelectedIndices.Count > 0)
             {
-                if (a.ToString() == selectedText)
+                string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
+                Yedda.Twitter.Account toEdit = null;
+                foreach (Yedda.Twitter.Account a in LocalList)
                 {
-                    toEdit = a;
+                    if (a.ToString() == selectedText)
+                    {
+                        toEdit = a;
+                    }
                 }
-            }
-            if (toEdit != null)
-            {
-                AccountInfoForm ai = new AccountInfoForm(toEdit);
-                if (ai.ShowDialog() == DialogResult.OK)
+                if (toEdit != null)
                 {
-                    LocalList.Remove(toEdit);
-                    LocalList.Add(ai.AccountInfo);
-                    ListAccounts();
-                    IsDirty = true;
+                    AccountInfoForm ai = new AccountInfoForm(toEdit);
+                    if (ai.ShowDialog() == DialogResult.OK)
+                    {
+                        LocalList.Remove(toEdit);
+                        LocalList.Add(ai.AccountInfo);
+                        ListAccounts();
+                        IsDirty = true;
+                    }
+                    ai.Close();
                 }
-                ai.Close();
             }
         }
 
