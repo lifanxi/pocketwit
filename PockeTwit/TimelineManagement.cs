@@ -82,14 +82,14 @@ namespace PockeTwit
     
         private void BackgroundUpdate()
         {
-            if (NotificationHandler.NotifyOfFriends)
-            {
+            //if (NotificationHandler.NotifyOfFriends)
+            //{
                 GetFriendsTimeLine(false);
-            }
-            if (NotificationHandler.NotifyOfMessages)
-            {
+            //}
+            //if (NotificationHandler.NotifyOfMessages)
+            //{
                 GetMessagesTimeLine(false);
-            }
+            //}
             if (HoldNewMessages > 0 && HoldNewFriends > 0)
             {
                 if (BothUpdated != null)
