@@ -95,6 +95,7 @@ namespace PockeTwit
             {
                 txtPassword.Visible = false;
                 lblPassword.Visible = false;
+                txtPassword.Text = ClientSettings.PingApi;
                 lblUser.Text = "Ping.FM Key";
                 if (DetectDevice.DeviceType == DeviceType.Professional)
                 {
@@ -103,6 +104,7 @@ namespace PockeTwit
             }
             else
             {
+                txtPassword.Text = "";
                 txtPassword.Visible = true;
                 lblPassword.Visible = true;
                 lblUser.Text = "User";

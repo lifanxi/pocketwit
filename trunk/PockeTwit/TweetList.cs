@@ -93,7 +93,7 @@ namespace PockeTwit
 
 		//�Private�Methods�(38)�
 
-        private bool IsFocused()
+        public bool IsFocused()
         {
             if (InvokeRequired)
             {
@@ -384,11 +384,12 @@ namespace PockeTwit
 
         void Manager_CompleteLoaded()
         {
+        
             lblLoading.Text = "Preparing UI";
             statList.SwitchTolist("Friends_TimeLine");
-            
+
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-            
+
             statList.SetSelectedIndexToZero();
         }
 
