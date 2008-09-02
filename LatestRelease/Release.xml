@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.33</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv33.CAB</url>
-  <notes>More bugfixes --
-  Lots of SmartPhone fixes
-  High-quality avatars in laconica fix
+  <version>.34</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv34.CAB</url>
+  <notes>Ping.FM support
+More bugfixes:\
 </notes>
 </LatestRelease>
