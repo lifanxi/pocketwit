@@ -54,7 +54,7 @@ namespace PockeTwit
                 Microsoft.WindowsMobile.PocketOutlook.EmailMessage m = new Microsoft.WindowsMobile.PocketOutlook.EmailMessage();
                 m.BodyText = ErrorText;
                 m.To.Add(new Microsoft.WindowsMobile.PocketOutlook.Recipient("pocketwitdev@gmail.com"));
-                m.Subject = "Crash Report";
+                m.Subject = "Crash Report: v" +UpdateChecker.currentVersion.ToString();
                 string accName = (string)comboBox1.SelectedItem;
                 accounts[accName].Send(m);
                 Microsoft.WindowsMobile.PocketOutlook.MessagingApplication.Synchronize();
