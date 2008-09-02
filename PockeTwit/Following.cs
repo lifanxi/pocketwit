@@ -10,6 +10,8 @@ namespace PockeTwit
     {
 
         public Yedda.Twitter TwitterConnection { get; set; }
+        public delegate void delFollowers(Yedda.Twitter ConnectionDone);
+        public event delFollowers FollowersDone;
 
 		#region Fields (2) 
 
