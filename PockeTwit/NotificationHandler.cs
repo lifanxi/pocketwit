@@ -29,6 +29,22 @@ namespace PockeTwit
             public string Sound;
         }
 
+        public static bool NotifyOfFriends
+        {
+            get
+            {
+                return false;   
+            }
+        }
+
+        public static bool NotifyOfMessages
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
         public const string MessageTweets = "{B4D35E62-A83F-4add-B421-F7FC28E14310}";
 

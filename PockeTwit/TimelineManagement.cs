@@ -19,9 +19,7 @@ namespace PockeTwit
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
         #endregion
-
-        
-        
+        public bool RunInBackground = true;
         public enum TimeLineType
         {
             Friends,
@@ -68,17 +66,30 @@ namespace PockeTwit
 
         void timerUpdate_Tick(object state)
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(BackgroundUpdate);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "BackgroundUpdate";
-            t.IsBackground = true;
-            t.Start();
+            if (RunInBackground)
+            {
+                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(BackgroundUpdate);
+                System.Threading.Thread t = new System.Threading.Thread(ts);
+                t.Name = "BackgroundUpdate";
+                t.IsBackground = true;
+                t.Start();
+            }
+            else
+            {
+                BackgroundUpdate();
+            }
         }
     
         private void BackgroundUpdate()
         {
-            GetFriendsTimeLine(false);
-            GetMessagesTimeLine(false);
+            if (NotificationHandler.NotifyOfFriends)
+            {
+                GetFriendsTimeLine(false);
+            }
+            if (NotificationHandler.NotifyOfMessages)
+            {
+                GetMessagesTimeLine(false);
+            }
             if (HoldNewMessages > 0 && HoldNewFriends > 0)
             {
                 if (BothUpdated != null)
