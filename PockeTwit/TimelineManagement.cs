@@ -113,6 +113,7 @@ namespace PockeTwit
             }
             HoldNewFriends = 0;
             HoldNewMessages = 0;
+            GC.Collect();
         }
 
         public void RefreshFriendsTimeLine()
