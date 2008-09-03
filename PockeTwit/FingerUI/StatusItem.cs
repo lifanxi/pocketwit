@@ -597,8 +597,12 @@ namespace FingerUI
                             SizeF WordSize = g.MeasureString(Words[i], TextFont);
                             //A structure containing info we need to know about the word.
                             c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-                            
-                            string SecondPart = c.Text.Substring(WordToCheck.Length);
+
+                            string SecondPart = null;
+                            if (WordToCheck.Length < c.Text.Length)
+                            {
+                                SecondPart = c.Text.Substring(WordToCheck.Length);
+                            }
 
                             if (!string.IsNullOrEmpty(SecondPart))
                             {
