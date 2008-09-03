@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
   <version>.36</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv35.CAB</url>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv36.CAB</url>
   <notes>Quick fix for crashes when @reply
   is followed by punctuation.
 </notes>
