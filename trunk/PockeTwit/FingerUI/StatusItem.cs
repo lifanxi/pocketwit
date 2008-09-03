@@ -64,14 +64,19 @@ namespace FingerUI
             {
                 if (m_bounds.Width!=0 && value.Width != m_bounds.Width)
                 {
-                    Tweet.text = string.Join(" ", Tweet.SplitLines.ToArray());
-                    Tweet.SplitLines = new List<string>();
-                    Tweet.Clickables = new List<Clickable>();
+                    ResetTexts();
                 }
                 m_bounds = value;
                 Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
                 BreakUpTheText(_ParentGraphics, textBounds);
             }
+        }
+
+        private void ResetTexts()
+        {
+            Tweet.text = string.Join(" ", Tweet.SplitLines.ToArray());
+            Tweet.SplitLines = new List<string>();
+            Tweet.Clickables = new List<Clickable>();
         }
 
         public bool Highlighted { get { return m_highlighted; } set { m_highlighted = value; } }
@@ -488,6 +493,8 @@ namespace FingerUI
         {
             if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
+                //How could this happen!  We have no texts!
+                if (this.Tweet.text == null) { return; }
                 Tweet.SplitLines = new List<string>();
                 string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text).Replace('\n', ' ');
                 FirstClickableRun(CurrentLine);

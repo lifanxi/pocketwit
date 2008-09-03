@@ -846,6 +846,7 @@ namespace PockeTwit
                 statList.SetSelectedIndexToZero();
                 statList.Visible = true;
             }
+            this.Invalidate();
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll")]
