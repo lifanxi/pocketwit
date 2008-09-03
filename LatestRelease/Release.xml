@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.34</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv34.CAB</url>
-  <notes>Ping.FM support
-More bugfixes
+  <version>.35</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv35.CAB</url>
+  <notes>Smartphone works again.
+More bugfixes.
 </notes>
 </LatestRelease>
