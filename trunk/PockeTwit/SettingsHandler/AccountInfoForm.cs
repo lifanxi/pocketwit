@@ -69,6 +69,7 @@ namespace PockeTwit
             {
                 return;
             }
+            if (string.IsNullOrEmpty(txtUserName.Text)) { return; }
             Cursor.Current = Cursors.WaitCursor;
             Application.DoEvents();
             lblError.Visible = false;

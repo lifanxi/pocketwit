@@ -50,7 +50,7 @@ namespace PockeTwit
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.statList = new FingerUI.KListControl();
-            this.inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
+            
             this.SuspendLayout();
             // 
             // timerStartup
@@ -103,6 +103,12 @@ namespace PockeTwit
             this.Controls.Add(this.statList);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
+
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
+            }
+
             this.ResumeLayout(false);
 
         }
