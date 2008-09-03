@@ -402,11 +402,7 @@ namespace PockeTwit
 
         void Manager_BothUpdated(int Messagecount, int FreindsCount)
         {
-            if (Notifyer != null)
-            {
-                Notifyer.NewBoth(Messagecount, FreindsCount);
-            }
-            if(this.IsFocused())
+            if (this.IsFocused())
             {
                 if (statList.CurrentList() == "Replies")
                 {
@@ -417,23 +413,23 @@ namespace PockeTwit
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                 }
             }
+            else
+            {
+                if (Notifyer != null)
+                {
+                    Notifyer.NewBoth(Messagecount, FreindsCount);
+                }
+            }
         }
 
         void Manager_MessagesUpdated(int count)
         {
-            if (statList.CurrentList() == "Replies")
+            if (this.IsFocused())
             {
-                if (this.IsFocused())
+                if (statList.CurrentList() == "Replies")
                 {
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-                }
-                else
-                {
-                    if (Notifyer != null)
-                    {
-                        Notifyer.NewMessages(count);
-                    }
                 }
             }
             else
@@ -443,23 +439,17 @@ namespace PockeTwit
                     Notifyer.NewMessages(count);
                 }
             }
+            
         }
 
         void Manager_FriendsUpdated(int count)
         {
-            if (statList.CurrentList() == "Friends_TimeLine")
+            if (this.IsFocused())
             {
-                if (this.IsFocused())
+                if (statList.CurrentList() == "Friends_TimeLine")
                 {
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-                }
-                else
-                {
-                    if (Notifyer != null)
-                    {
-                        Notifyer.NewFriendMessages(count);
-                    }
                 }
             }
             else

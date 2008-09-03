@@ -534,7 +534,7 @@ namespace FingerUI
                         bMulti = true;
                         currentPos = currentPos + word.Length + 1;
                     }
-                    string line = newString.ToString().TrimStart(new char[] { ' ' });
+                    string line = newString.ToString().Trim(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
                     if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText) 
