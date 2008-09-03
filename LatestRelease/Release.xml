@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.35</version>
+  <version>.36</version>
   <url>http://pocketwit.googlecode.com/files/PockeTwitv35.CAB</url>
-  <notes>Smartphone works again.
-More bugfixes.
+  <notes>Quick fix for crashes when @reply
+  is followed by punctuation.
 </notes>
 </LatestRelease>
