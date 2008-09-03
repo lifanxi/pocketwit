@@ -468,7 +468,7 @@ namespace Yedda
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
                 request.Timeout = 20000;
-
+                
                 request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(AccountInfo.UserName + ":" + AccountInfo.Password))); 
 
                 if (!string.IsNullOrEmpty(TwitterClient))
@@ -495,10 +495,17 @@ namespace Yedda
                 byte[] bytes = Encoding.UTF8.GetBytes(data);
 
                 request.ContentLength = bytes.Length;
-                using (Stream requestStream = request.GetRequestStream())
+                try
                 {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                    requestStream.Flush();
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(bytes, 0, bytes.Length);
+                        requestStream.Flush();
+                    }
+                }
+                catch
+                {
+
                 }
                 try
                 {

@@ -564,6 +564,7 @@ namespace FingerUI
 
         private void FirstClickableRun(string text)
         {
+            Tweet.Clickables = new List<Clickable>();
             string[] words = text.Split(new char[] { ' ' });
             foreach (string word in words)
             {
