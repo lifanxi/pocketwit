@@ -246,6 +246,19 @@ namespace PockeTwit
 
         private void SetupStandard()
         {
+            this.pictureBox1 = new PictureBox();
+            this.pictureBox2 = new PictureBox();
+
+            this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(25, 25);
+
+            this.pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(25, 25);
+
             this.menuSubmit = new System.Windows.Forms.MenuItem();
             this.menuSubmit.Text = "Submit";
             this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
@@ -284,6 +297,8 @@ namespace PockeTwit
 
             this.Controls.Add(chkGPS);
             this.Controls.Add(lblGPS);
+            this.Controls.Add(pictureBox1);
+            this.Controls.Add(pictureBox2);
         }
 
     }

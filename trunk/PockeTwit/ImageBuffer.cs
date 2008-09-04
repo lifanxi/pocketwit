@@ -67,6 +67,13 @@ namespace PockeTwit
         {
             if (!ImageDictionary.ContainsKey(User))
             {
+                string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+                if (System.IO.File.Exists(ArtPath))
+                {
+                    LoadArt(User);
+                    ImageDictionary[User].LastRequested = DateTime.Now;
+                    return ImageDictionary[User].Image;
+                }
                 //How do we find art for a user by name alone?
                 return UnknownArt;
             }
