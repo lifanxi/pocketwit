@@ -814,17 +814,18 @@ namespace PockeTwit
 
         protected override void OnActivated(EventArgs e)
         {
-            if (DetectDevice.DeviceType == DeviceType.Professional)
+            if (DetectDevice.DeviceType == DeviceType.Standard)
             {
-                inputPanel1.Enabled = false;
+                return;
             }
+            inputPanel1.Enabled = false;
             if (!IsLoaded)
             {
                 return;
             }
-            
+
             base.OnActivated(e);
-            /*
+
             if (ClientSettings.IsMaximized)
             {
                 SetWindowState(FormWindowState.Maximized);
@@ -833,7 +834,7 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
-             */
+
             if (statList.CurrentList() == "Friends_TimeLine")
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
@@ -846,6 +847,9 @@ namespace PockeTwit
                 statList.SetSelectedIndexToZero();
                 statList.Visible = true;
             }
+
+            SendToForground();
+
             this.Invalidate();
         }
 
@@ -870,6 +874,14 @@ namespace PockeTwit
             ImageBuffer.Clear();
             ShowWindow(this.Handle, SW_MINIMIZED);
             GC.Collect();
+        }
+
+        [System.Runtime.InteropServices.DllImport("coredll.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        void SendToForground()
+        {
+            SetForegroundWindow(this.Handle);
         }
 
 		#endregion�Methods�

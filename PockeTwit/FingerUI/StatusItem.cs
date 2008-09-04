@@ -332,7 +332,7 @@ namespace FingerUI
             ImageLocation.Offset(-5, -5);
             if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
             {
-                string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimStart(new char[] { '@' });
+                string ReplyTo = Tweet.Clickables[0].Text.TrimStart(new char[]{'@'});
                 Image ReplyImage = null;
                 if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
                 {
@@ -486,7 +486,6 @@ namespace FingerUI
                 }
                 LineOffset++;
             }
-            Tweet.text = null;
         }
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
@@ -566,7 +565,6 @@ namespace FingerUI
                     LineOffset++;
                 }
             }
-            Tweet.text = null;
         }
 
         private void FirstClickableRun(string text)

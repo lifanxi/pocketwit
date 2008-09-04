@@ -177,12 +177,16 @@ namespace PockeTwit
                     {
                         TwitPicFile = c.FileName;
                         UseTwitPic = true;
-                        if (pictureBox1.Visible)
-                        {
+                        //if (pictureBox1.Visible)
+                        //{
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
                             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+                            if (DetectDevice.DeviceType == DeviceType.Standard)
+                            {
+                                this.pictureBox2.Visible = false;
+                            }
                             AddPictureToForm(c.FileName, pictureBox1);
-                        }
+                        //}
                     }
                 }
                 catch
@@ -199,12 +203,16 @@ namespace PockeTwit
             {
                 TwitPicFile = s.FileName;
                 UseTwitPic = true;
-                if (pictureBox1.Visible)
-                {
+                //if (pictureBox1.Visible)
+                //{
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
                     this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+                    if (DetectDevice.DeviceType == DeviceType.Standard)
+                    {
+                        this.pictureBox1.Visible = false;
+                    }
                     AddPictureToForm(s.FileName, pictureBox2);
-                }
+                //}
             }
         }
 
@@ -213,6 +221,7 @@ namespace PockeTwit
             try
             {
                 BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
+                BoxToUpdate.Visible = true;
             }
             catch (OutOfMemoryException)
             {
