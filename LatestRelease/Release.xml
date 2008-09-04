@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.36</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv36.CAB</url>
-  <notes>Quick fix for crashes when @reply
-  is followed by punctuation.
+  <version>.37</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv37.CAB</url>
+  <notes>SmartPhone twitpic fixes
+Fixes for common crash when wrapping text 
+Fix for fullscreen when restoring
+  (thanks to @marclandis)
 </notes>
 </LatestRelease>
