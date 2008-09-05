@@ -295,7 +295,7 @@ namespace FingerUI
             }
             
             textBounds.Offset(ClientSettings.Margin, 1);
-            textBounds.Width = textBounds.Width = ClientSettings.Margin;
+            textBounds.Width = textBounds.Width - ClientSettings.Margin;
             textBounds.Height--;
 
             m_stringFormat.Alignment = StringAlignment.Near;
@@ -332,7 +332,7 @@ namespace FingerUI
             ImageLocation.Offset(-5, -5);
             if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
             {
-                string ReplyTo = Tweet.Clickables[0].Text.TrimStart(new char[]{'@'});
+                string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
                 Image ReplyImage = null;
                 if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
                 {
@@ -589,51 +589,54 @@ namespace FingerUI
             float Position = ((lineOffSet * (ClientSettings.TextSize)));
             for (int i = 0; i < Words.Length; i++)
             {
-                string WordToCheck = Words[i];
-                List<Clickable> OriginalClicks = new List<Clickable>(Tweet.Clickables);
-                foreach(Clickable c in OriginalClicks)
+                string WordToCheck = Words[i].TrimEnd(IgnoredAtChars);
+                if (!string.IsNullOrEmpty(WordToCheck))
                 {
-                    if (i == Words.Length-1)
+                    List<Clickable> OriginalClicks = new List<Clickable>(Tweet.Clickables);
+                    foreach (Clickable c in OriginalClicks)
                     {
-                        if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck.TrimEnd(IgnoredAtChars)))
+                        if (i == Words.Length - 1)
                         {
+                            if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck.TrimEnd(IgnoredAtChars)))
+                            {
+                                float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                                //Find the size of the word
+                                SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                                //A structure containing info we need to know about the word.
+                                c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+
+                                string SecondPart = null;
+                                if (WordToCheck.Length < c.Text.Length)
+                                {
+                                    SecondPart = c.Text.Substring(WordToCheck.Length);
+                                }
+
+                                if (!string.IsNullOrEmpty(SecondPart))
+                                {
+                                    Clickable wrapClick = new Clickable();
+                                    wrapClick.Text = c.Text;
+                                    //Find the size of the word
+                                    WordSize = g.MeasureString(SecondPart, TextFont);
+                                    //A structure containing info we need to know about the word.
+                                    float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
+                                    wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
+                                    Tweet.Clickables.Add(wrapClick);
+                                }
+                            }
+                        }
+                        else if (WordToCheck.TrimEnd(IgnoredAtChars) == c.Text)
+                        {
+                            //Find out how far to the right this word will appear
                             float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
                             //Find the size of the word
                             SizeF WordSize = g.MeasureString(Words[i], TextFont);
                             //A structure containing info we need to know about the word.
                             c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-
-                            string SecondPart = null;
-                            if (WordToCheck.Length < c.Text.Length)
-                            {
-                                SecondPart = c.Text.Substring(WordToCheck.Length);
-                            }
-
-                            if (!string.IsNullOrEmpty(SecondPart))
-                            {
-                                Clickable wrapClick = new Clickable();
-                                wrapClick.Text = c.Text;
-                                //Find the size of the word
-                                WordSize = g.MeasureString(SecondPart, TextFont);
-                                //A structure containing info we need to know about the word.
-                                float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
-                                wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
-                                Tweet.Clickables.Add(wrapClick);
-                            }
+                            c.Text = WordToCheck.TrimEnd(IgnoredAtChars);
                         }
                     }
-                    else if (WordToCheck.TrimEnd(IgnoredAtChars) == c.Text)
-                    {
-                        //Find out how far to the right this word will appear
-                        float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
-                        //Find the size of the word
-                        SizeF WordSize = g.MeasureString(Words[i], TextFont);
-                        //A structure containing info we need to know about the word.
-                        c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-                        c.Text = WordToCheck.TrimEnd(IgnoredAtChars);
-                    }
                 }
-                LineBeforeThisWord.Append(WordToCheck + " ");
+                LineBeforeThisWord.Append(Words[i]);
             }
         }
         #endregion
