@@ -119,7 +119,11 @@ namespace PockeTwit
                 InterpretUsers(response);
                 SaveUsers();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                OnceLoaded = false;
+                return;
+            }
             OnceLoaded = true;
         }
 
