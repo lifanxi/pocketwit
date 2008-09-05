@@ -41,6 +41,14 @@ namespace Yedda
                 pServer.Name = "ping.fm";
                 pServer.URL = "http://api.ping.fm/";
                 ServerList.Add(pServer.Name, pServer);
+
+                /*
+                Twitter.ServerURL bServer = new Twitter.ServerURL();
+                bServer.Name = "brightkite";
+                bServer.URL = "http://brightkite.com/";
+                ServerList.Add(bServer.Name, bServer);
+                */
+
                 while (!r.EndOfStream)
                 {
                     string URL = r.ReadLine();
@@ -158,7 +166,11 @@ namespace Yedda
                     {
                         return TwitterServer.twitter;
                     }
-                    else if(URL=="http://api.ping.fm/")
+                    else if (URL == "http://brightkite.com/")
+                    {
+                        return TwitterServer.brightkite;
+                    }
+                    else if (URL == "http://api.ping.fm/")
                     {
                         return TwitterServer.pingfm;
                     }
@@ -174,6 +186,7 @@ namespace Yedda
 
         public enum TwitterServer
         {
+            brightkite,
             pingfm,
             twitter,
             identica
@@ -233,6 +246,8 @@ namespace Yedda
             Update_Location
         }
 
+
+        private string PlaceID = null;
         private string source = "pocketwit";
 
         private string twitterClient = "pocketwit";
@@ -876,11 +891,25 @@ namespace Yedda
 
         public string Update(string status, OutputFormatType format)
         {
+            
             if (this.AccountInfo.ServerURL.ServerType == TwitterServer.pingfm)
             {
                 string url = "http://api.ping.fm/v1/user.post";
                 string data = string.Format("user_app_key={0}&api_key={1}&post_method=microblog&body={2}", this.AccountInfo.UserName,this.AccountInfo.Password,HttpUtility.UrlEncode(status));
                 return ExecutePostCommand(url, data);
+            }
+            else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
+            {
+                if (this.PlaceID != null)
+                {
+                    string url = string.Format("http://brightkite.com/places/{0}/notes", this.PlaceID);
+                    string data = string.Format("note[body]={0}", HttpUtility.UrlEncode(status));
+                    return ExecutePostCommand(url, data);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
@@ -1027,6 +1056,10 @@ namespace Yedda
                 string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName,this.AccountInfo.Password));
                 return Response.IndexOf("<rsp status=\"OK\">") > 0;
             }
+            else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
+            {
+                return true;
+            }
             else
             {
                 url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
@@ -1056,10 +1089,27 @@ namespace Yedda
         #region Location
         public void SetLocation(string Location)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Update_Location), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
-            string data = string.Format("location={0}", HttpUtility.UrlEncode(Location));
+            if (AccountInfo.ServerURL.ServerType == TwitterServer.twitter || AccountInfo.ServerURL.ServerType == TwitterServer.identica)
+            {
+                string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Update_Location), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
+                string data = string.Format("location={0}", HttpUtility.UrlEncode(Location));
 
-            ExecutePostCommand(url, data);
+                ExecutePostCommand(url, data);
+            }
+            else
+            {
+                string url = string.Format("http://brightkite.com/places/search.xml?q={0}", HttpUtility.UrlEncode(Location));
+                string placeRet = ExecuteGetCommand(url);
+                try
+                {
+                    XmlDocument placeDoc = new XmlDocument();
+                    placeDoc.LoadXml(placeRet);
+                    this.PlaceID = placeDoc.SelectSingleNode("//id").InnerText;
+                }
+                catch
+                {
+                }
+            }
         }
         #endregion
     }
