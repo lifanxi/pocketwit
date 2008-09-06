@@ -13,7 +13,7 @@ namespace PockeTwit
         public delegate void delBothUpdated(int Messagecount, int FreindsCount);
         public delegate void delProgress(int percentage, string Status);
         public delegate void delComplete();
-        public delegate void delNullReturnedByAccount(Yedda.Twitter.Account);
+        public delegate void delNullReturnedByAccount(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
         public event delFriendsUpdated FriendsUpdated;
         public event delMessagesUpdated MessagesUpdated;
         public event delBothUpdated BothUpdated;
@@ -165,7 +165,7 @@ namespace PockeTwit
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Search, SearchString);
             if (string.IsNullOrEmpty(response))
             {
-                NoData(t);
+                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Search);
                 return null;
             }
             return Library.status.DeserializeFromAtom(response, t.AccountInfo);
@@ -176,7 +176,7 @@ namespace PockeTwit
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Show, UserID);
             if (string.IsNullOrEmpty(response))
             {
-                NoData(t);
+                NoData(t.AccountInfo,Yedda.Twitter.ActionType.Show);
                 return null;
             }
             return Library.status.Deserialize(response, t.AccountInfo);
@@ -205,7 +205,7 @@ namespace PockeTwit
                     }
                     else
                     {
-                        NoData(t);
+                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                     }
                     ////I HATE DIRECT MESSAGES
                     /*
@@ -266,7 +266,7 @@ namespace PockeTwit
                     }
                     else
                     {
-                        NoData(t);
+                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                     }
                 }
             }
