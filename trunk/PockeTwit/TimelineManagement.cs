@@ -13,11 +13,13 @@ namespace PockeTwit
         public delegate void delBothUpdated(int Messagecount, int FreindsCount);
         public delegate void delProgress(int percentage, string Status);
         public delegate void delComplete();
+        public delegate void delNullReturnedByAccount(Yedda.Twitter.Account);
         public event delFriendsUpdated FriendsUpdated;
         public event delMessagesUpdated MessagesUpdated;
         public event delBothUpdated BothUpdated;
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
+        public event delNullReturnedByAccount NoData;
         #endregion
         public bool RunInBackground = true;
         public enum TimeLineType
@@ -163,6 +165,7 @@ namespace PockeTwit
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Search, SearchString);
             if (string.IsNullOrEmpty(response))
             {
+                NoData(t);
                 return null;
             }
             return Library.status.DeserializeFromAtom(response, t.AccountInfo);
@@ -173,6 +176,7 @@ namespace PockeTwit
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Show, UserID);
             if (string.IsNullOrEmpty(response))
             {
+                NoData(t);
                 return null;
             }
             return Library.status.Deserialize(response, t.AccountInfo);
@@ -198,6 +202,10 @@ namespace PockeTwit
                         {
                             LastReplyID[t] = NewStats[0].id;
                         }
+                    }
+                    else
+                    {
+                        NoData(t);
                     }
                     ////I HATE DIRECT MESSAGES
                     /*
@@ -255,6 +263,10 @@ namespace PockeTwit
                             SaveStatuses(NewStats, t);
                             LastStatusID[t] = NewStats[0].id;
                         }
+                    }
+                    else
+                    {
+                        NoData(t);
                     }
                 }
             }
