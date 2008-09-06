@@ -372,6 +372,7 @@ namespace PockeTwit
             }
             SetConnectedMenus();
             Manager = new TimelineManagement(TwitterConnections);
+            Manager.NoData += new TimelineManagement.delNullReturnedByAccount(Manager_NoData);
             Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
             Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
             Manager.Startup(TwitterConnections);
@@ -382,6 +383,11 @@ namespace PockeTwit
             {
                 f.LoadFromTwitter();
             }
+        }
+
+        void Manager_NoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
+        {
+            //Find a way to indicate error to the user
         }
 
         void Manager_CompleteLoaded()
