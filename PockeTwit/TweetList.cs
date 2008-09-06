@@ -215,8 +215,9 @@ namespace PockeTwit
         private void CreateFavoriteAsync()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            Yedda.Twitter.Account ChosenAccount = selectedItem.Tweet.Account;
             if (selectedItem == null) { return; }
+            Yedda.Twitter.Account ChosenAccount = selectedItem.Tweet.Account;
+            
             ChangeCursor(Cursors.WaitCursor);
             selectedItem.isFavorite = true;
 

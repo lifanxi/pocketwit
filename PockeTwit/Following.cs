@@ -119,12 +119,9 @@ namespace PockeTwit
                 InterpretUsers(response);
                 SaveUsers();
             }
-            catch (Exception ex)
+            catch 
             {
-                OnceLoaded = false;
-                return;
             }
-            OnceLoaded = true;
         }
 
         private  void InterpretUsers(string response)
