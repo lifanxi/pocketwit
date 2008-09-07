@@ -196,7 +196,7 @@ namespace PockeTwit
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                     if (!string.IsNullOrEmpty(response))
                     {
-                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
                         TempLine.AddRange(NewStats);
                         if (NewStats.Length > 0)
                         {

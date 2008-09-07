@@ -277,7 +277,7 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t)
         {
-            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Replies", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
             RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
@@ -389,7 +389,7 @@ namespace PockeTwit
         {
             if (this.IsFocused())
             {
-                if (statList.CurrentList() == "Replies")
+                if (statList.CurrentList() == "Messages")
                 {
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                 }
@@ -411,7 +411,7 @@ namespace PockeTwit
         {
             if (this.IsFocused())
             {
-                if (statList.CurrentList() == "Replies")
+                if (statList.CurrentList() == "Messages")
                 {
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
@@ -562,10 +562,10 @@ namespace PockeTwit
                     ChangeCursor(Cursors.Default);
                     //GetTimeLineAsync();
                     break;
-                case "Replies":
+                case "Messages":
                     ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList("Replies_TimeLine");
-                    statList.SetSelectedMenu("Replies");
+                    SwitchToList("Messages_TimeLine");
+                    statList.SetSelectedMenu("Messages");
                     statList.RightMenuItems = RightMenu;
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                     statList.Redraw();
@@ -826,7 +826,7 @@ namespace PockeTwit
                 statList.SetSelectedIndexToZero();
                 statList.Visible = true;
             }
-            else if (statList.CurrentList() == "Replies_TimeLine")
+            else if (statList.CurrentList() == "Messages_TimeLine")
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
                 statList.SetSelectedIndexToZero();
