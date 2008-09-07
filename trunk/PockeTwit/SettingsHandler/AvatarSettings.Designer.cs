@@ -86,7 +86,7 @@ namespace PockeTwit
             this.lnkClearAvatars.Location = new System.Drawing.Point(126, 248);
             this.lnkClearAvatars.Name = "lnkClearAvatars";
             this.lnkClearAvatars.Size = new System.Drawing.Size(109, 20);
-            this.lnkClearAvatars.TabIndex = 2;
+            this.lnkClearAvatars.TabIndex = 3;
             this.lnkClearAvatars.Text = "Clear Avatar Cache";
             this.lnkClearAvatars.Click += new System.EventHandler(this.lnkClearAvatars_Click);
             // 
