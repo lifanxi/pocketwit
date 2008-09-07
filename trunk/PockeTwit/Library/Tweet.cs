@@ -8,13 +8,22 @@ using System.Xml.Serialization;
 
 namespace PockeTwit.Library
 {
-    
+
+    public enum StatusTypes
+    {
+        Normal,
+        Reply,
+        Direct,
+        SearchResult
+    }
+
     [Serializable]
     public class status : IComparable
     {
         [XmlIgnore]
         private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
 
+        public StatusTypes TypeofMessage = StatusTypes.Normal;
 
 		#region Properties (7) 
         [XmlIgnore]
@@ -108,9 +117,13 @@ namespace PockeTwit.Library
 
         public static status[] Deserialize(string response)
         {
-            return Deserialize(response, null);
+            return Deserialize(response, null, StatusTypes.Normal);
         }
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account)
+        {
+            return Deserialize(response, Account, StatusTypes.Normal);
+        }
+        public static status[] Deserialize(string response, Yedda.Twitter.Account Account, StatusTypes TypeOfMessage)
         {
             
             
@@ -129,9 +142,11 @@ namespace PockeTwit.Library
             foreach (Library.status stat in statuses)
             {
                 stat.Account = Account;
+                stat.TypeofMessage = TypeOfMessage;
             }
             return statuses;
         }
+
 
         public static status[] DeserializeFromAtom(string response)
         {
@@ -168,11 +183,39 @@ namespace PockeTwit.Library
             }
             foreach (status stat in resultList)
             {
+                stat.TypeofMessage = StatusTypes.SearchResult;
                 stat.Account = Account;
             }
             return resultList.ToArray();
+        }
 
+        public static status[] FromDirectReplies(string response, Yedda.Twitter.Account Account)
+        {
+            List<status> resultList = new List<status>();
 
+            XmlDocument results = new XmlDocument();
+
+            results.LoadXml(response);
+            XmlNodeList entries = results.SelectNodes("//direct_message");
+            foreach (XmlNode entry in entries)
+            {
+                status newStat = new status();
+                newStat.text = entry.SelectSingleNode("text").InnerText;
+                newStat.id = entry.SelectSingleNode("id").InnerText;
+                newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
+                string userName = entry.SelectSingleNode("sender/screen_name").InnerText;
+                newStat.user = new User();
+                newStat.user.screen_name = userName;
+
+                resultList.Add(newStat);
+
+            }
+            foreach (status stat in resultList)
+            {
+                stat.TypeofMessage = StatusTypes.Direct;
+                stat.Account = Account;
+            }
+            return resultList.ToArray();
         }
 
         public static string Serialize(status[] List)

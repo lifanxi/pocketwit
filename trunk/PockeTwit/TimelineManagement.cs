@@ -208,13 +208,13 @@ namespace PockeTwit
                         NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                     }
                     ////I HATE DIRECT MESSAGES
-                    /*
+                    
                     if (t.DirectMessagesWork)
                     {
                         response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
                         if (!string.IsNullOrEmpty(response))
                         {
-                            Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                            Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
                             TempLine.AddRange(NewStats);
                             if (NewStats.Length > 0)
                             {
@@ -222,7 +222,6 @@ namespace PockeTwit
                             }
                         }
                     }
-                     */
                 }
             }
             int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);

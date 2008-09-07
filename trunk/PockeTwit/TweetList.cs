@@ -251,29 +251,7 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        /*
-        private void GetTimeLineAsync()
-        {
-            //Reset the timer
-            tmrautoUpdate.Enabled = false;
-            tmrautoUpdate.Interval = ClientSettings.UpdateInterval;
-            tmrautoUpdate.Enabled = true;
-
-            System.Threading.ThreadStart ts;
-            if (CurrentAction == Yedda.Twitter.ActionType.Show)
-            {
-                ts = new System.Threading.ThreadStart(GetSingleTimeLine);
-            }
-            else
-            {
-                ts = new System.Threading.ThreadStart(GetAllTimeLines);
-            }
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "GetTimeLine";
-            t.Start();
-        }
-        */
-
+        
         [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
         private static extern void MessageBeep(int type);
 
