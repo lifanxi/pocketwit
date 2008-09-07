@@ -294,6 +294,37 @@ namespace FingerUI
                     new Rectangle(bounds.X+5, bounds.Y+5, 7, 7),0,0,7,7,GraphicsUnit.Pixel, ia);
             }
             
+            if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
+            {
+                using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                {
+                    
+                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                    Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                    using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                    {
+                        g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                    }
+                    g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right-12,ImageRect.Top-2, 10,20));
+                }
+            }
+            else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+            {
+                using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                {
+                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                    Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                    using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                    {
+                        g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                    }
+                    g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
+                }
+
+            }
+            
             textBounds.Offset(ClientSettings.Margin, 1);
             textBounds.Width = textBounds.Width - ClientSettings.Margin;
             textBounds.Height--;
