@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.38</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv38.CAB</url>
-  <notes>Clickables rendering fix
+  <version>.39</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv39.CAB</url>
+  <notes>Direct messages and Replies both shown
+   under messages menu item.
 </notes>
 </LatestRelease>
