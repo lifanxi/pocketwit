@@ -126,7 +126,7 @@ namespace PockeTwit.Library
         }
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account, StatusTypes TypeOfMessage)
         {
-            Library.status[] statuses;
+            Library.status[] statuses = null;
             
             
             
@@ -136,22 +136,25 @@ namespace PockeTwit.Library
             }
             else
             {
-                if (Account.ServerURL.ServerType == Yedda.Twitter.TwitterServer.brightkite)
-                {
-                    statuses = FromBrightKite(response);
-                }
-                else
+                if (Account == null || Account.ServerURL.ServerType != Yedda.Twitter.TwitterServer.brightkite)
                 {
                     using (System.IO.StringReader r = new System.IO.StringReader(response))
                     {
                         statuses = (Library.status[])statusSerializer.Deserialize(r);
                     }
                 }
+                else if (Account.ServerURL.ServerType == Yedda.Twitter.TwitterServer.brightkite)
+                {
+                    statuses = FromBrightKite(response);
+                }
             }
-            foreach (Library.status stat in statuses)
+            if (Account != null)
             {
-                stat.Account = Account;
-                stat.TypeofMessage = TypeOfMessage;
+                foreach (Library.status stat in statuses)
+                {
+                    stat.Account = Account;
+                    stat.TypeofMessage = TypeOfMessage;
+                }
             }
             return statuses;
         }
