@@ -100,7 +100,8 @@ namespace PockeTwit.Library
         //public string in_reply_to_status_id { get; set; }
         public string in_reply_to_user_id { get; set; }
         public bool isDirect { get; set; }
-        
+
+        public string location { get; set; }
         public string text { get; set; }
 
         public User user { get; set; }
@@ -125,18 +126,26 @@ namespace PockeTwit.Library
         }
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account, StatusTypes TypeOfMessage)
         {
-            
-            
             Library.status[] statuses;
+            
+            
+            
             if (string.IsNullOrEmpty(response))
             {
                 statuses = new status[0];
             }
             else
             {
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                if (Account.ServerURL.ServerType == Yedda.Twitter.TwitterServer.brightkite)
                 {
-                    statuses = (Library.status[])statusSerializer.Deserialize(r);                    
+                    statuses = FromBrightKite(response);
+                }
+                else
+                {
+                    using (System.IO.StringReader r = new System.IO.StringReader(response))
+                    {
+                        statuses = (Library.status[])statusSerializer.Deserialize(r);
+                    }
                 }
             }
             foreach (Library.status stat in statuses)
@@ -214,6 +223,32 @@ namespace PockeTwit.Library
             {
                 stat.TypeofMessage = StatusTypes.Direct;
                 stat.Account = Account;
+            }
+            return resultList.ToArray();
+        }
+
+        public static status[] FromBrightKite(string response)
+        {
+            List<status> resultList = new List<status>();
+
+            XmlDocument results = new XmlDocument();
+
+            results.LoadXml(response);
+            XmlNodeList entries = results.SelectNodes("//note");
+            foreach (XmlNode entry in entries)
+            {
+                status newStat = new status();
+                newStat.text = entry.SelectSingleNode("body").InnerText;
+                newStat.id = entry.SelectSingleNode("id").InnerText;
+                newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
+                newStat.location = entry.SelectSingleNode("place/display_location").InnerText;
+                string userName = entry.SelectSingleNode("creator/login").InnerText;
+                string avURL = entry.SelectSingleNode("creator/small_avatar_url").InnerText;
+                newStat.user = new User();
+                newStat.user.screen_name = userName;
+                newStat.user.profile_image_url = "http://brightkite.com/" + avURL;
+                resultList.Add(newStat);
+
             }
             return resultList.ToArray();
         }
