@@ -59,7 +59,6 @@ namespace PockeTwit
 
         public static string CopyTempFile(string User, string URL)
         {
-
             string FileName = DetermineCacheFileName(User);
             if (!System.IO.File.Exists(FileName))
             {
@@ -70,14 +69,6 @@ namespace PockeTwit
                 return null;
             }
             return FileName;
-        }
-
-        public static void GetArt(string User, string URL)
-        {
-            Thread t = new Thread(delegate() { GetArtFromURL(User, URL); });
-            t.IsBackground = true;
-            t.Priority = ThreadPriority.BelowNormal;
-            t.Start();
         }
 
         public static string DetermineCacheFileName(string User)
@@ -98,6 +89,8 @@ namespace PockeTwit
             return FileName;
         }
 
+
+
 		// Private Methods (2) 
 
         private static void CheckCacheFolderExists(string Folder)
@@ -110,6 +103,7 @@ namespace PockeTwit
 
         private static void GetArtFromURL(string User, string URL)
         {
+            
             string LocalFileName = DetermineCacheFileName(User);
             System.Net.HttpWebResponse ArtResponse = null;
             try
@@ -117,9 +111,7 @@ namespace PockeTwit
                 System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
                 ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
             }
-            catch (Exception ex)
-            { 
-            }
+            catch { }
             if (ArtResponse == null)
             {
                 return;

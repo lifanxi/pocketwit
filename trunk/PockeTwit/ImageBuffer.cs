@@ -11,7 +11,6 @@ namespace PockeTwit
         {
             public Image Image;
             public DateTime LastRequested;
-            public String ID;
         }
 		#region Fields (3) 
 
@@ -85,7 +84,7 @@ namespace PockeTwit
         public static Image GetArt(string User, string URL)
         {
             if (User == null) { return null; }
-
+            
             if (!ImageDictionary.ContainsKey(User))
             {
                 if (!LoadArt(User, URL))
@@ -106,7 +105,6 @@ namespace PockeTwit
                     return UnknownArt;
                 }
             }
-
             ImageDictionary[User].LastRequested = DateTime.Now;
             return ImageDictionary[User].Image;
         }
@@ -156,18 +154,7 @@ namespace PockeTwit
                     ImageInfo newInfo = new ImageInfo();
                     newInfo.Image = NewArt;
                     newInfo.LastRequested = DateTime.Now;
-                    newInfo.ID = ImageDictionary[User].ID;
                     ImageDictionary[User] = newInfo;
-
-                    System.IO.FileStream fs = new System.IO.FileStream(Filename + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
-                    {
-                        sw.Write(newInfo.ID);
-                        sw.Flush();
-                        sw.Close();
-                    }
-
-
                     if (Updated != null)
                     {
                         Updated(User);
@@ -177,7 +164,6 @@ namespace PockeTwit
                 {
                     //Try again next time.
                     System.IO.File.Delete(Filename);
-                    System.IO.File.Delete(Filename + ".ID");
                 }
             }
         }
@@ -206,60 +192,25 @@ namespace PockeTwit
         {
             string ArtPath = AsyncArtGrabber.CopyTempFile(User, URL);
             Bitmap NewArt;
-            string ID,ID2;
             bool bFound = false;
             try
             {
                 if (ArtPath != null)
                 {
                     NewArt = new Bitmap(ArtPath);
-
-                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("/(?<ID>\\d+)/");
-                    ID = r.Match(URL).Groups["ID"].Value;
-
-                    if (System.IO.File.Exists(ArtPath + ".ID"))
-                    {
-                        using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtPath + ".ID"))
-                        {
-                            ID2 = reader.ReadToEnd();
-                        }
-
-                        // Hack to download the latest image
-                        if (long.Parse(ID) > long.Parse(ID2))
-                        {
-                            AsyncArtGrabber.GetArt(User, URL);
-                        }
-                    }
-                    else
-                    {
-                        System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
-                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
-                        {
-                            sw.Write(ID);
-                            sw.Flush();
-                            sw.Close();
-                        }
-                    }
-
                     bFound = true;
                 }
                 else
                 {
                     NewArt = UnknownArt;
-                    
-                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("/(?<ID>\\d+)/");
-                    ID = r.Match(URL).Groups["ID"].Value;
-
                 }
                 if (ImageDictionary.ContainsKey(User))
                 {
                     ImageDictionary.Remove(User);
                 }
-
                 ImageInfo newInfo = new ImageInfo();
                 newInfo.LastRequested = DateTime.Now;
                 newInfo.Image = NewArt;
-                newInfo.ID = ID;
                 ImageDictionary.Add(User, newInfo);
                 return bFound;
             }
@@ -268,6 +219,7 @@ namespace PockeTwit
                 return false;
             }
         }
+
 
 		#endregion Methods 
 
