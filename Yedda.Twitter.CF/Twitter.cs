@@ -42,13 +42,12 @@ namespace Yedda
                 pServer.URL = "http://api.ping.fm/";
                 ServerList.Add(pServer.Name, pServer);
 
-                /*
+                
                 Twitter.ServerURL bServer = new Twitter.ServerURL();
                 bServer.Name = "brightkite";
                 bServer.URL = "http://brightkite.com/";
                 ServerList.Add(bServer.Name, bServer);
-                */
-
+                
                 while (!r.EndOfStream)
                 {
                     string URL = r.ReadLine();
@@ -730,8 +729,16 @@ namespace Yedda
 
         public string GetFriendsTimeline(OutputFormatType format)
         {
-            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), AccountInfo.ServerURL.URL);
-            return ExecuteGetCommand(url);
+            if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
+            {
+                string url = "http://brightkite.com/me/friendstream.xml";
+                return ExecuteGetCommand(url);
+            }
+            else
+            {
+                string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends_Timeline), GetFormatTypeString(format), AccountInfo.ServerURL.URL);
+                return ExecuteGetCommand(url);
+            }
         }
 
         public string GetFriendsTimelineAsJSON()
@@ -1059,6 +1066,8 @@ namespace Yedda
             else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
             {
                 return true;
+                url = "http://brightkite.com/me";
+                return !string.IsNullOrEmpty(ExecutePostCommand(url, ""));
             }
             else
             {
