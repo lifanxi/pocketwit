@@ -53,6 +53,7 @@ namespace PockeTwit
             this.lblUpDates = new System.Windows.Forms.Label();
             this.txtUpdate = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -90,7 +91,7 @@ namespace PockeTwit
             // 
             // lblUpDates
             // 
-            this.lblUpDates.ForeColor = ClientSettings.ForeColor;
+            this.lblUpDates.ForeColor = ClientSettings.ForeColor; ;
             this.lblUpDates.Location = new System.Drawing.Point(3, 52);
             this.lblUpDates.Name = "lblUpDates";
             this.lblUpDates.Size = new System.Drawing.Size(234, 20);
@@ -111,12 +112,24 @@ namespace PockeTwit
             this.label1.Size = new System.Drawing.Size(124, 20);
             this.label1.Text = "0 to disable";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.Location = new System.Drawing.Point(107, 248);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(130, 20);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.Text = "Configure Notifications";
+            this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
+            this.linkLabel1.ForeColor = ClientSettings.LinkColor;
+            // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtUpdate);
             this.Controls.Add(this.lblUpDates);
@@ -136,6 +149,7 @@ namespace PockeTwit
         private System.Windows.Forms.Label lblUpDates;
         private System.Windows.Forms.TextBox txtUpdate;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
 
     }
 }

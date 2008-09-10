@@ -17,6 +17,10 @@ namespace PockeTwit
         public OtherSettings()
         {
             InitializeComponent();
+            if (DetectDevice.DeviceType == DeviceType.Standard)
+            {
+                linkLabel1.Visible = false;
+            }
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -72,6 +76,14 @@ namespace PockeTwit
 
 
 		#endregion Methods 
+
+        private void linkLabel1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.ProcessStartInfo ps = new System.Diagnostics.ProcessStartInfo("\\Windows\\ctlpnl.exe", "cplmain.cpl,9,1");
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo = ps;
+            p.Start();
+        }
 
     }
 }
