@@ -227,18 +227,15 @@ namespace PockeTwit
                         // Hack to download the latest image
                         if (long.Parse(ID) > long.Parse(ID2))
                         {
+                            System.IO.File.Delete(ArtPath);
                             AsyncArtGrabber.GetArt(User, URL);
+                            System.IO.File.Delete(ArtPath + ".ID");
+                            WriteID(ArtPath, ID);
                         }
                     }
                     else
                     {
-                        System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
-                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
-                        {
-                            sw.Write(ID);
-                            sw.Flush();
-                            sw.Close();
-                        }
+                        WriteID(ArtPath, ID);
                     }
 
                     bFound = true;
@@ -266,6 +263,17 @@ namespace PockeTwit
             catch
             {
                 return false;
+            }
+        }
+
+        private static void WriteID(string ArtPath, string ID)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
+            {
+                sw.Write(ID);
+                sw.Flush();
+                sw.Close();
             }
         }
 
