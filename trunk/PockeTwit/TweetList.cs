@@ -328,6 +328,11 @@ namespace PockeTwit
             
         }
 
+        void ImageBuffer_AvatarHasChanged(string User, string NewURL)
+        {
+            Manager.UpdateImagesForUser(User, NewURL);
+        }
+
         void Notifyer_MessagesNotificationClicked()
         {
             this.Show();
@@ -856,7 +861,10 @@ namespace PockeTwit
             /*
             statList.Clear();
              */
-            ImageBuffer.Clear();
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            {
+                a.Buffer.Clear();
+            }
             ShowWindow(this.Handle, SW_MINIMIZED);
             GC.Collect();
         }

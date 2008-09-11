@@ -5,25 +5,27 @@ using System.Text;
 
 namespace PockeTwit
 {
-    public static class ImageBuffer
+    public class ImageBuffer
     {
         class ImageInfo
         {
             public Image Image;
             public DateTime LastRequested;
+            public String ID;
         }
 		#region Fields (3) 
 
         public static Bitmap FavoriteImage;
-        private static SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
+        private SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
         public static Bitmap UnknownArt;
+        private AsyncArtGrabber Grabber = new AsyncArtGrabber();
         //private static System.Threading.Timer timerUpdate;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
-        static ImageBuffer()
+        public ImageBuffer()
         {
             FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
             Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
@@ -31,7 +33,7 @@ namespace PockeTwit
             Graphics g = Graphics.FromImage(UnknownArt);
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
-            AsyncArtGrabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
+            Grabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
             //timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(Trim), null, 30000, 30000);
         }
 
@@ -45,11 +47,12 @@ namespace PockeTwit
 
         public delegate void ArtWasUpdated(string User);
 
+        public delegate void delAvatarHasChanged(string User, string NewURL);
 
 		// Events (1) 
 
-        public static event ArtWasUpdated Updated;
-
+        public event ArtWasUpdated Updated;
+        public event delAvatarHasChanged AvatarHasChanged;
 
 		#endregion Delegates and Events 
 
@@ -58,16 +61,16 @@ namespace PockeTwit
 
 		// Public Methods (3) 
 
-        public static void Clear()
+        public void Clear()
         {
             ImageDictionary.Clear();
         }
 
-        public static Image GetArt(string User)
+        public Image GetArt(string User)
         {
             if (!ImageDictionary.ContainsKey(User))
             {
-                string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+                string ArtPath = Grabber.DetermineCacheFileName(User,"");
                 if (System.IO.File.Exists(ArtPath))
                 {
                     LoadArt(User);
@@ -81,7 +84,7 @@ namespace PockeTwit
             return ImageDictionary[User].Image;
         }
 
-        public static Image GetArt(string User, string URL)
+        public Image GetArt(string User, string URL)
         {
             if (User == null) { return null; }
             
@@ -105,17 +108,18 @@ namespace PockeTwit
                     return UnknownArt;
                 }
             }
+
             ImageDictionary[User].LastRequested = DateTime.Now;
             return ImageDictionary[User].Image;
         }
 
-        public static bool HasArt(string User)
+        public bool HasArt(string User)
         {
             if (ImageDictionary.ContainsKey(User))
             {
                 return true;
             }
-            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            string ArtPath = Grabber.DetermineCacheFileName(User,"");
             if (System.IO.File.Exists(ArtPath))
             {
                 LoadArt(User);
@@ -124,7 +128,7 @@ namespace PockeTwit
             return false;
         }
 
-        public static void Trim()
+        public void Trim()
         {
             DateTime runTime = DateTime.Now;
             List<string> Keys = new List<string>(ImageDictionary.Keys);
@@ -144,7 +148,7 @@ namespace PockeTwit
 
 		// Private Methods (3) 
 
-        private static void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
+        private void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
         {
             if (System.IO.File.Exists(Filename))
             {
@@ -154,7 +158,18 @@ namespace PockeTwit
                     ImageInfo newInfo = new ImageInfo();
                     newInfo.Image = NewArt;
                     newInfo.LastRequested = DateTime.Now;
+                    newInfo.ID = ImageDictionary[User].ID;
                     ImageDictionary[User] = newInfo;
+
+                    System.IO.FileStream fs = new System.IO.FileStream(Filename + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
+                    {
+                        sw.Write(newInfo.ID);
+                        sw.Flush();
+                        sw.Close();
+                    }
+
+
                     if (Updated != null)
                     {
                         Updated(User);
@@ -164,13 +179,14 @@ namespace PockeTwit
                 {
                     //Try again next time.
                     System.IO.File.Delete(Filename);
+                    System.IO.File.Delete(Filename + ".ID");
                 }
             }
         }
 
-        private static bool LoadArt(string User)
+        private bool LoadArt(string User)
         {
-            string ArtPath = AsyncArtGrabber.DetermineCacheFileName(User);
+            string ArtPath = Grabber.DetermineCacheFileName(User,"");
             
             Bitmap NewArt;
             try
@@ -188,29 +204,62 @@ namespace PockeTwit
             return true;
         }
 
-        private static bool LoadArt(string User, string URL)
+        private bool LoadArt(string User, string URL)
         {
-            string ArtPath = AsyncArtGrabber.CopyTempFile(User, URL);
+            string ArtPath = Grabber.CopyTempFile(User, URL);
             Bitmap NewArt;
+            string ID,ID2;
             bool bFound = false;
             try
             {
                 if (ArtPath != null)
                 {
                     NewArt = new Bitmap(ArtPath);
+
+                    ID = URL;
+
+                    if (System.IO.File.Exists(ArtPath + ".ID"))
+                    {
+                        using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtPath + ".ID"))
+                        {
+                            ID2 = reader.ReadToEnd();
+                        }
+
+                        // Hack to download the latest image
+                        if (ID != ID2)
+                        {
+                            Grabber.GetArt(User, URL);
+                            WriteID(ArtPath, ID);
+                            if (AvatarHasChanged != null)
+                            {
+                                AvatarHasChanged(User, URL);
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        WriteID(ArtPath, ID);
+                    }
+
                     bFound = true;
                 }
                 else
                 {
                     NewArt = UnknownArt;
+
+                    ID = URL;
+
                 }
                 if (ImageDictionary.ContainsKey(User))
                 {
                     ImageDictionary.Remove(User);
                 }
+
                 ImageInfo newInfo = new ImageInfo();
                 newInfo.LastRequested = DateTime.Now;
                 newInfo.Image = NewArt;
+                newInfo.ID = ID;
                 ImageDictionary.Add(User, newInfo);
                 return bFound;
             }
@@ -220,6 +269,16 @@ namespace PockeTwit
             }
         }
 
+        private void WriteID(string ArtPath, string ID)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
+            {
+                sw.Write(ID);
+                sw.Flush();
+                sw.Close();
+            }
+        }
 
 		#endregion Methods 
 

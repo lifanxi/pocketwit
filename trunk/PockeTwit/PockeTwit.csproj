@@ -216,6 +216,10 @@
     <Compile Include="URLForm.Designer.cs">
       <DependentUpon>URLForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Yedda\HtmlEntities.cs" />
+    <Compile Include="Yedda\HttpUtility.cs" />
+    <Compile Include="Yedda\TwitPic.cs" />
+    <Compile Include="Yedda\Twitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="asterisk_yellow.png">
@@ -252,12 +256,6 @@
     <Content Include="unknownart-small.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Yedda.Twitter.CF\Yedda.Twitter.CF.csproj">
-      <Project>{F37C243A-917A-468B-8012-973A3AAAB514}</Project>
-      <Name>Yedda.Twitter.CF</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
