@@ -46,7 +46,10 @@ namespace FingerUI
             {
                 if (_X == 0 && _Y == 0)
                 {
-                    PockeTwit.ImageBuffer.Trim();
+                    foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+                    {
+                        a.Buffer.Trim();
+                    }
                 }
             }
             
@@ -175,7 +178,10 @@ namespace FingerUI
             HighlightedFont = this.Font;
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
-            PockeTwit.ImageBuffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            {
+                a.Buffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
+            }
 
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
@@ -598,8 +604,10 @@ namespace FingerUI
             CleanupBackBuffer();
 
             m_timer.Enabled = false;
-
-            PockeTwit.ImageBuffer.Updated -= new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            {
+                a.Buffer.Updated -= new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
+            }
             base.Dispose(disposing);
         }
 

@@ -66,6 +66,23 @@ namespace Yedda
         [Serializable]
         public class Account
         {
+            [System.Xml.Serialization.XmlIgnore]
+            private PockeTwit.ImageBuffer _Buffer;
+            public PockeTwit.ImageBuffer Buffer {
+                get
+                {
+                    if (_Buffer == null)
+                    {
+                        _Buffer = new PockeTwit.ImageBuffer();
+                    }
+                    return _Buffer;
+                }
+                set
+                {
+                    _Buffer = value;
+                }
+            }
+
             public string UserName { get; set; }
             public string Password { get; set; }
             private Yedda.Twitter.TwitterServer _Server;

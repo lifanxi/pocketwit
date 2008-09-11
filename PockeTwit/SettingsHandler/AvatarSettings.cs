@@ -78,7 +78,10 @@ namespace PockeTwit
             {
                 System.IO.File.Delete(Avatar);
             }
-            ImageBuffer.Clear();
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            {
+                a.Buffer.Clear();
+            }
             MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
 

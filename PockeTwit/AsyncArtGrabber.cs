@@ -6,19 +6,19 @@ using System.Threading;
 
 namespace PockeTwit
 {
-    public static class AsyncArtGrabber
+    public class AsyncArtGrabber
     {
 
 		#region Fields (1) 
 
-        public static string CacheFolder;
+        public string CacheFolder;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
-        //private static string UnknownArtSmall;
-        static AsyncArtGrabber()
+        //private string UnknownArtSmall;
+        public AsyncArtGrabber()
         {
             CacheFolder = ClientSettings.AppPath + "\\ArtCache";
 
@@ -42,7 +42,7 @@ namespace PockeTwit
 
 		// Events (1) 
 
-        public static event ArtIsReady NewArtWasDownloaded;
+        public event ArtIsReady NewArtWasDownloaded;
 
 
 		#endregion Delegates and Events 
@@ -52,14 +52,20 @@ namespace PockeTwit
 
 		// Public Methods (4) 
 
-        public static string ConvertFileToUrl(string Filename)
+        public string ConvertFileToUrl(string Filename)
         {
             return "file://" + Filename.Replace("\\", "/");
         }
 
-        public static string CopyTempFile(string User, string URL)
+        public string CopyTempFile(string User, string URL)
         {
-            string FileName = DetermineCacheFileName(User);
+            System.Uri U = new Uri(URL);
+            string Folder = U.Host;
+            if (!System.IO.Directory.Exists(CacheFolder + "\\" + Folder))
+            {
+                System.IO.Directory.CreateDirectory(CacheFolder + "\\" + Folder);
+            }
+            string FileName = DetermineCacheFileName(User, URL);
             if (!System.IO.File.Exists(FileName))
             {
                 Thread t = new Thread(delegate() { GetArtFromURL(User, URL); });
@@ -71,29 +77,37 @@ namespace PockeTwit
             return FileName;
         }
 
-        public static string DetermineCacheFileName(string User)
+        public void GetArt(string User, string URL)
         {
+            Thread t = new Thread(delegate() { GetArtFromURL(User, URL); });
+            t.IsBackground = true;
+            t.Priority = ThreadPriority.BelowNormal;
+            t.Start();
+        }
+
+        public string DetermineCacheFileName(string User, string URL)
+        {
+            System.Uri U = new Uri(URL);
+            string Folder = U.Host;
             System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
 
             string UserFileName = r.Replace(User, "");
 
 
-            string FileName = CacheFolder + "\\" + UserFileName;
+            string FileName = CacheFolder + "\\" + Folder + "\\" + UserFileName;
             return FileName;
         }
 
-        public static string GetArtFileName(string User, string URL)
+        public string GetArtFileName(string User, string URL)
         {
             string FileName = CopyTempFile(User, URL);
             
             return FileName;
         }
 
-
-
 		// Private Methods (2) 
 
-        private static void CheckCacheFolderExists(string Folder)
+        private void CheckCacheFolderExists(string Folder)
         {
             if (!System.IO.Directory.Exists(CacheFolder + "\\" + Folder))
             {
@@ -101,17 +115,18 @@ namespace PockeTwit
             }
         }
 
-        private static void GetArtFromURL(string User, string URL)
+        private void GetArtFromURL(string User, string URL)
         {
-            
-            string LocalFileName = DetermineCacheFileName(User);
+            string LocalFileName = DetermineCacheFileName(User,URL);
             System.Net.HttpWebResponse ArtResponse = null;
             try
             {
                 System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
                 ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
             }
-            catch { }
+            catch (Exception ex)
+            { 
+            }
             if (ArtResponse == null)
             {
                 return;

@@ -261,11 +261,11 @@ namespace FingerUI
                 Image UserImage;
                 if (ClientSettings.HighQualityAvatars)
                 {
-                    UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.high_profile_image_url);
+                    UserImage = this.Tweet.Account.Buffer.GetArt(Tweet.user.screen_name, Tweet.user.high_profile_image_url);
                 }
                 else
                 {
-                    UserImage = PockeTwit.ImageBuffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
+                    UserImage = this.Tweet.Account.Buffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
                 }
                 g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
 
@@ -365,7 +365,7 @@ namespace FingerUI
             {
                 string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
                 Image ReplyImage = null;
-                if (!PockeTwit.ImageBuffer.HasArt(ReplyTo))
+                if (!this.Tweet.Account.Buffer.HasArt(ReplyTo))
                 {
                     if (ReplyUser == null)
                     {
@@ -375,17 +375,17 @@ namespace FingerUI
                     {
                         if (ClientSettings.HighQualityAvatars)
                         {
-                            ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
+                            ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
                         }
                         else
                         {
-                            ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                            ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
                         }
                     }
                 }
                 else
                 {
-                    ReplyImage = PockeTwit.ImageBuffer.GetArt(ReplyTo);
+                    ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyTo);
                 }
 
                 if (ReplyImage != null)
