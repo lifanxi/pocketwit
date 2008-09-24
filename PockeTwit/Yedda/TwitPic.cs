@@ -74,23 +74,26 @@ namespace Yedda
                 byte[] bytes = Encoding.UTF8.GetBytes(contents.ToString());
                 byte[] footBytes = Encoding.UTF8.GetBytes(End);
                 request.ContentLength = bytes.Length + photo.Length + footBytes.Length ;
-                
-                using (Stream requestStream = request.GetRequestStream())
+                try
                 {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                    requestStream.Write(photo, 0, photo.Length);
-                    requestStream.Write(footBytes, 0, footBytes.Length);
-                    requestStream.Flush();
-                    requestStream.Close();
-
-                    using (WebResponse response = request.GetResponse())
+                    using (Stream requestStream = request.GetRequestStream())
                     {
-                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        requestStream.Write(bytes, 0, bytes.Length);
+                        requestStream.Write(photo, 0, photo.Length);
+                        requestStream.Write(footBytes, 0, footBytes.Length);
+                        requestStream.Flush();
+                        requestStream.Close();
+
+                        using (WebResponse response = request.GetResponse())
                         {
-                            return reader.ReadToEnd();
+                            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                            {
+                                return reader.ReadToEnd();
+                            }
                         }
                     }
                 }
+                catch { }
             }
 
             return null;

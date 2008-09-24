@@ -50,7 +50,7 @@ namespace PockeTwit
         public delegate void delAvatarHasChanged(string User, string NewURL);
 
 		// Events (1) 
-
+        
         public event ArtWasUpdated Updated;
         public event delAvatarHasChanged AvatarHasChanged;
 
@@ -169,10 +169,14 @@ namespace PockeTwit
                         sw.Close();
                     }
 
-
+                    //WHY IS NOTHING CATCHING THESE?
                     if (Updated != null)
                     {
                         Updated(User);
+                    }
+                    else
+                    {
+                        GlobalEventHandler.CallArtWasUpdated(User);
                     }
                 }
                 catch
@@ -233,6 +237,10 @@ namespace PockeTwit
                             if (AvatarHasChanged != null)
                             {
                                 AvatarHasChanged(User, URL);
+                            }
+                            else
+                            {
+                                GlobalEventHandler.CallAvatarHasChanged(User, URL);
                             }
                             
                         }

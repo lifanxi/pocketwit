@@ -313,9 +313,11 @@ namespace PockeTwit
             SetUpListControl();
 
             ResetDictionaries();
-            
+
             CurrentlySelectedAccount = ClientSettings.AccountsList[0];
-            
+
+            GlobalEventHandler.AvatarHasChanged += new GlobalEventHandler.delAvatarHasChanged(GlobalEventHandler_AvatarHasChanged);
+            GlobalEventHandler.Updated += new GlobalEventHandler.ArtWasUpdated(GlobalEventHandler_Updated);
             
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
@@ -328,9 +330,15 @@ namespace PockeTwit
             
         }
 
-        void ImageBuffer_AvatarHasChanged(string User, string NewURL)
+        void GlobalEventHandler_Updated(string User)
+        {
+            statList.Redraw();
+        }
+
+        void GlobalEventHandler_AvatarHasChanged(string User, string NewURL)
         {
             Manager.UpdateImagesForUser(User, NewURL);
+            statList.Redraw();
         }
 
         void Notifyer_MessagesNotificationClicked()
