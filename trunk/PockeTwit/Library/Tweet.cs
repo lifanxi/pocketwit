@@ -106,8 +106,21 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
-        [XmlIgnore]
-        public Yedda.Twitter.Account Account { get; set; }
+        private Yedda.Twitter.Account _Account;
+        public Yedda.Twitter.Account Account {
+            get
+            {
+                if (_Account == null)
+                {
+                    _Account = ClientSettings.AccountsList[0];
+                }
+                return _Account;
+            }
+            set
+            {
+                _Account = value;
+            }
+        }
 
 		#endregion Properties 
 
