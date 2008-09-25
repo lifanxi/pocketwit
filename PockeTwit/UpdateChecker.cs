@@ -15,6 +15,8 @@ namespace PockeTwit
 		#region Fields (4) 
 
         public static double currentVersion = .39;
+        public static bool devBuild = true;
+
         private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private UpdateInfo WebVersion;
         private string XMLResponse;
@@ -65,10 +67,13 @@ namespace PockeTwit
 
         public void CheckForUpdate()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "CheckUpdates";
-            t.Start();
+            if (!devBuild)
+            {
+                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
+                System.Threading.Thread t = new System.Threading.Thread(ts);
+                t.Name = "CheckUpdates";
+                t.Start();
+            }
         }
 
 

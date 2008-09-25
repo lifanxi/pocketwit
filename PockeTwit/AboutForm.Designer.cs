@@ -90,7 +90,7 @@ namespace PockeTwit
             this.lblVersion.ForeColor = ClientSettings.ForeColor;
             this.lblVersion.Location = new System.Drawing.Point(96, 4);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(64, 20);
+            this.lblVersion.Size = new System.Drawing.Size(120, 20);
             this.lblVersion.Text = "v0.0";
             // 
             // label3

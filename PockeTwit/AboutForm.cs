@@ -30,6 +30,10 @@ namespace PockeTwit
             Checker.UpdateFound += new UpdateChecker.delUpdateFound(Checker_UpdateFound);
             Checker.CurrentVersion += new UpdateChecker.delUpdateFound(Checker_CurrentVersion);
             lblVersion.Text = UpdateChecker.currentVersion.ToString();
+            if (UpdateChecker.devBuild)
+            {
+                lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev";
+            }
         }
 
 		#endregion Constructors 
