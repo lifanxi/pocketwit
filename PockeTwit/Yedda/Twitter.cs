@@ -42,12 +42,13 @@ namespace Yedda
                 pServer.URL = "http://api.ping.fm/";
                 ServerList.Add(pServer.Name, pServer);
 
-                
+                /*
                 Twitter.ServerURL bServer = new Twitter.ServerURL();
                 bServer.Name = "brightkite";
                 bServer.URL = "http://brightkite.com/";
                 ServerList.Add(bServer.Name, bServer);
-                
+                */
+
                 while (!r.EndOfStream)
                 {
                     string URL = r.ReadLine();
