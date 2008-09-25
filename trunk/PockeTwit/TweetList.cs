@@ -165,7 +165,10 @@ namespace PockeTwit
                 CurrentlySelectedAccount = currentItem.Tweet.Account;
                 UpdateRightMenu();
                 statList.Redraw();
-                statList.YOffset = OldOffset + (newItems * statList.ItemHeight);
+                if (newItems > 0)
+                {
+                    statList.YOffset = OldOffset + ((newItems+1) * statList.ItemHeight);
+                }
             }
         }
 
