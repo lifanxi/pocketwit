@@ -87,7 +87,10 @@ namespace PockeTwit
         public Image GetArt(string User, string URL)
         {
             if (User == null) { return null; }
-            
+            if (string.IsNullOrEmpty(URL))
+            {
+                return GetArt(User);
+            }
             if (!ImageDictionary.ContainsKey(User))
             {
                 if (!LoadArt(User, URL))

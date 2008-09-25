@@ -175,7 +175,7 @@ namespace PockeTwit.Library
 
         public static status[] DeserializeFromAtom(string response)
         {
-            return Deserialize(response, null);
+            return DeserializeFromAtom(response, null);
         }
         public static status[] DeserializeFromAtom(string response, Yedda.Twitter.Account Account)
         {
@@ -201,7 +201,7 @@ namespace PockeTwit.Library
                 string userscreenName = userName.Split(new char[]{' '})[0];
                 newStat.user = new User();
                 newStat.user.screen_name = userscreenName;
-                
+                newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
                 
                 resultList.Add(newStat);
                 
