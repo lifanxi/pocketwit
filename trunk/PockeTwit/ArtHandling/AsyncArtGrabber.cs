@@ -87,10 +87,13 @@ namespace PockeTwit
 
         public string DetermineCacheFileName(string User, string URL)
         {
-            System.Uri U = new Uri(URL);
-            string Folder = U.Host;
+            string Folder = "Unknown";
+            if (!string.IsNullOrEmpty(URL))
+            {
+                System.Uri U = new Uri(URL);
+                Folder = U.Host;
+            }
             System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
-
             string UserFileName = r.Replace(User, "");
 
 
