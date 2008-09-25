@@ -133,6 +133,11 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
+            AddStatusesToList(mergedstatuses, 0);
+        }
+        
+        private void AddStatusesToList(Library.status[] mergedstatuses, int newItems)
+        {
             if (mergedstatuses == null) { return; }
             if (mergedstatuses.Length == 0) { return; }
             if(InvokeRequired)
@@ -143,6 +148,7 @@ namespace PockeTwit
             else
             {
                 if (mergedstatuses == null) { return; }
+                int OldOffset = statList.YOffset;
                 statList.Clear();
                 
                 foreach (Library.status stat in mergedstatuses)
@@ -159,6 +165,7 @@ namespace PockeTwit
                 CurrentlySelectedAccount = currentItem.Tweet.Account;
                 UpdateRightMenu();
                 statList.Redraw();
+                statList.YOffset = OldOffset + (newItems * statList.ItemHeight);
             }
         }
 
@@ -404,11 +411,11 @@ namespace PockeTwit
             {
                 if (statList.CurrentList() == "Messages")
                 {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), Messagecount);
                 }
                 else if (statList.CurrentList() == "Friends_TimeLine")
                 {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), FreindsCount);
                 }
             }
             else
@@ -426,7 +433,7 @@ namespace PockeTwit
             {
                 if (statList.CurrentList() == "Messages")
                 {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
                 }
             }
@@ -446,7 +453,7 @@ namespace PockeTwit
             {
                 if (statList.CurrentList() == "Friends_TimeLine")
                 {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
                 }
             }

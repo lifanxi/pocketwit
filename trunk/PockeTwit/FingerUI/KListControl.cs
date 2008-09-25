@@ -7,9 +7,6 @@ using System.Windows.Forms;
 
 namespace FingerUI
 {
-    /// <summary>
-    /// A Kinetic list control.
-    /// </summary>
     public class KListControl : UserControl
     {
         private class Velocity
@@ -190,9 +187,6 @@ namespace FingerUI
 		#endregion Constructors 
 
 		#region Properties (19) 
-
-        
-
         public int Count
         {
             get
@@ -322,6 +316,17 @@ namespace FingerUI
 
         public string Warning { get; set; }
 
+        public int YOffset
+        {
+            get
+            {
+                return m_offset.Y;
+            }
+            set
+            {
+                m_offset.Y = value;
+            }
+        }
         public int XOffset
         {
             get
