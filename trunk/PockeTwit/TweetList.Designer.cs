@@ -68,6 +68,10 @@ namespace PockeTwit
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(234, 31);
             this.lblTitle.Text = "Launching PockeTwit";
+            if (UpdateChecker.devBuild)
+            {
+                this.lblTitle.Text = "Launching PockeTwit Dev";
+            }
             // 
             // lblLoading
             // 
