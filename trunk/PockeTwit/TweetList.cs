@@ -81,7 +81,7 @@ namespace PockeTwit
 
 		//�Delegates�(2)�
         private delegate void delSetWindowState(FormWindowState state);
-        private delegate void delAddStatuses(Library.status[] arrayOfStats);
+        private delegate void delAddStatuses(Library.status[] arrayOfStats, int Count);
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
         private delegate bool delBool();
@@ -143,7 +143,7 @@ namespace PockeTwit
             if(InvokeRequired)
             {
                 delAddStatuses d = new delAddStatuses(AddStatusesToList);
-                this.Invoke(d, new object[] {mergedstatuses});
+                this.Invoke(d, new object[] {mergedstatuses, newItems});
             }
             else
             {
@@ -167,7 +167,7 @@ namespace PockeTwit
                 statList.Redraw();
                 if (newItems > 0)
                 {
-                    statList.YOffset = OldOffset + ((newItems+1) * statList.ItemHeight);
+                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);
                 }
             }
         }
