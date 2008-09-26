@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.39</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv39.CAB</url>
-  <notes>Direct messages and Replies both shown
-   under messages menu item.
+  <version>.40</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv40.CAB</url>
+  <notes>Avatars automatically update
+New messages no longr jump to top
+Fix crash from TwitPic
 </notes>
 </LatestRelease>
