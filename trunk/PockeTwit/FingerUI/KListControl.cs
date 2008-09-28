@@ -1470,6 +1470,10 @@ namespace FingerUI
             IKListItem item;
             item = m_items[m_selectedIndex.Y];
             item.Selected = true;
+            if (SelectedItemChanged != null)
+            {
+                SelectedItemChanged(this, new EventArgs());
+            }
             JumpToItem(item);
         }
 
