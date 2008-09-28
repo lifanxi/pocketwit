@@ -920,7 +920,8 @@ namespace Yedda
             if (this.AccountInfo.ServerURL.ServerType == TwitterServer.pingfm)
             {
                 string url = "http://api.ping.fm/v1/user.post";
-                string data = string.Format("user_app_key={0}&api_key={1}&post_method=microblog&body={2}", this.AccountInfo.UserName,this.AccountInfo.Password,HttpUtility.UrlEncode(status));
+                //string data = string.Format("user_app_key={0}&api_key={1}&post_method=microblog&body={2}", this.AccountInfo.UserName,this.AccountInfo.Password,HttpUtility.UrlEncode(status));
+                string data = string.Format("user_app_key={0}&api_key={1}&post_method=default&body={2}", this.AccountInfo.UserName, this.AccountInfo.Password, HttpUtility.UrlEncode(status));
                 return ExecutePostCommand(url, data);
             }
             else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
