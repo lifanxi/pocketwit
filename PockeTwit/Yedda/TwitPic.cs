@@ -99,14 +99,19 @@ namespace Yedda
             return null;
         }
 
-        public static string SendStoredPic(string userName, string password, string Message, string Path)
+        public static bool SendStoredPic(string userName, string password, string Message, string Path)
         {
 
             using(System.IO.FileStream f = new FileStream(Path,FileMode.Open, FileAccess.Read))
             {
                 byte[] incoming = new byte[f.Length];
                 f.Read(incoming, 0, incoming.Length);
-                return ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);    
+                string ret = ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);
+                if (ret == null)
+                {
+                    return false;
+                }
+                return true;
             }
             
         }

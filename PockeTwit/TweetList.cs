@@ -388,7 +388,7 @@ namespace PockeTwit
 
         void Manager_NoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
         {
-            //Find a way to indicate error to the user
+            MessageBox.Show("Unable to retrieve "+ Action.ToString()+ " from " +t.ToString());
         }
 
         void Manager_CompleteLoaded()
@@ -507,7 +507,11 @@ namespace PockeTwit
                     }
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
-                        Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                        bool bSuccess = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                        if (!bSuccess)
+                        {
+                            //ERROR
+                        }
                     }
                     else
                     {
