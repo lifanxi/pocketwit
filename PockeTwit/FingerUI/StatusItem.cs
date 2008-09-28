@@ -361,40 +361,43 @@ namespace FingerUI
         private void DrawReplyImage(Graphics g, Point ImageLocation)
         {
             ImageLocation.Offset(-5, -5);
-            if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
+            if (Tweet.SplitLines.Count > 0 && Tweet.SplitLines[0].IndexOf(' ')>0)
             {
-                string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
-                Image ReplyImage = null;
-                if (!this.Tweet.Account.Buffer.HasArt(ReplyTo))
+                if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
                 {
-                    if (ReplyUser == null)
+                    string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
+                    Image ReplyImage = null;
+                    if (!this.Tweet.Account.Buffer.HasArt(ReplyTo))
                     {
-                        ReplyUser = PockeTwit.Library.User.FromId(ReplyTo, this.Tweet.Account);
+                        if (ReplyUser == null)
+                        {
+                            ReplyUser = PockeTwit.Library.User.FromId(ReplyTo, this.Tweet.Account);
+                        }
+                        if (ReplyUser != null)
+                        {
+                            if (ClientSettings.HighQualityAvatars)
+                            {
+                                ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
+                            }
+                            else
+                            {
+                                ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                            }
+                        }
                     }
-                    if (ReplyUser != null)
+                    else
                     {
-                        if (ClientSettings.HighQualityAvatars)
-                        {
-                            ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
-                        }
-                        else
-                        {
-                            ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
-                        }
+                        ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyTo);
                     }
-                }
-                else
-                {
-                    ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyTo);
-                }
 
-                if (ReplyImage != null)
-                {
-                    Rectangle ReplyRect = new Rectangle(ImageLocation.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), ImageLocation.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
-                    g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
-                    using (Pen sPen = new Pen(ClientSettings.ForeColor))
+                    if (ReplyImage != null)
                     {
-                        g.DrawRectangle(sPen, ReplyRect);
+                        Rectangle ReplyRect = new Rectangle(ImageLocation.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), ImageLocation.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
+                        g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
+                        using (Pen sPen = new Pen(ClientSettings.ForeColor))
+                        {
+                            g.DrawRectangle(sPen, ReplyRect);
+                        }
                     }
                 }
             }
