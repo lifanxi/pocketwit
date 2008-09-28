@@ -13,15 +13,15 @@ namespace PockeTwit
     {
         private delegate void delEnableDistance();
 
-        public GPS.GpsPosition position = null;
-        private GPS.GpsDeviceState device = null;
-        private GPS.Gps gps = null;
+        public string GPSLocation = null;
+        private LocationManager Locator = new LocationManager();
         
 
 		#region Constructors (1) 
 
         public SearchForm()
         {
+            Locator.LocationReady += new LocationManager.delLocationReady(Locator_LocationReady);
             InitializeComponent();
             if (ClientSettings.IsMaximized)
             {
@@ -32,10 +32,7 @@ namespace PockeTwit
             if (ClientSettings.UseGPS)
             {
                 lblGPSStatus.Text = "Searching for GPS...";
-                gps = new PockeTwit.GPS.Gps();
-                gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-                gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
-                gps.Open();
+                Locator.StartGPS();
                 cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
                 cmbMeasurement.Text = ClientSettings.DistancePreference;
             }
@@ -43,6 +40,13 @@ namespace PockeTwit
             {
                 lblGPSStatus.Text = "GPS disabled.";
             }
+        }
+
+        void Locator_LocationReady(string Location)
+        {
+            SetLabelVisible();
+            GPSLocation = Location;
+            EnableDistance();
         }
 
         private void EnableDistance()
@@ -74,31 +78,7 @@ namespace PockeTwit
                 lblGPSStatus.Visible = false;
             }
         }
-        void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
-        {
-            if (args.Position == null) { return; }
-            try
-            {
-                if (args.Position.LatitudeValid && args.Position.LongitudeValid)
-                {
-                    if (!Double.IsNaN(args.Position.Longitude) && !Double.IsNaN(args.Position.Latitude))
-                    {
-                        SetLabelVisible();
-                        position = args.Position;
-                        EnableDistance();
-                    }
-                }
-            }
-            catch (DivideByZeroException)
-            {
-            }
-        }
-
-        void gps_DeviceStateChanged(object sender, PockeTwit.GPS.DeviceStateChangedEventArgs args)
-        {
-            this.device = args.DeviceState;
-        }
-
+        
 		#endregion Constructors 
 
 		#region Properties (1) 
@@ -116,9 +96,7 @@ namespace PockeTwit
         {
             if (ClientSettings.UseGPS)
             {
-                gps.Close();
-                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                Locator.StopGPS();
             }
             this.DialogResult = DialogResult.Cancel;
 
@@ -128,9 +106,7 @@ namespace PockeTwit
         {
             if (ClientSettings.UseGPS)
             {
-                gps.Close();
-                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                Locator.StopGPS();
             }
             StringBuilder b = new StringBuilder();
             if(!string.IsNullOrEmpty(txtSearch.Text))
@@ -145,7 +121,7 @@ namespace PockeTwit
             if (!string.IsNullOrEmpty(cmbDistance.Text))
             {
                 
-                b.Append("geocode=" + position.Latitude.ToString() + "," + position.Longitude.ToString());
+                b.Append("geocode=" + this.GPSLocation);
                 b.Append("," + cmbDistance.Text);
                 switch(cmbMeasurement.Text)
                 {

@@ -13,7 +13,7 @@ namespace PockeTwit
         private GPS.GpsDeviceState device = null;
         private GPS.Gps gps = null;
         
-        private void GetGPS()
+        public void GetGPS()
         {
             if (ClientSettings.UseGPS)
             {
@@ -21,7 +21,7 @@ namespace PockeTwit
             }
         }
 
-        private void StartGPS()
+        public void StartGPS()
         {
             gps = new PockeTwit.GPS.Gps();
             gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
@@ -29,7 +29,7 @@ namespace PockeTwit
 
             gps.Open();
         }
-        private void StopGPS()
+        public void StopGPS()
         {
             gps.Close();
             gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
