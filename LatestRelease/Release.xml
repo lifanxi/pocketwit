@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.40</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv40.CAB</url>
-  <notes>Avatars automatically update
-New messages no longr jump to top
-Fix crash from TwitPic
+  <version>.41</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv41.CAB</url>
+  <notes>Ping.FM fix.
+Minor bugfixes.
 </notes>
 </LatestRelease>
