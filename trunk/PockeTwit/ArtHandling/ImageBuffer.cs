@@ -68,6 +68,7 @@ namespace PockeTwit
 
         public Image GetArt(string User)
         {
+            User = User.ToLower();
             if (!ImageDictionary.ContainsKey(User))
             {
                 string ArtPath = Grabber.DetermineCacheFileName(User,"");
@@ -86,6 +87,7 @@ namespace PockeTwit
 
         public Image GetArt(string User, string URL)
         {
+            User = User.ToLower();
             if (User == null) { return null; }
             if (string.IsNullOrEmpty(URL))
             {
@@ -118,6 +120,7 @@ namespace PockeTwit
 
         public bool HasArt(string User)
         {
+            User = User.ToLower();
             if (ImageDictionary.ContainsKey(User))
             {
                 return true;
@@ -153,6 +156,7 @@ namespace PockeTwit
 
         private void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
         {
+            User = User.ToLower();
             if (System.IO.File.Exists(Filename))
             {
                 try
@@ -193,6 +197,7 @@ namespace PockeTwit
 
         private bool LoadArt(string User)
         {
+            User = User.ToLower();
             string ArtPath = Grabber.DetermineCacheFileName(User,"");
             
             Bitmap NewArt;
@@ -213,6 +218,7 @@ namespace PockeTwit
 
         private bool LoadArt(string User, string URL)
         {
+            User = User.ToLower();
             string ArtPath = Grabber.CopyTempFile(User, URL);
             Bitmap NewArt;
             string ID,ID2;
