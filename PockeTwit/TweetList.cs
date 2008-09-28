@@ -501,10 +501,9 @@ namespace PockeTwit
                 if (UpdateText != "Set Status")
                 {
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
-                    if (StatusForm.position != null)
+                    if (StatusForm.GPSLocation != null)
                     {
-                        GPS.GpsPosition mylocation = StatusForm.position;
-                        t.SetLocation(mylocation.Latitude.ToString() + "," + mylocation.Longitude.ToString());
+                        t.SetLocation(StatusForm.GPSLocation);
                     }
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {

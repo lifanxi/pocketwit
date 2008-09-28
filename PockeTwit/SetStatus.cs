@@ -16,16 +16,15 @@ namespace PockeTwit
         private delegate void delUpdateText(string text);
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
-        
-        public GPS.GpsPosition position = null;
-        private GPS.GpsDeviceState device = null;
-        private GPS.Gps gps = null;
+        public string GPSLocation = null;
+        private LocationManager Locator = new LocationManager();
         #endregion Fields 
 
 		#region Constructors (1) 
 
         public SetStatus()
         {
+            Locator.LocationReady += new LocationManager.delLocationReady(Locator_LocationReady);
             InitializeComponent();
             if (ClientSettings.IsMaximized)
             {
@@ -36,18 +35,16 @@ namespace PockeTwit
             
             if (ClientSettings.UseGPS)
             {
-                GetGPS();
+                Locator.StartGPS();
             }
         }
-        private void GetGPS()
+
+        void Locator_LocationReady(string GPSLocation)
         {
-            gps = new PockeTwit.GPS.Gps();
-            gps.DeviceStateChanged += new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-            gps.LocationChanged += new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
-
-            gps.Open();
+            SwitchOnGPS();
+            this.GPSLocation = GPSLocation;
         }
-
+        
         private delegate void delSwitchOnGPS();
         private void SwitchOnGPS()
         {
@@ -63,45 +60,9 @@ namespace PockeTwit
             }
         }
 
-        private delegate void delMSG(string message);
-        private void MSG(string message)
-        {
-            if (InvokeRequired)
-            {
-                delMSG d = new delMSG(MSG);
-                this.Invoke(d, new object[] { message });
-            }
-            else
-            {
-                MessageBox.Show(message);
-            }
-        }
+        
 
-
-        void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
-        {
-            if (args.Position == null) { return; }   
-            try
-            {
-                if (args.Position.LatitudeValid && args.Position.LongitudeValid)
-                {
-                    if (!Double.IsNaN(args.Position.Longitude)  && !Double.IsNaN(args.Position.Latitude))
-                    {
-                        SwitchOnGPS();
-                        position = args.Position;
-                    }
-                }
-            }
-            catch(DivideByZeroException ex)
-            {
-            }
-        }
-
-        void gps_DeviceStateChanged(object sender, PockeTwit.GPS.DeviceStateChangedEventArgs args)
-        {
-            device = args.DeviceState;
-        }
-
+        
         private void PopulateAccountList()
         {
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
@@ -243,9 +204,7 @@ namespace PockeTwit
         {
             if (ClientSettings.UseGPS)
             {
-                gps.Close();
-                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                Locator.StopGPS();
             }
             this.DialogResult = DialogResult.Cancel;
         }
@@ -263,13 +222,11 @@ namespace PockeTwit
         {
             if (ClientSettings.UseGPS)
             {
-                gps.Close();
-                gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
-                gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
+                Locator.StopGPS();
             }
             if (!chkGPS.Checked)
             {
-                this.position = null;
+                this.GPSLocation = null;   
             }
             this.DialogResult = DialogResult.OK;
         }
