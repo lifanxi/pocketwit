@@ -165,9 +165,9 @@ namespace Yedda
                 }
                 else
                 {
-                    if (Enabled) { Indicator = "+"; }
-                    else { Indicator = "-"; }
-                    return Indicator + " " + UserName + " (" + ServerURL.Name + ")";
+                    //if (Enabled) { Indicator = "+"; }
+                    //else { Indicator = "-"; }
+                    return UserName + " (" + ServerURL.Name + ")";
                 }
             }
         }

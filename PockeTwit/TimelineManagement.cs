@@ -148,12 +148,20 @@ namespace PockeTwit
                     string cachePath = ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml";
                     if (System.IO.File.Exists(cachePath))
                     {
-                        using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
+                        try
                         {
-                            string s = r.ReadToEnd();
-                            Library.status[] newstats = Library.status.Deserialize(s);
-                            Loaded.AddRange(newstats);
-                            LastStatusID[t] = newstats[0].id;
+                            using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
+                            {
+                                string s = r.ReadToEnd();
+                                Library.status[] newstats = Library.status.Deserialize(s);
+                                Loaded.AddRange(newstats);
+                                LastStatusID[t] = newstats[0].id;
+                            }
+                        }
+                        catch
+                        {
+                            System.IO.File.Delete(cachePath);
+                            MessageBox.Show("Error with " + t.AccountInfo.ToString() + " cache. Clearing it.");
                         }
                     }
                 }
