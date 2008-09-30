@@ -69,6 +69,12 @@
     <Compile Include="ChooseAccount.Designer.cs">
       <DependentUpon>ChooseAccount.cs</DependentUpon>
     </Compile>
+    <Compile Include="Errors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Errors.Designer.cs">
+      <DependentUpon>Errors.cs</DependentUpon>
+    </Compile>
     <Compile Include="GlobalEventHandler.cs" />
     <Compile Include="GPS\DegreesMinutesSeconds.cs" />
     <Compile Include="GPS\DeviceStateChangedEventArgs.cs" />
@@ -236,6 +242,9 @@
     <EmbeddedResource Include="ChooseAccount.resx">
       <DependentUpon>ChooseAccount.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Errors.resx">
+      <DependentUpon>Errors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MyIco.ico" />
     <EmbeddedResource Include="SettingsHandler\AvatarSettings.resx">

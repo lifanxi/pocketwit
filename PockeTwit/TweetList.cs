@@ -588,6 +588,10 @@ namespace PockeTwit
         {
             switch (ItemName)
             {
+                case "Errors":
+                    Errors errForm = new Errors();
+                    errForm.ShowDialog();
+                    break;
                 case "Search/Local":
                     TwitterSearch();
                     break;
