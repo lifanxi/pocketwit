@@ -17,7 +17,7 @@ namespace PockeTwit
         private UpdateChecker Checker;
         private Library.status[] CurrentStatuses =null;
 
-        private List<string> LeftMenu;
+        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
         private List<string> RightMenu;
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
@@ -55,26 +55,6 @@ namespace PockeTwit
         }
 
 		#endregion�Constructors�
-
-		#region�Properties�(1)�
-
-        private bool CurrentlyConnected
-        {
-            set
-            {
-                if (value)
-                {
-                    statList.Warning = "";
-                    SetConnectedMenus();
-                }
-                else
-                {
-                    SetDisconnectedMenus();
-                }
-            }
-        }
-
-		#endregion�Properties�
 
 		#region�Delegates�and�Events�(2)�
 
@@ -287,19 +267,13 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t)
         {
-            LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+            //LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
             RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
             statList.LeftMenuItems = LeftMenu;
             statList.RightMenuItems = RightMenu;
-        }
-
-        private void SetDisconnectedMenus()
-        {
-            statList.LeftMenuItems = new List<string>(new string[] { "Reconnect", "Settings", "About/Feedback", "Exit" });
-            statList.RightMenuItems = new List<string>(new string[] { "Minimize" });
         }
 
         private bool SetEverythingUp()
@@ -374,6 +348,7 @@ namespace PockeTwit
             SetConnectedMenus();
             Manager = new TimelineManagement(TwitterConnections);
             Manager.NoData += new TimelineManagement.delNullReturnedByAccount(Manager_NoData);
+            Manager.ErrorCleared += new TimelineManagement.delNullReturnedByAccount(Manager_ErrorCleared);
             Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
             Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
             Manager.Startup(TwitterConnections);
@@ -386,9 +361,55 @@ namespace PockeTwit
             }
         }
 
+        void Manager_ErrorCleared(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
+        {
+            if(LeftMenu[0]=="Errors")
+            {
+                if (Yedda.Twitter.Failures.ContainsKey(t))
+                {
+                    if (Yedda.Twitter.Failures[t].ContainsKey(Action))
+                    {
+                        Yedda.Twitter.Failures[t][Action] = 0;
+                    }
+                }
+                bool AllClear = true;
+                foreach (Dictionary<Yedda.Twitter.ActionType,int> FailList in Yedda.Twitter.Failures.Values)
+                {
+                    foreach (int i in FailList.Values)
+                    {
+                        if (i > 0)
+                        {
+                            AllClear = false;
+                        }
+                    }
+                }
+                if (AllClear)
+                {
+                    //Remove the menu item.
+                    LeftMenu.Remove("Errors");
+                    statList.LeftMenuItems = LeftMenu;
+                    statList.Redraw();
+                }
+            }
+        }
+
         void Manager_NoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
         {
-            MessageBox.Show("Unable to retrieve "+ Action.ToString()+ " from " +t.ToString());
+            if (!Yedda.Twitter.Failures.ContainsKey(t))
+            {
+                Yedda.Twitter.Failures.Add(t, new Dictionary<Yedda.Twitter.ActionType, int>());
+            }
+            if (!Yedda.Twitter.Failures[t].ContainsKey(Action))
+            {
+                Yedda.Twitter.Failures[t].Add(Action, 0);
+            }
+            Yedda.Twitter.Failures[t][Action]++;
+            if (LeftMenu[0] != "Errors")
+            {
+                LeftMenu.Insert(0, "Errors");
+                statList.LeftMenuItems = LeftMenu;
+                statList.Redraw();
+            }
         }
 
         void Manager_CompleteLoaded()
@@ -494,6 +515,7 @@ namespace PockeTwit
             IsLoaded = false;
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 this.statList.Visible = true;
                 StatusForm.Hide();
                 IsLoaded = false;
@@ -520,6 +542,7 @@ namespace PockeTwit
                     Manager.RefreshFriendsTimeLine();
                 }
             }
+            Cursor.Current = Cursors.Default;
             IsLoaded = true;
             this.statList.Redraw();
             this.statList.Visible = true;
