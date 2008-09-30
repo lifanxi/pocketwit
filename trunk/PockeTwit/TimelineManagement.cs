@@ -143,7 +143,7 @@ namespace PockeTwit
             List<Library.status> Loaded = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
-                if (t.AccountInfo.Enabled)
+                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType!= Yedda.Twitter.TwitterServer.pingfm)
                 {
                     string cachePath = ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml";
                     if (System.IO.File.Exists(cachePath))
@@ -201,7 +201,7 @@ namespace PockeTwit
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
-                if (t.AccountInfo.Enabled)
+                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
                 {
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                     if (!string.IsNullOrEmpty(response))
@@ -265,7 +265,7 @@ namespace PockeTwit
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
-                if (t.AccountInfo.Enabled)
+                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
                 {
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Friends_Timeline);
 
