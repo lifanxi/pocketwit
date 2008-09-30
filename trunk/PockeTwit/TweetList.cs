@@ -142,8 +142,11 @@ namespace PockeTwit
                 }
                 statList.SetSelectedIndexToZero();
                 FingerUI.StatusItem currentItem = (FingerUI.StatusItem)statList[0];
-                CurrentlySelectedAccount = currentItem.Tweet.Account;
-                UpdateRightMenu();
+                if (currentItem != null)
+                {
+                    CurrentlySelectedAccount = currentItem.Tweet.Account;
+                    UpdateRightMenu();
+                }
                 statList.Redraw();
                 if (newItems > 0)
                 {
