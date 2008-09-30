@@ -20,6 +20,8 @@ namespace PockeTwit
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
         public event delNullReturnedByAccount NoData;
+        public event delNullReturnedByAccount ErrorCleared;
+
         #endregion
         public bool RunInBackground = true;
         public enum TimeLineType
@@ -168,6 +170,10 @@ namespace PockeTwit
                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Search);
                 return null;
             }
+            else
+            {
+                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Search);
+            }
             return Library.status.DeserializeFromAtom(response, t.AccountInfo);
         }
 
@@ -176,8 +182,12 @@ namespace PockeTwit
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Show, UserID);
             if (string.IsNullOrEmpty(response))
             {
-                NoData(t.AccountInfo,Yedda.Twitter.ActionType.Show);
+                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Show);
                 return null;
+            }
+            else
+            {
+                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Show);
             }
             return Library.status.Deserialize(response, t.AccountInfo);
         }
@@ -202,6 +212,7 @@ namespace PockeTwit
                         {
                             LastReplyID[t] = NewStats[0].id;
                         }
+                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                     }
                     else
                     {
@@ -220,6 +231,11 @@ namespace PockeTwit
                             {
                                 LastStatusID[t] = NewStats[0].id;
                             }
+                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                        }
+                        else
+                        {
+                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                         }
                     }
                 }
@@ -262,6 +278,7 @@ namespace PockeTwit
                             SaveStatuses(NewStats, t);
                             LastStatusID[t] = NewStats[0].id;
                         }
+                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                     }
                     else
                     {
@@ -369,8 +386,6 @@ namespace PockeTwit
             }
             catch (Exception ex)
             {
-                //statList.Warning = ex.Message;
-                //CurrentlyConnected = false;
             }
             return response;
         }

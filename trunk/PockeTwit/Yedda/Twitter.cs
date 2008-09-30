@@ -64,6 +64,7 @@ namespace Yedda
 
     public class Twitter
     {
+        public static Dictionary<Twitter.Account, Dictionary<Twitter.ActionType, int>> Failures = new Dictionary<Account, Dictionary<ActionType, int>>();
         [Serializable]
         public class Account
         {
