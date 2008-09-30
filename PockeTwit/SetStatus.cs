@@ -37,6 +37,7 @@ namespace PockeTwit
             {
                 Locator.StartGPS();
             }
+            textBox1.Focus();
         }
 
         void Locator_LocationReady(string GPSLocation)
