@@ -281,6 +281,21 @@ namespace PockeTwit
             InsertURL();
         }
 
-
+        void PasteItem_Click(object sender, System.EventArgs e)
+        {
+            IDataObject iData = Clipboard.GetDataObject();
+            if (iData.GetDataPresent(DataFormats.Text))
+            {
+                textBox1.SelectedText=(string)iData.GetData(DataFormats.Text);
+            }
+        }
+        void CopyItem_Click(object sender, System.EventArgs e)
+        {
+            string selText = textBox1.SelectedText;
+            if (!string.IsNullOrEmpty(selText))
+            {
+                Clipboard.SetDataObject(selText);
+            }
+        }
     }
 }

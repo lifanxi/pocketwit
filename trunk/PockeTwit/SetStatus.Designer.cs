@@ -25,6 +25,9 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkGPS;
         private System.Windows.Forms.Label lblGPS;
         private System.Windows.Forms.ContextMenu Context;
+        private System.Windows.Forms.ContextMenu copyPasteMenu;
+        private System.Windows.Forms.MenuItem PasteItem;
+        private System.Windows.Forms.MenuItem CopyItem;
 		#endregion Fields 
 
 		#region Methods (1) 
@@ -237,6 +240,21 @@ namespace PockeTwit
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
+         
+            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
+            
+            this.PasteItem = new System.Windows.Forms.MenuItem();
+            PasteItem.Text = "Paste";
+
+            this.CopyItem = new MenuItem();
+            CopyItem.Text = "Copy";
+
+            copyPasteMenu.MenuItems.Add(CopyItem);
+            copyPasteMenu.MenuItems.Add(PasteItem);
+            PasteItem.Click += new System.EventHandler(PasteItem_Click);
+            CopyItem.Click += new System.EventHandler(CopyItem_Click);
+
+            textBox1.ContextMenu = copyPasteMenu;
             this.Controls.Add(pictureBox1);
             this.Controls.Add(pictureBox2);
             this.Controls.Add(pictureBox3);
