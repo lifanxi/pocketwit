@@ -23,6 +23,7 @@ namespace PockeTwit.Library
         [XmlIgnore]
         private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
 
+        public bool MarkedRead = false;
         public StatusTypes TypeofMessage = StatusTypes.Normal;
 
 		#region Properties (7) 
