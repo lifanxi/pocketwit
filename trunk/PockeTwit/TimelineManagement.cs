@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Win32;
 
 namespace PockeTwit
 {
@@ -38,78 +37,24 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
-        private RegistryKey PockeTwitKey;
-        private RegistryKey StatusIDs;
-        private RegistryKey ReplyIDs;
-        private RegistryKey DirectIDs;
 
 
-        private void SetUp()
+        public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
-            PockeTwitKey = Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("PockeTwit");
-            StatusIDs = Registry.CurrentUser.OpenSubKey("Software\\PockeTwit", true).CreateSubKey("LastStatusID");
-            ReplyIDs = Registry.CurrentUser.OpenSubKey("Software\\PockeTwit", true).CreateSubKey("LastReplyID");
-            DirectIDs = Registry.CurrentUser.OpenSubKey("Software\\PockeTwit", true).CreateSubKey("LastDirectID");
         }
 
-        private void LoadIDsFromRegistry()
+        public void Startup(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
+            Progress(0, "Starting");
+            TimeLines.Add(TimeLineType.Friends, new TimeLine());
+            TimeLines.Add(TimeLineType.Messages, new TimeLine());
+            TwitterConnections = TwitterConnectionsToFollow;
             foreach (Yedda.Twitter t in TwitterConnections)
             {
                 LastStatusID.Add(t, "");
                 LastReplyID.Add(t, "");
                 LastDirectID.Add(t, "");
             }
-            foreach (Yedda.Twitter t in this.TwitterConnections)
-            {
-                LastStatusID[t] = (string)StatusIDs.GetValue(t.AccountInfo.ToString());
-                LastReplyID[t] = (string)ReplyIDs.GetValue(t.AccountInfo.ToString());
-                LastDirectID[t] = (string)DirectIDs.GetValue(t.AccountInfo.ToString());
-            }
-        }
-        
-        
-
-        private void SaveIDsToregistry()
-        {
-            foreach (Yedda.Twitter t in LastStatusID.Keys)
-            {
-                if (LastStatusID[t] != null)
-                {
-                    StatusIDs.SetValue(t.AccountInfo.ToString(), LastStatusID[t]);
-                }
-            }
-            foreach (Yedda.Twitter t in LastReplyID.Keys)
-            {
-                if (LastReplyID[t] != null)
-                {
-                    ReplyIDs.SetValue(t.AccountInfo.ToString(), LastReplyID[t]);
-                }
-            }
-            foreach (Yedda.Twitter t in LastDirectID.Keys)
-            {
-                if (LastDirectID[t] != null)
-                {
-                    DirectIDs.SetValue(t.AccountInfo.ToString(), LastDirectID[t]);
-                }
-            }
-        }
-        
-        public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
-        {
-            SetUp();
-        }
-
-        public void Startup(List<Yedda.Twitter> TwitterConnectionsToFollow)
-        {
-            TwitterConnections = TwitterConnectionsToFollow;
-            LoadIDsFromRegistry();
-            Progress(0, "Starting");
-            TimeLines.Add(TimeLineType.Friends, new TimeLine());
-            TimeLines.Add(TimeLineType.Messages, new TimeLine());
-            /*
-            
-             */
             Progress(0, "Loading Cache");
             LoadCachedtimeline();
             Progress(0, "Fetching Friends TimeLine");
@@ -195,16 +140,34 @@ namespace PockeTwit
 
         private void LoadCachedtimeline()
         {
-            if (System.IO.File.Exists(ClientSettings.AppPath + "\\" + "FriendsTime.xml"))
+            List<Library.status> Loaded = new List<PockeTwit.Library.status>();
+            foreach (Yedda.Twitter t in TwitterConnections)
             {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\" + "FriendsTime.xml"))
+                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType!= Yedda.Twitter.TwitterServer.pingfm)
                 {
-                    string s = r.ReadToEnd();
-                    Library.status[] newstats = Library.status.Deserialize(s);
-                    TimeLine cachedLine = new TimeLine(newstats);
-                    TimeLines[TimeLineType.Friends] = cachedLine;
+                    string cachePath = ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml";
+                    if (System.IO.File.Exists(cachePath))
+                    {
+                        try
+                        {
+                            using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
+                            {
+                                string s = r.ReadToEnd();
+                                Library.status[] newstats = Library.status.Deserialize(s);
+                                Loaded.AddRange(newstats);
+                                LastStatusID[t] = newstats[0].id;
+                            }
+                        }
+                        catch
+                        {
+                            System.IO.File.Delete(cachePath);
+                            MessageBox.Show("Error with " + t.AccountInfo.ToString() + " cache. Clearing it.");
+                        }
+                    }
                 }
             }
+            TimeLine CachedLines = new TimeLine(Loaded);
+            TimeLines[TimeLineType.Friends] = CachedLines;
         }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
@@ -256,7 +219,6 @@ namespace PockeTwit
                         if (NewStats.Length > 0)
                         {
                             LastReplyID[t] = NewStats[0].id;
-                            SaveIDsToregistry();
                         }
                         ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                     }
@@ -276,7 +238,6 @@ namespace PockeTwit
                             if (NewStats.Length > 0)
                             {
                                 LastStatusID[t] = NewStats[0].id;
-                                SaveIDsToregistry();
                             }
                             ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                         }
@@ -322,8 +283,8 @@ namespace PockeTwit
                         TempLine.AddRange(NewStats);
                         if (NewStats.Length > 0)
                         {
+                            SaveStatuses(NewStats, t);
                             LastStatusID[t] = NewStats[0].id;
-                            SaveIDsToregistry();
                         }
                         ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                     }
@@ -334,7 +295,6 @@ namespace PockeTwit
                 }
             }
             int NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
-            
             if (FriendsUpdated != null && NewItems>0)
             {
                 if (Notify)
@@ -345,13 +305,12 @@ namespace PockeTwit
                 {
                     HoldNewFriends = NewItems;
                 }
-                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray());
             }
             TempLine.Clear();
             TempLine.TrimExcess();
         }
 
-        private void SaveStatuses(PockeTwit.Library.status[] statuses)
+        private void SaveStatuses(PockeTwit.Library.status[] statuses, Yedda.Twitter t)
         {
             if (statuses.Length <= 20)
             {
@@ -360,7 +319,7 @@ namespace PockeTwit
             }
             string StatusString = Library.status.Serialize(statuses);
 
-            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + "FriendsTime.xml"))
+            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml"))
             {
                 w.Write(StatusString);
                 w.Flush();
