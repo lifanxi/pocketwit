@@ -85,5 +85,13 @@ namespace PockeTwit
             MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
 
+        private void chkReplyImages_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (chkReplyImages.Checked)
+            {
+                MessageBox.Show("Replay avatars may cause instability.  Please disable them if you have any problems.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            }
+        }
+
     }
 }

@@ -136,11 +136,7 @@ namespace FingerUI
             } 
             set 
             {
-                m_selected = value;
-                if (value)
-                {
-                    this.Tweet.MarkedRead = true;
-                }
+                m_selected = value; 
             } 
         }
 
@@ -239,24 +235,6 @@ namespace FingerUI
                 //g.DrawRectangle(new Pen(Color.Black), bounds);
                 //Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width+5, textBounds.Height);
                 Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width , bounds.Height);
-                InnerBounds.Offset(1, 1);
-                InnerBounds.Width--; InnerBounds.Height--;
-
-                g.FillRectangle(FillColor, InnerBounds);
-
-                FillColor.Dispose();
-            }
-            else if (!this.Tweet.MarkedRead)
-            {
-                SolidBrush FillColor;
-
-                FillColor = new SolidBrush(ClientSettings.UnreadBackColor);
-                TextFont = m_parent.SelectedFont;
-                ForeBrush = new SolidBrush(ClientSettings.UnreadForeColor);
-
-                //g.DrawRectangle(new Pen(Color.Black), bounds);
-                //Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width+5, textBounds.Height);
-                Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
                 InnerBounds.Offset(1, 1);
                 InnerBounds.Width--; InnerBounds.Height--;
 

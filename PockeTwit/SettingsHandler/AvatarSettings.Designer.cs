@@ -72,17 +72,18 @@ namespace PockeTwit
             // 
             // chkReplyImages
             // 
-            this.chkReplyImages.ForeColor = ClientSettings.ForeColor;
+            this.chkReplyImages.ForeColor = System.Drawing.Color.LightGray;
             this.chkReplyImages.Location = new System.Drawing.Point(3, 55);
             this.chkReplyImages.Name = "chkReplyImages";
             this.chkReplyImages.Size = new System.Drawing.Size(235, 20);
             this.chkReplyImages.TabIndex = 2;
             this.chkReplyImages.Text = "Show Reply Avatars";
+            this.chkReplyImages.CheckStateChanged += new System.EventHandler(this.chkReplyImages_CheckStateChanged);
             // 
             // lnkClearAvatars
             // 
             this.lnkClearAvatars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkClearAvatars.ForeColor = ClientSettings.LinkColor;
+            this.lnkClearAvatars.ForeColor = System.Drawing.Color.LightBlue;
             this.lnkClearAvatars.Location = new System.Drawing.Point(126, 248);
             this.lnkClearAvatars.Name = "lnkClearAvatars";
             this.lnkClearAvatars.Size = new System.Drawing.Size(109, 20);
@@ -92,7 +93,7 @@ namespace PockeTwit
             // 
             // chkAvatar
             // 
-            this.chkAvatar.ForeColor = ClientSettings.ForeColor;
+            this.chkAvatar.ForeColor = System.Drawing.Color.LightGray;
             this.chkAvatar.Location = new System.Drawing.Point(2, 3);
             this.chkAvatar.Name = "chkAvatar";
             this.chkAvatar.Size = new System.Drawing.Size(235, 20);
@@ -101,7 +102,7 @@ namespace PockeTwit
             // 
             // chkHighQuality
             // 
-            this.chkHighQuality.ForeColor = ClientSettings.ForeColor;
+            this.chkHighQuality.ForeColor = System.Drawing.Color.LightGray;
             this.chkHighQuality.Location = new System.Drawing.Point(3, 29);
             this.chkHighQuality.Name = "chkHighQuality";
             this.chkHighQuality.Size = new System.Drawing.Size(235, 20);
@@ -112,7 +113,7 @@ namespace PockeTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.chkHighQuality);
             this.Controls.Add(this.chkAvatar);

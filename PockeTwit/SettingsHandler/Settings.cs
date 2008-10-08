@@ -22,8 +22,6 @@ public static class ClientSettings
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldBackColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;
-    public static System.Drawing.Color UnreadBackColor = Color.FromArgb(50,50,50);
-    public static System.Drawing.Color UnreadForeColor = System.Drawing.Color.LightGray;
     public static string PingApi = "07fcca78e725fa4d3b27ea552ef06b3b";
 
     public static int Margin = 5;
