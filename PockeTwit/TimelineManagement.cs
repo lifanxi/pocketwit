@@ -214,13 +214,20 @@ namespace PockeTwit
                     string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                     if (!string.IsNullOrEmpty(response))
                     {
-                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
-                        TempLine.AddRange(NewStats);
-                        if (NewStats.Length > 0)
+                        try
                         {
-                            LastReplyID[t] = NewStats[0].id;
+                            Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
+                            TempLine.AddRange(NewStats);
+                            if (NewStats.Length > 0)
+                            {
+                                LastReplyID[t] = NewStats[0].id;
+                            }
+                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                         }
-                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                        catch
+                        {
+                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                        }
                     }
                     else
                     {
@@ -233,13 +240,20 @@ namespace PockeTwit
                         response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
                         if (!string.IsNullOrEmpty(response))
                         {
-                            Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
-                            TempLine.AddRange(NewStats);
-                            if (NewStats.Length > 0)
+                            try
                             {
-                                LastStatusID[t] = NewStats[0].id;
+                                Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                TempLine.AddRange(NewStats);
+                                if (NewStats.Length > 0)
+                                {
+                                    LastStatusID[t] = NewStats[0].id;
+                                }
+                                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                             }
-                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                            catch
+                            {
+                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                            }
                         }
                         else
                         {
@@ -279,14 +293,21 @@ namespace PockeTwit
 
                     if (!string.IsNullOrEmpty(response))
                     {
-                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
-                        TempLine.AddRange(NewStats);
-                        if (NewStats.Length > 0)
+                        try
                         {
-                            SaveStatuses(NewStats, t);
-                            LastStatusID[t] = NewStats[0].id;
+                            Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                            TempLine.AddRange(NewStats);
+                            if (NewStats.Length > 0)
+                            {
+                                SaveStatuses(NewStats, t);
+                                LastStatusID[t] = NewStats[0].id;
+                            }
+                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                         }
-                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                        catch
+                        {
+                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                        }
                     }
                     else
                     {
@@ -317,13 +338,20 @@ namespace PockeTwit
                 //No need to cache less than 20 tweets.  
                 return;
             }
-            string StatusString = Library.status.Serialize(statuses);
 
-            using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml"))
+            try
             {
-                w.Write(StatusString);
-                w.Flush();
-                w.Close();  //Shouldn't need this in using, but I'm desperate   
+                string StatusString = Library.status.Serialize(statuses);
+
+                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml"))
+                {
+                    w.Write(StatusString);
+                    w.Flush();
+                    w.Close();  //Shouldn't need this in using, but I'm desperate   
+                }
+            }
+            catch
+            {
             }
         }
 
