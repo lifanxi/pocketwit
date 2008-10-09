@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.42</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv42.CAB</url>
-  <notes>Less invasive error report
-Don't fetch timelines from Ping.FM
+  <version>.43</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv43.CAB</url>
+  <notes>Copy+Paste in status update
+More crash fixes
 </notes>
 </LatestRelease>
