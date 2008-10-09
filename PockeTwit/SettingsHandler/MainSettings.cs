@@ -112,11 +112,5 @@ namespace PockeTwit.SettingsHandler
         {
 
         }
-
-        private void lnkDiagnostics_Click(object sender, EventArgs e)
-        {
-            DiagnosticsForm f = new DiagnosticsForm();
-            f.ShowDialog();
-        }
     }
 }

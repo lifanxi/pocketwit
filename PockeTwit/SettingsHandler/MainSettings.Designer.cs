@@ -35,7 +35,6 @@
             this.lnkAvatar = new System.Windows.Forms.LinkLabel();
             this.lnkUI = new System.Windows.Forms.LinkLabel();
             this.lnkGPS = new System.Windows.Forms.LinkLabel();
-            this.lnkDiagnostics = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -51,7 +50,7 @@
             // 
             this.lnkManageAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkManageAccounts.ForeColor = System.Drawing.Color.LightBlue;
+            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor; ;
             this.lnkManageAccounts.Location = new System.Drawing.Point(3, 9);
             this.lnkManageAccounts.Name = "lnkManageAccounts";
             this.lnkManageAccounts.Size = new System.Drawing.Size(234, 20);
@@ -63,7 +62,7 @@
             // 
             this.lnkAvatar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkAvatar.ForeColor = System.Drawing.Color.LightBlue;
+            this.lnkAvatar.ForeColor = ClientSettings.LinkColor;
             this.lnkAvatar.Location = new System.Drawing.Point(3, 29);
             this.lnkAvatar.Name = "lnkAvatar";
             this.lnkAvatar.Size = new System.Drawing.Size(234, 20);
@@ -75,7 +74,7 @@
             // 
             this.lnkUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkUI.ForeColor = System.Drawing.Color.LightBlue;
+            this.lnkUI.ForeColor = ClientSettings.LinkColor;
             this.lnkUI.Location = new System.Drawing.Point(3, 49);
             this.lnkUI.Name = "lnkUI";
             this.lnkUI.Size = new System.Drawing.Size(234, 20);
@@ -87,7 +86,7 @@
             // 
             this.lnkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkGPS.ForeColor = System.Drawing.Color.LightBlue;
+            this.lnkGPS.ForeColor = ClientSettings.LinkColor;
             this.lnkGPS.Location = new System.Drawing.Point(3, 69);
             this.lnkGPS.Name = "lnkGPS";
             this.lnkGPS.Size = new System.Drawing.Size(234, 20);
@@ -95,26 +94,13 @@
             this.lnkGPS.Text = "Other Settings";
             this.lnkGPS.Click += new System.EventHandler(this.lnkGPS_Click);
             // 
-            // lnkDiagnostics
-            // 
-            this.lnkDiagnostics.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkDiagnostics.ForeColor = System.Drawing.Color.LightBlue;
-            this.lnkDiagnostics.Location = new System.Drawing.Point(3, 248);
-            this.lnkDiagnostics.Name = "lnkDiagnostics";
-            this.lnkDiagnostics.Size = new System.Drawing.Size(234, 20);
-            this.lnkDiagnostics.TabIndex = 4;
-            this.lnkDiagnostics.Text = "Send Diagnostics Info";
-            this.lnkDiagnostics.Click += new System.EventHandler(this.lnkDiagnostics_Click);
-            // 
             // MainSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.lnkDiagnostics);
             this.Controls.Add(this.lnkGPS);
             this.Controls.Add(this.lnkUI);
             this.Controls.Add(this.lnkAvatar);
@@ -137,6 +123,5 @@
         private System.Windows.Forms.LinkLabel lnkUI;
         private System.Windows.Forms.LinkLabel lnkGPS;
         private System.Windows.Forms.MenuItem menuDone;
-        private System.Windows.Forms.LinkLabel lnkDiagnostics;
     }
 }
