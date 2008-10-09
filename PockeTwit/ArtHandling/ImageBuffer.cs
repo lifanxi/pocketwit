@@ -69,20 +69,23 @@ namespace PockeTwit
         public Image GetArt(string User)
         {
             User = User.ToLower();
-            if (!ImageDictionary.ContainsKey(User))
+            lock (ImageDictionary)
             {
-                string ArtPath = Grabber.DetermineCacheFileName(User,"");
-                if (System.IO.File.Exists(ArtPath))
+                if (!ImageDictionary.ContainsKey(User))
                 {
-                    LoadArt(User);
-                    ImageDictionary[User].LastRequested = DateTime.Now;
-                    return ImageDictionary[User].Image;
+                    string ArtPath = Grabber.DetermineCacheFileName(User, "");
+                    if (System.IO.File.Exists(ArtPath))
+                    {
+                        LoadArt(User);
+                        ImageDictionary[User].LastRequested = DateTime.Now;
+                        return ImageDictionary[User].Image;
+                    }
+                    //How do we find art for a user by name alone?
+                    return UnknownArt;
                 }
-                //How do we find art for a user by name alone?
-                return UnknownArt;
+                ImageDictionary[User].LastRequested = DateTime.Now;
+                return ImageDictionary[User].Image;    
             }
-            ImageDictionary[User].LastRequested = DateTime.Now;
-            return ImageDictionary[User].Image;
         }
 
         public Image GetArt(string User, string URL)
@@ -137,19 +140,21 @@ namespace PockeTwit
         public void Trim()
         {
             DateTime runTime = DateTime.Now;
-            List<string> Keys = new List<string>(ImageDictionary.Keys);
-
-            foreach (string infoKey in Keys)
+            lock (ImageDictionary)
             {
-                ImageInfo info = ImageDictionary[infoKey];
-                if (runTime.Ticks - info.LastRequested.Ticks > 1000)
+                List<string> Keys = new List<string>(ImageDictionary.Keys);
+                foreach (string infoKey in Keys)
                 {
-                    System.Diagnostics.Debug.WriteLine("Removing " + infoKey + " from imagebuffer");
-                    ImageDictionary.Remove(infoKey);
+                    ImageInfo info = ImageDictionary[infoKey];
+                    if (runTime.Ticks - info.LastRequested.Ticks > 1000)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Removing " + infoKey + " from imagebuffer");
+                        ImageDictionary.Remove(infoKey);
+                    }
                 }
+                Keys.Clear();
+                Keys.TrimExcess(); 
             }
-            Keys.Clear();
-            Keys.TrimExcess();
         }
 
 		// Private Methods (3) 
