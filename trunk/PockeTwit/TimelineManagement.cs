@@ -57,11 +57,15 @@ namespace PockeTwit
             }
             Progress(0, "Loading Cache");
             LoadCachedtimeline();
+            CompleteLoaded();
+            timerUpdate_Tick(null);
+            /*
             Progress(0, "Fetching Friends TimeLine");
             GetFriendsTimeLine();
             Progress(0, "Fetching Messages TimeLine");
             GetMessagesTimeLine();
-            CompleteLoaded();
+            */
+
             if (ClientSettings.UpdateInterval > 0)
             {
                 timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
@@ -299,7 +303,6 @@ namespace PockeTwit
                             TempLine.AddRange(NewStats);
                             if (NewStats.Length > 0)
                             {
-                                SaveStatuses(NewStats, t);
                                 LastStatusID[t] = NewStats[0].id;
                             }
                             ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
@@ -315,7 +318,12 @@ namespace PockeTwit
                     }
                 }
             }
-            int NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+            int NewItems = 0;
+            if (TempLine.Count > 0)
+            {
+                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray());
+                NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+            }
             if (FriendsUpdated != null && NewItems>0)
             {
                 if (Notify)
@@ -331,7 +339,7 @@ namespace PockeTwit
             TempLine.TrimExcess();
         }
 
-        private void SaveStatuses(PockeTwit.Library.status[] statuses, Yedda.Twitter t)
+        private void SaveStatuses(PockeTwit.Library.status[] statuses)
         {
             if (statuses.Length <= 20)
             {
@@ -343,15 +351,16 @@ namespace PockeTwit
             {
                 string StatusString = Library.status.Serialize(statuses);
 
-                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml"))
+                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + "FriendsTime.xml"))
                 {
                     w.Write(StatusString);
                     w.Flush();
                     w.Close();  //Shouldn't need this in using, but I'm desperate   
                 }
             }
-            catch
+            catch(Exception ex)
             {
+
             }
         }
 
