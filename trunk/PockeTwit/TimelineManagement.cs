@@ -30,9 +30,9 @@ namespace PockeTwit
             Messages
         }
         public Dictionary<TimeLineType, TimeLine> TimeLines = new Dictionary<TimeLineType, TimeLine>();
-        private Dictionary<Yedda.Twitter, string> LastStatusID = new Dictionary<Yedda.Twitter, string>();
-        private Dictionary<Yedda.Twitter, string> LastReplyID = new Dictionary<Yedda.Twitter, string>();
-        private Dictionary<Yedda.Twitter, string> LastDirectID = new Dictionary<Yedda.Twitter, string>();
+        private Dictionary<Yedda.Twitter.Account, string> LastStatusID = new Dictionary<Yedda.Twitter.Account, string>();
+        private Dictionary<Yedda.Twitter.Account, string> LastReplyID = new Dictionary<Yedda.Twitter.Account, string>();
+        private Dictionary<Yedda.Twitter.Account, string> LastDirectID = new Dictionary<Yedda.Twitter.Account, string>();
         private System.Threading.Timer timerUpdate;
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
@@ -51,9 +51,9 @@ namespace PockeTwit
             TwitterConnections = TwitterConnectionsToFollow;
             foreach (Yedda.Twitter t in TwitterConnections)
             {
-                LastStatusID.Add(t, "");
-                LastReplyID.Add(t, "");
-                LastDirectID.Add(t, "");
+                LastStatusID.Add(t.AccountInfo, "");
+                LastReplyID.Add(t.AccountInfo, "");
+                LastDirectID.Add(t.AccountInfo, "");
             }
             Progress(0, "Loading Cache");
             LoadCachedtimeline();
@@ -145,33 +145,32 @@ namespace PockeTwit
         private void LoadCachedtimeline()
         {
             List<Library.status> Loaded = new List<PockeTwit.Library.status>();
-            foreach (Yedda.Twitter t in TwitterConnections)
+
+            string cachePath = ClientSettings.AppPath + "\\" + "FriendsTime.xml";
+            if (System.IO.File.Exists(cachePath))
             {
-                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType!= Yedda.Twitter.TwitterServer.pingfm)
+                try
                 {
-                    string cachePath = ClientSettings.AppPath + "\\" + t.AccountInfo.UserName + t.AccountInfo.ServerURL.Name + "FriendsTime.xml";
-                    if (System.IO.File.Exists(cachePath))
+                    using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
                     {
-                        try
-                        {
-                            using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
-                            {
-                                string s = r.ReadToEnd();
-                                Library.status[] newstats = Library.status.Deserialize(s);
-                                Loaded.AddRange(newstats);
-                                LastStatusID[t] = newstats[0].id;
-                            }
-                        }
-                        catch
-                        {
-                            System.IO.File.Delete(cachePath);
-                            MessageBox.Show("Error with " + t.AccountInfo.ToString() + " cache. Clearing it.");
-                        }
+                        string s = r.ReadToEnd();
+                        Library.status[] newstats = Library.status.Deserialize(s);
+                        Loaded.AddRange(newstats);
                     }
+                }
+                catch
+                {
+                    System.IO.File.Delete(cachePath);
+                    MessageBox.Show("Error with cache. Clearing it.");
                 }
             }
             TimeLine CachedLines = new TimeLine(Loaded);
             TimeLines[TimeLineType.Friends] = CachedLines;
+
+            foreach (Library.status stat in CachedLines)
+            {
+                LastStatusID[stat.Account] = stat.id;   
+            }
         }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
@@ -224,7 +223,7 @@ namespace PockeTwit
                             TempLine.AddRange(NewStats);
                             if (NewStats.Length > 0)
                             {
-                                LastReplyID[t] = NewStats[0].id;
+                                LastReplyID[t.AccountInfo] = NewStats[0].id;
                             }
                             ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                         }
@@ -250,7 +249,7 @@ namespace PockeTwit
                                 TempLine.AddRange(NewStats);
                                 if (NewStats.Length > 0)
                                 {
-                                    LastStatusID[t] = NewStats[0].id;
+                                    LastStatusID[t.AccountInfo] = NewStats[0].id;
                                 }
                                 ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                             }
@@ -303,7 +302,7 @@ namespace PockeTwit
                             TempLine.AddRange(NewStats);
                             if (NewStats.Length > 0)
                             {
-                                LastStatusID[t] = NewStats[0].id;
+                                LastStatusID[t.AccountInfo] = NewStats[0].id;
                             }
                             ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                         }
@@ -376,7 +375,7 @@ namespace PockeTwit
                 switch (TimelineType)
                 {
                     case Yedda.Twitter.ActionType.Direct_Messages:
-                        response = t.GetDirectTimeLineSince(LastDirectID[t]);
+                        response = t.GetDirectTimeLineSince(LastDirectID[t.AccountInfo]);
                         break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         if (!t.BigTimeLines)
@@ -385,13 +384,13 @@ namespace PockeTwit
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(LastStatusID[t]))
+                            if (string.IsNullOrEmpty(LastStatusID[t.AccountInfo]))
                             {
                                 response = t.GetFriendsTimeLineMax(Yedda.Twitter.OutputFormatType.XML);
                             }
                             else
                             {
-                                response = t.GetFriendsTimeLineSince(Yedda.Twitter.OutputFormatType.XML, LastStatusID[t]);
+                                response = t.GetFriendsTimeLineSince(Yedda.Twitter.OutputFormatType.XML, LastStatusID[t.AccountInfo]);
                             }
                         }
                         break;
@@ -405,13 +404,13 @@ namespace PockeTwit
                         }
                         else
                         {
-                            if (string.IsNullOrEmpty(LastReplyID[t]))
+                            if (string.IsNullOrEmpty(LastReplyID[t.AccountInfo]))
                             {
                                 response = t.GetRepliesTimeLine(Yedda.Twitter.OutputFormatType.XML);
                             }
                             else
                             {
-                                response = t.GetRepliesTimeLineSince(Yedda.Twitter.OutputFormatType.XML, LastReplyID[t]);
+                                response = t.GetRepliesTimeLineSince(Yedda.Twitter.OutputFormatType.XML, LastReplyID[t.AccountInfo]);
                             }
                         }
                         break;
