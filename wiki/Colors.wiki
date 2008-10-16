@@ -4,7 +4,6 @@
 
 I believe that with every application eventually someone wants skins.  I haven't put in a full-blown skinning engine, but you can easily change the color set for the application
 
-*Note:*  Right now I haven't extended the colors throughout the application, they will only affect the main screen.  If there's enough demand, I can make the other screens comply as well.
 
 = Details =
 
