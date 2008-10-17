@@ -61,6 +61,19 @@ namespace PockeTwit
             {
                 LastStatusID[stat.Account] = stat.id;
             }
+
+            LoadCachedtimeline(TimeLineType.Messages, "Messages");
+            foreach (Library.status stat in TimeLines[TimeLineType.Messages])
+            {
+                if (stat.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+                {
+                    LastDirectID[stat.Account] = stat.id;
+                }
+                else
+                {
+                    LastReplyID[stat.Account] = stat.id;
+                }
+            }
             if (TimeLines[TimeLineType.Friends].Count > 0)
             {
                 CompleteLoaded();
@@ -274,6 +287,7 @@ namespace PockeTwit
             int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
             if (MessagesUpdated != null && NewItems>0)
             {
+                SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
                 if (Notify)
                 {
                     MessagesUpdated(NewItems);
