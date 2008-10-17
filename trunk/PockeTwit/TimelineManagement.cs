@@ -56,16 +56,26 @@ namespace PockeTwit
                 LastDirectID.Add(t.AccountInfo, "");
             }
             Progress(0, "Loading Cache");
-            LoadCachedtimeline();
-            CompleteLoaded();
-            timerUpdate_Tick(null);
-            /*
-            Progress(0, "Fetching Friends TimeLine");
-            GetFriendsTimeLine();
-            Progress(0, "Fetching Messages TimeLine");
-            GetMessagesTimeLine();
-            */
+            LoadCachedtimeline(TimeLineType.Friends, "Friends");
+            foreach (Library.status stat in TimeLines[TimeLineType.Friends])
+            {
+                LastStatusID[stat.Account] = stat.id;
+            }
+            if (TimeLines[TimeLineType.Friends].Count > 0)
+            {
+                CompleteLoaded();
+                timerUpdate_Tick(null);
+            }
+            else
+            {
 
+                Progress(0, "Fetching Friends TimeLine");
+                GetFriendsTimeLine();
+                Progress(0, "Fetching Messages TimeLine");
+                GetMessagesTimeLine();
+                CompleteLoaded();
+             
+            }
             if (ClientSettings.UpdateInterval > 0)
             {
                 timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
@@ -142,11 +152,11 @@ namespace PockeTwit
             t.Start();
         }
 
-        private void LoadCachedtimeline()
+        private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
         {
             List<Library.status> Loaded = new List<PockeTwit.Library.status>();
 
-            string cachePath = ClientSettings.AppPath + "\\" + "FriendsTime.xml";
+            string cachePath = ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml";
             if (System.IO.File.Exists(cachePath))
             {
                 try
@@ -165,12 +175,7 @@ namespace PockeTwit
                 }
             }
             TimeLine CachedLines = new TimeLine(Loaded);
-            TimeLines[TimeLineType.Friends] = CachedLines;
-
-            foreach (Library.status stat in CachedLines)
-            {
-                LastStatusID[stat.Account] = stat.id;   
-            }
+            TimeLines[TimeType] = CachedLines;
         }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
@@ -320,7 +325,7 @@ namespace PockeTwit
             int NewItems = 0;
             if (TempLine.Count > 0)
             {
-                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray());
+                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
                 NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
             }
             if (FriendsUpdated != null && NewItems>0)
@@ -338,7 +343,7 @@ namespace PockeTwit
             TempLine.TrimExcess();
         }
 
-        private void SaveStatuses(PockeTwit.Library.status[] statuses)
+        private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)
         {
             if (statuses.Length <= 20)
             {
@@ -350,7 +355,7 @@ namespace PockeTwit
             {
                 string StatusString = Library.status.Serialize(statuses);
 
-                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + "FriendsTime.xml"))
+                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml"))
                 {
                     w.Write(StatusString);
                     w.Flush();
