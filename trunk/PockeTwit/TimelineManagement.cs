@@ -214,6 +214,7 @@ namespace PockeTwit
         }
         private void GetMessagesTimeLine(bool Notify)
         {
+            GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
@@ -284,6 +285,7 @@ namespace PockeTwit
             }
             TempLine.Clear();
             TempLine.TrimExcess();
+            GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
         }
 
         private void GetFriendsTimeLine()
@@ -292,6 +294,7 @@ namespace PockeTwit
         }
         private void GetFriendsTimeLine(bool Notify)
         {
+            GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
@@ -341,6 +344,7 @@ namespace PockeTwit
             }
             TempLine.Clear();
             TempLine.TrimExcess();
+            GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)
