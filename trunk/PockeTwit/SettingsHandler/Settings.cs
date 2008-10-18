@@ -237,7 +237,10 @@ public static class ClientSettings
             {
                 AccountsList.Add(LegacySettingsAccount);
             }
-
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["IncludeScreenName"]))
+            {
+                IncludeUserName = bool.Parse(ConfigurationSettings.AppSettings["IncludeScreenName"]);
+            }
             foreach (Yedda.Twitter.Account a in ConfigurationSettings.Accounts)
             {
                 AccountsList.Add(a);
@@ -261,6 +264,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
         ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
         ConfigurationSettings.AppSettings["UseClickables"] = UseClickables.ToString();
+        ConfigurationSettings.AppSettings["IncludeScreenName"] = IncludeUserName.ToString();
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
             ConfigurationSettings.AppSettings.Remove("UserName");

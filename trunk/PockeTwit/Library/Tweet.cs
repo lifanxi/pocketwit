@@ -102,22 +102,20 @@ namespace PockeTwit.Library
         public bool isDirect { get; set; }
 
         public string location { get; set; }
-        private string _text;
-        public string text {
+        public string text { get;set;}
+        [XmlIgnore]
+        public string DisplayText
+        {
             get
             {
                 if (ClientSettings.IncludeUserName)
                 {
-                    return this.user.screen_name + ": " + _text;
+                    return this.user.screen_name + ": " + text;
                 }
                 else
                 {
-                    return _text;
+                    return text;
                 }
-            }
-            set
-            {
-                _text = value;
             }
         }
 
