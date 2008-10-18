@@ -10,3 +10,7 @@ I believe that with every application eventually someone wants skins.  I haven't
 If you want to customize the colors, look for the "colors.txt" file in the program folder.  It contains a list of element styles and the R:G:B values for their color.  Modify those values and restart PockeTwit to see the results.
 
 If you've come up with something nice, let me know!  If enough people want, I can look into extending the customization capabilities in future releases.
+
+= Utilities = 
+
+[http://tinyurl.com/6nrz83 @markandey] wrote a [http://hackbit.googlepages.com/colorchooserofpocketwit utility] to help with picking colors.
