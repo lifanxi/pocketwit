@@ -167,8 +167,7 @@ namespace PockeTwit
 
         private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
         {
-            List<Library.status> Loaded = new List<PockeTwit.Library.status>();
-
+            Library.status[] newstats = null;
             string cachePath = ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml";
             if (System.IO.File.Exists(cachePath))
             {
@@ -177,8 +176,7 @@ namespace PockeTwit
                     using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
                     {
                         string s = r.ReadToEnd();
-                        Library.status[] newstats = Library.status.Deserialize(s);
-                        Loaded.AddRange(newstats);
+                        newstats = Library.status.Deserialize(s);
                     }
                 }
                 catch
@@ -187,7 +185,7 @@ namespace PockeTwit
                     MessageBox.Show("Error with cache. Clearing it.");
                 }
             }
-            TimeLine CachedLines = new TimeLine(Loaded);
+            TimeLine CachedLines = new TimeLine(newstats);
             TimeLines[TimeType] = CachedLines;
         }
 

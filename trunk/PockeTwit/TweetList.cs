@@ -423,11 +423,13 @@ namespace PockeTwit
         {
         
             lblLoading.Text = "Preparing UI";
+            Application.DoEvents();
             statList.SwitchTolist("Friends_TimeLine");
 
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
 
             statList.SetSelectedIndexToZero();
+            Application.DoEvents();
         }
 
         void Manager_Progress(int percentage, string Status)
@@ -539,12 +541,18 @@ namespace PockeTwit
                         bool bSuccess = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
                         if (!bSuccess)
                         {
-                            //ERROR
+                            
                         }
                     }
                     else
                     {
-                        t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                        string retValue = t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                        if (retValue.IndexOf("</error>") > 0)
+                        {
+                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+                            d.LoadXml(retValue);
+                            MessageBox.Show("Error posting tweet:" + d.SelectSingleNode("//error").InnerText);
+                        }
                     }
                     Manager.RefreshFriendsTimeLine();
                 }
