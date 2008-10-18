@@ -74,7 +74,6 @@ namespace FingerUI
 
         private void ResetTexts()
         {
-            Tweet.text = string.Join(" ", Tweet.SplitLines.ToArray());
             Tweet.SplitLines = new List<string>();
             Tweet.Clickables = new List<Clickable>();
         }
@@ -466,7 +465,7 @@ namespace FingerUI
         #region Parsing Routines
         private void BreakUpTheTextWithoutSpaces(Graphics g, Rectangle textBounds)
         {
-            string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text);
+            string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText);
             SizeF size = g.MeasureString(CurrentLine, TextFont);
 
             bool SpaceSplit = false;
@@ -527,13 +526,13 @@ namespace FingerUI
             if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
                 //How could this happen!  We have no texts!
-                if (this.Tweet.text == null) { return; }
+                if (this.Tweet.DisplayText == null) { return; }
                 Tweet.SplitLines = new List<string>();
-                string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.text).Replace('\n', ' ');
+                string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
                 FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
 
-                if (this.Tweet.text.IndexOf(' ') <= 0)
+                if (this.Tweet.DisplayText.IndexOf(' ') <= 0)
                 {
                     BreakUpTheTextWithoutSpaces(g, textBounds);
                     return;
