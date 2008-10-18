@@ -31,6 +31,7 @@ public static class ClientSettings
     public static int SmallArtSize = 65;
     public static int UpdateInterval;
 
+
     public static int LinesOfText
     {
         get
@@ -59,6 +60,7 @@ public static class ClientSettings
 		#endregion Constructors 
 
 		#region Properties (7) 
+    public static bool IncludeUserName { get; set; }
     public static bool HighQualityAvatars { get; set; }
     public static bool UseClickables { get; set; }
 
