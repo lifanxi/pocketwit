@@ -148,14 +148,7 @@ namespace PockeTwit
                     UpdateRightMenu();
                 }
                 statList.Redraw();
-                if (newItems > 0 & newItems < ClientSettings.MaxTweets)
-                {
-                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);
-                }
-                else
-                {
-                    statList.YOffset = (ClientSettings.MaxTweets - 1) * statList.ItemHeight;
-                }
+                statList.YOffset = OldOffset + (newItems * statList.ItemHeight);                
             }
         }
 
