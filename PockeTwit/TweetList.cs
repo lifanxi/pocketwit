@@ -527,14 +527,24 @@ namespace PockeTwit
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
                     if (StatusForm.GPSLocation != null)
                     {
-                        t.SetLocation(StatusForm.GPSLocation);
+                        try
+                        {
+                            t.SetLocation(StatusForm.GPSLocation);
+                        }
+                        catch { }
                     }
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
-                        bool bSuccess = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
-                        if (!bSuccess)
+                        string retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                        if (retValue == null)
                         {
-                            
+                            MessageBox.Show("An error has occured communicating with TwitPic. Please try again.");
+                        }
+                        if (retValue.IndexOf("</error>") > 0)
+                        {
+                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+                            d.LoadXml(retValue);
+                            MessageBox.Show("Error posting to twitpic:" + d.SelectSingleNode("//error").InnerText);
                         }
                     }
                     else
