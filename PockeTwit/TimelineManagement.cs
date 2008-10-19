@@ -74,6 +74,7 @@ namespace PockeTwit
                     LastReplyID[stat.Account] = stat.id;
                 }
             }
+            /*
             if (TimeLines[TimeLineType.Friends].Count > 0)
             {
                 CompleteLoaded();
@@ -81,14 +82,14 @@ namespace PockeTwit
             }
             else
             {
-
+            */
                 Progress(0, "Fetching Friends TimeLine");
                 GetFriendsTimeLine();
                 Progress(0, "Fetching Messages TimeLine");
                 GetMessagesTimeLine();
                 CompleteLoaded();
              
-            }
+            //}
             if (ClientSettings.UpdateInterval > 0)
             {
                 timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
