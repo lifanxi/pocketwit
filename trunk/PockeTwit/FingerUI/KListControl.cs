@@ -1081,14 +1081,15 @@ namespace FingerUI
             }
         }
 
+
         void ClickablesControl_WordClicked(string TextClicked)
         {
-            if (TextClicked == "Full Text")
+            if (TextClicked == "Full Text" | Yedda.ShortText.isShortTextURL(TextClicked))
             {
                 //Show the full tweet somehow.
                 StatusItem s = (StatusItem)SelectedItem;
                 string fullText = null;
-                if (s.Tweet.text.IndexOf("http://shortText.com/") > 0)
+                if (Yedda.ShortText.isShortTextURL(s.Tweet.text))
                 {
                     string[] splitup = s.Tweet.text.Split(new char[] { ' ' });
                     fullText = Yedda.ShortText.getFullText(splitup[splitup.Length - 1]);
