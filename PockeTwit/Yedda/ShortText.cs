@@ -12,6 +12,13 @@ namespace Yedda
         private static string API = "http://shortText.com/api.aspx";
         private static string APIKey = "66810129-8F4D-45D8-B6B4-922E35817A48";
 
+        private static System.Text.RegularExpressions.Regex matchURL = new System.Text.RegularExpressions.Regex("shorttext.com", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+
+        public static bool isShortTextURL(string URLToCheck)
+        {
+            return matchURL.IsMatch(URLToCheck);
+        }
         public static string shorten(string inputText)
         {
             string data = "shorttext=" + HttpUtility.UrlEncode(inputText);
@@ -21,7 +28,8 @@ namespace Yedda
 
         public static string getFullText(string textURL)
         {
-            string data = "appkey=" + HttpUtility.UrlEncode(APIKey) + "&url=" + textURL.Remove(0,21);
+            textURL = textURL.Substring(textURL.LastIndexOf("/")+1);
+            string data = "appkey=" + HttpUtility.UrlEncode(APIKey) + "&url=" + textURL;
             string ret = ExecutePostCommand(API, data);
             ret = ret.Substring(0, ret.IndexOf("<div "));
             ret = HttpUtility.HtmlDecode(ret);
