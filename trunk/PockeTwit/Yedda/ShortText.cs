@@ -10,7 +10,7 @@ namespace Yedda
     public static class ShortText
     {
         private static string API = "http://shortText.com/api.aspx";
-        private static string APIKey = "";
+        private static string APIKey = "66810129-8F4D-45D8-B6B4-922E35817A48";
 
         public static string shorten(string inputText)
         {
@@ -21,8 +21,12 @@ namespace Yedda
 
         public static string getFullText(string textURL)
         {
-            string data = "url=" + textURL + "&appkey=" + APIKey;
-            return ExecutePostCommand(API, "url=" + textURL);
+            string data = "appkey=" + HttpUtility.UrlEncode(APIKey) + "&url=" + textURL.Remove(0,21);
+            string ret = ExecutePostCommand(API, data);
+            ret = ret.Substring(0, ret.IndexOf("<div "));
+            ret = HttpUtility.HtmlDecode(ret);
+            return ret;
+            
         }
 
 
