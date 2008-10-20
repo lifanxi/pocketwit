@@ -108,7 +108,7 @@ namespace PockeTwit
             this.textBox1.BackColor = ClientSettings.FieldBackColor;
             this.textBox1.ForeColor = ClientSettings.FieldForeColor;
             this.textBox1.Location = new System.Drawing.Point(3, 65);
-            this.textBox1.MaxLength = 140;
+            //this.textBox1.MaxLength = 140;
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(234, 226);

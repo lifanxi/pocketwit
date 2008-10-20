@@ -502,7 +502,10 @@ namespace FingerUI
                 string line = newString.ToString().TrimStart(new char[] { ' ' });
                 Tweet.SplitLines.Add(line);
                 FindClickables(line, g, LineOffset - 1);
-                if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText)
+                if (
+                    Tweet.SplitLines.Count >= ClientSettings.LinesOfText || 
+                    Tweet.text.IndexOf("http://shortText.com/")>0
+                    )
                 {
                     Tweet.Clipped = true;
                 }
@@ -576,7 +579,10 @@ namespace FingerUI
                     string line = newString.ToString().Trim(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
-                    if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText) 
+                    if (
+                    Tweet.SplitLines.Count >= ClientSettings.LinesOfText ||
+                    Tweet.text.IndexOf("http://shortText.com/") > 0
+                    )
                     {
                         Tweet.Clipped = true;
                     }

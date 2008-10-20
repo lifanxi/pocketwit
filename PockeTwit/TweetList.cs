@@ -522,6 +522,13 @@ namespace PockeTwit
                 StatusForm.Hide();
                 IsLoaded = false;
                 string UpdateText = StatusForm.StatusText;
+                if (UpdateText.Length > 140)
+                {
+                    //Truncate the text to the last available space, the add the URL.
+                    string URL = Yedda.ShortText.shorten(UpdateText);
+                    string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + 5)));
+                    UpdateText = NewText + " ... " + URL;
+                }
                 if (UpdateText != "Set Status")
                 {
                     Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
