@@ -1087,7 +1087,17 @@ namespace FingerUI
             {
                 //Show the full tweet somehow.
                 StatusItem s = (StatusItem)SelectedItem;
-                MessageBox.Show(s.Tweet.text, s.Tweet.user.screen_name);
+                string fullText = null;
+                if (s.Tweet.text.IndexOf("http://shortText.com/") > 0)
+                {
+                    string[] splitup = s.Tweet.text.Split(new char[] { ' ' });
+                    fullText = Yedda.ShortText.getFullText(splitup[splitup.Length - 1]);
+                }
+                else
+                {
+                    fullText = s.Tweet.text;   
+                }
+                MessageBox.Show(fullText, s.Tweet.user.screen_name);
             }
             else if (WordClicked != null)
             {
