@@ -81,7 +81,7 @@ namespace Yedda
                     requestStream.Write(footBytes, 0, footBytes.Length);
                     requestStream.Flush();
                     requestStream.Close();
-
+                    /*
                     using (WebResponse response = request.GetResponse())
                     {
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -89,6 +89,7 @@ namespace Yedda
                             return reader.ReadToEnd();
                         }
                     }
+                     */
                 }
             }
 

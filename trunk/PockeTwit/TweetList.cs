@@ -556,6 +556,7 @@ namespace PockeTwit
                         {
                             if (ex.Status == System.Net.WebExceptionStatus.Timeout)
                             {
+                                Cursor.Current = Cursors.Default;
                                 MessageBox.Show("Timed out sending the image.");
                             }
                             return;
