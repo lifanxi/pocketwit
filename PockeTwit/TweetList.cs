@@ -547,12 +547,24 @@ namespace PockeTwit
                     }
                     if (t.AllowTwitPic && StatusForm.UseTwitPic)
                     {
-                        string retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                        string retValue;
+                        try
+                        {
+                            retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                        }
+                        catch (System.Net.WebException ex)
+                        {
+                            if (ex.Status == System.Net.WebExceptionStatus.Timeout)
+                            {
+                                MessageBox.Show("Timed out sending the image.");
+                            }
+                            return;
+                        }
                         if (retValue == null)
                         {
                             MessageBox.Show("An error has occured communicating with TwitPic. Please try again.");
                         }
-                        if (retValue.IndexOf("</error>") > 0)
+                        else if (retValue.IndexOf("</error>") > 0)
                         {
                             System.Xml.XmlDocument d = new System.Xml.XmlDocument();
                             d.LoadXml(retValue);
