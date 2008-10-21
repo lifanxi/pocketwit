@@ -554,22 +554,8 @@ namespace PockeTwit
                         }
                         catch (System.Net.WebException ex)
                         {
-                            if (ex.Status == System.Net.WebExceptionStatus.Timeout)
-                            {
-                                Cursor.Current = Cursors.Default;
-                                MessageBox.Show("Timed out sending the image.");
-                            }
-                            return;
-                        }
-                        if (retValue == null)
-                        {
-                            MessageBox.Show("An error has occured communicating with TwitPic. Please try again.");
-                        }
-                        else if (retValue.IndexOf("</error>") > 0)
-                        {
-                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-                            d.LoadXml(retValue);
-                            MessageBox.Show("Error posting to twitpic:" + d.SelectSingleNode("//error").InnerText);
+                            Cursor.Current = Cursors.Default;
+                            MessageBox.Show("Error sending the image to twitpic -- " + ex.Status.ToString());
                         }
                     }
                     else

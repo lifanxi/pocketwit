@@ -12,6 +12,7 @@ namespace FingerUI
     {
 
         private static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>' };
+        private static float SpaceWidth;
 
 		#region�Fields�(15)�
 
@@ -622,6 +623,10 @@ namespace FingerUI
         }
         private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
+            if (SpaceWidth == 0)
+            {
+                SpaceWidth = g.MeasureString(" ", TextFont).Width;
+            }
             if (!ClientSettings.UseClickables) { return; }
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
