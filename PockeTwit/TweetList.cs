@@ -526,7 +526,12 @@ namespace PockeTwit
                 {
                     //Truncate the text to the last available space, the add the URL.
                     string URL = Yedda.ShortText.shorten(UpdateText);
-                    string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + 5)));
+                    int trimLength = 5;
+                    if (StatusForm.UseTwitPic)
+                    {
+                        trimLength = 30;
+                    }
+                    string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + trimLength)));
                     UpdateText = NewText + " ... " + URL;
                 }
                 if (UpdateText != "Set Status")
@@ -737,9 +742,7 @@ namespace PockeTwit
             if (TextClicked.StartsWith("http"))
             {
                 System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-                //pi.FileName = "\\Windows\\iexplore.exe";
                 pi.FileName = TextClicked;
-                //pi.Arguments = TextClicked;
                 pi.UseShellExecute = true;
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             }
