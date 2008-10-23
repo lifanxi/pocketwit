@@ -184,6 +184,7 @@ namespace PockeTwit
             {
                 BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
                 BoxToUpdate.Visible = true;
+                textBox1_TextChanged(null, new EventArgs());
             }
             catch (OutOfMemoryException)
             {
@@ -254,7 +255,12 @@ namespace PockeTwit
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            int lengthLeft = 140-textBox1.Text.Length;
+            int charsAvail = 140;
+            if (this.UseTwitPic)
+            {
+                charsAvail = charsAvail - 27;
+            }
+            int lengthLeft = charsAvail-textBox1.Text.Length;
             lblCharsLeft.Text = lengthLeft.ToString();
         }
 
