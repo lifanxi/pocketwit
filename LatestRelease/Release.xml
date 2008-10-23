@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.43</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv43.CAB</url>
-  <notes>Copy+Paste in status update
-More crash fixes
+  <version>.44</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv44.CAB</url>
+  <notes>Fix for smartphone account management
+Shorttext integration
+Better caching
 </notes>
 </LatestRelease>
