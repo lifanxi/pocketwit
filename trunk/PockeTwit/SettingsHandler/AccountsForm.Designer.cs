@@ -34,9 +34,9 @@
             this.menuAccept = new System.Windows.Forms.MenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.lnkAdd = new System.Windows.Forms.LinkLabel();
-            this.lstAccounts = new System.Windows.Forms.ListView();
             this.lnkEdit = new System.Windows.Forms.LinkLabel();
             this.lnkRemove = new System.Windows.Forms.LinkLabel();
+            this.cmbAccounts = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -68,33 +68,19 @@
             this.lnkAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkAdd.ForeColor = ClientSettings.LinkColor;
-            this.lnkAdd.Location = new System.Drawing.Point(4, 98);
+            this.lnkAdd.Location = new System.Drawing.Point(3, 53);
             this.lnkAdd.Name = "lnkAdd";
             this.lnkAdd.Size = new System.Drawing.Size(234, 20);
             this.lnkAdd.TabIndex = 1;
             this.lnkAdd.Text = "Add New";
             this.lnkAdd.Click += new System.EventHandler(this.lnkAdd_Click);
             // 
-            // lstAccounts
-            // 
-            this.lstAccounts.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.lstAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstAccounts.BackColor = ClientSettings.FieldBackColor;
-            this.lstAccounts.ForeColor = ClientSettings.FieldForeColor;
-            this.lstAccounts.FullRowSelect = true;
-            this.lstAccounts.Location = new System.Drawing.Point(4, 27);
-            this.lstAccounts.Name = "lstAccounts";
-            this.lstAccounts.Size = new System.Drawing.Size(233, 68);
-            this.lstAccounts.TabIndex = 9;
-            this.lstAccounts.View = System.Windows.Forms.View.List;
-            // 
             // lnkEdit
             // 
             this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkEdit.ForeColor = ClientSettings.LinkColor;
-            this.lnkEdit.Location = new System.Drawing.Point(4, 118);
+            this.lnkEdit.Location = new System.Drawing.Point(3, 73);
             this.lnkEdit.Name = "lnkEdit";
             this.lnkEdit.Size = new System.Drawing.Size(234, 20);
             this.lnkEdit.TabIndex = 2;
@@ -106,12 +92,21 @@
             this.lnkRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkRemove.ForeColor = ClientSettings.LinkColor;
-            this.lnkRemove.Location = new System.Drawing.Point(4, 138);
+            this.lnkRemove.Location = new System.Drawing.Point(3, 93);
             this.lnkRemove.Name = "lnkRemove";
             this.lnkRemove.Size = new System.Drawing.Size(234, 20);
             this.lnkRemove.TabIndex = 3;
             this.lnkRemove.Text = "Remove Selected";
             this.lnkRemove.Click += new System.EventHandler(this.lnkRemove_Click);
+            // 
+            // cmbAccounts
+            // 
+            this.cmbAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbAccounts.Location = new System.Drawing.Point(4, 28);
+            this.cmbAccounts.Name = "cmbAccounts";
+            this.cmbAccounts.Size = new System.Drawing.Size(233, 22);
+            this.cmbAccounts.TabIndex = 11;
             // 
             // AccountsForm
             // 
@@ -120,9 +115,9 @@
             this.AutoScroll = true;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.cmbAccounts);
             this.Controls.Add(this.lnkRemove);
             this.Controls.Add(this.lnkEdit);
-            this.Controls.Add(this.lstAccounts);
             this.Controls.Add(this.lnkAdd);
             this.Controls.Add(this.label1);
             this.ForeColor = ClientSettings.ForeColor;
@@ -139,8 +134,8 @@
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuAccept;
         private System.Windows.Forms.LinkLabel lnkAdd;
-        private System.Windows.Forms.ListView lstAccounts;
         private System.Windows.Forms.LinkLabel lnkEdit;
         private System.Windows.Forms.LinkLabel lnkRemove;
+        private System.Windows.Forms.ComboBox cmbAccounts;
     }
 }

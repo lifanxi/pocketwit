@@ -29,11 +29,10 @@ namespace PockeTwit
         }
         private void ListAccounts()
         {
-            
-            lstAccounts.Items.Clear();
+            cmbAccounts.Items.Clear();   
             foreach (Yedda.Twitter.Account a in LocalList)
             {
-                lstAccounts.Items.Add(new ListViewItem(a.ToString()));
+                cmbAccounts.Items.Add(a);
             }
         }
         protected override void OnActivated(EventArgs e)
@@ -82,7 +81,7 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
-            if (lstAccounts.Items.Count == 0)
+            if (cmbAccounts.Items.Count == 0)
             {
                 MessageBox.Show("You must enter at least one account or cancel.");
                 return;
@@ -112,45 +111,26 @@ namespace PockeTwit
 
         private void lnkEdit_Click(object sender, EventArgs e)
         {
-            if (lstAccounts.SelectedIndices.Count > 0)
+            if (cmbAccounts.SelectedItem != null)
             {
-                string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
-                Yedda.Twitter.Account toEdit = null;
-                foreach (Yedda.Twitter.Account a in LocalList)
+                Yedda.Twitter.Account toEdit = (Yedda.Twitter.Account)cmbAccounts.SelectedItem;
+                AccountInfoForm ai = new AccountInfoForm(toEdit);
+                if (ai.ShowDialog() == DialogResult.OK)
                 {
-                    if (a.ToString() == selectedText)
-                    {
-                        toEdit = a;
-                    }
+                    LocalList.Remove(toEdit);
+                    LocalList.Add(ai.AccountInfo);
+                    ListAccounts();
+                    IsDirty = true;
                 }
-                if (toEdit != null)
-                {
-                    AccountInfoForm ai = new AccountInfoForm(toEdit);
-                    if (ai.ShowDialog() == DialogResult.OK)
-                    {
-                        LocalList.Remove(toEdit);
-                        LocalList.Add(ai.AccountInfo);
-                        ListAccounts();
-                        IsDirty = true;
-                    }
-                    ai.Close();
-                }
+                ai.Close();
             }
         }
 
         private void lnkRemove_Click(object sender, EventArgs e)
         {
-            if (lstAccounts.SelectedIndices.Count > 0)
+            if (cmbAccounts.SelectedItem != null)
             {
-                string selectedText = lstAccounts.Items[lstAccounts.SelectedIndices[0]].Text;
-                Yedda.Twitter.Account toRemove = null;
-                foreach (Yedda.Twitter.Account a in LocalList)
-                {
-                    if (a.ToString() == selectedText)
-                    {
-                        toRemove = a;
-                    }
-                }
+                Yedda.Twitter.Account toRemove = (Yedda.Twitter.Account)cmbAccounts.SelectedItem;
                 if (toRemove != null)
                 {
                     LocalList.Remove(toRemove);
