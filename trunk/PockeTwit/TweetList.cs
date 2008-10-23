@@ -536,36 +536,39 @@ namespace PockeTwit
                 }
                 if (UpdateText != "Set Status")
                 {
-                    Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
-                    if (StatusForm.GPSLocation != null)
+                    if (StatusForm.AccountToSet != null)
                     {
-                        try
+                        Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
+                        if (StatusForm.GPSLocation != null)
                         {
-                            t.SetLocation(StatusForm.GPSLocation);
+                            try
+                            {
+                                t.SetLocation(StatusForm.GPSLocation);
+                            }
+                            catch { }
                         }
-                        catch { }
-                    }
-                    if (t.AllowTwitPic && StatusForm.UseTwitPic)
-                    {
-                        string retValue;
-                        try
+                        if (t.AllowTwitPic && StatusForm.UseTwitPic)
                         {
-                            retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                            string retValue;
+                            try
+                            {
+                                retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
+                            }
+                            catch (System.Net.WebException ex)
+                            {
+                                Cursor.Current = Cursors.Default;
+                                MessageBox.Show("Error sending the image to twitpic -- " + ex.Status.ToString());
+                            }
                         }
-                        catch (System.Net.WebException ex)
+                        else
                         {
-                            Cursor.Current = Cursors.Default;
-                            MessageBox.Show("Error sending the image to twitpic -- " + ex.Status.ToString());
-                        }
-                    }
-                    else
-                    {
-                        string retValue = t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
-                        if (retValue.IndexOf("</error>") > 0)
-                        {
-                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-                            d.LoadXml(retValue);
-                            MessageBox.Show("Error posting tweet:" + d.SelectSingleNode("//error").InnerText);
+                            string retValue = t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                            if (retValue.IndexOf("</error>") > 0)
+                            {
+                                System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+                                d.LoadXml(retValue);
+                                MessageBox.Show("Error posting tweet:" + d.SelectSingleNode("//error").InnerText);
+                            }
                         }
                     }
                     Manager.RefreshFriendsTimeLine();
