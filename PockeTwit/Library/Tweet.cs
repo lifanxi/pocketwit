@@ -60,7 +60,7 @@ namespace PockeTwit.Library
                 return "about " + Diff.ToString() + " " + Span +  " ago.";
             }
         }
-        private DateTime createdAt;
+        public DateTime createdAt;
         private string _created_at;
         public string created_at 
         {
