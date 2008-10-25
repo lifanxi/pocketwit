@@ -2,9 +2,6 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
-using System.Data.Common;
-using System.Data;
-using System.Data.SQLite;
 
 namespace PockeTwit
 {
@@ -373,6 +370,7 @@ namespace PockeTwit
 
             try
             {
+                /*
                 string StatusString = Library.status.Serialize(statuses);
 
                 using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml"))
@@ -381,31 +379,12 @@ namespace PockeTwit
                     w.Flush();
                     w.Close();  //Shouldn't need this in using, but I'm desperate   
                 }
+                 */
             }
             catch(Exception ex)
             {
-                
-            }
-            using (SQLiteConnection conn = db.dbUtil.GetDBConnection())
-            {
-                
-                
-                db.CacheTableAdapters.statusesTableAdapter statusadapter = new PockeTwit.db.CacheTableAdapters.statusesTableAdapter();
-                
-                statusadapter.Connection = conn;
-                conn.Open();
-                db.Cache.statusesDataTable t = new PockeTwit.db.Cache.statusesDataTable();
-                
-                statusadapter.Fill(t);
-                foreach (PockeTwit.Library.status s in statuses)
-                {
-                    t.AddstatusesRow(s.id, s.text, s.user.screen_name, bool.Parse(s.favorited), s.createdAt, s.source, s.in_reply_to_user_id, s.isDirect, s.location, s.Account.ToString(), s.user.screen_name);
-                }
-                statusadapter.Update(t);
-                conn.Close();
-            }
 
-            
+            }
         }
 
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)

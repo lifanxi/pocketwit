@@ -132,14 +132,11 @@ namespace PockeTwit
                 
                 foreach (Library.status stat in mergedstatuses)
                 {
-                    if (stat != null && stat.user != null)
+                    if (stat != null && stat.user != null && stat.user.screen_name != null)
                     {
-                        if (!string.IsNullOrEmpty(stat.user.screen_name))
-                        {
-                            FingerUI.StatusItem item = new FingerUI.StatusItem();
-                            item.Tweet = stat;
-                            statList.AddItem(item);
-                        }
+                        FingerUI.StatusItem item = new FingerUI.StatusItem();
+                        item.Tweet = stat;
+                        statList.AddItem(item);
                     }
                 }
                 statList.SetSelectedIndexToZero();
