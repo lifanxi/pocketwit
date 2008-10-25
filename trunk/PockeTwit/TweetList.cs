@@ -127,17 +127,19 @@ namespace PockeTwit
             }
             else
             {
-                if (mergedstatuses == null) { return; }
                 int OldOffset = statList.YOffset;
                 statList.Clear();
                 
                 foreach (Library.status stat in mergedstatuses)
                 {
-                    FingerUI.StatusItem item = new FingerUI.StatusItem();
-                    if (stat.user.screen_name != null)
+                    if (stat != null && stat.user != null)
                     {
-                        item.Tweet = stat;
-                        statList.AddItem(item);
+                        if (!string.IsNullOrEmpty(stat.user.screen_name))
+                        {
+                            FingerUI.StatusItem item = new FingerUI.StatusItem();
+                            item.Tweet = stat;
+                            statList.AddItem(item);
+                        }
                     }
                 }
                 statList.SetSelectedIndexToZero();
