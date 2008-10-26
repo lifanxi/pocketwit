@@ -74,7 +74,6 @@ namespace FingerUI
         IKListItem m_selectedItem = null;
         Timer m_timer = new Timer();
         bool m_updating = false;
-        private Velocity _m_velocity = new Velocity();
         private Velocity m_velocity = new Velocity();
         
         private int LeftMenuItemFocusedIndex = 0;
