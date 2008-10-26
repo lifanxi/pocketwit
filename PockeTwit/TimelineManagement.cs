@@ -24,6 +24,7 @@ namespace PockeTwit
 
         #endregion
         public bool RunInBackground = true;
+        
         public enum TimeLineType
         {
             Friends,
@@ -37,7 +38,7 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
-
+        private bool ReadyForNotifications = false;
 
         public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
@@ -98,21 +99,10 @@ namespace PockeTwit
 
         void timerUpdate_Tick(object state)
         {
-            if (RunInBackground)
-            {
-                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(BackgroundUpdate);
-                System.Threading.Thread t = new System.Threading.Thread(ts);
-                t.Name = "BackgroundUpdate";
-                t.IsBackground = true;
-                t.Start();
-            }
-            else
-            {
-                BackgroundUpdate();
-            }
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdate));
         }
     
-        private void BackgroundUpdate()
+        private void BackgroundUpdate(object o)
         {
             //if (NotificationHandler.NotifyOfFriends)
             //{
@@ -150,20 +140,12 @@ namespace PockeTwit
 
         public void RefreshFriendsTimeLine()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFriendsTimeLine);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "BackgroundUpdate";
-            t.IsBackground = true;
-            t.Start();
-        }
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFriendsTimeLine));
+         }
 
         public void RefreshMessagesTimeLine()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetMessagesTimeLine);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "BackgroundUpdate";
-            t.IsBackground = true;
-            t.Start();
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetMessagesTimeLine));
         }
 
         private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
@@ -219,7 +201,10 @@ namespace PockeTwit
             }
             return Library.status.Deserialize(response, t.AccountInfo);
         }
-
+        private void GetMessagesTimeLine(object o)
+        {
+            GetMessagesTimeLine(true);
+        }
         private void GetMessagesTimeLine()
         {
             GetMessagesTimeLine(true);
@@ -300,7 +285,10 @@ namespace PockeTwit
             TempLine.TrimExcess();
             GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
         }
-
+        private void GetFriendsTimeLine(object o)
+        {
+            GetFriendsTimeLine(true);
+        }
         private void GetFriendsTimeLine()
         {
             GetFriendsTimeLine(true);
