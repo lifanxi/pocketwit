@@ -23,6 +23,7 @@ namespace Yedda
                 request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
                 request.PreAuthenticate = true;
                 request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                
 
                 //request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";

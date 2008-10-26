@@ -571,11 +571,13 @@ namespace PockeTwit
                         else
                         {
                             string retValue = t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
-                            if (retValue.IndexOf("</error>") > 0)
+                            try
                             {
-                                System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-                                d.LoadXml(retValue);
-                                MessageBox.Show("Error posting tweet:" + d.SelectSingleNode("//error").InnerText);
+                                Library.status.DeserializeSingle(retValue, StatusForm.AccountToSet);
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Error posting tweet:" + retValue);
                             }
                         }
                     }
