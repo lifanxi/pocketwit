@@ -91,8 +91,11 @@ namespace FingerUI
             }
             set
             {
-                _LeftMenuItems = value;
-                SetLeftMenuHeight();
+                lock (_LeftMenuItems)
+                {
+                    _LeftMenuItems = value;
+                    SetLeftMenuHeight();
+                }
             }
         }
 
@@ -1196,44 +1199,47 @@ namespace FingerUI
             int TopOfItem = TopOfLeftMenu;
             int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
             int i = 0;
-            foreach (string MenuItem in LeftMenuItems)
+            lock (LeftMenuItems)
             {
-                
-                int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-
-                using (Pen whitePen = new Pen(ForeColor))
+                foreach (string MenuItem in LeftMenuItems)
                 {
 
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, LeftMenuHeight);
+                    int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
 
-                    Color BackColor;
-                    if (i == LeftMenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
+                    using (Pen whitePen = new Pen(ForeColor))
                     {
-                        BackColor = ClientSettings.SelectedBackColor;
-                    }
-                    else
-                    {
-                        BackColor = ClientSettings.BackColor;
-                    }
-                    using (Brush sBrush = new SolidBrush(BackColor))
-                    {
-                        m_backBuffer.FillRectangle(sBrush, menuRect);
-                    }
 
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                    using (Brush sBrush = new SolidBrush(ForeColor))
-                    {
-                        StringFormat sFormat = new StringFormat();
-                        sFormat.LineAlignment = StringAlignment.Center;
-                        int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                        int LeftPos = menuRect.Right - TextWidth;
-                        m_backBuffer.DrawString(MenuItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
+                        Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, LeftMenuHeight);
+
+                        Color BackColor;
+                        if (i == LeftMenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
+                        {
+                            BackColor = ClientSettings.SelectedBackColor;
+                        }
+                        else
+                        {
+                            BackColor = ClientSettings.BackColor;
+                        }
+                        using (Brush sBrush = new SolidBrush(BackColor))
+                        {
+                            m_backBuffer.FillRectangle(sBrush, menuRect);
+                        }
+
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
+                        using (Brush sBrush = new SolidBrush(ForeColor))
+                        {
+                            StringFormat sFormat = new StringFormat();
+                            sFormat.LineAlignment = StringAlignment.Center;
+                            int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
+                            int LeftPos = menuRect.Right - TextWidth;
+                            m_backBuffer.DrawString(MenuItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
+                        }
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                        m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
+                        TopOfItem = TopOfItem + LeftMenuHeight;
                     }
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                    m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
-                    TopOfItem = TopOfItem + LeftMenuHeight;
+                    i++;
                 }
-                i++;
             }
         }
 
@@ -1274,45 +1280,48 @@ namespace FingerUI
             int TopOfItem = TopOfRightMenu;
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             int i = 0;
-            foreach (string MenuItem in RightMenuItems)
+            lock (RightMenuItems)
             {
-                using (Pen whitePen = new Pen(ForeColor))
+                foreach (string MenuItem in RightMenuItems)
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, RightMenuHeight);
-                    Color BackColor;
-                    if (i == RightMenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
+                    using (Pen whitePen = new Pen(ForeColor))
                     {
-                        BackColor = ClientSettings.SelectedBackColor;
-                    }
-                    else
-                    {
-                        BackColor = ClientSettings.BackColor;
-                    }
-                    using (Brush sBrush = new SolidBrush(BackColor))
-                    {
-                        m_backBuffer.FillRectangle(sBrush, menuRect);
-                    }
-
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                    using (Brush sBrush = new SolidBrush(ForeColor))
-                    {
-                        StringFormat sFormat = new StringFormat();
-                        //sFormat.Alignment = StringAlignment.Center;
-                        sFormat.LineAlignment = StringAlignment.Center;
-                        int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                        StatusItem SelectedStatus = (StatusItem)SelectedItem;
-                        string DisplayItem = MenuItem;
-                        if(SelectedStatus !=null)
+                        Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, RightMenuHeight);
+                        Color BackColor;
+                        if (i == RightMenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
                         {
-                            DisplayItem = MenuItem.Replace("@User", "@"+SelectedStatus.Tweet.user.screen_name);
+                            BackColor = ClientSettings.SelectedBackColor;
                         }
-                        m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, menuRect.X + 5, TextTop, sFormat);
+                        else
+                        {
+                            BackColor = ClientSettings.BackColor;
+                        }
+                        using (Brush sBrush = new SolidBrush(BackColor))
+                        {
+                            m_backBuffer.FillRectangle(sBrush, menuRect);
+                        }
+
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
+                        using (Brush sBrush = new SolidBrush(ForeColor))
+                        {
+                            StringFormat sFormat = new StringFormat();
+                            //sFormat.Alignment = StringAlignment.Center;
+                            sFormat.LineAlignment = StringAlignment.Center;
+                            int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
+                            StatusItem SelectedStatus = (StatusItem)SelectedItem;
+                            string DisplayItem = MenuItem;
+                            if (SelectedStatus != null)
+                            {
+                                DisplayItem = MenuItem.Replace("@User", "@" + SelectedStatus.Tweet.user.screen_name);
+                            }
+                            m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, menuRect.X + 5, TextTop, sFormat);
+                        }
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
+                        TopOfItem = TopOfItem + RightMenuHeight;
                     }
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                    TopOfItem = TopOfItem + RightMenuHeight;
+                    i++;
                 }
-                i++;
             }
         }
 
