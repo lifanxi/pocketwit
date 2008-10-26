@@ -81,7 +81,7 @@ namespace Yedda
                     requestStream.Write(footBytes, 0, footBytes.Length);
                     requestStream.Flush();
                     requestStream.Close();
-                    /*
+                    
                     using (WebResponse response = request.GetResponse())
                     {
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -89,7 +89,7 @@ namespace Yedda
                             return reader.ReadToEnd();
                         }
                     }
-                     */
+                    
                 }
             }
 
@@ -104,9 +104,43 @@ namespace Yedda
                 byte[] incoming = new byte[f.Length];
                 f.Read(incoming, 0, incoming.Length);
                 string ret = ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);
-                return ret;
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(ret);
+                if (doc.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                {
+                    string ErrorText = doc.SelectSingleNode("//err").Attributes["msg"].Value;
+                    throw new Exception(ErrorText);
+                }
+                else
+                {
+                    string URL = doc.SelectSingleNode("//mediaurl").InnerText;
+                    return URL;
+                }
+                throw new Exception("Error communicating with twitpic.  Please try again.");
             }
-            
+        }
+
+        public static string JustUpload(string userName, string password, string Path)
+        {
+            using (System.IO.FileStream f = new FileStream(Path, FileMode.Open, FileAccess.Read))
+            {
+                byte[] incoming = new byte[f.Length];
+                f.Read(incoming, 0, incoming.Length);
+                string ret = ExecutePostCommand("http://twitpic.com/api/upload", userName, password, incoming, null);
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(ret);
+                if (doc.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                {
+                    string ErrorText = doc.SelectSingleNode("//err").Attributes["msg"].Value;
+                    throw new Exception(ErrorText);
+                }
+                else
+                {
+                    string URL = doc.SelectSingleNode("//mediaurl").InnerText;
+                    return URL;
+                }
+                throw new Exception("Error communicating with twitpic.  Please try again.");
+            }
         }
     }
 }

@@ -1116,14 +1116,14 @@ namespace Yedda
         #endregion
 
         #region Location
-        public void SetLocation(string Location)
+        public string SetLocation(string Location)
         {
             if (AccountInfo.ServerURL.ServerType == TwitterServer.twitter || AccountInfo.ServerURL.ServerType == TwitterServer.identica)
             {
                 string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Update_Location), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
                 string data = string.Format("location={0}", HttpUtility.UrlEncode(Location));
 
-                ExecutePostCommand(url, data);
+                return ExecutePostCommand(url, data);
             }
             else
             {
@@ -1134,11 +1134,13 @@ namespace Yedda
                     XmlDocument placeDoc = new XmlDocument();
                     placeDoc.LoadXml(placeRet);
                     this.PlaceID = placeDoc.SelectSingleNode("//id").InnerText;
+                    return "";
                 }
                 catch
                 {
                 }
             }
+            return "";
         }
         #endregion
     }

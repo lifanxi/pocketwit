@@ -65,6 +65,7 @@ namespace PockeTwit
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
         private delegate bool delBool();
+        private delegate void delNone();
 
 		#endregion�Delegates�and�Events�
 
@@ -411,17 +412,25 @@ namespace PockeTwit
             }
         }
 
+
         void Manager_CompleteLoaded()
         {
-        
-            lblLoading.Text = "Preparing UI";
-            Application.DoEvents();
-            statList.SwitchTolist("Friends_TimeLine");
+            if (InvokeRequired)
+            {
+                delNone d = new delNone(Manager_CompleteLoaded);
+                this.Invoke(d);
+            }
+            else
+            {
+                lblLoading.Text = "Preparing UI";
+                Application.DoEvents();
+                statList.SwitchTolist("Friends_TimeLine");
 
-            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
 
-            statList.SetSelectedIndexToZero();
-            Application.DoEvents();
+                statList.SetSelectedIndexToZero();
+                Application.DoEvents();
+            }
         }
 
         void Manager_Progress(int percentage, string Status)
@@ -553,10 +562,10 @@ namespace PockeTwit
                             {
                                 retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
                             }
-                            catch (System.Net.WebException ex)
+                            catch (Exception ex)
                             {
                                 Cursor.Current = Cursors.Default;
-                                MessageBox.Show("Error sending the image to twitpic -- " + ex.Status.ToString());
+                                MessageBox.Show("Error sending the image to twitpic -- " + ex.ToString());
                             }
                         }
                         else
