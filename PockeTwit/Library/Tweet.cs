@@ -22,6 +22,7 @@ namespace PockeTwit.Library
     {
         [XmlIgnore]
         private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
+        private static XmlSerializer singleSerializer = new XmlSerializer(typeof(Library.status));
 
         public StatusTypes TypeofMessage = StatusTypes.Normal;
 
@@ -151,6 +152,18 @@ namespace PockeTwit.Library
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account)
         {
             return Deserialize(response, Account, StatusTypes.Normal);
+        }
+        public static status DeserializeSingle(string response, Yedda.Twitter.Account Account)
+        {
+            status s = null;
+            if (Account == null || Account.ServerURL.ServerType != Yedda.Twitter.TwitterServer.brightkite)
+            {
+                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                {
+                    s = (Library.status)singleSerializer.Deserialize(r);
+                }
+            }
+            return s;
         }
         public static status[] Deserialize(string response, Yedda.Twitter.Account Account, StatusTypes TypeOfMessage)
         {
