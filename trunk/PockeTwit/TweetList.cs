@@ -363,7 +363,8 @@ namespace PockeTwit
 
         void Manager_ErrorCleared(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
         {
-            if(LeftMenu[0]=="Errors")
+
+            if(LeftMenu.Contains("Errors"))
             {
                 if (Yedda.Twitter.Failures.ContainsKey(t))
                 {
@@ -385,9 +386,13 @@ namespace PockeTwit
                 }
                 if (AllClear)
                 {
+
                     //Remove the menu item.
                     LeftMenu.Remove("Errors");
-                    statList.LeftMenuItems = LeftMenu;
+                    lock (statList.LeftMenuItems)
+                    {
+                        statList.LeftMenuItems = LeftMenu;
+                    }
                     statList.Redraw();
                 }
             }
@@ -404,10 +409,13 @@ namespace PockeTwit
                 Yedda.Twitter.Failures[t].Add(Action, 0);
             }
             Yedda.Twitter.Failures[t][Action]++;
-            if (LeftMenu[0] != "Errors")
+            if (!LeftMenu.Contains("Errors"))
             {
-                LeftMenu.Insert(0, "Errors");
-                statList.LeftMenuItems = LeftMenu;
+                LeftMenu.Insert(LeftMenu.Count - 1, "Errors");
+                lock (statList.LeftMenuItems)
+                {
+                    statList.LeftMenuItems = LeftMenu;
+                }
                 statList.Redraw();
             }
         }
