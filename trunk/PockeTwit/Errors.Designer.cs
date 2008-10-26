@@ -46,6 +46,8 @@
             // lblErrors
             // 
             this.lblErrors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblErrors.ForeColor = ClientSettings.ForeColor;
+            this.lblErrors.BackColor = ClientSettings.BackColor;
             this.lblErrors.Location = new System.Drawing.Point(0, 0);
             this.lblErrors.Name = "lblErrors";
             this.lblErrors.Size = new System.Drawing.Size(240, 268);
@@ -61,6 +63,8 @@
             this.Menu = this.mainMenu1;
             this.Name = "Errors";
             this.Text = "Errors";
+            this.ForeColor = ClientSettings.ForeColor;
+            this.BackColor = ClientSettings.BackColor;
             this.ResumeLayout(false);
 
         }
