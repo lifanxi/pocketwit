@@ -57,20 +57,14 @@ namespace PockeTwit
 
         public  void LoadFromTwitter()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
-            System.Threading.Thread t = new System.Threading.Thread(ts);
-            t.Name = "FetchFollowers";
-            t.Start();
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFollowersFromTwitter));
         }
 
         public  void Reset()
         {
             if (OnceLoaded)
             {
-                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetFollowersFromTwitter);
-                System.Threading.Thread t = new System.Threading.Thread(ts);
-                t.Name = "FetchFollowers";
-                t.Start();
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFollowersFromTwitter));
             }
         }
 
@@ -111,7 +105,7 @@ namespace PockeTwit
             }
         }
 
-        private  void GetFollowersFromTwitter()
+        private  void GetFollowersFromTwitter(object o)
         {
             try
             {

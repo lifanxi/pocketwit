@@ -69,10 +69,7 @@ namespace PockeTwit
         {
             if (!devBuild)
             {
-                System.Threading.ThreadStart ts = new System.Threading.ThreadStart(GetWebResponse);
-                System.Threading.Thread t = new System.Threading.Thread(ts);
-                t.Name = "CheckUpdates";
-                t.Start();
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetWebResponse));
             }
         }
 
@@ -80,10 +77,9 @@ namespace PockeTwit
 
 		// Private Methods (1) 
 
-        private void GetWebResponse()
+        private void GetWebResponse(object o)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UpdateURL);
-
             try
             {
                 HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
