@@ -15,15 +15,18 @@ namespace PockeTwit
         {
             InitializeComponent();
             StringBuilder erstring = new StringBuilder();
-            erstring.Append("Errors:\r\n");
+            erstring.Append("Communication Errors:\r\n");
             foreach (Yedda.Twitter.Account accountKey in Yedda.Twitter.Failures.Keys)
             {
-                Dictionary<Yedda.Twitter.ActionType, int> Failure = Yedda.Twitter.Failures[accountKey];
-                foreach (Yedda.Twitter.ActionType key in Failure.Keys)
+                lock (Yedda.Twitter.Failures[accountKey])
                 {
-                    if (Failure[key] > 0)
+                    Dictionary<Yedda.Twitter.ActionType, int> Failure = Yedda.Twitter.Failures[accountKey];
+                    foreach (Yedda.Twitter.ActionType key in Failure.Keys)
                     {
-                        erstring.Append(accountKey.ToString() + "-" + key.ToString() + ": " + Failure[key].ToString() + "\r\n");
+                        if (Failure[key] > 0)
+                        {
+                            erstring.Append(accountKey.ToString() + "-" + key.ToString() + ": " + Failure[key].ToString() + "\r\n");
+                        }
                     }
                 }
             }
