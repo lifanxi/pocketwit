@@ -227,6 +227,7 @@
     <Compile Include="Yedda\HtmlEntities.cs" />
     <Compile Include="Yedda\HttpUtility.cs" />
     <Compile Include="Yedda\ShortText.cs" />
+    <Compile Include="Yedda\Skweezer.cs" />
     <Compile Include="Yedda\TwitPic.cs" />
     <Compile Include="Yedda\Twitter.cs" />
   </ItemGroup>

@@ -64,6 +64,8 @@ public static class ClientSettings
     public static bool HighQualityAvatars { get; set; }
     public static bool UseClickables { get; set; }
 
+    public static bool UseSkweezer { get; set; }
+
     public static bool ShowAvatars { get; set; }
 
     public static bool UseGPS { get; set; }
