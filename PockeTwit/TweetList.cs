@@ -232,8 +232,11 @@ namespace PockeTwit
 
         private void FollowUser()
         {
-            ChangeCursor(Cursors.WaitCursor);
+            
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return; }
+            if (selectedItem.Tweet.user == null) { return; }
+            ChangeCursor(Cursors.WaitCursor);
             Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
             Conn.FollowUser(selectedItem.Tweet.user.screen_name);
             FollowingDictionary[Conn].AddUser(selectedItem.Tweet.user);
@@ -629,7 +632,12 @@ namespace PockeTwit
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-            pi.FileName = GetMatchingConnection(selectedItem.Tweet.Account).GetProfileURL(selectedItem.Tweet.user.screen_name);
+            string ProfileURL = GetMatchingConnection(selectedItem.Tweet.Account).GetProfileURL(selectedItem.Tweet.user.screen_name);
+            if (ClientSettings.UseSkweezer)
+            {
+                ProfileURL = Yedda.Skweezer.GetSkweezerURL(ProfileURL);
+            }
+            pi.FileName = ProfileURL;
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
         }
@@ -762,7 +770,14 @@ namespace PockeTwit
             if (TextClicked.StartsWith("http"))
             {
                 System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-                pi.FileName = TextClicked;
+                if (ClientSettings.UseSkweezer)
+                {
+                    pi.FileName = Yedda.Skweezer.GetSkweezerURL(TextClicked);
+                }
+                else
+                {
+                    pi.FileName = TextClicked;
+                }
                 pi.UseShellExecute = true;
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             }
