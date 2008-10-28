@@ -66,6 +66,7 @@ namespace PockeTwit
             ClientSettings.UseClickables = chkClickables.Checked;
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
+            ClientSettings.UseSkweezer = chkSkweezer.Checked;
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -84,6 +85,7 @@ namespace PockeTwit
             chkTimestamps.Checked = ClientSettings.ShowExtra;
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
+            chkSkweezer.Checked = ClientSettings.UseSkweezer;
 
             this.DialogResult = DialogResult.Cancel;
         }

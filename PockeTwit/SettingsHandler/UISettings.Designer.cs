@@ -57,6 +57,7 @@ namespace PockeTwit
             this.chkTimestamps = new System.Windows.Forms.CheckBox();
             this.chkClickables = new System.Windows.Forms.CheckBox();
             this.chkScreenName = new System.Windows.Forms.CheckBox();
+            this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -76,65 +77,77 @@ namespace PockeTwit
             // 
             // label4
             // 
-            this.label4.ForeColor = ClientSettings.ForeColor ;
             this.label4.Location = new System.Drawing.Point(4, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 20);
             this.label4.Text = "Max Length:";
+            this.label4.ForeColor = ClientSettings.ForeColor;
+            this.label4.BackColor = ClientSettings.BackColor;
             // 
             // txtMaxTweets
             // 
             this.txtMaxTweets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMaxTweets.BackColor = ClientSettings.FieldBackColor;
-            this.txtMaxTweets.ForeColor = ClientSettings.FieldForeColor;
             this.txtMaxTweets.Location = new System.Drawing.Point(81, 3);
             this.txtMaxTweets.Name = "txtMaxTweets";
             this.txtMaxTweets.Size = new System.Drawing.Size(92, 21);
             this.txtMaxTweets.TabIndex = 0;
+            this.txtMaxTweets.BackColor = ClientSettings.FieldBackColor;
+            this.txtMaxTweets.ForeColor = ClientSettings.FieldForeColor;
             // 
             // lblTweets
             // 
             this.lblTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTweets.ForeColor = ClientSettings.ForeColor;
             this.lblTweets.Location = new System.Drawing.Point(179, 4);
             this.lblTweets.Name = "lblTweets";
             this.lblTweets.Size = new System.Drawing.Size(57, 20);
             this.lblTweets.Text = "(10-200)";
+            this.lblTweets.ForeColor = ClientSettings.ForeColor;
+            this.lblTweets.BackColor = ClientSettings.BackColor;
             // 
             // chkTimestamps
             // 
-            this.chkTimestamps.ForeColor = ClientSettings.ForeColor;
             this.chkTimestamps.Location = new System.Drawing.Point(2, 30);
             this.chkTimestamps.Name = "chkTimestamps";
             this.chkTimestamps.Size = new System.Drawing.Size(235, 20);
             this.chkTimestamps.TabIndex = 1;
             this.chkTimestamps.Text = "Show times";
+            this.chkTimestamps.ForeColor = ClientSettings.ForeColor;
             // 
             // chkClickables
             // 
-            this.chkClickables.ForeColor = ClientSettings.ForeColor;
             this.chkClickables.Location = new System.Drawing.Point(2, 56);
             this.chkClickables.Name = "chkClickables";
             this.chkClickables.Size = new System.Drawing.Size(235, 20);
-            this.chkClickables.TabIndex = 4;
+            this.chkClickables.TabIndex = 2;
             this.chkClickables.Text = "Clickable Links";
+            this.chkClickables.ForeColor = ClientSettings.ForeColor;
             // 
             // chkScreenName
             // 
-            this.chkScreenName.ForeColor = ClientSettings.ForeColor;
-            this.chkScreenName.Location = new System.Drawing.Point(2, 82);
+            this.chkScreenName.Location = new System.Drawing.Point(2, 108);
             this.chkScreenName.Name = "chkScreenName";
             this.chkScreenName.Size = new System.Drawing.Size(235, 20);
-            this.chkScreenName.TabIndex = 7;
+            this.chkScreenName.TabIndex = 4;
             this.chkScreenName.Text = "Include screenname";
+            this.chkScreenName.ForeColor = ClientSettings.ForeColor;
+            // 
+            // chkSkweezer
+            // 
+            this.chkSkweezer.Location = new System.Drawing.Point(2, 82);
+            this.chkSkweezer.Name = "chkSkweezer";
+            this.chkSkweezer.Size = new System.Drawing.Size(235, 20);
+            this.chkSkweezer.TabIndex = 3;
+            this.chkSkweezer.Text = "Load URLs in Skweezer";
+            this.chkSkweezer.ForeColor = ClientSettings.ForeColor;
             // 
             // UISettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = ClientSettings.BackColor;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkScreenName);
             this.Controls.Add(this.chkClickables);
             this.Controls.Add(this.chkTimestamps);
@@ -153,6 +166,7 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkTimestamps;
         private System.Windows.Forms.CheckBox chkClickables;
         private System.Windows.Forms.CheckBox chkScreenName;
+        private System.Windows.Forms.CheckBox chkSkweezer;
 
     }
 }
