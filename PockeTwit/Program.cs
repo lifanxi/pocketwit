@@ -15,9 +15,13 @@ namespace PockeTwit
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+
             string ErrorPath = ClientSettings.AppPath;
             Exception ex = (Exception)e.ExceptionObject;
-
+            if (ex is ObjectDisposedException)
+            {
+                return;
+            }
             System.Text.StringBuilder b = new System.Text.StringBuilder();
             b.Append("From v" + UpdateChecker.currentVersion.ToString());
             b.Append("\r\n");
