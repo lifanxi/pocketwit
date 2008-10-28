@@ -243,6 +243,10 @@ public static class ClientSettings
             {
                 IncludeUserName = bool.Parse(ConfigurationSettings.AppSettings["IncludeScreenName"]);
             }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseSkweezer"]))
+            {
+                UseSkweezer = bool.Parse(ConfigurationSettings.AppSettings["UseSkweezer"]);
+            }
             foreach (Yedda.Twitter.Account a in ConfigurationSettings.Accounts)
             {
                 AccountsList.Add(a);
@@ -267,6 +271,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
         ConfigurationSettings.AppSettings["UseClickables"] = UseClickables.ToString();
         ConfigurationSettings.AppSettings["IncludeScreenName"] = IncludeUserName.ToString();
+        ConfigurationSettings.AppSettings["UseSkweezer"] = UseSkweezer.ToString();
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
             ConfigurationSettings.AppSettings.Remove("UserName");
