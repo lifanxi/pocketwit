@@ -271,7 +271,7 @@ namespace PockeTwit
         private void SetConnectedMenus(Yedda.Twitter t)
         {
             //LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
-            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
+            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Retweet", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
@@ -713,6 +713,9 @@ namespace PockeTwit
                 case "Reply @User":
                     SendReply();
                     break;
+                case "Retweet":
+                    Retweet();
+                    break;
                 case "Destroy Favorite":
                     DestroyFavorite();
                     break;
@@ -740,6 +743,14 @@ namespace PockeTwit
                     this.Close();
                     break;
             }
+        }
+
+        private void Retweet()
+        {
+            if (statList.SelectedItem == null) { return; }
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            string retweet = "RT: " + selectedItem.Tweet.text;
+            SetStatus(retweet);
         }
 
         void statusList_SelectedItemChanged(object sender, EventArgs e)

@@ -731,7 +731,7 @@ namespace FingerUI
                     }
                 }
             }
-            if (e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.Right | e.KeyCode == Keys.F2) 
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
@@ -741,7 +741,7 @@ namespace FingerUI
                     m_timer.Enabled = true;
                 }
             }
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
             {
                 if (CurrentlyViewing != SideShown.Left)
                 {
