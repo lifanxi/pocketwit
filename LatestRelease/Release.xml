@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.44</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv44.CAB</url>
-  <notes>Fix for smartphone account management
-Shorttext integration
-Better caching
+  <version>.45</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv45.CAB</url>
+  <notes>Option to use Skweezer
+Retweet command
 </notes>
 </LatestRelease>
