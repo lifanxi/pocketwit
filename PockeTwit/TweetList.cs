@@ -749,7 +749,7 @@ namespace PockeTwit
         {
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            string quote = "RT: " + selectedItem.Tweet.text;
+            string quote = "RT: \"" + selectedItem.Tweet.text + "\"";
             SetStatus(quote);
         }
 
