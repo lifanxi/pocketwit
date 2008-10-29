@@ -96,36 +96,38 @@ namespace PockeTwit
 
         public void KeyDown(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Down)
+            lock (TextItems)
             {
-                if(_CurrentlyFocused< TextItems.Count-1)
+                if (e.KeyCode == Keys.Down)
                 {
-                    _CurrentlyFocused++;
+                    if (_CurrentlyFocused < TextItems.Count - 1)
+                    {
+                        _CurrentlyFocused++;
+                    }
                 }
-            }
-            if (e.KeyCode == Keys.Up)
-            {
-                if (_CurrentlyFocused > 0)
+                if (e.KeyCode == Keys.Up)
                 {
-                    _CurrentlyFocused--;
+                    if (_CurrentlyFocused > 0)
+                    {
+                        _CurrentlyFocused--;
+                    }
                 }
-            }
-            if (e.KeyCode == Keys.Enter)
-            {
-                this.Visible = false;
+                if (e.KeyCode == Keys.Enter)
+                {
+                    this.Visible = false;
 
-                if (TextItems[_CurrentlyFocused] == "Exit")
-                {
-                    _CurrentlyFocused = 0;
-                    return;
-                }
-                if (WordClicked != null)
-                {
-                    WordClicked(TextItems[_CurrentlyFocused]);
-                    _CurrentlyFocused = 0;
+                    if (TextItems[_CurrentlyFocused] == "Exit")
+                    {
+                        _CurrentlyFocused = 0;
+                        return;
+                    }
+                    if (WordClicked != null)
+                    {
+                        WordClicked(TextItems[_CurrentlyFocused]);
+                        _CurrentlyFocused = 0;
+                    }
                 }
             }
-            
         }
 
         public void Render(Graphics g)
