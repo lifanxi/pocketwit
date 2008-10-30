@@ -349,7 +349,7 @@ namespace PockeTwit
                 FollowingDictionary.Add(TwitterConn, f);
             }
             SetConnectedMenus();
-            Manager = new TimelineManagement(TwitterConnections);
+            Manager = new TimelineManagement();
             Manager.NoData += new TimelineManagement.delNullReturnedByAccount(Manager_NoData);
             Manager.ErrorCleared += new TimelineManagement.delNullReturnedByAccount(Manager_ErrorCleared);
             Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);

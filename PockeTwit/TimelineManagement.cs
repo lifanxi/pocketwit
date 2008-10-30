@@ -40,7 +40,7 @@ namespace PockeTwit
         private int HoldNewFriends = 0;
         private bool ReadyForNotifications = false;
 
-        public TimelineManagement(List<Yedda.Twitter> TwitterConnectionsToFollow)
+        public TimelineManagement()
         {
         }
 
