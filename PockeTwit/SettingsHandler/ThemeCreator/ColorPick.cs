@@ -26,7 +26,7 @@ namespace PockeTwit
             ThemeName = Theme;
             LoadColorFile();
             InitializeComponent();
-            
+            PockeTwit.Themes.FormColors.SetColors(this);
             //Graphics.FromImage(m_bmp).FillRectangle(
         }
         void LoadColorFile()
@@ -143,7 +143,16 @@ namespace PockeTwit
             {
                 if (MessageBox.Show("That theme already exists, would you like to create a new one?", "New Theme?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    filename = CloneTheme(filename);
+                    string newFile = CloneTheme(filename);
+                    if (newFile == filename)
+                    {
+                        return;
+                    }
+                    filename = newFile;
+                }
+                else
+                {
+                    return;
                 }
             }
             string ColorSet = "";
@@ -168,14 +177,19 @@ namespace PockeTwit
 
         private string CloneTheme(string filename)
         {
-            string newName = "New";
-            string newFolder = ClientSettings.AppPath + "\\Themes\\" + newName;
-            System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Themes\\" + newName);
-            foreach (string oldItem in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\" + ThemeName))
+            SettingsHandler.ThemeCreator.NewThemeName n = new PockeTwit.SettingsHandler.ThemeCreator.NewThemeName();
+            if (n.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                string newName = n.ThemeName;
+                string newFolder = ClientSettings.AppPath + "\\Themes\\" + newName;
+                System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Themes\\" + newName);
+                foreach (string oldItem in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\" + ThemeName))
+                {
+                    System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                }
+                return newFolder + "\\colors.txt";
             }
-            return newFolder + "\\colors.txt";
+            return filename;
         }
 
         private void menuCancel_Click(object sender, EventArgs e)

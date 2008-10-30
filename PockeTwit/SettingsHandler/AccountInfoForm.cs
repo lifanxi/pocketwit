@@ -28,6 +28,7 @@ namespace PockeTwit
         public AccountInfoForm()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;

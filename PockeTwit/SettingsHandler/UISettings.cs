@@ -17,6 +17,7 @@ namespace PockeTwit
         public UISettings()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -74,7 +75,7 @@ namespace PockeTwit
             {
                 ClientSettings.ThemeName = selectedTheme;
                 ClientSettings.LoadColors();
-                MessageBox.Show("You will need to restart PockeTwit to see the new colors");
+                PockeTwit.Themes.FormColors.SetColors(this);
             }
 
             ClientSettings.SaveSettings();

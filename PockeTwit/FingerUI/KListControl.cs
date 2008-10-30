@@ -9,6 +9,7 @@ namespace FingerUI
 {
     public class KListControl : UserControl
     {
+        private Font HighlightedFont;
         private class Velocity
         {
             private int _X = 0;
@@ -213,12 +214,7 @@ namespace FingerUI
             }
         }
 
-        public Color HighLightBackColor { get; set; }
-
-        public Font HighlightedFont { get; set; }
-
-        public Color HighLightForeColor { get; set; }
-
+        
         public bool IsMaximized { get; set; }
         
         public int ItemHeight
@@ -290,12 +286,10 @@ namespace FingerUI
             }
         }
 
-        public Color SelectedBackColor { get; set; }
-
+        
         public Font SelectedFont { get; set; }
 
-        public Color SelectedForeColor { get; set; }
-
+        
         public IKListItem SelectedItem
         {
             get
@@ -929,7 +923,7 @@ namespace FingerUI
             OnScreenItems.Clear();
             if (m_backBuffer != null)
             {
-                m_backBuffer.Clear(BackColor);
+                m_backBuffer.Clear(ClientSettings.BackColor);
                 
                 Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
 
@@ -952,7 +946,7 @@ namespace FingerUI
                         {
                             //Draw borders
                             OnScreenItems.Add(item);
-                            using (Pen whitePen = new Pen(ForeColor))
+                            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                             {
                                 m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
                                 m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
@@ -1161,7 +1155,7 @@ namespace FingerUI
         {
             if (m_backBuffer != null)
             {
-                m_backBuffer.Clear(BackColor);
+                m_backBuffer.Clear(ClientSettings.BackColor);
 
                 
                 ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
@@ -1177,7 +1171,7 @@ namespace FingerUI
                         
                         //Draw borders
 
-                        using (Pen whitePen = new Pen(ForeColor))
+                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                         {
                             m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
                             m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
@@ -1206,7 +1200,7 @@ namespace FingerUI
 
                     int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
 
-                    using (Pen whitePen = new Pen(ForeColor))
+                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                     {
 
                         Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, LeftMenuHeight);
@@ -1267,7 +1261,7 @@ namespace FingerUI
                 Percentage = (float)m_offset.Y / MaxYOffset;
             }
             int Position = (int)Math.Round(Height * Percentage);
-            using (SolidBrush SBrush = new SolidBrush(ForeColor))
+            using (SolidBrush SBrush = new SolidBrush(ClientSettings.ForeColor))
             {
                 Point a = new Point(Width - 10, Position);
                 Point b = new Point(Width, Position - 5);
@@ -1288,7 +1282,7 @@ namespace FingerUI
             {
                 foreach (string MenuItem in RightMenuItems)
                 {
-                    using (Pen whitePen = new Pen(ForeColor))
+                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                     {
                         Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, RightMenuHeight);
                         Color BackColor;

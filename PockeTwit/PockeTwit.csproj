@@ -155,6 +155,12 @@
     <Compile Include="SettingsHandler\ThemeCreator\ColorPick.designer.cs">
       <DependentUpon>ColorPick.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\NewThemeName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\NewThemeName.Designer.cs">
+      <DependentUpon>NewThemeName.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsHandler\UISettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +176,7 @@
     <Compile Include="SideMenu.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Contributors.cs" />
+    <Compile Include="Themes\FormColors.cs" />
     <Compile Include="TimeLine.cs" />
     <Compile Include="TimelineManagement.cs" />
     <Compile Include="TweetList.cs">
@@ -288,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\ThemeCreator\ColorPick.resx">
       <DependentUpon>ColorPick.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\ThemeCreator\NewThemeName.resx">
+      <DependentUpon>NewThemeName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\UISettings.resx">
       <DependentUpon>UISettings.cs</DependentUpon>
