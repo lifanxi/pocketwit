@@ -70,7 +70,7 @@ namespace PockeTwit
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
 
             string selectedTheme = (string)cmbTheme.SelectedItem;
-            if (selectedTheme != ClientSettings.ThemeName)
+            if ((selectedTheme!="Custom...") && (selectedTheme != ClientSettings.ThemeName))
             {
                 ClientSettings.ThemeName = selectedTheme;
                 ClientSettings.LoadColors();
@@ -106,10 +106,20 @@ namespace PockeTwit
                 string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
                 cmbTheme.Items.Add(themeName);
             }
+            cmbTheme.Items.Add("Custom...");
             cmbTheme.SelectedItem = ClientSettings.ThemeName;
         }
 
 		#endregion Methods 
+
+        private void cmbTheme_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedTheme = (string)cmbTheme.SelectedItem;
+            if (selectedTheme == "Custom...")
+            {
+                MessageBox.Show("soon...");                
+            }
+        }
 
         
     }

@@ -151,6 +151,7 @@ namespace PockeTwit
             this.cmbTheme.Name = "cmbTheme";
             this.cmbTheme.Size = new System.Drawing.Size(182, 22);
             this.cmbTheme.TabIndex = 7;
+            this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged);
             // 
             // label1
             // 
