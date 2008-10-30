@@ -20,6 +20,7 @@ namespace PockeTwit
         ArrayList m_arraylist;
         public ColorPick(string Theme)
         {
+            Cursor.Current = Cursors.WaitCursor;
             m_bmp = CreateColorPallet();
             m_arraylist = new ArrayList();
             filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\colors.txt";
@@ -27,7 +28,7 @@ namespace PockeTwit
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
             LoadColorFile();
-            //Graphics.FromImage(m_bmp).FillRectangle(
+            Cursor.Current = Cursors.Default;
         }
         void LoadColorFile()
         {
