@@ -58,6 +58,8 @@ namespace PockeTwit
             this.chkClickables = new System.Windows.Forms.CheckBox();
             this.chkScreenName = new System.Windows.Forms.CheckBox();
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
+            this.cmbTheme = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -77,76 +79,96 @@ namespace PockeTwit
             // 
             // label4
             // 
+            this.label4.BackColor = System.Drawing.Color.Black;
+            this.label4.ForeColor = System.Drawing.Color.LightGray;
             this.label4.Location = new System.Drawing.Point(4, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 20);
             this.label4.Text = "Max Length:";
-            this.label4.ForeColor = ClientSettings.ForeColor;
-            this.label4.BackColor = ClientSettings.BackColor;
             // 
             // txtMaxTweets
             // 
             this.txtMaxTweets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaxTweets.BackColor = System.Drawing.Color.White;
+            this.txtMaxTweets.ForeColor = System.Drawing.Color.Black;
             this.txtMaxTweets.Location = new System.Drawing.Point(81, 3);
             this.txtMaxTweets.Name = "txtMaxTweets";
             this.txtMaxTweets.Size = new System.Drawing.Size(92, 21);
             this.txtMaxTweets.TabIndex = 0;
-            this.txtMaxTweets.BackColor = ClientSettings.FieldBackColor;
-            this.txtMaxTweets.ForeColor = ClientSettings.FieldForeColor;
             // 
             // lblTweets
             // 
             this.lblTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTweets.BackColor = System.Drawing.Color.Black;
+            this.lblTweets.ForeColor = System.Drawing.Color.LightGray;
             this.lblTweets.Location = new System.Drawing.Point(179, 4);
             this.lblTweets.Name = "lblTweets";
             this.lblTweets.Size = new System.Drawing.Size(57, 20);
             this.lblTweets.Text = "(10-200)";
-            this.lblTweets.ForeColor = ClientSettings.ForeColor;
-            this.lblTweets.BackColor = ClientSettings.BackColor;
             // 
             // chkTimestamps
             // 
+            this.chkTimestamps.ForeColor = System.Drawing.Color.LightGray;
             this.chkTimestamps.Location = new System.Drawing.Point(2, 30);
             this.chkTimestamps.Name = "chkTimestamps";
             this.chkTimestamps.Size = new System.Drawing.Size(235, 20);
             this.chkTimestamps.TabIndex = 1;
             this.chkTimestamps.Text = "Show times";
-            this.chkTimestamps.ForeColor = ClientSettings.ForeColor;
             // 
             // chkClickables
             // 
+            this.chkClickables.ForeColor = System.Drawing.Color.LightGray;
             this.chkClickables.Location = new System.Drawing.Point(2, 56);
             this.chkClickables.Name = "chkClickables";
             this.chkClickables.Size = new System.Drawing.Size(235, 20);
             this.chkClickables.TabIndex = 2;
             this.chkClickables.Text = "Clickable Links";
-            this.chkClickables.ForeColor = ClientSettings.ForeColor;
             // 
             // chkScreenName
             // 
+            this.chkScreenName.ForeColor = System.Drawing.Color.LightGray;
             this.chkScreenName.Location = new System.Drawing.Point(2, 108);
             this.chkScreenName.Name = "chkScreenName";
             this.chkScreenName.Size = new System.Drawing.Size(235, 20);
             this.chkScreenName.TabIndex = 4;
             this.chkScreenName.Text = "Include screenname";
-            this.chkScreenName.ForeColor = ClientSettings.ForeColor;
             // 
             // chkSkweezer
             // 
+            this.chkSkweezer.ForeColor = System.Drawing.Color.LightGray;
             this.chkSkweezer.Location = new System.Drawing.Point(2, 82);
             this.chkSkweezer.Name = "chkSkweezer";
             this.chkSkweezer.Size = new System.Drawing.Size(235, 20);
             this.chkSkweezer.TabIndex = 3;
             this.chkSkweezer.Text = "Load URLs in Skweezer";
-            this.chkSkweezer.ForeColor = ClientSettings.ForeColor;
+            // 
+            // cmbTheme
+            // 
+            this.cmbTheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbTheme.Location = new System.Drawing.Point(54, 135);
+            this.cmbTheme.Name = "cmbTheme";
+            this.cmbTheme.Size = new System.Drawing.Size(182, 22);
+            this.cmbTheme.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.Location = new System.Drawing.Point(4, 137);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 20);
+            this.label1.Text = "Theme:";
             // 
             // UISettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.BackColor = ClientSettings.BackColor;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cmbTheme);
             this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkScreenName);
             this.Controls.Add(this.chkClickables);
@@ -167,6 +189,8 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkClickables;
         private System.Windows.Forms.CheckBox chkScreenName;
         private System.Windows.Forms.CheckBox chkSkweezer;
+        private System.Windows.Forms.ComboBox cmbTheme;
+        private System.Windows.Forms.Label label1;
 
     }
 }

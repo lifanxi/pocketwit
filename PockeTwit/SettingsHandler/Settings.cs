@@ -53,13 +53,14 @@ public static class ClientSettings
     static ClientSettings()
     {
         GetTextSizes();
-        LoadColors();
         LoadSettings();
+        LoadColors();
     }
 
 		#endregion Constructors 
 
 		#region Properties (7) 
+    public static string ThemeName { get; set; }
     public static bool IncludeUserName { get; set; }
     public static bool HighQualityAvatars { get; set; }
     public static bool UseClickables { get; set; }
@@ -119,6 +120,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ThemeName"]))
+            {
+                ThemeName = ConfigurationSettings.AppSettings["ThemeName"];
+            }
+            else
+            {
+                ThemeName = "Original";
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["HighQualityAvatars"]))
             {
                 HighQualityAvatars = bool.Parse(ConfigurationSettings.AppSettings["HighQualityAvatars"]);
@@ -259,6 +268,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["ThemeName"] = ThemeName;
         ConfigurationSettings.AppSettings["ShowAvatars"] = ShowAvatars.ToString();
         ConfigurationSettings.AppSettings["UseGPS"] = UseGPS.ToString();
         ConfigurationSettings.AppSettings["IsMaximized"] = IsMaximized.ToString();
@@ -301,11 +311,11 @@ public static class ClientSettings
         }
     }
 
-    private static void LoadColors()
+    public static void LoadColors()
     {
-        if (System.IO.File.Exists(AppPath + "\\colors.txt"))
+        if (System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + ".txt"))
         {
-            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\colors.txt"))
+            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Themes\\" + ThemeName + ".txt"))
             {
                 while(!r.EndOfStream)
                 {
