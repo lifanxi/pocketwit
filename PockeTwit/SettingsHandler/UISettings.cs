@@ -101,7 +101,7 @@ namespace PockeTwit
         }
         private void ListThemes()
         {
-            foreach (string ThemeFile in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\"))
+            foreach (string ThemeFile in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\Themes\\"))
             {
                 string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
                 cmbTheme.Items.Add(themeName);

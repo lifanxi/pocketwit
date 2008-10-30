@@ -142,7 +142,7 @@ namespace PockeTwit
                         //if (pictureBox1.Visible)
                         //{
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+                            this.pictureBox2.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
                                 this.pictureBox2.Visible = false;
@@ -168,7 +168,7 @@ namespace PockeTwit
                 //if (pictureBox1.Visible)
                 //{
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                    this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+                    this.pictureBox1.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
                     if (DetectDevice.DeviceType == DeviceType.Standard)
                     {
                         this.pictureBox1.Visible = false;
