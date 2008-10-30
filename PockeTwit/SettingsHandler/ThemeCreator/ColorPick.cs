@@ -22,11 +22,11 @@ namespace PockeTwit
         {
             m_bmp = CreateColorPallet();
             m_arraylist = new ArrayList();
-            filename = ClientSettings.AppPath + "\\Themes\\" + Theme + ".txt";
+            filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\colors.txt";
             ThemeName = Theme;
-            LoadColorFile();
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
+            LoadColorFile();
             //Graphics.FromImage(m_bmp).FillRectangle(
         }
         void LoadColorFile()
@@ -93,6 +93,7 @@ namespace PockeTwit
             lbl.Top = pos * 20 + 10;
             lbl.Width = 120;
             lbl.Height = 15;
+            lbl.ForeColor = ClientSettings.ForeColor;
 
 
             PictureBox pb = new PictureBox();

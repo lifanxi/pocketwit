@@ -1,8 +1,8 @@
 ﻿BackColor:255:255:255
 ForeColor:30:30:30
-LinkColor:150:150:255
-SelectedBackColor:200:200:200
-SelectedForeColor:30:30:30
+LinkColor:100:100:205
+SelectedBackColor:150:150:150
+SelectedForeColor:0:0:0
 SelectedSmallTextColor:128:128:128
 SmallTextColor:200:200:200
 ErrorColor:255:0:0
