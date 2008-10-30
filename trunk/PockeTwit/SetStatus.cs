@@ -26,6 +26,7 @@ namespace PockeTwit
         {
             Locator.LocationReady += new LocationManager.delLocationReady(Locator_LocationReady);
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;

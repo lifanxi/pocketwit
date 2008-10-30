@@ -17,6 +17,7 @@ namespace PockeTwit
         public AvatarSettings()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;

@@ -16,7 +16,7 @@ namespace PockeTwit
         {
             MyColor = C;
             InitializeComponent();
-            
+            PockeTwit.Themes.FormColors.SetColors(this);
             this.pictureBox1.Image = bmp;
         }
 

@@ -24,6 +24,7 @@ namespace PockeTwit
         public AboutForm()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             ContributorChecker = new Contributors();
             ContributorChecker.ContributorsReady += new Contributors.delContributorsReady(ContributorChecker_ContributorsReady);
             if (ClientSettings.IsMaximized)

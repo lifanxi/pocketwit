@@ -14,6 +14,7 @@ namespace PockeTwit
         public Errors()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             StringBuilder erstring = new StringBuilder();
             erstring.Append("Communication Errors:\r\n");
             foreach (Yedda.Twitter.Account accountKey in Yedda.Twitter.Failures.Keys)

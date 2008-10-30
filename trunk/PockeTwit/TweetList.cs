@@ -38,11 +38,16 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             Application.DoEvents();
             if (ClientSettings.AccountsList.Count == 0)
             {
                 // SHow Settings page first
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
+                this.lblLoading.ForeColor = ClientSettings.ForeColor;
+                this.BackColor = ClientSettings.BackColor;
+                this.ForeColor = ClientSettings.ForeColor;
+
                 //SettingsForm settings = new SettingsForm();
                 if (settings.ShowDialog() == DialogResult.Cancel)
                 {
@@ -172,6 +177,8 @@ namespace PockeTwit
             //SettingsForm settings = new SettingsForm();
             IsLoaded = false;
             if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; IsLoaded = true; return; }
+            statList.BackColor = ClientSettings.BackColor;
+            statList.ForeColor = ClientSettings.ForeColor;
             IsLoaded = true;
             this.statList.Visible = true;
             
@@ -605,10 +612,6 @@ namespace PockeTwit
 
         private void SetUpListControl()
         {
-            statList.BackColor = ClientSettings.BackColor;
-            statList.ForeColor = ClientSettings.ForeColor;
-            statList.SelectedBackColor = ClientSettings.SelectedBackColor;
-            statList.SelectedForeColor = ClientSettings.SelectedForeColor;
             statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
             statList.IsMaximized = ClientSettings.IsMaximized;
             statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);

@@ -140,7 +140,7 @@ namespace FingerUI
                     Rectangle InnerBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                     InnerBounds.Offset(1, 1);
                     InnerBounds.Width--; InnerBounds.Height--;
-                    using (SolidBrush FillColor = new SolidBrush(m_parent.SelectedBackColor))
+                    using (SolidBrush FillColor = new SolidBrush(ClientSettings.BackColor))
                     {
                         g.FillRectangle(FillColor, InnerBounds);
                     }
@@ -151,10 +151,10 @@ namespace FingerUI
             if (!string.IsNullOrEmpty(m_text))
             {
                 Font TextFont = m_parent.Font;
-                SolidBrush ColorBrush = new SolidBrush(m_parent.ForeColor);
+                SolidBrush ColorBrush = new SolidBrush(ClientSettings.ForeColor);
                 if (m_selected) 
                 {
-                    ColorBrush = new SolidBrush(m_parent.SelectedForeColor); 
+                    ColorBrush = new SolidBrush(ClientSettings.SelectedForeColor); 
                 }
                 Rectangle textBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 textBounds.Offset(1, 1);

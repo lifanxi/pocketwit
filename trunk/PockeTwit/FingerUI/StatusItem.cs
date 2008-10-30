@@ -227,9 +227,9 @@ namespace FingerUI
             {
                 SolidBrush FillColor;
 
-                FillColor = new SolidBrush(m_parent.SelectedBackColor);
+                FillColor = new SolidBrush(ClientSettings.SelectedBackColor);
                 TextFont = m_parent.SelectedFont;
-                ForeBrush = new SolidBrush(m_parent.SelectedForeColor);
+                ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
             
                 //g.DrawRectangle(new Pen(Color.Black), bounds);
                 //Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width+5, textBounds.Height);
@@ -275,7 +275,7 @@ namespace FingerUI
             }
             else
             {
-                using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                using (Brush bBrush = new SolidBrush(ClientSettings.ForeColor))
                 {
                     Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
                     g.FillRectangle(bBrush, ImageRect);

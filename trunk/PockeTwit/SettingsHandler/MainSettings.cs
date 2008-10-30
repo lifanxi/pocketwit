@@ -16,6 +16,7 @@ namespace PockeTwit.SettingsHandler
         public MainSettings()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -88,6 +89,7 @@ namespace PockeTwit.SettingsHandler
                 {
                     NeedsReset = true;
                 }
+                PockeTwit.Themes.FormColors.SetColors(this);
             }
             UI.Close();
         }
