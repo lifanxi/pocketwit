@@ -102,6 +102,7 @@ namespace PockeTwit
         }
         private void ListThemes()
         {
+            cmbTheme.Items.Clear();
             foreach (string ThemeFile in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\Themes\\"))
             {
                 string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
@@ -127,6 +128,7 @@ namespace PockeTwit
             string selectedTheme = (string)cmbTheme.SelectedItem;
             ColorPick c = new ColorPick(selectedTheme);
             c.ShowDialog();
+            ListThemes();
         }
 
         
