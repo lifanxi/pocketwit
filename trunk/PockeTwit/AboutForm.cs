@@ -11,11 +11,12 @@ namespace PockeTwit
 {
     public partial class AboutForm : Form
     {
-
+        delegate void delNothing();
 		#region Fields (1) 
 
         private UpdateChecker Checker = new UpdateChecker(false);
-
+        private Contributors ContributorChecker;
+        public string AskedToSeeUser = null;
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -23,6 +24,8 @@ namespace PockeTwit
         public AboutForm()
         {
             InitializeComponent();
+            ContributorChecker = new Contributors();
+            ContributorChecker.ContributorsReady += new Contributors.delContributorsReady(ContributorChecker_ContributorsReady);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -33,6 +36,56 @@ namespace PockeTwit
             if (UpdateChecker.devBuild)
             {
                 lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev";
+            }
+        }
+
+        void ContributorChecker_ContributorsReady()
+        {
+            if (InvokeRequired)
+            {
+                delNothing d = new delNothing(ContributorChecker_ContributorsReady);
+                this.Invoke(d);
+            }
+            else
+            {
+                int topOfLabel = 0;
+                foreach (Contributors.Contributor s in ContributorChecker.ContributorsList)
+                {
+
+                    LinkLabel nameLabel = new LinkLabel();
+                    nameLabel.Text = s.Name;
+                    if (s.Name.StartsWith("@"))
+                    {
+                        nameLabel.ForeColor = ClientSettings.LinkColor;
+                        nameLabel.Click += new EventHandler(nameLabel_Click);
+                    }
+                    else
+                    {
+                        nameLabel.ForeColor = ClientSettings.FieldForeColor;
+                    }
+                    nameLabel.Top = topOfLabel;
+                    panel1.Controls.Add(nameLabel);
+                    
+                    Label typeLabel = new Label();
+                    typeLabel.Text = s.Contribution;
+                    typeLabel.Top = topOfLabel;
+                    typeLabel.Left = nameLabel.Right;
+                    typeLabel.ForeColor = ClientSettings.FieldForeColor;
+                    panel1.Controls.Add(typeLabel);
+
+
+                    topOfLabel = topOfLabel + nameLabel.Height;
+                }
+            }
+        }
+
+        void nameLabel_Click(object sender, EventArgs e)
+        {
+            LinkLabel l = (LinkLabel)sender;
+            if (l.Text.StartsWith("@"))
+            {
+                AskedToSeeUser = l.Text;
+                this.Close();
             }
         }
 

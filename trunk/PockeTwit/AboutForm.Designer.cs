@@ -58,6 +58,7 @@ namespace PockeTwit
             this.label3 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -120,6 +121,17 @@ namespace PockeTwit
             this.linkLabel2.TabIndex = 8;
             this.linkLabel2.Text = "http://code.google.com/p/pocketwit/";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoScroll = true;
+            this.panel1.Location = new System.Drawing.Point(4, 122);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(232, 143);
+            this.panel1.BackColor = ClientSettings.FieldBackColor;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -127,6 +139,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label3);
@@ -140,5 +153,7 @@ namespace PockeTwit
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel panel1;
     }
 }

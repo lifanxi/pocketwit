@@ -623,6 +623,11 @@ namespace PockeTwit
             AboutForm a = new AboutForm();
             IsLoaded = false;
             a.ShowDialog();
+            if (!string.IsNullOrEmpty(a.AskedToSeeUser))
+            {
+                SwitchToUserTimeLine(a.AskedToSeeUser);
+            }
+            a.Close();
             IsLoaded = true;
         }
 
@@ -794,16 +799,22 @@ namespace PockeTwit
             }
             else
             {
-                ChangeCursor(Cursors.WaitCursor);
-                ShowUserID = TextClicked.Replace("@","");
-                FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
-                if (statItem == null) { return; }
-                CurrentlySelectedAccount = statItem.Tweet.Account;
-                Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
-                SwitchToList("@User_TimeLine");
-                AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
-                ChangeCursor(Cursors.Default);
+                SwitchToUserTimeLine(TextClicked);
             }
+        }
+
+        private void SwitchToUserTimeLine(string TextClicked)
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            ShowUserID = TextClicked.Replace("@", "");
+            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (statItem == null) { return; }
+            CurrentlySelectedAccount = statItem.Tweet.Account;
+            Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
+            SwitchToList("@User_TimeLine");
+            AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
+            ChangeCursor(Cursors.Default);
+            return;
         }
 
         private void StopFollowingUser()
