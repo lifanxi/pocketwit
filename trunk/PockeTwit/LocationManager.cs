@@ -35,10 +35,9 @@ namespace PockeTwit
         }
         public void StopGPS()
         {
-            gps.Close();
             gps.DeviceStateChanged -= new PockeTwit.GPS.DeviceStateChangedEventHandler(gps_DeviceStateChanged);
             gps.LocationChanged -= new PockeTwit.GPS.LocationChangedEventHandler(gps_LocationChanged);
-            
+            gps.Close();
         }
 
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
