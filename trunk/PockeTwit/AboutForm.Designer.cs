@@ -59,6 +59,8 @@ namespace PockeTwit
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblWait = new System.Windows.Forms.Label();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -79,7 +81,7 @@ namespace PockeTwit
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = ClientSettings.ForeColor;
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 20);
@@ -88,7 +90,7 @@ namespace PockeTwit
             // lblVersion
             // 
             this.lblVersion.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
-            this.lblVersion.ForeColor = ClientSettings.ForeColor;
+            this.lblVersion.ForeColor = System.Drawing.Color.LightGray;
             this.lblVersion.Location = new System.Drawing.Point(96, 4);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(120, 20);
@@ -96,7 +98,7 @@ namespace PockeTwit
             // 
             // label3
             // 
-            this.label3.ForeColor = ClientSettings.ForeColor;
+            this.label3.ForeColor = System.Drawing.Color.LightGray;
             this.label3.Location = new System.Drawing.Point(4, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(232, 31);
@@ -104,7 +106,7 @@ namespace PockeTwit
             // 
             // linkLabel1
             // 
-            this.linkLabel1.ForeColor = ClientSettings.LinkColor;
+            this.linkLabel1.ForeColor = System.Drawing.Color.LightBlue;
             this.linkLabel1.Location = new System.Drawing.Point(3, 95);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(233, 23);
@@ -114,7 +116,7 @@ namespace PockeTwit
             // 
             // linkLabel2
             // 
-            this.linkLabel2.ForeColor = ClientSettings.LinkColor;
+            this.linkLabel2.ForeColor = System.Drawing.Color.LightBlue;
             this.linkLabel2.Location = new System.Drawing.Point(3, 24);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(233, 23);
@@ -127,17 +129,25 @@ namespace PockeTwit
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.lblWait);
             this.panel1.Location = new System.Drawing.Point(4, 122);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(232, 143);
-            this.panel1.BackColor = ClientSettings.FieldBackColor;
+            // 
+            // lblWait
+            // 
+            this.lblWait.Location = new System.Drawing.Point(4, 4);
+            this.lblWait.Name = "lblWait";
+            this.lblWait.Size = new System.Drawing.Size(100, 20);
+            this.lblWait.Text = "Please wait...";
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.linkLabel2);
@@ -148,6 +158,7 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "AboutForm";
             this.Text = "About PockeTwit";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -155,5 +166,6 @@ namespace PockeTwit
         #endregion
 
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lblWait;
     }
 }

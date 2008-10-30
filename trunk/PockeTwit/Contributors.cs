@@ -46,9 +46,10 @@ namespace PockeTwit
                         }
                     }
                 }
+                ContributorsReady();
             }
             catch { }
-            ContributorsReady();
+            
         }
     }
 }

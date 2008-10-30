@@ -25,6 +25,7 @@ namespace PockeTwit
         {
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
+            lblWait.ForeColor = ClientSettings.FieldForeColor;
             ContributorChecker = new Contributors();
             ContributorChecker.ContributorsReady += new Contributors.delContributorsReady(ContributorChecker_ContributorsReady);
             if (ClientSettings.IsMaximized)
@@ -49,6 +50,7 @@ namespace PockeTwit
             }
             else
             {
+                panel1.Controls.Remove(lblWait);
                 int topOfLabel = 0;
                 foreach (Contributors.Contributor s in ContributorChecker.ContributorsList)
                 {
@@ -74,6 +76,7 @@ namespace PockeTwit
                     typeLabel.ForeColor = ClientSettings.FieldForeColor;
                     panel1.Controls.Add(typeLabel);
 
+                    
 
                     topOfLabel = topOfLabel + nameLabel.Height;
                 }
