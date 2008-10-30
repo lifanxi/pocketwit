@@ -206,7 +206,7 @@ namespace PockeTwit
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder()+ "url.png");
             this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             this.pictureBox1.Location = new System.Drawing.Point(66, ClientSettings.TextSize + 20);
             this.pictureBox1.Name = "pictureBox1";
@@ -215,7 +215,7 @@ namespace PockeTwit
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
             this.pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             this.pictureBox2.Location = new System.Drawing.Point(35, ClientSettings.TextSize + 20);
             this.pictureBox2.Name = "pictureBox2";
@@ -224,7 +224,7 @@ namespace PockeTwit
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
             this.pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             this.pictureBox3.Location = new System.Drawing.Point(4, ClientSettings.TextSize + 20);
             this.pictureBox3.Name = "pictureBox3";
