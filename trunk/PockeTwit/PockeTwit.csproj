@@ -143,6 +143,18 @@
     <Compile Include="SettingsHandler\OtherSettings.Designer.cs">
       <DependentUpon>OtherSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\ColorChose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\ColorChose.designer.cs">
+      <DependentUpon>ColorChose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\ColorPick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\ThemeCreator\ColorPick.designer.cs">
+      <DependentUpon>ColorPick.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsHandler\UISettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -270,6 +282,12 @@
     <EmbeddedResource Include="SettingsHandler\OtherSettings.resx">
       <DependentUpon>OtherSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\ThemeCreator\ColorChose.resx">
+      <DependentUpon>ColorChose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\ThemeCreator\ColorPick.resx">
+      <DependentUpon>ColorPick.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\UISettings.resx">
       <DependentUpon>UISettings.cs</DependentUpon>
