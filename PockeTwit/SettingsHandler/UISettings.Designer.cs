@@ -60,6 +60,7 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.cmbTheme = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -149,7 +150,7 @@ namespace PockeTwit
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbTheme.Location = new System.Drawing.Point(54, 135);
             this.cmbTheme.Name = "cmbTheme";
-            this.cmbTheme.Size = new System.Drawing.Size(182, 22);
+            this.cmbTheme.Size = new System.Drawing.Size(139, 22);
             this.cmbTheme.TabIndex = 7;
             this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged);
             // 
@@ -162,12 +163,23 @@ namespace PockeTwit
             this.label1.Size = new System.Drawing.Size(44, 20);
             this.label1.Text = "Theme:";
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(200, 135);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(36, 20);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Edit";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // UISettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbTheme);
             this.Controls.Add(this.chkSkweezer);
@@ -192,6 +204,7 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.ComboBox cmbTheme;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
 
     }
 }
