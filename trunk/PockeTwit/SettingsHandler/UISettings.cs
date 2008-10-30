@@ -22,6 +22,7 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             PopulateForm();
+            
         }
 
 		#endregion Constructors 
@@ -67,6 +68,15 @@ namespace PockeTwit
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
+
+            string selectedTheme = (string)cmbTheme.SelectedItem;
+            if (selectedTheme != ClientSettings.ThemeName)
+            {
+                ClientSettings.ThemeName = selectedTheme;
+                ClientSettings.LoadColors();
+                MessageBox.Show("You will need to restart PockeTwit to see the new colors");
+            }
+
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -86,10 +96,18 @@ namespace PockeTwit
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
-
+            ListThemes();
             this.DialogResult = DialogResult.Cancel;
         }
-
+        private void ListThemes()
+        {
+            foreach (string ThemeFile in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\"))
+            {
+                string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
+                cmbTheme.Items.Add(themeName);
+            }
+            cmbTheme.SelectedItem = ClientSettings.ThemeName;
+        }
 
 		#endregion Methods 
 

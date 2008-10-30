@@ -1212,13 +1212,16 @@ namespace FingerUI
                         Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, LeftMenuHeight);
 
                         Color BackColor;
+                        Color MenuTextColor;
                         if (i == LeftMenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
                         {
                             BackColor = ClientSettings.SelectedBackColor;
+                            MenuTextColor = ClientSettings.SelectedForeColor;
                         }
                         else
                         {
                             BackColor = ClientSettings.BackColor;
+                            MenuTextColor = ClientSettings.ForeColor;
                         }
                         using (Brush sBrush = new SolidBrush(BackColor))
                         {
@@ -1226,7 +1229,8 @@ namespace FingerUI
                         }
 
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                        using (Brush sBrush = new SolidBrush(ForeColor))
+                        
+                        using (Brush sBrush = new SolidBrush(MenuTextColor))
                         {
                             StringFormat sFormat = new StringFormat();
                             sFormat.LineAlignment = StringAlignment.Center;
@@ -1288,13 +1292,16 @@ namespace FingerUI
                     {
                         Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, RightMenuHeight);
                         Color BackColor;
+                        Color MenuTextColor;
                         if (i == RightMenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
                         {
                             BackColor = ClientSettings.SelectedBackColor;
+                            MenuTextColor = ClientSettings.SelectedForeColor;
                         }
                         else
                         {
                             BackColor = ClientSettings.BackColor;
+                            MenuTextColor = ClientSettings.ForeColor;
                         }
                         using (Brush sBrush = new SolidBrush(BackColor))
                         {
@@ -1302,7 +1309,7 @@ namespace FingerUI
                         }
 
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                        using (Brush sBrush = new SolidBrush(ForeColor))
+                        using (Brush sBrush = new SolidBrush(MenuTextColor))
                         {
                             StringFormat sFormat = new StringFormat();
                             //sFormat.Alignment = StringAlignment.Center;
