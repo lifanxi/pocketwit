@@ -125,7 +125,7 @@ namespace PockeTwit
             Themes.FormColors.SetColors(this);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void linkLabel1_Click(object sender, EventArgs e)
         {
             string selectedTheme = (string)cmbTheme.SelectedItem;
             ColorPick c = new ColorPick(selectedTheme);
