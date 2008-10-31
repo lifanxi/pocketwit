@@ -10,7 +10,6 @@ namespace PockeTwit
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel2;
@@ -55,11 +54,11 @@ namespace PockeTwit
             this.menuClose = new System.Windows.Forms.MenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblWait = new System.Windows.Forms.Label();
+            this.lnkContributors = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,22 +95,16 @@ namespace PockeTwit
             this.lblVersion.Size = new System.Drawing.Size(120, 20);
             this.lblVersion.Text = "v0.0";
             // 
-            // label3
-            // 
-            this.label3.ForeColor = System.Drawing.Color.LightGray;
-            this.label3.Location = new System.Drawing.Point(4, 64);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(232, 31);
-            this.label3.Text = "I\'m just doing this for fun, so please let me know what you think:\r\n";
-            // 
             // linkLabel1
             // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.ForeColor = System.Drawing.Color.LightBlue;
-            this.linkLabel1.Location = new System.Drawing.Point(3, 95);
+            this.linkLabel1.Location = new System.Drawing.Point(4, 47);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(233, 23);
             this.linkLabel1.TabIndex = 7;
-            this.linkLabel1.Text = "http://twitter.com/pocketwitdev/";
+            this.linkLabel1.Text = "Let me know what you think.";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
             // 
             // linkLabel2
@@ -122,6 +115,7 @@ namespace PockeTwit
             this.linkLabel2.Size = new System.Drawing.Size(233, 23);
             this.linkLabel2.TabIndex = 8;
             this.linkLabel2.Text = "http://code.google.com/p/pocketwit/";
+            this.linkLabel2.Click += new System.EventHandler(this.linkLabel2_Click);
             // 
             // panel1
             // 
@@ -142,6 +136,17 @@ namespace PockeTwit
             this.lblWait.Size = new System.Drawing.Size(100, 20);
             this.lblWait.Text = "Please wait...";
             // 
+            // lnkContributors
+            // 
+            this.lnkContributors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkContributors.Location = new System.Drawing.Point(4, 96);
+            this.lnkContributors.Name = "lnkContributors";
+            this.lnkContributors.Size = new System.Drawing.Size(232, 20);
+            this.lnkContributors.TabIndex = 12;
+            this.lnkContributors.Text = "Contributors: (How can you help?)";
+            this.lnkContributors.Click += new System.EventHandler(this.lnkContributors_Click);
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -149,10 +154,10 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lnkContributors);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.label1);
             this.Menu = this.mainMenu1;
@@ -167,5 +172,6 @@ namespace PockeTwit
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblWait;
+        private System.Windows.Forms.LinkLabel lnkContributors;
     }
 }

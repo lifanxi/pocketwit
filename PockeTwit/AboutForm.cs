@@ -145,5 +145,27 @@ namespace PockeTwit
 
 		#endregion Methods 
 
+        private void lnkContributors_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel2_Click(object sender, EventArgs e)
+        {
+            LaunchSite("http://code.google.com/p/pocketwit/");
+        }
+
+        private void LaunchSite(string URL)
+        {
+            System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
+            if (ClientSettings.UseSkweezer)
+            {
+                URL = Yedda.Skweezer.GetSkweezerURL(URL);
+            }
+            pi.FileName = URL;
+            pi.UseShellExecute = true;
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
+        }
+
     }
 }

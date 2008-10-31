@@ -157,8 +157,8 @@ namespace PockeTwit
             });
 
             this.Controls.Add(rTxt);
-            this.Controls.Add(bTxt);
             this.Controls.Add(gTxt);
+            this.Controls.Add(bTxt);
             this.Controls.Add(lbl);
             this.Controls.Add(pb);
             ColorSetting cs=new ColorSetting(strLabel,pb);
