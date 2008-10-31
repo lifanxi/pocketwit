@@ -12,12 +12,17 @@ namespace PockeTwit
 {
     public partial class TweetList : Form
     {
-
+        private struct HistoryItem
+        {
+            public string Argument;
+            public Yedda.Twitter.ActionType Action;
+        }
+        private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
         private UpdateChecker Checker;
         private Library.status[] CurrentStatuses =null;
 
-        private List<string> LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+        private List<string> LeftMenu;
         private List<string> RightMenu;
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
@@ -273,21 +278,40 @@ namespace PockeTwit
 
         private void SetConnectedMenus()
         {
-            SetConnectedMenus(TwitterConnections[0]);
+            SetConnectedMenus(TwitterConnections[0], null);
         }
-        private void SetConnectedMenus(Yedda.Twitter t)
+        private void SetLeftMenu()
         {
-            //LeftMenu = new List<string>(new string[] { "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
-            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Quote", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
+            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+            if (History.Count == 1)
+            {
+                LeftMenu.Remove("Back");
+            }
+
+            statList.LeftMenuItems = LeftMenu;
+        }
+        private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
+        {
+            
+            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Quote", "Show Conversation", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
-            statList.LeftMenuItems = LeftMenu;
+            if (item == null || string.IsNullOrEmpty(item.Tweet.in_reply_to_status_id))
+            {
+                RightMenu.Remove("Show Conversation");
+            }
+
+            
             statList.RightMenuItems = RightMenu;
+            SetLeftMenu();
         }
 
         private bool SetEverythingUp()
         {
+            HistoryItem firstItem = new HistoryItem();
+            firstItem.Action = Yedda.Twitter.ActionType.Friends_Timeline;
+            History.Push(firstItem);
             if(System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
             {
                 ChooseAccount errorForm = new ChooseAccount();
@@ -654,6 +678,9 @@ namespace PockeTwit
         {
             switch (ItemName)
             {
+                case "Back":
+                    GoBackInHistory();
+                    break;
                 case "Errors":
                     Errors errForm = new Errors();
                     errForm.ShowDialog();
@@ -671,26 +698,10 @@ namespace PockeTwit
                     break;
                 case "Reconnect":
                 case "Friends TimeLine":
-                    ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList("Friends_TimeLine");
-                    statList.SetSelectedMenu("Friends TimeLine");
-                    statList.RightMenuItems = RightMenu;
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-                    statList.Redraw();
-                    Manager.RefreshFriendsTimeLine();
-                    ChangeCursor(Cursors.Default);
-                    //GetTimeLineAsync();
+                    ShowFriendsTimeLine();
                     break;
                 case "Messages":
-                    ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList("Messages_TimeLine");
-                    statList.SetSelectedMenu("Messages");
-                    statList.RightMenuItems = RightMenu;
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
-                    statList.Redraw();
-                    Manager.RefreshMessagesTimeLine();
-                    ChangeCursor(Cursors.Default);
-                    //GetTimeLineAsync();
+                    ShowMessagesTimeLine();
                     break;
                 case "Favorites":
                     //GetTimeLineAsync();
@@ -706,23 +717,16 @@ namespace PockeTwit
                     break;
 
                 case "@User TimeLine":
-                    ChangeCursor(Cursors.WaitCursor);
-                    FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    if (statItem == null) { return; }
-                    ShowUserID = statItem.Tweet.user.screen_name;
-                    CurrentlySelectedAccount = statItem.Tweet.Account;
-                    Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
-                    SwitchToList("@User_TimeLine");
-                    AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
-                    ChangeCursor(Cursors.Default);
-
-
+                    ShowUserTimeLine();
                     break;
                 case "Reply @User":
                     SendReply();
                     break;
                 case "Quote":
                     Quote();
+                    break;
+                case "Show Conversation":
+                    GetConversation();
                     break;
                 case "Destroy Favorite":
                     DestroyFavorite();
@@ -751,6 +755,112 @@ namespace PockeTwit
                     this.Close();
                     break;
             }
+            SetLeftMenu();
+        }
+
+        private void GoBackInHistory()
+        {
+            if (History.Count > 0)
+            {
+                HistoryItem current = History.Pop();
+                HistoryItem prev = History.Pop();
+                switch (prev.Action)
+                {
+                    case Yedda.Twitter.ActionType.Conversation:
+                        
+                        break;
+                    case Yedda.Twitter.ActionType.Friends_Timeline:
+                        ShowFriendsTimeLine();
+                        statList.SetSelectedMenu("Friends TimeLine");
+                        break;
+                    case Yedda.Twitter.ActionType.Replies:
+                        statList.SetSelectedMenu("Messages");
+                        ShowMessagesTimeLine();
+                        break;
+                    case Yedda.Twitter.ActionType.Search:
+                        statList.SetSelectedMenu("Search/Local");
+                        break;
+                    case Yedda.Twitter.ActionType.User_Timeline:
+                        statList.SetSelectedMenu("");
+                        break;
+                }
+            }
+        }
+
+        private void ShowFriendsTimeLine()
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            SwitchToList("Friends_TimeLine");
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
+            History.Push(i);
+            statList.SetSelectedMenu("Friends TimeLine");
+            statList.RightMenuItems = RightMenu;
+            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+            statList.Redraw();
+            Manager.RefreshFriendsTimeLine();
+            ChangeCursor(Cursors.Default);
+            //GetTimeLineAsync();
+        }
+
+        private void ShowMessagesTimeLine()
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            SwitchToList("Messages_TimeLine");
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Replies;
+            History.Push(i);
+            statList.SetSelectedMenu("Messages");
+            statList.RightMenuItems = RightMenu;
+            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+            statList.Redraw();
+            Manager.RefreshMessagesTimeLine();
+            ChangeCursor(Cursors.Default);
+        }
+
+        private void ShowUserTimeLine()
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (statItem == null) { return; }
+            ShowUserID = statItem.Tweet.user.screen_name;
+            CurrentlySelectedAccount = statItem.Tweet.Account;
+            Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
+            SwitchToList("@User_TimeLine");
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.User_Timeline;
+            i.Argument = ShowUserID;
+            History.Push(i);
+            AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
+            ChangeCursor(Cursors.Default);
+
+            return;
+        }
+
+        private void GetConversation()
+        {
+            if (statList.SelectedItem == null) { return; }
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (string.IsNullOrEmpty(selectedItem.Tweet.in_reply_to_status_id)) { return; }
+            ChangeCursor(Cursors.WaitCursor);
+            Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
+            List<Library.status> Conversation = new List<PockeTwit.Library.status>();
+            Library.status lastStatus = selectedItem.Tweet;
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Conversation;
+            i.Argument = lastStatus.in_reply_to_status_id;
+            History.Push(i);
+
+            while (!string.IsNullOrEmpty(lastStatus.in_reply_to_status_id))
+            {
+                Conversation.Add(lastStatus);
+                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), selectedItem.Tweet.Account);
+            }
+            Conversation.Add(lastStatus);
+            statList.SwitchTolist("Conversation");
+            statList.ClearVisible();
+            AddStatusesToList(Conversation.ToArray());
+            ChangeCursor(Cursors.Default);
         }
 
         private void Quote()
@@ -766,7 +876,7 @@ namespace PockeTwit
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
             CurrentlySelectedAccount = statItem.Tweet.Account;
-            SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount));
+            SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
             UpdateRightMenu();
         }
 
@@ -808,6 +918,10 @@ namespace PockeTwit
 
         private void SwitchToUserTimeLine(string TextClicked)
         {
+            HistoryItem i = new HistoryItem();
+            i.Argument = TextClicked;
+            i.Action = Yedda.Twitter.ActionType.User_Timeline;
+            History.Push(i);
             ChangeCursor(Cursors.WaitCursor);
             ShowUserID = TextClicked.Replace("@", "");
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
@@ -885,6 +999,12 @@ namespace PockeTwit
             ChangeCursor(Cursors.WaitCursor);
             statList.SetSelectedMenu("Search/Local");
             statList.RightMenuItems = RightMenu;
+
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Search;
+            i.Argument = SearchString;
+            History.Push(i);
+
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             SwitchToList("Search_TimeLine");
             this.statList.ClearVisible();

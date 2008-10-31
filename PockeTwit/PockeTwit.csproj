@@ -75,6 +75,7 @@
     <Compile Include="Errors.Designer.cs">
       <DependentUpon>Errors.cs</DependentUpon>
     </Compile>
+    <Compile Include="FingerUI\SideMenu.cs" />
     <Compile Include="GlobalEventHandler.cs" />
     <Compile Include="GPS\DegreesMinutesSeconds.cs" />
     <Compile Include="GPS\DeviceStateChangedEventArgs.cs" />

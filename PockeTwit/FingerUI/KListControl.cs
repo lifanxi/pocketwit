@@ -84,6 +84,10 @@ namespace FingerUI
         private int LeftMenuHeight;
         private int TopOfLeftMenu;
         private List<string> _LeftMenuItems = new List<string>();
+        public void NoSelectedLeftMenu()
+        {
+            LeftMenuItemFocusedIndex = -1;
+        }
         public List<string> LeftMenuItems 
         {
             get
@@ -111,8 +115,12 @@ namespace FingerUI
             {
                 if (_LeftMenuItems.Count > 0)
                 {
-                    LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
-                    TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
+                    try
+                    {
+                        LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
+                        TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
+                    }
+                    catch (ObjectDisposedException) { }
                 }
             }
         }
@@ -128,8 +136,14 @@ namespace FingerUI
             }
             set
             {
-                _RightMenuItems = value;
-                SetRightMenuHeight();
+                lock (_RightMenuItems)
+                {
+                    lock (this)
+                    {
+                        _RightMenuItems = value;
+                        SetRightMenuHeight();
+                    }
+                }
             }
         }
 

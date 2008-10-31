@@ -34,6 +34,8 @@ namespace PockeTwit.Library
         [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
+        public string in_reply_to_status_id { get; set; }
+
         public string favorited { get; set; }
         [XmlIgnore]
         public string TimeStamp

@@ -261,7 +261,8 @@ namespace Yedda
             Follow,
             Leave,
             Verify_Credentials,
-            Update_Location
+            Update_Location,
+            Conversation
         }
 
 
@@ -1008,6 +1009,12 @@ namespace Yedda
         #endregion
 
         #region Show
+
+        public string ShowSingleStatus(string statusID)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Show) + "/" + statusID, GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
+            return ExecuteGetCommand(url);
+        }
 
         public string Show(string IDorScreenName, OutputFormatType format)
         {
