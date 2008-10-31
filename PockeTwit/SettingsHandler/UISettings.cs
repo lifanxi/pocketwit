@@ -11,6 +11,7 @@ namespace PockeTwit
 {
     public partial class UISettings : Form
     {
+        private string OriginalTheme = ClientSettings.ThemeName;
 
         #region Constructors (1) 
 
@@ -71,12 +72,11 @@ namespace PockeTwit
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
 
             string selectedTheme = (string)cmbTheme.SelectedItem;
-            if ((selectedTheme!="Custom...") && (selectedTheme != ClientSettings.ThemeName))
+            if (selectedTheme != OriginalTheme)
             {
                 ClientSettings.ThemeName = selectedTheme;
-                ClientSettings.LoadColors();
-                PockeTwit.Themes.FormColors.SetColors(this);
             }
+            ClientSettings.LoadColors();
 
             ClientSettings.SaveSettings();
             this.DialogResult = DialogResult.OK;
@@ -86,6 +86,10 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
+            if (ClientSettings.ThemeName != OriginalTheme)
+            {
+                ClientSettings.ThemeName = OriginalTheme;
+            }
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
@@ -108,7 +112,6 @@ namespace PockeTwit
                 string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
                 cmbTheme.Items.Add(themeName);
             }
-            cmbTheme.Items.Add("Custom...");
             cmbTheme.SelectedItem = ClientSettings.ThemeName;
         }
 
@@ -117,10 +120,9 @@ namespace PockeTwit
         private void cmbTheme_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedTheme = (string)cmbTheme.SelectedItem;
-            if (selectedTheme == "Custom...")
-            {
-                MessageBox.Show("soon...");                
-            }
+            ClientSettings.ThemeName = selectedTheme;
+            ClientSettings.LoadColors();
+            Themes.FormColors.SetColors(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -129,6 +131,7 @@ namespace PockeTwit
             ColorPick c = new ColorPick(selectedTheme);
             c.ShowDialog();
             ListThemes();
+            cmbTheme_SelectedIndexChanged(null, new EventArgs());
         }
 
         
