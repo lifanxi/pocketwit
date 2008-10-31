@@ -12,10 +12,11 @@ namespace PockeTwit
 {
     public partial class TweetList : Form
     {
-        private struct HistoryItem
+        private class HistoryItem
         {
             public string Argument;
             public Yedda.Twitter.ActionType Action;
+            public Yedda.Twitter.Account Account;
         }
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
@@ -767,7 +768,7 @@ namespace PockeTwit
                 switch (prev.Action)
                 {
                     case Yedda.Twitter.ActionType.Conversation:
-                        
+                        GetConversation(prev);
                         break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         ShowFriendsTimeLine();
@@ -829,6 +830,7 @@ namespace PockeTwit
             SwitchToList("@User_TimeLine");
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.User_Timeline;
+            i.Account = CurrentlySelectedAccount;
             i.Argument = ShowUserID;
             History.Push(i);
             AddStatusesToList(Manager.GetUserTimeLine(Conn, ShowUserID));
@@ -839,22 +841,41 @@ namespace PockeTwit
 
         private void GetConversation()
         {
-            if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            if (string.IsNullOrEmpty(selectedItem.Tweet.in_reply_to_status_id)) { return; }
-            ChangeCursor(Cursors.WaitCursor);
-            Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
-            List<Library.status> Conversation = new List<PockeTwit.Library.status>();
-            Library.status lastStatus = selectedItem.Tweet;
+            GetConversation(null);
+        }
+        private void GetConversation(HistoryItem history)
+        {
             HistoryItem i = new HistoryItem();
-            i.Action = Yedda.Twitter.ActionType.Conversation;
-            i.Argument = lastStatus.in_reply_to_status_id;
+            Library.status lastStatus;
+            Yedda.Twitter Conn;
+
+            if (history == null)
+            {
+                if (statList.SelectedItem == null) { return; }
+                FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+                if (string.IsNullOrEmpty(selectedItem.Tweet.in_reply_to_status_id)) { return; }
+                Conn = GetMatchingConnection(selectedItem.Tweet.Account);
+                lastStatus = selectedItem.Tweet;
+
+                i.Account = selectedItem.Tweet.Account;
+                i.Action = Yedda.Twitter.ActionType.Conversation;
+                i.Argument = lastStatus.id;
+            }
+            else
+            {
+                i = history;
+                Conn = GetMatchingConnection(history.Account);
+                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(i.Argument), i.Account);
+            }
+            ChangeCursor(Cursors.WaitCursor);
+            
+            List<Library.status> Conversation = new List<PockeTwit.Library.status>();
             History.Push(i);
 
             while (!string.IsNullOrEmpty(lastStatus.in_reply_to_status_id))
             {
                 Conversation.Add(lastStatus);
-                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), selectedItem.Tweet.Account);
+                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), Conn.AccountInfo);
             }
             Conversation.Add(lastStatus);
             statList.SwitchTolist("Conversation");
@@ -918,14 +939,17 @@ namespace PockeTwit
 
         private void SwitchToUserTimeLine(string TextClicked)
         {
-            HistoryItem i = new HistoryItem();
-            i.Argument = TextClicked;
-            i.Action = Yedda.Twitter.ActionType.User_Timeline;
-            History.Push(i);
-            ChangeCursor(Cursors.WaitCursor);
+            
+            
             ShowUserID = TextClicked.Replace("@", "");
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
+            ChangeCursor(Cursors.WaitCursor);
+            HistoryItem i = new HistoryItem();
+            i.Argument = ShowUserID;
+            i.Account = statItem.Tweet.Account;
+            i.Action = Yedda.Twitter.ActionType.User_Timeline;
+            History.Push(i);
             CurrentlySelectedAccount = statItem.Tweet.Account;
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             SwitchToList("@User_TimeLine");
