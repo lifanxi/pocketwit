@@ -23,7 +23,7 @@ namespace PockeTwit
             Cursor.Current = Cursors.WaitCursor;
             m_bmp = CreateColorPallet();
             m_arraylist = new ArrayList();
-            filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\colors.txt";
+            filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\" + Theme + ".txt";
             ThemeName = Theme;
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
@@ -152,10 +152,6 @@ namespace PockeTwit
                     }
                     filename = newFile;
                 }
-                else
-                {
-                    return;
-                }
             }
             string ColorSet = "";
             for (int i = 0; i < m_arraylist.Count; ++i)
@@ -189,7 +185,7 @@ namespace PockeTwit
                 {
                     System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
                 }
-                return newFolder + "\\colors.txt";
+                return newFolder + "\\" + newName + ".txt";
             }
             return filename;
         }
