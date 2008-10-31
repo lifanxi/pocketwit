@@ -266,7 +266,7 @@ namespace PockeTwit
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
-            SetStatus("d " + User);
+            SetStatus("d " + User, selectedItem.Tweet.id);
         }
 
         private void SendReply()
@@ -274,7 +274,7 @@ namespace PockeTwit
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
-            SetStatus("@"+User);
+            SetStatus("@"+User, selectedItem.Tweet.id);
         }
 
         private void SetConnectedMenus()
@@ -545,10 +545,10 @@ namespace PockeTwit
 
         private void SetStatus()
         {
-            SetStatus("");
+            SetStatus("", "");
         }
 
-        private void SetStatus(string ToUser)
+        private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
 
             SetStatus StatusForm = new SetStatus();
@@ -613,7 +613,7 @@ namespace PockeTwit
                         }
                         else
                         {
-                            string retValue = t.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                            string retValue = t.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
                             try
                             {
                                 Library.status.DeserializeSingle(retValue, StatusForm.AccountToSet);
@@ -631,8 +631,7 @@ namespace PockeTwit
             IsLoaded = true;
             this.statList.Redraw();
             this.statList.Visible = true;
-            StatusForm.Close();
-            
+            StatusForm.Close();   
         }
 
         private void SetUpListControl()
@@ -889,7 +888,7 @@ namespace PockeTwit
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string quote = "RT @" + selectedItem.Tweet.user.screen_name + ": \"" + selectedItem.Tweet.text + "\"";
-            SetStatus(quote);
+            SetStatus(quote, selectedItem.Tweet.id);
         }
 
         void statusList_SelectedItemChanged(object sender, EventArgs e)
