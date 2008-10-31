@@ -16,19 +16,15 @@ namespace PockeTwit
     {
         private string filename;
         private string ThemeName;
-        Bitmap m_bmp;
         ArrayList m_arraylist;
         public ColorPick(string Theme)
         {
-            Cursor.Current = Cursors.WaitCursor;
-            m_bmp = CreateColorPallet();
             m_arraylist = new ArrayList();
             filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\" + Theme + ".txt";
             ThemeName = Theme;
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
             LoadColorFile();
-            Cursor.Current = Cursors.Default;
         }
         void LoadColorFile()
         {
@@ -104,8 +100,7 @@ namespace PockeTwit
             rTxt.Width = txtWidth;
             rTxt.ForeColor = ClientSettings.FieldForeColor;
             rTxt.BackColor = ClientSettings.FieldBackColor;
-            rTxt.TextChanged += new EventHandler(cTxt_TextChanged);
-
+            
             lbl.Height = rTxt.Height;
 
             TextBox gTxt = new TextBox();
@@ -115,8 +110,7 @@ namespace PockeTwit
             gTxt.Width = txtWidth;
             gTxt.ForeColor = ClientSettings.FieldForeColor;
             gTxt.BackColor = ClientSettings.FieldBackColor;
-            gTxt.TextChanged += new EventHandler(cTxt_TextChanged);
-
+            
             TextBox bTxt = new TextBox();
             bTxt.Text = B.ToString();
             bTxt.Top = topPos;
@@ -132,10 +126,7 @@ namespace PockeTwit
             pb.Width = ClientSettings.TextSize;
             pb.Height = bTxt.Height;
             pb.BackColor = Color.FromArgb(R, G, B);
-            if (DetectDevice.DeviceType == DeviceType.Professional)
-            {
-                pb.Click += new EventHandler(pb_Click);
-            }
+            
 
             rTxt.TextChanged += new EventHandler(delegate(object sender, EventArgs e)
             {
@@ -176,36 +167,7 @@ namespace PockeTwit
 
         }
 
-        void cTxt_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        void pb_Click(object sender, EventArgs e)
-        {
-            ColorChose cc = new ColorChose(Color.Red, m_bmp);
-            cc.ShowDialog();
-            PictureBox pb = (PictureBox)sender;
-            pb.BackColor = cc.MyColor;
-        }
-        public static Color GetColorFromPallet(int i, int j)
-        {
-            return Color.FromArgb(i, j, (i+j) % 255);
-        }
-        Bitmap CreateColorPallet()
-        {
-            Bitmap bmp = new Bitmap(255, 255);
-
-            for (int i = 0; i < 255; i++)
-            {
-                for (int j = 0; j < 255; j++)
-                {
-                    bmp.SetPixel(i, j, ColorPick.GetColorFromPallet(i,j));
-                }
-            }
-            return bmp;
-        }
-        
+               
         
         private void menuAccept_Click(object sender, EventArgs e)
         {
@@ -262,7 +224,6 @@ namespace PockeTwit
         {
             this.Close();
         }
-
     }
     class ColorSetting
     {

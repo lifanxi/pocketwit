@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -142,12 +142,6 @@
     </Compile>
     <Compile Include="SettingsHandler\OtherSettings.Designer.cs">
       <DependentUpon>OtherSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsHandler\ThemeCreator\ColorChose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsHandler\ThemeCreator\ColorChose.designer.cs">
-      <DependentUpon>ColorChose.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsHandler\ThemeCreator\ColorPick.cs">
       <SubType>Form</SubType>
@@ -289,9 +283,6 @@
     <EmbeddedResource Include="SettingsHandler\OtherSettings.resx">
       <DependentUpon>OtherSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsHandler\ThemeCreator\ColorChose.resx">
-      <DependentUpon>ColorChose.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\ThemeCreator\ColorPick.resx">
       <DependentUpon>ColorPick.cs</DependentUpon>
