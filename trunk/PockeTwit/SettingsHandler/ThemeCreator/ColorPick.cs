@@ -76,6 +76,8 @@ namespace PockeTwit
         }
         void CreateColorItem(int pos,string strLabel, string strR, string strG, string strB)
         {
+            int topPos = pos * (ClientSettings.TextSize + 10);
+            int txtWidth = (ClientSettings.TextSize+5) * 2;
             if (strLabel.Length <= 2) return;
             Int16 R, G, B;
             try
@@ -90,27 +92,93 @@ namespace PockeTwit
             }
             Label lbl = new Label();
             lbl.Text = strLabel;
-            lbl.Left = 10;
-            lbl.Top = pos * 20 + 10;
-            lbl.Width = 120;
-            lbl.Height = 15;
+            lbl.Left = 5;
+            lbl.Top = topPos;
+            lbl.Width = ClientSettings.TextSize*8;
             lbl.ForeColor = ClientSettings.ForeColor;
 
+            TextBox rTxt = new TextBox();
+            rTxt.Text = R.ToString();
+            rTxt.Top = topPos;
+            rTxt.Left = lbl.Right;
+            rTxt.Width = txtWidth;
+            rTxt.ForeColor = ClientSettings.FieldForeColor;
+            rTxt.BackColor = ClientSettings.FieldBackColor;
+            rTxt.TextChanged += new EventHandler(cTxt_TextChanged);
 
+            lbl.Height = rTxt.Height;
+
+            TextBox gTxt = new TextBox();
+            gTxt.Text = G.ToString();
+            gTxt.Top = topPos;
+            gTxt.Left = rTxt.Right;
+            gTxt.Width = txtWidth;
+            gTxt.ForeColor = ClientSettings.FieldForeColor;
+            gTxt.BackColor = ClientSettings.FieldBackColor;
+            gTxt.TextChanged += new EventHandler(cTxt_TextChanged);
+
+            TextBox bTxt = new TextBox();
+            bTxt.Text = B.ToString();
+            bTxt.Top = topPos;
+            bTxt.Left = gTxt.Right;
+            bTxt.Width = txtWidth;
+            bTxt.ForeColor = ClientSettings.FieldForeColor;
+            bTxt.BackColor = ClientSettings.FieldBackColor;
+            
+            
             PictureBox pb = new PictureBox();
-            pb.Left = 150;
-            pb.Top = pos * 20 + 10;
-            pb.Width = 20;
-            pb.Height = 15;
+            pb.Left = bTxt.Right;
+            pb.Top = topPos;
+            pb.Width = ClientSettings.TextSize;
+            pb.Height = bTxt.Height;
             pb.BackColor = Color.FromArgb(R, G, B);
-            pb.Click += new EventHandler(pb_Click);
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                pb.Click += new EventHandler(pb_Click);
+            }
 
+            rTxt.TextChanged += new EventHandler(delegate(object sender, EventArgs e)
+            {
+                try
+                {
+                    int c = int.Parse(rTxt.Text) % 256;
+                    pb.BackColor = Color.FromArgb(c, pb.BackColor.G, pb.BackColor.B);
+                }
+                catch { }
+            });
+            bTxt.TextChanged += new EventHandler(delegate(object sender, EventArgs e)
+            {
+                try
+                {
+                    int c = int.Parse(bTxt.Text) % 256;
+                    pb.BackColor = Color.FromArgb(pb.BackColor.R, pb.BackColor.G, c);
+                }
+                catch { }
+            });
+            gTxt.TextChanged += new EventHandler(delegate(object sender, EventArgs e)
+            {
+                try
+                {
+                    int c = int.Parse(gTxt.Text) % 256;
+                    pb.BackColor = Color.FromArgb(pb.BackColor.R, c, pb.BackColor.B);
+                }
+                catch { }
+            });
+
+            this.Controls.Add(rTxt);
+            this.Controls.Add(bTxt);
+            this.Controls.Add(gTxt);
             this.Controls.Add(lbl);
             this.Controls.Add(pb);
             ColorSetting cs=new ColorSetting(strLabel,pb);
             
             m_arraylist.Add(cs);
 
+        }
+
+        void cTxt_TextChanged(object sender, EventArgs e)
+        {
+            
         }
 
         void pb_Click(object sender, EventArgs e)
