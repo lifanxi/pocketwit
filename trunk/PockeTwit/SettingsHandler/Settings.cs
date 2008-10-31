@@ -317,9 +317,9 @@ public static class ClientSettings
     }
     public static void LoadColors()
     {
-        if (System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + "\\colors.txt"))
+        if (System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
         {
-            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Themes\\" + ThemeName + "\\colors.txt"))
+            using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
             {
                 while(!r.EndOfStream)
                 {

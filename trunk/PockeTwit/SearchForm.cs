@@ -121,7 +121,6 @@ namespace PockeTwit
             }
             if (!string.IsNullOrEmpty(cmbDistance.Text))
             {
-                
                 b.Append("geocode=" + this.GPSLocation);
                 b.Append("," + cmbDistance.Text);
                 switch(cmbMeasurement.Text)
