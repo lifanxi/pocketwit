@@ -1228,9 +1228,9 @@ namespace FingerUI
             int TopOfItem = TopOfLeftMenu;
             int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
             int i = 0;
-            lock (LeftMenuItems)
+            lock (_LeftMenuItems)
             {
-                foreach (string MenuItem in LeftMenuItems)
+                foreach (string MenuItem in _LeftMenuItems)
                 {
 
                     int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
@@ -1313,9 +1313,9 @@ namespace FingerUI
             int TopOfItem = TopOfRightMenu;
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             int i = 0;
-            lock (RightMenuItems)
+            lock (_RightMenuItems)
             {
-                foreach (string MenuItem in RightMenuItems)
+                foreach (string MenuItem in _RightMenuItems)
                 {
                     using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                     {
