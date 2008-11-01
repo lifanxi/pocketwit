@@ -284,7 +284,7 @@ namespace PockeTwit
         private void SetLeftMenu()
         {
             LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
-            if (History.Count == 1)
+            if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
             }
@@ -779,9 +779,11 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.Search:
                         statList.SetSelectedMenu("Search/Local");
+                        ShowSearchResults(prev.Argument);
                         break;
                     case Yedda.Twitter.ActionType.User_Timeline:
                         statList.SetSelectedMenu("");
+                        SwitchToUserTimeLine(prev.Argument);
                         break;
                 }
             }
@@ -791,9 +793,7 @@ namespace PockeTwit
         {
             ChangeCursor(Cursors.WaitCursor);
             SwitchToList("Friends_TimeLine");
-            HistoryItem i = new HistoryItem();
-            i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
-            History.Push(i);
+            History.Clear();
             statList.SetSelectedMenu("Friends TimeLine");
             statList.RightMenuItems = RightMenu;
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
@@ -807,9 +807,7 @@ namespace PockeTwit
         {
             ChangeCursor(Cursors.WaitCursor);
             SwitchToList("Messages_TimeLine");
-            HistoryItem i = new HistoryItem();
-            i.Action = Yedda.Twitter.ActionType.Replies;
-            History.Push(i);
+            History.Clear();
             statList.SetSelectedMenu("Messages");
             statList.RightMenuItems = RightMenu;
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
@@ -1018,7 +1016,12 @@ namespace PockeTwit
             string SearchString = f.SearchText;
             f.Close();
             this.statList.Visible = true;
-            
+
+            ShowSearchResults(SearchString);
+        }
+
+        private void ShowSearchResults(string SearchString)
+        {
             ChangeCursor(Cursors.WaitCursor);
             statList.SetSelectedMenu("Search/Local");
             statList.RightMenuItems = RightMenu;
