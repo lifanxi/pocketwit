@@ -140,6 +140,11 @@ namespace PockeTwit
             else
             {
                 int OldOffset = statList.YOffset;
+                int oldIndex = -1;
+                if (statList.SelectedItem != null)
+                {
+                    oldIndex = statList.SelectedItem.Index;
+                }
                 statList.Clear();
                 
                 foreach (Library.status stat in mergedstatuses)
@@ -151,8 +156,17 @@ namespace PockeTwit
                         statList.AddItem(item);
                     }
                 }
-                statList.SetSelectedIndexToZero();
-                FingerUI.StatusItem currentItem = (FingerUI.StatusItem)statList[0];
+                FingerUI.StatusItem currentItem;
+                if (oldIndex>=0)
+                {
+                    statList.SelectedItem = statList[oldIndex + newItems];
+                    currentItem = (FingerUI.StatusItem)statList.SelectedItem;
+                }
+                else
+                {
+                    statList.SetSelectedIndexToZero();
+                    currentItem = (FingerUI.StatusItem)statList[0];
+                }
                 if (currentItem != null)
                 {
                     CurrentlySelectedAccount = currentItem.Tweet.Account;
@@ -982,7 +996,10 @@ namespace PockeTwit
 
         private void SwitchToList(string ListName)
         {
-            statList.SwitchTolist(ListName);
+            if (statList.CurrentList() != ListName)
+            {
+                statList.SwitchTolist(ListName);
+            }
         }
 
         private void timerStartup_Tick(object sender, EventArgs e)

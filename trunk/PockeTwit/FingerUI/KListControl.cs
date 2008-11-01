@@ -314,6 +314,27 @@ namespace FingerUI
                 }
                 return null;
             }
+            set
+            {
+                if (m_selectedItem != null)
+                {
+                    m_selectedItem.Selected = false;
+                }
+                for(int i=0;i<m_items.Count;i++)
+                {
+                    IKListItem item = m_items[i];
+                    if (item == value)
+                    {
+                        item.Selected = true;
+                        m_selectedItem = item;
+                        m_selectedIndex.Y = i;
+                    }
+                    else
+                    {
+                        item.Selected = false;
+                    }
+                }
+            }
         }
 
         public IKListItem this[int index]
