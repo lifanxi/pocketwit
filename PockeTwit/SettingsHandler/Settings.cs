@@ -31,6 +31,24 @@ public static class ClientSettings
     public static int SmallArtSize = 65;
     public static int UpdateInterval;
 
+    public static Yedda.Twitter.Account DefaultAccount
+    {
+        get
+        {
+            foreach (Yedda.Twitter.Account a in AccountsList)
+            {
+                if (a.IsDefault) { return a; }
+            }
+            return AccountsList[0];
+        }
+        set
+        {
+            foreach (Yedda.Twitter.Account a in AccountsList)
+            {
+                a.IsDefault = a == value;
+            }
+        }
+    }
 
     public static int LinesOfText
     {

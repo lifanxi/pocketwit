@@ -7,7 +7,7 @@ namespace PockeTwit
 {
     static class Program
     {
-
+        public static string LastStatus;
 		#region Methods (2) 
 
         

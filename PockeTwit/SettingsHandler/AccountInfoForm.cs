@@ -25,9 +25,21 @@ namespace PockeTwit
             }
         }
 
+        private void SetupProfessional()
+        {
+            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
+            this.PasteItem = new System.Windows.Forms.MenuItem();
+            PasteItem.Text = "Paste";
+            copyPasteMenu.MenuItems.Add(PasteItem);
+            PasteItem.Click += new System.EventHandler(PasteItem_Click);
+        }
         public AccountInfoForm()
         {
             InitializeComponent();
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                SetupProfessional();
+            }
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
@@ -50,6 +62,7 @@ namespace PockeTwit
             txtUserName.Text = _AccountInfo.UserName;
             txtPassword.Text = _AccountInfo.Password;
             cmbServers.SelectedItem = _AccountInfo.ServerURL.Name;
+            chkDefault.Checked = _AccountInfo == ClientSettings.DefaultAccount;
         }
         private void FillServerList()
         {
