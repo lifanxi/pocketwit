@@ -395,6 +395,76 @@ namespace Yedda
             return format.ToString().ToLower();
         }
 
+
+        protected string ExecuteAnonymousGetCommand(string url)
+        {
+            HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
+            client.Timeout = 20000;
+            
+            try
+            {
+                using (HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse())
+                {
+                    using (Stream stream = httpResponse.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                //
+                // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
+                //
+                if (ex.Response is HttpWebResponse)
+                {
+                    try
+                    {
+                        if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return null;
+                        }
+
+                        HttpWebResponse errorResponse = (HttpWebResponse)ex.Response;
+                        if (errorResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            return null;
+                        }
+                        string ErrorText;
+                        using (Stream stream = errorResponse.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                ErrorText = reader.ReadToEnd();
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(ErrorText);
+
+                                if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
+                                {
+                                    DateTime NewTime = GetTimeOutTime();
+                                    errorResponse.Close();
+                                    throw new Exception("Timeout until " + NewTime.ToString());
+                                }
+
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        ex.Response.Close();
+
+                    }
+
+
+                }
+
+            }
+            return null;
+        }
+
         protected string ExecuteGetCommand(string url)
         {
             HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
@@ -470,7 +540,7 @@ namespace Yedda
             return null;
         }
 
-        private DateTime GetTimeOutTime()
+        public DateTime GetTimeOutTime()
         {
             string URL = "http://twitter.com/account/rate_limit_status.xml";
             string Response = ExecuteGetCommand(URL);
@@ -1021,7 +1091,7 @@ namespace Yedda
         public string ShowSingleStatus(string statusID)
         {
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Show) + "/" + statusID, GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
-            return ExecuteGetCommand(url);
+            return ExecuteAnonymousGetCommand(url);
         }
 
         public string Show(string IDorScreenName, OutputFormatType format)
