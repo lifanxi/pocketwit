@@ -130,7 +130,7 @@ namespace PockeTwit.Library
             {
                 if (_Account == null)
                 {
-                    _Account = ClientSettings.AccountsList[0];
+                    _Account = ClientSettings.DefaultAccount;
                 }
                 return _Account;
             }

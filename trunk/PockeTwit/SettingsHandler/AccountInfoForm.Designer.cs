@@ -39,6 +39,7 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblUser = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
+            this.chkDefault = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -55,38 +56,34 @@
             // 
             this.menuItem2.Text = "Accept";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
-            
-            // 
-            // lblServer
-            // 
-            this.lblServer.BackColor = ClientSettings.BackColor;
-            this.lblServer.ForeColor = ClientSettings.ForeColor;
-            this.lblServer.Location = new System.Drawing.Point(5, 5);
-            //this.lblServer.Location = new System.Drawing.Point(5, 103);
-            this.lblServer.Name = "lblServer";
-            this.lblServer.Size = new System.Drawing.Size(71, 20);
-            this.lblServer.Text = "Server:";
             // 
             // cmbServers
             // 
             this.cmbServers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbServers.BackColor = ClientSettings.FieldBackColor;
-            this.cmbServers.ForeColor = ClientSettings.FieldForeColor;
-            //this.cmbServers.Location = new System.Drawing.Point(5, 126);
+            this.cmbServers.BackColor = System.Drawing.Color.White;
+            this.cmbServers.ForeColor = System.Drawing.Color.Black;
             this.cmbServers.Location = new System.Drawing.Point(5, 28);
             this.cmbServers.Name = "cmbServers";
             this.cmbServers.Size = new System.Drawing.Size(232, 22);
             this.cmbServers.TabIndex = 0;
             this.cmbServers.SelectedIndexChanged += new System.EventHandler(this.cmbServers_SelectedIndexChanged);
             // 
+            // lblServer
+            // 
+            this.lblServer.BackColor = System.Drawing.Color.Black;
+            this.lblServer.ForeColor = System.Drawing.Color.LightGray;
+            this.lblServer.Location = new System.Drawing.Point(5, 5);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(71, 20);
+            this.lblServer.Text = "Server:";
+            // 
             // txtPassword
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.BackColor = ClientSettings.FieldBackColor;
-            this.txtPassword.ForeColor = ClientSettings.FieldForeColor;
-            //this.txtPassword.Location = new System.Drawing.Point(5, 79);
+            this.txtPassword.BackColor = System.Drawing.Color.White;
+            this.txtPassword.ForeColor = System.Drawing.Color.Black;
             this.txtPassword.Location = new System.Drawing.Point(5, 126);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
@@ -95,10 +92,9 @@
             // 
             // lblPassword
             // 
-            this.lblPassword.BackColor = ClientSettings.BackColor;
-            this.lblPassword.ForeColor = ClientSettings.ForeColor;
-            //this.lblPassword.Location = new System.Drawing.Point(5, 56);
-            this.lblPassword.Location = new System.Drawing.Point(5, 103); 
+            this.lblPassword.BackColor = System.Drawing.Color.Black;
+            this.lblPassword.ForeColor = System.Drawing.Color.LightGray;
+            this.lblPassword.Location = new System.Drawing.Point(5, 103);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(71, 20);
             this.lblPassword.Text = "Password:";
@@ -107,9 +103,8 @@
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.BackColor = ClientSettings.FieldBackColor;
-            this.txtUserName.ForeColor = ClientSettings.FieldForeColor;
-            //this.txtUserName.Location = new System.Drawing.Point(5, 28);
+            this.txtUserName.BackColor = System.Drawing.Color.White;
+            this.txtUserName.ForeColor = System.Drawing.Color.Black;
             this.txtUserName.Location = new System.Drawing.Point(5, 79);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(232, 21);
@@ -117,10 +112,9 @@
             // 
             // lblUser
             // 
-            this.lblUser.BackColor = ClientSettings.BackColor;
-            this.lblUser.ForeColor = ClientSettings.ForeColor;
+            this.lblUser.BackColor = System.Drawing.Color.Black;
+            this.lblUser.ForeColor = System.Drawing.Color.LightGray;
             this.lblUser.Location = new System.Drawing.Point(5, 56);
-            //this.lblUser.Location = new System.Drawing.Point(5, 5);
             this.lblUser.Name = "lblUser";
             this.lblUser.Size = new System.Drawing.Size(72, 20);
             this.lblUser.Text = "User:";
@@ -129,21 +123,31 @@
             // 
             this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblError.BackColor = ClientSettings.BackColor;
-            this.lblError.ForeColor = ClientSettings.ErrorColor; ;
+            this.lblError.BackColor = System.Drawing.Color.Black;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(83, 154);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(152, 20);
             this.lblError.Text = "Unable to verify username and password";
             this.lblError.Visible = false;
             // 
+            // chkDefault
+            // 
+            this.chkDefault.ForeColor = System.Drawing.Color.White;
+            this.chkDefault.Location = new System.Drawing.Point(5, 154);
+            this.chkDefault.Name = "chkDefault";
+            this.chkDefault.Size = new System.Drawing.Size(100, 20);
+            this.chkDefault.TabIndex = 5;
+            this.chkDefault.Text = "Default";
+            // 
             // AccountInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkDefault);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.cmbServers);
             this.Controls.Add(this.lblServer);
@@ -154,17 +158,6 @@
             this.Menu = this.mainMenu1;
             this.Name = "AccountInfoForm";
             this.Text = "Account Info";
-            
-            switch (DetectDevice.DeviceType)
-            {
-                case DeviceType.Professional:
-                    SetupProfessional();
-                    break;
-                case DeviceType.Standard:
-                    //SetupStandard();
-                    break;
-            }
-            
             this.ResumeLayout(false);
 
         }
@@ -182,14 +175,8 @@
         private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.ContextMenu copyPasteMenu;
         private System.Windows.Forms.MenuItem PasteItem;
-        private void SetupProfessional()
-        {
-            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
-            this.PasteItem = new System.Windows.Forms.MenuItem();
-            PasteItem.Text = "Paste";
-            copyPasteMenu.MenuItems.Add(PasteItem);
-            PasteItem.Click += new System.EventHandler(PasteItem_Click);
-        }
+        private System.Windows.Forms.CheckBox chkDefault;
+        
 
         
 		

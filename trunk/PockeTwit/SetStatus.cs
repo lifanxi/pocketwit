@@ -76,7 +76,7 @@ namespace PockeTwit
 
 		#region Properties (2) 
 
-        private Yedda.Twitter.Account _AccountToSet = ClientSettings.AccountsList[0];
+        private Yedda.Twitter.Account _AccountToSet = ClientSettings.DefaultAccount;
         public Yedda.Twitter.Account AccountToSet 
         { 
             get
@@ -223,6 +223,7 @@ namespace PockeTwit
 
         private void menuSubmit_Click(object sender, EventArgs e)
         {
+            Program.LastStatus = this.StatusText;
             if (ClientSettings.UseGPS)
             {
                 Locator.StopGPS();

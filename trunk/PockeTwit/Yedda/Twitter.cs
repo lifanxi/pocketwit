@@ -149,6 +149,12 @@ namespace Yedda
                     _Enabled = value;
                 }
             }
+            private bool _IsDefault = false;
+            public bool IsDefault
+            {
+                get { return _IsDefault; }
+                set { _IsDefault = value; }
+            }
 
             public override bool Equals(object obj)
             {

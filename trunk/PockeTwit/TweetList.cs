@@ -210,7 +210,7 @@ namespace PockeTwit
             {
                 Cursor.Current = Cursors.WaitCursor;
                 ResetDictionaries();
-                CurrentlySelectedAccount = ClientSettings.AccountsList[0];
+                CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
                 CurrentStatuses = new PockeTwit.Library.status[0];
                 statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
@@ -347,7 +347,7 @@ namespace PockeTwit
 
             ResetDictionaries();
 
-            CurrentlySelectedAccount = ClientSettings.AccountsList[0];
+            CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
             GlobalEventHandler.AvatarHasChanged += new GlobalEventHandler.delAvatarHasChanged(GlobalEventHandler_AvatarHasChanged);
             GlobalEventHandler.Updated += new GlobalEventHandler.ArtWasUpdated(GlobalEventHandler_Updated);
@@ -568,7 +568,7 @@ namespace PockeTwit
             SetStatus StatusForm = new SetStatus();
             if (CurrentlySelectedAccount == null)
             {
-                StatusForm.AccountToSet = ClientSettings.AccountsList[0];
+                StatusForm.AccountToSet = ClientSettings.DefaultAccount;
             }
             else
             {
