@@ -158,6 +158,10 @@ namespace PockeTwit.Library
         public static status DeserializeSingle(string response, Yedda.Twitter.Account Account)
         {
             status s = null;
+            if (string.IsNullOrEmpty(response))
+            {
+                return new status();
+            }
             if (Account == null || (Account.ServerURL.ServerType != Yedda.Twitter.TwitterServer.brightkite && Account.ServerURL.ServerType!= Yedda.Twitter.TwitterServer.pingfm))
             {
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
