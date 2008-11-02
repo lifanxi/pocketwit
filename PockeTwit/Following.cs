@@ -87,9 +87,9 @@ namespace PockeTwit
 
         private  void GetCachedFollowers()
         {
+            string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
             try
             {
-                string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
                 if (System.IO.File.Exists(location))
                 {
                     using (System.IO.StreamReader r = new System.IO.StreamReader(location))
@@ -99,10 +99,11 @@ namespace PockeTwit
                     }
                 }
             }
-            catch (NullReferenceException)
+            catch ()
             {
-                // We just won't rely on the cache then :P
+                System.IO.File.Delete(location);   
             }
+            
         }
 
         private  void GetFollowersFromTwitter(object o)

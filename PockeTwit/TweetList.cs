@@ -621,7 +621,7 @@ namespace PockeTwit
                             }
                             catch (Exception ex)
                             {
-                                Cursor.Current = Cursors.Default;
+                                      Cursor.Current = Cursors.Default;
                                 MessageBox.Show("Error sending the image to twitpic -- " + ex.ToString());
                             }
                         }
