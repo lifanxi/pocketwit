@@ -107,7 +107,7 @@ namespace Yedda
                 string ret = ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(ret);
-                if (doc.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                if (doc.SelectSingleNode("rsp").Attributes["status"].Value == "fail")
                 {
                     string ErrorText = doc.SelectSingleNode("//err").Attributes["msg"].Value;
                     throw new Exception(ErrorText);

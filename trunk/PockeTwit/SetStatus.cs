@@ -99,8 +99,8 @@ namespace PockeTwit
             {
                 if (DetectDevice.DeviceType == DeviceType.Professional)
                 {
-                    pictureBox1.Visible = value;
-                    pictureBox2.Visible = value;
+                    cameraPictureBox.Visible = value;
+                    filePictureBox.Visible = value;
                 }
                 else
                 {
@@ -140,15 +140,15 @@ namespace PockeTwit
                     {
                         TwitPicFile = c.FileName;
                         UseTwitPic = true;
-                        //if (pictureBox1.Visible)
+                        //if (cameraPictureBox.Visible)
                         //{
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                            this.pictureBox2.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+                            this.filePictureBox.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
-                                this.pictureBox2.Visible = false;
+                                this.filePictureBox.Visible = false;
                             }
-                            AddPictureToForm(c.FileName, pictureBox1);
+                            AddPictureToForm(c.FileName, cameraPictureBox);
                         //}
                     }
                 }
@@ -166,15 +166,15 @@ namespace PockeTwit
             {
                 TwitPicFile = s.FileName;
                 UseTwitPic = true;
-                //if (pictureBox1.Visible)
+                //if (cameraPictureBox.Visible)
                 //{
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                    this.pictureBox1.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
+                    this.cameraPictureBox.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                     if (DetectDevice.DeviceType == DeviceType.Standard)
                     {
-                        this.pictureBox1.Visible = false;
+                        this.cameraPictureBox.Visible = false;
                     }
-                    AddPictureToForm(s.FileName, pictureBox2);
+                    AddPictureToForm(s.FileName, filePictureBox);
                 //}
             }
         }
@@ -277,17 +277,17 @@ namespace PockeTwit
             this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void cameraPictureBox_Click(object sender, EventArgs e)
         {
             InsertPictureFromCamera();
         }
 
-        private void pictureBox2_Click(object sender, EventArgs e)
+        private void filePictureBox_Click(object sender, EventArgs e)
         {
             InsertPictureFromFile();
         }
 
-        private void pictureBox3_Click(object sender, EventArgs e)
+        private void urlPictureBox_Click(object sender, EventArgs e)
         {
             InsertURL();
         }
