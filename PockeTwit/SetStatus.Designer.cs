@@ -154,9 +154,9 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = ClientSettings.BackColor;
             this.ClientSize = new System.Drawing.Size(240, 294);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.urlPictureBox);
+            this.Controls.Add(this.filePictureBox);
+            this.Controls.Add(this.cameraPictureBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbAccount);
             this.Controls.Add(this.lblCharsLeft);
@@ -185,9 +185,9 @@ namespace PockeTwit
 
         private System.Windows.Forms.ComboBox cmbAccount;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox cameraPictureBox;
+        private System.Windows.Forms.PictureBox filePictureBox;
+        private System.Windows.Forms.PictureBox urlPictureBox;
 
         private void SetupProfessional()
         {
@@ -202,34 +202,34 @@ namespace PockeTwit
 
             this.mainMenu1.MenuItems.Add(this.menuSubmit);
 
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.cameraPictureBox = new System.Windows.Forms.PictureBox();
+            this.filePictureBox = new System.Windows.Forms.PictureBox();
+            this.urlPictureBox = new System.Windows.Forms.PictureBox();
 
-            this.pictureBox1.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder()+ "url.png");
-            this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.Location = new System.Drawing.Point(66, ClientSettings.TextSize + 20);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.cameraPictureBox.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder()+ "takepicture.png");
+            this.cameraPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.cameraPictureBox.Location = new System.Drawing.Point(66, ClientSettings.TextSize + 20);
+            this.cameraPictureBox.Name = "cameraPictureBox";
+            this.cameraPictureBox.Size = new System.Drawing.Size(25, 25);
+            this.cameraPictureBox.Click += new System.EventHandler(this.cameraPictureBox_Click);
             // 
-            // pictureBox2
+            // filePictureBox
             // 
-            this.pictureBox2.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
-            this.pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.Location = new System.Drawing.Point(35, ClientSettings.TextSize + 20);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.filePictureBox.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+            this.filePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.filePictureBox.Location = new System.Drawing.Point(35, ClientSettings.TextSize + 20);
+            this.filePictureBox.Name = "filePictureBox";
+            this.filePictureBox.Size = new System.Drawing.Size(25, 25);
+            this.filePictureBox.Click += new System.EventHandler(this.filePictureBox_Click);
             // 
-            // pictureBox3
+            // urlPictureBox
             // 
-            this.pictureBox3.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
-            this.pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.Location = new System.Drawing.Point(4, ClientSettings.TextSize + 20);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            this.urlPictureBox.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
+            this.urlPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.urlPictureBox.Location = new System.Drawing.Point(4, ClientSettings.TextSize + 20);
+            this.urlPictureBox.Name = "urlPictureBox";
+            this.urlPictureBox.Size = new System.Drawing.Size(25, 25);
+            this.urlPictureBox.Click += new System.EventHandler(this.urlPictureBox_Click);
 
             this.chkGPS.Text = "Update GPS";
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
@@ -255,27 +255,27 @@ namespace PockeTwit
             CopyItem.Click += new System.EventHandler(CopyItem_Click);
 
             textBox1.ContextMenu = copyPasteMenu;
-            this.Controls.Add(pictureBox1);
-            this.Controls.Add(pictureBox2);
-            this.Controls.Add(pictureBox3);
+            this.Controls.Add(cameraPictureBox);
+            this.Controls.Add(filePictureBox);
+            this.Controls.Add(urlPictureBox);
             this.Controls.Add(chkGPS);
             this.Controls.Add(lblGPS);
         }
 
         private void SetupStandard()
         {
-            this.pictureBox1 = new PictureBox();
-            this.pictureBox2 = new PictureBox();
+            this.cameraPictureBox = new PictureBox();
+            this.filePictureBox = new PictureBox();
 
-            this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(25, 25);
+            this.cameraPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.cameraPictureBox.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
+            this.cameraPictureBox.Name = "cameraPictureBox";
+            this.cameraPictureBox.Size = new System.Drawing.Size(25, 25);
 
-            this.pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(25, 25);
+            this.filePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.filePictureBox.Location = new System.Drawing.Point(3, ClientSettings.TextSize + 20);
+            this.filePictureBox.Name = "filePictureBox";
+            this.filePictureBox.Size = new System.Drawing.Size(25, 25);
 
             this.menuSubmit = new System.Windows.Forms.MenuItem();
             this.menuSubmit.Text = "Submit";
@@ -315,8 +315,8 @@ namespace PockeTwit
 
             this.Controls.Add(chkGPS);
             this.Controls.Add(lblGPS);
-            this.Controls.Add(pictureBox1);
-            this.Controls.Add(pictureBox2);
+            this.Controls.Add(cameraPictureBox);
+            this.Controls.Add(filePictureBox);
         }
 
     }
