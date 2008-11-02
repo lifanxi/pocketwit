@@ -307,16 +307,16 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
-            
-            RightMenu = new List<string>(new string[] { "@User TimeLine", "Reply @User", "Direct @User", "Quote", "Show Conversation", "Make Favorite", "Profile Page", "Stop Following", "Minimize" });
+
+            RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
+            
             if (item == null || string.IsNullOrEmpty(item.Tweet.in_reply_to_status_id))
             {
                 RightMenu.Remove("Show Conversation");
             }
-
             
             statList.RightMenuItems = RightMenu;
             SetLeftMenu();
@@ -879,7 +879,8 @@ namespace PockeTwit
                 lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(i.Argument), i.Account);
             }
             ChangeCursor(Cursors.WaitCursor);
-            
+
+            //List<Library.status> Conversation = GetConversationFROMTHEFUTURE(lastStatus);
             List<Library.status> Conversation = new List<PockeTwit.Library.status>();
             History.Push(i);
 
@@ -895,6 +896,27 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
+        private List<PockeTwit.Library.status> GetConversationFROMTHEFUTURE(PockeTwit.Library.status lastStatus)
+        {
+            Yedda.Twitter Conn = GetMatchingConnection(lastStatus.Account);
+            Library.status[] SearchResults = Manager.SearchTwitter(Conn, "@"+lastStatus.user.screen_name);
+            List<Library.status> Results = new List<PockeTwit.Library.status>();
+            foreach (Library.status s in SearchResults)
+            {
+                if (s.in_reply_to_status_id == lastStatus.id)
+                {
+                    Results.Add(s);
+                }
+            }
+
+            if (Results.Count == 1)
+            {
+                Results.AddRange(GetConversationFROMTHEFUTURE(Results[0]));
+            }
+            return Results;
+        }
+
+        
         private void Quote()
         {
             if (statList.SelectedItem == null) { return; }
