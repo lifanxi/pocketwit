@@ -99,7 +99,7 @@ namespace PockeTwit
                     }
                 }
             }
-            catch ()
+            catch
             {
                 System.IO.File.Delete(location);   
             }
