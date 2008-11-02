@@ -205,11 +205,14 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            if (ClientSettings.UseGPS)
+            if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
             {
-                Locator.StopGPS();
+                if (ClientSettings.UseGPS)
+                {
+                    Locator.StopGPS();
+                }
+                this.DialogResult = DialogResult.Cancel;
             }
-            this.DialogResult = DialogResult.Cancel;
         }
 
         void menuExists_Click(object sender, EventArgs e)
