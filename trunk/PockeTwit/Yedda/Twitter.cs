@@ -1108,7 +1108,7 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Users), GetActionTypeString(ActionType.Show) + "/" + IDorScreenName, GetFormatTypeString(format), AccountInfo.ServerURL.URL);
-            return ExecuteGetCommand(url);
+            return ExecuteAnonymousGetCommand(url);
         }
 
         public string ShowAsJSON(string IDorScreenName)

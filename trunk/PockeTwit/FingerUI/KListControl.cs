@@ -138,11 +138,8 @@ namespace FingerUI
             {
                 lock (_RightMenuItems)
                 {
-                    lock (this)
-                    {
-                        _RightMenuItems = value;
-                        SetRightMenuHeight();
-                    }
+                    _RightMenuItems = value;
+                    SetRightMenuHeight();
                 }
             }
         }
