@@ -83,12 +83,12 @@ namespace FingerUI
 
         private int LeftMenuHeight;
         private int TopOfLeftMenu;
-        private List<string> _LeftMenuItems = new List<string>();
+        private PockeTwit.SafeList<string> _LeftMenuItems = new PockeTwit.SafeList<string>();
         public void NoSelectedLeftMenu()
         {
             LeftMenuItemFocusedIndex = -1;
         }
-        public List<string> LeftMenuItems 
+        public PockeTwit.SafeList<string> LeftMenuItems 
         {
             get
             {
@@ -96,11 +96,8 @@ namespace FingerUI
             }
             set
             {
-                lock (_LeftMenuItems)
-                {
-                    _LeftMenuItems = value;
-                    SetLeftMenuHeight();
-                }
+                _LeftMenuItems = value;
+                SetLeftMenuHeight();
             }
         }
 
@@ -127,8 +124,8 @@ namespace FingerUI
 
         private int RightMenuHeight;
         private int TopOfRightMenu;
-        private List<string> _RightMenuItems = new List<string>();
-        public List<string> RightMenuItems
+        private PockeTwit.SafeList<string> _RightMenuItems = new PockeTwit.SafeList<string>();
+        public PockeTwit.SafeList<string> RightMenuItems
         {
             get
             {
@@ -136,11 +133,8 @@ namespace FingerUI
             }
             set
             {
-                lock (_RightMenuItems)
-                {
-                    _RightMenuItems = value;
-                    SetRightMenuHeight();
-                }
+                _RightMenuItems = value;
+                SetRightMenuHeight();
             }
         }
 

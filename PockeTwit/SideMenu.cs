@@ -13,7 +13,7 @@ namespace PockeTwit
 
 		// Public Methods (1) 
 
-        public static List<string> ReplaceMenuItem(List<string> List, string Original, string New)
+        public static SafeList<string> ReplaceMenuItem(SafeList<string> List, string Original, string New)
         {
             for (int i = 0; i < List.Count; i++)
             {
