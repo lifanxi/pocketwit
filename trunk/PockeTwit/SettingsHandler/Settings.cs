@@ -7,21 +7,26 @@ public static class ClientSettings
 {
 
 
-		#region Fields (13) 
-
-    private static int _TextSize = 0;
-    public static int AnimationInterval;
-    public static string AppPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+    #region DefaultColors
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
-    public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldBackColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;
+    public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
+    public static System.Drawing.Color HashLinkColor = System.Drawing.Color.Sienna;
+    #endregion
+
+    #region Fields (13)
+
+    private static int _TextSize = 0;
+    public static int AnimationInterval;
+    public static string AppPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+   
     public static string PingApi = "07fcca78e725fa4d3b27ea552ef06b3b";
 
     public static int Margin = 5;

@@ -127,7 +127,7 @@ namespace PockeTwit
         {
             AddStatusesToList(mergedstatuses, 0);
         }
-        
+
         private void AddStatusesToList(Library.status[] mergedstatuses, int newItems)
         {
             if (mergedstatuses == null) { return; }
@@ -964,7 +964,11 @@ namespace PockeTwit
                 pi.UseShellExecute = true;
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
             }
-            else
+            else if (TextClicked.StartsWith("#"))
+            {
+                ShowSearchResults(TextClicked);
+            }
+            else if (TextClicked.StartsWith("@"))
             {
                 SwitchToUserTimeLine(TextClicked);
             }

@@ -407,13 +407,19 @@ namespace FingerUI
         private void MakeClickable(Graphics g, Rectangle textBounds)
         {
             
-            using (Pen sPen = new Pen(ClientSettings.LinkColor))
+            using (Pen lPen = new Pen(ClientSettings.LinkColor))
             {
-                foreach (Clickable c in Tweet.Clickables)
+                using (Pen hPen = new Pen(ClientSettings.HashLinkColor))
                 {
-                    g.DrawLine(sPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
-                        (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+                    foreach (Clickable c in Tweet.Clickables)
+                    {
+                        Pen uPen = lPen;
+                        if (c.Text.StartsWith("#")) { uPen = hPen; }
+                        g.DrawLine(uPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
+                            (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+                    }
                 }
+                
             }
         }
 
@@ -612,7 +618,7 @@ namespace FingerUI
             string[] words = text.Split(new char[] { ' ' });
             foreach (string word in words)
             {
-                if ((word.StartsWith("http") | word.StartsWith("@")) && word.Length>1)
+                if ((word.StartsWith("http") | word.StartsWith("@") | word.StartsWith("#")) && word.Length>1)
                 {
                     Clickable c = new Clickable();
                     c.Text = word.TrimEnd(IgnoredAtChars);

@@ -1,6 +1,7 @@
 ﻿BackColor:255:255:255
 ForeColor:30:30:30
 LinkColor:100:100:205
+HashLinkColor:160:82:45
 SelectedBackColor:150:150:150
 SelectedForeColor:0:0:0
 SelectedSmallTextColor:30:30:30
