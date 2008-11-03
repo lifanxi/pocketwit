@@ -23,8 +23,8 @@ namespace PockeTwit
         private UpdateChecker Checker;
         private Library.status[] CurrentStatuses =null;
 
-        private List<string> LeftMenu;
-        private List<string> RightMenu;
+        private SafeList<string> LeftMenu;
+        private SafeList<string> RightMenu;
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
@@ -297,7 +297,7 @@ namespace PockeTwit
         }
         private void SetLeftMenu()
         {
-            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new SafeList<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
             if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
@@ -308,7 +308,7 @@ namespace PockeTwit
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
 
-            RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
+            RightMenu = new SafeList<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
 
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
