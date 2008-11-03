@@ -216,7 +216,7 @@ namespace FingerUI
         /// <param name="bounds">The bounds.</param>
         public virtual void Render(Graphics g, Rectangle bounds)
         {
-
+            g.Clip = new Region(bounds);
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             
@@ -351,6 +351,7 @@ namespace FingerUI
                 MakeClickable(g, textBounds);
             }
             ForeBrush.Dispose();
+            g.Clip = new Region();
         }
 
 
