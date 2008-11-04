@@ -1169,8 +1169,14 @@ namespace FingerUI
                         m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
                     }
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                    m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
+                    if (Side == SideShown.Right)
+                    {
+                        m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
+                    }
+                    else
+                    {
+                        m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
+                    }
                     CurrentTop = CurrentTop + MenuToDraw.ItemHeight;
                 }
             }
