@@ -1201,6 +1201,10 @@ namespace Yedda
         #region Search
         public string SearchFor(string textToSearch)
         {
+            if (textToSearch.StartsWith("q="))
+            {
+                textToSearch = textToSearch.Remove(0, 2);
+            }
             string url = string.Format(TwitterSearchUrlFormat, HttpUtility.UrlEncode(textToSearch), AccountInfo.ServerURL.URL);
             return ExecuteGetCommand(url);
         }
