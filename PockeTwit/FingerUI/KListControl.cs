@@ -77,83 +77,10 @@ namespace FingerUI
         bool m_updating = false;
         private Velocity m_velocity = new Velocity();
         
-        private int LeftMenuItemFocusedIndex = 0;
-        private int RightMenuItemFocusedIndex = 0;
         List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
 
-        private int LeftMenuHeight;
-        private int TopOfLeftMenu;
-        private PockeTwit.SafeList<string> _LeftMenuItems = new PockeTwit.SafeList<string>();
-        public void NoSelectedLeftMenu()
-        {
-            LeftMenuItemFocusedIndex = -1;
-        }
-        public PockeTwit.SafeList<string> LeftMenuItems 
-        {
-            get
-            {
-                return _LeftMenuItems;
-            }
-            set
-            {
-                _LeftMenuItems = value;
-                SetLeftMenuHeight();
-            }
-        }
-
-        private void SetLeftMenuHeight()
-        {
-            if (InvokeRequired)
-            {
-                delClearMe d = new delClearMe(SetLeftMenuHeight);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                if (_LeftMenuItems.Count > 0)
-                {
-                    try
-                    {
-                        LeftMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _LeftMenuItems.Count;
-                        TopOfLeftMenu = ((this.Height / 2) - ((_LeftMenuItems.Count * LeftMenuHeight) / 2));
-                    }
-                    catch (ObjectDisposedException) { }
-                }
-            }
-        }
-
-        private int RightMenuHeight;
-        private int TopOfRightMenu;
-        private PockeTwit.SafeList<string> _RightMenuItems = new PockeTwit.SafeList<string>();
-        public PockeTwit.SafeList<string> RightMenuItems
-        {
-            get
-            {
-                return _RightMenuItems;
-            }
-            set
-            {
-                _RightMenuItems = value;
-                SetRightMenuHeight();
-            }
-        }
-
-        private void SetRightMenuHeight()
-        {
-            if (InvokeRequired)
-            {
-                delClearMe d = new delClearMe(SetRightMenuHeight);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                if (_RightMenuItems.Count > 0)
-                {
-                    RightMenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / _RightMenuItems.Count;
-                    TopOfRightMenu = ((this.Height / 2) - ((_RightMenuItems.Count * RightMenuHeight) / 2));
-                }
-            }
-        }
+        public SideMenu LeftMenu = new SideMenu();
+        public SideMenu RightMenu = new SideMenu();
 		#endregion Fields 
 
 		#region Enums (2) 
@@ -283,11 +210,7 @@ namespace FingerUI
         {
             get
             {
-                if (this.LeftMenuItems.Count > 0)
-                {
-                    return 0 - (this.Width - 50);
-                }
-                return 0;
+                return 0 - (this.Width - 50);
             }
         }
 
@@ -595,27 +518,13 @@ namespace FingerUI
 
         public void SetSelectedMenu(string RequestedMenuItem)
         {
-            int i = 0;
-            foreach (string MenuItem in RightMenuItems)
+            if (RightMenu.Contains(RequestedMenuItem))
             {
-                if (MenuItem == RequestedMenuItem)
-                {
-                    RightMenuItemFocusedIndex = i;
-                    this.Redraw();
-                    return;
-                }
-                i++;
+                RightMenu.SelectedItem = RequestedMenuItem;
             }
-            i=0;
-            foreach (string MenuItem in LeftMenuItems)
+            if (LeftMenu.Contains(RequestedMenuItem))
             {
-                if (MenuItem == RequestedMenuItem)
-                {
-                    LeftMenuItemFocusedIndex = i;
-                    this.Redraw();
-                    return;
-                }
-                i++;
+                LeftMenu.SelectedItem = RequestedMenuItem;
             }
         }
 
@@ -667,12 +576,12 @@ namespace FingerUI
                 {
                     case SideShown.Left:
                         {
-                            MenuItemSelected(LeftMenuItems[LeftMenuItemFocusedIndex]);
+                            MenuItemSelected(LeftMenu.SelectedItem);
                             break;
                         }
                     case SideShown.Right:
                         {
-                            MenuItemSelected(RightMenuItems[RightMenuItemFocusedIndex]);
+                            MenuItemSelected(RightMenu.SelectedItem);
                             break;
                         }
                     case SideShown.Middle:
@@ -704,17 +613,11 @@ namespace FingerUI
                 {
                     if (CurrentlyViewing == SideShown.Right)
                     {
-                        if (RightMenuItemFocusedIndex >0)
-                        {
-                            RightMenuItemFocusedIndex--;
-                        }
+                        RightMenu.SelectUp();
                     }
                     if (CurrentlyViewing == SideShown.Left)
                     {
-                        if (LeftMenuItemFocusedIndex >0)
-                        {
-                            LeftMenuItemFocusedIndex--;
-                        }
+                        LeftMenu.SelectUp();
                     }
                 }
             }
@@ -738,24 +641,17 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing == SideShown.Right)
                 {
-                    if (RightMenuItemFocusedIndex < RightMenuItems.Count-1)
-                    {
-                        RightMenuItemFocusedIndex++;
-                    }
+                    RightMenu.SelectDown();
                 }
                 if (CurrentlyViewing == SideShown.Left)
                 {
-                    if (LeftMenuItemFocusedIndex < LeftMenuItems.Count-1)
-                    {
-                        LeftMenuItemFocusedIndex++;
-                    }
+                    LeftMenu.SelectDown();
                 }
             }
             if (e.KeyCode == Keys.Right | e.KeyCode == Keys.F2) 
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    //RightMenuItemFocusedIndex = 0;
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
@@ -765,7 +661,6 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    //LeftMenuItemFocusedIndex = 0;
                     m_velocity.X = -15;
                     m_offset.X = m_offset.X - 3;
                     m_timer.Enabled = true;
@@ -824,13 +719,7 @@ namespace FingerUI
                 }
                 Point currPos = new Point(e.X, e.Y);
 
-                //Don't allow us to drag left if there's no right menu
-                int distanceX = 0;
-                if (RightMenuItems.Count > 0)
-                {
-                    distanceX = m_mousePrev.X - currPos.X;
-                }
-                
+                int distanceX = m_mousePrev.X - currPos.X;
                 
                 int distanceY = m_mousePrev.Y - currPos.Y;
                 //if we're primarily moving vertically, ignore horizontal movement.
@@ -991,11 +880,11 @@ namespace FingerUI
 
                 if (m_offset.X > 0)
                 {
-                    DrawRightMenu(m_backBuffer);
+                    DrawMenu(m_backBuffer, SideShown.Right);
                 }
                 else if (m_offset.X < 0)
                 {
-                    DrawLeftMenu(m_backBuffer);
+                    DrawMenu(m_backBuffer, SideShown.Left);
                 }
 
                 DrawPointer(m_backBuffer);
@@ -1059,8 +948,8 @@ namespace FingerUI
                 item.Bounds = ItemBounds(0, item.Index);
             }
             CreateBackBuffer();
-            SetLeftMenuHeight();
-            SetRightMenuHeight();
+            LeftMenu.Height = this.Height;
+            RightMenu.Height = this.Height;
             Reset();
         }
 
@@ -1214,55 +1103,75 @@ namespace FingerUI
             
         }
 
-        private void DrawLeftMenu(Graphics m_backBuffer)
+        private void DrawMenu(Graphics m_backBuffer, SideShown Side)
         {
-            int TopOfItem = TopOfLeftMenu;
-            int LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X))+50;
-            int i = 0;
-            lock (_LeftMenuItems)
+            SideMenu MenuToDraw;
+            int LeftOfItem;
+            int CurrentItemWidth;
+            int LeftPos = 0;
+            if (Side == SideShown.Left)
             {
-                foreach (string MenuItem in _LeftMenuItems)
+                MenuToDraw = LeftMenu;
+                LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X)) + 50;
+                CurrentItemWidth = ItemWidth - 50;
+            }
+            else
+            {
+                MenuToDraw = RightMenu;
+                LeftOfItem = this.Width - Math.Abs(m_offset.X);
+                CurrentItemWidth = ItemWidth;
+                LeftPos = LeftOfItem + 6;
+            }
+            int CurrentTop = MenuToDraw.TopOfMenu;
+            foreach (string Item in MenuToDraw.GetItems())
+            {
+                if (Side == SideShown.Left)
                 {
-
-                    int TextWidth = (int)m_backBuffer.MeasureString(MenuItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                    int TextWidth = (int)m_backBuffer.MeasureString(Item, ClientSettings.MenuFont).Width + ClientSettings.Margin;
+                    LeftPos = (LeftOfItem + CurrentItemWidth) - TextWidth;
+                }
+                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                {
+                    
+                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, CurrentTop, CurrentItemWidth, MenuToDraw.ItemHeight);
+                    Color BackColor;
+                    Color MenuTextColor;
+                    
+                    if (Item==MenuToDraw.SelectedItem)
                     {
-
-                        Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth - 50, LeftMenuHeight);
-
-                        Color BackColor;
-                        Color MenuTextColor;
-                        if (i == LeftMenuItemFocusedIndex && CurrentlyViewing == SideShown.Left)
-                        {
-                            BackColor = ClientSettings.SelectedBackColor;
-                            MenuTextColor = ClientSettings.SelectedForeColor;
-                        }
-                        else
-                        {
-                            BackColor = ClientSettings.BackColor;
-                            MenuTextColor = ClientSettings.ForeColor;
-                        }
-                        using (Brush sBrush = new SolidBrush(BackColor))
-                        {
-                            m_backBuffer.FillRectangle(sBrush, menuRect);
-                        }
-
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                        
-                        using (Brush sBrush = new SolidBrush(MenuTextColor))
-                        {
-                            StringFormat sFormat = new StringFormat();
-                            sFormat.LineAlignment = StringAlignment.Center;
-                            int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                            int LeftPos = menuRect.Right - TextWidth;
-                            m_backBuffer.DrawString(MenuItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
-                        }
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                        m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
-                        TopOfItem = TopOfItem + LeftMenuHeight;
+                        BackColor = ClientSettings.SelectedBackColor;
+                        MenuTextColor = ClientSettings.SelectedForeColor;
                     }
-                    i++;
+                    else
+                    {
+                        BackColor = ClientSettings.BackColor;
+                        MenuTextColor = ClientSettings.ForeColor;
+                        
+                        
+                    }
+                    using (Brush sBrush = new SolidBrush(BackColor))
+                    {
+                        m_backBuffer.FillRectangle(sBrush, menuRect);
+                    }
+
+                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
+                    using (Brush sBrush = new SolidBrush(MenuTextColor))
+                    {
+                        StringFormat sFormat = new StringFormat();
+                        sFormat.LineAlignment = StringAlignment.Center;
+                        int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
+                        StatusItem SelectedStatus = (StatusItem)SelectedItem;
+                        string DisplayItem = Item;
+                        if (SelectedStatus != null)
+                        {
+                            DisplayItem = Item.Replace("@User", "@" + SelectedStatus.Tweet.user.screen_name);
+                        }
+                        m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
+                    }
+                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                    m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
+                    m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
+                    CurrentTop = CurrentTop + MenuToDraw.ItemHeight;
                 }
             }
         }
@@ -1299,58 +1208,6 @@ namespace FingerUI
 
         }
 
-        private void DrawRightMenu(Graphics graphics)
-        {
-            int TopOfItem = TopOfRightMenu;
-            int LeftOfItem = this.Width - Math.Abs(m_offset.X);
-            int i = 0;
-            lock (_RightMenuItems)
-            {
-                foreach (string MenuItem in _RightMenuItems)
-                {
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                    {
-                        Rectangle menuRect = new Rectangle(LeftOfItem + 1, TopOfItem, ItemWidth, RightMenuHeight);
-                        Color BackColor;
-                        Color MenuTextColor;
-                        if (i == RightMenuItemFocusedIndex && CurrentlyViewing == SideShown.Right)
-                        {
-                            BackColor = ClientSettings.SelectedBackColor;
-                            MenuTextColor = ClientSettings.SelectedForeColor;
-                        }
-                        else
-                        {
-                            BackColor = ClientSettings.BackColor;
-                            MenuTextColor = ClientSettings.ForeColor;
-                        }
-                        using (Brush sBrush = new SolidBrush(BackColor))
-                        {
-                            m_backBuffer.FillRectangle(sBrush, menuRect);
-                        }
-
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                        using (Brush sBrush = new SolidBrush(MenuTextColor))
-                        {
-                            StringFormat sFormat = new StringFormat();
-                            //sFormat.Alignment = StringAlignment.Center;
-                            sFormat.LineAlignment = StringAlignment.Center;
-                            int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                            StatusItem SelectedStatus = (StatusItem)SelectedItem;
-                            string DisplayItem = MenuItem;
-                            if (SelectedStatus != null)
-                            {
-                                DisplayItem = MenuItem.Replace("@User", "@" + SelectedStatus.Tweet.user.screen_name);
-                            }
-                            m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, menuRect.X + 5, TextTop, sFormat);
-                        }
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                        TopOfItem = TopOfItem + RightMenuHeight;
-                    }
-                    i++;
-                }
-            }
-        }
 
         private void DrawStandardWindowSwitcher(Graphics g)
         {
@@ -1380,36 +1237,28 @@ namespace FingerUI
             
             int LeftOfItem = this.Width - Math.Abs(m_offset.X);
             int MenuHeight;
+            int TopOfItem;
+            SideMenu MenuToCheck = null;
             if (m_offset.X > 0)
             {
-                MenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / RightMenuItems.Count;
-                int TopOfItem = ((this.Height / 2) - ((RightMenuItems.Count * MenuHeight) / 2));
-                foreach (string MenuItem in RightMenuItems)
-                {
-                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
-                    TopOfItem = TopOfItem + MenuHeight;
-                    if (menuRect.Contains(X))
-                    {
-                        Invalidate(menuRect);
-                        return MenuItem;
-                    }
-                }
-
+                MenuToCheck = RightMenu;
+                MenuHeight = RightMenu.ItemHeight;
+                TopOfItem = RightMenu.TopOfMenu;
             }
             else if (m_offset.X < 0)
             {
-                MenuHeight = (this.Height - (ClientSettings.TextSize * 5)) / LeftMenuItems.Count;
-                int TopOfItem = ((this.Height / 2) - ((LeftMenuItems.Count * MenuHeight) / 2));
-                LeftOfItem = 0;
-                foreach (string MenuItem in LeftMenuItems)
+                MenuToCheck = LeftMenu;
+            }
+            MenuHeight = MenuToCheck.ItemHeight;
+            TopOfItem = MenuToCheck.TopOfMenu;
+            foreach (string MenuItem in MenuToCheck.GetItems())
+            {
+                Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
+                TopOfItem = TopOfItem + MenuHeight;
+                if (menuRect.Contains(X))
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, Math.Abs(m_offset.X), MenuHeight);
-                    TopOfItem = TopOfItem + MenuHeight;
-                    if (menuRect.Contains(X))
-                    {
-                        Invalidate(menuRect);
-                        return MenuItem;
-                    }
+                    Invalidate(menuRect);
+                    return MenuItem;
                 }
             }
             return null;

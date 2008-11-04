@@ -75,6 +75,9 @@
     <Compile Include="Errors.Designer.cs">
       <DependentUpon>Errors.cs</DependentUpon>
     </Compile>
+    <Compile Include="FingerUI\SideMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GlobalEventHandler.cs" />
     <Compile Include="GPS\DegreesMinutesSeconds.cs" />
     <Compile Include="GPS\DeviceStateChangedEventArgs.cs" />
@@ -94,7 +97,6 @@
     <Compile Include="NotificationSoftKeys\SHNOTIFICATIONDATA.cs" />
     <Compile Include="NotificationSoftKeys\SpinnerClickEventHandler.cs" />
     <Compile Include="SafeDictionary.cs" />
-    <Compile Include="SafeList.cs" />
     <Compile Include="SettingsHandler\AccountInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,7 +170,6 @@
     <Compile Include="SettingsHandler\MainSettings.Designer.cs">
       <DependentUpon>MainSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SideMenu.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Contributors.cs" />
     <Compile Include="Themes\FormColors.cs" />
