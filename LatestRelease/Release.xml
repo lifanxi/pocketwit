@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.45</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv45.CAB</url>
-  <notes>Option to use Skweezer
-Retweet command
+  <version>.46</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv46.CAB</url>
+  <notes>Conversation View
+Go back to previous view
+Hashtag links
+Theme management
+Improved Quotes
+Contributors listed in About
+Bugfixes
+UI Tweaks
 </notes>
 </LatestRelease>
