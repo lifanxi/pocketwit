@@ -39,6 +39,7 @@ namespace PockeTwit
             {
                 lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev";
             }
+            panel1.Focus();
         }
 
         void ContributorChecker_ContributorsReady()
@@ -80,7 +81,19 @@ namespace PockeTwit
 
                     topOfLabel = topOfLabel + nameLabel.Height;
                 }
+                LinkLabel YouToo = new LinkLabel();
+                YouToo.Text = "Your name can be here!";
+                YouToo.ForeColor = ClientSettings.LinkColor;
+                YouToo.Width = panel1.Width - 2;
+                YouToo.Click += new EventHandler(YouToo_Click);
+                YouToo.Top = topOfLabel;
+                panel1.Controls.Add(YouToo);
             }
+        }
+
+        void YouToo_Click(object sender, EventArgs e)
+        {
+            LaunchSite("http://code.google.com/p/pocketwit/wiki/Contribute");
         }
 
         void nameLabel_Click(object sender, EventArgs e)
@@ -147,7 +160,7 @@ namespace PockeTwit
 
         private void lnkContributors_Click(object sender, EventArgs e)
         {
-
+            LaunchSite("http://code.google.com/p/pocketwit/wiki/Contribute");
         }
 
         private void linkLabel2_Click(object sender, EventArgs e)

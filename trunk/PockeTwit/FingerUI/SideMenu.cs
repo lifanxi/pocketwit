@@ -69,7 +69,12 @@ namespace FingerUI
                 {
                     try
                     {
-                        _ItemHeight = (this.Height - (ClientSettings.TextSize * 5)) / Items.Count;
+                        int multiplyer = 4;
+                        if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+                        {
+                            multiplyer = 3;
+                        }
+                        _ItemHeight = (this.Height - (ClientSettings.TextSize * multiplyer)) / Items.Count;
                         _TopOfMenu= ((this.Height / 2) - ((Items.Count * ItemHeight) / 2));
                     }
                     catch (ObjectDisposedException) { }
