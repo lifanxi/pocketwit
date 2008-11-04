@@ -619,7 +619,7 @@ namespace FingerUI
             string[] words = text.Split(new char[] { ' ' });
             foreach (string word in words)
             {
-                if ((word.StartsWith("http") | word.StartsWith("@") | word.StartsWith("#")) && word.Length>1)
+                if ((word.StartsWith("http:") | word.StartsWith("@") | word.StartsWith("#")) && word.Length>1)
                 {
                     Clickable c = new Clickable();
                     c.Text = word.TrimEnd(IgnoredAtChars);
