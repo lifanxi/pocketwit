@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.46</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv46.CAB</url>
-  <notes>Conversation View
+  <version>.47</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv47.CAB</url>
+  <notes>QuickFix for bugs in .46
+Still features:
+Conversation View
 Go back to previous view
 Hashtag links
 Theme management
