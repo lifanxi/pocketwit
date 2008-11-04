@@ -103,7 +103,7 @@ namespace PockeTwit
             this.linkLabel1.Location = new System.Drawing.Point(4, 47);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(233, 23);
-            this.linkLabel1.TabIndex = 7;
+            this.linkLabel1.TabIndex = 1;
             this.linkLabel1.Text = "Let me know what you think.";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
             // 
@@ -113,7 +113,7 @@ namespace PockeTwit
             this.linkLabel2.Location = new System.Drawing.Point(3, 24);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(233, 23);
-            this.linkLabel2.TabIndex = 8;
+            this.linkLabel2.TabIndex = 0;
             this.linkLabel2.Text = "http://code.google.com/p/pocketwit/";
             this.linkLabel2.Click += new System.EventHandler(this.linkLabel2_Click);
             // 
@@ -125,9 +125,9 @@ namespace PockeTwit
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblWait);
-            this.panel1.Location = new System.Drawing.Point(4, 122);
+            this.panel1.Location = new System.Drawing.Point(4, 93);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(232, 143);
+            this.panel1.Size = new System.Drawing.Size(232, 172);
             // 
             // lblWait
             // 
@@ -140,10 +140,10 @@ namespace PockeTwit
             // 
             this.lnkContributors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkContributors.Location = new System.Drawing.Point(4, 96);
+            this.lnkContributors.Location = new System.Drawing.Point(5, 70);
             this.lnkContributors.Name = "lnkContributors";
             this.lnkContributors.Size = new System.Drawing.Size(232, 20);
-            this.lnkContributors.TabIndex = 12;
+            this.lnkContributors.TabIndex = 2;
             this.lnkContributors.Text = "Contributors: (How can you help?)";
             this.lnkContributors.Click += new System.EventHandler(this.lnkContributors_Click);
             // 

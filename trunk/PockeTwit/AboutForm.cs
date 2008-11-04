@@ -39,7 +39,7 @@ namespace PockeTwit
             {
                 lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev";
             }
-            panel1.Focus();
+            this.lnkContributors.Focus();
         }
 
         void ContributorChecker_ContributorsReady()
@@ -53,6 +53,7 @@ namespace PockeTwit
             {
                 panel1.Controls.Remove(lblWait);
                 int topOfLabel = 0;
+                int labelWidth = panel1.Width / 2;
                 foreach (Contributors.Contributor s in ContributorChecker.ContributorsList)
                 {
 
@@ -68,12 +69,14 @@ namespace PockeTwit
                         nameLabel.ForeColor = ClientSettings.FieldForeColor;
                     }
                     nameLabel.Top = topOfLabel;
+                    nameLabel.Width = labelWidth;
                     panel1.Controls.Add(nameLabel);
                     
                     Label typeLabel = new Label();
                     typeLabel.Text = s.Contribution;
                     typeLabel.Top = topOfLabel;
                     typeLabel.Left = nameLabel.Right;
+                    typeLabel.Width = labelWidth;
                     typeLabel.ForeColor = ClientSettings.FieldForeColor;
                     panel1.Controls.Add(typeLabel);
 
