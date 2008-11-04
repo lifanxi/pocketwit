@@ -13,6 +13,7 @@ I love to hear from the users and welcome all comments and critiques.  Please fe
 Some users have expressed an interest in making a token financial donationion to the project. Rather than simply accepting donations, I've set up a "Sponsor" system in the application.  Anyone who makes a PayPal donation may have their account listed in the Contributors section of the application.  Users of PockeTwit will see your sponsorship as an important contribution to the development of the application and will be able to easily contact/follow you if they like.
 
 You can apply for sponsorship by donating throught the Paypal button below. Then please send an email to pocketwitdev@gmail.com listing your twitter username if you would like to be listed in the program as a Sponsor.
+
 [https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=pocketwitdev%40gmail%2ecom&lc=US&item_name=PockeTwit&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif]
 == Code ==
 
