@@ -39,6 +39,7 @@ namespace PockeTwit
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
         private bool ReadyForNotifications = false;
+        public DateTime NextUpdate;
 
         public TimelineManagement()
         {
@@ -94,16 +95,21 @@ namespace PockeTwit
             if (ClientSettings.UpdateInterval > 0)
             {
                 timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+                NextUpdate = DateTime.Now.Add(new TimeSpan(0,0,0,0,ClientSettings.UpdateInterval));
+                System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
             }
         }
 
         void timerUpdate_Tick(object state)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdate));
+            NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
+            System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
         }
     
         private void BackgroundUpdate(object o)
         {
+            System.Diagnostics.Debug.WriteLine("Background update called at " + DateTime.Now.ToString());
             //if (NotificationHandler.NotifyOfFriends)
             //{
                 GetFriendsTimeLine(false);
@@ -133,6 +139,7 @@ namespace PockeTwit
                     FriendsUpdated(HoldNewFriends);
                 }
             }
+            System.Diagnostics.Debug.WriteLine("Background update complete");
             HoldNewFriends = 0;
             HoldNewMessages = 0;
             GC.Collect();

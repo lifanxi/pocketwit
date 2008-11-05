@@ -15,11 +15,18 @@ namespace FingerUI
         {
             get 
             {
-                if (string.IsNullOrEmpty(_SelectedItem))
+                lock (Items)
                 {
-                    return Items[0];
+                    if (Items.Count == 0)
+                    {
+                        return null;
+                    }
+                    if (string.IsNullOrEmpty(_SelectedItem))
+                    {
+                        return Items[0];
+                    }
+                    return _SelectedItem;
                 }
-                return _SelectedItem; 
             }
             set
             {
@@ -82,10 +89,25 @@ namespace FingerUI
             }
         }
 
-        public void Clear()
+        public void InsertMenuItem(int index, string Item)
         {
-            lock (Items) { Items.Clear(); }
+            lock (Items)
+            {
+                Items.Insert(index, Item);
+                SetMenuHeight();
+            }
         }
+
+        public void ResetMenu(IEnumerable<string> NewItems)
+        {
+            lock (Items)
+            {
+                Items.Clear();
+                Items.AddRange(NewItems);
+                SetMenuHeight();
+            }
+        }
+
         public void AddItems(IEnumerable<string> NewItems)
         {
             lock (Items)

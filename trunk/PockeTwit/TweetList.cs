@@ -298,12 +298,11 @@ namespace PockeTwit
         private void SetLeftMenu()
         {
             LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
-            statList.LeftMenu.Clear();
-            statList.LeftMenu.AddItems(LeftMenu);
             if (History.Count <= 1)
             {
-                statList.LeftMenu.RemoveItem("Back");
+                LeftMenu.Remove("Back");
             }
+            statList.LeftMenu.ResetMenu(LeftMenu);
         }
         private void UpdateRightMenu()
         {
@@ -339,16 +338,14 @@ namespace PockeTwit
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
             RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
-            statList.RightMenu.Clear();
-            statList.RightMenu.AddItems(RightMenu);
-            if (!t.FavoritesWork) { statList.RightMenu.RemoveItem("Make Favorite"); }
-            if (!t.DirectMessagesWork) { statList.RightMenu.RemoveItem("Direct @User"); }
+            if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
+            if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
             
             if (item == null || string.IsNullOrEmpty(item.Tweet.in_reply_to_status_id))
             {
-                statList.RightMenu.RemoveItem("Show Conversation");
+                RightMenu.Remove("Show Conversation");
             }
-            
+            statList.RightMenu.ResetMenu(RightMenu);
             SetLeftMenu();
         }
 
@@ -487,8 +484,7 @@ namespace PockeTwit
             Yedda.Twitter.Failures[t][Action]++;
             if (!LeftMenu.Contains("Errors"))
             {
-                LeftMenu.Insert(LeftMenu.Count - 1, "Errors");
-                statList.LeftMenu.Clear();
+                statList.LeftMenu.InsertMenuItem(LeftMenu.Count - 1, "Errors");
                 statList.Redraw();
             }
         }
@@ -833,8 +829,6 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(i);
-            statList.RightMenu.Clear();
-            statList.RightMenu.AddItems(RightMenu);
             statList.SetSelectedMenu("Friends TimeLine");
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
             statList.Redraw();
@@ -851,8 +845,6 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            statList.RightMenu.Clear();
-            statList.RightMenu.AddItems(RightMenu);
             statList.SetSelectedMenu("Messages");
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
             statList.Redraw();
@@ -1096,9 +1088,6 @@ namespace PockeTwit
         private void ShowSearchResults(string SearchString)
         {
             ChangeCursor(Cursors.WaitCursor);
-
-            statList.RightMenu.Clear();
-            statList.RightMenu.AddItems(RightMenu);
             statList.SetSelectedMenu("Search/Local");
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Search;
