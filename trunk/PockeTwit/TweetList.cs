@@ -17,6 +17,8 @@ namespace PockeTwit
             public string Argument;
             public Yedda.Twitter.ActionType Action;
             public Yedda.Twitter.Account Account;
+            public int SelectedItemIndex = -1;
+            public int itemsOffset = -1;
         }
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
@@ -814,6 +816,14 @@ namespace PockeTwit
                         SwitchToUserTimeLine(prev.Argument);
                         break;
                 }
+                if (prev.SelectedItemIndex >= 0)
+                {
+                    statList.SelectedItem = statList[prev.SelectedItemIndex];
+                }
+                if(prev.itemsOffset>=0)
+                {
+                    statList.YOffset = prev.itemsOffset;
+                }
             }
         }
 
@@ -850,6 +860,7 @@ namespace PockeTwit
 
         private void ShowUserTimeLine()
         {
+            UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
@@ -874,6 +885,7 @@ namespace PockeTwit
         }
         private void GetConversation(HistoryItem history)
         {
+            UpdateHistoryPosition();
             HistoryItem i = new HistoryItem();
             Library.status lastStatus;
             Yedda.Twitter Conn;
@@ -968,6 +980,14 @@ namespace PockeTwit
             CurrentlySelectedAccount = statItem.Tweet.Account;
             SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
             UpdateRightMenu();
+            UpdateHistoryPosition();
+        }
+
+        private void UpdateHistoryPosition()
+        {
+            HistoryItem i = History.Peek();
+            i.SelectedItemIndex = statList.SelectedIndex;
+            i.itemsOffset = statList.YOffset;
         }
 
         void statusList_SwitchWindowState(bool IsMaximized)
@@ -1012,8 +1032,7 @@ namespace PockeTwit
 
         private void SwitchToUserTimeLine(string TextClicked)
         {
-            
-            
+            UpdateHistoryPosition();
             ShowUserID = TextClicked.Replace("@", "");
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
@@ -1101,6 +1120,7 @@ namespace PockeTwit
 
         private void ShowSearchResults(string SearchString)
         {
+            UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
             statList.SetSelectedMenu("Search/Local");
             HistoryItem i = new HistoryItem();
