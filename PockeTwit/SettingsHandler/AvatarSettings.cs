@@ -75,13 +75,21 @@ namespace PockeTwit
 
         private static void ClearCache()
         {
-            foreach (string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
+            try
             {
-                System.IO.File.Delete(Avatar);
+                foreach (string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
+                {
+                    System.IO.File.Delete(Avatar);
+                }
+                foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+                {
+                    a.Buffer.Clear();
+                }
             }
-            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            catch
             {
-                a.Buffer.Clear();
+                MessageBox.Show("There was an error when clearing the cache. You may want to try again.", "PockeTwit");
+                return;
             }
             MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
