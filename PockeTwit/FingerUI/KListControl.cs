@@ -217,14 +217,23 @@ namespace FingerUI
         
         public Font SelectedFont { get; set; }
 
-        
+        public int SelectedIndex
+        {
+            get
+            {
+                return m_selectedIndex.Y;
+            }
+        }
         public IKListItem SelectedItem
         {
             get
             {
-                if (m_items.Count > 0)
+                lock (m_items)
                 {
-                    return (IKListItem)m_items[m_selectedIndex.Y];
+                    if (m_items.Count > 0)
+                    {
+                        return (IKListItem)m_items[m_selectedIndex.Y];
+                    }
                 }
                 return null;
             }

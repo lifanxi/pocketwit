@@ -140,11 +140,7 @@ namespace PockeTwit
             else
             {
                 int OldOffset = statList.YOffset;
-                int oldIndex = -1;
-                if (statList.SelectedItem != null)
-                {
-                    oldIndex = statList.SelectedItem.Index;
-                }
+                int oldIndex = statList.SelectedIndex;
                 statList.Clear();
                 
                 foreach (Library.status stat in mergedstatuses)
@@ -898,7 +894,14 @@ namespace PockeTwit
             {
                 i = history;
                 Conn = GetMatchingConnection(history.Account);
-                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(i.Argument), i.Account);
+                try
+                {
+                    lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(i.Argument), i.Account);
+                }
+                catch
+                {
+                    return;
+                }
             }
             ChangeCursor(Cursors.WaitCursor);
 
@@ -909,9 +912,20 @@ namespace PockeTwit
             while (!string.IsNullOrEmpty(lastStatus.in_reply_to_status_id))
             {
                 Conversation.Add(lastStatus);
-                lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), Conn.AccountInfo);
+                try
+                {
+                    lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), Conn.AccountInfo);
+                }
+                catch 
+                {
+                    lastStatus = null;
+                    break;
+                }
             }
-            Conversation.Add(lastStatus);
+            if (lastStatus != null)
+            {
+                Conversation.Add(lastStatus);
+            }
             statList.SwitchTolist("Conversation");
             statList.ClearVisible();
             AddStatusesToList(Conversation.ToArray());
