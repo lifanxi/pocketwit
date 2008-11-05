@@ -67,7 +67,15 @@ namespace FingerUI
                     ResetTexts();
                 }
                 m_bounds = value;
-                Rectangle textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), m_bounds.Height);
+                Rectangle textBounds;
+                if (ClientSettings.ShowAvatars)
+                {
+                    textBounds = new Rectangle(ClientSettings.SmallArtSize + ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin * 2)), m_bounds.Height);
+                }
+                else
+                {
+                    textBounds = new Rectangle(ClientSettings.Margin, 0, m_bounds.Width - (ClientSettings.Margin * 2), m_bounds.Height);
+                }
                 BreakUpTheText(_ParentGraphics, textBounds);
             }
         }
@@ -219,8 +227,15 @@ namespace FingerUI
             g.Clip = new Region(bounds);
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
-            
-            Rectangle textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin*2)), bounds.Height);
+            Rectangle textBounds;
+            if (ClientSettings.ShowAvatars)
+            {
+                textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin * 2)), bounds.Height);
+            }
+            else
+            {
+                textBounds = new Rectangle(bounds.X + ClientSettings.Margin, bounds.Y, bounds.Width - (ClientSettings.Margin * 2), bounds.Height);
+            }
             //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
         
             if (m_selected) 
@@ -272,57 +287,47 @@ namespace FingerUI
                 {
                     DrawReplyImage(g, ImageLocation);
                 }
-            }
-            else
-            {
-                using (Brush bBrush = new SolidBrush(ClientSettings.ForeColor))
+                if (m_highlighted)
                 {
-                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                    g.FillRectangle(bBrush, ImageRect);
+                    System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+                    ia.SetColorKey(PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0), PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0));
+                    g.DrawImage(PockeTwit.ImageBuffer.FavoriteImage,
+                        new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
+                }
+                if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
+                {
                     using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
                     {
-                        g.DrawString(this.Tweet.user.screen_name, TextFont, sBrush, ImageRect);
+
+                        Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                        Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                        using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                        {
+                            g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                        }
+                        g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right - 12, ImageRect.Top - 2, 10, 20));
                     }
                 }
-            }
-            if (m_highlighted)
-            {
-                System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
-                ia.SetColorKey(PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0), PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0));
-                g.DrawImage(PockeTwit.ImageBuffer.FavoriteImage, 
-                    new Rectangle(bounds.X+5, bounds.Y+5, 7, 7),0,0,7,7,GraphicsUnit.Pixel, ia);
+                else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+                {
+                    using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                    {
+                        Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                        Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                        using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                        {
+                            g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                        }
+                        g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
+                    }
+
+                }
             }
             
-            if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
-            {
-                using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
-                {
-                    
-                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                    Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
-
-                    using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
-                    {
-                        g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
-                    }
-                    g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right-12,ImageRect.Top-2, 10,20));
-                }
-            }
-            else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
-            {
-                using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
-                {
-                    Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                    Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
-
-                    using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
-                    {
-                        g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
-                    }
-                    g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
-                }
-
-            }
+            
+            
             
             textBounds.Offset(ClientSettings.Margin, 1);
             textBounds.Width = textBounds.Width - ClientSettings.Margin;
