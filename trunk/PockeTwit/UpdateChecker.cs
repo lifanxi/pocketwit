@@ -126,8 +126,6 @@ namespace PockeTwit
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Unable to check for upgrades.\r\nIf the problem persists let me know @PockeTwitdev", "Upgrade error.");
-
             }
         }
 
