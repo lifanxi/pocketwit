@@ -92,6 +92,7 @@ namespace FingerUI
             {
                 _Width = value;
                 Rendered = new Bitmap(_Height, _Width);
+                DrawMenu();
             }
         }
 
