@@ -330,7 +330,6 @@ namespace PockeTwit
                     statList.RightMenu.ReplaceItem("Stop Following", "Follow");
                 }
             }
-            statList.Redraw();
         }
 
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
