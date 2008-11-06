@@ -125,6 +125,10 @@ namespace FingerUI
         /// </summary>
         /// <param name="g">The graphics.</param>
         /// <param name="bounds">The bounds.</param>
+        public virtual void Render(Graphics g)
+        {
+            Render(g, this.Bounds);
+        }
         public virtual void Render(Graphics g, Rectangle bounds)
         {
             if (m_selected)

@@ -239,6 +239,7 @@ namespace FingerUI
             set
             {
                 m_items[m_selectedIndex].Selected = false;
+                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                 for(int i=0;i<m_items.Count;i++)
                 {
                     IKListItem item = m_items[i];
@@ -246,6 +247,7 @@ namespace FingerUI
                     {
                         item.Selected = true;
                         m_selectedIndex = i;
+                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                     }
                     else
                     {
@@ -263,8 +265,7 @@ namespace FingerUI
             }
         }
 
-        public string Warning { get; set; }
-
+        
         public int YOffset
         {
             get
@@ -484,6 +485,7 @@ namespace FingerUI
             }
             else
             {
+                FillBuffer();
                 this.Invalidate();
             }
         }
@@ -513,8 +515,12 @@ namespace FingerUI
             {
                 if (m_items != null && m_items.Count>0)
                 {
+                    m_items[m_selectedIndex].Selected = false;
+                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                     m_selectedIndex = 0;
                     m_items[0].Selected = true;
+                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                    FillBuffer();
                 }
             }
         }
@@ -603,7 +609,7 @@ namespace FingerUI
                         if (m_selectedIndex > 0)
                         {
                             UnselectCurrentItem();
-                            m_selectedIndex++;
+                            m_selectedIndex--;
                             SelectAndJump();
                         }
                     }
@@ -632,7 +638,7 @@ namespace FingerUI
                         if (m_selectedIndex < m_items.Count - 1)
                         {
                             UnselectCurrentItem();
-                            m_selectedIndex--;
+                            m_selectedIndex++;
                             SelectAndJump();
                         }
                     }
@@ -836,98 +842,67 @@ namespace FingerUI
             HasMoved = false;
         }
 
+        private void FillBuffer()
+        {
+            lock (m_items)
+            {
+                for(int i=0;i<m_items.Count;i++)
+                {
+                    IKListItem item = m_items[i];
+                    Rectangle itemRect = item.Bounds;
+                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                    {
+                        m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
+                        m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
+                        m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
+                    }
+                    item.Render(m_backBuffer, itemRect);
+                }
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            OnScreenItems.Clear();
-            if (m_backBuffer != null)
-            {
-                m_backBuffer.Clear(ClientSettings.BackColor);
-                
-                Point startIndex = FindIndex(Bounds.Left, Bounds.Top);
-
-                ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
-                bool moreY = yEnumerator.MoveNext();
-                while (moreY && yEnumerator.Current.Key < startIndex.Y)
+            using(Bitmap flickerBuffer = new Bitmap(this.Width, this.Height)){
+                using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
-                    moreY = yEnumerator.MoveNext();
-                }
-
-                
-                while (moreY)
-                {
-                    IKListItem item = yEnumerator.Current.Value;
-                    if (item != null)
+                    OnScreenItems.Clear();
+                    flickerGraphics.Clear(ClientSettings.BackColor);
+                    flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
+                    if (m_offset.X > 0)
                     {
-                        Rectangle itemRect = item.Bounds;
-                        itemRect.Offset(-m_offset.X, -m_offset.Y);
-                        if (Bounds.IntersectsWith(itemRect))
+                        DrawMenu(flickerGraphics, SideShown.Right);
+                    }
+                    else if (m_offset.X < 0)
+                    {
+                        DrawMenu(flickerGraphics, SideShown.Left);
+                    }
+
+                    DrawPointer(flickerGraphics);
+                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
+                    {
+                        if (m_offset.X > 15)
                         {
-                            //Draw borders
-                            OnScreenItems.Add(item);
-                            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                            if (IsMaximized)
                             {
-                                m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
-                                m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
-                                m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
+                                DrawMaxWindowSwitcher(flickerGraphics);
                             }
-                            item.Render(m_backBuffer, itemRect);
-                        }
-                        else
-                        {
-                            break;
+                            else
+                            {
+                                DrawStandardWindowSwitcher(flickerGraphics);
+                            }
                         }
                     }
 
-                    moreY = yEnumerator.MoveNext();
-                }
 
-                if (m_offset.X > 0)
-                {
-                    DrawMenu(m_backBuffer, SideShown.Right);
-                }
-                else if (m_offset.X < 0)
-                {
-                    DrawMenu(m_backBuffer, SideShown.Left);
-                }
 
-                DrawPointer(m_backBuffer);
-                if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional &&  this.Width < this.Height)
-                {
-                    if (m_offset.X > 15)
+
+                    if (ClickablesControl.Visible)
                     {
-                        if (IsMaximized)
-                        {
-                            DrawMaxWindowSwitcher(m_backBuffer);
-                        }
-                        else
-                        {
-                            DrawStandardWindowSwitcher(m_backBuffer);
-                        }
+                        ClickablesControl.Render(flickerGraphics);
                     }
+                    e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
-                
-
-                if (!string.IsNullOrEmpty(Warning))
-                {
-                    using(Brush redBrush = new SolidBrush(ClientSettings.ErrorColor))
-                    {
-                        using (Font WarningFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold))
-                        {
-                            m_backBuffer.DrawString(Warning, WarningFont, redBrush, 0, 0);
-                        }
-                    }
-                }
-
-                if (ClickablesControl.Visible)
-                {
-                    ClickablesControl.Render(m_backBuffer);
-                }
-
-                e.Graphics.DrawImage(m_backBufferBitmap, 0, 0);
-            }
-            else
-            {
-                base.OnPaint(e);
             }
         }
 
@@ -1060,7 +1035,7 @@ namespace FingerUI
         {
             CleanupBackBuffer();
 
-            m_backBufferBitmap = new Bitmap(Bounds.Width, Bounds.Height);
+            m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight*ClientSettings.MaxTweets);
             m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
             foreach (IKListItem item in m_items.Values)
             {
@@ -1293,6 +1268,7 @@ namespace FingerUI
                 if (m_items.Count > 0)
                 {
                     m_items[m_selectedIndex].Selected = false;
+                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                 }
                 m_selectedIndex = 0;
                 Capture = false;
@@ -1303,7 +1279,6 @@ namespace FingerUI
 
                 SetSelectedIndexToZero();
                 Invalidate();
-                
             }
         }
 
@@ -1319,8 +1294,10 @@ namespace FingerUI
 
         private void SelectAndJump()
         {
+            m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             IKListItem item = m_items[m_selectedIndex];
             item.Selected = true;
+            m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             if (SelectedItemChanged != null)
             {
                 SelectedItemChanged(this, new EventArgs());
@@ -1361,9 +1338,10 @@ namespace FingerUI
                     if (m_items.ContainsKey(selectedIndex.Y))
                     {
                         m_items[m_selectedIndex].Selected = false;
+                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                         m_selectedIndex = selectedIndex.Y;
                         m_items[m_selectedIndex].Selected = true;
-
+                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
                         if (SelectedItemChanged != null)
                         {
                             SelectedItemChanged(this, new EventArgs());
@@ -1404,6 +1382,7 @@ namespace FingerUI
             {
                 IKListItem item = m_items[m_selectedIndex];
                 item.Selected = false;
+                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             }
         }
 

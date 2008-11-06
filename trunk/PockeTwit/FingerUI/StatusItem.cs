@@ -222,6 +222,10 @@ namespace FingerUI
         /// </summary>
         /// <param name="g">The graphics.</param>
         /// <param name="bounds">The bounds.</param>
+        public virtual void Render(Graphics g)
+        {
+            Render(g, this.Bounds);
+        }
         public virtual void Render(Graphics g, Rectangle bounds)
         {
             g.Clip = new Region(bounds);
@@ -236,26 +240,21 @@ namespace FingerUI
             {
                 textBounds = new Rectangle(bounds.X + ClientSettings.Margin, bounds.Y, bounds.Width - (ClientSettings.Margin * 2), bounds.Height);
             }
-            //Image AlbumArt = mpdclient.ArtBuffer.GetArt(Album, Artist, mpdclient.AsyncArtGrabber.ArtSize.Small);
-        
+            SolidBrush FillColor = new SolidBrush(ClientSettings.BackColor);
+
             if (m_selected) 
             {
-                SolidBrush FillColor;
-
                 FillColor = new SolidBrush(ClientSettings.SelectedBackColor);
                 TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
-            
-                //g.DrawRectangle(new Pen(Color.Black), bounds);
-                //Rectangle InnerBounds = new Rectangle(textBounds.Left, textBounds.Top, textBounds.Width+5, textBounds.Height);
-                Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width , bounds.Height);
-                InnerBounds.Offset(1, 1);
-                InnerBounds.Width--; InnerBounds.Height--;
-
-                g.FillRectangle(FillColor, InnerBounds);
-
-                FillColor.Dispose();
             }
+            Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+            InnerBounds.Offset(1, 1);
+            InnerBounds.Width--; InnerBounds.Height--;
+
+            g.FillRectangle(FillColor, InnerBounds);
+
+            FillColor.Dispose();
 
             Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
