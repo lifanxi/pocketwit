@@ -1022,7 +1022,7 @@ namespace PockeTwit
             }
             else if (TextClicked.StartsWith("#"))
             {
-                ShowSearchResults(TextClicked);
+                ShowSearchResults("q=" + System.Web.HttpUtility.UrlEncode(TextClicked));
             }
             else if (TextClicked.StartsWith("@"))
             {
