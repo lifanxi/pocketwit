@@ -839,7 +839,6 @@ namespace PockeTwit
             statList.Redraw();
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
-            //GetTimeLineAsync();
         }
 
         private void ShowMessagesTimeLine()
