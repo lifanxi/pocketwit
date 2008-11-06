@@ -58,6 +58,7 @@ namespace FingerUI
         private bool HasMoved = false;
         private bool InFocus = false;
         Graphics m_backBuffer;
+        Bitmap flickerBuffer;
         // Background drawing
         Bitmap m_backBufferBitmap;
         int m_itemHeight = 40;
@@ -863,46 +864,44 @@ namespace FingerUI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            using(Bitmap flickerBuffer = new Bitmap(this.Width, this.Height)){
-                using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
+            using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
+            {
+                OnScreenItems.Clear();
+                flickerGraphics.Clear(ClientSettings.BackColor);
+                flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
+                if (m_offset.X > 0)
                 {
-                    OnScreenItems.Clear();
-                    flickerGraphics.Clear(ClientSettings.BackColor);
-                    flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
-                    if (m_offset.X > 0)
-                    {
-                        DrawMenu(flickerGraphics, SideShown.Right);
-                    }
-                    else if (m_offset.X < 0)
-                    {
-                        DrawMenu(flickerGraphics, SideShown.Left);
-                    }
+                    DrawMenu(flickerGraphics, SideShown.Right);
+                }
+                else if (m_offset.X < 0)
+                {
+                    DrawMenu(flickerGraphics, SideShown.Left);
+                }
 
-                    DrawPointer(flickerGraphics);
-                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
+                DrawPointer(flickerGraphics);
+                if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
+                {
+                    if (m_offset.X > 15)
                     {
-                        if (m_offset.X > 15)
+                        if (IsMaximized)
                         {
-                            if (IsMaximized)
-                            {
-                                DrawMaxWindowSwitcher(flickerGraphics);
-                            }
-                            else
-                            {
-                                DrawStandardWindowSwitcher(flickerGraphics);
-                            }
+                            DrawMaxWindowSwitcher(flickerGraphics);
+                        }
+                        else
+                        {
+                            DrawStandardWindowSwitcher(flickerGraphics);
                         }
                     }
-
-
-
-
-                    if (ClickablesControl.Visible)
-                    {
-                        ClickablesControl.Render(flickerGraphics);
-                    }
-                    e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
+
+
+
+
+                if (ClickablesControl.Visible)
+                {
+                    ClickablesControl.Render(flickerGraphics);
+                }
+                e.Graphics.DrawImage(flickerBuffer, 0, 0);
             }
         }
 
@@ -921,6 +920,7 @@ namespace FingerUI
             ClickablesControl.Height = this.Height - 40;
 
             this.ItemWidth = this.Width;
+            
             foreach (IKListItem item in m_items.Values)
             {
                 item.Bounds = ItemBounds(0, item.Index);
@@ -970,6 +970,11 @@ namespace FingerUI
                 m_backBufferBitmap = null;
                 m_backBuffer.Dispose();
                 m_backBuffer = null;
+            }
+            if (flickerBuffer != null)
+            {
+                flickerBuffer.Dispose();
+                flickerBuffer = null;
             }
         }
 
@@ -1034,7 +1039,7 @@ namespace FingerUI
         private void CreateBackBuffer()
         {
             CleanupBackBuffer();
-
+            flickerBuffer = new Bitmap(this.Width, this.Height);
             m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight*ClientSettings.MaxTweets);
             m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
             foreach (IKListItem item in m_items.Values)
