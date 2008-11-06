@@ -40,17 +40,23 @@ public static class ClientSettings
     {
         get
         {
-            foreach (Yedda.Twitter.Account a in AccountsList)
+            lock (AccountsList)
             {
-                if (a.IsDefault) { return a; }
+                foreach (Yedda.Twitter.Account a in AccountsList)
+                {
+                    if (a.IsDefault) { return a; }
+                }
+                return AccountsList[0];
             }
-            return AccountsList[0];
         }
         set
         {
-            foreach (Yedda.Twitter.Account a in AccountsList)
+            lock (AccountsList)
             {
-                a.IsDefault = a == value;
+                foreach (Yedda.Twitter.Account a in AccountsList)
+                {
+                    a.IsDefault = a == value;
+                }
             }
         }
     }
