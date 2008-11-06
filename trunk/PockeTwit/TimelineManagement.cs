@@ -38,7 +38,6 @@ namespace PockeTwit
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
-        private bool ReadyForNotifications = false;
         public DateTime NextUpdate;
 
         public TimelineManagement()

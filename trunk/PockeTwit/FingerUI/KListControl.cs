@@ -70,9 +70,8 @@ namespace FingerUI
         Point m_mousePrev = new Point(-1, -1);
         Point m_offset = new Point();
         bool m_scrollBarMove = false;
-        
-        Point m_selectedIndex = new Point(0,0);
-        IKListItem m_selectedItem = null;
+
+        int m_selectedIndex = 0;
         Timer m_timer = new Timer();
         bool m_updating = false;
         private Velocity m_velocity = new Velocity();
@@ -221,7 +220,7 @@ namespace FingerUI
         {
             get
             {
-                return m_selectedIndex.Y;
+                return m_selectedIndex;
             }
         }
         public IKListItem SelectedItem
@@ -232,25 +231,21 @@ namespace FingerUI
                 {
                     if (m_items.Count > 0)
                     {
-                        return (IKListItem)m_items[m_selectedIndex.Y];
+                        return (IKListItem)m_items[m_selectedIndex];
                     }
                 }
                 return null;
             }
             set
             {
-                if (m_selectedItem != null)
-                {
-                    m_selectedItem.Selected = false;
-                }
+                m_items[m_selectedIndex].Selected = false;
                 for(int i=0;i<m_items.Count;i++)
                 {
                     IKListItem item = m_items[i];
                     if (item == value)
                     {
                         item.Selected = true;
-                        m_selectedItem = item;
-                        m_selectedIndex.Y = i;
+                        m_selectedIndex = i;
                     }
                     else
                     {
@@ -518,8 +513,7 @@ namespace FingerUI
             {
                 if (m_items != null && m_items.Count>0)
                 {
-                    m_selectedIndex.Y = 0;
-                    m_selectedItem = m_items[0];
+                    m_selectedIndex = 0;
                     m_items[0].Selected = true;
                 }
             }
@@ -606,11 +600,10 @@ namespace FingerUI
                 {
                     try
                     {
-                        if (m_selectedIndex.Y > 0)
+                        if (m_selectedIndex > 0)
                         {
                             UnselectCurrentItem();
-                            m_selectedIndex.Y = m_selectedIndex.Y - 1;
-                            m_selectedItem = m_items[m_selectedIndex.Y];
+                            m_selectedIndex++;
                             SelectAndJump();
                         }
                     }
@@ -636,11 +629,10 @@ namespace FingerUI
                 {
                     try
                     {
-                        if (m_selectedIndex.Y < m_items.Count - 1)
+                        if (m_selectedIndex < m_items.Count - 1)
                         {
                             UnselectCurrentItem();
-                            m_selectedIndex.Y = m_selectedIndex.Y + 1;
-                            m_selectedItem = m_items[m_selectedIndex.Y];
+                            m_selectedIndex--;
                             SelectAndJump();
                         }
                     }
@@ -1130,83 +1122,7 @@ namespace FingerUI
                 MenuMap = RightMenu.Rendered;
                 m_backBuffer.DrawImage(MenuMap, this.Width - m_offset.X, 0);
             }
-            /*
-            SideMenu MenuToDraw;
-            int LeftOfItem;
-            int CurrentItemWidth;
-            int LeftPos = 0;
-            if (Side == SideShown.Left)
-            {
-                MenuToDraw = LeftMenu;
-                LeftOfItem = ((0 - this.Width) + Math.Abs(m_offset.X)) + 50;
-                CurrentItemWidth = ItemWidth - 50;
-            }
-            else
-            {
-                MenuToDraw = RightMenu;
-                LeftOfItem = this.Width - Math.Abs(m_offset.X);
-                CurrentItemWidth = ItemWidth;
-                LeftPos = LeftOfItem + 6;
-            }
-            int CurrentTop = MenuToDraw.TopOfMenu;
-            foreach (string Item in MenuToDraw.GetItems())
-            {
-                if (Side == SideShown.Left)
-                {
-                    int TextWidth = (int)m_backBuffer.MeasureString(Item, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-                    LeftPos = (LeftOfItem + CurrentItemWidth) - TextWidth;
-                }
-                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                {
-                    
-                    Rectangle menuRect = new Rectangle(LeftOfItem + 1, CurrentTop, CurrentItemWidth, MenuToDraw.ItemHeight);
-                    Color BackColor;
-                    Color MenuTextColor;
-                    
-                    if (Item==MenuToDraw.SelectedItem)
-                    {
-                        BackColor = ClientSettings.SelectedBackColor;
-                        MenuTextColor = ClientSettings.SelectedForeColor;
-                    }
-                    else
-                    {
-                        BackColor = ClientSettings.BackColor;
-                        MenuTextColor = ClientSettings.ForeColor;
-                        
-                        
-                    }
-                    using (Brush sBrush = new SolidBrush(BackColor))
-                    {
-                        m_backBuffer.FillRectangle(sBrush, menuRect);
-                    }
-
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                    using (Brush sBrush = new SolidBrush(MenuTextColor))
-                    {
-                        StringFormat sFormat = new StringFormat();
-                        sFormat.LineAlignment = StringAlignment.Center;
-                        int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                        StatusItem SelectedStatus = (StatusItem)SelectedItem;
-                        string DisplayItem = Item;
-                        if (SelectedStatus != null)
-                        {
-                            DisplayItem = Item.Replace("@User", "@" + SelectedStatus.Tweet.user.screen_name);
-                        }
-                        m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
-                    }
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                    if (Side == SideShown.Right)
-                    {
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                    }
-                    else
-                    {
-                        m_backBuffer.DrawLine(whitePen, menuRect.Right, 0, menuRect.Right, this.Height);
-                    }
-                    CurrentTop = CurrentTop + MenuToDraw.ItemHeight;
-                }
-            }
-             */
+            
         }
 
         private void DrawMaxWindowSwitcher(Graphics g)
@@ -1374,12 +1290,11 @@ namespace FingerUI
             if (!m_updating)
             {
                 m_timer.Enabled = false;
-                if (m_selectedItem != null)
+                if (m_items.Count > 0)
                 {
-                    m_selectedItem.Selected = false;
-                    m_selectedItem = null;
+                    m_items[m_selectedIndex].Selected = false;
                 }
-                m_selectedIndex = new Point(0, 0);
+                m_selectedIndex = 0;
                 Capture = false;
                 m_velocity.X = 0;
                 m_velocity.Y = 0;
@@ -1397,16 +1312,14 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("RightMenuSet called");
             if (CurrentlyViewing != SideShown.Left)
             {
-                StatusItem s = (StatusItem)m_selectedItem;
+                StatusItem s = (StatusItem)m_items[m_selectedIndex];
                 RightMenu.UserName = s.Tweet.user.screen_name;
             }
         }
 
         private void SelectAndJump()
         {
-            m_selectedItem.Selected = false;
-            IKListItem item;
-            item = m_items[m_selectedIndex.Y];
+            IKListItem item = m_items[m_selectedIndex];
             item.Selected = true;
             if (SelectedItemChanged != null)
             {
@@ -1443,17 +1356,13 @@ namespace FingerUI
             else
             {
                 Point selectedIndex = FindIndex(e.X, e.Y);
-                if (selectedIndex != m_selectedIndex)
+                if (selectedIndex .Y!= m_selectedIndex)
                 {
                     if (m_items.ContainsKey(selectedIndex.Y))
                     {
-                        if (m_selectedItem != null)
-                        {
-                            m_selectedItem.Selected = false;
-                        }
-                        m_selectedIndex = selectedIndex;
-                        m_selectedItem = m_items[selectedIndex.Y];
-                        m_selectedItem.Selected = true;
+                        m_items[m_selectedIndex].Selected = false;
+                        m_selectedIndex = selectedIndex.Y;
+                        m_items[m_selectedIndex].Selected = true;
 
                         if (SelectedItemChanged != null)
                         {
@@ -1479,7 +1388,7 @@ namespace FingerUI
 
         private void ShowClickablesControl()
         {
-            StatusItem s = (StatusItem)m_selectedItem;
+            StatusItem s = (StatusItem)m_items[m_selectedIndex];
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
             if (s.Tweet.Clipped)
@@ -1491,9 +1400,9 @@ namespace FingerUI
 
         private void UnselectCurrentItem()
         {
-            if (m_selectedIndex.Y >= 0)
+            if (m_selectedIndex >= 0)
             {
-                IKListItem item = m_items[m_selectedIndex.Y];
+                IKListItem item = m_items[m_selectedIndex];
                 item.Selected = false;
             }
         }
