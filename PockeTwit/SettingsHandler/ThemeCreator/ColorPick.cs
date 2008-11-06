@@ -23,6 +23,7 @@ namespace PockeTwit
             filename = ClientSettings.AppPath + "\\Themes\\" + Theme + "\\" + Theme + ".txt";
             ThemeName = Theme;
             InitializeComponent();
+            if (ClientSettings.IsMaximized){this.WindowState = FormWindowState.Maximized;}
             PockeTwit.Themes.FormColors.SetColors(this);
             LoadColorFile();
         }

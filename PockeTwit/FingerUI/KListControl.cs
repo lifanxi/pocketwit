@@ -79,8 +79,8 @@ namespace FingerUI
         
         List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
 
-        public SideMenu LeftMenu = new SideMenu();
-        public SideMenu RightMenu = new SideMenu();
+        public SideMenu LeftMenu = new SideMenu(SideShown.Left);
+        public SideMenu RightMenu = new SideMenu(SideShown.Right);
 		#endregion Fields 
 
 		#region Enums (2) 
@@ -89,7 +89,7 @@ namespace FingerUI
         {
             Left, Right
         }
-        private enum SideShown
+        public enum SideShown
         {
             Left,
             Middle,
@@ -661,6 +661,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
+                    SetRightMenuUser();
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
@@ -729,6 +730,7 @@ namespace FingerUI
                 Point currPos = new Point(e.X, e.Y);
 
                 int distanceX = m_mousePrev.X - currPos.X;
+                if (distanceX > 3 & m_offset.X == 0) { SetRightMenuUser(); }
                 
                 int distanceY = m_mousePrev.Y - currPos.Y;
                 //if we're primarily moving vertically, ignore horizontal movement.
@@ -958,7 +960,10 @@ namespace FingerUI
             }
             CreateBackBuffer();
             LeftMenu.Height = this.Height;
+            LeftMenu.Width = this.Width;
+
             RightMenu.Height = this.Height;
+            RightMenu.Width = this.Width;
             Reset();
         }
 
@@ -1114,6 +1119,18 @@ namespace FingerUI
 
         private void DrawMenu(Graphics m_backBuffer, SideShown Side)
         {
+            Bitmap MenuMap;
+            if (Side == SideShown.Left)
+            {
+                MenuMap = LeftMenu.Rendered;
+                m_backBuffer.DrawImage(MenuMap, (0 - this.Width) + Math.Abs(m_offset.X), 0);
+            }
+            else if (Side == SideShown.Right)
+            {
+                MenuMap = RightMenu.Rendered;
+                m_backBuffer.DrawImage(MenuMap, this.Width - m_offset.X, 0);
+            }
+            /*
             SideMenu MenuToDraw;
             int LeftOfItem;
             int CurrentItemWidth;
@@ -1189,6 +1206,7 @@ namespace FingerUI
                     CurrentTop = CurrentTop + MenuToDraw.ItemHeight;
                 }
             }
+             */
         }
 
         private void DrawMaxWindowSwitcher(Graphics g)
@@ -1374,6 +1392,16 @@ namespace FingerUI
             }
         }
 
+        private void SetRightMenuUser()
+        {
+            System.Diagnostics.Debug.WriteLine("RightMenuSet called");
+            if (CurrentlyViewing != SideShown.Left)
+            {
+                StatusItem s = (StatusItem)m_selectedItem;
+                RightMenu.UserName = s.Tweet.user.screen_name;
+            }
+        }
+
         private void SelectAndJump()
         {
             m_selectedItem.Selected = false;
@@ -1430,6 +1458,10 @@ namespace FingerUI
                         if (SelectedItemChanged != null)
                         {
                             SelectedItemChanged(this, new EventArgs());
+                        }
+                        if (CurrentlyViewing == SideShown.Right)
+                        {
+                            SetRightMenuUser();
                         }
                     }
                 }
