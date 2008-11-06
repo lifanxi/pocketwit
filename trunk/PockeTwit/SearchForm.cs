@@ -113,7 +113,7 @@ namespace PockeTwit
             if(!string.IsNullOrEmpty(txtSearch.Text))
             {
                 b.Append("q=");
-                b.Append(txtSearch.Text);
+                b.Append(System.Web.HttpUtility.UrlEncode(txtSearch.Text));
                 if(!string.IsNullOrEmpty(cmbDistance.Text))
                 {
                     b.Append("&");
