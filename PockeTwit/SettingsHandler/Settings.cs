@@ -330,6 +330,7 @@ public static class ClientSettings
 
     private static void GetTextSizes()
     {
+        
         using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(100, 100))
         {
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))

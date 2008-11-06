@@ -70,6 +70,7 @@ namespace PockeTwit
                     }
                     nameLabel.Top = topOfLabel;
                     nameLabel.Width = labelWidth;
+                    nameLabel.Height = ClientSettings.TextSize+5;
                     panel1.Controls.Add(nameLabel);
                     
                     Label typeLabel = new Label();
@@ -77,17 +78,19 @@ namespace PockeTwit
                     typeLabel.Top = topOfLabel;
                     typeLabel.Left = nameLabel.Right;
                     typeLabel.Width = labelWidth;
+                    typeLabel.Height = ClientSettings.TextSize + 5;
                     typeLabel.ForeColor = ClientSettings.FieldForeColor;
                     panel1.Controls.Add(typeLabel);
 
                     
 
-                    topOfLabel = topOfLabel + nameLabel.Height;
+                    topOfLabel = nameLabel.Bottom + 5;
                 }
                 LinkLabel YouToo = new LinkLabel();
                 YouToo.Text = "Your name can be here!";
                 YouToo.ForeColor = ClientSettings.LinkColor;
                 YouToo.Width = panel1.Width - 2;
+                YouToo.Height = ClientSettings.TextSize+5;
                 YouToo.Click += new EventHandler(YouToo_Click);
                 YouToo.Top = topOfLabel;
                 panel1.Controls.Add(YouToo);
