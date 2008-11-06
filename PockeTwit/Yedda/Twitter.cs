@@ -373,7 +373,7 @@ namespace Yedda
         protected const string TwitterBaseUrlFormat = "{3}/{0}/{1}.{2}";
         protected const string TwitterSimpleURLFormat = "{1}/{0}.xml";
         protected const string TwitterFavoritesUrlFormat = "{3}/{0}/{1}/{2}.xml";
-        protected const string TwitterSearchUrlFormat = "http://search.twitter.com/search.atom?q={0}";
+        protected const string TwitterSearchUrlFormat = "http://search.twitter.com/search.atom?{0}";
 
         public string GetProfileURL(string User)
         {
@@ -1201,11 +1201,7 @@ namespace Yedda
         #region Search
         public string SearchFor(string textToSearch)
         {
-            if (textToSearch.StartsWith("q="))
-            {
-                textToSearch = textToSearch.Remove(0, 2);
-            }
-            string url = string.Format(TwitterSearchUrlFormat, HttpUtility.UrlEncode(textToSearch), AccountInfo.ServerURL.URL);
+            string url = string.Format(TwitterSearchUrlFormat, textToSearch);
             return ExecuteGetCommand(url);
         }
         #endregion

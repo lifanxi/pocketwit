@@ -63,10 +63,7 @@ namespace PockeTwit
 
         public void Clear()
         {
-            lock (ImageDictionary)
-            {
-                ImageDictionary.Clear();
-            }
+            ImageDictionary.Clear();
         }
 
         public Image GetArt(string User)
@@ -99,51 +96,45 @@ namespace PockeTwit
             {
                 return GetArt(User);
             }
-            lock (ImageDictionary)
+            if (!ImageDictionary.ContainsKey(User))
             {
-                if (!ImageDictionary.ContainsKey(User))
+                if (!LoadArt(User, URL))
                 {
-                    if (!LoadArt(User, URL))
+                    if (string.IsNullOrEmpty(URL))
                     {
-                        if (string.IsNullOrEmpty(URL))
+                        System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
+                        Library.User newUser = null;
+                        foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
                         {
-                            System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
-                            Library.User newUser = null;
-                            foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
-                            {
-                                newUser = Library.User.FromId(User, Account);
-                                if (newUser != null) { break; }
-                            }
-                            if (newUser == null) { return UnknownArt; }
-                            URL = newUser.profile_image_url;
-                            LoadArt(User, URL);
+                            newUser = Library.User.FromId(User, Account);
+                            if (newUser != null) { break; }
                         }
-                        return UnknownArt;
+                        if (newUser == null) { return UnknownArt; }
+                        URL = newUser.profile_image_url;
+                        LoadArt(User, URL);
                     }
+                    return UnknownArt;
                 }
-
-                ImageDictionary[User].LastRequested = DateTime.Now;
-                return ImageDictionary[User].Image;
             }
+
+            ImageDictionary[User].LastRequested = DateTime.Now;
+            return ImageDictionary[User].Image;
         }
 
         public bool HasArt(string User)
         {
             User = User.ToLower();
-            lock (ImageDictionary)
+            if (ImageDictionary.ContainsKey(User))
             {
-                if (ImageDictionary.ContainsKey(User))
-                {
-                    return true;
-                }
-                string ArtPath = Grabber.DetermineCacheFileName(User, "");
-                if (System.IO.File.Exists(ArtPath))
-                {
-                    LoadArt(User);
-                    return true;
-                }
-                return false;
+                return true;
             }
+            string ArtPath = Grabber.DetermineCacheFileName(User,"");
+            if (System.IO.File.Exists(ArtPath))
+            {
+                LoadArt(User);
+                return true;
+            }
+            return false;
         }
 
         public void Trim()
@@ -173,41 +164,38 @@ namespace PockeTwit
             User = User.ToLower();
             if (System.IO.File.Exists(Filename))
             {
-                lock (ImageDictionary)
+                try
                 {
-                    try
-                    {
-                        Bitmap NewArt = new Bitmap(Filename);
-                        ImageInfo newInfo = new ImageInfo();
-                        newInfo.Image = NewArt;
-                        newInfo.LastRequested = DateTime.Now;
-                        newInfo.ID = ImageDictionary[User].ID;
-                        ImageDictionary[User] = newInfo;
+                    Bitmap NewArt = new Bitmap(Filename);
+                    ImageInfo newInfo = new ImageInfo();
+                    newInfo.Image = NewArt;
+                    newInfo.LastRequested = DateTime.Now;
+                    newInfo.ID = ImageDictionary[User].ID;
+                    ImageDictionary[User] = newInfo;
 
-                        System.IO.FileStream fs = new System.IO.FileStream(Filename + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
-                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
-                        {
-                            sw.Write(newInfo.ID);
-                            sw.Flush();
-                            sw.Close();
-                        }
-
-                        //WHY IS NOTHING CATCHING THESE?
-                        if (Updated != null)
-                        {
-                            Updated(User);
-                        }
-                        else
-                        {
-                            GlobalEventHandler.CallArtWasUpdated(User);
-                        }
-                    }
-                    catch
+                    System.IO.FileStream fs = new System.IO.FileStream(Filename + ".ID", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
                     {
-                        //Try again next time.
-                        System.IO.File.Delete(Filename);
-                        System.IO.File.Delete(Filename + ".ID");
+                        sw.Write(newInfo.ID);
+                        sw.Flush();
+                        sw.Close();
                     }
+
+                    //WHY IS NOTHING CATCHING THESE?
+                    if (Updated != null)
+                    {
+                        Updated(User);
+                    }
+                    else
+                    {
+                        GlobalEventHandler.CallArtWasUpdated(User);
+                    }
+                }
+                catch
+                {
+                    //Try again next time.
+                    System.IO.File.Delete(Filename);
+                    System.IO.File.Delete(Filename + ".ID");
                 }
             }
         }
@@ -229,10 +217,7 @@ namespace PockeTwit
             ImageInfo newInfo = new ImageInfo();
             newInfo.LastRequested = DateTime.Now;
             newInfo.Image = NewArt;
-            lock (ImageDictionary)
-            {
-                ImageDictionary.Add(User, newInfo);
-            }
+            ImageDictionary.Add(User, newInfo);
             return true;
         }
 
@@ -288,21 +273,17 @@ namespace PockeTwit
                     ID = URL;
 
                 }
-                lock (ImageDictionary)
+                if (ImageDictionary.ContainsKey(User))
                 {
-                    if (ImageDictionary.ContainsKey(User))
-                    {
-                        ImageDictionary.Remove(User);
-                    }
-
-                    ImageInfo newInfo = new ImageInfo();
-                    newInfo.LastRequested = DateTime.Now;
-                    newInfo.Image = NewArt;
-                    newInfo.ID = ID;
-                    ImageDictionary.Add(User, newInfo);
-                    return bFound;
+                    ImageDictionary.Remove(User);
                 }
-                
+
+                ImageInfo newInfo = new ImageInfo();
+                newInfo.LastRequested = DateTime.Now;
+                newInfo.Image = NewArt;
+                newInfo.ID = ID;
+                ImageDictionary.Add(User, newInfo);
+                return bFound;
             }
             catch
             {

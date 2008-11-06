@@ -220,57 +220,59 @@ namespace PockeTwit
         {
             GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
-            foreach (Yedda.Twitter t in TwitterConnections)
-            {
-                if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
+            lock(TwitterConnections){
+                foreach (Yedda.Twitter t in TwitterConnections)
                 {
-                    string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
-                    if (!string.IsNullOrEmpty(response))
+                    if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
                     {
-                        try
-                        {
-                            Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
-                            TempLine.AddRange(NewStats);
-                            if (NewStats.Length > 0)
-                            {
-                                LastReplyID[t.AccountInfo] = NewStats[0].id;
-                            }
-                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                        }
-                        catch
-                        {
-                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                        }
-                    }
-                    else
-                    {
-                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                    }
-                    ////I HATE DIRECT MESSAGES
-                    
-                    if (t.DirectMessagesWork)
-                    {
-                        response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                        string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                         if (!string.IsNullOrEmpty(response))
                         {
                             try
                             {
-                                Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
                                 TempLine.AddRange(NewStats);
                                 if (NewStats.Length > 0)
                                 {
-                                    LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                    LastReplyID[t.AccountInfo] = NewStats[0].id;
                                 }
-                                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                             }
                             catch
                             {
-                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                             }
                         }
                         else
                         {
-                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                        }
+                        ////I HATE DIRECT MESSAGES
+
+                        if (t.DirectMessagesWork)
+                        {
+                            response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                            if (!string.IsNullOrEmpty(response))
+                            {
+                                try
+                                {
+                                    Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                    TempLine.AddRange(NewStats);
+                                    if (NewStats.Length > 0)
+                                    {
+                                        LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                    }
+                                    ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                }
+                                catch
+                                {
+                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                }
+                            }
+                            else
+                            {
+                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                            }
                         }
                     }
                 }
