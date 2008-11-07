@@ -34,7 +34,6 @@ namespace PockeTwit
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
             Grabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
-            //timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(Trim), null, 30000, 30000);
         }
 
 
