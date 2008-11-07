@@ -1333,7 +1333,7 @@ namespace FingerUI
                 m_velocity.X = 0;
                 m_velocity.Y = 0;
                 m_offset.Y = 0;
-
+                FillBuffer();
                 SetSelectedIndexToZero();
                 Invalidate();
             }
