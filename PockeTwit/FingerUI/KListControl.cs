@@ -931,14 +931,13 @@ namespace FingerUI
                 {
                     using (Brush ForeBrush = new SolidBrush(ClientSettings.ForeColor))
                     {
-                        using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
+                        using(Pen p = new Pen(ClientSettings.ForeColor))
                         {
-                            RectangleF backtextPos = new RectangleF(0, 0, this.Width, this.Height);
-                            RectangleF textPos = new RectangleF(1, 1, this.Width, this.Height);
-
-                            flickerGraphics.DrawString("Fetching", this.Font, BackBrush, backtextPos);
+                            Rectangle boxPos = new Rectangle(0, this.Height-(ClientSettings.TextSize+(ClientSettings.Margin*2)), this.Width, ClientSettings.TextSize + (ClientSettings.Margin*2));
+                            Rectangle textPos = new Rectangle(ClientSettings.Margin, this.Height - (ClientSettings.TextSize+ClientSettings.Margin), this.Width - ClientSettings.Margin, ClientSettings.TextSize+ClientSettings.Margin);
+                            flickerGraphics.DrawLine(p, 0, boxPos.Top - 1, boxPos.Width, boxPos.Top - 1);
+                            Gradient.GradientFill.Fill(flickerGraphics, boxPos, ClientSettings.SelectedBackGradColor, ClientSettings.SelectedBackColor, Gradient.GradientFill.FillDirection.TopToBottom);
                             flickerGraphics.DrawString("Fetching", this.Font, ForeBrush, textPos);
-                            
                         }
                     }
                 }
