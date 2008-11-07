@@ -107,38 +107,9 @@ namespace PockeTwit
         private void BackgroundUpdate(object o)
         {
             System.Diagnostics.Debug.WriteLine("Background update called at " + DateTime.Now.ToString());
-            //if (NotificationHandler.NotifyOfFriends)
-            //{
-                GetFriendsTimeLine(false);
-            //}
-            //if (NotificationHandler.NotifyOfMessages)
-            //{
-                GetMessagesTimeLine(false);
-            //}
-            if (HoldNewMessages > 0 && HoldNewFriends > 0)
-            {
-                if (BothUpdated != null)
-                {
-                    BothUpdated(HoldNewMessages, HoldNewFriends);
-                }
-            }
-            else if (HoldNewMessages > 0)
-            {
-                if (MessagesUpdated != null)
-                {
-                    MessagesUpdated(HoldNewMessages);
-                }
-            }
-            else if (HoldNewFriends > 0)
-            {
-                if (FriendsUpdated != null)
-                {
-                    FriendsUpdated(HoldNewFriends);
-                }
-            }
-            System.Diagnostics.Debug.WriteLine("Background update complete");
-            HoldNewFriends = 0;
-            HoldNewMessages = 0;
+            
+            GetFriendsTimeLine(true);
+            GetMessagesTimeLine(true);
             GC.Collect();
         }
 
@@ -364,7 +335,6 @@ namespace PockeTwit
 
             try
             {
-                /*
                 string StatusString = Library.status.Serialize(statuses);
 
                 using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml"))
@@ -373,11 +343,9 @@ namespace PockeTwit
                     w.Flush();
                     w.Close();  //Shouldn't need this in using, but I'm desperate   
                 }
-                 */
             }
-            catch(Exception ex)
+            catch
             {
-
             }
         }
 
