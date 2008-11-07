@@ -160,6 +160,7 @@ namespace PockeTwit
                 {
                     statList.SelectedItem = statList[oldIndex + newItems];
                     currentItem = (FingerUI.StatusItem)statList.SelectedItem;
+                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);                
                 }
                 else
                 {
@@ -172,7 +173,7 @@ namespace PockeTwit
                     UpdateRightMenu();
                 }
                 statList.Redraw();
-                statList.YOffset = OldOffset + (newItems * statList.ItemHeight);                
+    
             }
         }
 

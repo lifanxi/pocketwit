@@ -159,6 +159,7 @@ namespace FingerUI
             set
             {
                 m_itemHeight = value;
+                CreateBackBuffer();
                 Reset();
             }
         }
@@ -474,6 +475,7 @@ namespace FingerUI
                 if(m_offset.Y>(m_items.Values.Count-1)*ItemHeight){m_offset.Y=m_items.Values.Count*ItemHeight;}
 
                 VisibleBounds = new Rectangle(0, m_offset.Y, this.Width, this.Height);
+                Invalidate();
             }
         }
 
@@ -1301,7 +1303,7 @@ namespace FingerUI
 
         private void SelectAndJump()
         {
-            m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+            //m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             IKListItem item = m_items[m_selectedIndex];
             item.Selected = true;
             m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
