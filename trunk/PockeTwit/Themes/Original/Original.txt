@@ -1,8 +1,10 @@
 ﻿BackColor:0:0:0
+BackGradColor:0:0:0
 ForeColor:211:211:211
 LinkColor:150:150:255
 HashLinkColor:160:82:45
 SelectedBackColor:47:79:79
+SelectedBackGradColor:0:0:0
 SelectedForeColor:255:255:255
 SelectedSmallTextColor:200:200:200
 SmallTextColor:128:128:128

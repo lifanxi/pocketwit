@@ -8,7 +8,7 @@ public static class ClientSettings
 
 
     #region DefaultColors
-    public static System.Drawing.Color BackColor = System.Drawing.Color.DarkGray;
+    public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
     public static System.Drawing.Color BackGradColor = System.Drawing.Color.Black;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;

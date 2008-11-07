@@ -216,6 +216,7 @@ namespace PockeTwit
                 SwitchToList("Friends_TimeLine");
                 Cursor.Current = Cursors.Default;
             }
+            statList.Redraw();
             settings.Close();
             
         }
