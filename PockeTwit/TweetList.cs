@@ -1222,10 +1222,6 @@ namespace PockeTwit
             /*
             statList.Clear();
              */
-            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
-            {
-                a.Buffer.Clear();
-            }
             ShowWindow(this.Handle, SW_MINIMIZED);
             GC.Collect();
         }

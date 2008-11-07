@@ -33,22 +33,9 @@ namespace FingerUI
                 set
                 {
                     _Y = value;
-                    if (value == 0)
-                    {
-                        CheckForClear();
-                    }
                 }
             }
-            private void CheckForClear()
-            {
-                if (_X == 0 && _Y == 0)
-                {
-                    foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
-                    {
-                        a.Buffer.Trim();
-                    }
-                }
-            }
+            
 
         }
         
