@@ -9,6 +9,10 @@ namespace PockeTwit
     //  this static class allows me to create the events globally and subscribe in the UI.
     static class GlobalEventHandler
     {
+        // Fields
+        public static bool FriendsUpdating = false;
+        public static bool MessagesUpdating = false;
+
         // Delegates (1) 
 
         public delegate void ArtWasUpdated(string User);
@@ -46,6 +50,8 @@ namespace PockeTwit
             {
                 TimeLineFetching(TType);
             }
+            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = true; }
+            if (TType == TimelineManagement.TimeLineType.Messages) { MessagesUpdating = true; }
         }
         public static void NotifyTimeLineDone(TimelineManagement.TimeLineType TType)
         {
@@ -53,6 +59,9 @@ namespace PockeTwit
             {
                 TimeLineDone(TType);
             }
+            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = false; }
+            if (TType == TimelineManagement.TimeLineType.Messages) {MessagesUpdating = false; }
+
         }
         
     }
