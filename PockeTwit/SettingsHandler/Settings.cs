@@ -8,12 +8,14 @@ public static class ClientSettings
 
 
     #region DefaultColors
-    public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
+    public static System.Drawing.Color BackColor = System.Drawing.Color.DarkGray;
+    public static System.Drawing.Color BackGradColor = System.Drawing.Color.Black;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
-    public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.DarkSlateGray;
+    public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.Gray;
+    public static System.Drawing.Color SelectedBackGradColor = System.Drawing.Color.Black;
     public static System.Drawing.Color SelectedForeColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldBackColor = System.Drawing.Color.White;
     public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;

@@ -250,24 +250,28 @@ namespace FingerUI
                         Rectangle menuRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
                         Color BackColor;
                         Color MenuTextColor;
+                        Color GradColor;
 
                         if (Item == SelectedItem)
                         {
                             BackColor = ClientSettings.SelectedBackColor;
+                            GradColor = ClientSettings.SelectedBackGradColor;
                             MenuTextColor = ClientSettings.SelectedForeColor;
                         }
                         else
                         {
                             BackColor = ClientSettings.BackColor;
+                            GradColor = ClientSettings.BackGradColor;
                             MenuTextColor = ClientSettings.ForeColor;
-
-
                         }
+                        Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        /*
                         using (Brush sBrush = new SolidBrush(BackColor))
                         {
                             m_backBuffer.FillRectangle(sBrush, menuRect);
-                        }
 
+                        }
+                        */
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
                         using (Brush sBrush = new SolidBrush(MenuTextColor))
                         {
