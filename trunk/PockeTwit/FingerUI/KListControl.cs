@@ -1271,6 +1271,7 @@ namespace FingerUI
         {
             if (!m_updating)
             {
+                m_backBuffer.Clear(ClientSettings.BackColor);
                 m_timer.Enabled = false;
                 if (m_items.Count > 0)
                 {
@@ -1281,7 +1282,6 @@ namespace FingerUI
                 Capture = false;
                 m_velocity.X = 0;
                 m_velocity.Y = 0;
-                //m_offset.X = 0;
                 m_offset.Y = 0;
 
                 SetSelectedIndexToZero();

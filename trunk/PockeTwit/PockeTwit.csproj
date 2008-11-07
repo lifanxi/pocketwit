@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -75,6 +75,8 @@
     <Compile Include="Errors.Designer.cs">
       <DependentUpon>Errors.cs</DependentUpon>
     </Compile>
+    <Compile Include="FingerUI\Gradient\MSDNGradient.cs" />
+    <Compile Include="FingerUI\Gradient\Win32Helper.cs" />
     <Compile Include="FingerUI\SideMenu.cs">
       <SubType>Component</SubType>
     </Compile>

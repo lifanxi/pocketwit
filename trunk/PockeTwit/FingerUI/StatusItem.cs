@@ -240,21 +240,26 @@ namespace FingerUI
             {
                 textBounds = new Rectangle(bounds.X + ClientSettings.Margin, bounds.Y, bounds.Width - (ClientSettings.Margin * 2), bounds.Height);
             }
-            SolidBrush FillColor = new SolidBrush(ClientSettings.BackColor);
 
-            if (m_selected) 
-            {
-                FillColor = new SolidBrush(ClientSettings.SelectedBackColor);
-                TextFont = m_parent.SelectedFont;
-                ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
-            }
             Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
             InnerBounds.Offset(1, 1);
             InnerBounds.Width--; InnerBounds.Height--;
 
-            g.FillRectangle(FillColor, InnerBounds);
+            //SolidBrush FillColor = new SolidBrush(ClientSettings.BackColor);
+            if (m_selected)
+            {
+                //FillColor = new SolidBrush(ClientSettings.SelectedBackColor);
+                TextFont = m_parent.SelectedFont;
+                ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
+                Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+            }
+            else
+            {
+                Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+            }
 
-            FillColor.Dispose();
+            //g.FillRectangle(FillColor, InnerBounds);
+            //FillColor.Dispose();
 
             Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
