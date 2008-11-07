@@ -81,10 +81,6 @@ namespace PockeTwit
                 {
                     System.IO.File.Delete(Avatar);
                 }
-                foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
-                {
-                    a.Buffer.Clear();
-                }
             }
             catch
             {

@@ -81,6 +81,14 @@ namespace FingerUI
             {
                 _Height = value;
                 SetMenuHeight();
+                if (_Width > 0 && _Height > 0)
+                {
+                    if (Rendered != null)
+                    {
+                        Rendered.Dispose();
+                    }
+                    Rendered = new Bitmap(_Width,_Height);
+                }
             }
         }
 
@@ -91,7 +99,14 @@ namespace FingerUI
             set
             {
                 _Width = value;
-                Rendered = new Bitmap(_Height, _Width);
+                if (_Width > 0 && _Height > 0)
+                {
+                    if (Rendered != null)
+                    {
+                        Rendered.Dispose();
+                    }
+                    Rendered = new Bitmap(_Width, _Height);
+                }
                 DrawMenu();
             }
         }
@@ -228,7 +243,6 @@ namespace FingerUI
 
         private void DrawMenu()
         {
-            Rendered = new Bitmap(_Width, _Height);
             using (Graphics m_backBuffer = Graphics.FromImage(Rendered))
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);

@@ -7,8 +7,19 @@ namespace PockeTwit
 {
     public class ImageBuffer
     {
+        class request
+        {
+            public request(string username, string url)
+            {
+                UserName = username;
+                URL = url;
+            }
+            public string UserName;
+            public string URL;
+        }
         class ImageInfo
         {
+            public string UserName;
             public Image Image;
             public DateTime LastRequested;
             public String ID;
@@ -16,11 +27,11 @@ namespace PockeTwit
 		#region Fields (3) 
 
         public static Bitmap FavoriteImage;
-        private SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
+        private Queue<request> Requests = new Queue<request>();
+        //private SafeDictionary<string, ImageInfo> ImageDictionary = new SafeDictionary<string, ImageInfo>();
         public static Bitmap UnknownArt;
         private AsyncArtGrabber Grabber = new AsyncArtGrabber();
-        //private static System.Threading.Timer timerUpdate;
-
+        
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -33,7 +44,7 @@ namespace PockeTwit
             Graphics g = Graphics.FromImage(UnknownArt);
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
-            Grabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
+            //Grabber.NewArtWasDownloaded += new AsyncArtGrabber.ArtIsReady(AsyncArtGrabber_NewArtWasDownloaded);
         }
 
 
@@ -60,31 +71,21 @@ namespace PockeTwit
 
 		// Public Methods (3) 
 
-        public void Clear()
-        {
-            ImageDictionary.Clear();
-        }
-
         public Image GetArt(string User)
         {
             User = User.ToLower();
-            lock (ImageDictionary)
+            string ArtPath = Grabber.DetermineCacheFileName(User, "");
+            if (System.IO.File.Exists(ArtPath))
             {
-                if (!ImageDictionary.ContainsKey(User))
+                try
                 {
-                    string ArtPath = Grabber.DetermineCacheFileName(User, "");
-                    if (System.IO.File.Exists(ArtPath))
-                    {
-                        LoadArt(User);
-                        ImageDictionary[User].LastRequested = DateTime.Now;
-                        return ImageDictionary[User].Image;
-                    }
-                    //How do we find art for a user by name alone?
-                    return UnknownArt;
+                    return new Bitmap(ArtPath);
                 }
-                ImageDictionary[User].LastRequested = DateTime.Now;
-                return ImageDictionary[User].Image;    
+                catch { }
             }
+            request request = new request(User, "");
+            Requests.Enqueue(request);
+            return UnknownArt;
         }
 
         public Image GetArt(string User, string URL)
@@ -95,69 +96,34 @@ namespace PockeTwit
             {
                 return GetArt(User);
             }
-            if (!ImageDictionary.ContainsKey(User))
+            string ArtPath = Grabber.DetermineCacheFileName(User, URL);
+            if (System.IO.File.Exists(ArtPath))
             {
-                if (!LoadArt(User, URL))
+                try
                 {
-                    if (string.IsNullOrEmpty(URL))
-                    {
-                        System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
-                        Library.User newUser = null;
-                        foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
-                        {
-                            newUser = Library.User.FromId(User, Account);
-                            if (newUser != null) { break; }
-                        }
-                        if (newUser == null) { return UnknownArt; }
-                        URL = newUser.profile_image_url;
-                        LoadArt(User, URL);
-                    }
-                    return UnknownArt;
+                    return new Bitmap(ArtPath);
                 }
+                catch { }
             }
-
-            ImageDictionary[User].LastRequested = DateTime.Now;
-            return ImageDictionary[User].Image;
+            request request = new request(User, URL);
+            Requests.Enqueue(request);
+            return UnknownArt;
         }
 
         public bool HasArt(string User)
         {
             User = User.ToLower();
-            if (ImageDictionary.ContainsKey(User))
-            {
-                return true;
-            }
             string ArtPath = Grabber.DetermineCacheFileName(User,"");
             if (System.IO.File.Exists(ArtPath))
             {
-                LoadArt(User);
                 return true;
             }
             return false;
         }
 
-        public void Trim()
-        {
-            DateTime runTime = DateTime.Now;
-            lock (ImageDictionary)
-            {
-                List<string> Keys = new List<string>(ImageDictionary.Keys);
-                foreach (string infoKey in Keys)
-                {
-                    ImageInfo info = ImageDictionary[infoKey];
-                    if (runTime.Ticks - info.LastRequested.Ticks > 1000)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Removing " + infoKey + " from imagebuffer");
-                        ImageDictionary.Remove(infoKey);
-                    }
-                }
-                Keys.Clear();
-                Keys.TrimExcess(); 
-            }
-        }
 
 		// Private Methods (3) 
-
+        /*
         private void AsyncArtGrabber_NewArtWasDownloaded(string User, string Filename)
         {
             User = User.ToLower();
@@ -198,7 +164,8 @@ namespace PockeTwit
                 }
             }
         }
-
+        */
+        /*
         private bool LoadArt(string User)
         {
             User = User.ToLower();
@@ -219,7 +186,8 @@ namespace PockeTwit
             ImageDictionary.Add(User, newInfo);
             return true;
         }
-
+        */
+        /*
         private bool LoadArt(string User, string URL)
         {
             User = User.ToLower();
@@ -289,7 +257,8 @@ namespace PockeTwit
                 return false;
             }
         }
-
+        */
+        /*
         private void WriteID(string ArtPath, string ID)
         {
             System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.Create, System.IO.FileAccess.Write);
@@ -300,7 +269,7 @@ namespace PockeTwit
                 sw.Close();
             }
         }
-
+        */
 		#endregion Methods 
 
     }
