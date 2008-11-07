@@ -115,12 +115,18 @@ namespace PockeTwit
 
         public void RefreshFriendsTimeLine()
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFriendsTimeLine));
+            if (!GlobalEventHandler.FriendsUpdating)
+            {
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFriendsTimeLine));
+            }
          }
 
         public void RefreshMessagesTimeLine()
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetMessagesTimeLine));
+            if (!GlobalEventHandler.MessagesUpdating)
+            {
+                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetMessagesTimeLine));
+            }
         }
 
         private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
