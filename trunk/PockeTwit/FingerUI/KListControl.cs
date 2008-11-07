@@ -944,11 +944,13 @@ namespace FingerUI
 
         private void CheckForClicks(Point point)
         {
-            foreach (IKListItem Item in OnScreenItems)
-            {
-                if (Item is StatusItem)
-                {
-                    StatusItem s = (StatusItem)Item;
+            int itemNumber = FindIndex(point.X, point.Y).Y;
+            StatusItem s = (StatusItem)m_items[itemNumber];
+            //foreach (IKListItem Item in OnScreenItems)
+            //{
+                //if (Item is StatusItem)
+                //{
+                  //  StatusItem s = (StatusItem)Item;
                     foreach (StatusItem.Clickable c in s.Tweet.Clickables)
                     {
                         Rectangle itemRect = s.Bounds;
@@ -962,8 +964,8 @@ namespace FingerUI
                             }
                         }
                     }
-                }
-            }
+                //}
+            //}
         }
 
         private void CleanupBackBuffer()
