@@ -9,7 +9,6 @@ namespace FingerUI
 {
     public class KListControl : UserControl
     {
-        private Font HighlightedFont;
         private class Velocity
         {
             private int _X = 0;
@@ -50,10 +49,11 @@ namespace FingerUI
                     }
                 }
             }
-            
-        }
-		#region Fields (23) 
 
+        }
+        
+		#region Fields (23) 
+        private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
         private bool InFocus = false;
@@ -117,7 +117,22 @@ namespace FingerUI
 
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
+
+            //Need to repaint when fetching state has changed.
+            PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
+            PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
         }
+
+        void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
+        {
+            Invalidate();
+        }
+
+        void GlobalEventHandler_TimeLineDone(PockeTwit.TimelineManagement.TimeLineType TType)
+        {
+            Invalidate();
+        }
+
 
 		#endregion Constructors 
 
@@ -896,6 +911,21 @@ namespace FingerUI
                     }
                 }
 
+                if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
+                {
+                    using (Brush ForeBrush = new SolidBrush(ClientSettings.ForeColor))
+                    {
+                        using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
+                        {
+                            RectangleF backtextPos = new RectangleF(0, 0, this.Width, this.Height);
+                            RectangleF textPos = new RectangleF(1, 1, this.Width, this.Height);
+
+                            flickerGraphics.DrawString("Fetching", this.Font, BackBrush, backtextPos);
+                            flickerGraphics.DrawString("Fetching", this.Font, ForeBrush, textPos);
+                            
+                        }
+                    }
+                }
 
 
 
@@ -944,28 +974,29 @@ namespace FingerUI
 
         private void CheckForClicks(Point point)
         {
-            int itemNumber = FindIndex(point.X, point.Y).Y;
-            StatusItem s = (StatusItem)m_items[itemNumber];
-            //foreach (IKListItem Item in OnScreenItems)
-            //{
-                //if (Item is StatusItem)
-                //{
-                  //  StatusItem s = (StatusItem)Item;
-                    foreach (StatusItem.Clickable c in s.Tweet.Clickables)
+            try
+            {
+                int itemNumber = FindIndex(point.X, point.Y).Y;
+                StatusItem s = (StatusItem)m_items[itemNumber];
+
+                foreach (StatusItem.Clickable c in s.Tweet.Clickables)
+                {
+                    Rectangle itemRect = s.Bounds;
+                    itemRect.Offset(-m_offset.X, -m_offset.Y);
+                    Rectangle cRect = new Rectangle(((int)c.Location.X + itemRect.Left) + (ClientSettings.SmallArtSize + 10), (int)c.Location.Y + itemRect.Top, (int)c.Location.Width, (int)c.Location.Height);
+                    if (cRect.Contains(point))
                     {
-                        Rectangle itemRect = s.Bounds;
-                        itemRect.Offset(-m_offset.X, -m_offset.Y);
-                        Rectangle cRect = new Rectangle(((int)c.Location.X + itemRect.Left) + (ClientSettings.SmallArtSize + 10), (int)c.Location.Y + itemRect.Top, (int)c.Location.Width, (int)c.Location.Height);
-                        if (cRect.Contains(point))
+                        if (WordClicked != null)
                         {
-                            if (WordClicked != null)
-                            {
-                                WordClicked(c.Text);
-                            }
+                            WordClicked(c.Text);
                         }
                     }
-                //}
-            //}
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                //Oops, we're closing shop.
+            }
         }
 
         private void CleanupBackBuffer()
