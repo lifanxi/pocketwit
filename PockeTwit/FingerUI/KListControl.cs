@@ -125,12 +125,28 @@ namespace FingerUI
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
         {
-            Invalidate();
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(this.Invalidate);
+                this.Invoke(d);
+            }
+            else
+            {
+                this.Invalidate();
+            }
         }
 
         void GlobalEventHandler_TimeLineDone(PockeTwit.TimelineManagement.TimeLineType TType)
         {
-            Invalidate();
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(this.Invalidate);
+                this.Invoke(d);
+            }
+            else
+            {
+                this.Invalidate();
+            }
         }
 
 

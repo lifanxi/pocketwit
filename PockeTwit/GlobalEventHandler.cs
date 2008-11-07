@@ -46,22 +46,21 @@ namespace PockeTwit
 
         public static void NotifyTimeLineFetching(TimelineManagement.TimeLineType TType)
         {
-            if (TimeLineFetching!=null)
+            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = true; }
+            if (TType == TimelineManagement.TimeLineType.Messages) { MessagesUpdating = true; }
+            if (TimeLineFetching != null)
             {
                 TimeLineFetching(TType);
             }
-            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = true; }
-            if (TType == TimelineManagement.TimeLineType.Messages) { MessagesUpdating = true; }
         }
         public static void NotifyTimeLineDone(TimelineManagement.TimeLineType TType)
         {
-            if(TimeLineDone!=null)
+            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = false; }
+            if (TType == TimelineManagement.TimeLineType.Messages) {MessagesUpdating = false; }
+            if (TimeLineDone != null)
             {
                 TimeLineDone(TType);
             }
-            if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = false; }
-            if (TType == TimelineManagement.TimeLineType.Messages) {MessagesUpdating = false; }
-
         }
         
     }
