@@ -554,7 +554,7 @@ namespace FingerUI
                     m_selectedIndex = 0;
                     m_items[0].Selected = true;
                     m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
-                    FillBuffer();
+                    //FillBuffer();
                 }
             }
         }
