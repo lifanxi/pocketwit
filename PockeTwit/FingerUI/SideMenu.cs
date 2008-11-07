@@ -231,6 +231,7 @@ namespace FingerUI
             Rendered = new Bitmap(_Width, _Height);
             using (Graphics m_backBuffer = Graphics.FromImage(Rendered))
             {
+                m_backBuffer.Clear(ClientSettings.BackColor);
                 int LeftPos = 0;
                 int CurrentTop = TopOfMenu;
                 foreach (string Item in this.GetItems())
@@ -265,13 +266,6 @@ namespace FingerUI
                             MenuTextColor = ClientSettings.ForeColor;
                         }
                         Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                        /*
-                        using (Brush sBrush = new SolidBrush(BackColor))
-                        {
-                            m_backBuffer.FillRectangle(sBrush, menuRect);
-
-                        }
-                        */
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
                         using (Brush sBrush = new SolidBrush(MenuTextColor))
                         {
