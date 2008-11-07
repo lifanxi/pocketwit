@@ -41,6 +41,7 @@ namespace PockeTwit
 
         public TweetList()
         {
+            Program.StartUp = DateTime.Now;
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -155,7 +156,7 @@ namespace PockeTwit
                     }
                 }
                 FingerUI.StatusItem currentItem;
-                if (oldIndex>=0)
+                if (oldIndex>=0 && newItems<50)
                 {
                     statList.SelectedItem = statList[oldIndex + newItems];
                     currentItem = (FingerUI.StatusItem)statList.SelectedItem;
@@ -504,6 +505,7 @@ namespace PockeTwit
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
 
                 statList.SetSelectedIndexToZero();
+                Program.Ready = DateTime.Now;
                 Application.DoEvents();
             }
         }

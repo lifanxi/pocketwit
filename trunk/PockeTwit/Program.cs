@@ -8,6 +8,8 @@ namespace PockeTwit
     static class Program
     {
         public static string LastStatus;
+        public static DateTime StartUp;
+        public static DateTime Ready;
 		#region Methods (2) 
 
         
