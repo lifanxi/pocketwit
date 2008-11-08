@@ -104,6 +104,22 @@ namespace FingerUI
             //Need to repaint when fetching state has changed.
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
+
+            PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+        }
+
+        void ThrottledArtGrabber_NewArtWasDownloaded(string User, string FileName)
+        {
+            for (int i = 0; i < m_items.Count; i++)
+            {
+                StatusItem s = (StatusItem)m_items[i];
+                if (s.Tweet.user.screen_name == User)
+                {
+                    s.Render(m_backBuffer);
+                    System.Diagnostics.Debug.WriteLine("Redrawing all " + User);
+                    Invalidate();
+                }
+            }
         }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
