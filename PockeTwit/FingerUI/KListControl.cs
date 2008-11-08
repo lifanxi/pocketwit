@@ -40,6 +40,7 @@ namespace FingerUI
         }
         
 		#region Fields (23) 
+        private NotificationPopup NotificationArea = new NotificationPopup(); 
         private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
@@ -92,6 +93,7 @@ namespace FingerUI
         /// </summary>
         public KListControl()
         {
+            NotificationArea.TextFont = this.Font;
             CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
@@ -108,16 +110,23 @@ namespace FingerUI
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
         }
 
-        void ThrottledArtGrabber_NewArtWasDownloaded(string User, string FileName)
+        void ThrottledArtGrabber_NewArtWasDownloaded(string User)
         {
-            for (int i = 0; i < m_items.Count; i++)
+            if (InvokeRequired)
             {
-                StatusItem s = (StatusItem)m_items[i];
-                if (s.Tweet.user.screen_name == User)
+                delMenuItemSelected d = new delMenuItemSelected(this.ThrottledArtGrabber_NewArtWasDownloaded);
+                this.Invoke(d, User);
+            }
+            else
+            {
+                for (int i = 0; i < m_items.Count; i++)
                 {
-                    s.Render(m_backBuffer);
-                    System.Diagnostics.Debug.WriteLine("Redrawing all " + User);
-                    Invalidate();
+                    StatusItem s = (StatusItem)m_items[i];
+                    if (s.Tweet.user.screen_name.ToLower() == User)
+                    {
+                        s.Render(m_backBuffer);
+                        Invalidate();
+                    }
                 }
             }
         }
@@ -873,6 +882,7 @@ namespace FingerUI
 
         private void FillBuffer()
         {
+            System.Diagnostics.Debug.WriteLine("FillBuffer called with " + m_items.Count);
             lock (m_items)
             {
                 for(int i=0;i<m_items.Count;i++)
@@ -880,7 +890,7 @@ namespace FingerUI
                     IKListItem item = m_items[i];
                     Rectangle itemRect = item.Bounds;
                     using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                    {
+                    {   
                         m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
                         m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
                         m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
@@ -924,17 +934,7 @@ namespace FingerUI
 
                 if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
                 {
-                    using (Brush ForeBrush = new SolidBrush(ClientSettings.ForeColor))
-                    {
-                        using(Pen p = new Pen(ClientSettings.ForeColor))
-                        {
-                            Rectangle boxPos = new Rectangle(0, this.Height-(ClientSettings.TextSize+(ClientSettings.Margin*2)), this.Width, ClientSettings.TextSize + (ClientSettings.Margin*2));
-                            Rectangle textPos = new Rectangle(ClientSettings.Margin, this.Height - (ClientSettings.TextSize+ClientSettings.Margin), this.Width - ClientSettings.Margin, ClientSettings.TextSize+ClientSettings.Margin);
-                            flickerGraphics.DrawLine(p, 0, boxPos.Top - 1, boxPos.Width, boxPos.Top - 1);
-                            Gradient.GradientFill.Fill(flickerGraphics, boxPos, ClientSettings.SelectedBackGradColor, ClientSettings.SelectedBackColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                            flickerGraphics.DrawString("Fetching", this.Font, ForeBrush, textPos);
-                        }
-                    }
+                    NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
                 }
 
 
@@ -955,7 +955,6 @@ namespace FingerUI
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-
             ClickablesControl.Top = this.Top + 20;
             ClickablesControl.Left = this.Left + 20;
             ClickablesControl.Width = this.Width - 40;

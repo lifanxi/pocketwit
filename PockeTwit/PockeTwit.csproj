@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="FingerUI\Gradient\MSDNGradient.cs" />
     <Compile Include="FingerUI\Gradient\Win32Helper.cs" />
+    <Compile Include="FingerUI\Notification.cs" />
     <Compile Include="FingerUI\SideMenu.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,7 +113,6 @@
     <Compile Include="SettingsHandler\AccountsForm.Designer.cs">
       <DependentUpon>AccountsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArtHandling\AsyncArtGrabber.cs" />
     <Compile Include="Clickables.cs">
     </Compile>
     <Compile Include="DetectDevice.cs" />
@@ -122,7 +122,6 @@
     <Compile Include="FingerUI\KListItem.cs" />
     <Compile Include="FingerUI\StatusItem.cs" />
     <Compile Include="Following.cs" />
-    <Compile Include="ArtHandling\ImageBuffer.cs" />
     <Compile Include="is.gd.cs" />
     <Compile Include="Library\Tweet.cs" />
     <Compile Include="SearchForm.cs">

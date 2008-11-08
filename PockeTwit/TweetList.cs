@@ -845,7 +845,6 @@ namespace PockeTwit
             History.Push(i);
             statList.SetSelectedMenu("Friends TimeLine");
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-            statList.Redraw();
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
         }
@@ -860,7 +859,6 @@ namespace PockeTwit
             History.Push(i);
             statList.SetSelectedMenu("Messages");
             AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
-            statList.Redraw();
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
         }
