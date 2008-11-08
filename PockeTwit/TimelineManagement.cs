@@ -312,8 +312,8 @@ namespace PockeTwit
             int NewItems = 0;
             if (TempLine.Count > 0)
             {
-                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
                 NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+                SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
             }
             if (FriendsUpdated != null && NewItems>0)
             {
