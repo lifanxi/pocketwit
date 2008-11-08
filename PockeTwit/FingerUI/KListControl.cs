@@ -94,21 +94,22 @@ namespace FingerUI
         public KListControl()
         {
             NotificationArea.TextFont = this.Font;
+            NotificationArea.parentControl = this;
             CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
-            
+
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
 
             //Need to repaint when fetching state has changed.
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
-
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
         }
+
 
         void ThrottledArtGrabber_NewArtWasDownloaded(string User)
         {
@@ -946,9 +947,14 @@ namespace FingerUI
 
                 if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
                 {
-                    NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
+                    NotificationArea.ShowNotification();
+                }
+                else
+                {
+                    NotificationArea.HideNotification();
                 }
 
+                NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
 
 
                 if (ClickablesControl.Visible)

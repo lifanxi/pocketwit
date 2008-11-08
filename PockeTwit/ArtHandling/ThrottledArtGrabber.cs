@@ -26,6 +26,7 @@ namespace PockeTwit
         public static Bitmap FavoriteImage;
         public static Bitmap UnknownArt;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
+        private static List<string> BadURLs = new List<string>();
         public static string CacheFolder;
         private static System.Threading.Thread WorkerThread;
         static ThrottledArtGrabber()
@@ -53,13 +54,23 @@ namespace PockeTwit
             
         }
 
-        public delegate void ArtIsReady(string User);
+        public delegate void ArtIsReady(string Argument);
         public static event ArtIsReady NewArtWasDownloaded;
-
+        
         public static Image GetArt(string user, string url)
         {
             string ArtName = DetermineCacheFileName(user, url);
-            if (!System.IO.File.Exists(ArtName))
+            string ID = url;
+            lock (BadURLs)
+            {
+                if (BadURLs.Contains(url))
+                {
+                    System.Diagnostics.Debug.WriteLine("Bad URL");
+                    return UnknownArt;
+                }
+            }
+                        
+            if (!System.IO.File.Exists(ArtName + ".ID"))
             {
                 ArtRequest r = new ArtRequest(user, url);
                 QueueRequest(r);
@@ -67,9 +78,24 @@ namespace PockeTwit
             }
             else
             {
-                using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                
+                string ID2;
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtName + ".ID"))
                 {
-                    return new Bitmap(s);
+                    ID2 = reader.ReadToEnd();
+                }
+                if (ID != ID2)
+                {
+                    ArtRequest r = new ArtRequest(user, url);
+                    QueueRequest(r);
+                    return UnknownArt;
+                }
+                else
+                {
+                    using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                    {
+                        return new Bitmap(s);
+                    }
                 }
             }
         }
@@ -139,6 +165,11 @@ namespace PockeTwit
             }
             catch (Exception ex)
             {
+                lock (BadURLs)
+                {
+                    BadURLs.Add(r.URL);
+                    return;
+                }
             }
             if (ArtResponse == null)
             {
@@ -176,7 +207,7 @@ namespace PockeTwit
                 g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
                 g.Dispose();
                 resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
-                
+                WriteID(LocalFileName, r.URL);
                 ArtWriter.Close();
             }
             catch(Exception ex) 
@@ -212,6 +243,17 @@ namespace PockeTwit
             }
             if (newUser == null) { return null; }
             return newUser.profile_image_url;
+        }
+
+        private static void WriteID(string ArtPath, string ID)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
+            {
+                sw.Write(ID);
+                sw.Flush();
+                sw.Close();
+            }
         }
     }
 }
