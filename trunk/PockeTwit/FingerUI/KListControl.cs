@@ -97,11 +97,7 @@ namespace FingerUI
             HighlightedFont = this.Font;
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
-            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
-            {
-                a.Buffer.Updated += new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
-            }
-
+            
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
 
@@ -570,10 +566,6 @@ namespace FingerUI
             CleanupBackBuffer();
 
             m_timer.Enabled = false;
-            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
-            {
-                a.Buffer.Updated -= new PockeTwit.ImageBuffer.ArtWasUpdated(ImageBuffer_Updated);
-            }
             base.Dispose(disposing);
         }
 
@@ -1230,19 +1222,6 @@ namespace FingerUI
                 }
             }
             return null;
-        }
-
-        void ImageBuffer_Updated(string User)
-        {
-            if(InvokeRequired)
-            {
-                delClearMe d = new delClearMe(Refresh);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                this.Refresh();
-            }
         }
 
         private Rectangle ItemBounds(int x, int y)
