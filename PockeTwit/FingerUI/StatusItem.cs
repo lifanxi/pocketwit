@@ -279,11 +279,11 @@ namespace FingerUI
                 Image UserImage;
                 if (ClientSettings.HighQualityAvatars)
                 {
-                    UserImage = this.Tweet.Account.Buffer.GetArt(Tweet.user.screen_name, Tweet.user.high_profile_image_url);
+                    UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, Tweet.user.high_profile_image_url);
                 }
                 else
                 {
-                    UserImage = this.Tweet.Account.Buffer.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
+                    UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
                 }
                 g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
 
@@ -294,8 +294,8 @@ namespace FingerUI
                 if (m_highlighted)
                 {
                     System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
-                    ia.SetColorKey(PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0), PockeTwit.ImageBuffer.FavoriteImage.GetPixel(0, 0));
-                    g.DrawImage(PockeTwit.ImageBuffer.FavoriteImage,
+                    ia.SetColorKey(PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0), PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0));
+                    g.DrawImage(PockeTwit.ThrottledArtGrabber.FavoriteImage,
                         new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
                 }
                 if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
@@ -376,7 +376,7 @@ namespace FingerUI
                 {
                     string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
                     Image ReplyImage = null;
-                    if (!this.Tweet.Account.Buffer.HasArt(ReplyTo))
+                    if (!PockeTwit.ThrottledArtGrabber.HasArt(ReplyTo))
                     {
                         if (ReplyUser == null)
                         {
@@ -386,17 +386,17 @@ namespace FingerUI
                         {
                             if (ClientSettings.HighQualityAvatars)
                             {
-                                ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
+                                ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
                             }
                             else
                             {
-                                ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
+                                ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
                             }
                         }
                     }
                     else
                     {
-                        ReplyImage = this.Tweet.Account.Buffer.GetArt(ReplyTo);
+                        ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyTo, "");
                     }
 
                     if (ReplyImage != null)
