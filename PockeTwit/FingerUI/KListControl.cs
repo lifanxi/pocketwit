@@ -895,20 +895,23 @@ namespace FingerUI
 
         private void FillBuffer()
         {
-            System.Diagnostics.Debug.WriteLine("FillBuffer called with " + m_items.Count);
-            lock (m_items)
+            if (m_items.Count > 0)
             {
-                for(int i=0;i<m_items.Count;i++)
+                System.Diagnostics.Debug.WriteLine("FillBuffer called with " + m_items.Count);
+                lock (m_items)
                 {
-                    IKListItem item = m_items[i];
-                    Rectangle itemRect = item.Bounds;
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                    {   
-                        m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
-                        m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
-                        m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
+                    for (int i = 0; i < m_items.Count; i++)
+                    {
+                        IKListItem item = m_items[i];
+                        Rectangle itemRect = item.Bounds;
+                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                        {
+                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
+                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
+                            m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
+                        }
+                        item.Render(m_backBuffer, itemRect);
                     }
-                    item.Render(m_backBuffer, itemRect);
                 }
             }
         }
@@ -973,26 +976,29 @@ namespace FingerUI
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            ClickablesControl.Top = this.Top + 20;
-            ClickablesControl.Left = this.Left + 20;
-            ClickablesControl.Width = this.Width - 40;
-            ClickablesControl.Height = this.Height - 40;
-
-            this.ItemWidth = this.Width;
-            
-            foreach (IKListItem item in m_items.Values)
+            if (this.Visible)
             {
-                item.Bounds = ItemBounds(0, item.Index);
+                ClickablesControl.Top = this.Top + 20;
+                ClickablesControl.Left = this.Left + 20;
+                ClickablesControl.Width = this.Width - 40;
+                ClickablesControl.Height = this.Height - 40;
+
+                this.ItemWidth = this.Width;
+
+                foreach (IKListItem item in m_items.Values)
+                {
+                    item.Bounds = ItemBounds(0, item.Index);
+                }
+                CreateBackBuffer();
+                LeftMenu.Height = this.Height;
+                LeftMenu.Width = this.Width;
+
+
+
+                RightMenu.Height = this.Height;
+                RightMenu.Width = this.Width;
+                Reset();
             }
-            CreateBackBuffer();
-            LeftMenu.Height = this.Height;
-            LeftMenu.Width = this.Width;
-
-            
-
-            RightMenu.Height = this.Height;
-            RightMenu.Width = this.Width;
-            Reset();
         }
 
 
