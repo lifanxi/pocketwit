@@ -11,7 +11,7 @@ namespace FingerUI
     public class StatusItem : KListControl.IKListItem, IDisposable, IComparable
     {
 
-        private static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>' };
+        public static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>' };
 
 		#region�Fields�(15)�
 
