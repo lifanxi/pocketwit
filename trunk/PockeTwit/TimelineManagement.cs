@@ -342,7 +342,6 @@ namespace PockeTwit
             try
             {
                 string StatusString = Library.status.Serialize(statuses);
-
                 using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml"))
                 {
                     w.Write(StatusString);
