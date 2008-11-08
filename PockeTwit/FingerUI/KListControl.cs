@@ -127,6 +127,18 @@ namespace FingerUI
                         s.Render(m_backBuffer);
                         Invalidate();
                     }
+                    if (ClientSettings.ShowReplyImages)
+                    {
+                        if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
+                        {
+                            string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
+                            if (ReplyTo == User)
+                            {
+                                s.Render(m_backBuffer);
+                                Invalidate();
+                            }
+                        }
+                    }
                 }
             }
         }
