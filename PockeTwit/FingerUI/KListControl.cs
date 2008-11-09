@@ -61,7 +61,7 @@ namespace FingerUI
         bool m_scrollBarMove = false;
 
         int m_selectedIndex = 0;
-        System.Threading.Timer m_timer;
+        Timer m_timer = new Timer();
         bool m_updating = false;
         private Velocity m_velocity = new Velocity();
         
@@ -98,8 +98,8 @@ namespace FingerUI
             CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
-            //m_timer.Interval = ClientSettings.AnimationInterval;
-            //m_timer.Tick += new EventHandler(m_timer_Tick);
+            m_timer.Interval = ClientSettings.AnimationInterval;
+            m_timer.Tick += new EventHandler(m_timer_Tick);
 
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
@@ -108,7 +108,6 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
-            m_timer = new System.Threading.Timer(new System.Threading.TimerCallback(m_timer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
 
@@ -355,7 +354,6 @@ namespace FingerUI
         public delegate void delClearMe();
         public delegate void delMenuItemSelected(string ItemName);
         public delegate void delSwitchState(bool IsMaximized);
-        public delegate void delObjectOnly(object o);
 
 
 		// Events (5) 
@@ -604,8 +602,8 @@ namespace FingerUI
         protected override void Dispose(bool disposing)
         {
             CleanupBackBuffer();
-            
-            //m_timer.Enabled = false;
+
+            m_timer.Enabled = false;
             base.Dispose(disposing);
         }
 
@@ -715,8 +713,7 @@ namespace FingerUI
                     SetRightMenuUser();
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
-                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
-                    //m_timer.Enabled = true;
+                    m_timer.Enabled = true;
                 }
             }
             if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
@@ -725,8 +722,7 @@ namespace FingerUI
                 {
                     m_velocity.X = -15;
                     m_offset.X = m_offset.X - 3;
-                    //m_timer.Enabled = true;
-                    m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    m_timer.Enabled = true;
                 }
             }
             Invalidate();
@@ -847,8 +843,7 @@ namespace FingerUI
             }
             else
             {
-                m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
-                //m_timer.Enabled = true;
+                m_timer.Enabled = true;
             }
 
             try
@@ -856,8 +851,7 @@ namespace FingerUI
                 //Check if we're half-way to menu
                 if (m_offset.X > 0 && m_offset.X <= this.Width)
                 {
-                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
-                    //m_timer.Enabled = true;
+                    m_timer.Enabled = true;
                     if (m_offset.X > (this.Width * .6))
                     {
                         //Scroll to other side
@@ -872,8 +866,7 @@ namespace FingerUI
 
                 if (m_offset.X < 0 && m_offset.X >= 0 - this.Width)
                 {
-                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
-                    //m_timer.Enabled = true;
+                    m_timer.Enabled = true;
                     if (m_offset.X < (0 - (this.Width * .6)))
                     {
                         //Scroll to other side
@@ -1278,60 +1271,54 @@ namespace FingerUI
             
         }
 
-        private void m_timer_Tick(object sender)
+        private void m_timer_Tick(object sender, EventArgs e)
         {
-            if (InvokeRequired)
+            
+            if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
             {
-                delObjectOnly d = new delObjectOnly(m_timer_Tick);
-                this.Invoke(d, sender);
-            }
-            else{
-                if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
+                XDirection dir = m_velocity.X > 0 ? XDirection.Right : XDirection.Left;
+                XDirection currentPos = m_offset.X > 0 ? XDirection.Right : XDirection.Left;
+
+                m_offset.Offset(m_velocity.X, m_velocity.Y);
+
+                if (currentPos == XDirection.Right & dir == XDirection.Left)
                 {
-                    XDirection dir = m_velocity.X > 0 ? XDirection.Right : XDirection.Left;
-                    XDirection currentPos = m_offset.X > 0 ? XDirection.Right : XDirection.Left;
-
-                    m_offset.Offset(m_velocity.X, m_velocity.Y);
-
-                    if (currentPos == XDirection.Right & dir == XDirection.Left)
+                    if (m_offset.X <= 0)
                     {
-                        if (m_offset.X <= 0)
-                        {
-                            m_offset.X = 0;
-                            m_velocity.X = 0;
-                        }
+                        m_offset.X = 0;
+                        m_velocity.X = 0;
                     }
-                    else if (currentPos == XDirection.Left & dir == XDirection.Right)
-                    {
-                        if (m_offset.X >= 0)
-                        {
-                            m_offset.X = 0;
-                            m_velocity.X = 0;
-                        }
-                    }
-
-
-
-
-                    ClipScrollPosition();
-
-                    // Slow down
-                    if (m_velocity.Y < 0)
-                    {
-                        m_velocity.Y++;
-                    }
-                    else if (m_velocity.Y > 0)
-                    {
-                        m_velocity.Y--;
-                    }
-                    if (m_velocity.Y == 0 && m_velocity.X == 0)
-                    {
-                        //m_timer.Enabled = false;
-                        m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        HasMoved = false;
-                    }
-                    Invalidate();
                 }
+                else if (currentPos == XDirection.Left & dir == XDirection.Right)
+                {
+                    if (m_offset.X >= 0)
+                    {
+                        m_offset.X = 0;
+                        m_velocity.X = 0;
+                    }
+                }
+
+
+                
+
+                ClipScrollPosition();
+                
+                // Slow down
+                if (m_velocity.Y < 0)
+                {
+                    m_velocity.Y++;
+                }
+                else if (m_velocity.Y > 0)
+                {
+                    m_velocity.Y--;
+                }
+                if (m_velocity.Y == 0 && m_velocity.X == 0)
+                {
+                    m_timer.Enabled = false;
+                    HasMoved = false;
+                }
+
+                Invalidate();
             }
         }
 
@@ -1340,8 +1327,7 @@ namespace FingerUI
             if (!m_updating)
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);
-                m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                //m_timer.Enabled = false;
+                m_timer.Enabled = false;
                 if (m_items.Count > 0)
                 {
                     m_items[m_selectedIndex].Selected = false;
