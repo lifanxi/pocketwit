@@ -355,6 +355,7 @@ namespace FingerUI
         public delegate void delClearMe();
         public delegate void delMenuItemSelected(string ItemName);
         public delegate void delSwitchState(bool IsMaximized);
+        public delegate void delObjectOnly(object o);
 
 
 		// Events (5) 
@@ -1279,53 +1280,58 @@ namespace FingerUI
 
         private void m_timer_Tick(object sender)
         {
-            
-            if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
+            if (InvokeRequired)
             {
-                XDirection dir = m_velocity.X > 0 ? XDirection.Right : XDirection.Left;
-                XDirection currentPos = m_offset.X > 0 ? XDirection.Right : XDirection.Left;
-
-                m_offset.Offset(m_velocity.X, m_velocity.Y);
-
-                if (currentPos == XDirection.Right & dir == XDirection.Left)
+                delObjectOnly d = new delObjectOnly(m_timer_Tick);
+                this.Invoke(d, sender);
+            }
+            else{
+                if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
                 {
-                    if (m_offset.X <= 0)
+                    XDirection dir = m_velocity.X > 0 ? XDirection.Right : XDirection.Left;
+                    XDirection currentPos = m_offset.X > 0 ? XDirection.Right : XDirection.Left;
+
+                    m_offset.Offset(m_velocity.X, m_velocity.Y);
+
+                    if (currentPos == XDirection.Right & dir == XDirection.Left)
                     {
-                        m_offset.X = 0;
-                        m_velocity.X = 0;
+                        if (m_offset.X <= 0)
+                        {
+                            m_offset.X = 0;
+                            m_velocity.X = 0;
+                        }
                     }
-                }
-                else if (currentPos == XDirection.Left & dir == XDirection.Right)
-                {
-                    if (m_offset.X >= 0)
+                    else if (currentPos == XDirection.Left & dir == XDirection.Right)
                     {
-                        m_offset.X = 0;
-                        m_velocity.X = 0;
+                        if (m_offset.X >= 0)
+                        {
+                            m_offset.X = 0;
+                            m_velocity.X = 0;
+                        }
                     }
-                }
 
 
-                
 
-                ClipScrollPosition();
-                
-                // Slow down
-                if (m_velocity.Y < 0)
-                {
-                    m_velocity.Y++;
-                }
-                else if (m_velocity.Y > 0)
-                {
-                    m_velocity.Y--;
-                }
-                if (m_velocity.Y == 0 && m_velocity.X == 0)
-                {
-                    //m_timer.Enabled = false;
-                    m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                    HasMoved = false;
-                }
 
-                Invalidate();
+                    ClipScrollPosition();
+
+                    // Slow down
+                    if (m_velocity.Y < 0)
+                    {
+                        m_velocity.Y++;
+                    }
+                    else if (m_velocity.Y > 0)
+                    {
+                        m_velocity.Y--;
+                    }
+                    if (m_velocity.Y == 0 && m_velocity.X == 0)
+                    {
+                        //m_timer.Enabled = false;
+                        m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        HasMoved = false;
+                    }
+                    Invalidate();
+                }
             }
         }
 
