@@ -245,10 +245,8 @@ namespace FingerUI
             InnerBounds.Offset(1, 1);
             InnerBounds.Width--; InnerBounds.Height--;
 
-            //SolidBrush FillColor = new SolidBrush(ClientSettings.BackColor);
             if (m_selected)
             {
-                //FillColor = new SolidBrush(ClientSettings.SelectedBackColor);
                 TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
                 Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
@@ -258,9 +256,7 @@ namespace FingerUI
                 Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
             }
 
-            //g.FillRectangle(FillColor, InnerBounds);
-            //FillColor.Dispose();
-
+            
             Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
             if (ClientSettings.ShowExtra)
@@ -269,7 +265,6 @@ namespace FingerUI
                 if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
                 using (Brush dateBrush = new SolidBrush(SmallColor))
                 {
-                    //g.DrawString(Tweet.TimeStamp, smallFont, dateBrush, bounds.Left + ClientSettings.Margin, bounds.Top + 2, m_stringFormat);
                     g.DrawString(Tweet.TimeStamp, ClientSettings.SmallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
                 }
             }

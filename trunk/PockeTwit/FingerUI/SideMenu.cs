@@ -13,8 +13,20 @@ namespace FingerUI
         }
         public delegate void delClearMe();
 
-        public Bitmap Rendered;
+        private Bitmap _Rendered;
+        public Bitmap Rendered
+        {
+            get
+            {
+                if (IsDirty)
+                {
+                    DrawMenu();
+                }
+                return _Rendered;
+            }
+        }
 
+        private bool IsDirty = true;
         private FingerUI.KListControl.SideShown _Side;
         private List<string> Items = new List<string>();
         private string _SelectedItem = null;
@@ -69,7 +81,7 @@ namespace FingerUI
             set
             {
                 _UserName = value;
-                DrawMenu();
+                IsDirty=true;
             }
         }
 
@@ -87,7 +99,7 @@ namespace FingerUI
                     {
                         Rendered.Dispose();
                     }
-                    Rendered = new Bitmap(_Width,_Height);
+                    _Rendered = new Bitmap(_Width,_Height);
                 }
             }
         }
@@ -105,9 +117,9 @@ namespace FingerUI
                     {
                         Rendered.Dispose();
                     }
-                    Rendered = new Bitmap(_Width, _Height);
+                    _Rendered = new Bitmap(_Width, _Height);
                 }
-                DrawMenu();
+                IsDirty=true;
             }
         }
 
@@ -145,7 +157,7 @@ namespace FingerUI
                 Items.Insert(index, Item);
                 SetMenuHeight();
             }
-            DrawMenu();
+            IsDirty=true;
         }
 
         public void ResetMenu(IEnumerable<string> NewItems)
@@ -156,7 +168,7 @@ namespace FingerUI
                 Items.AddRange(NewItems);
                 SetMenuHeight();
             }
-            DrawMenu();
+            IsDirty=true;
         }
 
         public void AddItems(IEnumerable<string> NewItems)
@@ -172,7 +184,7 @@ namespace FingerUI
                 }
                 SetMenuHeight();
             }
-            DrawMenu();
+            IsDirty=true;
         }
         public void RemoveItem(string OldItem)
         {
@@ -184,7 +196,7 @@ namespace FingerUI
                 }
                 SetMenuHeight();
             }
-            DrawMenu();
+            IsDirty=true;
         }
         public string[] GetItems()
         {
@@ -211,7 +223,7 @@ namespace FingerUI
                     _SelectedItem = Items[PrevSelected + 1];
                 }
             }
-            DrawMenu();
+            IsDirty=true;
         }
         public void SelectUp()
         {
@@ -223,7 +235,7 @@ namespace FingerUI
                     _SelectedItem = Items[PrevSelected - 1];
                 }
             }
-            DrawMenu();
+            IsDirty=true;
         }
 
         public void ReplaceItem(string Original, string New)
@@ -238,12 +250,13 @@ namespace FingerUI
                     }
                 }
             }
-            DrawMenu();
+            IsDirty=true;
         }
 
         private void DrawMenu()
         {
-            using (Graphics m_backBuffer = Graphics.FromImage(Rendered))
+            if (_Rendered == null) { return; }
+            using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);
                 int LeftPos = 0;
@@ -302,6 +315,7 @@ namespace FingerUI
                     }
                 }
             }
+            IsDirty = false;
         }
 
     }
