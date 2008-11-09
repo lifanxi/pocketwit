@@ -61,7 +61,7 @@ namespace FingerUI
         bool m_scrollBarMove = false;
 
         int m_selectedIndex = 0;
-        Timer m_timer = new Timer();
+        System.Threading.Timer m_timer;
         bool m_updating = false;
         private Velocity m_velocity = new Velocity();
         
@@ -98,8 +98,8 @@ namespace FingerUI
             CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
-            m_timer.Interval = ClientSettings.AnimationInterval;
-            m_timer.Tick += new EventHandler(m_timer_Tick);
+            //m_timer.Interval = ClientSettings.AnimationInterval;
+            //m_timer.Tick += new EventHandler(m_timer_Tick);
 
             ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
@@ -108,6 +108,7 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+            m_timer = new System.Threading.Timer(new System.Threading.TimerCallback(m_timer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
 
@@ -602,8 +603,8 @@ namespace FingerUI
         protected override void Dispose(bool disposing)
         {
             CleanupBackBuffer();
-
-            m_timer.Enabled = false;
+            
+            //m_timer.Enabled = false;
             base.Dispose(disposing);
         }
 
@@ -713,7 +714,8 @@ namespace FingerUI
                     SetRightMenuUser();
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
-                    m_timer.Enabled = true;
+                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
+                    //m_timer.Enabled = true;
                 }
             }
             if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
@@ -722,7 +724,8 @@ namespace FingerUI
                 {
                     m_velocity.X = -15;
                     m_offset.X = m_offset.X - 3;
-                    m_timer.Enabled = true;
+                    //m_timer.Enabled = true;
+                    m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                 }
             }
             Invalidate();
@@ -843,7 +846,8 @@ namespace FingerUI
             }
             else
             {
-                m_timer.Enabled = true;
+                m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
+                //m_timer.Enabled = true;
             }
 
             try
@@ -851,7 +855,8 @@ namespace FingerUI
                 //Check if we're half-way to menu
                 if (m_offset.X > 0 && m_offset.X <= this.Width)
                 {
-                    m_timer.Enabled = true;
+                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
+                    //m_timer.Enabled = true;
                     if (m_offset.X > (this.Width * .6))
                     {
                         //Scroll to other side
@@ -866,7 +871,8 @@ namespace FingerUI
 
                 if (m_offset.X < 0 && m_offset.X >= 0 - this.Width)
                 {
-                    m_timer.Enabled = true;
+                    m_timer.Change(ClientSettings.AnimationInterval, ClientSettings.AnimationInterval);
+                    //m_timer.Enabled = true;
                     if (m_offset.X < (0 - (this.Width * .6)))
                     {
                         //Scroll to other side
@@ -1271,7 +1277,7 @@ namespace FingerUI
             
         }
 
-        private void m_timer_Tick(object sender, EventArgs e)
+        private void m_timer_Tick(object sender)
         {
             
             if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
@@ -1314,7 +1320,8 @@ namespace FingerUI
                 }
                 if (m_velocity.Y == 0 && m_velocity.X == 0)
                 {
-                    m_timer.Enabled = false;
+                    //m_timer.Enabled = false;
+                    m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                     HasMoved = false;
                 }
 
@@ -1327,7 +1334,8 @@ namespace FingerUI
             if (!m_updating)
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);
-                m_timer.Enabled = false;
+                m_timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                //m_timer.Enabled = false;
                 if (m_items.Count > 0)
                 {
                     m_items[m_selectedIndex].Selected = false;
