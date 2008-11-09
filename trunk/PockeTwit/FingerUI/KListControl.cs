@@ -174,6 +174,36 @@ namespace FingerUI
 		#endregion Constructors 
 
 		#region Properties (19) 
+        
+        private Point OldSize;
+
+        private bool _Visible;
+        public new bool Visible
+        {
+            get
+            {
+                return _Visible;
+            }
+            set
+            {
+                
+                if (!value)
+                {
+                    OldSize = new Point(this.Width, this.Height);
+                }
+                if (value)
+                {
+                    if (OldSize != new Point(this.Width, this.Height))
+                    {
+                        Application.DoEvents();
+                        RerenderBySize();
+                    }
+                }
+                _Visible = value;
+                base.Visible = value;
+            }
+        }
+
         public int Count
         {
             get
@@ -978,29 +1008,36 @@ namespace FingerUI
         {
             base.OnResize(e);
 
+            LeftMenu.Height = this.Height;
+            LeftMenu.Width = this.Width;
+
+
+
+            RightMenu.Height = this.Height;
+            RightMenu.Width = this.Width;
+
             if (this.Visible)
             {
-                ClickablesControl.Top = this.Top + 20;
-                ClickablesControl.Left = this.Left + 20;
-                ClickablesControl.Width = this.Width - 40;
-                ClickablesControl.Height = this.Height - 40;
-
-                this.ItemWidth = this.Width;
-
-                foreach (IKListItem item in m_items.Values)
-                {
-                    item.Bounds = ItemBounds(0, item.Index);
-                }
-                CreateBackBuffer();
-                LeftMenu.Height = this.Height;
-                LeftMenu.Width = this.Width;
-
-
-
-                RightMenu.Height = this.Height;
-                RightMenu.Width = this.Width;
-                Reset();
+                RerenderBySize();
             }
+        }
+
+        private void RerenderBySize()
+        {
+            ClickablesControl.Top = this.Top + 20;
+            ClickablesControl.Left = this.Left + 20;
+            ClickablesControl.Width = this.Width - 40;
+            ClickablesControl.Height = this.Height - 40;
+
+            this.ItemWidth = this.Width;
+
+            foreach (IKListItem item in m_items.Values)
+            {
+                item.Bounds = ItemBounds(0, item.Index);
+            }
+            CreateBackBuffer();
+
+            Reset();
         }
 
 

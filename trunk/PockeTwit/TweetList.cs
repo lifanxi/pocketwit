@@ -89,6 +89,7 @@ namespace PockeTwit
 
 		//�Private�Methods�(38)�
 
+
         public bool IsFocused()
         {
             if (InvokeRequired)
@@ -1078,11 +1079,16 @@ namespace PockeTwit
 
         private void SwitchToDone()
         {
-            lblLoading.Visible = false;
-            lblTitle.Visible = false;
+
+            //lblLoading.Visible = false;
+            //lblTitle.Visible = false;
+            
             statList.Visible = true;
+            statList.BringToFront();
             SwitchToList("Friends_TimeLine");
             IsLoaded = true;
+            lblLoading.Text = "Please wait... re-rendering to fit orientation.";
+            lblTitle.Text = "PockeTwit";
         }
 
         private void SwitchToList(string ListName)
@@ -1179,7 +1185,7 @@ namespace PockeTwit
             }
 
             base.OnActivated(e);
-
+            
             if (ClientSettings.IsMaximized)
             {
                 SetWindowState(FormWindowState.Maximized);
@@ -1188,7 +1194,8 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
-
+            statList.Visible = true;
+            /*
             if (statList.CurrentList() == "Friends_TimeLine")
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
@@ -1201,7 +1208,7 @@ namespace PockeTwit
                 statList.SetSelectedIndexToZero();
                 statList.Visible = true;
             }
-
+            */
             SendToForground();
 
             this.Invalidate();
@@ -1216,6 +1223,7 @@ namespace PockeTwit
         {
             // The Taskbar must be enabled to be able to do a Smart Minimize
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            statList.Visible = false;
             this.WindowState = FormWindowState.Normal;
             this.ControlBox = true;
             this.MinimizeBox = true;
@@ -1240,6 +1248,4 @@ namespace PockeTwit
 		#endregion�Methods�
 
     }
-
-    
 }
