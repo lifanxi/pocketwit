@@ -527,8 +527,8 @@ namespace FingerUI
                 if(m_offset.Y>(m_items.Values.Count-1)*ItemHeight){m_offset.Y=m_items.Values.Count*ItemHeight;}
 
                 VisibleBounds = new Rectangle(0, m_offset.Y, this.Width, this.Height);
-                Invalidate();
             }
+            Invalidate();
         }
 
         public void Redraw()
@@ -682,6 +682,7 @@ namespace FingerUI
             }
             if (e.KeyCode == System.Windows.Forms.Keys.Down)
             {
+                System.Diagnostics.Debug.WriteLine("KeyDown");
                 if (CurrentlyViewing == SideShown.Middle)
                 {
                     try
@@ -976,6 +977,7 @@ namespace FingerUI
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+
             if (this.Visible)
             {
                 ClickablesControl.Top = this.Top + 20;
@@ -1442,8 +1444,7 @@ namespace FingerUI
         {
             if (m_selectedIndex >= 0)
             {
-                IKListItem item = m_items[m_selectedIndex];
-                item.Selected = false;
+                m_items[m_selectedIndex].Selected = false;
                 m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             }
         }

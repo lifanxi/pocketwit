@@ -49,6 +49,7 @@ namespace PockeTwit
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
             Application.DoEvents();
+
             if (ClientSettings.AccountsList.Count == 0)
             {
                 // SHow Settings page first
@@ -292,10 +293,6 @@ namespace PockeTwit
             SetStatus("@"+User, selectedItem.Tweet.id);
         }
 
-        private void SetConnectedMenus()
-        {
-            SetConnectedMenus(TwitterConnections[0], null);
-        }
         private void SetLeftMenu()
         {
             LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
@@ -334,7 +331,11 @@ namespace PockeTwit
                 }
             }
         }
-
+        
+        private void SetConnectedMenus()
+        {
+            SetConnectedMenus(TwitterConnections[0], null);
+        }
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
             RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
@@ -439,6 +440,7 @@ namespace PockeTwit
 
         void Manager_ErrorCleared(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
         {
+            /*
             lock (Yedda.Twitter.Failures)
             {
                 if (LeftMenu.Contains("Errors"))
@@ -471,10 +473,12 @@ namespace PockeTwit
                     }
                 }
             }
+             */
         }
 
         void Manager_NoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
         {
+            /*
             lock (Yedda.Twitter.Failures)
             {
                 if (!Yedda.Twitter.Failures.ContainsKey(t))
@@ -492,6 +496,7 @@ namespace PockeTwit
                     statList.Redraw();
                 }
             }
+             */
         }
 
 
