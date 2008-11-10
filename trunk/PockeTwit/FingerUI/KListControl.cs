@@ -1046,6 +1046,7 @@ namespace FingerUI
 
         private void CheckForClicks(Point point)
         {
+            if (m_items.Count == 0) { return; }
             try
             {
                 int itemNumber = FindIndex(point.X, point.Y).Y;

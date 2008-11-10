@@ -34,7 +34,8 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter.Account, string> LastStatusID = new Dictionary<Yedda.Twitter.Account, string>();
         private Dictionary<Yedda.Twitter.Account, string> LastReplyID = new Dictionary<Yedda.Twitter.Account, string>();
         private Dictionary<Yedda.Twitter.Account, string> LastDirectID = new Dictionary<Yedda.Twitter.Account, string>();
-        private System.Threading.Timer timerUpdate;
+        private System.Threading.Timer messagesTimerUpdate;
+        private System.Threading.Timer friendsTimerUpdate;
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
@@ -79,7 +80,7 @@ namespace PockeTwit
             if (TimeLines[TimeLineType.Friends].Count > 0)
             {
                 CompleteLoaded();
-                timerUpdate_Tick(null);
+                friendsTimerUpdate_Tick(null);
             }
             else
             {
@@ -91,26 +92,33 @@ namespace PockeTwit
             } 
             if (ClientSettings.UpdateInterval > 0)
             {
-                timerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(timerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+                messagesTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(messagesTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+                friendsTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(friendsTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
                 NextUpdate = DateTime.Now.Add(new TimeSpan(0,0,0,0,ClientSettings.UpdateInterval));
                 System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
             }
         }
 
-        void timerUpdate_Tick(object state)
+        void messagesTimerUpdate_Tick(object state)
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdate));
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundMessagesUpdate));
             NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
             System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
         }
-    
-        private void BackgroundUpdate(object o)
+        void friendsTimerUpdate_Tick(object state)
         {
-            System.Diagnostics.Debug.WriteLine("Background update called at " + DateTime.Now.ToString());
-            
-            GetFriendsTimeLine(true);
+           System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundFriendsUpdate));
+            NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
+            System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
+        }
+        private void BackgroundMessagesUpdate(object o)
+        {
             GetMessagesTimeLine(true);
-            GC.Collect();
+        }
+
+        private void BackgroundFriendsUpdate(object o)
+        {
+            GetFriendsTimeLine(true);
         }
 
         public void RefreshFriendsTimeLine()
@@ -267,6 +275,10 @@ namespace PockeTwit
             TempLine.Clear();
             TempLine.TrimExcess();
             GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
+            if (ClientSettings.UpdateInterval > 0)
+            {
+                messagesTimerUpdate.Change(ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+            }
         }
         private void GetFriendsTimeLine(object o)
         {
@@ -329,6 +341,10 @@ namespace PockeTwit
             TempLine.Clear();
             TempLine.TrimExcess();
             GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
+            if (ClientSettings.UpdateInterval > 0)
+            {
+                this.friendsTimerUpdate.Change(ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+            }
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)

@@ -91,6 +91,7 @@ public static class ClientSettings
 		#endregion Constructors 
 
 		#region Properties (7) 
+    public static float TextHeight { get; set; }
     public static string ThemeName { get; set; }
     public static bool IncludeUserName { get; set; }
     public static bool HighQualityAvatars { get; set; }
