@@ -47,6 +47,19 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             InitializeComponent();
+
+
+            SizeF currentScreen = this.CurrentAutoScaleDimensions;
+            if (currentScreen.Height == 192)
+            {
+                statList.MaxVelocity = 45;
+            }
+            else
+            {
+                statList.MaxVelocity = 15;
+            }
+            ClientSettings.TextHeight = currentScreen.Height;
+
             PockeTwit.Themes.FormColors.SetColors(this);
             Application.DoEvents();
 

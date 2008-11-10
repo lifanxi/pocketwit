@@ -9,6 +9,25 @@ namespace FingerUI
     {
         public Font TextFont;
         private int AnimationStep = 0;
+        private int _AnimationPixels = -1;
+        private int AnimationPixels
+        {
+            get
+            {
+                if (_AnimationPixels < 0)
+                {
+                    if (ClientSettings.TextHeight == 192)
+                    {
+                        _AnimationPixels = 4;
+                    }
+                    else
+                    {
+                        _AnimationPixels = 1;
+                    }
+                }
+                return _AnimationPixels;
+            }
+        }
         private bool Visibility = false;
         private int MaxHeight = ClientSettings.TextSize + (ClientSettings.Margin * 2);
         public KListControl parentControl;
@@ -17,6 +36,7 @@ namespace FingerUI
         {
             animationTimer.Interval = ClientSettings.AnimationInterval;
             animationTimer.Tick += new EventHandler(animationTimer_Tick);
+            
         }
 
         void animationTimer_Tick(object sender, EventArgs e)
@@ -38,11 +58,11 @@ namespace FingerUI
         {
             if (Visibility)
             {
-                if (AnimationStep < MaxHeight) { AnimationStep++; }
+                if (AnimationStep < MaxHeight) { AnimationStep= AnimationStep+AnimationPixels; }
             }
             else
             {
-                if (AnimationStep > 0) { AnimationStep--; }
+                if (AnimationStep > 0) { AnimationStep = AnimationStep - AnimationPixels; }
                 else { animationTimer.Enabled = false; }
 
             }
