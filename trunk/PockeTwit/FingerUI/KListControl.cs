@@ -561,6 +561,19 @@ namespace FingerUI
             Invalidate();
         }
 
+        public void Repaint()
+        {
+            if (InvokeRequired)
+            {
+                delClearMe d = new delClearMe(Repaint);
+                this.Invoke(d, null);
+            }
+            else
+            {
+                this.Invalidate();
+            }
+        }
+
         public void Redraw()
         {
             if (InvokeRequired)
@@ -605,6 +618,8 @@ namespace FingerUI
                     m_selectedIndex = 0;
                     m_items[0].Selected = true;
                     m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                    StatusItem s = (StatusItem)SelectedItem;
+                    RightMenu.UserName = s.Tweet.user.screen_name;
                     //FillBuffer();
                 }
             }
@@ -741,7 +756,6 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    SetRightMenuUser();
                     m_velocity.X = 15;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
@@ -810,7 +824,7 @@ namespace FingerUI
                 Point currPos = new Point(e.X, e.Y);
 
                 int distanceX = m_mousePrev.X - currPos.X;
-                if (distanceX > 3 & m_offset.X == 0) { SetRightMenuUser(); }
+                //if (distanceX > 3 & m_offset.X == 0) { SetRightMenuUser(); }
                 
                 int distanceY = m_mousePrev.Y - currPos.Y;
                 //if we're primarily moving vertically, ignore horizontal movement.
@@ -1008,13 +1022,7 @@ namespace FingerUI
         {
             base.OnResize(e);
 
-            LeftMenu.Height = this.Height;
-            LeftMenu.Width = this.Width;
-
-
-
-            RightMenu.Height = this.Height;
-            RightMenu.Width = this.Width;
+            
 
             if (this.Visible)
             {
@@ -1024,6 +1032,14 @@ namespace FingerUI
 
         private void RerenderBySize()
         {
+            LeftMenu.Height = this.Height;
+            LeftMenu.Width = this.Width;
+
+
+
+            RightMenu.Height = this.Height;
+            RightMenu.Width = this.Width;
+
             ClickablesControl.Top = this.Top + 20;
             ClickablesControl.Left = this.Left + 20;
             ClickablesControl.Width = this.Width - 40;

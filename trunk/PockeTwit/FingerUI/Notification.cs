@@ -79,7 +79,7 @@ namespace FingerUI
                         Rectangle textPos = new Rectangle(Left + ClientSettings.Margin, (Bottom - AnimationStep)+ClientSettings.Margin, Width - ClientSettings.Margin, ClientSettings.TextSize + ClientSettings.Margin);
                         Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackGradColor, ClientSettings.SelectedBackColor, Gradient.GradientFill.FillDirection.TopToBottom);
                         g.DrawRectangle(p, boxPos);
-                        g.DrawString("Fetching", TextFont, ForeBrush, textPos);
+                        g.DrawString("Updating...", TextFont, ForeBrush, textPos);
                     }
                 }
             }
