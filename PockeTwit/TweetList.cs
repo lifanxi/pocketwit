@@ -242,6 +242,7 @@ namespace PockeTwit
         {
             GetMatchingConnection(AccountInfo).SetFavorite(ID);
             UpdateRightMenu();
+            statList.Repaint();
             ChangeCursor(Cursors.Default);
         }
 
@@ -269,6 +270,7 @@ namespace PockeTwit
             GetMatchingConnection(selectedItem.Tweet.Account).DestroyFavorite(ID);
             selectedItem.isFavorite = false;
             UpdateRightMenu();
+            statList.Repaint();
             ChangeCursor(Cursors.Default);
         }
 
