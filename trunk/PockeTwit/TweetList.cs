@@ -455,7 +455,6 @@ namespace PockeTwit
             Manager.Startup(TwitterConnections);
             Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
             Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
-            Manager.BothUpdated += new TimelineManagement.delBothUpdated(Manager_BothUpdated);
             foreach (Following f in FollowingDictionary.Values)
             {
                 f.LoadFromTwitter();
@@ -549,28 +548,6 @@ namespace PockeTwit
         {
             lblLoading.Text = Status;
             Application.DoEvents();
-        }
-
-        void Manager_BothUpdated(int Messagecount, int FreindsCount)
-        {
-            if (this.IsFocused())
-            {
-                if (statList.CurrentList() == "Messages")
-                {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), Messagecount);
-                }
-                else if (statList.CurrentList() == "Friends_TimeLine")
-                {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), FreindsCount);
-                }
-            }
-            else
-            {
-                if (Notifyer != null)
-                {
-                    Notifyer.NewBoth(Messagecount, FreindsCount);
-                }
-            }
         }
 
         void Manager_MessagesUpdated(int count)
