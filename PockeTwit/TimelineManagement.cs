@@ -16,7 +16,6 @@ namespace PockeTwit
         public delegate void delNullReturnedByAccount(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
         public event delFriendsUpdated FriendsUpdated;
         public event delMessagesUpdated MessagesUpdated;
-        public event delBothUpdated BothUpdated;
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
         public event delNullReturnedByAccount NoData;
@@ -102,6 +101,7 @@ namespace PockeTwit
         void messagesTimerUpdate_Tick(object state)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundMessagesUpdate));
+            
             NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
             System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
         }
