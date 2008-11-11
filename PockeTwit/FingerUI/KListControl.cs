@@ -256,7 +256,7 @@ namespace FingerUI
             set
             {
                 m_itemWidth = value;
-                Reset();
+                this.Redraw();
             }
         }
 
@@ -1040,7 +1040,7 @@ namespace FingerUI
             Application.DoEvents();
             LeftMenu.Height = this.Height;
             LeftMenu.Width = this.Width;
-
+            
 
 
             RightMenu.Height = this.Height;
@@ -1059,7 +1059,9 @@ namespace FingerUI
             }
             CreateBackBuffer();
 
-            Reset();
+            FillBuffer();
+            SelectAndJump();
+            this.Redraw();
             base.Visible = true;
         }
 
