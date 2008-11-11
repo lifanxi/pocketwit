@@ -37,7 +37,7 @@ namespace PockeTwit
             lblVersion.Text = UpdateChecker.currentVersion.ToString();
             if (UpdateChecker.devBuild)
             {
-                lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev";
+                lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev " + Environment.Version.Build.ToString();
             }
             this.lnkContributors.Focus();
         }
