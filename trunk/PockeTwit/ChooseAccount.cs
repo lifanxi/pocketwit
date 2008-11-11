@@ -57,7 +57,7 @@ namespace PockeTwit
                 m.Subject = "Crash Report: v" +UpdateChecker.currentVersion.ToString();
                 if (UpdateChecker.devBuild)
                 {
-                    m.Subject = m.Subject + " dev build";
+                    m.Subject = m.Subject + " dev build" + Environment.Version.Build.ToString();
                 }
                 string accName = (string)comboBox1.SelectedItem;
                 accounts[accName].Send(m);
