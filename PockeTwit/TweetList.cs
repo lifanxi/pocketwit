@@ -167,6 +167,7 @@ namespace PockeTwit
             {
                 int OldOffset = statList.YOffset;
                 int oldIndex = statList.SelectedIndex;
+                int oldCount = statList.Count;
                 statList.Clear();
                 
                 foreach (Library.status stat in mergedstatuses)
@@ -179,7 +180,7 @@ namespace PockeTwit
                     }
                 }
                 FingerUI.StatusItem currentItem;
-                if (oldIndex>=0 && newItems<50)
+                if (oldIndex>=0 && newItems<oldCount)
                 {
                     statList.SelectedItem = statList[oldIndex + newItems];
                     currentItem = (FingerUI.StatusItem)statList.SelectedItem;
@@ -554,7 +555,7 @@ namespace PockeTwit
         {
             if (this.IsFocused())
             {
-                if (statList.CurrentList() == "Messages")
+                if (statList.CurrentList() == "Messages_TimeLine")
                 {
                     AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }

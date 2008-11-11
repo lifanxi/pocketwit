@@ -345,6 +345,10 @@ namespace FingerUI
         {
             get
             {
+                if (m_items.Count <= index)
+                {
+                    return m_items[m_items.Count - 1];
+                }
                 return m_items[index];
             }
         }
@@ -1069,6 +1073,7 @@ namespace FingerUI
             try
             {
                 int itemNumber = FindIndex(point.X, point.Y).Y;
+                if (itemNumber > m_items.Count) { return; }
                 StatusItem s = (StatusItem)m_items[itemNumber];
 
                 foreach (StatusItem.Clickable c in s.Tweet.Clickables)
@@ -1386,6 +1391,10 @@ namespace FingerUI
             if (!m_updating)
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);
+                using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
+                {
+                    m_backBuffer.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
+                }
                 m_timer.Enabled = false;
                 if (m_items.Count > 0)
                 {
