@@ -50,7 +50,6 @@ namespace PockeTwit
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.statList = new FingerUI.KListControl();
-            
             this.SuspendLayout();
             // 
             // timerStartup
@@ -63,25 +62,22 @@ namespace PockeTwit
             this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular);
-            this.lblTitle.ForeColor = ClientSettings.ForeColor;
-            this.lblTitle.Location = new System.Drawing.Point(3, 0);
+            this.lblTitle.ForeColor = System.Drawing.Color.LightGray;
+            this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(234, 31);
+            this.lblTitle.Size = new System.Drawing.Size(240, 31);
             this.lblTitle.Text = "Launching PockeTwit";
-            if (UpdateChecker.devBuild)
-            {
-                this.lblTitle.Text = "Launching PockeTwit Dev";
-            }
             // 
             // lblLoading
             // 
-            this.lblLoading.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
-            this.lblLoading.ForeColor = ClientSettings.ForeColor;
-            this.lblLoading.Location = new System.Drawing.Point(3, 31);
+            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
+            this.lblLoading.Location = new System.Drawing.Point(0, 31);
             this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(234, 55);
+            this.lblLoading.Size = new System.Drawing.Size(240, 263);
             this.lblLoading.Text = "Loading. . .";
             // 
             // statList
@@ -100,19 +96,12 @@ namespace PockeTwit
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor; ;
             this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblLoading);
             this.Controls.Add(this.statList);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
-
-            if (DetectDevice.DeviceType == DeviceType.Professional)
-            {
-                inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
-            }
-
             this.ResumeLayout(false);
 
         }

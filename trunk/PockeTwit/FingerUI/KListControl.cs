@@ -1032,6 +1032,8 @@ namespace FingerUI
 
         private void RerenderBySize()
         {
+            base.Visible = false;
+            Application.DoEvents();
             LeftMenu.Height = this.Height;
             LeftMenu.Width = this.Width;
 
@@ -1054,6 +1056,7 @@ namespace FingerUI
             CreateBackBuffer();
 
             Reset();
+            base.Visible = true;
         }
 
 
@@ -1451,7 +1454,7 @@ namespace FingerUI
             else
             {
                 Point selectedIndex = FindIndex(e.X, e.Y);
-                if (selectedIndex .Y!= m_selectedIndex)
+                if (selectedIndex.Y!= m_selectedIndex)
                 {
                     if (m_items.ContainsKey(selectedIndex.Y))
                     {
@@ -1464,10 +1467,7 @@ namespace FingerUI
                         {
                             SelectedItemChanged(this, new EventArgs());
                         }
-                        if (CurrentlyViewing == SideShown.Right)
-                        {
-                            SetRightMenuUser();
-                        }
+                        SetRightMenuUser();
                     }
                 }
                 else
