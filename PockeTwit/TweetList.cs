@@ -47,6 +47,14 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             InitializeComponent();
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
+            }
+            if (UpdateChecker.devBuild)
+            {
+                this.lblTitle.Text = "Launching PockeTwit Dev";
+            }
 
 
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
