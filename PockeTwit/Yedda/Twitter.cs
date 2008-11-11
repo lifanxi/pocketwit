@@ -68,10 +68,10 @@ namespace Yedda
         [Serializable]
         public class Account
         {
-            [System.Xml.Serialization.XmlIgnore]
-            
             public string UserName { get; set; }
+            [System.Xml.Serialization.XmlIgnore]
             public string Password { get; set; }
+
             private Yedda.Twitter.TwitterServer _Server;
             public Yedda.Twitter.TwitterServer Server
             {
@@ -120,6 +120,7 @@ namespace Yedda
                 set
                 {
                     _ServerURL = value;
+                    _Server = value.ServerType;
                 }
             }
             private bool _Enabled = true;
@@ -144,20 +145,21 @@ namespace Yedda
             public override bool Equals(object obj)
             {
                 Account otherAccount = (Account)obj;
-                return (otherAccount.UserName == this.UserName && otherAccount.ServerURL== this.ServerURL);
+                return (otherAccount.UserName == this.UserName && otherAccount.ServerURL.URL== this.ServerURL.URL);
             }
-
+            public override int GetHashCode()
+            {
+                string hashString = this.UserName + this.ServerURL.URL;
+                return hashString.GetHashCode();
+            }
             public override string ToString()
             {
-                string Indicator;
                 if (ServerURL.ServerType == TwitterServer.pingfm)
                 {
                     return "+ ping.fm";
                 }
                 else
                 {
-                    //if (Enabled) { Indicator = "+"; }
-                    //else { Indicator = "-"; }
                     return UserName + " (" + ServerURL.Name + ")";
                 }
             }

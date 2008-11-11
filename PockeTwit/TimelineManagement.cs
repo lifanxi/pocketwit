@@ -33,8 +33,8 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter.Account, string> LastStatusID = new Dictionary<Yedda.Twitter.Account, string>();
         private Dictionary<Yedda.Twitter.Account, string> LastReplyID = new Dictionary<Yedda.Twitter.Account, string>();
         private Dictionary<Yedda.Twitter.Account, string> LastDirectID = new Dictionary<Yedda.Twitter.Account, string>();
-        private System.Threading.Timer messagesTimerUpdate;
-        private System.Threading.Timer friendsTimerUpdate;
+        private System.Threading.Timer messagesTimerUpdate = new System.Threading.Timer(null, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+        private System.Threading.Timer friendsTimerUpdate = new System.Threading.Timer(null, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
@@ -52,6 +52,7 @@ namespace PockeTwit
             TwitterConnections = TwitterConnectionsToFollow;
             foreach (Yedda.Twitter t in TwitterConnections)
             {
+                System.Diagnostics.Debug.WriteLine("Adding key: " + t.AccountInfo);
                 LastStatusID.Add(t.AccountInfo, "");
                 LastReplyID.Add(t.AccountInfo, "");
                 LastDirectID.Add(t.AccountInfo, "");
@@ -79,7 +80,6 @@ namespace PockeTwit
             if (TimeLines[TimeLineType.Friends].Count > 0)
             {
                 CompleteLoaded();
-                friendsTimerUpdate_Tick(null);
             }
             else
             {
@@ -91,6 +91,7 @@ namespace PockeTwit
             } 
             if (ClientSettings.UpdateInterval > 0)
             {
+                friendsTimerUpdate_Tick(null);
                 messagesTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(messagesTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
                 friendsTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(friendsTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
                 NextUpdate = DateTime.Now.Add(new TimeSpan(0,0,0,0,ClientSettings.UpdateInterval));

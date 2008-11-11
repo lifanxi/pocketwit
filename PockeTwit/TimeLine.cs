@@ -23,6 +23,10 @@ namespace PockeTwit
                 AddUnique(items);
             }
             TrimToFit();
+            if (this.Count > 0)
+            {
+                this.LastReadID = this[0].id;
+            }
         }
 
         private void AddUnique(IEnumerable<Library.status> items)
