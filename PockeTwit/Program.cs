@@ -12,14 +12,10 @@ namespace PockeTwit
         public static DateTime Ready;
 		#region Methods (2) 
 
-        [System.Runtime.InteropServices.DllImport("coredll.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
-        private static extern bool PowerPolicyNotify(int dwMessage, int dwData); 
-
 		// Private Methods (2) 
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            PowerPolicyNotify(3, 0);
             string ErrorPath = ClientSettings.AppPath;
             Exception ex = (Exception)e.ExceptionObject;
             if (ex is ObjectDisposedException)
@@ -62,14 +58,9 @@ namespace PockeTwit
         static void Main()
         {
             
-            
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-            PowerPolicyNotify(3, 1);
-
             ClientSettings.LoadSettings();
             Application.Run(new TweetList());
-            PowerPolicyNotify(3, 0);
         }
 
 
