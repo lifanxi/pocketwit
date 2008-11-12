@@ -1223,6 +1223,7 @@ namespace PockeTwit
         void Minimize()
         {
             // The Taskbar must be enabled to be able to do a Smart Minimize
+            statList.Visible = false;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             //statList.Visible = false;
             this.WindowState = FormWindowState.Normal;
@@ -1235,6 +1236,7 @@ namespace PockeTwit
             statList.Clear();
              */
             ShowWindow(this.Handle, SW_MINIMIZED);
+            statList.Visible = true;
             GC.Collect();
         }
 
