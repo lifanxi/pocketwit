@@ -553,13 +553,13 @@ namespace PockeTwit
 
         void Manager_MessagesUpdated(int count)
         {
+            if (statList.CurrentList() == "Messages_TimeLine")
+            {
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
+            }
             if (this.IsFocused())
             {
-                if (statList.CurrentList() == "Messages_TimeLine")
-                {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
-                    if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-                }
+                if (ClientSettings.BeepOnNew) { MessageBeep(0); }
             }
             else
             {
@@ -573,13 +573,13 @@ namespace PockeTwit
 
         void Manager_FriendsUpdated(int count)
         {
+            if (statList.CurrentList() == "Friends_TimeLine")
+            {
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
+            }
             if (this.IsFocused())
             {
-                if (statList.CurrentList() == "Friends_TimeLine")
-                {
-                    AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
                     if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-                }
             }
             else
             {
@@ -1195,7 +1195,7 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
-            statList.Visible = true;
+            //statList.Visible = true;
             /*
             if (statList.CurrentList() == "Friends_TimeLine")
             {
@@ -1224,7 +1224,7 @@ namespace PockeTwit
         {
             // The Taskbar must be enabled to be able to do a Smart Minimize
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            statList.Visible = false;
+            //statList.Visible = false;
             this.WindowState = FormWindowState.Normal;
             this.ControlBox = true;
             this.MinimizeBox = true;
