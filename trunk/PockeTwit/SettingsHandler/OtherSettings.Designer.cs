@@ -54,6 +54,7 @@ namespace PockeTwit
             this.txtUpdate = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.chkBeep = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -73,41 +74,41 @@ namespace PockeTwit
             // 
             // chkGPS
             // 
-            this.chkGPS.ForeColor = ClientSettings.ForeColor;
+            this.chkGPS.ForeColor = System.Drawing.Color.LightGray;
             this.chkGPS.Location = new System.Drawing.Point(2, 29);
             this.chkGPS.Name = "chkGPS";
             this.chkGPS.Size = new System.Drawing.Size(235, 20);
-            this.chkGPS.TabIndex = 2;
+            this.chkGPS.TabIndex = 1;
             this.chkGPS.Text = "Use GPS";
             // 
             // chkVersion
             // 
-            this.chkVersion.ForeColor = ClientSettings.ForeColor;
+            this.chkVersion.ForeColor = System.Drawing.Color.LightGray;
             this.chkVersion.Location = new System.Drawing.Point(2, 3);
             this.chkVersion.Name = "chkVersion";
             this.chkVersion.Size = new System.Drawing.Size(235, 20);
-            this.chkVersion.TabIndex = 1;
+            this.chkVersion.TabIndex = 0;
             this.chkVersion.Text = "Automatically check for new version";
             // 
             // lblUpDates
             // 
-            this.lblUpDates.ForeColor = ClientSettings.ForeColor; ;
-            this.lblUpDates.Location = new System.Drawing.Point(3, 52);
+            this.lblUpDates.ForeColor = System.Drawing.Color.LightGray;
+            this.lblUpDates.Location = new System.Drawing.Point(6, 75);
             this.lblUpDates.Name = "lblUpDates";
             this.lblUpDates.Size = new System.Drawing.Size(234, 20);
             this.lblUpDates.Text = "Automatic Update (Milliseconds)";
             // 
             // txtUpdate
             // 
-            this.txtUpdate.Location = new System.Drawing.Point(3, 75);
+            this.txtUpdate.Location = new System.Drawing.Point(6, 94);
             this.txtUpdate.Name = "txtUpdate";
             this.txtUpdate.Size = new System.Drawing.Size(90, 21);
             this.txtUpdate.TabIndex = 3;
             // 
             // label1
             // 
-            this.label1.ForeColor = ClientSettings.ForeColor;
-            this.label1.Location = new System.Drawing.Point(99, 76);
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
+            this.label1.Location = new System.Drawing.Point(102, 95);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 20);
             this.label1.Text = "0 to disable";
@@ -115,20 +116,30 @@ namespace PockeTwit
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.Location = new System.Drawing.Point(107, 248);
+            this.linkLabel1.ForeColor = System.Drawing.Color.LightBlue;
+            this.linkLabel1.Location = new System.Drawing.Point(110, 248);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(130, 20);
-            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabIndex = 4;
             this.linkLabel1.Text = "Configure Notifications";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
-            this.linkLabel1.ForeColor = ClientSettings.LinkColor;
+            // 
+            // chkBeep
+            // 
+            this.chkBeep.ForeColor = System.Drawing.Color.LightGray;
+            this.chkBeep.Location = new System.Drawing.Point(2, 55);
+            this.chkBeep.Name = "chkBeep";
+            this.chkBeep.Size = new System.Drawing.Size(235, 20);
+            this.chkBeep.TabIndex = 2;
+            this.chkBeep.Text = "Beep on new messages";
             // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkBeep);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtUpdate);
@@ -150,6 +161,7 @@ namespace PockeTwit
         private System.Windows.Forms.TextBox txtUpdate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox chkBeep;
 
     }
 }

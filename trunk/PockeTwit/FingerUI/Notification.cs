@@ -7,6 +7,7 @@ namespace FingerUI
 {
     class NotificationPopup
     {
+        private string _DisplayText;
         public Font TextFont;
         private int AnimationStep = 0;
         private int _AnimationPixels = -1;
@@ -44,8 +45,10 @@ namespace FingerUI
             parentControl.Invalidate();
         }
         
-        public void ShowNotification()
+        
+        public void ShowNotification(string Text)
         {
+            _DisplayText = Text;
             animationTimer.Enabled = true;
             Visibility = true;
         }
@@ -79,7 +82,7 @@ namespace FingerUI
                         Rectangle textPos = new Rectangle(Left + ClientSettings.Margin, (Bottom - AnimationStep)+ClientSettings.Margin, Width - ClientSettings.Margin, ClientSettings.TextSize + ClientSettings.Margin);
                         Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackGradColor, ClientSettings.SelectedBackColor, Gradient.GradientFill.FillDirection.TopToBottom);
                         g.DrawRectangle(p, boxPos);
-                        g.DrawString("Updating...", TextFont, ForeBrush, textPos);
+                        g.DrawString(_DisplayText, TextFont, ForeBrush, textPos);
                     }
                 }
             }

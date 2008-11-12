@@ -95,22 +95,16 @@ namespace PockeTwit
                 messagesTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(messagesTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
                 friendsTimerUpdate = new System.Threading.Timer(new System.Threading.TimerCallback(friendsTimerUpdate_Tick), null, ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
                 NextUpdate = DateTime.Now.Add(new TimeSpan(0,0,0,0,ClientSettings.UpdateInterval));
-                System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
             }
         }
 
         void messagesTimerUpdate_Tick(object state)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundMessagesUpdate));
-            
-            NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
-            System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
         }
         void friendsTimerUpdate_Tick(object state)
         {
-           System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundFriendsUpdate));
-            NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
-            System.Diagnostics.Debug.WriteLine("Next update in " + NextUpdate.ToString());
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundFriendsUpdate));
         }
         private void BackgroundMessagesUpdate(object o)
         {
@@ -201,6 +195,7 @@ namespace PockeTwit
         }
         private void GetMessagesTimeLine(bool Notify)
         {
+            messagesTimerUpdate.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             lock(TwitterConnections){
@@ -291,6 +286,7 @@ namespace PockeTwit
         }
         private void GetFriendsTimeLine(bool Notify)
         {
+            friendsTimerUpdate.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
@@ -345,6 +341,13 @@ namespace PockeTwit
             if (ClientSettings.UpdateInterval > 0)
             {
                 this.friendsTimerUpdate.Change(ClientSettings.UpdateInterval, ClientSettings.UpdateInterval);
+                NextUpdate = DateTime.Now.Add(new TimeSpan(0, 0, 0, 0, ClientSettings.UpdateInterval));
+                using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\NextTime.txt", true))
+                {
+                    w.WriteLine("Now: " + DateTime.Now);
+                    w.WriteLine("Next: " + NextUpdate);
+                    w.WriteLine("___________________________");
+                }
             }
         }
 

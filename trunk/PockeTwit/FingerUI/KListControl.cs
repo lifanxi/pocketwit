@@ -999,7 +999,7 @@ namespace FingerUI
 
                 if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
                 {
-                    NotificationArea.ShowNotification();
+                    NotificationArea.ShowNotification("Updating...");
                 }
                 else
                 {
