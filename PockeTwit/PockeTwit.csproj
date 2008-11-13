@@ -31,7 +31,8 @@
     <ErrorReport>prompt</ErrorReport>
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+    <ApplicationIcon>PockeTwit.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,13 +44,14 @@
     <ErrorReport>prompt</ErrorReport>
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+    <ApplicationIcon>PockeTwit.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DevBuild|AnyCPU' ">
     <ApplicationIcon>PockeTwitDev.ico</ApplicationIcon>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
     <OutputPath>bin\DevBuild\</OutputPath>
     <DefineConstants>TRACE;PocketPC</DefineConstants>
     <Optimize>true</Optimize>
