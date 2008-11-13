@@ -36,8 +36,7 @@ public static class ClientSettings
     public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
     public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
     public static int SmallArtSize = 65;
-    public static int UpdateInterval;
-
+    
     public static Yedda.Twitter.Account DefaultAccount
     {
         get
@@ -91,6 +90,8 @@ public static class ClientSettings
 		#endregion Constructors 
 
 		#region Properties (7) 
+
+    public static int UpdateMinutes { get; set; }
     public static float TextHeight { get; set; }
     public static string ThemeName { get; set; }
     public static bool IncludeUserName { get; set; }
@@ -152,6 +153,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateMinutes"]))
+            {
+                UpdateMinutes = int.Parse(ConfigurationSettings.AppSettings["UpdateMinutes"]);
+            }
+            else
+            {
+                UpdateMinutes = 5;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ThemeName"]))
             {
                 ThemeName = ConfigurationSettings.AppSettings["ThemeName"];
@@ -252,14 +261,6 @@ public static class ClientSettings
             {
                 AnimationInterval = 15;
             }
-            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateInterval"]))
-            {
-                UpdateInterval = int.Parse(ConfigurationSettings.AppSettings["UpdateInterval"]);
-            }
-            else
-            {
-                UpdateInterval = 90000;
-            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MaxTweets"]))
             {
                 MaxTweets= int.Parse(ConfigurationSettings.AppSettings["MaxTweets"]);
@@ -307,7 +308,6 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
         ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
-        ConfigurationSettings.AppSettings["UpdateInterval"] = UpdateInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
         ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
