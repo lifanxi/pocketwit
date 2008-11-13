@@ -797,6 +797,7 @@ namespace PockeTwit
                     break;
                 case "Exit":
                     statList.Clear();
+                    Manager.ShutDown();
                     this.Close();
                     break;
             }

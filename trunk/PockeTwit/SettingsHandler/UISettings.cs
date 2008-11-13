@@ -107,10 +107,17 @@ namespace PockeTwit
         private void ListThemes()
         {
             cmbTheme.Items.Clear();
+            List<string> ItemList = new List<string>();
             foreach (string ThemeFile in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\Themes\\"))
             {
                 string themeName = System.IO.Path.GetFileNameWithoutExtension(ThemeFile);
-                cmbTheme.Items.Add(themeName);
+                ItemList.Add(themeName);
+            }
+
+            ItemList.Sort();
+            foreach (string item in ItemList)
+            {
+                cmbTheme.Items.Add(item);
             }
             cmbTheme.SelectedItem = ClientSettings.ThemeName;
         }

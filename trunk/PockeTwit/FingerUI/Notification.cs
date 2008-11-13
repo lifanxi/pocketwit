@@ -80,7 +80,7 @@ namespace FingerUI
 
                         Rectangle boxPos = new Rectangle(Left, Bottom - AnimationStep, Width, ClientSettings.TextSize + (ClientSettings.Margin * 2));
                         Rectangle textPos = new Rectangle(Left + ClientSettings.Margin, (Bottom - AnimationStep)+ClientSettings.Margin, Width - ClientSettings.Margin, ClientSettings.TextSize + ClientSettings.Margin);
-                        Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackGradColor, ClientSettings.SelectedBackColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
                         g.DrawRectangle(p, boxPos);
                         g.DrawString(_DisplayText, TextFont, ForeBrush, textPos);
                     }
