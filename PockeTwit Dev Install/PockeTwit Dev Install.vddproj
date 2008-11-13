@@ -189,6 +189,18 @@
         "CertificateHash" = "8:"
         "TimeStampServer" = "8:"
         }
+        "DevBuild"
+        {
+        "DisplayName" = "8:DevBuild"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:DevBuild\\PockeTwit Dev Install.cab"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "SignOutput" = "11:FALSE"
+        "CertificateHash" = "8:"
+        "TimeStampServer" = "8:"
+        }
         "Release"
         {
         "DisplayName" = "8:Release"
@@ -533,7 +545,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_40E71D37BA55489FBE0B2DC740587735"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
