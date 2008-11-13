@@ -2,7 +2,9 @@
 
 = Introduction =
 
-Who knows if it will work.
+This is a link to the latest unstable development testing build.  I use it to test out code before I feel it's ready for release to general users.  It usually runs ok, but is much more likely to have bugs or crash than a "release" version.
+
+Installing it will not overwrite or affect an installed "release" build.  It creates its own separate folder and shortcut.
 
 = Details =
 
