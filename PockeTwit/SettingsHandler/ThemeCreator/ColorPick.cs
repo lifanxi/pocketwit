@@ -214,7 +214,10 @@ namespace PockeTwit
                 System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Themes\\" + newName);
                 foreach (string oldItem in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\" + ThemeName))
                 {
-                    System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                    if (System.IO.Path.GetExtension(oldItem) != ".txt")
+                    {
+                        System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                    }
                 }
                 return newFolder + "\\" + newName + ".txt";
             }

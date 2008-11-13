@@ -59,14 +59,11 @@ namespace PockeTwit
 
                     LinkLabel nameLabel = new LinkLabel();
                     nameLabel.Text = s.Name;
+                    nameLabel.ForeColor = ClientSettings.LinkColor;
+
                     if (s.Name.StartsWith("@"))
                     {
-                        nameLabel.ForeColor = ClientSettings.LinkColor;
                         nameLabel.Click += new EventHandler(nameLabel_Click);
-                    }
-                    else
-                    {
-                        nameLabel.ForeColor = ClientSettings.FieldForeColor;
                     }
                     nameLabel.Top = topOfLabel;
                     nameLabel.Width = labelWidth;

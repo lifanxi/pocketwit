@@ -890,7 +890,10 @@ namespace FingerUI
             if (sameY)
             {
                 // Yes, so select that item or menuiten
-                SelectItemOrMenu(e);
+                if (Math.Abs(e.X - m_mouseDown.X) < MaxVelocity)
+                {
+                    SelectItemOrMenu(e);
+                }
             }
             else
             {

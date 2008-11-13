@@ -100,7 +100,18 @@ namespace PockeTwit
                 NextUpdate = DateTime.Now.Add(new TimeSpan(0, ClientSettings.UpdateMinutes, 0));
             }
         }
-
+        ~TimelineManagement()
+        {
+            ShutDown();
+        }
+        public void ShutDown()
+        {
+            if (updateTimer != null)
+            {
+                updateTimer.Enabled = false;
+                updateTimer = null;
+            }
+        }
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdateBoth));   
