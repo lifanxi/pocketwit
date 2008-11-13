@@ -96,7 +96,7 @@ namespace PockeTwit
             this.lblUpDates.Location = new System.Drawing.Point(6, 75);
             this.lblUpDates.Name = "lblUpDates";
             this.lblUpDates.Size = new System.Drawing.Size(234, 20);
-            this.lblUpDates.Text = "Automatic Update (Milliseconds)";
+            this.lblUpDates.Text = "Automatic Update (Minutes)";
             // 
             // txtUpdate
             // 

@@ -114,6 +114,9 @@
     </Compile>
     <Compile Include="NotificationSoftKeys\SHNOTIFICATIONDATA.cs" />
     <Compile Include="NotificationSoftKeys\SpinnerClickEventHandler.cs" />
+    <Compile Include="OpenNetCF\EventWaitHandle.cs" />
+    <Compile Include="OpenNetCF\LargeIntervalTimer.cs" />
+    <Compile Include="OpenNetCF\NativeMethods.cs" />
     <Compile Include="SafeDictionary.cs" />
     <Compile Include="SettingsHandler\AccountInfoForm.cs">
       <SubType>Form</SubType>
@@ -331,6 +334,15 @@
     <Content Include="unknownart-small.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OpenNetCF\LED.cs" />
+    <Compile Include="OpenNetCF\Notify.cs" />
+    <Compile Include="OpenNetCF\SYSTEMTIME.cs" />
+    <Compile Include="OpenNetCF\UserNotification.cs" />
+    <Compile Include="OpenNetCF\UserNotificationInfoHeader.cs" />
+    <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
+    <Compile Include="OpenNetCF\WaitHandle.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

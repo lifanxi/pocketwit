@@ -228,22 +228,26 @@ namespace PockeTwit.Library
             nm.AddNamespace("s", "http://www.w3.org/2005/Atom");
             XmlNodeList entries = results.SelectNodes("//s:entry", nm);
             System.Diagnostics.Debug.WriteLine(entries.Count);
-            foreach (XmlNode entry in entries)
+            try
             {
-                status newStat = new status();
-                newStat.text = entry.SelectSingleNode("s:title",nm).InnerText;
-                newStat.id = entry.SelectSingleNode("s:id", nm).InnerText;
-                newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
-                string userName = entry.SelectSingleNode("s:author/s:name",nm).InnerText;
-                newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
-                string userscreenName = userName.Split(new char[]{' '})[0];
-                newStat.user = new User();
-                newStat.user.screen_name = userscreenName;
-                newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
-                
-                resultList.Add(newStat);
-                
+                foreach (XmlNode entry in entries)
+                {
+                    status newStat = new status();
+                    newStat.text = entry.SelectSingleNode("s:title", nm).InnerText;
+                    newStat.id = entry.SelectSingleNode("s:id", nm).InnerText;
+                    newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
+                    string userName = entry.SelectSingleNode("s:author/s:name", nm).InnerText;
+                    newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
+                    string userscreenName = userName.Split(new char[] { ' ' })[0];
+                    newStat.user = new User();
+                    newStat.user.screen_name = userscreenName;
+                    newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
+
+                    resultList.Add(newStat);
+
+                }
             }
+            catch { }
             foreach (status stat in resultList)
             {
                 stat.TypeofMessage = StatusTypes.SearchResult;
