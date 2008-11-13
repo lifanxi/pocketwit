@@ -91,10 +91,6 @@ namespace PockeTwit
             
 
             // 
-            // mainMenu1
-            // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
-            // 
             // menuCancel
             // 
             this.menuCancel.Text = "Cancel";
@@ -201,6 +197,8 @@ namespace PockeTwit
             this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
 
             this.mainMenu1.MenuItems.Add(this.menuSubmit);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
+            
 
             this.cameraPictureBox = new System.Windows.Forms.PictureBox();
             this.filePictureBox = new System.Windows.Forms.PictureBox();
@@ -306,7 +304,8 @@ namespace PockeTwit
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
-
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
+            
             this.menuItem1.MenuItems.Add(this.menuSubmit);
             this.menuItem1.MenuItems.Add(menuURL);
             this.menuItem1.MenuItems.Add(menuExist);
