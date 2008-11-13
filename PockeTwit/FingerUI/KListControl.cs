@@ -711,6 +711,7 @@ namespace FingerUI
                             UnselectCurrentItem();
                             m_selectedIndex--;
                             SelectAndJump();
+                            SetRightMenuUser();
                         }
                     }
                     catch
@@ -741,6 +742,7 @@ namespace FingerUI
                             UnselectCurrentItem();
                             m_selectedIndex++;
                             SelectAndJump();
+                            SetRightMenuUser();
                         }
                     }
                     catch
