@@ -39,12 +39,6 @@
         "Entry"
         {
         "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
-        "OwnerKey" = "8:_E79667C3D66DB477E6FC8E35A5AE0E34"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -70,12 +64,6 @@
         {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
         "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_E79667C3D66DB477E6FC8E35A5AE0E34"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -128,26 +116,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7806F126BC175ED8C34F3AA922003BA2"
-        "OwnerKey" = "8:_A9F8E6FE8302A51F05CD662C8579B4AC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7806F126BC175ED8C34F3AA922003BA2"
-        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
-        "OwnerKey" = "8:_E79667C3D66DB477E6FC8E35A5AE0E34"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -176,25 +146,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A9F8E6FE8302A51F05CD662C8579B4AC"
+        "MsmKey" = "8:_EA0262DE4D37968ABA63504CC90711AA"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C16B917E2E4E620611F71D9F2630DC2F"
+        "MsmKey" = "8:_EA0262DE4D37968ABA63504CC90711AA"
+        "OwnerKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
+        "OwnerKey" = "8:_FF1C7FC2012D3E959D20CB3F00802F44"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C16B917E2E4E620611F71D9F2630DC2F"
-        "OwnerKey" = "8:_7806F126BC175ED8C34F3AA922003BA2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E79667C3D66DB477E6FC8E35A5AE0E34"
+        "MsmKey" = "8:_FF1C7FC2012D3E959D20CB3F00802F44"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -207,6 +183,18 @@
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
         "OutputFilename" = "8:Debug\\PockeTwit Install.cab"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "SignOutput" = "11:FALSE"
+        "CertificateHash" = "8:"
+        "TimeStampServer" = "8:"
+        }
+        "DevBuild"
+        {
+        "DisplayName" = "8:DevBuild"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:DevBuild\\PockeTwit Install.cab"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
         "SignOutput" = "11:FALSE"
@@ -398,34 +386,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_7806F126BC175ED8C34F3AA922003BA2"
-            {
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile.PocketOutlook, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
-                "ScatterAssemblies"
-                {
-                    "_7806F126BC175ED8C34F3AA922003BA2"
-                    {
-                    "Name" = "8:Microsoft.WindowsMobile.PocketOutlook.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.WindowsMobile.PocketOutlook.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
-            "Condition" = "8:"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "Register" = "3:0"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_A5BEC62F022195F9327047851A24F816"
             {
             "AssemblyIsInGAC" = "11:FALSE"
@@ -454,41 +414,13 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_A9F8E6FE8302A51F05CD662C8579B4AC"
-            {
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile.Forms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
-                "ScatterAssemblies"
-                {
-                    "_A9F8E6FE8302A51F05CD662C8579B4AC"
-                    {
-                    "Name" = "8:Microsoft.WindowsMobile.Forms.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.WindowsMobile.Forms.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
-            "Condition" = "8:"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "Register" = "3:0"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_C16B917E2E4E620611F71D9F2630DC2F"
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_EA0262DE4D37968ABA63504CC90711AA"
             {
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
                 "ScatterAssemblies"
                 {
-                    "_C16B917E2E4E620611F71D9F2630DC2F"
+                    "_EA0262DE4D37968ABA63504CC90711AA"
                     {
                     "Name" = "8:Microsoft.WindowsMobile.dll"
                     "Attributes" = "3:512"
@@ -510,19 +442,19 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_E79667C3D66DB477E6FC8E35A5AE0E34"
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_F888508587E6A59D7E134D7DBD507C7D"
             {
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Yedda.Twitter.CF, Version=1.0.3154.29265, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile.PocketOutlook, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
                 "ScatterAssemblies"
                 {
-                    "_E79667C3D66DB477E6FC8E35A5AE0E34"
+                    "_F888508587E6A59D7E134D7DBD507C7D"
                     {
-                    "Name" = "8:Yedda.Twitter.CF.dll"
+                    "Name" = "8:Microsoft.WindowsMobile.PocketOutlook.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Yedda.Twitter.CF.dll"
+            "SourcePath" = "8:Microsoft.WindowsMobile.PocketOutlook.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -534,7 +466,35 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_FF1C7FC2012D3E959D20CB3F00802F44"
+            {
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile.Forms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+                "ScatterAssemblies"
+                {
+                    "_FF1C7FC2012D3E959D20CB3F00802F44"
+                    {
+                    "Name" = "8:Microsoft.WindowsMobile.Forms.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.WindowsMobile.Forms.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -585,7 +545,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_40E71D37BA55489FBE0B2DC740587735"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
