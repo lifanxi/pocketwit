@@ -6,4 +6,4 @@ Who knows if it will work.
 
 = Details =
 
-Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/Release/PockeTwit%20Install.CAB here].
+Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Install.CAB here].
