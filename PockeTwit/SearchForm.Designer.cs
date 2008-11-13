@@ -61,8 +61,8 @@ namespace PockeTwit
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.mainMenu1.MenuItems.Add(this.menuSearch);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
             // menuCancel
             // 
@@ -78,8 +78,8 @@ namespace PockeTwit
             // 
             this.lblSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSearch.BackColor = ClientSettings.BackColor;
-            this.lblSearch.ForeColor = ClientSettings.ForeColor;
+            this.lblSearch.BackColor = System.Drawing.Color.Black;
+            this.lblSearch.ForeColor = System.Drawing.Color.LightGray;
             this.lblSearch.Location = new System.Drawing.Point(3, 9);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(234, 20);
@@ -89,8 +89,8 @@ namespace PockeTwit
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.BackColor = ClientSettings.FieldBackColor;
-            this.txtSearch.ForeColor = ClientSettings.FieldForeColor;
+            this.txtSearch.BackColor = System.Drawing.Color.White;
+            this.txtSearch.ForeColor = System.Drawing.Color.Black;
             this.txtSearch.Location = new System.Drawing.Point(57, 57);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(180, 21);
@@ -98,7 +98,7 @@ namespace PockeTwit
             // 
             // lblWithin
             // 
-            this.lblWithin.ForeColor = ClientSettings.ForeColor;
+            this.lblWithin.ForeColor = System.Drawing.Color.LightGray;
             this.lblWithin.Location = new System.Drawing.Point(3, 31);
             this.lblWithin.Name = "lblWithin";
             this.lblWithin.Size = new System.Drawing.Size(48, 20);
@@ -107,9 +107,9 @@ namespace PockeTwit
             // 
             // cmbDistance
             // 
-            this.cmbDistance.BackColor = ClientSettings.FieldBackColor;
-            this.cmbDistance.ForeColor = ClientSettings.FieldForeColor;
+            this.cmbDistance.BackColor = System.Drawing.Color.White;
             this.cmbDistance.Enabled = false;
+            this.cmbDistance.ForeColor = System.Drawing.Color.Black;
             this.cmbDistance.Items.Add("1");
             this.cmbDistance.Items.Add("3");
             this.cmbDistance.Items.Add("5");
@@ -126,9 +126,9 @@ namespace PockeTwit
             // 
             this.cmbMeasurement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbMeasurement.BackColor = ClientSettings.FieldBackColor;
-            this.cmbMeasurement.ForeColor = ClientSettings.FieldForeColor;
+            this.cmbMeasurement.BackColor = System.Drawing.Color.White;
             this.cmbMeasurement.Enabled = false;
+            this.cmbMeasurement.ForeColor = System.Drawing.Color.Black;
             this.cmbMeasurement.Items.Add("Miles");
             this.cmbMeasurement.Items.Add("Kilometers");
             this.cmbMeasurement.Location = new System.Drawing.Point(107, 29);
@@ -140,7 +140,7 @@ namespace PockeTwit
             // 
             // label1
             // 
-            this.label1.ForeColor = ClientSettings.ForeColor;
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(3, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 20);
@@ -150,7 +150,7 @@ namespace PockeTwit
             // 
             this.lblGPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblGPSStatus.ForeColor = ClientSettings.ErrorColor;
+            this.lblGPSStatus.ForeColor = System.Drawing.Color.Red;
             this.lblGPSStatus.Location = new System.Drawing.Point(3, 29);
             this.lblGPSStatus.Name = "lblGPSStatus";
             this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);
@@ -161,7 +161,7 @@ namespace PockeTwit
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.lblGPSStatus);
             this.Controls.Add(this.label1);
@@ -170,7 +170,7 @@ namespace PockeTwit
             this.Controls.Add(this.lblWithin);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblSearch);
-            this.ForeColor = ClientSettings.ForeColor;
+            this.ForeColor = System.Drawing.Color.LightGray;
             this.Menu = this.mainMenu1;
             this.Name = "SearchForm";
             this.Text = "Twitter Search";
