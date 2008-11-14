@@ -65,8 +65,7 @@ namespace FingerUI
         bool m_updating = false;
         private Velocity m_velocity = new Velocity();
         
-        List<FingerUI.KListControl.IKListItem> OnScreenItems = new List<IKListItem>();
-
+        
         public SideMenu LeftMenu = new SideMenu(SideShown.Left);
         public SideMenu RightMenu = new SideMenu(SideShown.Right);
 		#endregion Fields 
@@ -974,7 +973,6 @@ namespace FingerUI
         {
             using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
             {
-                OnScreenItems.Clear();
                 flickerGraphics.Clear(ClientSettings.BackColor);
                 flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
                 if (m_offset.X > 0)
@@ -1118,6 +1116,7 @@ namespace FingerUI
                 flickerBuffer = null;
             }
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
 
@@ -1182,7 +1181,15 @@ namespace FingerUI
         {
             CleanupBackBuffer();
             flickerBuffer = new Bitmap(this.Width, this.Height);
-            m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight*ClientSettings.MaxTweets);
+            try
+            {
+                m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight * ClientSettings.MaxTweets);
+            }
+            catch (OutOfMemoryException)
+            {
+                GC.WaitForPendingFinalizers();
+                m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight * ClientSettings.MaxTweets);
+            }
             m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
             foreach (IKListItem item in m_items.Values)
             {
@@ -1237,12 +1244,18 @@ namespace FingerUI
             if (Side == SideShown.Left)
             {
                 MenuMap = LeftMenu.Rendered;
-                m_backBuffer.DrawImage(MenuMap, (0 - this.Width) + Math.Abs(m_offset.X), 0);
+                if (MenuMap != null)
+                {
+                    m_backBuffer.DrawImage(MenuMap, (0 - this.Width) + Math.Abs(m_offset.X), 0);
+                }
             }
             else if (Side == SideShown.Right)
             {
                 MenuMap = RightMenu.Rendered;
-                m_backBuffer.DrawImage(MenuMap, this.Width - m_offset.X, 0);
+                if (MenuMap != null)
+                {
+                    m_backBuffer.DrawImage(MenuMap, this.Width - m_offset.X, 0);
+                }
             }
             
         }
@@ -1501,7 +1514,15 @@ namespace FingerUI
 
         private void ShowClickablesControl()
         {
-            StatusItem s = (StatusItem)m_items[m_selectedIndex];
+            StatusItem s = null;
+            try
+            {
+                s = (StatusItem)m_items[m_selectedIndex];
+            }
+            catch (KeyNotFoundException) 
+            {
+                return;
+            }
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
             if (s.Tweet.Clipped)

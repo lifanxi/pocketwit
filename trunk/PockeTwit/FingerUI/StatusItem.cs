@@ -281,7 +281,7 @@ namespace FingerUI
                     UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
                 }
                 g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
-
+               
                 if (ClientSettings.ShowReplyImages)
                 {
                     DrawReplyImage(g, ImageLocation);
