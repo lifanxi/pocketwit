@@ -1126,8 +1126,7 @@ namespace PockeTwit
                 f.Close(); 
                 return; 
             }
-            mbox
-
+            
             IsLoaded = true;
             this.statList.Visible = true;
             f.Hide();
