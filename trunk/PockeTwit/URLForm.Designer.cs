@@ -55,8 +55,8 @@ namespace PockeTwit
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.mainMenu1.MenuItems.Add(this.menuOK);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
             // menuCancel
             // 
@@ -72,8 +72,8 @@ namespace PockeTwit
             // 
             this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtURL.BackColor = ClientSettings.FieldBackColor;
-            this.txtURL.ForeColor = ClientSettings.FieldForeColor;
+            this.txtURL.BackColor = System.Drawing.Color.White;
+            this.txtURL.ForeColor = System.Drawing.Color.Black;
             this.txtURL.Location = new System.Drawing.Point(0, 29);
             this.txtURL.Multiline = true;
             this.txtURL.Name = "txtURL";
@@ -84,18 +84,18 @@ namespace PockeTwit
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(233, 20);
             this.label1.Text = "Enter the URL:";
-            this.label1.ForeColor = ClientSettings.ForeColor;
             // 
             // URLForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtURL);

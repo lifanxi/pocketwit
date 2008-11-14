@@ -59,8 +59,8 @@ namespace PockeTwit
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.mainMenu1.MenuItems.Add(this.menuAccept);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
             // menuCancel
             // 

@@ -30,17 +30,27 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuItem1);
             this.mainMenu1.MenuItems.Add(this.menuItem2);
+            this.mainMenu1.MenuItems.Add(this.menuItem1);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Text = "Cancel";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Text = "Send";
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
             // 
             // comboBox1
             // 
@@ -69,16 +79,6 @@
             this.label2.Size = new System.Drawing.Size(234, 69);
             this.label2.Text = "An unexpected error has occured.  May I send a crash report to the developet? If " +
                 "so, please choose the account to send from below.\r\n";
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Text = "Cancel";
-            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
-            // 
-            // menuItem2
-            // 
-            this.menuItem2.Text = "Send";
-            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
             // 
             // ChooseAccount
             // 

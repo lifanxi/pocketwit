@@ -61,9 +61,9 @@ namespace PockeTwit
             {
                 MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 MessagesBubbler.Icon = Properties.Resources.MyIco;
-                MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
-                MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
-                MessagesBubbler.RightSoftKeyClick += new EventHandler(MessagesBubbler_RightSoftKeyClick);
+                MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
+                MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
+                MessagesBubbler.LeftSoftKeyClick += new EventHandler(MessagesBubbler_LeftSoftKeyClick);
                 MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
                 MessagesBubbler.Silent = true;   
             }
@@ -99,7 +99,7 @@ namespace PockeTwit
             }
         }
 
-        void MessagesBubbler_RightSoftKeyClick(object sender, EventArgs e)
+        void MessagesBubbler_LeftSoftKeyClick(object sender, EventArgs e)
         {
             NewMessagesCount = 0;
             NewFriendsCount = 0;
@@ -252,16 +252,7 @@ namespace PockeTwit
         {
             System.Text.StringBuilder HTMLString = new StringBuilder();
             HTMLString.Append("<html><body>");
-            HTMLString.Append(NewFriendsCount.ToString() + " new ");
-            if (NewFriendsCount > 1)
-            {
-                HTMLString.Append("friend updates are available!");
-            }
-            else
-            {
-                HTMLString.Append("friend update is available!");
-            }
-
+            HTMLString.Append("New friend update(s) are available.");
             HTMLString.Append("</body></html>");
             return HTMLString.ToString();
         }
@@ -269,17 +260,7 @@ namespace PockeTwit
         {
             System.Text.StringBuilder HTMLString = new StringBuilder();
             HTMLString.Append("<html><body>");
-            HTMLString.Append(NewMessagesCount.ToString() + " new ");
-            if(NewMessagesCount>1)
-            {
-                HTMLString.Append("messages are available!");
-            }
-            else
-            {
-                HTMLString.Append("message is available!");
-            }
-            
-            HTMLString.Append("<form method=\'GET\' action=notify>");
+            HTMLString.Append("New message(s) are available.");
             HTMLString.Append("</body></html>");
 
             return HTMLString.ToString();

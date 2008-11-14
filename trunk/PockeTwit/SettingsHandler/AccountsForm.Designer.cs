@@ -41,8 +41,8 @@
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.mainMenu1.MenuItems.Add(this.menuAccept);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
             // menuCancel
             // 
@@ -56,8 +56,8 @@
             // 
             // label1
             // 
-            this.label1.BackColor = ClientSettings.BackColor;
-            this.label1.ForeColor = ClientSettings.ForeColor;
+            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.ForeColor = System.Drawing.Color.LightGray;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 20);
@@ -67,7 +67,7 @@
             // 
             this.lnkAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkAdd.ForeColor = ClientSettings.LinkColor;
+            this.lnkAdd.ForeColor = System.Drawing.Color.LightBlue;
             this.lnkAdd.Location = new System.Drawing.Point(3, 53);
             this.lnkAdd.Name = "lnkAdd";
             this.lnkAdd.Size = new System.Drawing.Size(234, 20);
@@ -79,7 +79,7 @@
             // 
             this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkEdit.ForeColor = ClientSettings.LinkColor;
+            this.lnkEdit.ForeColor = System.Drawing.Color.LightBlue;
             this.lnkEdit.Location = new System.Drawing.Point(3, 73);
             this.lnkEdit.Name = "lnkEdit";
             this.lnkEdit.Size = new System.Drawing.Size(234, 20);
@@ -91,7 +91,7 @@
             // 
             this.lnkRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkRemove.ForeColor = ClientSettings.LinkColor;
+            this.lnkRemove.ForeColor = System.Drawing.Color.LightBlue;
             this.lnkRemove.Location = new System.Drawing.Point(3, 93);
             this.lnkRemove.Name = "lnkRemove";
             this.lnkRemove.Size = new System.Drawing.Size(234, 20);
@@ -113,14 +113,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = ClientSettings.BackColor;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.cmbAccounts);
             this.Controls.Add(this.lnkRemove);
             this.Controls.Add(this.lnkEdit);
             this.Controls.Add(this.lnkAdd);
             this.Controls.Add(this.label1);
-            this.ForeColor = ClientSettings.ForeColor;
+            this.ForeColor = System.Drawing.Color.LightGray;
             this.Menu = this.mainMenu1;
             this.Name = "AccountsForm";
             this.Text = "Accounts";
