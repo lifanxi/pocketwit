@@ -255,7 +255,10 @@ namespace FingerUI
 
         private void DrawMenu()
         {
-            if (_Rendered == null) { return; }
+            if (_Rendered == null) 
+            {
+                _Rendered = new Bitmap(_Width, _Height);
+            }
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
             {
                 m_backBuffer.Clear(ClientSettings.BackColor);
