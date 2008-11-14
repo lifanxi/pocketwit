@@ -46,7 +46,6 @@ namespace FingerUI
         private bool HasMoved = false;
         private bool InFocus = false;
         Graphics m_backBuffer;
-        Bitmap flickerBuffer;
         // Background drawing
         Bitmap m_backBufferBitmap;
         int m_itemHeight = 40;
@@ -971,52 +970,56 @@ namespace FingerUI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
+            using (Image flickerBuffer = new Bitmap(this.Width, this.Height))
             {
-                flickerGraphics.Clear(ClientSettings.BackColor);
-                flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
-                if (m_offset.X > 0)
-                {
-                    DrawMenu(flickerGraphics, SideShown.Right);
-                }
-                else if (m_offset.X < 0)
-                {
-                    DrawMenu(flickerGraphics, SideShown.Left);
-                }
 
-                DrawPointer(flickerGraphics);
-                if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
+                using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
-                    if (m_offset.X > 15)
+                    flickerGraphics.Clear(ClientSettings.BackColor);
+                    flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
+                    if (m_offset.X > 0)
                     {
-                        if (IsMaximized)
+                        DrawMenu(flickerGraphics, SideShown.Right);
+                    }
+                    else if (m_offset.X < 0)
+                    {
+                        DrawMenu(flickerGraphics, SideShown.Left);
+                    }
+
+                    DrawPointer(flickerGraphics);
+                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
+                    {
+                        if (m_offset.X > 15)
                         {
-                            DrawMaxWindowSwitcher(flickerGraphics);
-                        }
-                        else
-                        {
-                            DrawStandardWindowSwitcher(flickerGraphics);
+                            if (IsMaximized)
+                            {
+                                DrawMaxWindowSwitcher(flickerGraphics);
+                            }
+                            else
+                            {
+                                DrawStandardWindowSwitcher(flickerGraphics);
+                            }
                         }
                     }
-                }
 
-                if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
-                {
-                    NotificationArea.ShowNotification("Updating...");
-                }
-                else
-                {
-                    NotificationArea.HideNotification();
-                }
+                    if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
+                    {
+                        NotificationArea.ShowNotification("Updating...");
+                    }
+                    else
+                    {
+                        NotificationArea.HideNotification();
+                    }
 
-                NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
+                    NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
 
 
-                if (ClickablesControl.Visible)
-                {
-                    ClickablesControl.Render(flickerGraphics);
+                    if (ClickablesControl.Visible)
+                    {
+                        ClickablesControl.Render(flickerGraphics);
+                    }
+                    e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
-                e.Graphics.DrawImage(flickerBuffer, 0, 0);
             }
         }
 
@@ -1110,11 +1113,6 @@ namespace FingerUI
                 m_backBuffer.Dispose();
                 m_backBuffer = null;
             }
-            if (flickerBuffer != null)
-            {
-                flickerBuffer.Dispose();
-                flickerBuffer = null;
-            }
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -1180,7 +1178,6 @@ namespace FingerUI
         private void CreateBackBuffer()
         {
             CleanupBackBuffer();
-            flickerBuffer = new Bitmap(this.Width, this.Height);
             try
             {
                 m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight * ClientSettings.MaxTweets);
