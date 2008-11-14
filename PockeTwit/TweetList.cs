@@ -449,8 +449,6 @@ namespace PockeTwit
             }
             SetConnectedMenus();
             Manager = new TimelineManagement();
-            Manager.NoData += new TimelineManagement.delNullReturnedByAccount(Manager_NoData);
-            Manager.ErrorCleared += new TimelineManagement.delNullReturnedByAccount(Manager_ErrorCleared);
             Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
             Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
             Manager.Startup(TwitterConnections);
@@ -462,68 +460,7 @@ namespace PockeTwit
             }
         }
 
-        void Manager_ErrorCleared(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
-        {
-            /*
-            lock (Yedda.Twitter.Failures)
-            {
-                if (LeftMenu.Contains("Errors"))
-                {
-                    if (Yedda.Twitter.Failures.ContainsKey(t))
-                    {
-                        if (Yedda.Twitter.Failures[t].ContainsKey(Action))
-                        {
-                            Yedda.Twitter.Failures[t][Action] = 0;
-                        }
-                    }
-                    bool AllClear = true;
-                    foreach (Dictionary<Yedda.Twitter.ActionType, int> FailList in Yedda.Twitter.Failures.Values)
-                    {
-                        foreach (int i in FailList.Values)
-                        {
-                            if (i > 0)
-                            {
-                                AllClear = false;
-                            }
-                        }
-                    }
-                    if (AllClear)
-                    {
-
-                        //Remove the menu item.
-                        LeftMenu.Remove("Errors");
-                        statList.LeftMenu.RemoveItem("Errors");
-                        statList.Redraw();
-                    }
-                }
-            }
-             */
-        }
-
-        void Manager_NoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action)
-        {
-            /*
-            lock (Yedda.Twitter.Failures)
-            {
-                if (!Yedda.Twitter.Failures.ContainsKey(t))
-                {
-                    Yedda.Twitter.Failures.Add(t, new Dictionary<Yedda.Twitter.ActionType, int>());
-                }
-                if (!Yedda.Twitter.Failures[t].ContainsKey(Action))
-                {
-                    Yedda.Twitter.Failures[t].Add(Action, 0);
-                }
-                Yedda.Twitter.Failures[t][Action]++;
-                if (!LeftMenu.Contains("Errors"))
-                {
-                    statList.LeftMenu.InsertMenuItem(LeftMenu.Count - 1, "Errors");
-                    statList.Redraw();
-                }
-            }
-             */
-        }
-
-
+        
         void Manager_CompleteLoaded()
         {
             if (InvokeRequired)
