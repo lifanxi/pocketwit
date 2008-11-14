@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.48</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv48.CAB</url>
-  <notes>More bugfixes
-
-Last important features:
-Conversation View
-Go back to previous view
-Hashtag links
-Theme management
-Improved Quotes
-Contributors listed in About
-Bugfixes
-UI Tweaks
+  <version>.49</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv49.CAB</url>
+  <notes>Big speed increases
+Reduced load time
+Improved look
+Runs in background during device sleep
 </notes>
 </LatestRelease>
