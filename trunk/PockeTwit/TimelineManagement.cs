@@ -18,8 +18,8 @@ namespace PockeTwit
         public event delMessagesUpdated MessagesUpdated;
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
-        public event delNullReturnedByAccount NoData;
-        public event delNullReturnedByAccount ErrorCleared;
+        public event delNullReturnedByAccount NoData = delegate{};
+        public event delNullReturnedByAccount ErrorCleared = delegate { };
 
         #endregion
         public bool RunInBackground = true;
