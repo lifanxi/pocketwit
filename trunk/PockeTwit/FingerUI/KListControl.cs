@@ -1443,7 +1443,15 @@ namespace FingerUI
         private void SelectAndJump()
         {
             //m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
-            IKListItem item = m_items[m_selectedIndex];
+            IKListItem item = null;
+            try
+            {
+                item = m_items[m_selectedIndex];
+            }
+            catch (KeyNotFoundException)
+            {
+                return;
+            }
             item.Selected = true;
             m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
             if (SelectedItemChanged != null)
