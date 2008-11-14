@@ -78,24 +78,32 @@ namespace PockeTwit
             }
             else
             {
-                
-                string ID2;
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtName + ".ID"))
+                try
                 {
-                    ID2 = reader.ReadToEnd();
+                    string ID2;
+                    using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtName + ".ID"))
+                    {
+                        ID2 = reader.ReadToEnd();
+                    }
+                    if (ID != ID2)
+                    {
+                        ArtRequest r = new ArtRequest(user, url);
+                        QueueRequest(r);
+                        return UnknownArt;
+                    }
+                    else
+                    {
+                        using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                        {
+                            return new Bitmap(s);
+                        }
+                    }
                 }
-                if (ID != ID2)
+                catch
                 {
                     ArtRequest r = new ArtRequest(user, url);
                     QueueRequest(r);
                     return UnknownArt;
-                }
-                else
-                {
-                    using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-                    {
-                        return new Bitmap(s);
-                    }
                 }
             }
         }
