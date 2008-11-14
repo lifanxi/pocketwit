@@ -771,7 +771,11 @@ namespace PockeTwit
                 }
                 if (prev.SelectedItemIndex >= 0)
                 {
-                    statList.SelectedItem = statList[prev.SelectedItemIndex];
+                    try
+                    {
+                        statList.SelectedItem = statList[prev.SelectedItemIndex];
+                    }
+                    catch (KeyNotFoundException) { }
                 }
                 if(prev.itemsOffset>=0)
                 {
