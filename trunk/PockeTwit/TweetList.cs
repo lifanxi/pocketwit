@@ -64,7 +64,7 @@ namespace PockeTwit
             }
             else
             {
-                statList.MaxVelocity = 15;
+                statList.MaxVelocity = 45;
             }
             ClientSettings.TextHeight = currentScreen.Height;
 
