@@ -53,7 +53,7 @@ namespace FingerUI
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
         int m_itemWidth = 240;
         // Properties
-        int m_maxVelocity = 15;
+        int m_maxVelocity = 45;
         Point m_mouseDown = new Point(-1, -1);
         Point m_mousePrev = new Point(-1, -1);
         Point m_offset = new Point();
