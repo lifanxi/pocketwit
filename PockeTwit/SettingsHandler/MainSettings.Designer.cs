@@ -50,7 +50,7 @@
             // 
             this.lnkManageAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor; ;
+            this.lnkManageAccounts.ForeColor = ClientSettings.LinkColor;
             this.lnkManageAccounts.Location = new System.Drawing.Point(3, 9);
             this.lnkManageAccounts.Name = "lnkManageAccounts";
             this.lnkManageAccounts.Size = new System.Drawing.Size(234, 20);
