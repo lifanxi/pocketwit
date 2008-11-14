@@ -783,12 +783,13 @@ namespace PockeTwit
         private void ShowFriendsTimeLine()
         {
             ChangeCursor(Cursors.WaitCursor);
+            bool Redraw = statList.CurrentList() != "Friends_TimeLine";
             SwitchToList("Friends_TimeLine");
             History.Clear();
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(i);
-            if (statList.CurrentList() != "Friends_TimeLine")
+            if (Redraw)
             {
                 statList.SetSelectedMenu("Friends TimeLine");
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
@@ -800,12 +801,13 @@ namespace PockeTwit
         private void ShowMessagesTimeLine()
         {
             ChangeCursor(Cursors.WaitCursor);
+            bool Redraw = statList.CurrentList() != "Messages_TimeLine";
             SwitchToList("Messages_TimeLine");
             History.Clear();
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            if (statList.CurrentList() != "Messages_TimeLine")
+            if (Redraw)
             {
                 statList.SetSelectedMenu("Messages");
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
