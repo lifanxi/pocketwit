@@ -475,7 +475,7 @@ namespace PockeTwit
                 statList.SwitchTolist("Friends_TimeLine");
 
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-
+                statList.Visible = true;
                 statList.SetSelectedIndexToZero();
                 Program.Ready = DateTime.Now;
                 Application.DoEvents();
@@ -788,8 +788,11 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(i);
-            statList.SetSelectedMenu("Friends TimeLine");
-            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+            if (statList.CurrentList() != "Friends_TimeLine")
+            {
+                statList.SetSelectedMenu("Friends TimeLine");
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+            }
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
         }
@@ -802,8 +805,11 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            statList.SetSelectedMenu("Messages");
-            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+            if (statList.CurrentList() != "Messages_TimeLine")
+            {
+                statList.SetSelectedMenu("Messages");
+                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+            }
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
         }
