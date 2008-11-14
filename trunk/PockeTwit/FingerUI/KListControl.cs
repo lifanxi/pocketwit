@@ -1117,6 +1117,7 @@ namespace FingerUI
                 flickerBuffer.Dispose();
                 flickerBuffer = null;
             }
+            GC.Collect();
         }
 
 
