@@ -100,6 +100,7 @@ namespace FingerUI
                     if (Rendered != null)
                     {
                         Rendered.Dispose();
+                        GC.Collect();
                     }
                     _Rendered = new Bitmap(_Width,_Height);
                 }
@@ -118,6 +119,7 @@ namespace FingerUI
                     if (Rendered != null)
                     {
                         Rendered.Dispose();
+                        GC.Collect();
                     }
                     _Rendered = new Bitmap(_Width, _Height);
                 }
