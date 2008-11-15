@@ -10,10 +10,12 @@ namespace FingerUI
         public SideMenu(FingerUI.KListControl.SideShown Side)
         {
             _Side = Side;
+            _Height = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            _Width = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
         }
         public delegate void delClearMe();
 
-        private Bitmap _Rendered;
+        private Bitmap _Rendered = null;
         public Bitmap Rendered
         {
             get
