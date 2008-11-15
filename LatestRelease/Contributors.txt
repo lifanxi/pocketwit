@@ -1,5 +1,5 @@
 @jakes:Lead Developer
-@marclandis:Code+Sponsor
+@marclandis:Code
 @markandey:Code
 @thelovebug:Sponsor
 @timwoolsey:Sponsor
