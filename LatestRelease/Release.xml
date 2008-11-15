@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.49</version>
+  <version>.50</version>
   <url>http://pocketwit.googlecode.com/files/PockeTwitv49.CAB</url>
-  <notes>Big speed increases
-Reduced load time
-Improved look
-Runs in background during device sleep
+  <notes>For v.50:  
+   Bugfixes
+From v.49:
+   Big speed increases
+   Reduced load time
+   Improved look
+   Runs in background during device sleep
 </notes>
 </LatestRelease>
