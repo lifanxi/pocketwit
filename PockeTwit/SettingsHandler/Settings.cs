@@ -323,6 +323,7 @@ public static class ClientSettings
             ConfigurationSettings.AppSettings.Remove("Password");
         }
         ConfigurationSettings.AppSettings["ShowExtra"] = ShowExtra.ToString();
+        ConfigurationSettings.AppSettings["UpdateMinutes"] = UpdateMinutes.ToString();
         ConfigurationSettings.Accounts = AccountsList;
         ConfigurationSettings.SaveConfig();
     }

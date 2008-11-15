@@ -209,12 +209,16 @@ namespace PockeTwit
                 responseStream.Close();
 
                 ArtWriter.Seek(0, System.IO.SeekOrigin.Begin);
-                Bitmap original = new Bitmap(ArtWriter);
-                Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                Graphics g = Graphics.FromImage(resized);
-                g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
-                g.Dispose();
-                resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                using (Bitmap original = new Bitmap(ArtWriter))
+                {
+                    using (Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize))
+                    {
+                        Graphics g = Graphics.FromImage(resized);
+                        g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
+                        g.Dispose();
+                        resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                }
                 WriteID(LocalFileName, r.URL);
                 ArtWriter.Close();
             }
