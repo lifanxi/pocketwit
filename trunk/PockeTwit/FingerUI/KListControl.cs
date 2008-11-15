@@ -106,10 +106,6 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
-            LeftMenu.Height = this.Height;
-            LeftMenu.Width = this.Width;
-            RightMenu.Height = this.Height;
-            RightMenu.Width = this.Width;
             
         }
 
