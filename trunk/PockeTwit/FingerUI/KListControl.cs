@@ -184,12 +184,7 @@ namespace FingerUI
             }
             set
             {
-                
-                if (!value)
-                {
-                    OldSize = new Point(this.Width, this.Height);
-                }
-                if (value)
+                if (value && !_Visible)
                 {
                     if (OldSize != new Point(this.Width, this.Height))
                     {
@@ -197,6 +192,7 @@ namespace FingerUI
                         RerenderBySize();
                     }
                 }
+                OldSize = new Point(this.Width, this.Height);
                 _Visible = value;
                 base.Visible = value;
             }
@@ -254,7 +250,7 @@ namespace FingerUI
             set
             {
                 m_itemWidth = value;
-                this.Redraw();
+                //this.Redraw();
             }
         }
 
@@ -1064,7 +1060,7 @@ namespace FingerUI
                 item.Bounds = ItemBounds(0, item.Index);
             }
 
-            FillBuffer();
+            //FillBuffer();
             SelectAndJump();
             this.Redraw();
             base.Visible = true;
