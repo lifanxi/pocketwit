@@ -86,14 +86,13 @@ namespace FingerUI
 
 		#region Constructors (1) 
 
-        /// <summary>
+        /// <summary>eB
         /// Initializes a new instance of the <see cref="KListControl"/> class.
         /// </summary>
         public KListControl()
         {
             NotificationArea.TextFont = this.Font;
             NotificationArea.parentControl = this;
-            CreateBackBuffer();
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
             m_timer.Interval = ClientSettings.AnimationInterval;
@@ -1064,7 +1063,6 @@ namespace FingerUI
             {
                 item.Bounds = ItemBounds(0, item.Index);
             }
-            CreateBackBuffer();
 
             FillBuffer();
             SelectAndJump();
@@ -1178,15 +1176,24 @@ namespace FingerUI
 
         private void CreateBackBuffer()
         {
-            CleanupBackBuffer();
+            System.Drawing.Rectangle b = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            int bufferwidth;
+            if (b.Width > b.Height)
+            {
+                bufferwidth = b.Width;
+            }
+            else
+            {
+                bufferwidth = b.Height;
+            }
             try
             {
-                m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight * ClientSettings.MaxTweets);
+                m_backBufferBitmap = new Bitmap(bufferwidth, this.ItemHeight * ClientSettings.MaxTweets);
             }
             catch (OutOfMemoryException)
             {
                 GC.WaitForPendingFinalizers();
-                m_backBufferBitmap = new Bitmap(this.Width, this.ItemHeight * ClientSettings.MaxTweets);
+                m_backBufferBitmap = new Bitmap(bufferwidth, this.ItemHeight * ClientSettings.MaxTweets);
             }
             m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
             foreach (IKListItem item in m_items.Values)
