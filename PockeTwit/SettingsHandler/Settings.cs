@@ -313,6 +313,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
         ConfigurationSettings.AppSettings["UseClickables"] = UseClickables.ToString();
         ConfigurationSettings.AppSettings["IncludeScreenName"] = IncludeUserName.ToString();
+        ConfigurationSettings.AppSettings["HighQualityAvatars"] = HighQualityAvatars.ToString();
         ConfigurationSettings.AppSettings["UseSkweezer"] = UseSkweezer.ToString();
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
