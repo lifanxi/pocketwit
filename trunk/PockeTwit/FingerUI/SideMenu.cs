@@ -93,16 +93,19 @@ namespace FingerUI
             get { return _Height; }
             set
             {
-                _Height = value;
-                SetMenuHeight();
-                if (_Width > 0 && _Height > 0)
+                if (value != _Height)
                 {
-                    if (Rendered != null)
+                    _Height = value;
+                    SetMenuHeight();
+                    if (_Width > 0 && _Height > 0)
                     {
-                        Rendered.Dispose();
-                        GC.Collect();
+                        if (_Rendered != null)
+                        {
+                            _Rendered.Dispose();
+                            GC.Collect();
+                        }
+                        _Rendered = new Bitmap(_Width, _Height);
                     }
-                    _Rendered = new Bitmap(_Width,_Height);
                 }
             }
         }
@@ -113,17 +116,20 @@ namespace FingerUI
             get{return _Width;}
             set
             {
-                _Width = value;
-                if (_Width > 0 && _Height > 0)
+                if (value != _Width)
                 {
-                    if (Rendered != null)
+                    _Width = value;
+                    if (_Width > 0 && _Height > 0)
                     {
-                        Rendered.Dispose();
-                        GC.Collect();
+                        if (_Rendered != null)
+                        {
+                            _Rendered.Dispose();
+                            GC.Collect();
+                        }
+                        _Rendered = new Bitmap(_Width, _Height);
                     }
-                    _Rendered = new Bitmap(_Width, _Height);
+                    IsDirty = true;
                 }
-                IsDirty=true;
             }
         }
 
