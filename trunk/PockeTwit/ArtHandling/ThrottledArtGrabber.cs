@@ -59,21 +59,18 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
-            System.Diagnostics.Debug.WriteLine("GetArt " + user);
             string ArtName = DetermineCacheFileName(user, url);
             string ID = url;
             lock (BadURLs)
             {
                 if (BadURLs.Contains(url))
                 {
-                    System.Diagnostics.Debug.WriteLine("Bad URL");
                     return new Bitmap(UnknownArt);
                 }
             }
                         
             if (!System.IO.File.Exists(ArtName + ".ID"))
             {
-                System.Diagnostics.Debug.WriteLine("No ID. Adding request");
                 ArtRequest r = new ArtRequest(user, url);
                 QueueRequest(r);
                 return new Bitmap(UnknownArt);
@@ -89,7 +86,6 @@ namespace PockeTwit
                     }
                     if (ID != ID2)
                     {
-                        System.Diagnostics.Debug.WriteLine("IDs don't match, starting request");
                         ArtRequest r = new ArtRequest(user, url);
                         QueueRequest(r);
                         return new Bitmap(UnknownArt);
@@ -98,14 +94,12 @@ namespace PockeTwit
                     {
                         using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
                         {
-                            System.Diagnostics.Debug.WriteLine("Returning cached image");
                             return new Bitmap(s);
                         }
                     }
                 }
                 catch
                 {
-                    System.Diagnostics.Debug.WriteLine("error loading, add request");
                     ArtRequest r = new ArtRequest(user, url);
                     QueueRequest(r);
                     return new Bitmap(UnknownArt);
@@ -120,12 +114,10 @@ namespace PockeTwit
                 if (!Requests.Contains(r))
                 {
                     Requests.Enqueue(r);
-                    //System.Diagnostics.Debug.WriteLine("Queue " + r.User);
                 }
             }
             if (WorkerThread==null)
             {
-                System.Diagnostics.Debug.WriteLine("New Queue, starting worker");
                 WorkerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessQueue));
                 WorkerThread.Name = "AvatarFetcher";
                 WorkerThread.Start();
@@ -147,9 +139,7 @@ namespace PockeTwit
                 {
                     r = Requests.Peek();
                 }
-                System.Diagnostics.Debug.WriteLine("Fetching " + r.User);
                 FetchRequest(r);
-                System.Diagnostics.Debug.WriteLine("Fetched " + r.User);
                 lock (Requests)
                 {
                     Requests.Dequeue();
@@ -159,7 +149,6 @@ namespace PockeTwit
                     NewArtWasDownloaded.Invoke(r.User);
                 }
             }
-            System.Diagnostics.Debug.WriteLine("Queue empty, closing shop.");
             WorkerThread = null;
         }
 
@@ -251,7 +240,6 @@ namespace PockeTwit
 
         public static string TryToFindURL(string User)
         {
-            System.Diagnostics.Debug.WriteLine("Falling back to load user from screename");
             Library.User newUser = null;
             foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
             {
