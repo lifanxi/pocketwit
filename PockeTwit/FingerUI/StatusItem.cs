@@ -401,6 +401,7 @@ namespace FingerUI
                         {
                             g.DrawRectangle(sPen, ReplyRect);
                         }
+                        ReplyImage.Dispose();
                     }
                 }
             }
