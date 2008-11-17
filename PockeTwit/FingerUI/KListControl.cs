@@ -736,6 +736,7 @@ namespace FingerUI
             }
             if (e.KeyCode == Keys.Right | e.KeyCode == Keys.F2) 
             {
+                if (fsDisplay.Visible) { return; }
                 if (CurrentlyViewing != SideShown.Right)
                 {
                     m_velocity.X = (this.Width/10);
@@ -745,6 +746,7 @@ namespace FingerUI
             }
             if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
             {
+                if (fsDisplay.Visible) { return; }
                 if (CurrentlyViewing != SideShown.Left)
                 {
                     m_velocity.X = -(this.Width / 10);
@@ -1140,7 +1142,7 @@ namespace FingerUI
 
         void ClickablesControl_WordClicked(string TextClicked)
         {
-            if (TextClicked == "Full Text" | Yedda.ShortText.isShortTextURL(TextClicked))
+            if (TextClicked == "Detailed View" | Yedda.ShortText.isShortTextURL(TextClicked))
             {
                 //Show the full tweet somehow.
                 StatusItem s = (StatusItem)SelectedItem;
@@ -1492,6 +1494,12 @@ namespace FingerUI
             {
                 SelectedItemChanged(this, new EventArgs());
             }
+            if (fsDisplay.Visible)
+            {
+                StatusItem s = (StatusItem)m_items[m_selectedIndex];
+                fsDisplay.Status = s.Tweet;
+                fsDisplay.Render();
+            }
             JumpToItem(item);
         }
 
@@ -1536,6 +1544,12 @@ namespace FingerUI
                         {
                             SelectedItemChanged(this, new EventArgs());
                         }
+                        if (fsDisplay.Visible)
+                        {
+                            StatusItem s = (StatusItem)m_items[m_selectedIndex];
+                            fsDisplay.Status = s.Tweet;
+                            fsDisplay.Render();
+                        }
                         SetRightMenuUser();
                     }
                 }
@@ -1564,10 +1578,6 @@ namespace FingerUI
             }
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
-            if (s.Tweet.Clipped)
-            {
-                ClickablesControl.ShowClipped = true;
-            }
             ClickablesControl.Visible = true;
         }
 

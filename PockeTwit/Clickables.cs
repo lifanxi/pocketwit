@@ -37,6 +37,7 @@ namespace PockeTwit
             set
             {
                 TextItems = new List<string>();
+                TextItems.Add("Detailed View");
                 foreach (FingerUI.StatusItem.Clickable c in value)
                 {
                     if (!TextItems.Contains(c.Text))
@@ -50,26 +51,6 @@ namespace PockeTwit
 
         public int Left { get; set; }
 
-        public bool ShowClipped
-        {
-            set
-            {
-                if (value)
-                {
-                    if (TextItems[0] != "Full Text")
-                    {
-                        TextItems.Insert(0, "Full Text");
-                    }
-                }
-                else
-                {
-                    if (TextItems[0] == "Full Text")
-                    {
-                        TextItems.Remove("Full Text");
-                    }
-                }
-            }
-        }
 
         public int Top { get; set; }
 
