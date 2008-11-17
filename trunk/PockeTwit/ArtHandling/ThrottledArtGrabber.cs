@@ -59,12 +59,13 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
-            string ArtName = DetermineCacheFileName(user, url);
-            string ID=url;
-            if(!string.IsNullOrEmpty(url))
+            
+            if (string.IsNullOrEmpty(url))
             {
-                ID = url.Replace("_bigger","").Replace("_normal","") ;
+                url = TryToFindURL(user);
             }
+            string ID = url.Replace("_bigger","").Replace("_normal","") ;
+            string ArtName = DetermineCacheFileName(user, url);
             lock (BadURLs)
             {
                 if (BadURLs.Contains(url))
@@ -158,6 +159,7 @@ namespace PockeTwit
 
         private static void FetchRequest(ArtRequest r)
         {
+            System.Diagnostics.Debug.WriteLine("Processing " + r.User);
             if (string.IsNullOrEmpty(r.URL))
             {
                 r.URL = TryToFindURL(r.User);
