@@ -60,7 +60,11 @@ namespace PockeTwit
         public static Image GetArt(string user, string url)
         {
             string ArtName = DetermineCacheFileName(user, url);
-            string ID = url.Replace("_bigger","").Replace("_normal","") ;
+            string ID=url;
+            if(!string.IsNullOrEmpty(url))
+            {
+                ID = url.Replace("_bigger","").Replace("_normal","") ;
+            }
             lock (BadURLs)
             {
                 if (BadURLs.Contains(url))
