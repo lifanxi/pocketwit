@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.50</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv50.CAB</url>
-  <notes>For v.50:  
-   Bugfixes
-From v.49:
+  <version>.51</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv51.CAB</url>
+  <notes>For v.51:  
+   Bugfixes and Optimizations
+From v.49 & v.50:
    Big speed increases
    Reduced load time
    Improved look
