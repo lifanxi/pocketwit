@@ -756,7 +756,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    m_velocity.X = 15;
+                    m_velocity.X = 45;
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
                 }
@@ -765,7 +765,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    m_velocity.X = -15;
+                    m_velocity.X = -45;
                     m_offset.X = m_offset.X - 3;
                     m_timer.Enabled = true;
                 }
