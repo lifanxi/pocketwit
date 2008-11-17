@@ -271,17 +271,16 @@ namespace FingerUI
 
             if (ClientSettings.ShowAvatars)
             {
-                Image UserImage;
+                string artURL = Tweet.user.high_profile_image_url;
                 if (ClientSettings.HighQualityAvatars)
                 {
-                    UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, Tweet.user.high_profile_image_url);
+                    artURL = Tweet.user.profile_image_url;
                 }
-                else
+                using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
                 {
-                    UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, Tweet.user.profile_image_url);
+                    g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
                 }
-                g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
-               
+                
                 if (ClientSettings.ShowReplyImages)
                 {
                     DrawReplyImage(g, ImageLocation);

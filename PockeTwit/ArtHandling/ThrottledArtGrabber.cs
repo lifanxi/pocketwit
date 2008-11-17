@@ -59,6 +59,7 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
+            System.Diagnostics.Debug.WriteLine("GetArt " + user);
             string ArtName = DetermineCacheFileName(user, url);
             string ID = url;
             lock (BadURLs)
@@ -66,15 +67,16 @@ namespace PockeTwit
                 if (BadURLs.Contains(url))
                 {
                     System.Diagnostics.Debug.WriteLine("Bad URL");
-                    return UnknownArt;
+                    return new Bitmap(UnknownArt);
                 }
             }
                         
             if (!System.IO.File.Exists(ArtName + ".ID"))
             {
+                System.Diagnostics.Debug.WriteLine("No ID. Adding request");
                 ArtRequest r = new ArtRequest(user, url);
                 QueueRequest(r);
-                return UnknownArt;
+                return new Bitmap(UnknownArt);
             }
             else
             {
@@ -87,23 +89,26 @@ namespace PockeTwit
                     }
                     if (ID != ID2)
                     {
+                        System.Diagnostics.Debug.WriteLine("IDs don't match, starting request");
                         ArtRequest r = new ArtRequest(user, url);
                         QueueRequest(r);
-                        return UnknownArt;
+                        return new Bitmap(UnknownArt);
                     }
                     else
                     {
                         using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
                         {
+                            System.Diagnostics.Debug.WriteLine("Returning cached image");
                             return new Bitmap(s);
                         }
                     }
                 }
                 catch
                 {
+                    System.Diagnostics.Debug.WriteLine("error loading, add request");
                     ArtRequest r = new ArtRequest(user, url);
                     QueueRequest(r);
-                    return UnknownArt;
+                    return new Bitmap(UnknownArt);
                 }
             }
         }
