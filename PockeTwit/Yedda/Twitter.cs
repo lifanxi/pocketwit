@@ -1157,9 +1157,7 @@ namespace Yedda
             string url;
             if (this.AccountInfo.ServerURL.ServerType == TwitterServer.pingfm)
             {
-                url = "http://api.ping.fm/v1/user.validate";
-                string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName,this.AccountInfo.Password));
-                return Response.IndexOf("<rsp status=\"OK\">") > 0;
+                return PingValidate();
             }
             else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
             {
@@ -1182,6 +1180,31 @@ namespace Yedda
             
             }
             return false;
+        }
+
+        private bool PingValidate()
+        {
+            //First, if mobile key use it to get real key
+            string url;
+            if (this.AccountInfo.UserName.Length < 6)
+            {
+                url = "http://api.ping.fm/v1/user.key";
+                try
+                {
+                    string KeyResponse = ExecutePostCommand(url, string.Format("mobile_key={0}&api_key={1}", this.AccountInfo.UserName, this.AccountInfo.Password));
+                    XmlDocument d = new XmlDocument();
+                    d.LoadXml(KeyResponse);
+                    this.AccountInfo.UserName = d.SelectSingleNode("//key").InnerText;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            url = "http://api.ping.fm/v1/user.validate";
+            string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName, this.AccountInfo.Password));
+            return Response.IndexOf("<rsp status=\"OK\">") > 0;
         }
         #endregion
 
