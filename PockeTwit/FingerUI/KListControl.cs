@@ -9,6 +9,9 @@ namespace FingerUI
 {
     public class KListControl : UserControl
     {
+        private FullScreenTweet fsDisplay = new FullScreenTweet();
+
+
         private class Velocity
         {
             private int _X = 0;
@@ -105,7 +108,12 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+
+            fsDisplay.Visible = false;
+            fsDisplay.Dock = DockStyle.Fill;
+            this.Controls.Add(fsDisplay);
             
+
         }
 
 
@@ -958,6 +966,10 @@ namespace FingerUI
         private delegate void delRender(int i);
         private void RenderItem(int i)
         {
+            if (m_items.Count <= i)
+            {
+                return;
+            }
             if (InvokeRequired)
             {
                 delRender d = new delRender(RenderItem);
@@ -1132,6 +1144,12 @@ namespace FingerUI
             {
                 //Show the full tweet somehow.
                 StatusItem s = (StatusItem)SelectedItem;
+
+                fsDisplay.Status = s.Tweet;
+                fsDisplay.Render();
+                fsDisplay.Visible = true;
+                
+                /*
                 string fullText = null;
                 if (Yedda.ShortText.isShortTextURL(s.Tweet.text))
                 {
@@ -1143,6 +1161,7 @@ namespace FingerUI
                     fullText = s.Tweet.text;   
                 }
                 MessageBox.Show(fullText, s.Tweet.user.screen_name);
+                 */
             }
             else if (WordClicked != null)
             {
