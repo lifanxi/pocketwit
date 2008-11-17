@@ -61,7 +61,7 @@ namespace FingerUI
 
         int m_selectedIndex = 0;
         Timer m_timer = new Timer();
-        bool m_updating = false;
+        public bool Startup = true;
         private Velocity m_velocity = new Velocity();
         
         
@@ -305,13 +305,11 @@ namespace FingerUI
         {
             get
             {
-                lock (m_items)
+                if (m_items.Count > 0)
                 {
-                    if (m_items.Count > 0)
-                    {
-                        return (IKListItem)m_items[m_selectedIndex];
-                    }
+                    return (IKListItem)m_items[m_selectedIndex];
                 }
+                
                 return null;
             }
             set
@@ -453,19 +451,6 @@ namespace FingerUI
             //Reset();
         }
 
-        public void BeginUpdate()
-        {
-            if (InvokeRequired)
-            {
-                delClearMe d = new delClearMe(BeginUpdate);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                m_updating = true;
-            }
-        }
-
         public void Clear()
         {
             if (InvokeRequired)
@@ -492,20 +477,6 @@ namespace FingerUI
             else
             {
                 m_items.Clear();
-                Reset();
-            }
-        }
-
-        public void EndUpdate()
-        {
-            if (InvokeRequired)
-            {
-                delClearMe d = new delClearMe(EndUpdate);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                m_updating = false;
                 Reset();
             }
         }
@@ -574,15 +545,18 @@ namespace FingerUI
 
         public void Redraw()
         {
-            if (InvokeRequired)
+            if (!Startup)
             {
-                delClearMe d = new delClearMe(Redraw);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                FillBuffer();
-                this.Invalidate();
+                if (InvokeRequired)
+                {
+                    delClearMe d = new delClearMe(Redraw);
+                    this.Invoke(d, null);
+                }
+                else
+                {
+                    FillBuffer();
+                    this.Invalidate();
+                }
             }
         }
 
@@ -756,7 +730,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    m_velocity.X = 45;
+                    m_velocity.X = (this.Width/10);
                     m_offset.X = m_offset.X + 3;
                     m_timer.Enabled = true;
                 }
@@ -765,7 +739,7 @@ namespace FingerUI
             {
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    m_velocity.X = -45;
+                    m_velocity.X = -(this.Width / 10);
                     m_offset.X = m_offset.X - 3;
                     m_timer.Enabled = true;
                 }
@@ -903,11 +877,11 @@ namespace FingerUI
                     if (m_offset.X > (this.Width * .6))
                     {
                         //Scroll to other side
-                        m_velocity.X = 7;
+                        m_velocity.X = (this.Width / 10);
                     }
                     else
                     {
-                        m_velocity.X = -7;
+                        m_velocity.X = -(this.Width / 10);
                         //Scroll back
                     }
                 }
@@ -918,11 +892,11 @@ namespace FingerUI
                     if (m_offset.X < (0 - (this.Width * .6)))
                     {
                         //Scroll to other side
-                        m_velocity.X = -7;
+                        m_velocity.X = -(this.Width/10);
                     }
                     else
                     {
-                        m_velocity.X = 7;
+                        m_velocity.X = (this.Width / 10);
                         //Scroll back
                     }
                 }
@@ -945,22 +919,61 @@ namespace FingerUI
         {
             if (m_items.Count > 0)
             {
-                System.Diagnostics.Debug.WriteLine("FillBuffer called with " + m_items.Count);
-                lock (m_items)
+                FillImmediateBuffer();
+                //I want to do this async, but I'm running into race conditions right now.
+                FillBackBuffer(null);
+            }
+        }
+
+        private void FillBackBuffer(object state)
+        {
+            lock (m_items)
+            {
+                int FirstItem = m_offset.Y / ItemHeight;
+                int LastItem = (Screen.PrimaryScreen.Bounds.Height / ItemHeight) + FirstItem;
+                for (int i = FirstItem; i >= 0; i--)
                 {
-                    for (int i = 0; i < m_items.Count; i++)
-                    {
-                        IKListItem item = m_items[i];
-                        Rectangle itemRect = item.Bounds;
-                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                        {
-                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
-                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
-                            m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
-                        }
-                        item.Render(m_backBuffer, itemRect);
-                    }
+                    RenderItem(i);
                 }
+                for (int i = LastItem; i < m_items.Count; i++)
+                {
+                    RenderItem(i);
+                }
+            }
+        }
+
+        private void FillImmediateBuffer()
+        {
+            lock (m_items)
+            {
+                int FirstItem = m_offset.Y / ItemHeight;
+                int LastItem = (Screen.PrimaryScreen.Bounds.Height/ ItemHeight) + FirstItem;
+                for (int i = FirstItem; i < LastItem; i++)
+                {
+                    RenderItem(i);
+                }
+            }
+        }
+
+        private delegate void delRender(int i);
+        private void RenderItem(int i)
+        {
+            if (InvokeRequired)
+            {
+                delRender d = new delRender(RenderItem);
+                this.Invoke(d, i);
+            }
+            else
+            {
+                IKListItem item = m_items[i];
+                Rectangle itemRect = item.Bounds;
+                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                {
+                    m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
+                    m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
+                    m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
+                }
+                item.Render(m_backBuffer, itemRect);
             }
         }
 
@@ -1410,28 +1423,26 @@ namespace FingerUI
 
         private void Reset()
         {
-            if (!m_updating)
+            
+            m_backBuffer.Clear(ClientSettings.BackColor);
+            using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                m_backBuffer.Clear(ClientSettings.BackColor);
-                using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
-                {
-                    m_backBuffer.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
-                }
-                m_timer.Enabled = false;
-                if (m_items.Count > 0)
-                {
-                    m_items[m_selectedIndex].Selected = false;
-                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
-                }
-                m_selectedIndex = 0;
-                Capture = false;
-                m_velocity.X = 0;
-                m_velocity.Y = 0;
-                m_offset.Y = 0;
-                FillBuffer();
-                SetSelectedIndexToZero();
-                Invalidate();
+                m_backBuffer.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
             }
+            m_timer.Enabled = false;
+            if (m_items.Count > 0)
+            {
+                m_items[m_selectedIndex].Selected = false;
+                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+            }
+            m_selectedIndex = 0;
+            Capture = false;
+            m_velocity.X = 0;
+            m_velocity.Y = 0;
+            m_offset.Y = 0;
+            FillBuffer();
+            SetSelectedIndexToZero();
+            Invalidate();
         }
 
         private void SetRightMenuUser()

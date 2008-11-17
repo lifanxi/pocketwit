@@ -473,8 +473,9 @@ namespace PockeTwit
                 lblLoading.Text = "Preparing UI";
                 Application.DoEvents();
                 statList.SwitchTolist("Friends_TimeLine");
-
+                
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                statList.Startup = false;
                 statList.Visible = true;
                 statList.SetSelectedIndexToZero();
                 Program.Ready = DateTime.Now;
