@@ -60,7 +60,7 @@ namespace PockeTwit
         public static Image GetArt(string user, string url)
         {
             string ArtName = DetermineCacheFileName(user, url);
-            string ID = url;
+            string ID = url.Replace("_bigger","").Replace("_normal","") ;
             lock (BadURLs)
             {
                 if (BadURLs.Contains(url))
@@ -213,7 +213,7 @@ namespace PockeTwit
                         resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
                     }
                 }
-                WriteID(LocalFileName, r.URL);
+                WriteID(LocalFileName, r.URL.Replace("_normal","").Replace("_bigger", ""));
                 ArtWriter.Close();
             }
             catch(Exception ex) 
