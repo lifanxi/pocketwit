@@ -671,6 +671,7 @@ namespace FingerUI
                         }
                     case SideShown.Middle:
                         {
+                            if (fsDisplay.Visible) { fsDisplay.Visible = false; }
                             ShowClickablesControl();
                             break;
                         }
