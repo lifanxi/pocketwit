@@ -275,7 +275,7 @@ namespace FingerUI
             if (ClientSettings.ShowAvatars)
             {
                 string artURL = Tweet.user.high_profile_image_url;
-                if (ClientSettings.HighQualityAvatars)
+                if (!ClientSettings.HighQualityAvatars)
                 {
                     artURL = Tweet.user.profile_image_url;
                 }
