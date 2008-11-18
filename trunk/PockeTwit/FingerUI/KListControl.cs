@@ -1218,7 +1218,18 @@ namespace FingerUI
             }
             try
             {
+                int bufferHeight = this.ItemHeight * ClientSettings.MaxTweets;
+                System.Diagnostics.Debug.WriteLine(this.ItemHeight);
+                System.Diagnostics.Debug.WriteLine("Bitmap Size:" + bufferwidth + "x" + bufferHeight);
+                MEMORYSTATUS m = new MEMORYSTATUS();
+                GlobalMemoryStatus(ref m);
+                System.Diagnostics.Debug.WriteLine(m.dwAvailVirtual);
+                System.Diagnostics.Debug.WriteLine(m.dwAvailPhys);
                 m_backBufferBitmap = new Bitmap(bufferwidth, this.ItemHeight * ClientSettings.MaxTweets);
+                m = new MEMORYSTATUS();
+                GlobalMemoryStatus(ref m);
+                System.Diagnostics.Debug.WriteLine(m.dwAvailVirtual);
+                System.Diagnostics.Debug.WriteLine(m.dwAvailPhys);
             }
             catch (OutOfMemoryException)
             {
@@ -1235,6 +1246,21 @@ namespace FingerUI
                 }
             }
         }
+
+        [System.Runtime.InteropServices.DllImport("coredll.dll", SetLastError = true)]
+        static extern void GlobalMemoryStatus(ref MEMORYSTATUS lpBuffer);
+        struct MEMORYSTATUS
+        {
+            public UInt32 dwLength;
+            public UInt32 dwMemoryLoad;
+            public UInt32 dwTotalPhys;
+            public UInt32 dwAvailPhys;
+            public UInt32 dwTotalPageFile;
+            public UInt32 dwAvailPageFile;
+            public UInt32 dwTotalVirtual;
+            public UInt32 dwAvailVirtual;
+        }
+
 
         private void DrawItems()
         {
