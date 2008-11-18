@@ -1207,6 +1207,8 @@ namespace FingerUI
 
         private void CreateBackBuffer()
         {
+            //IntPtr i = PockeTwit.Utility.Memory.AllocHLocal(4194304);
+
             System.Drawing.Rectangle b = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             int bufferwidth;
             if (b.Width > b.Height)
@@ -1219,6 +1221,8 @@ namespace FingerUI
             }
             try
             {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 int bufferHeight = this.ItemHeight * ClientSettings.MaxTweets;
                 System.Diagnostics.Debug.WriteLine(this.ItemHeight);
                 System.Diagnostics.Debug.WriteLine("Bitmap Size:" + bufferwidth + "x" + bufferHeight);

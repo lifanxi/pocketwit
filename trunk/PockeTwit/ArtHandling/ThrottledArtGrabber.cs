@@ -59,10 +59,14 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
-            
             if (string.IsNullOrEmpty(url))
             {
                 url = TryToFindURL(user);
+            }
+            if(string.IsNullOrEmpty(url))
+            {
+                //Don't re-queue -- we won't be able to get it for now.
+                return new Bitmap(UnknownArt);
             }
             string ID = url.Replace("_bigger","").Replace("_normal","") ;
             string ArtName = DetermineCacheFileName(user, url);
