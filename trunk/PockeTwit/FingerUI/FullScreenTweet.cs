@@ -6,11 +6,14 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace FingerUI
 {
     public partial class FullScreenTweet : UserControl
     {
+        const string HTML_TAG_PATTERN = "<.*?>";
+
         public PockeTwit.Library.status Status;
         private bool _Visible = false;
         public bool Visible
@@ -69,7 +72,7 @@ namespace FingerUI
                 avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.screen_name, Status.user.high_profile_image_url);
                 lblUserName.Text = Status.user.screen_name;
                 lblTime.Text = Status.TimeStamp.ToString();
-                //lblSource.Text = Status.source;
+                lblSource.Text = "from "+StripHTML(Status.source);
                 string fullText;
                 if (Yedda.ShortText.isShortTextURL(Status.text))
                 {
@@ -87,6 +90,11 @@ namespace FingerUI
         private void lnkDismiss_Click(object sender, EventArgs e)
         {
             this.Visible = false;
+        }
+        static string StripHTML(string inputString)
+        {
+            return Regex.Replace
+              (inputString, HTML_TAG_PATTERN, string.Empty);
         }
     }
 }

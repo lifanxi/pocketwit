@@ -65,7 +65,6 @@
             this.lblSource.Name = "lblSource";
             this.lblSource.Size = new System.Drawing.Size(125, 20);
             this.lblSource.Text = "label3";
-            this.lblSource.Visible = false;
             // 
             // lblText
             // 
