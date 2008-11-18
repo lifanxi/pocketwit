@@ -19,7 +19,7 @@ namespace FingerUI
         private PockeTwit.Library.status _Tweet;
         private Rectangle currentOffset;
         private Rectangle m_bounds;
-        private bool m_highlighted = false;
+        private bool hasFavoriteStar = false;
         private KListControl m_parent;
         private bool m_selected = false;
         private StringFormat m_stringFormat = new StringFormat();
@@ -86,7 +86,7 @@ namespace FingerUI
             Tweet.Clickables = new List<Clickable>();
         }
 
-        public bool Highlighted { get { return m_highlighted; } set { m_highlighted = value; } }
+        public bool Highlighted { get { return hasFavoriteStar; } set { hasFavoriteStar = value; } }
 
         /// <summary>
         /// Gets or sets the Y.
@@ -161,11 +161,11 @@ namespace FingerUI
                 _Tweet = value;
                 if (string.IsNullOrEmpty(value.favorited))
                 {
-                    m_highlighted = false;
+                    hasFavoriteStar = false;
                 }
                 else
                 {
-                    m_highlighted = bool.Parse(value.favorited);
+                    hasFavoriteStar = bool.Parse(value.favorited);
                 }
                 if (Tweet.Clickables == null)
                 {
@@ -232,6 +232,7 @@ namespace FingerUI
             currentOffset = bounds;
             SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
             Rectangle textBounds;
+            //Shrink the text area to accomidate avatars if appropriate
             if (ClientSettings.ShowAvatars)
             {
                 textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin * 2)), bounds.Height);
@@ -259,6 +260,7 @@ namespace FingerUI
             
             Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
 
+            //Add the timestamp if the settings call for it.
             if (ClientSettings.ShowExtra)
             {
                 Color SmallColor = ClientSettings.SmallTextColor;
@@ -269,6 +271,7 @@ namespace FingerUI
                 }
             }
 
+            //Get and draw the avatar area.
             if (ClientSettings.ShowAvatars)
             {
                 string artURL = Tweet.user.high_profile_image_url;
@@ -281,17 +284,22 @@ namespace FingerUI
                     g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
                 }
                 
+                //This is usually disabled, but we may draw a smaller avatar over the first one
                 if (ClientSettings.ShowReplyImages)
                 {
                     DrawReplyImage(g, ImageLocation);
                 }
-                if (m_highlighted)
+                
+                //Only occasionally is an item "starred", but we draw one on there if it is.
+                if (hasFavoriteStar)
                 {
                     System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
                     ia.SetColorKey(PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0), PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0));
                     g.DrawImage(PockeTwit.ThrottledArtGrabber.FavoriteImage,
                         new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
                 }
+
+                //If it's a reply or direct message, overlay that on the avatar
                 if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
                 {
                     using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
@@ -323,8 +331,6 @@ namespace FingerUI
 
                 }
             }
-            
-            
             
             
             textBounds.Offset(ClientSettings.Margin, 1);
@@ -590,10 +596,7 @@ namespace FingerUI
                     string line = newString.ToString().Trim(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, LineOffset-1);
-                    if (
-                    Tweet.SplitLines.Count >= ClientSettings.LinesOfText ||
-                    Tweet.text.IndexOf("http://shortText.com/") > 0
-                    )
+                    if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText || Tweet.text.IndexOf("http://shortText.com/") > 0)
                     {
                         Tweet.Clipped = true;
                     }

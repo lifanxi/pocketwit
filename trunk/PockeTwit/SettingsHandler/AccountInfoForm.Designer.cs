@@ -30,8 +30,8 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.cmbServers = new System.Windows.Forms.ComboBox();
             this.lblServer = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
@@ -40,6 +40,7 @@
             this.lblUser = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
             this.chkDefault = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -47,15 +48,15 @@
             this.mainMenu1.MenuItems.Add(this.menuItem2);
             this.mainMenu1.MenuItems.Add(this.menuItem1);
             // 
-            // menuItem1
-            // 
-            this.menuItem1.Text = "Cancel";
-            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
-            // 
             // menuItem2
             // 
             this.menuItem2.Text = "Accept";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Text = "Cancel";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
             // 
             // cmbServers
             // 
@@ -140,6 +141,16 @@
             this.chkDefault.TabIndex = 5;
             this.chkDefault.Text = "Default";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Location = new System.Drawing.Point(5, 102);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(100, 20);
+            this.linkLabel1.TabIndex = 10;
+            this.linkLabel1.Text = "Get my ping key";
+            this.linkLabel1.Visible = false;
+            this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
+            // 
             // AccountInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -147,6 +158,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.chkDefault);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.cmbServers);
@@ -176,6 +188,7 @@
         private System.Windows.Forms.ContextMenu copyPasteMenu;
         private System.Windows.Forms.MenuItem PasteItem;
         private System.Windows.Forms.CheckBox chkDefault;
+        private System.Windows.Forms.LinkLabel linkLabel1;
         
 
         

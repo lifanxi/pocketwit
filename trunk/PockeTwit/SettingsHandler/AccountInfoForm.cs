@@ -113,16 +113,19 @@ namespace PockeTwit
                 lblPassword.Visible = false;
                 txtPassword.Text = ClientSettings.PingApi;
                 lblUser.Text = "Ping.FM Key";
+                linkLabel1.Visible = true;
                 if (DetectDevice.DeviceType == DeviceType.Professional)
                 {
                     txtUserName.ContextMenu = copyPasteMenu;
                 }
+
             }
             else
             {
                 txtPassword.Text = "";
                 txtPassword.Visible = true;
                 lblPassword.Visible = true;
+                linkLabel1.Visible = false;
                 lblUser.Text = "User";
                 if (DetectDevice.DeviceType == DeviceType.Professional)
                 {
@@ -137,6 +140,25 @@ namespace PockeTwit
             {
                 txtUserName.Text = (string)iData.GetData(DataFormats.Text);
             }
+        }
+
+        private void linkLabel1_Click(object sender, EventArgs e)
+        {
+            LaunchSite("http://ping.fm/m/key/");
+        }
+
+        private void LaunchSite(string URL)
+        {
+            System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
+            /*
+            if (ClientSettings.UseSkweezer)
+            {
+                URL = Yedda.Skweezer.GetSkweezerURL(URL);
+            }
+             */
+            pi.FileName = URL;
+            pi.UseShellExecute = true;
+            System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
         }
     }
 }

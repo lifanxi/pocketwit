@@ -889,7 +889,7 @@ namespace Yedda
             }
 
             string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Friends), GetFormatTypeString(format), AccountInfo.ServerURL.URL);
-            return ExecuteGetCommand(url);
+            return ExecutePostCommand(url, null);
         }
 
         public string GetFriends(string IDorScreenName, OutputFormatType format)
