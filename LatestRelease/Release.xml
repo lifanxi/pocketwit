@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.51</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv51.CAB</url>
-  <notes>For v.51:  
-   Bugfixes and Optimizations
-From v.49 and v.50:
-   Big speed increases
-   Reduced load time
-   Improved look
-   Runs in background during device sleep
+  <version>.52</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv52.CAB</url>
+  <notes>Detailed view for statuses
+Easier ping.fm setup
+Fix one of the major bugs from v.51
 </notes>
 </LatestRelease>
