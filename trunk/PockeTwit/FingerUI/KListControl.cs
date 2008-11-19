@@ -1104,7 +1104,8 @@ namespace FingerUI
             try
             {
                 int itemNumber = FindIndex(point.X, point.Y).Y;
-                if (itemNumber > m_items.Count) { return; }
+                if (itemNumber > m_items.Count-1) { return; }
+                
                 StatusItem s = (StatusItem)m_items[itemNumber];
 
                 foreach (StatusItem.Clickable c in s.Tweet.Clickables)
