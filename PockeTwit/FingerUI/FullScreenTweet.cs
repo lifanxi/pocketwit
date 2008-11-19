@@ -72,7 +72,15 @@ namespace FingerUI
                 avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.screen_name, Status.user.high_profile_image_url);
                 lblUserName.Text = Status.user.screen_name;
                 lblTime.Text = Status.TimeStamp.ToString();
-                lblSource.Text = "from "+StripHTML(Status.source);
+                if(string.IsNullOrEmpty(Status.source))
+                {
+                    lblSource.Text = "";
+                }
+                else
+                {
+                    
+                    lblSource.Text = "from "+StripHTML(Status.source);
+                }
                 string fullText;
                 if (Yedda.ShortText.isShortTextURL(Status.text))
                 {
@@ -93,6 +101,7 @@ namespace FingerUI
         }
         static string StripHTML(string inputString)
         {
+            if (string.IsNullOrEmpty(inputString)) { return null; }
             return Regex.Replace
               (inputString, HTML_TAG_PATTERN, string.Empty);
         }

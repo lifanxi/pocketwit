@@ -375,6 +375,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FingerUI\Bigbuffer.cs" />
     <Compile Include="FingerUI\FullScreenTweet.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -388,6 +389,7 @@
     <Compile Include="OpenNetCF\UserNotificationInfoHeader.cs" />
     <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
     <Compile Include="OpenNetCF\WaitHandle.cs" />
+    <Compile Include="Utility\Memory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
