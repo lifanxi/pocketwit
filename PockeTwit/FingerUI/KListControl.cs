@@ -43,14 +43,14 @@ namespace FingerUI
         }
         
 		#region Fields (23) 
+        private Portal SlidingPortal = new Portal();
         private NotificationPopup NotificationArea = new NotificationPopup(); 
         private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
         private bool InFocus = false;
-        Graphics m_backBuffer;
         // Background drawing
-        Bitmap m_backBufferBitmap;
+        
         int m_itemHeight = 40;
         ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
@@ -107,47 +107,12 @@ namespace FingerUI
             //Need to repaint when fetching state has changed.
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
-            PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
-
+            
             fsDisplay.Visible = false;
             fsDisplay.Dock = DockStyle.Fill;
             this.Controls.Add(fsDisplay);
             
 
-        }
-
-
-        void ThrottledArtGrabber_NewArtWasDownloaded(string User)
-        {
-            if (InvokeRequired)
-            {
-                delMenuItemSelected d = new delMenuItemSelected(this.ThrottledArtGrabber_NewArtWasDownloaded);
-                this.Invoke(d, User);
-            }
-            else
-            {
-                for (int i = 0; i < m_items.Count; i++)
-                {
-                    StatusItem s = (StatusItem)m_items[i];
-                    if (s.Tweet.user.screen_name.ToLower() == User)
-                    {
-                        s.Render(m_backBuffer);
-                        Invalidate();
-                    }
-                    if (ClientSettings.ShowReplyImages)
-                    {
-                        if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
-                        {
-                            string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                            if (ReplyTo == User)
-                            {
-                                s.Render(m_backBuffer);
-                                Invalidate();
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
@@ -323,7 +288,7 @@ namespace FingerUI
             set
             {
                 m_items[m_selectedIndex].Selected = false;
-                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                 for(int i=0;i<m_items.Count;i++)
                 {
                     IKListItem item = m_items[i];
@@ -331,7 +296,7 @@ namespace FingerUI
                     {
                         item.Selected = true;
                         m_selectedIndex = i;
-                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                        SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     }
                     else
                     {
@@ -445,7 +410,7 @@ namespace FingerUI
             {
                 item.Parent = this;
                 item.Index = m_items.Count;
-                item.ParentGraphics = m_backBuffer;
+                item.ParentGraphics = SlidingPortal.g;
                 AddItem((IKListItem)item);
             }
         }
@@ -594,10 +559,10 @@ namespace FingerUI
                 if (m_items != null && m_items.Count>0)
                 {
                     m_items[m_selectedIndex].Selected = false;
-                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                    SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     m_selectedIndex = 0;
                     m_items[0].Selected = true;
-                    m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                    SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     StatusItem s = (StatusItem)SelectedItem;
                     RightMenu.UserName = s.Tweet.user.screen_name;
                     //FillBuffer();
@@ -626,8 +591,6 @@ namespace FingerUI
 
         protected override void Dispose(bool disposing)
         {
-            CleanupBackBuffer();
-
             m_timer.Enabled = false;
             base.Dispose(disposing);
         }
@@ -925,17 +888,20 @@ namespace FingerUI
             }
             HasMoved = false;
         }
-
+        
         private void FillBuffer()
         {
             if (m_items.Count > 0)
             {
+                /*
                 FillImmediateBuffer();
                 //I want to do this async, but I'm running into race conditions right now.
                 FillBackBuffer(null);
+                 */
+                SlidingPortal.SetItemList(m_items.Values);
             }
         }
-
+        /*
         private void FillBackBuffer(object state)
         {
             lock (m_items)
@@ -991,7 +957,7 @@ namespace FingerUI
                 item.Render(m_backBuffer, itemRect);
             }
         }
-
+        */
         protected override void OnPaint(PaintEventArgs e)
         {
             using (Image flickerBuffer = new Bitmap(this.Width, this.Height))
@@ -1000,7 +966,7 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
-                    flickerGraphics.DrawImage(m_backBufferBitmap, 0 - m_offset.X, 0 - m_offset.Y);
+                    flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - m_offset.X, 0 - m_offset.Y);
                     if (m_offset.X > 0)
                     {
                         DrawMenu(flickerGraphics, SideShown.Right);
@@ -1128,19 +1094,6 @@ namespace FingerUI
             }
         }
 
-        private void CleanupBackBuffer()
-        {
-            if (m_backBufferBitmap != null)
-            {
-                m_backBufferBitmap.Dispose();
-                m_backBufferBitmap = null;
-                m_backBuffer.Dispose();
-                m_backBuffer = null;
-            }
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
 
         void ClickablesControl_WordClicked(string TextClicked)
         {
@@ -1208,47 +1161,13 @@ namespace FingerUI
 
         private void CreateBackBuffer()
         {
-            //IntPtr i = PockeTwit.Utility.Memory.AllocHLocal(4194304);
-
-            System.Drawing.Rectangle b = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-            int bufferwidth;
-            if (b.Width > b.Height)
-            {
-                bufferwidth = b.Width;
-            }
-            else
-            {
-                bufferwidth = b.Height;
-            }
-            try
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                int bufferHeight = this.ItemHeight * ClientSettings.MaxTweets;
-                System.Diagnostics.Debug.WriteLine(this.ItemHeight);
-                System.Diagnostics.Debug.WriteLine("Bitmap Size:" + bufferwidth + "x" + bufferHeight);
-                MEMORYSTATUS m = new MEMORYSTATUS();
-                GlobalMemoryStatus(ref m);
-                System.Diagnostics.Debug.WriteLine(m.dwAvailVirtual);
-                System.Diagnostics.Debug.WriteLine(m.dwAvailPhys);
-                m_backBufferBitmap = new Bitmap(bufferwidth, this.ItemHeight * ClientSettings.MaxTweets);
-                m = new MEMORYSTATUS();
-                GlobalMemoryStatus(ref m);
-                System.Diagnostics.Debug.WriteLine(m.dwAvailVirtual);
-                System.Diagnostics.Debug.WriteLine(m.dwAvailPhys);
-            }
-            catch (OutOfMemoryException)
-            {
-                GC.WaitForPendingFinalizers();
-                m_backBufferBitmap = new Bitmap(bufferwidth, this.ItemHeight * ClientSettings.MaxTweets);
-            }
-            m_backBuffer = Graphics.FromImage(m_backBufferBitmap);
+            
             foreach (IKListItem item in m_items.Values)
             {
                 if (item is StatusItem)
                 {
                     StatusItem sItem = (StatusItem)item;
-                    sItem.ParentGraphics = m_backBuffer;
+                    sItem.ParentGraphics = SlidingPortal.g;
                 }
             }
         }
@@ -1265,44 +1184,6 @@ namespace FingerUI
             public UInt32 dwAvailPageFile;
             public UInt32 dwTotalVirtual;
             public UInt32 dwAvailVirtual;
-        }
-
-
-        private void DrawItems()
-        {
-            if (m_backBuffer != null)
-            {
-                m_backBuffer.Clear(ClientSettings.BackColor);
-
-                
-                ItemList.Enumerator yEnumerator = m_items.GetEnumerator();
-                bool moreY = yEnumerator.MoveNext();
-                
-                while (moreY)
-                {
-                    IKListItem item = yEnumerator.Current.Value;
-                    if (item != null)
-                    {
-                        Rectangle itemRect = item.Bounds;
-                        itemRect.Offset(-m_offset.X, -m_offset.Y);
-                        
-                        //Draw borders
-
-                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                        {
-                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
-                            m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
-                            m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
-                        }
-                        item.Render(m_backBuffer, itemRect);
-                    }
-
-                    moreY = yEnumerator.MoveNext();
-                }
-
-                DrawPointer(m_backBuffer);
-            }
-            
         }
 
         private void DrawMenu(Graphics m_backBuffer, SideShown Side)
@@ -1477,16 +1358,16 @@ namespace FingerUI
         private void Reset()
         {
             
-            m_backBuffer.Clear(ClientSettings.BackColor);
+            SlidingPortal.g.Clear(ClientSettings.BackColor);
             using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                m_backBuffer.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
+                SlidingPortal.g.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
             }
             m_timer.Enabled = false;
             if (m_items.Count > 0)
             {
                 m_items[m_selectedIndex].Selected = false;
-                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             }
             m_selectedIndex = 0;
             Capture = false;
@@ -1521,7 +1402,7 @@ namespace FingerUI
                 return;
             }
             item.Selected = true;
-            m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+            SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             if (SelectedItemChanged != null)
             {
                 SelectedItemChanged(this, new EventArgs());
@@ -1568,10 +1449,10 @@ namespace FingerUI
                     if (m_items.ContainsKey(selectedIndex.Y))
                     {
                         m_items[m_selectedIndex].Selected = false;
-                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                        SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         m_selectedIndex = selectedIndex.Y;
                         m_items[m_selectedIndex].Selected = true;
-                        m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                        SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         if (SelectedItemChanged != null)
                         {
                             SelectedItemChanged(this, new EventArgs());
@@ -1618,7 +1499,7 @@ namespace FingerUI
             if (m_selectedIndex >= 0)
             {
                 m_items[m_selectedIndex].Selected = false;
-                m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
+                SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             }
         }
 
