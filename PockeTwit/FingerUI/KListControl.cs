@@ -60,6 +60,7 @@ namespace FingerUI
         Point m_mouseDown = new Point(-1, -1);
         Point m_mousePrev = new Point(-1, -1);
         Point m_offset = new Point();
+        
         bool m_scrollBarMove = false;
 
         int m_selectedIndex = 0;
@@ -183,11 +184,11 @@ namespace FingerUI
         {
             get
             {
-                if (m_offset.X < 0)
+                if (XOffset < 0)
                 {
                     return SideShown.Left;
                 }
-                else if (m_offset.X> 0)
+                else if (XOffset> 0)
                 {
                     return SideShown.Right;
                 }
@@ -318,7 +319,11 @@ namespace FingerUI
             }
         }
 
-        
+        private int SlidingPortalOffset = 0;
+        private int SlidingPortalCurrentMin;
+        private int SlidingPortalCurrentEnd;
+        private int SlidingPortalSpaces = 0;
+
         public int YOffset
         {
             get
@@ -328,6 +333,24 @@ namespace FingerUI
             set
             {
                 m_offset.Y = value;
+                SlidingPortalOffset = m_offset.Y % ItemHeight;
+                int newSpaces = m_offset.Y / ItemHeight;
+                if (newSpaces > SlidingPortalSpaces)
+                {
+                    SlidingPortalCurrentMin = newSpaces;
+                    SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
+                    StatusItem i = (StatusItem)m_items[SlidingPortalCurrentEnd];
+                    SlidingPortal.AddToEnd(i);
+                    SlidingPortalSpaces = newSpaces;
+                }
+                else if (newSpaces < SlidingPortalSpaces)
+                {
+                    SlidingPortalCurrentMin = newSpaces;
+                    SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
+                    StatusItem i = (StatusItem)m_items[SlidingPortalCurrentMin];
+                    SlidingPortal.AddItemToStart(i);
+                    SlidingPortalSpaces = newSpaces;
+                }
             }
         }
         public int XOffset
@@ -458,17 +481,7 @@ namespace FingerUI
         {
             this.Parent.KeyDown += new KeyEventHandler(OnKeyDown);
         }
-
-        public void Invalidate(IKListItem item)
-        {
-            Rectangle itemBounds = item.Bounds;
-            itemBounds.Offset(-m_offset.X, -m_offset.Y);
-            if (Bounds.IntersectsWith(itemBounds))
-            {
-                Invalidate(itemBounds);
-            }
-        }
-
+        
         public void JumpToItem(object Value)
         {
             for (int i = 0; i < this.Count; i++)
@@ -483,22 +496,22 @@ namespace FingerUI
 
         public void JumpToItem(IKListItem item)
         {
-            Rectangle VisibleBounds = new Rectangle(0, m_offset.Y, this.Width, this.Height);
+            Rectangle VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
             while (!VisibleBounds.Contains(item.Bounds))
             {
                 if(item.Bounds.Top > VisibleBounds.Top)
                 {
-                    this.m_offset.Y  = this.m_offset.Y + ItemHeight;
+                    YOffset  = YOffset + ItemHeight;
                 }
                 else
                 {
-                    this.m_offset.Y = this.m_offset.Y - ItemHeight;
+                    YOffset = YOffset - ItemHeight;
                 }
 
-                if(m_offset.Y<0){m_offset.Y=0;}
-                if(m_offset.Y>(m_items.Values.Count-1)*ItemHeight){m_offset.Y=m_items.Values.Count*ItemHeight;}
+                if (YOffset < 0) { YOffset = 0; }
+                if (YOffset > (m_items.Values.Count - 1) * ItemHeight) { YOffset = m_items.Values.Count * ItemHeight; }
 
-                VisibleBounds = new Rectangle(0, m_offset.Y, this.Width, this.Height);
+                VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
             }
             Invalidate();
         }
@@ -544,7 +557,7 @@ namespace FingerUI
 
         public void ResetHoriz()
         {
-            m_offset.X = 0;
+            XOffset = 0;
         }
 
         public void SetSelectedIndexToZero()
@@ -704,7 +717,7 @@ namespace FingerUI
                 if (CurrentlyViewing != SideShown.Right)
                 {
                     m_velocity.X = (this.Width/10);
-                    m_offset.X = m_offset.X + 3;
+                    XOffset =  XOffset + 3;
                     m_timer.Enabled = true;
                 }
             }
@@ -714,7 +727,7 @@ namespace FingerUI
                 if (CurrentlyViewing != SideShown.Left)
                 {
                     m_velocity.X = -(this.Width / 10);
-                    m_offset.X = m_offset.X - 3;
+                    XOffset = XOffset - 3;
                     m_timer.Enabled = true;
                 }
             }
@@ -760,9 +773,9 @@ namespace FingerUI
                     float ScrollPos = (float)e.Y/this.Height;
                     int MoveToPos = (int)Math.Round(MaxYOffset * ScrollPos);
                     
-                    float Percentage = (float)m_offset.Y / MaxYOffset;
+                    float Percentage = (float)YOffset / MaxYOffset;
 
-                    m_offset.Y = MoveToPos;
+                    YOffset = MoveToPos;
                     
                     m_velocity.X = 0;
                     m_velocity.Y = 0;
@@ -772,12 +785,11 @@ namespace FingerUI
                 Point currPos = new Point(e.X, e.Y);
 
                 int distanceX = m_mousePrev.X - currPos.X;
-                //if (distanceX > 3 & m_offset.X == 0) { SetRightMenuUser(); }
                 
                 int distanceY = m_mousePrev.Y - currPos.Y;
                 //if we're primarily moving vertically, ignore horizontal movement.
                 //It makes it "stick" to the middle better!
-                if (m_offset.X==0 & Math.Abs(distanceX) < Math.Abs(distanceY))
+                if (XOffset==0 & Math.Abs(distanceX) < Math.Abs(distanceY))
                 {
                     distanceX = 0;
                 }
@@ -793,7 +805,9 @@ namespace FingerUI
 
                 ClipVelocity();
 
-                m_offset.Offset(distanceX, distanceY);
+                XOffset = XOffset + distanceX;
+                YOffset = YOffset + distanceY;
+                //m_offset.Offset(distanceX, distanceY);
                 ClipScrollPosition();
 
                 m_mousePrev = currPos;
@@ -806,7 +820,7 @@ namespace FingerUI
         {
             base.OnMouseUp(e);
 
-            if (m_offset.X > 15)
+            if (XOffset > 15)
             {
                 Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
                 if (cLocation.Contains(new Point(e.X, e.Y)))
@@ -845,10 +859,10 @@ namespace FingerUI
             try
             {
                 //Check if we're half-way to menu
-                if (m_offset.X > 0 && m_offset.X <= this.Width)
+                if (XOffset > 0 && XOffset <= this.Width)
                 {
                     m_timer.Enabled = true;
-                    if (m_offset.X > (this.Width * .6))
+                    if (XOffset > (this.Width * .6))
                     {
                         //Scroll to other side
                         m_velocity.X = (this.Width / 10);
@@ -860,10 +874,10 @@ namespace FingerUI
                     }
                 }
 
-                if (m_offset.X < 0 && m_offset.X >= 0 - this.Width)
+                if (XOffset < 0 && XOffset >= 0 - this.Width)
                 {
                     m_timer.Enabled = true;
-                    if (m_offset.X < (0 - (this.Width * .6)))
+                    if (XOffset < (0 - (this.Width * .6)))
                     {
                         //Scroll to other side
                         m_velocity.X = -(this.Width/10);
@@ -899,6 +913,8 @@ namespace FingerUI
                 FillBackBuffer(null);
                  */
                 SlidingPortal.SetItemList(m_items.Values);
+                SlidingPortalCurrentMin = 0;
+                SlidingPortalCurrentEnd = SlidingPortal.MaxItems;
             }
         }
         /*
@@ -966,12 +982,12 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
-                    flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - m_offset.X, 0 - m_offset.Y);
-                    if (m_offset.X > 0)
+                    flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
+                    if (XOffset > 0)
                     {
                         DrawMenu(flickerGraphics, SideShown.Right);
                     }
-                    else if (m_offset.X < 0)
+                    else if (XOffset < 0)
                     {
                         DrawMenu(flickerGraphics, SideShown.Left);
                     }
@@ -979,7 +995,7 @@ namespace FingerUI
                     DrawPointer(flickerGraphics);
                     if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
                     {
-                        if (m_offset.X > 15)
+                        if (XOffset > 15)
                         {
                             if (IsMaximized)
                             {
@@ -1077,7 +1093,7 @@ namespace FingerUI
                 foreach (StatusItem.Clickable c in s.Tweet.Clickables)
                 {
                     Rectangle itemRect = s.Bounds;
-                    itemRect.Offset(-m_offset.X, -m_offset.Y);
+                    itemRect.Offset(-XOffset, -YOffset);
                     Rectangle cRect = new Rectangle(((int)c.Location.X + itemRect.Left) + (ClientSettings.SmallArtSize + 10), (int)c.Location.Y + itemRect.Top, (int)c.Location.Width, (int)c.Location.Height);
                     if (cRect.Contains(point))
                     {
@@ -1128,24 +1144,24 @@ namespace FingerUI
 
         private void ClipScrollPosition()
         {
-            if (m_offset.X < MinXOffset)
+            if (XOffset < MinXOffset)
             {
-                m_offset.X = MinXOffset;
+                XOffset = MinXOffset;
                 m_velocity.X = 0;
             }
-            else if (m_offset.X > MaxXOffset)
+            else if (XOffset > MaxXOffset)
             {
-                m_offset.X = MaxXOffset;
+                XOffset = MaxXOffset;
                 m_velocity.X = 0;
             }
-            if (m_offset.Y < 0)
+            if (YOffset < 0)
             {
-                m_offset.Y = 0;
+                YOffset = 0;
                 m_velocity.Y = 0;
             }
-            else if (m_offset.Y > MaxYOffset)
+            else if (YOffset > MaxYOffset)
             {
-                m_offset.Y = MaxYOffset;
+                YOffset = MaxYOffset;
                 m_velocity.Y = 0;
             }
         }
@@ -1194,7 +1210,7 @@ namespace FingerUI
                 MenuMap = LeftMenu.Rendered;
                 if (MenuMap != null)
                 {
-                    m_backBuffer.DrawImage(MenuMap, (0 - this.Width) + Math.Abs(m_offset.X), 0);
+                    m_backBuffer.DrawImage(MenuMap, (0 - this.Width) + Math.Abs(XOffset), 0);
                 }
             }
             else if (Side == SideShown.Right)
@@ -1202,7 +1218,7 @@ namespace FingerUI
                 MenuMap = RightMenu.Rendered;
                 if (MenuMap != null)
                 {
-                    m_backBuffer.DrawImage(MenuMap, this.Width - m_offset.X, 0);
+                    m_backBuffer.DrawImage(MenuMap, this.Width - XOffset, 0);
                 }
             }
             
@@ -1223,9 +1239,9 @@ namespace FingerUI
         private void DrawPointer(Graphics g)
         {
             float Percentage = 0;
-            if (m_offset.Y > 0)
+            if (YOffset > 0)
             {
-                Percentage = (float)m_offset.Y / MaxYOffset;
+                Percentage = (float)YOffset / MaxYOffset;
             }
             int Position = (int)Math.Round(Height * Percentage);
             using (SolidBrush SBrush = new SolidBrush(ClientSettings.ForeColor))
@@ -1258,7 +1274,7 @@ namespace FingerUI
         {
             Point index = new Point(0, 0);
 
-            index.Y = ((y + m_offset.Y - Bounds.Top) / (m_itemHeight));
+            index.Y = ((y + YOffset - Bounds.Top) / (m_itemHeight));
             
             return index;
         }
@@ -1267,17 +1283,17 @@ namespace FingerUI
         {
             Point X = new Point(e.X, e.Y);
             
-            int LeftOfItem = this.Width - Math.Abs(m_offset.X);
+            int LeftOfItem = this.Width - Math.Abs(XOffset);
             int MenuHeight;
             int TopOfItem;
             SideMenu MenuToCheck = null;
-            if (m_offset.X > 0)
+            if (XOffset > 0)
             {
                 MenuToCheck = RightMenu;
                 MenuHeight = RightMenu.ItemHeight;
                 TopOfItem = RightMenu.TopOfMenu;
             }
-            else if (m_offset.X < 0)
+            else if (XOffset < 0)
             {
                 MenuToCheck = LeftMenu;
             }
@@ -1310,23 +1326,25 @@ namespace FingerUI
             if (!Capture && (m_velocity.Y != 0 || m_velocity.X != 0))
             {
                 XDirection dir = m_velocity.X > 0 ? XDirection.Right : XDirection.Left;
-                XDirection currentPos = m_offset.X > 0 ? XDirection.Right : XDirection.Left;
+                XDirection currentPos = XOffset > 0 ? XDirection.Right : XDirection.Left;
 
-                m_offset.Offset(m_velocity.X, m_velocity.Y);
+                //m_offset.Offset(m_velocity.X, m_velocity.Y);
+                XOffset = XOffset + m_velocity.X;
+                YOffset = YOffset + m_velocity.Y;
 
                 if (currentPos == XDirection.Right & dir == XDirection.Left)
                 {
-                    if (m_offset.X <= 0)
+                    if (XOffset <= 0)
                     {
-                        m_offset.X = 0;
+                        XOffset = 0;
                         m_velocity.X = 0;
                     }
                 }
                 else if (currentPos == XDirection.Left & dir == XDirection.Right)
                 {
-                    if (m_offset.X >= 0)
+                    if (XOffset >= 0)
                     {
-                        m_offset.X = 0;
+                        XOffset = 0;
                         m_velocity.X = 0;
                     }
                 }
@@ -1373,7 +1391,7 @@ namespace FingerUI
             Capture = false;
             m_velocity.X = 0;
             m_velocity.Y = 0;
-            m_offset.Y = 0;
+            YOffset = 0;
             FillBuffer();
             SetSelectedIndexToZero();
             Invalidate();
@@ -1418,7 +1436,7 @@ namespace FingerUI
 
         private void SelectItemOrMenu(MouseEventArgs e)
         {
-            if (e.X > this.Width-m_offset.X)
+            if (e.X > this.Width-XOffset)
             {
                 //MenuItem selected
                 if(MenuItemSelected!=null)
@@ -1430,7 +1448,7 @@ namespace FingerUI
                     }
                 }
             }
-            else if ((m_offset.X) < 0 && e.X<Math.Abs(m_offset.X))
+            else if ((XOffset) < 0 && e.X<Math.Abs(XOffset))
             {
                 if (MenuItemSelected != null)
                 {
