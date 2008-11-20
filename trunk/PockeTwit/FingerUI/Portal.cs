@@ -10,7 +10,7 @@ namespace FingerUI
     class Portal : System.Windows.Forms.Control
     {
         #region GDI Imports
-        [DllImport("gdi32.dll")]
+        [DllImport("coredll.dll")]
         static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, TernaryRasterOperations dwRop);
 
         public enum TernaryRasterOperations : uint
@@ -59,7 +59,7 @@ namespace FingerUI
         }
 
         private List<StatusItem> Items = new List<StatusItem>();
-        private int MaxItems = 12;
+        public readonly int MaxItems = 5;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
 
@@ -114,6 +114,7 @@ namespace FingerUI
         {
             lock (Items)
             {
+                Items.Clear();
                 int i = 0;
                 foreach (KListControl.IKListItem Item in SetOfItems)
                 {
@@ -132,6 +133,7 @@ namespace FingerUI
         {
             lock (Items)
             {
+                Items.Clear();
                 Items = new List<StatusItem>(SetOfItems);
                 if (Items.Count > MaxItems)
                 {
@@ -212,6 +214,7 @@ namespace FingerUI
             //Copy all but last item from top down one.
             IntPtr gPtr = g.GetHdc();
             BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
+            g.ReleaseHdc(gPtr);
             //Draw the first item.
             StatusItem Item = Items[0];
             Rectangle ItemBounds = new Rectangle(0, 0, Item.Bounds.Width, Item.Bounds.Height);
@@ -228,6 +231,7 @@ namespace FingerUI
             //Copy all but first item from top up one.
             IntPtr gPtr = g.GetHdc();
             BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
+            g.ReleaseHdc(gPtr);
             //Draw the last item.
             StatusItem Item = Items[Items.Count-1];
             Rectangle ItemBounds = new Rectangle(0, (MaxItems-1)*ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
