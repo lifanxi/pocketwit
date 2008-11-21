@@ -213,7 +213,8 @@ namespace FingerUI
         {
             //Copy all but last item from top down one.
             IntPtr gPtr = g.GetHdc();
-            BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
+            
+            BitBlt(gPtr, 0, ItemHeight, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, 0, TernaryRasterOperations.SRCCOPY);
             g.ReleaseHdc(gPtr);
             //Draw the first item.
             StatusItem Item = Items[0];
