@@ -135,7 +135,7 @@ namespace FingerUI
 
         void RerenderPortal()
         {
-            if (!Capture && m_velocity.Y == 0)
+            if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
                 SlidingPortal.Rerender();
             }
