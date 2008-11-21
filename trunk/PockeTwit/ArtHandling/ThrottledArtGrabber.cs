@@ -23,6 +23,7 @@ namespace PockeTwit
     }
     static class ThrottledArtGrabber
     {
+        private static System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]", System.Text.RegularExpressions.RegexOptions.Compiled);
         public static Bitmap FavoriteImage;
         public static Bitmap UnknownArt;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
@@ -234,13 +235,13 @@ namespace PockeTwit
         public static string DetermineCacheFileName(string User, string URL)
         {
             string Folder = "Unknown";
+            
             if (!string.IsNullOrEmpty(URL))
             {
-                System.Uri U = new Uri(URL);
-                Folder = U.Host;
+                Folder = URL.Substring(7, URL.IndexOf('/', 8));
             }
-            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]");
-            string UserFileName = r.Replace(User, "");
+            
+            string UserFileName = User.Replace("/","").Replace("\\","").Replace("?","").Replace("!","");
 
 
             string FileName = CacheFolder + "\\" + Folder + "\\" + UserFileName;
