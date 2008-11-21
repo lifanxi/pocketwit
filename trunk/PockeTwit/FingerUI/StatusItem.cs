@@ -29,8 +29,8 @@ namespace FingerUI
         private int m_y = -1;
         private PockeTwit.Library.User ReplyUser = null;
         private Font TextFont;
-
-		#endregion�Fields�
+        private Font SelectedFont;
+        #endregion�Fields�
 
 		#region�Constructors�(2)�
 
@@ -46,6 +46,7 @@ namespace FingerUI
             m_text = text;
             m_value = value;
             TextFont = m_parent.Font;
+            SelectedFont = m_parent.SelectedFont;
         }
 
         public StatusItem()
@@ -120,6 +121,7 @@ namespace FingerUI
             {
                 m_parent = value;
                 TextFont = m_parent.Font;
+                SelectedFont = m_parent.SelectedFont;
             }
         }
 
@@ -248,7 +250,6 @@ namespace FingerUI
             
             if (m_selected)
             {
-                TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
                 if (ClientSettings.SelectedBackColor != ClientSettings.SelectedBackGradColor)
                 {

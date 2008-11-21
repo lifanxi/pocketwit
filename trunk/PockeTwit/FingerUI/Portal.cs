@@ -59,7 +59,7 @@ namespace FingerUI
         }
 
         private List<StatusItem> Items = new List<StatusItem>();
-        public readonly int MaxItems = 5;
+        public readonly int MaxItems = 14;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
 
@@ -190,22 +190,39 @@ namespace FingerUI
 
         }
 
+        public void Rerender()
+        {
+            System.Threading.ThreadPool.QueueUserWorkItem(RenderBackground);
+        }
+
         private delegate void delRender();
+        private void RenderBackground(object state)
+        {
+            Render();
+        }
         private void Render()
         {
-            lock (Items)
+            if (InvokeRequired)
             {
-                for (int i = 0; i < MaxItems; i++)
+                delRender d = new delRender(Render);
+                this.Invoke(d);
+            }
+            else
+            {
+                lock (Items)
                 {
-                    StatusItem Item = Items[i];
-                    Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                    for (int i = 0; i < Items.Count; i++)
                     {
-                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                        g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                        StatusItem Item = Items[i];
+                        Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
+                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                        {
+                            g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                            g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                            g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                        }
+                        Item.Render(g, ItemBounds);
                     }
-                    Item.Render(g, ItemBounds);
                 }
             }
         }
