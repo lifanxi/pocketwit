@@ -60,6 +60,7 @@ namespace FingerUI
 
         private List<StatusItem> Items = new List<StatusItem>();
         public readonly int MaxItems = 14;
+        public readonly int SlideThreshold = 5;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
 

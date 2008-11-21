@@ -358,7 +358,16 @@ namespace FingerUI
             set
             {
                 m_offset.Y = value;
+
+                int HiddenSteps = m_offset.Y / ItemHeight;
+                if (HiddenSteps > SlidingPortal.SlideThreshold)
+                {
+                    
+                }
+
                 SlidingPortalOffset = m_offset.Y;
+
+
                 /*
                 SlidingPortalOffset = m_offset.Y % ItemHeight;
                 int newSpaces = m_offset.Y / ItemHeight;
