@@ -14,6 +14,9 @@ namespace FingerUI
 
         private class Velocity
         {
+            public delegate void delStoppedMoving();
+            public event delStoppedMoving StoppedMoving = delegate { };
+
             private int _X = 0;
             public int X
             {
@@ -35,7 +38,14 @@ namespace FingerUI
                 }
                 set
                 {
+                    bool bRaiseStop = false;
+                    bRaiseStop = (_Y != value) && (value == 0);
+                        
                     _Y = value;
+                    if (bRaiseStop)
+                    {
+                        StoppedMoving();
+                    }
                 }
             }
             
@@ -108,12 +118,27 @@ namespace FingerUI
             //Need to repaint when fetching state has changed.
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
-            
+
+            m_velocity.StoppedMoving += new Velocity.delStoppedMoving(m_velocity_StoppedMoving);
+
             fsDisplay.Visible = false;
             fsDisplay.Dock = DockStyle.Fill;
             this.Controls.Add(fsDisplay);
             
 
+        }
+
+        void m_velocity_StoppedMoving()
+        {
+            RerenderPortal();
+        }
+
+        void RerenderPortal()
+        {
+            if (!Capture && m_velocity.Y == 0)
+            {
+                SlidingPortal.Rerender();
+            }
         }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
@@ -333,6 +358,8 @@ namespace FingerUI
             set
             {
                 m_offset.Y = value;
+                SlidingPortalOffset = m_offset.Y;
+                /*
                 SlidingPortalOffset = m_offset.Y % ItemHeight;
                 int newSpaces = m_offset.Y / ItemHeight;
                 if (m_items.Values.Count > 0)
@@ -354,6 +381,7 @@ namespace FingerUI
                         SlidingPortalSpaces = newSpaces;
                     }
                 }
+                 */
             }
         }
         public int XOffset
@@ -904,6 +932,7 @@ namespace FingerUI
                 CheckForClicks(new Point(e.X, e.Y));
             }
             HasMoved = false;
+            RerenderPortal();
         }
         
         private void FillBuffer()
@@ -1435,6 +1464,7 @@ namespace FingerUI
                 fsDisplay.Render();
             }
             JumpToItem(item);
+            RerenderPortal();
         }
 
         private void SelectItemOrMenu(MouseEventArgs e)
