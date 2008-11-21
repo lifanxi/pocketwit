@@ -335,21 +335,24 @@ namespace FingerUI
                 m_offset.Y = value;
                 SlidingPortalOffset = m_offset.Y % ItemHeight;
                 int newSpaces = m_offset.Y / ItemHeight;
-                if (newSpaces > SlidingPortalSpaces)
+                if (m_items.Values.Count > 0)
                 {
-                    SlidingPortalCurrentMin = newSpaces;
-                    SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
-                    StatusItem i = (StatusItem)m_items[SlidingPortalCurrentEnd];
-                    SlidingPortal.AddToEnd(i);
-                    SlidingPortalSpaces = newSpaces;
-                }
-                else if (newSpaces < SlidingPortalSpaces)
-                {
-                    SlidingPortalCurrentMin = newSpaces;
-                    SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
-                    StatusItem i = (StatusItem)m_items[SlidingPortalCurrentMin];
-                    SlidingPortal.AddItemToStart(i);
-                    SlidingPortalSpaces = newSpaces;
+                    if (newSpaces > SlidingPortalSpaces)
+                    {
+                        SlidingPortalCurrentMin = newSpaces;
+                        SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
+                        StatusItem i = (StatusItem)m_items[SlidingPortalCurrentEnd-1];
+                        SlidingPortal.AddToEnd(i);
+                        SlidingPortalSpaces = newSpaces;
+                    }
+                    else if (newSpaces < SlidingPortalSpaces)
+                    {
+                        SlidingPortalCurrentMin = newSpaces;
+                        SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
+                        StatusItem i = (StatusItem)m_items[SlidingPortalCurrentMin];
+                        SlidingPortal.AddItemToStart(i);
+                        SlidingPortalSpaces = newSpaces;
+                    }
                 }
             }
         }

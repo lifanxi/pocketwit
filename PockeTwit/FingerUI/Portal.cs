@@ -121,7 +121,7 @@ namespace FingerUI
                     StatusItem SItem = (StatusItem)Item;
                     Items.Add(SItem);
                     i++;
-                    if (i >= MaxItems)
+                    if (i > MaxItems)
                     {
                         break;
                     }
