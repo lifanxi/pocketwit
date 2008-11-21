@@ -245,16 +245,36 @@ namespace FingerUI
             Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
             InnerBounds.Offset(1, 1);
             InnerBounds.Width--; InnerBounds.Height--;
-
+            
             if (m_selected)
             {
                 TextFont = m_parent.SelectedFont;
                 ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
-                Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                if (ClientSettings.SelectedBackColor != ClientSettings.SelectedBackGradColor)
+                {
+                    Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                }
+                else
+                {
+                    using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                    {
+                        g.FillRectangle(BackBrush, InnerBounds);
+                    }
+                }
             }
             else
             {
-                Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                if (ClientSettings.BackColor != ClientSettings.BackGradColor)
+                {
+                    Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                }
+                else
+                {
+                    using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
+                    {
+                        g.FillRectangle(BackBrush, InnerBounds);
+                    }
+                }
             }
 
             
