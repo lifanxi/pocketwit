@@ -171,7 +171,11 @@ namespace FingerUI
 
         public void Rerender()
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(RenderBackground);
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(Render);
+            System.Threading.Thread renderThread = new System.Threading.Thread(ts);
+            renderThread.Priority = System.Threading.ThreadPriority.BelowNormal;
+            renderThread.IsBackground = true;
+            renderThread.Start();
         }
 
         private delegate void delRender();
