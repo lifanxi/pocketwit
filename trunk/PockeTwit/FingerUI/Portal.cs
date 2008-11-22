@@ -83,6 +83,7 @@ namespace FingerUI
         delegate void delNewArt(string User);
         void ThrottledArtGrabber_NewArtWasDownloaded(string User)
         {
+            /*
             if (InvokeRequired)
             {
                 delNewArt d = new delNewArt(this.ThrottledArtGrabber_NewArtWasDownloaded);
@@ -90,6 +91,7 @@ namespace FingerUI
             }
             else
             {
+             */
                 lock (Items)
                 {
                     for (int i = 0; i < Items.Count; i++)
@@ -114,7 +116,7 @@ namespace FingerUI
                         }
                     }
                 }
-            }
+            //}
         }
 
         public void SetItemList(IEnumerable<StatusItem> SetOfItems)
@@ -160,16 +162,12 @@ namespace FingerUI
 
         public void ReRenderItem(StatusItem Item)
         {
-            lock (Items)
+            if (Items.Contains(Item))
             {
-                if (Items.Contains(Item))
-                {
-                    int i = Items.IndexOf(Item);
-                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
-                    Item.Render(g, itemBounds);
-                }
+                int i = Items.IndexOf(Item);
+                Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
+                Item.Render(g, itemBounds);
             }
-
         }
 
         public void Rerender()
