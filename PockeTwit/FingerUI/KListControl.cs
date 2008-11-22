@@ -100,9 +100,6 @@ namespace FingerUI
 
 		#region Constructors (1) 
 
-        /// <summary>eB
-        /// Initializes a new instance of the <see cref="KListControl"/> class.
-        /// </summary>
         public KListControl()
         {
             NotificationArea.TextFont = this.Font;
@@ -119,6 +116,8 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineDone += new PockeTwit.GlobalEventHandler.delTimelineIsDone(GlobalEventHandler_TimeLineDone);
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
 
+            SlidingPortal.NewImage += new Portal.delNewImage(SlidingPortal_NewImage);
+
             m_velocity.StoppedMoving += new Velocity.delStoppedMoving(m_velocity_StoppedMoving);
 
             fsDisplay.Visible = false;
@@ -128,16 +127,39 @@ namespace FingerUI
 
         }
 
+        void SlidingPortal_NewImage()
+        {
+            SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
+            Invalidate();
+        }
+
         void m_velocity_StoppedMoving()
         {
             RerenderPortal();
         }
 
+        int itemsBeforePortal = 0;
+        int previousItemsBeforePortal = 0;
         void RerenderPortal()
         {
             if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
-                SlidingPortal.Rerender();
+                if (m_items.Count > SlidingPortal.MaxItems)
+                {
+                    int itemsBeforeScreen = YOffset / ItemHeight;
+                    itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+                    if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
+                    List<StatusItem> NewSet = new List<StatusItem>();
+                    for (int i = itemsBeforePortal; i < itemsBeforePortal + SlidingPortal.MaxItems; i++)
+                    {
+                        NewSet.Add(m_items[i]);
+                    }
+                    if (previousItemsBeforePortal != itemsBeforePortal)
+                    {
+                        previousItemsBeforePortal = itemsBeforePortal;                        
+                    }
+                    SlidingPortal.SetItemList(NewSet);
+                }
             }
         }
 
@@ -300,13 +322,13 @@ namespace FingerUI
                 return m_selectedIndex;
             }
         }
-        public IKListItem SelectedItem
+        public StatusItem SelectedItem
         {
             get
             {
                 if (m_items.Count > 0)
                 {
-                    return (IKListItem)m_items[m_selectedIndex];
+                    return m_items[m_selectedIndex];
                 }
                 
                 return null;
@@ -317,7 +339,7 @@ namespace FingerUI
                 SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                 for(int i=0;i<m_items.Count;i++)
                 {
-                    IKListItem item = m_items[i];
+                    StatusItem item = m_items[i];
                     if (item == value)
                     {
                         item.Selected = true;
@@ -332,7 +354,7 @@ namespace FingerUI
             }
         }
 
-        public IKListItem this[int index]
+        public StatusItem this[int index]
         {
             get
             {
@@ -359,13 +381,7 @@ namespace FingerUI
             {
                 m_offset.Y = value;
 
-                int HiddenSteps = m_offset.Y / ItemHeight;
-                if (HiddenSteps > SlidingPortal.SlideThreshold)
-                {
-                    
-                }
-
-                SlidingPortalOffset = m_offset.Y;
+                SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
 
 
                 /*
@@ -457,7 +473,7 @@ namespace FingerUI
         public void AddItem(string text, object value)
         {
             
-            KListItem item = new KListItem(this, text, value);
+            StatusItem item = new StatusItem(this, text, value);
             item.Index = m_items.Count;
             AddItem(item);
         }
@@ -474,17 +490,10 @@ namespace FingerUI
                 item.Parent = this;
                 item.Index = m_items.Count;
                 item.ParentGraphics = SlidingPortal.g;
-                AddItem((IKListItem)item);
+                item.Selected = false;
+                item.Bounds = ItemBounds(0, item.Index);
+                m_items.Add(item.Index, item);
             }
-        }
-
-        public void AddItem(IKListItem item)
-        {
-            item.Parent = this;
-            item.Selected = false;
-            item.Bounds = ItemBounds(0, item.Index);
-            m_items.Add(item.Index, item);
-            //Reset();
         }
 
         public void Clear()
@@ -526,7 +535,7 @@ namespace FingerUI
         {
             for (int i = 0; i < this.Count; i++)
             {
-                IKListItem item = this[i];
+                StatusItem item = this[i];
                 if (item.Value.ToString() == Value.ToString())
                 {
                     JumpToItem(item);
@@ -534,7 +543,7 @@ namespace FingerUI
             }
         }
 
-        public void JumpToItem(IKListItem item)
+        public void JumpToItem(StatusItem item)
         {
             Rectangle VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
             while (!VisibleBounds.Contains(item.Bounds))
@@ -586,7 +595,7 @@ namespace FingerUI
             }
         }
 
-        public void RemoveItem(IKListItem item)
+        public void RemoveItem(StatusItem item)
         {
             if (m_items.ContainsKey(item.Index))
             {
@@ -1106,7 +1115,7 @@ namespace FingerUI
 
             this.ItemWidth = this.Width;
 
-            foreach (IKListItem item in m_items.Values)
+            foreach (StatusItem item in m_items.Values)
             {
                 item.Bounds = ItemBounds(0, item.Index);
             }
@@ -1219,7 +1228,7 @@ namespace FingerUI
         private void CreateBackBuffer()
         {
             
-            foreach (IKListItem item in m_items.Values)
+            foreach (StatusItem item in m_items.Values)
             {
                 if (item is StatusItem)
                 {
@@ -1451,7 +1460,7 @@ namespace FingerUI
         private void SelectAndJump()
         {
             //m_items[m_selectedIndex].Render(m_backBuffer, m_items[m_selectedIndex].Bounds);
-            IKListItem item = null;
+            StatusItem item = null;
             try
             {
                 item = m_items[m_selectedIndex];
@@ -1567,55 +1576,10 @@ namespace FingerUI
 		#endregion Methods 
 
 		#region Nested Classes (1) 
-        class ItemList : Dictionary<int, IKListItem>
+        class ItemList : Dictionary<int, StatusItem>
         {
         }
 		#endregion Nested Classes 
-        public interface IKListItem
-        {
-            /// <summary>
-            /// Gets or sets the parent.
-            /// </summary>
-            /// <value>The parent.</value>
-            KListControl Parent { get; set; }
-
-            /// <summary>
-            /// The unscrolled bounds for this item.
-            /// </summary>
-            Rectangle Bounds { get; set; }
-
-            
-            /// <summary>
-            /// Gets or sets the Y.
-            /// </summary>
-            /// <value>The Y.</value>
-            int Index { get; set; }
-
-            /// <summary>
-            /// Gets or sets a value indicating whether this <see cref="IKListItem"/> is selected.
-            /// </summary>
-            /// <value><c>true</c> if selected; otherwise, <c>false</c>.</value>
-            bool Selected { get; set; }
-
-            /// <summary>
-            /// Gets or sets the text.
-            /// </summary>
-            /// <value>The text.</value>
-            string Text { get; set; }
-
-            /// <summary>
-            /// Gets or sets the value.
-            /// </summary>
-            /// <value>The value.</value>
-            object Value { get; set; }
-
-            /// <summary>
-            /// Renders the specified graphics object.
-            /// </summary>
-            /// <param name="g">The graphics.</param>
-            /// <param name="bounds">The bounds.</param>
-            void Render(Graphics g, Rectangle bounds);
-        }
-
+        
     }
 }

@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace FingerUI
 {
-    public class StatusItem : KListControl.IKListItem, IDisposable, IComparable
+    public class StatusItem : IDisposable, IComparable
     {
 
         public static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>',')' };
