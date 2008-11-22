@@ -48,6 +48,9 @@ namespace FingerUI
         }
         #endregion
 
+        public delegate void delNewImage();
+        public event delNewImage NewImage = delegate { };
+
         private Bitmap _Rendered;
         public Graphics g;
         public Bitmap Rendered
@@ -59,7 +62,7 @@ namespace FingerUI
         }
 
         private List<StatusItem> Items = new List<StatusItem>();
-        public readonly int MaxItems = 14;
+        public readonly int MaxItems = 20;
         public readonly int SlideThreshold = 5;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
@@ -111,25 +114,6 @@ namespace FingerUI
             }
         }
 
-        public void SetItemList(IEnumerable<KListControl.IKListItem> SetOfItems)
-        {
-            lock (Items)
-            {
-                Items.Clear();
-                int i = 0;
-                foreach (KListControl.IKListItem Item in SetOfItems)
-                {
-                    StatusItem SItem = (StatusItem)Item;
-                    Items.Add(SItem);
-                    i++;
-                    if (i > MaxItems)
-                    {
-                        break;
-                    }
-                }
-                Render();
-            }
-        }
         public void SetItemList(IEnumerable<StatusItem> SetOfItems)
         {
             lock (Items)
@@ -140,7 +124,7 @@ namespace FingerUI
                 {
                     Items.RemoveRange(MaxItems, Items.Count - MaxItems);
                 }
-                Render();
+                Rerender();
             }
         }
         public void AddItemToStart(StatusItem Item)
@@ -169,12 +153,6 @@ namespace FingerUI
                     RenderNewItemAtEnd();
                 }
             }
-        }
-
-        public void ReRenderItem(KListControl.IKListItem IItem)
-        {
-            StatusItem Item = (StatusItem)IItem;
-            ReRenderItem(Item);
         }
 
         public void ReRenderItem(StatusItem Item)
@@ -225,6 +203,7 @@ namespace FingerUI
                         Item.Render(g, ItemBounds);
                     }
                 }
+                NewImage();
             }
         }
         private void RenderNewItemAtStart()
