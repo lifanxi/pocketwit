@@ -232,7 +232,7 @@ namespace FingerUI
         {
             g.Clip = new Region(bounds);
             currentOffset = bounds;
-            SolidBrush ForeBrush = new SolidBrush(m_parent.ForeColor);
+            SolidBrush ForeBrush = new SolidBrush(ClientSettings.ForeColor);
             Rectangle textBounds;
             //Shrink the text area to accomidate avatars if appropriate
             if (ClientSettings.ShowAvatars)

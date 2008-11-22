@@ -51,6 +51,8 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
+        private System.Threading.Timer pauseBeforeStarting;
+
         private Bitmap _Rendered;
         public Graphics g;
         public Bitmap Rendered
@@ -75,6 +77,7 @@ namespace FingerUI
             _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
             g = Graphics.FromImage(_Rendered);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+            pauseBeforeStarting = new System.Threading.Timer(RenderBackground, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         delegate void delNewArt(string User);
@@ -171,20 +174,20 @@ namespace FingerUI
 
         public void Rerender()
         {
-            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(Render);
-            System.Threading.Thread renderThread = new System.Threading.Thread(ts);
-            renderThread.Priority = System.Threading.ThreadPriority.BelowNormal;
-            renderThread.IsBackground = true;
-            renderThread.Start();
+            //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
+            pauseBeforeStarting.Change(3000, System.Threading.Timeout.Infinite);
         }
 
         private delegate void delRender();
         private void RenderBackground(object state)
         {
+            System.Diagnostics.Debug.WriteLine("RenderBackground called");
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
             Render();
         }
         private void Render()
         {
+            /*
             if (InvokeRequired)
             {
                 delRender d = new delRender(Render);
@@ -192,23 +195,26 @@ namespace FingerUI
             }
             else
             {
-                lock (Items)
+             */
+            lock (Items)
+            {
+                for (int i = 0; i < Items.Count; i++)
                 {
-                    for (int i = 0; i < Items.Count; i++)
+                    StatusItem Item = Items[i];
+                    Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
+                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                     {
-                        StatusItem Item = Items[i];
-                        Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
-                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                        {
-                            g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                            g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                            g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
-                        }
-                        Item.Render(g, ItemBounds);
+                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                        g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
                     }
+                    Item.Render(g, ItemBounds);
                 }
+
+                System.Diagnostics.Debug.WriteLine("Done rendering background");
                 NewImage();
             }
+            //}
         }
         private void RenderNewItemAtStart()
         {

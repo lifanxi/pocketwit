@@ -130,7 +130,7 @@ namespace FingerUI
         void SlidingPortal_NewImage()
         {
             SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
-            Invalidate();
+            Repaint();
         }
 
         void m_velocity_StoppedMoving()
@@ -156,9 +156,9 @@ namespace FingerUI
                     }
                     if (previousItemsBeforePortal != itemsBeforePortal)
                     {
-                        previousItemsBeforePortal = itemsBeforePortal;                        
+                        previousItemsBeforePortal = itemsBeforePortal;
+                        SlidingPortal.SetItemList(NewSet);
                     }
-                    SlidingPortal.SetItemList(NewSet);
                 }
             }
         }
@@ -950,7 +950,10 @@ namespace FingerUI
                 CheckForClicks(new Point(e.X, e.Y));
             }
             HasMoved = false;
-            RerenderPortal();
+            if (HasMoved)
+            {
+                RerenderPortal();
+            }
         }
         
         private void FillBuffer()
@@ -1449,7 +1452,6 @@ namespace FingerUI
 
         private void SetRightMenuUser()
         {
-            System.Diagnostics.Debug.WriteLine("RightMenuSet called");
             if (CurrentlyViewing != SideShown.Left)
             {
                 StatusItem s = (StatusItem)m_items[m_selectedIndex];
