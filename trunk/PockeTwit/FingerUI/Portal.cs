@@ -51,8 +51,11 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
+        private int itemsBeforePortal;
+        private int itemsAfterPortal;
         private System.Threading.Timer pauseBeforeStarting;
 
+        public int WindowOffset;
         private Bitmap _Rendered;
         public Graphics g;
         public Bitmap Rendered
@@ -83,54 +86,39 @@ namespace FingerUI
         delegate void delNewArt(string User);
         void ThrottledArtGrabber_NewArtWasDownloaded(string User)
         {
-            /*
-            if (InvokeRequired)
+            for (int i = 0; i < Items.Count; i++)
             {
-                delNewArt d = new delNewArt(this.ThrottledArtGrabber_NewArtWasDownloaded);
-                this.Invoke(d, User);
-            }
-            else
-            {
-             */
-                lock (Items)
+                StatusItem s = (StatusItem)Items[i];
+                if (s.Tweet.user.screen_name.ToLower() == User)
                 {
-                    for (int i = 0; i < Items.Count; i++)
+                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                    s.Render(g, itemBounds);
+                }
+                if (ClientSettings.ShowReplyImages)
+                {
+                    if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
                     {
-                        StatusItem s = (StatusItem)Items[i];
-                        if (s.Tweet.user.screen_name.ToLower() == User)
+                        string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
+                        if (ReplyTo == User)
                         {
                             Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
                             s.Render(g, itemBounds);
                         }
-                        if (ClientSettings.ShowReplyImages)
-                        {
-                            if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
-                            {
-                                string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                                if (ReplyTo == User)
-                                {
-                                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                                    s.Render(g, itemBounds);
-                                }
-                            }
-                        }
                     }
                 }
-            //}
+            }
         }
 
         public void SetItemList(IEnumerable<StatusItem> SetOfItems)
         {
-            lock (Items)
+            
+            Items.Clear();
+            Items = new List<StatusItem>(SetOfItems);
+            if (Items.Count > MaxItems)
             {
-                Items.Clear();
-                Items = new List<StatusItem>(SetOfItems);
-                if (Items.Count > MaxItems)
-                {
-                    Items.RemoveRange(MaxItems, Items.Count - MaxItems);
-                }
-                Rerender();
+                Items.RemoveRange(MaxItems, Items.Count - MaxItems);
             }
+            Rerender();
         }
         public void AddItemToStart(StatusItem Item)
         {
@@ -173,7 +161,7 @@ namespace FingerUI
         public void Rerender()
         {
             //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
-            pauseBeforeStarting.Change(3000, System.Threading.Timeout.Infinite);
+            pauseBeforeStarting.Change(500, System.Threading.Timeout.Infinite);
         }
 
         private delegate void delRender();
@@ -185,34 +173,47 @@ namespace FingerUI
         }
         private void Render()
         {
-            /*
-            if (InvokeRequired)
-            {
-                delRender d = new delRender(Render);
-                this.Invoke(d);
-            }
-            else
-            {
-             */
             lock (Items)
             {
-                for (int i = 0; i < Items.Count; i++)
+                int StartItem = WindowOffset / ItemHeight;
+                int EndItem = StartItem + 4;
+                if(EndItem>Items.Count)
                 {
-                    StatusItem Item = Items[i];
-                    Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                    {
-                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                        g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                        g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
-                    }
-                    Item.Render(g, ItemBounds);
+                    EndItem = Items.Count;
+                    StartItem = EndItem - 4;
+                }
+                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                // Onscreen items first
+                for (int i = StartItem; i < EndItem; i++)
+                {
+                    DrawSingleItem(i);
+                }
+                for(int i=0;i<StartItem;i++)
+                {
+                    DrawSingleItem(i);
+                }
+                for(int i=EndItem+1;i<Items.Count;i++)
+                {
+                    DrawSingleItem(i);
                 }
 
                 System.Diagnostics.Debug.WriteLine("Done rendering background");
                 NewImage();
             }
             //}
+        }
+
+        private void DrawSingleItem(int i)
+        {
+            StatusItem Item = Items[i];
+            Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
+            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+            {
+                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+            }
+            Item.Render(g, ItemBounds);
         }
         private void RenderNewItemAtStart()
         {

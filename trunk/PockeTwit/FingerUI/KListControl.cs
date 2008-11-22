@@ -129,8 +129,7 @@ namespace FingerUI
 
         void SlidingPortal_NewImage()
         {
-            offSetItemsBeforePortal = itemsBeforePortal;
-            SlidingPortalOffset = YOffset - (offSetItemsBeforePortal * ItemHeight);
+            SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
             Repaint();
         }
 
@@ -383,8 +382,8 @@ namespace FingerUI
             {
                 m_offset.Y = value;
 
-                SlidingPortalOffset = YOffset - (offSetItemsBeforePortal * ItemHeight);
-
+                SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
+                SlidingPortal.WindowOffset = SlidingPortalOffset;
 
                 /*
                 SlidingPortalOffset = m_offset.Y % ItemHeight;
