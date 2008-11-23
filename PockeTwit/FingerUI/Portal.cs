@@ -70,7 +70,7 @@ namespace FingerUI
 
         private List<StatusItem> Items = new List<StatusItem>();
         public readonly int MaxItems = 15;
-        private const int PauseBeforeRerender = 300;
+        private const int PauseBeforeRerender = 50;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
@@ -110,9 +110,35 @@ namespace FingerUI
             }
         }
 
-        public void SetItemList(IEnumerable<StatusItem> SetOfItems)
+        public void SetItemList(List<StatusItem> SetOfItems)
         {
-            
+            StatusItem FirstNewItem = SetOfItems[0];
+            int SpacesMoved = 0;
+            if (Items.Contains(FirstNewItem))
+            {
+                //Items added to the end
+                SpacesMoved = Items.IndexOf(FirstNewItem);
+                StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
+                Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
+                System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the end of the image.");
+                AddItemsToEnd(ItemsToAdd);
+                return;
+            }
+            else
+            {
+                StatusItem LastNewItem = SetOfItems[SetOfItems.Count - 1];
+                if (Items.Contains(LastNewItem))
+                {
+                    //Items added to the start
+                    SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem)+1);
+                    StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
+                    Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
+                    System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
+                    AddItemsToStart(ItemsToAdd);
+                    return;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("Jumped " + SpacesMoved + " spaces");
             Items.Clear();
             Items = new List<StatusItem>(SetOfItems);
             if (Items.Count > MaxItems)
@@ -121,31 +147,41 @@ namespace FingerUI
             }
             Rerender();
         }
+
+        public void AddItemsToStart(StatusItem[] Items)
+        {
+            for (int i = Items.Length - 1; i >= 0; i--)
+            {
+                AddItemToStart(Items[i]);
+            }
+            NewImage();
+        }
         public void AddItemToStart(StatusItem Item)
         {
-            lock (Items)
+            Items.Insert(0, Item);
+            if (Items.Count > MaxItems)
             {
-                Items.Insert(0, Item);
-                if (Items.Count > MaxItems)
-                {
-                    Items.RemoveAt(Items.Count - 1);
-                    Items.TrimExcess();
-                    RenderNewItemAtStart();
-                }
-                
+                Items.RemoveAt(Items.Count - 1);
+                Items.TrimExcess();
+                RenderNewItemAtStart();
             }
         }
-        public void AddToEnd(StatusItem Item)
+        public void AddItemsToEnd(StatusItem[] Items)
         {
-            lock (Items)
+            foreach (StatusItem Item in Items)
             {
-                Items.Add(Item);
-                if (Items.Count > MaxItems)
-                {
-                    Items.RemoveAt(0);
-                    Items.TrimExcess();
-                    RenderNewItemAtEnd();
-                }
+                AddItemToEnd(Item);
+            }
+            NewImage();
+        }
+        public void AddItemToEnd(StatusItem Item)
+        {
+            Items.Add(Item);
+            if (Items.Count > MaxItems)
+            {
+                Items.RemoveAt(0);
+                Items.TrimExcess();
+                RenderNewItemAtEnd();
             }
         }
 
