@@ -967,7 +967,7 @@ namespace FingerUI
                 //I want to do this async, but I'm running into race conditions right now.
                 FillBackBuffer(null);
                  */
-                SlidingPortal.SetItemList(m_items.Values);
+                SlidingPortal.SetItemList(new List<StatusItem>(m_items.Values));
                 SlidingPortalCurrentMin = 0;
                 SlidingPortalCurrentEnd = SlidingPortal.MaxItems;
             }
