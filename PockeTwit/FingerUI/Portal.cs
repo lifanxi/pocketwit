@@ -57,7 +57,7 @@ namespace FingerUI
 
         public int WindowOffset;
         private Bitmap _Rendered;
-        public Graphics g;
+        public Graphics _RenderedGraphics;
         public Bitmap Rendered
         {
             get
@@ -67,18 +67,17 @@ namespace FingerUI
         }
 
         private List<StatusItem> Items = new List<StatusItem>();
-        public readonly int MaxItems = 20;
-        public readonly int SlideThreshold = 5;
+        public readonly int MaxItems = 15;
+        private const int PauseBeforeRerender = 300;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
-
+        private int maxWidth = 0;
         public Portal()
         {
-            int maxWidth;
             Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
             _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
-            g = Graphics.FromImage(_Rendered);
+            _RenderedGraphics = Graphics.FromImage(_Rendered);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackground, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
@@ -92,7 +91,7 @@ namespace FingerUI
                 if (s.Tweet.user.screen_name.ToLower() == User)
                 {
                     Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                    s.Render(g, itemBounds);
+                    s.Render(_RenderedGraphics, itemBounds);
                 }
                 if (ClientSettings.ShowReplyImages)
                 {
@@ -102,7 +101,7 @@ namespace FingerUI
                         if (ReplyTo == User)
                         {
                             Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                            s.Render(g, itemBounds);
+                            s.Render(_RenderedGraphics, itemBounds);
                         }
                     }
                 }
@@ -154,14 +153,14 @@ namespace FingerUI
             {
                 int i = Items.IndexOf(Item);
                 Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
-                Item.Render(g, itemBounds);
+                Item.Render(_RenderedGraphics, itemBounds);
             }
         }
 
         public void Rerender()
         {
             //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
-            pauseBeforeStarting.Change(500, System.Threading.Timeout.Infinite);
+            pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
         }
 
         private delegate void delRender();
@@ -173,37 +172,48 @@ namespace FingerUI
         }
         private void Render()
         {
-            lock (Items)
+            using (Bitmap temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
             {
-                int StartItem = WindowOffset / ItemHeight;
-                int EndItem = StartItem + 4;
-                if(EndItem>Items.Count)
+                using (Graphics g = Graphics.FromImage(temp))
                 {
-                    EndItem = Items.Count;
-                    StartItem = EndItem - 4;
-                }
-                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
-                // Onscreen items first
-                for (int i = StartItem; i < EndItem; i++)
-                {
-                    DrawSingleItem(i);
-                }
-                for(int i=0;i<StartItem;i++)
-                {
-                    DrawSingleItem(i);
-                }
-                for(int i=EndItem+1;i<Items.Count;i++)
-                {
-                    DrawSingleItem(i);
-                }
+                    lock (Items)
+                    {
+                        int StartItem = WindowOffset / ItemHeight;
+                        if (StartItem < 0)
+                        {
+                            StartItem = 0;
+                        }
+                        int EndItem = StartItem + 4;
+                        if (EndItem > Items.Count)
+                        {
+                            EndItem = Items.Count;
+                            StartItem = EndItem - 4;
+                        }
+                        System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                        // Onscreen items first
+                        for (int i = StartItem; i < EndItem; i++)
+                        {
+                            DrawSingleItem(i,g);
+                        }
+                        for (int i = 0; i < StartItem; i++)
+                        {
+                            DrawSingleItem(i,g);
+                        }
+                        for (int i = EndItem; i < Items.Count; i++)
+                        {
+                            DrawSingleItem(i,g);
+                        }
 
-                System.Diagnostics.Debug.WriteLine("Done rendering background");
-                NewImage();
+                        System.Diagnostics.Debug.WriteLine("Done rendering background");
+                        _RenderedGraphics.DrawImage(temp, 0, 0);
+                        NewImage();
+                    }
+                }
             }
             //}
         }
 
-        private void DrawSingleItem(int i)
+        private void DrawSingleItem(int i, Graphics g)
         {
             StatusItem Item = Items[i];
             Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
@@ -218,37 +228,37 @@ namespace FingerUI
         private void RenderNewItemAtStart()
         {
             //Copy all but last item from top down one.
-            IntPtr gPtr = g.GetHdc();
+            IntPtr gPtr = _RenderedGraphics.GetHdc();
             
             BitBlt(gPtr, 0, ItemHeight, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, 0, TernaryRasterOperations.SRCCOPY);
-            g.ReleaseHdc(gPtr);
+            _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the first item.
             StatusItem Item = Items[0];
             Rectangle ItemBounds = new Rectangle(0, 0, Item.Bounds.Width, Item.Bounds.Height);
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
             }
-            Item.Render(g, ItemBounds);
+            Item.Render(_RenderedGraphics, ItemBounds);
         }
         private void RenderNewItemAtEnd()
         {
             //Copy all but first item from top up one.
-            IntPtr gPtr = g.GetHdc();
+            IntPtr gPtr = _RenderedGraphics.GetHdc();
             BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
-            g.ReleaseHdc(gPtr);
+            _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the last item.
             StatusItem Item = Items[Items.Count-1];
             Rectangle ItemBounds = new Rectangle(0, (MaxItems-1)*ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                _RenderedGraphics.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
             }
-            Item.Render(g, ItemBounds);
+            Item.Render(_RenderedGraphics, ItemBounds);
         }
     }
 }

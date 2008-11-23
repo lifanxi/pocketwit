@@ -490,7 +490,7 @@ namespace FingerUI
             {
                 item.Parent = this;
                 item.Index = m_items.Count;
-                item.ParentGraphics = SlidingPortal.g;
+                item.ParentGraphics = SlidingPortal._RenderedGraphics;
                 item.Selected = false;
                 item.Bounds = ItemBounds(0, item.Index);
                 m_items.Add(item.Index, item);
@@ -1237,7 +1237,7 @@ namespace FingerUI
                 if (item is StatusItem)
                 {
                     StatusItem sItem = (StatusItem)item;
-                    sItem.ParentGraphics = SlidingPortal.g;
+                    sItem.ParentGraphics = SlidingPortal._RenderedGraphics;
                 }
             }
         }
@@ -1430,10 +1430,10 @@ namespace FingerUI
         private void Reset()
         {
             
-            SlidingPortal.g.Clear(ClientSettings.BackColor);
+            SlidingPortal._RenderedGraphics.Clear(ClientSettings.BackColor);
             using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                SlidingPortal.g.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
+                SlidingPortal._RenderedGraphics.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
             }
             m_timer.Enabled = false;
             if (m_items.Count > 0)
