@@ -887,6 +887,7 @@ namespace FingerUI
             if (m_scrollBarMove)
             {
                 m_scrollBarMove = false;
+                RerenderPortal();
                 return;
             }
             // Did the click end on the same item it started on?
