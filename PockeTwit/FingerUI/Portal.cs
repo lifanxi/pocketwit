@@ -55,7 +55,9 @@ namespace FingerUI
         private int itemsAfterPortal;
         private System.Threading.Timer pauseBeforeStarting;
 
+
         public int WindowOffset;
+        private Bitmap temp;
         private Bitmap _Rendered;
         public Graphics _RenderedGraphics;
         public Bitmap Rendered
@@ -172,7 +174,7 @@ namespace FingerUI
         }
         private void Render()
         {
-            using (Bitmap temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+            using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
             {
                 using (Graphics g = Graphics.FromImage(temp))
                 {
