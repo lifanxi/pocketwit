@@ -77,9 +77,9 @@ namespace PockeTwit
         {
             try
             {
-                foreach (string Avatar in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\ArtCache\\"))
+                foreach (string Folder in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\ArtCache\\"))
                 {
-                    System.IO.File.Delete(Avatar);
+                    System.IO.Directory.Delete(Folder, true);
                 }
             }
             catch

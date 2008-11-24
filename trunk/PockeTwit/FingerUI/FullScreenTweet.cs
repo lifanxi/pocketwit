@@ -39,6 +39,7 @@ namespace FingerUI
         public FullScreenTweet()
         {
             InitializeComponent();
+            _FontSize = lblText.Font.Size;
             PockeTwit.Themes.FormColors.SetColors(this);
             avatarBox.Width = ClientSettings.SmallArtSize;
             avatarBox.Height = ClientSettings.SmallArtSize;
@@ -62,6 +63,20 @@ namespace FingerUI
                     {
                         avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.screen_name, Status.user.high_profile_image_url);
                     }
+                }
+            }
+        }
+
+        private float _FontSize;
+        public float FontSize
+        {
+            get { return _FontSize; }
+            set
+            {
+                _FontSize = value;
+                using (Font TextFont = new Font(FontFamily.GenericSansSerif, value, FontStyle.Regular))
+                {
+                    lblText.Font = TextFont;
                 }
             }
         }
