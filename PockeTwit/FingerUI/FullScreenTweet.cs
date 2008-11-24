@@ -39,6 +39,10 @@ namespace FingerUI
         public FullScreenTweet()
         {
             InitializeComponent();
+            if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+            {
+                lnkDismiss.Visible = false;
+            }
             _FontSize = lblText.Font.Size;
             PockeTwit.Themes.FormColors.SetColors(this);
             avatarBox.Width = ClientSettings.SmallArtSize;
