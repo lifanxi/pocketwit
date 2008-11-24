@@ -44,15 +44,17 @@
             // 
             // lblUserName
             // 
-            this.lblUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblUserName.Location = new System.Drawing.Point(94, 4);
+            this.lblUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUserName.Location = new System.Drawing.Point(92, 4);
             this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(125, 20);
+            this.lblUserName.Size = new System.Drawing.Size(127, 20);
             this.lblUserName.Text = "label1";
             // 
             // lblTime
             // 
-            this.lblTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTime.Location = new System.Drawing.Point(93, 28);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(125, 20);
@@ -60,7 +62,8 @@
             // 
             // lblSource
             // 
-            this.lblSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSource.Location = new System.Drawing.Point(92, 53);
             this.lblSource.Name = "lblSource";
             this.lblSource.Size = new System.Drawing.Size(125, 20);
