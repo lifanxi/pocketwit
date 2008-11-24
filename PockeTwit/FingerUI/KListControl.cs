@@ -763,7 +763,11 @@ namespace FingerUI
             }
             if (e.KeyCode == Keys.Right | e.KeyCode == Keys.F2) 
             {
-                if (fsDisplay.Visible) { return; }
+                if (fsDisplay.Visible) 
+                {
+                    fsDisplay.FontSize++;
+                    return; 
+                }
                 if (CurrentlyViewing != SideShown.Right)
                 {
                     m_velocity.X = (this.Width/10);
@@ -773,7 +777,11 @@ namespace FingerUI
             }
             if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
             {
-                if (fsDisplay.Visible) { return; }
+                if (fsDisplay.Visible) 
+                {
+                    fsDisplay.FontSize--;
+                    return; 
+                }
                 if (CurrentlyViewing != SideShown.Left)
                 {
                     m_velocity.X = -(this.Width / 10);

@@ -105,6 +105,7 @@ namespace FingerUI
                     }
                 }
             }
+            NewImage();
         }
 
         public void SetItemList(List<StatusItem> SetOfItems)
