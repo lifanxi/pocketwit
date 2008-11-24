@@ -147,18 +147,21 @@ namespace FingerUI
             {
                 if (m_items.Count > SlidingPortal.MaxItems)
                 {
-                    int itemsBeforeScreen = YOffset / ItemHeight;
-                    itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
-                    if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
-                    List<StatusItem> NewSet = new List<StatusItem>();
-                    for (int i = itemsBeforePortal; i < itemsBeforePortal + SlidingPortal.MaxItems; i++)
+                    lock (m_items)
                     {
-                        NewSet.Add(m_items[i]);
-                    }
-                    if (previousItemsBeforePortal != itemsBeforePortal)
-                    {
-                        previousItemsBeforePortal = itemsBeforePortal;
-                        SlidingPortal.SetItemList(NewSet);
+                        int itemsBeforeScreen = YOffset / ItemHeight;
+                        itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+                        if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
+                        List<StatusItem> NewSet = new List<StatusItem>();
+                        for (int i = itemsBeforePortal; i < itemsBeforePortal + SlidingPortal.MaxItems; i++)
+                        {
+                            NewSet.Add(m_items[i]);
+                        }
+                        if (previousItemsBeforePortal != itemsBeforePortal)
+                        {
+                            previousItemsBeforePortal = itemsBeforePortal;
+                            SlidingPortal.SetItemList(NewSet);
+                        }
                     }
                 }
             }
