@@ -51,10 +51,7 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
-        private int itemsBeforePortal;
-        private int itemsAfterPortal;
         private System.Threading.Timer pauseBeforeStarting;
-
 
         public int WindowOffset;
         private Bitmap temp;
@@ -81,7 +78,7 @@ namespace FingerUI
             _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
-            pauseBeforeStarting = new System.Threading.Timer(RenderBackground, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         delegate void delNewArt(string User);
@@ -112,6 +109,7 @@ namespace FingerUI
 
         public void SetItemList(List<StatusItem> SetOfItems)
         {
+            System.Diagnostics.Debug.WriteLine(SetOfItems[MaxItems-1].Tweet.text);
             StatusItem FirstNewItem = SetOfItems[0];
             int SpacesMoved = 0;
             if (Items.Contains(FirstNewItem))
@@ -132,7 +130,8 @@ namespace FingerUI
                     //Items added to the start
                     SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem)+1);
                     StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
-                    Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
+                    Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
+                    //Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
                     System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
                     AddItemsToStart(ItemsToAdd);
                     return;
@@ -150,7 +149,7 @@ namespace FingerUI
 
         public void AddItemsToStart(StatusItem[] Items)
         {
-            for (int i = Items.Length - 1; i >= 0; i--)
+            for (int i = Items.Length-1; i >= 0; i--)
             {
                 AddItemToStart(Items[i]);
             }
@@ -200,12 +199,22 @@ namespace FingerUI
             //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
             pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
         }
+        public void RenderImmediately()
+        {
+            RenderBackgroundHighPriority(null);
+        }
 
         private delegate void delRender();
-        private void RenderBackground(object state)
+        private void RenderBackgroundLowPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+            Render();
+        }
+        private void RenderBackgroundHighPriority(object state)
+        {
+            System.Diagnostics.Debug.WriteLine("RenderBackground called");
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
             Render();
         }
         private void Render()

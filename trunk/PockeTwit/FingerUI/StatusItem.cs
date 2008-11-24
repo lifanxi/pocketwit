@@ -384,7 +384,10 @@ namespace FingerUI
             g.Clip = new Region();
         }
 
-
+        public override string ToString()
+        {
+            return this.Tweet.text;
+        }
 
 		//�Private�Methods�(2)�
 
