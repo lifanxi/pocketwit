@@ -390,6 +390,7 @@
     <Compile Include="OpenNetCF\UserNotificationInfoHeader.cs" />
     <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
     <Compile Include="OpenNetCF\WaitHandle.cs" />
+    <Compile Include="Yedda\GoogleTranslate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

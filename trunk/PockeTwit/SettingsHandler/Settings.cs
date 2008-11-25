@@ -91,6 +91,7 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static string TranslationLanguage { get; set; }
     public static int PortalSize { get; set; }
     public static int UpdateMinutes { get; set; }
     public static float TextHeight { get; set; }
@@ -154,6 +155,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["TranslationLanguage"]))
+            {
+                TranslationLanguage = ConfigurationSettings.AppSettings["TranslationLanguage"];
+            }
+            else
+            {
+                TranslationLanguage = "en";
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateMinutes"]))
             {
                 UpdateMinutes = int.Parse(ConfigurationSettings.AppSettings["UpdateMinutes"]);
