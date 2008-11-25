@@ -66,19 +66,59 @@ namespace FingerUI
         }
 
         private List<StatusItem> Items = new List<StatusItem>();
-        public readonly int MaxItems = 15;
+        public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
         public Portal()
         {
+            
             Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
+            SetBufferSize();
             _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+        }
+
+        private void SetBufferSize()
+        {
+            bool bGood = false;
+            Bitmap TestMap = null;
+            Bitmap SecondMap = null;
+            Bitmap ScreenMap = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
+            Bitmap AvatarMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+            while(!bGood)
+            {
+                try
+                {
+                    TestMap = new Bitmap(maxWidth, MaxItems * ItemHeight);
+                    SecondMap = new Bitmap(maxWidth, MaxItems * ItemHeight);
+                    break;
+                }
+                catch (OutOfMemoryException ex)
+                {
+                    MaxItems = MaxItems - 2;
+                }
+                finally
+                {
+                    if (TestMap != null)
+                    {
+                        TestMap.Dispose();
+                    }
+                    if (SecondMap != null)
+                    {
+                        SecondMap.Dispose();
+                    }
+                }
+            }
+            ScreenMap.Dispose();
+            AvatarMap.Dispose();
+            System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
+            ClientSettings.PortalSize = MaxItems;
+            ClientSettings.SaveSettings();
         }
 
         delegate void delNewArt(string User);
@@ -110,7 +150,6 @@ namespace FingerUI
 
         public void SetItemList(List<StatusItem> SetOfItems)
         {
-            System.Diagnostics.Debug.WriteLine(SetOfItems[MaxItems-1].Tweet.text);
             StatusItem FirstNewItem = SetOfItems[0];
             int SpacesMoved = 0;
             if (Items.Contains(FirstNewItem))
@@ -220,43 +259,66 @@ namespace FingerUI
         }
         private void Render()
         {
-            using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+            bool bGood = false;
+            while (!bGood)
             {
-                using (Graphics g = Graphics.FromImage(temp))
+                lock (Items)
                 {
-                    lock (Items)
+                    try
                     {
-                        int StartItem = WindowOffset / ItemHeight;
-                        if (StartItem < 0)
+                        using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
                         {
-                            StartItem = 0;
-                        }
-                        int EndItem = StartItem + 4;
-                        if (EndItem > Items.Count)
-                        {
-                            EndItem = Items.Count;
-                            StartItem = EndItem - 4;
-                        }
-                        System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
-                        // Onscreen items first
-                        for (int i = StartItem; i < EndItem; i++)
-                        {
-                            DrawSingleItem(i,g);
-                        }
-                        for (int i = 0; i < StartItem; i++)
-                        {
-                            DrawSingleItem(i,g);
-                        }
-                        for (int i = EndItem; i < Items.Count; i++)
-                        {
-                            DrawSingleItem(i,g);
-                        }
+                            using (Graphics g = Graphics.FromImage(temp))
+                            {
 
-                        System.Diagnostics.Debug.WriteLine("Done rendering background");
-                        _RenderedGraphics.DrawImage(temp, 0, 0);
-                        NewImage();
+                                int StartItem = WindowOffset / ItemHeight;
+                                if (StartItem < 0)
+                                {
+                                    StartItem = 0;
+                                }
+                                int EndItem = StartItem + 4;
+                                if (EndItem > Items.Count)
+                                {
+                                    EndItem = Items.Count;
+                                    StartItem = EndItem - 4;
+                                }
+                                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                                // Onscreen items first
+                                for (int i = StartItem; i < EndItem; i++)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
+                                for (int i = 0; i < StartItem; i++)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
+                                for (int i = EndItem; i < Items.Count; i++)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
+
+                                System.Diagnostics.Debug.WriteLine("Done rendering background");
+                                _RenderedGraphics.DrawImage(temp, 0, 0);
+                                NewImage();
+                                break;
+                            }
+                        }
+                    }
+                    catch (OutOfMemoryException ex)
+                    {
+                        
+                        MaxItems = MaxItems - 2;
+                        System.Diagnostics.Debug.WriteLine("Lower maxitems: " + MaxItems);
+                    }
+                    finally
+                    {
+                        if (temp != null)
+                        {
+                            temp.Dispose();
+                        }
                     }
                 }
+                
             }
             //}
         }
