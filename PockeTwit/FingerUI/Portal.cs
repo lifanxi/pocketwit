@@ -52,7 +52,7 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
-        private System.Threading.Timer pauseBeforeStarting;
+        private bool isRendering = false;
 
         public int WindowOffset;
         private Bitmap temp;
@@ -66,6 +66,8 @@ namespace FingerUI
             }
         }
 
+        private System.Threading.Thread CurrentRenderJob;
+        private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
@@ -127,6 +129,7 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
             ClientSettings.PortalSize = MaxItems;
             ClientSettings.SaveSettings();
+            GC.Collect();
         }
 
         delegate void delNewArt(string User);
@@ -249,7 +252,10 @@ namespace FingerUI
         }
         public void RenderImmediately()
         {
-            RenderBackgroundHighPriority(null);
+            if (!isRendering)
+            {
+                RenderBackgroundHighPriority(null);
+            }
         }
 
         private delegate void delRender();
@@ -267,19 +273,17 @@ namespace FingerUI
         }
         private void Render()
         {
-            bool bGood = false;
-            while (!bGood)
+            if (!isRendering)
             {
-                using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+                isRendering = true;
+                try
                 {
-                    using (Graphics g = Graphics.FromImage(temp))
+                    using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
                     {
-                        lock (Items)
+                        using (Graphics g = Graphics.FromImage(temp))
                         {
-                            try
+                            lock (Items)
                             {
-
-
                                 int StartItem = WindowOffset / ItemHeight;
                                 if (StartItem < 0)
                                 {
@@ -309,24 +313,18 @@ namespace FingerUI
                                 System.Diagnostics.Debug.WriteLine("Done rendering background");
                                 _RenderedGraphics.DrawImage(temp, 0, 0);
                                 NewImage();
-                                break;
                             }
-                            catch (OutOfMemoryException ex)
-                            {
 
-                                MaxItems = MaxItems - 2;
-                                System.Diagnostics.Debug.WriteLine("Lower maxitems: " + MaxItems);
-                            }
-                            finally
-                            {
-                                if (temp != null)
-                                {
-                                    temp.Dispose();
-                                }
-                            }
                         }
-
                     }
+                }
+                catch (OutOfMemoryException)
+                {
+                    throw new LowMemoryException();
+                }
+                finally
+                {
+                    isRendering = false;
                 }
             }
         }
