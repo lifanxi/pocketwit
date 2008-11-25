@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
+using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -8,6 +9,7 @@ using System.Runtime.InteropServices;
 namespace FingerUI
 {
     public class LowMemoryException : Exception { }
+
     class Portal : System.Windows.Forms.Control
     {
         #region GDI Imports
@@ -49,11 +51,11 @@ namespace FingerUI
         }
         #endregion
 
+        private static List<Thread> _RenderThreads = new List<Thread>();
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
-        private bool isRendering = false;
-
+        
         public int WindowOffset;
         private Bitmap temp;
         private Bitmap _Rendered;
@@ -252,80 +254,85 @@ namespace FingerUI
         }
         public void RenderImmediately()
         {
-            if (!isRendering)
-            {
-                RenderBackgroundHighPriority(null);
-            }
+            RenderBackgroundHighPriority(null);
         }
 
         private delegate void delRender();
         private void RenderBackgroundLowPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+            if (System.Threading.Thread.CurrentThread.IsBackground)
+            {
+                System.Threading.Thread.CurrentThread.Name = "Renderer";
+                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
+            }
             Render();
         }
         private void RenderBackgroundHighPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+            if (System.Threading.Thread.CurrentThread.IsBackground)
+            {
+                System.Threading.Thread.CurrentThread.Name = "Renderer";
+                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
+            }
             Render();
         }
         private void Render()
         {
-            if (!isRendering)
+            foreach (Thread t in _RenderThreads)
             {
-                isRendering = true;
-                try
+                //Kill those suckers.
+                System.Diagnostics.Debug.WriteLine("KILLED A RENDERER!");
+                t.Abort();
+            }
+            try
+            {
+                using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
                 {
-                    using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+                    using (Graphics g = Graphics.FromImage(temp))
                     {
-                        using (Graphics g = Graphics.FromImage(temp))
+                        lock (Items)
                         {
-                            lock (Items)
+                            int StartItem = WindowOffset / ItemHeight;
+                            if (StartItem < 0)
                             {
-                                int StartItem = WindowOffset / ItemHeight;
-                                if (StartItem < 0)
-                                {
-                                    StartItem = 0;
-                                }
-                                int EndItem = StartItem + 4;
-                                if (EndItem > Items.Count)
-                                {
-                                    EndItem = Items.Count;
-                                    StartItem = EndItem - 4;
-                                }
-                                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
-                                // Onscreen items first
-                                for (int i = StartItem; i < EndItem; i++)
-                                {
-                                    DrawSingleItem(i, g);
-                                }
-                                for (int i = 0; i < StartItem; i++)
-                                {
-                                    DrawSingleItem(i, g);
-                                }
-                                for (int i = EndItem; i < Items.Count; i++)
-                                {
-                                    DrawSingleItem(i, g);
-                                }
-
-                                System.Diagnostics.Debug.WriteLine("Done rendering background");
-                                _RenderedGraphics.DrawImage(temp, 0, 0);
-                                NewImage();
+                                StartItem = 0;
+                            }
+                            int EndItem = StartItem + 4;
+                            if (EndItem > Items.Count)
+                            {
+                                EndItem = Items.Count;
+                                StartItem = EndItem - 4;
+                            }
+                            System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                            // Onscreen items first
+                            for (int i = StartItem; i < EndItem; i++)
+                            {
+                                DrawSingleItem(i, g);
+                            }
+                            for (int i = 0; i < StartItem; i++)
+                            {
+                                DrawSingleItem(i, g);
+                            }
+                            for (int i = EndItem; i < Items.Count; i++)
+                            {
+                                DrawSingleItem(i, g);
                             }
 
+                            System.Diagnostics.Debug.WriteLine("Done rendering background");
+                            _RenderedGraphics.DrawImage(temp, 0, 0);
+                            NewImage();
                         }
+
                     }
                 }
-                catch (OutOfMemoryException)
-                {
-                    throw new LowMemoryException();
-                }
-                finally
-                {
-                    isRendering = false;
-                }
+            }
+            catch (OutOfMemoryException)
+            {
+                throw new LowMemoryException();
             }
         }
 
