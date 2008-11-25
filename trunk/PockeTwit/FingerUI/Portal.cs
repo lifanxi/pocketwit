@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace FingerUI
 {
+    public class LowMemoryException : Exception{}
     class Portal : System.Windows.Forms.Control
     {
         #region GDI Imports
@@ -85,9 +86,11 @@ namespace FingerUI
 
         private void SetBufferSize()
         {
+            //Try to create temporary bitmaps for everything we'll need so we can try it out.
             bool bGood = false;
             Bitmap TestMap = null;
             Bitmap SecondMap = null;
+
             Bitmap ScreenMap = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
             Bitmap AvatarMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
             while(!bGood)
@@ -100,7 +103,12 @@ namespace FingerUI
                 }
                 catch (OutOfMemoryException ex)
                 {
-                    MaxItems = MaxItems - 2;
+                    if (MaxItems == 5)
+                    {
+                        throw new LowMemoryException();
+                    }
+                    MaxItems = MaxItems - 5;
+                    if (MaxItems < 5) { MaxItems = 5; }
                 }
                 finally
                 {
