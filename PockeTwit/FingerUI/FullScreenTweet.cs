@@ -88,6 +88,7 @@ namespace FingerUI
         {
             if (Status != null)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.screen_name, Status.user.high_profile_image_url);
                 lblUserName.Text = Status.user.screen_name;
                 lblTime.Text = Status.TimeStamp.ToString();
@@ -112,6 +113,7 @@ namespace FingerUI
                 }
                 fullText = Yedda.GoogleTranslate.GetTranslation(fullText);
                 lblText.Text = fullText;
+                Cursor.Current = Cursors.Default;
             }
         }
 
