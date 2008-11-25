@@ -16,10 +16,16 @@ namespace PockeTwit
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            
             string ErrorPath = ClientSettings.AppPath;
             Exception ex = (Exception)e.ExceptionObject;
             if (ex is ObjectDisposedException)
             {
+                return;
+            }
+            if (ex is FingerUI.LowMemoryException)
+            {
+                MessageBox.Show("You do not currently have enough graphics memory to run PockeTwit.  Please close some applications or soft-reset and try again.", "Low Memory", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
             System.Text.StringBuilder b = new System.Text.StringBuilder();
