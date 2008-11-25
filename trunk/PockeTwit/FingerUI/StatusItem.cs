@@ -230,158 +230,166 @@ namespace FingerUI
         }
         public virtual void Render(Graphics g, Rectangle bounds)
         {
-            g.Clip = new Region(bounds);
-            currentOffset = bounds;
-            SolidBrush ForeBrush = new SolidBrush(ClientSettings.ForeColor);
-            Rectangle textBounds;
-            //Shrink the text area to accomidate avatars if appropriate
-            if (ClientSettings.ShowAvatars)
+            try
             {
-                textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin * 2)), bounds.Height);
-            }
-            else
-            {
-                textBounds = new Rectangle(bounds.X + ClientSettings.Margin, bounds.Y, bounds.Width - (ClientSettings.Margin * 2), bounds.Height);
-            }
-
-            Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
-            InnerBounds.Offset(1, 1);
-            InnerBounds.Width--; InnerBounds.Height--;
-            
-            if (m_selected)
-            {
-                ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
-                if (ClientSettings.SelectedBackColor != ClientSettings.SelectedBackGradColor)
+                g.Clip = new Region(bounds);
+                currentOffset = bounds;
+                SolidBrush ForeBrush = new SolidBrush(ClientSettings.ForeColor);
+                Rectangle textBounds;
+                //Shrink the text area to accomidate avatars if appropriate
+                if (ClientSettings.ShowAvatars)
                 {
-                    Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                    textBounds = new Rectangle(bounds.X + (ClientSettings.SmallArtSize + ClientSettings.Margin), bounds.Y, bounds.Width - (ClientSettings.SmallArtSize + (ClientSettings.Margin * 2)), bounds.Height);
                 }
                 else
                 {
-                    using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
-                    {
-                        g.FillRectangle(BackBrush, InnerBounds);
-                    }
+                    textBounds = new Rectangle(bounds.X + ClientSettings.Margin, bounds.Y, bounds.Width - (ClientSettings.Margin * 2), bounds.Height);
                 }
-            }
-            else
-            {
-                if (ClientSettings.BackColor != ClientSettings.BackGradColor)
+
+                Rectangle InnerBounds = new Rectangle(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+                InnerBounds.Offset(1, 1);
+                InnerBounds.Width--; InnerBounds.Height--;
+
+                if (m_selected)
                 {
-                    Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                    ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
+                    if (ClientSettings.SelectedBackColor != ClientSettings.SelectedBackGradColor)
+                    {
+                        Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                    }
+                    else
+                    {
+                        using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                        {
+                            g.FillRectangle(BackBrush, InnerBounds);
+                        }
+                    }
                 }
                 else
                 {
-                    using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
+                    if (ClientSettings.BackColor != ClientSettings.BackGradColor)
                     {
-                        g.FillRectangle(BackBrush, InnerBounds);
+                        Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
                     }
-                }
-            }
-
-            
-            Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
-
-            //Add the timestamp if the settings call for it.
-            if (ClientSettings.ShowExtra)
-            {
-                Color SmallColor = ClientSettings.SmallTextColor;
-                if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
-                using (Brush dateBrush = new SolidBrush(SmallColor))
-                {
-                    g.DrawString(Tweet.TimeStamp, ClientSettings.SmallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
-                }
-            }
-
-            //Get and draw the avatar area.
-            if (ClientSettings.ShowAvatars)
-            {
-                string artURL = Tweet.user.high_profile_image_url;
-                if (!ClientSettings.HighQualityAvatars)
-                {
-                    artURL = Tweet.user.profile_image_url;
-                }
-                using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
-                {
-                    g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
-                }
-                
-                //This is usually disabled, but we may draw a smaller avatar over the first one
-                if (ClientSettings.ShowReplyImages)
-                {
-                    DrawReplyImage(g, ImageLocation);
-                }
-                
-                //Only occasionally is an item "starred", but we draw one on there if it is.
-                if (hasFavoriteStar)
-                {
-                    System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
-                    ia.SetColorKey(PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0), PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0));
-                    g.DrawImage(PockeTwit.ThrottledArtGrabber.FavoriteImage,
-                        new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
-                }
-
-                //If it's a reply or direct message, overlay that on the avatar
-                if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
-                {
-                    using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                    else
                     {
-
-                        Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                        Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
-
-                        using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                        using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
                         {
-                            g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                            g.FillRectangle(BackBrush, InnerBounds);
                         }
-                        g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right - 12, ImageRect.Top - 2, 10, 20));
                     }
                 }
-                else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+
+
+                Point ImageLocation = new Point(bounds.X + ClientSettings.Margin, bounds.Y + ClientSettings.Margin);
+
+                //Add the timestamp if the settings call for it.
+                if (ClientSettings.ShowExtra)
                 {
-                    using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                    Color SmallColor = ClientSettings.SmallTextColor;
+                    if (this.Selected) { SmallColor = ClientSettings.SelectedSmallTextColor; }
+                    using (Brush dateBrush = new SolidBrush(SmallColor))
                     {
-                        Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-                        Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+                        g.DrawString(Tweet.TimeStamp, ClientSettings.SmallFont, dateBrush, bounds.Left + ClientSettings.Margin, ClientSettings.SmallArtSize + ClientSettings.Margin + bounds.Top, m_stringFormat);
+                    }
+                }
 
-                        using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
-                        {
-                            g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
-                        }
-                        g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
+                //Get and draw the avatar area.
+                if (ClientSettings.ShowAvatars)
+                {
+                    string artURL = Tweet.user.high_profile_image_url;
+                    if (!ClientSettings.HighQualityAvatars)
+                    {
+                        artURL = Tweet.user.profile_image_url;
+                    }
+                    using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
+                    {
+                        g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
                     }
 
+                    //This is usually disabled, but we may draw a smaller avatar over the first one
+                    if (ClientSettings.ShowReplyImages)
+                    {
+                        DrawReplyImage(g, ImageLocation);
+                    }
+
+                    //Only occasionally is an item "starred", but we draw one on there if it is.
+                    if (hasFavoriteStar)
+                    {
+                        System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+                        ia.SetColorKey(PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0), PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0));
+                        g.DrawImage(PockeTwit.ThrottledArtGrabber.FavoriteImage,
+                            new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
+                    }
+
+                    //If it's a reply or direct message, overlay that on the avatar
+                    if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
+                    {
+                        using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                        {
+
+                            Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                            Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                            using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                            {
+                                g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                            }
+                            g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right - 12, ImageRect.Top - 2, 10, 20));
+                        }
+                    }
+                    else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+                    {
+                        using (Brush sBrush = new SolidBrush(ClientSettings.SelectedForeColor))
+                        {
+                            Rectangle ImageRect = new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+                            Point sPoint = new Point(ImageRect.Right - 15, ImageRect.Top);
+
+                            using (Brush bBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                            {
+                                g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
+                            }
+                            g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
+                        }
+
+                    }
                 }
-            }
-            
-            
-            textBounds.Offset(ClientSettings.Margin, 1);
-            textBounds.Width = textBounds.Width - ClientSettings.Margin;
-            textBounds.Height--;
-
-            m_stringFormat.Alignment = StringAlignment.Near;
-            
-            m_stringFormat.LineAlignment = StringAlignment.Near;
-            BreakUpTheText(g, textBounds);
-            int lineOffset = 0;
 
 
-            for (int i = 0; i < Tweet.SplitLines.Count; i++)
-            {
-                if (i >= ClientSettings.LinesOfText)
+                textBounds.Offset(ClientSettings.Margin, 1);
+                textBounds.Width = textBounds.Width - ClientSettings.Margin;
+                textBounds.Height--;
+
+                m_stringFormat.Alignment = StringAlignment.Near;
+
+                m_stringFormat.LineAlignment = StringAlignment.Near;
+                BreakUpTheText(g, textBounds);
+                int lineOffset = 0;
+
+
+                for (int i = 0; i < Tweet.SplitLines.Count; i++)
                 {
-                    break;
-                }
-                float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
+                    if (i >= ClientSettings.LinesOfText)
+                    {
+                        break;
+                    }
+                    float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
 
-                g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
-                lineOffset++;
+                    g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
+                    lineOffset++;
+                }
+                if (ClientSettings.UseClickables)
+                {
+                    MakeClickable(g, textBounds);
+                }
+                ForeBrush.Dispose();
+                g.Clip = new Region();
             }
-            if (ClientSettings.UseClickables)
+            catch (ObjectDisposedException)
             {
-                MakeClickable(g, textBounds);
             }
-            ForeBrush.Dispose();
-            g.Clip = new Region();
+            
+            
         }
 
         public override string ToString()
