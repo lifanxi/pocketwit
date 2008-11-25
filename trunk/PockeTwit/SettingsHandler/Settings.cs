@@ -91,6 +91,7 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static int PortalSize { get; set; }
     public static int UpdateMinutes { get; set; }
     public static float TextHeight { get; set; }
     public static string ThemeName { get; set; }
@@ -289,6 +290,15 @@ public static class ClientSettings
             {
                 UseSkweezer = bool.Parse(ConfigurationSettings.AppSettings["UseSkweezer"]);
             }
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["PortalSize"]))
+            {
+                PortalSize= int.Parse(ConfigurationSettings.AppSettings["PortalSize"]);
+            }
+            else
+            {
+                PortalSize = MaxTweets;
+            }
+
             foreach (Yedda.Twitter.Account a in ConfigurationSettings.Accounts)
             {
                 AccountsList.Add(a);
@@ -315,6 +325,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["IncludeScreenName"] = IncludeUserName.ToString();
         ConfigurationSettings.AppSettings["HighQualityAvatars"] = HighQualityAvatars.ToString();
         ConfigurationSettings.AppSettings["UseSkweezer"] = UseSkweezer.ToString();
+        ConfigurationSettings.AppSettings["PortalSize"] = PortalSize.ToString();
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
             ConfigurationSettings.AppSettings.Remove("UserName");

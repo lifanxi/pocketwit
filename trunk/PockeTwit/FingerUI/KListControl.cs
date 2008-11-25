@@ -53,6 +53,7 @@ namespace FingerUI
         }
         
 		#region Fields (23) 
+
         private Portal SlidingPortal = new Portal();
         private NotificationPopup NotificationArea = new NotificationPopup(); 
         private Font HighlightedFont;
@@ -153,7 +154,8 @@ namespace FingerUI
                         itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
                         if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
                         List<StatusItem> NewSet = new List<StatusItem>();
-                        for (int i = itemsBeforePortal; i < itemsBeforePortal + SlidingPortal.MaxItems; i++)
+                        int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
+                        for (int i = itemsBeforePortal; i < MaxSize; i++)
                         {
                             NewSet.Add(m_items[i]);
                         }
