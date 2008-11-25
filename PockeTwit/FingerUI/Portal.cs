@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace FingerUI
 {
-    public class LowMemoryException : Exception{}
+    public class LowMemoryException : Exception { }
     class Portal : System.Windows.Forms.Control
     {
         #region GDI Imports
@@ -69,12 +69,12 @@ namespace FingerUI
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
-        
+
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
         public Portal()
         {
-            
+
             Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
             SetBufferSize();
@@ -93,7 +93,7 @@ namespace FingerUI
 
             Bitmap ScreenMap = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
             Bitmap AvatarMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-            while(!bGood)
+            while (!bGood)
             {
                 try
                 {
@@ -176,7 +176,7 @@ namespace FingerUI
                 if (Items.Contains(LastNewItem))
                 {
                     //Items added to the start
-                    SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem)+1);
+                    SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
                     StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
                     Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
                     //Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
@@ -197,7 +197,7 @@ namespace FingerUI
 
         public void AddItemsToStart(StatusItem[] Items)
         {
-            for (int i = Items.Length-1; i >= 0; i--)
+            for (int i = Items.Length - 1; i >= 0; i--)
             {
                 AddItemToStart(Items[i]);
             }
@@ -270,14 +270,15 @@ namespace FingerUI
             bool bGood = false;
             while (!bGood)
             {
-                lock (Items)
+                using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
                 {
-                    try
+                    using (Graphics g = Graphics.FromImage(temp))
                     {
-                        using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+                        lock (Items)
                         {
-                            using (Graphics g = Graphics.FromImage(temp))
+                            try
                             {
+
 
                                 int StartItem = WindowOffset / ItemHeight;
                                 if (StartItem < 0)
@@ -310,25 +311,24 @@ namespace FingerUI
                                 NewImage();
                                 break;
                             }
+                            catch (OutOfMemoryException ex)
+                            {
+
+                                MaxItems = MaxItems - 2;
+                                System.Diagnostics.Debug.WriteLine("Lower maxitems: " + MaxItems);
+                            }
+                            finally
+                            {
+                                if (temp != null)
+                                {
+                                    temp.Dispose();
+                                }
+                            }
                         }
-                    }
-                    catch (OutOfMemoryException ex)
-                    {
-                        
-                        MaxItems = MaxItems - 2;
-                        System.Diagnostics.Debug.WriteLine("Lower maxitems: " + MaxItems);
-                    }
-                    finally
-                    {
-                        if (temp != null)
-                        {
-                            temp.Dispose();
-                        }
+
                     }
                 }
-                
             }
-            //}
         }
 
         private void DrawSingleItem(int i, Graphics g)
@@ -347,7 +347,7 @@ namespace FingerUI
         {
             //Copy all but last item from top down one.
             IntPtr gPtr = _RenderedGraphics.GetHdc();
-            
+
             BitBlt(gPtr, 0, ItemHeight, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, 0, TernaryRasterOperations.SRCCOPY);
             _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the first item.
@@ -368,8 +368,8 @@ namespace FingerUI
             BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
             _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the last item.
-            StatusItem Item = Items[Items.Count-1];
-            Rectangle ItemBounds = new Rectangle(0, (MaxItems-1)*ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
+            StatusItem Item = Items[Items.Count - 1];
+            Rectangle ItemBounds = new Rectangle(0, (MaxItems - 1) * ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);

@@ -279,7 +279,7 @@ namespace Yedda
         {
             get
             {
-                return AccountInfo.ServerURL.ServerType == Yedda.Twitter.TwitterServer.twitter; 
+                return AccountInfo.ServerURL.ServerType == Yedda.Twitter.TwitterServer.twitter || AccountInfo.ServerURL.ServerType== TwitterServer.identica; 
             }
         }
         public bool FavoritesWork
@@ -293,7 +293,7 @@ namespace Yedda
         {
             get
             {
-                return AccountInfo.ServerURL.ServerType == Yedda.Twitter.TwitterServer.twitter; 
+                return AccountInfo.ServerURL.ServerType == Yedda.Twitter.TwitterServer.twitter || AccountInfo.ServerURL.ServerType == Yedda.Twitter.TwitterServer.identica;
             }
 
         }
