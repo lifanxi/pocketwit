@@ -110,6 +110,7 @@ namespace FingerUI
                 {
                     fullText = Status.text;
                 }
+                fullText = Yedda.GoogleTranslate.GetTranslation(fullText);
                 lblText.Text = fullText;
             }
         }
