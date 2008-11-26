@@ -803,6 +803,8 @@ namespace FingerUI
             InFocus = false;
         }
 
+        private long ticks = 0;
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             HasMoved = false;
@@ -815,6 +817,7 @@ namespace FingerUI
             
             base.OnMouseDown(e);
 
+            
             Capture = true;
 
             m_mouseDown.X = e.X;
@@ -883,6 +886,13 @@ namespace FingerUI
         {
             base.OnMouseUp(e);
 
+            if (ClickablesControl.Visible)
+            {
+                ClickablesControl.CheckForClicks(new Point(e.X, e.Y));
+                Invalidate();
+                return;
+            }
+
             if (XOffset > 15)
             {
                 Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
@@ -912,8 +922,21 @@ namespace FingerUI
                 // Yes, so select that item or menuiten
                 if (Math.Abs(e.X - m_mouseDown.X) < MaxVelocity)
                 {
+                    int OldSelected = m_selectedIndex;
                     SelectItemOrMenu(e);
+                    //Check for double-click!
+                    if (m_selectedIndex == OldSelected)
+                    {
+                        long NowTicks = DateTime.Now.Ticks;
+                        if ((NowTicks - ticks) < new TimeSpan(0, 0, 0, 0, 500).Ticks)
+                        {
+                            ShowClickablesControl();
+                            return;
+                        }
+                        ticks = NowTicks;
+                    }
                 }
+                
             }
             else
             {
@@ -1582,6 +1605,7 @@ namespace FingerUI
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
             ClickablesControl.Visible = true;
+            Invalidate();
         }
 
         private void UnselectCurrentItem()
