@@ -807,7 +807,7 @@ namespace FingerUI
         {
             HasMoved = false;
             //Fast scrolling on the right 10 pixels
-            if (e.X > this.Width - 10)
+            if (e.X > this.Width - PointerSize)
             {
                 m_scrollBarMove = true;
                 return;
@@ -1305,6 +1305,9 @@ namespace FingerUI
             }
         }
 
+        int PointerSize = ClientSettings.TextSize;
+        int PointerHalf = ClientSettings.TextSize / 2;
+
         private void DrawPointer(Graphics g)
         {
             float Percentage = 0;
@@ -1315,9 +1318,9 @@ namespace FingerUI
             int Position = (int)Math.Round(Height * Percentage);
             using (SolidBrush SBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                Point a = new Point(Width - 10, Position);
-                Point b = new Point(Width, Position - 5);
-                Point c = new Point(Width, Position + 5);
+                Point a = new Point(Width - PointerSize, Position);
+                Point b = new Point(Width, Position - PointerHalf);
+                Point c = new Point(Width, Position + PointerHalf);
                 Point[] Triangle = new Point[]{a,b,c};
                 g.FillPolygon(SBrush, Triangle);
             }

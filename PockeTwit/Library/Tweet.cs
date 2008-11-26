@@ -44,7 +44,7 @@ namespace PockeTwit.Library
             {
                 TimeSpan Difference = DateTime.Now - createdAt;
                 double Diff;
-                string Span = "";
+                string Span;
                 if (Difference.TotalDays > 1)
                 {
                     Diff = Math.Round(Difference.TotalDays);
