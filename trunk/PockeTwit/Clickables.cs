@@ -75,6 +75,31 @@ namespace PockeTwit
 
 		// Public Methods (2) 
 
+        public void CheckForClicks(Point p)
+        {
+            int ItemHeight = (ClientSettings.TextSize * 2);
+            int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
+            foreach (string Item in TextItems)
+            {
+                Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
+                if (r.Contains(p))
+                {
+                    this.Visible = false;
+                    if (TextItems[_CurrentlyFocused] == "Exit")
+                    {
+                        _CurrentlyFocused = 0;
+                        return;
+                    }
+                    if (WordClicked != null)
+                    {
+                        WordClicked(Item);
+                        _CurrentlyFocused = 0;
+                    }
+                }
+                TopOfItem = TopOfItem + ItemHeight;
+            }
+        }
+
         public void KeyDown(KeyEventArgs e)
         {
             lock (TextItems)
