@@ -665,6 +665,7 @@ namespace PockeTwit
             {
                 case "Back":
                     GoBackInHistory();
+                    
                     break;
                 case "Errors":
                     Errors errForm = new Errors();
@@ -672,6 +673,7 @@ namespace PockeTwit
                     break;
                 case "Search/Local":
                     TwitterSearch();
+                    
                     break;
                 case "Public TimeLine":
                     ChangeCursor(Cursors.WaitCursor);
@@ -682,9 +684,11 @@ namespace PockeTwit
                 case "Reconnect":
                 case "Friends TimeLine":
                     ShowFriendsTimeLine();
+                    
                     break;
                 case "Messages":
                     ShowMessagesTimeLine();
+                    
                     break;
                 case "Favorites":
                     //GetTimeLineAsync();
@@ -701,6 +705,7 @@ namespace PockeTwit
 
                 case "@User TimeLine":
                     ShowUserTimeLine();
+                    
                     break;
                 case "Reply @User":
                     SendReply();
@@ -738,6 +743,10 @@ namespace PockeTwit
                     Manager.ShutDown();
                     this.Close();
                     break;
+            }
+            if (ItemName != "Exit")
+            {
+                statList.SnapBack();
             }
             SetLeftMenu();
         }
