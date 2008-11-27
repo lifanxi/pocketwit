@@ -54,6 +54,7 @@ namespace FingerUI
         
 		#region Fields (23) 
 
+        private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
         private NotificationPopup NotificationArea = new NotificationPopup(); 
         private Font HighlightedFont;
@@ -933,53 +934,52 @@ namespace FingerUI
                             ShowClickablesControl();
                             return;
                         }
+                        ticks = NowTicks;
                     }
+                    Invalidate();
+                    return;
                 }
-                
             }
             else
             {
                 m_timer.Enabled = true;
             }
-            ticks = DateTime.Now.Ticks;
+
             try
             {
                 //Check if we're half-way to menu
-                if (!m_timer.Enabled)
+                if (XOffset > 0 && XOffset <= this.Width)
                 {
-                    if (XOffset > 0 && XOffset <= this.Width)
+                    m_timer.Enabled = true;
+                    if (XOffset > (this.Width * .6))
                     {
-                        m_timer.Enabled = true;
-                        if (XOffset > (this.Width * .6))
-                        {
-                            //Scroll to other side
-                            m_velocity.X = (this.Width / 10);
-                        }
-                        else
-                        {
-                            m_velocity.X = -(this.Width / 10);
-                            //Scroll back
-                        }
+                        //Scroll to other side
+                        m_velocity.X = (this.Width / 10);
                     }
-
-                    if (XOffset < 0 && XOffset >= 0 - this.Width)
+                    else
                     {
-                        m_timer.Enabled = true;
-                        if (XOffset < (0 - (this.Width * .6)))
-                        {
-                            //Scroll to other side
-                            m_velocity.X = -(this.Width / 10);
-                        }
-                        else
-                        {
-                            m_velocity.X = (this.Width / 10);
-                            //Scroll back
-                        }
+                        m_velocity.X = -(this.Width / 10);
+                        //Scroll back
                     }
-                    Capture = false;
                 }
+
+                if (XOffset < 0 && XOffset >= 0 - this.Width)
+                {
+                    m_timer.Enabled = true;
+                    if (XOffset < (0 - (this.Width * .6)))
+                    {
+                        //Scroll to other side
+                        m_velocity.X = -(this.Width / 10);
+                    }
+                    else
+                    {
+                        m_velocity.X = (this.Width / 10);
+                        //Scroll back
+                    }
+                }
+
                 m_mouseDown.Y = -1;
-                
+                Capture = false;
 
                 Invalidate();
             }
@@ -995,6 +995,7 @@ namespace FingerUI
                 RerenderPortal();
             }
         }
+        
 
         public void SnapBack()
         {
@@ -1562,6 +1563,7 @@ namespace FingerUI
                     if (!String.IsNullOrEmpty(ItemName))
                     {
                         MenuItemSelected(ItemName);
+                        menuwasClicked = true;
                     }
                 }
             }
@@ -1573,6 +1575,7 @@ namespace FingerUI
                     if (!String.IsNullOrEmpty(ItemName))
                     {
                         MenuItemSelected(ItemName);
+                        menuwasClicked = true;
                     }
                 }
             }
