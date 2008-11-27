@@ -110,12 +110,20 @@ namespace PockeTwit
                     {
                         _CurrentlyFocused++;
                     }
+                    else
+                    {
+                        _CurrentlyFocused = 0;
+                    }
                 }
                 if (e.KeyCode == Keys.Up)
                 {
                     if (_CurrentlyFocused > 0)
                     {
                         _CurrentlyFocused--;
+                    }
+                    else
+                    {
+                        _CurrentlyFocused = TextItems.Count - 1;
                     }
                 }
                 if (e.KeyCode == Keys.Enter)

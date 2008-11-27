@@ -228,9 +228,13 @@ namespace FingerUI
             lock (Items)
             {
                 int PrevSelected = Items.IndexOf(SelectedItem);
-                if(PrevSelected<Items.Count-1)
+                if (PrevSelected < Items.Count - 1)
                 {
                     _SelectedItem = Items[PrevSelected + 1];
+                }
+                else
+                {
+                    _SelectedItem = Items[0];
                 }
             }
             IsDirty=true;
@@ -243,6 +247,10 @@ namespace FingerUI
                 if (PrevSelected > 0)
                 {
                     _SelectedItem = Items[PrevSelected - 1];
+                }
+                else
+                {
+                    _SelectedItem = Items[Items.Count- 1];
                 }
             }
             IsDirty=true;
