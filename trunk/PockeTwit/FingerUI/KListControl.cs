@@ -933,7 +933,6 @@ namespace FingerUI
                             ShowClickablesControl();
                             return;
                         }
-                        ticks = NowTicks;
                     }
                 }
                 
@@ -942,42 +941,45 @@ namespace FingerUI
             {
                 m_timer.Enabled = true;
             }
-
+            ticks = DateTime.Now.Ticks;
             try
             {
                 //Check if we're half-way to menu
-                if (XOffset > 0 && XOffset <= this.Width)
+                if (!m_timer.Enabled)
                 {
-                    m_timer.Enabled = true;
-                    if (XOffset > (this.Width * .6))
+                    if (XOffset > 0 && XOffset <= this.Width)
                     {
-                        //Scroll to other side
-                        m_velocity.X = (this.Width / 10);
+                        m_timer.Enabled = true;
+                        if (XOffset > (this.Width * .6))
+                        {
+                            //Scroll to other side
+                            m_velocity.X = (this.Width / 10);
+                        }
+                        else
+                        {
+                            m_velocity.X = -(this.Width / 10);
+                            //Scroll back
+                        }
                     }
-                    else
-                    {
-                        m_velocity.X = -(this.Width / 10);
-                        //Scroll back
-                    }
-                }
 
-                if (XOffset < 0 && XOffset >= 0 - this.Width)
-                {
-                    m_timer.Enabled = true;
-                    if (XOffset < (0 - (this.Width * .6)))
+                    if (XOffset < 0 && XOffset >= 0 - this.Width)
                     {
-                        //Scroll to other side
-                        m_velocity.X = -(this.Width/10);
+                        m_timer.Enabled = true;
+                        if (XOffset < (0 - (this.Width * .6)))
+                        {
+                            //Scroll to other side
+                            m_velocity.X = -(this.Width / 10);
+                        }
+                        else
+                        {
+                            m_velocity.X = (this.Width / 10);
+                            //Scroll back
+                        }
                     }
-                    else
-                    {
-                        m_velocity.X = (this.Width / 10);
-                        //Scroll back
-                    }
+                    Capture = false;
                 }
-
                 m_mouseDown.Y = -1;
-                Capture = false;
+                
 
                 Invalidate();
             }
@@ -993,7 +995,23 @@ namespace FingerUI
                 RerenderPortal();
             }
         }
-        
+
+        public void SnapBack()
+        {
+            if (CurrentlyViewing == SideShown.Right)
+            {
+                Capture = false;
+                m_timer.Enabled = true;
+                m_velocity.X = -(this.Width / 10);
+            }
+            else if (CurrentlyViewing == SideShown.Left)
+            {
+                Capture = false;
+                m_timer.Enabled = true;
+                m_velocity.X = (this.Width / 10);
+            }
+        }
+
         private void FillBuffer()
         {
             if (m_items.Count > 0)
@@ -1577,6 +1595,8 @@ namespace FingerUI
                             fsDisplay.Render();
                         }
                         SetRightMenuUser();
+                        m_velocity.X = 0;
+                        m_velocity.Y = 0;
                     }
                 }
                 else
@@ -1587,8 +1607,7 @@ namespace FingerUI
                     }
                 }
             }
-            m_velocity.X = 0;
-            m_velocity.Y = 0;
+
         }
 
         private void ShowClickablesControl()
