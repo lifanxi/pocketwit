@@ -1091,7 +1091,11 @@ namespace FingerUI
 
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
-                    flickerGraphics.Clear(ClientSettings.BackColor);
+                    //flickerGraphics.Clear(ClientSettings.BackColor);
+                    using (Brush b = new TextureBrush(PockeTwit.ThrottledArtGrabber.VoidMap))
+                    {
+                        flickerGraphics.FillRectangle(b, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+                    }
                     flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
                     if (XOffset > 0)
                     {
