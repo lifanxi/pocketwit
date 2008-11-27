@@ -26,6 +26,7 @@ namespace PockeTwit
         private static System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]", System.Text.RegularExpressions.RegexOptions.Compiled);
         public static Bitmap FavoriteImage;
         public static Bitmap UnknownArt;
+        public static Bitmap VoidMap;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
         private static List<string> BadURLs = new List<string>();
         public static string CacheFolder;
@@ -33,6 +34,18 @@ namespace PockeTwit
         static ThrottledArtGrabber()
         {
             CacheFolder = ClientSettings.AppPath + "\\ArtCache";
+
+            VoidMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+            int s = ClientSettings.SmallArtSize / 2;
+            using (Graphics vg = Graphics.FromImage(VoidMap))
+            {
+                vg.Clear(Color.White);
+                using (Brush b = new SolidBrush(Color.LightGray))
+                {
+                    vg.FillRectangle(b, 0, 0, s, s);
+                    vg.FillRectangle(b, s, s, s, s);
+                }
+            }
 
             if (!System.IO.Directory.Exists(CacheFolder))
             {
