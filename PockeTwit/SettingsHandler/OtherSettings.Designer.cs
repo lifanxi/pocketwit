@@ -46,8 +46,8 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuAccept = new System.Windows.Forms.MenuItem();
+            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.chkGPS = new System.Windows.Forms.CheckBox();
             this.chkVersion = new System.Windows.Forms.CheckBox();
             this.lblUpDates = new System.Windows.Forms.Label();
@@ -55,6 +55,7 @@ namespace PockeTwit
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkBeep = new System.Windows.Forms.CheckBox();
+            this.chkTranslate = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -62,15 +63,15 @@ namespace PockeTwit
             this.mainMenu1.MenuItems.Add(this.menuAccept);
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
-            // menuCancel
-            // 
-            this.menuCancel.Text = "Cancel";
-            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
-            // 
             // menuAccept
             // 
             this.menuAccept.Text = "Accept";
             this.menuAccept.Click += new System.EventHandler(this.menuAccept_Click);
+            // 
+            // menuCancel
+            // 
+            this.menuCancel.Text = "Cancel";
+            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // chkGPS
             // 
@@ -133,12 +134,21 @@ namespace PockeTwit
             this.chkBeep.TabIndex = 2;
             this.chkBeep.Text = "Beep on new messages";
             // 
+            // chkTranslate
+            // 
+            this.chkTranslate.Location = new System.Drawing.Point(6, 122);
+            this.chkTranslate.Name = "chkTranslate";
+            this.chkTranslate.Size = new System.Drawing.Size(100, 20);
+            this.chkTranslate.TabIndex = 10;
+            this.chkTranslate.Text = "Automatically translate";
+            // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkTranslate);
             this.Controls.Add(this.chkBeep);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
@@ -162,6 +172,7 @@ namespace PockeTwit
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkBeep;
+        private System.Windows.Forms.CheckBox chkTranslate;
 
     }
 }

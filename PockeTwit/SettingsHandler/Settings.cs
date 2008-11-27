@@ -91,6 +91,7 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static bool AutoTranslate { get; set; }
     public static string TranslationLanguage { get; set; }
     public static int PortalSize { get; set; }
     public static int UpdateMinutes { get; set; }
@@ -155,13 +156,22 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AutoTranslate"]))
+            {
+                AutoTranslate = bool.Parse(ConfigurationSettings.AppSettings["AutoTranslate"]);
+            }
+            else
+            {
+                AutoTranslate = true;
+            }
+
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["TranslationLanguage"]))
             {
                 TranslationLanguage = ConfigurationSettings.AppSettings["TranslationLanguage"];
             }
             else
             {
-                TranslationLanguage = "en";
+                TranslationLanguage = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLower();
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateMinutes"]))
             {
@@ -320,6 +330,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
         ConfigurationSettings.AppSettings["ThemeName"] = ThemeName;
         ConfigurationSettings.AppSettings["ShowAvatars"] = ShowAvatars.ToString();
         ConfigurationSettings.AppSettings["UseGPS"] = UseGPS.ToString();

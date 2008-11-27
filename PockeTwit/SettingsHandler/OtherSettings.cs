@@ -26,6 +26,7 @@ namespace PockeTwit
             {
                 this.WindowState = FormWindowState.Maximized;
             }
+
             PopulateForm();
         }
 
@@ -50,6 +51,7 @@ namespace PockeTwit
             ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.BeepOnNew = chkBeep.Checked;
+            ClientSettings.AutoTranslate = chkTranslate.Checked;
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
@@ -74,6 +76,8 @@ namespace PockeTwit
             chkGPS.Checked = ClientSettings.UseGPS;
             chkBeep.Checked = ClientSettings.BeepOnNew;
             txtUpdate.Text = ClientSettings.UpdateMinutes.ToString();
+            chkTranslate.Checked = ClientSettings.AutoTranslate;
+            chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;
             this.DialogResult = DialogResult.Cancel;
         }
 
