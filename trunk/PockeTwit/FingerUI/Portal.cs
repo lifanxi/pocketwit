@@ -55,6 +55,7 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
 
+        private volatile bool cancelMyCurrentThread = false;
         
         public int WindowOffset;
         private Bitmap temp;
@@ -74,6 +75,7 @@ namespace FingerUI
         public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
 
+        
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
         public Portal()
@@ -280,13 +282,19 @@ namespace FingerUI
             }
             Render();
         }
+        
         private void Render()
         {
-            foreach (Thread t in _RenderThreads)
+            while (_RenderThreads.Count > 1)
             {
-                //Kill those suckers.
-                System.Diagnostics.Debug.WriteLine("KILLED A RENDERER!");
-                t.Abort();
+                Thread t = _RenderThreads[0];
+                if (t == System.Threading.Thread.CurrentThread)
+                {
+                    t = _RenderThreads[1];
+                }
+                cancelMyCurrentThread = true;
+                t.Join();
+                _RenderThreads.Remove(t);
             }
             try
             {
@@ -311,17 +319,32 @@ namespace FingerUI
                             // Onscreen items first
                             for (int i = StartItem; i < EndItem; i++)
                             {
-                                DrawSingleItem(i, g);
+                                if (!cancelMyCurrentThread)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
                             }
                             for (int i = 0; i < StartItem; i++)
                             {
-                                DrawSingleItem(i, g);
+                                if (!cancelMyCurrentThread)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
                             }
                             for (int i = EndItem; i < Items.Count; i++)
                             {
-                                DrawSingleItem(i, g);
+                                if (!cancelMyCurrentThread)
+                                {
+                                    DrawSingleItem(i, g);
+                                }
                             }
 
+
+                            if (cancelMyCurrentThread)
+                            {
+                                cancelMyCurrentThread = false;
+                                return;
+                            }
                             System.Diagnostics.Debug.WriteLine("Done rendering background");
                             _RenderedGraphics.DrawImage(temp, 0, 0);
                             NewImage();
