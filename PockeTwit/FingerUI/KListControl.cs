@@ -937,7 +937,11 @@ namespace FingerUI
                         ticks = NowTicks;
                     }
                     Invalidate();
-                    return;
+                    if (menuwasClicked)
+                    {
+                        menuwasClicked = false;
+                        return;
+                    }
                 }
             }
             else
