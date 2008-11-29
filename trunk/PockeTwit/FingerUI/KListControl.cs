@@ -1097,12 +1097,6 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
-                    /*
-                    using (Brush b = new TextureBrush(PockeTwit.ThrottledArtGrabber.VoidMap))
-                    {
-                        flickerGraphics.FillRectangle(b, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-                    }
-                     */
                     flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
                     if (XOffset > 0)
                     {
@@ -1501,9 +1495,11 @@ namespace FingerUI
         {
             
             SlidingPortal._RenderedGraphics.Clear(ClientSettings.BackColor);
+            string Message = "One moment please...";
+            if (m_items.Count == 0) { Message = "There are no items to display"; }
             using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                SlidingPortal._RenderedGraphics.DrawString("There are no items to display", this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
+                SlidingPortal._RenderedGraphics.DrawString(Message, this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
             }
             m_timer.Enabled = false;
             if (m_items.Count > 0)

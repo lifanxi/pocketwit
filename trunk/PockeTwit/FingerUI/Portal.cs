@@ -140,6 +140,12 @@ namespace FingerUI
         delegate void delNewArt(string User);
         void ThrottledArtGrabber_NewArtWasDownloaded(string User)
         {
+            //Don't bother if it's in the middle of rendering
+            if (_RenderThreads.Count > 0)
+            {
+                return;
+            }
+
             for (int i = 0; i < Items.Count; i++)
             {
                 StatusItem s = (StatusItem)Items[i];
@@ -264,7 +270,7 @@ namespace FingerUI
         private void RenderBackgroundLowPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            Render(System.Threading.ThreadPriority.Normal);
+            Render(System.Threading.ThreadPriority.AboveNormal);
         }
         private void RenderBackgroundHighPriority(object state)
         {
