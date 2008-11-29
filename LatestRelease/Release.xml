@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.53</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv53.CAB</url>
-  <notes>Fixes for crashes on VGA devices
-Google translate in detailed view
-Resizable text in detailed view
-Clickable center menu
+  <version>.52</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv52.CAB</url>
+  <notes>Detailed view for statuses
+Easier ping.fm setup
+Fix one of the major bugs from v.51
 </notes>
 </LatestRelease>
