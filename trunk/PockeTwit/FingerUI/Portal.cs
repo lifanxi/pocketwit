@@ -209,6 +209,12 @@ namespace FingerUI
             Rerender();
         }
 
+        public void Clear()
+        {
+            Items.Clear();
+            _RenderedGraphics.Clear(ClientSettings.BackColor);
+        }
+
         public void AddItemsToStart(StatusItem[] Items)
         {
             for (int i = Items.Length - 1; i >= 0; i--)
@@ -259,7 +265,8 @@ namespace FingerUI
         public void Rerender()
         {
             //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
-            pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
+            //pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
+            RenderImmediately();
         }
         public void RenderImmediately()
         {
