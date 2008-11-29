@@ -103,6 +103,7 @@ namespace FingerUI
                         {
                             _Rendered.Dispose();
                             GC.Collect();
+                            GC.WaitForPendingFinalizers();
                         }
                         _Rendered = new Bitmap(_Width, _Height);
                     }
@@ -125,6 +126,7 @@ namespace FingerUI
                         {
                             _Rendered.Dispose();
                             GC.Collect();
+                            GC.WaitForPendingFinalizers();
                         }
                         _Rendered = new Bitmap(_Width, _Height);
                     }

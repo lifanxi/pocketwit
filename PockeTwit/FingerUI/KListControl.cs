@@ -1025,7 +1025,7 @@ namespace FingerUI
                 SlidingPortal.SetItemList(new List<StatusItem>(m_items.Values));
                 SlidingPortalCurrentMin = 0;
                 SlidingPortalCurrentEnd = SlidingPortal.MaxItems;
-                SlidingPortal.RenderImmediately();
+                //SlidingPortal.RenderImmediately();
             }
         }
         /*
