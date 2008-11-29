@@ -197,7 +197,6 @@ namespace PockeTwit
                     UpdateRightMenu();
                 }
                 statList.Redraw();
-    
             }
         }
 
@@ -1199,6 +1198,7 @@ namespace PockeTwit
             ShowWindow(this.Handle, SW_MINIMIZED);
             statList.Visible = true;
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll")]

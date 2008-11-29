@@ -134,6 +134,7 @@ namespace FingerUI
             ClientSettings.PortalSize = MaxItems;
             ClientSettings.SaveSettings();
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         delegate void delNewArt(string User);
@@ -167,7 +168,7 @@ namespace FingerUI
         {
             StatusItem FirstNewItem = SetOfItems[0];
             int SpacesMoved = 0;
-            if (Items.Contains(FirstNewItem))
+            if (Items.Contains(FirstNewItem) && SetOfItems.Count>SpacesMoved)
             {
                 //Items added to the end
                 SpacesMoved = Items.IndexOf(FirstNewItem);
@@ -263,38 +264,30 @@ namespace FingerUI
         private void RenderBackgroundLowPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            if (System.Threading.Thread.CurrentThread.IsBackground)
-            {
-                System.Threading.Thread.CurrentThread.Name = "Renderer";
-                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
-                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
-            }
-            Render();
+            Render(System.Threading.ThreadPriority.Normal);
         }
         private void RenderBackgroundHighPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            if (System.Threading.Thread.CurrentThread.IsBackground)
-            {
-                System.Threading.Thread.CurrentThread.Name = "Renderer";
-                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
-                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
-            }
-            Render();
+            Render(System.Threading.ThreadPriority.Highest);
         }
         
-        private void Render()
+        private void Render(System.Threading.ThreadPriority p)
         {
-            while (_RenderThreads.Count > 1)
+
+            while (_RenderThreads.Count > 0)
             {
                 Thread t = _RenderThreads[0];
-                if (t == System.Threading.Thread.CurrentThread)
-                {
-                    t = _RenderThreads[1];
-                }
                 cancelMyCurrentThread = true;
                 t.Join();
                 _RenderThreads.Remove(t);
+            }
+            cancelMyCurrentThread = false;
+            if (System.Threading.Thread.CurrentThread.IsBackground)
+            {
+                System.Threading.Thread.CurrentThread.Name = "Renderer";
+                System.Threading.Thread.CurrentThread.Priority = p;
+                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
             }
             try
             {
@@ -342,12 +335,13 @@ namespace FingerUI
 
                             if (cancelMyCurrentThread)
                             {
-                                cancelMyCurrentThread = false;
+                                _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
                                 return;
                             }
                             System.Diagnostics.Debug.WriteLine("Done rendering background");
                             _RenderedGraphics.DrawImage(temp, 0, 0);
                             NewImage();
+                            _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
                         }
 
                     }
