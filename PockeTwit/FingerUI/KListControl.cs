@@ -1185,9 +1185,10 @@ namespace FingerUI
                 item.Bounds = ItemBounds(0, item.Index);
             }
 
-            //FillBuffer();
+            SlidingPortal.Clear();
+            FillBuffer();
             SelectAndJump();
-            this.Redraw();
+            this.Repaint();
             base.Visible = true;
         }
 
