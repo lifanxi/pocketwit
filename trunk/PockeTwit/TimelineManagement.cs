@@ -119,8 +119,8 @@ namespace PockeTwit
 
         private void BackgroundUpdateBoth(object o)
         {
-            GetMessagesTimeLine(true);
             GetFriendsTimeLine(true);
+            GetMessagesTimeLine(true);
         }
 
         private void BackgroundMessagesUpdate(object o)
