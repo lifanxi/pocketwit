@@ -34,6 +34,10 @@ namespace PockeTwit
             {
                 cmbAccounts.Items.Add(a);
             }
+            if (cmbAccounts.Items.Count > 0)
+            {
+                cmbAccounts.SelectedIndex = 0;
+            }
         }
         protected override void OnActivated(EventArgs e)
         {
@@ -92,7 +96,9 @@ namespace PockeTwit
                 ClientSettings.AccountsList.Clear();
                 foreach (Yedda.Twitter.Account a in LocalList)
                 {
+                    
                     ClientSettings.AccountsList.Add(a);
+                    if (a.IsDefault) { ClientSettings.DefaultAccount = a; }
                 }
                 ClientSettings.SaveSettings();
             }

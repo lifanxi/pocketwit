@@ -47,7 +47,11 @@ public static class ClientSettings
                 {
                     if (a.IsDefault) { return a; }
                 }
-                return AccountsList[0];
+                if (AccountsList.Count > 0)
+                {
+                    return AccountsList[0];
+                }
+                return null;
             }
         }
         set
