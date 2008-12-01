@@ -312,16 +312,12 @@ namespace FingerUI
                     {
                         lock (Items)
                         {
-                            int StartItem = WindowOffset / ItemHeight;
-                            if (StartItem < 0)
-                            {
-                                StartItem = 0;
-                            }
+                            int StartItem = Math.Max(WindowOffset / ItemHeight,0);
                             int EndItem = StartItem + 4;
                             if (EndItem > Items.Count)
                             {
                                 EndItem = Items.Count;
-                                StartItem = EndItem - 4;
+                                StartItem = Math.Max(EndItem - 4,0);
                             }
                             System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
                             // Onscreen items first
