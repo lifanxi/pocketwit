@@ -152,7 +152,13 @@ namespace FingerUI
                     lock (m_items)
                     {
                         int itemsBeforeScreen = YOffset / ItemHeight;
+                        
                         itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+                        int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2);
+                        if (itemsAfterPortal < 0)
+                        {
+                            itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
+                        }
                         if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
                         List<StatusItem> NewSet = new List<StatusItem>();
                         int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);

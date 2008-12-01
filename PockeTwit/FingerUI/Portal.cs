@@ -147,29 +147,38 @@ namespace FingerUI
             {
                 return;
             }
-            lock (Items)
+            try
             {
-                for (int i = 0; i < Items.Count; i++)
+                lock (Items)
                 {
-                    StatusItem s = (StatusItem)Items[i];
-                    if (s.Tweet.user.screen_name.ToLower() == User)
-                    {
-                        Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                        s.Render(_RenderedGraphics, itemBounds);
-                    }
-                    if (ClientSettings.ShowReplyImages)
-                    {
-                        if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
+                    
+                        for (int i = 0; i < Items.Count; i++)
                         {
-                            string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                            if (ReplyTo == User)
+                            StatusItem s = (StatusItem)Items[i];
+                            if (s.Tweet.user.screen_name.ToLower() == User)
                             {
                                 Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
                                 s.Render(_RenderedGraphics, itemBounds);
                             }
+                            if (ClientSettings.ShowReplyImages)
+                            {
+                                if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
+                                {
+                                    string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
+                                    if (ReplyTo == User)
+                                    {
+                                        Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                                        s.Render(_RenderedGraphics, itemBounds);
+                                    }
+                                }
+                            }
                         }
-                    }
+                    
                 }
+            }
+            catch
+            {
+                return;
             }
             NewImage();
         }
