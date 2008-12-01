@@ -77,10 +77,13 @@ namespace FingerUI
             get { return _FontSize; }
             set
             {
-                _FontSize = value;
-                using (Font TextFont = new Font(FontFamily.GenericSansSerif, value, FontStyle.Regular))
+                if (value > 5)
                 {
-                    lblText.Font = TextFont;
+                    _FontSize = value;
+                    using (Font TextFont = new Font(FontFamily.GenericSansSerif, value, FontStyle.Regular))
+                    {
+                        lblText.Font = TextFont;
+                    }
                 }
             }
         }

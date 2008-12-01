@@ -134,6 +134,7 @@ namespace PockeTwit.GPS
         {
             if (gpsHandle != IntPtr.Zero)
             {
+                this.gpsEventThread.Abort();
                 GPSCloseDevice(gpsHandle);
                 gpsHandle = IntPtr.Zero;
             }
