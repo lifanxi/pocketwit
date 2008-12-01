@@ -61,7 +61,8 @@ namespace FingerUI
         {
             if (Visibility)
             {
-                if (AnimationStep < MaxHeight) { AnimationStep= AnimationStep+AnimationPixels; }
+                if (AnimationStep < MaxHeight) { AnimationStep = AnimationStep+AnimationPixels; }
+                if (AnimationStep > MaxHeight) { AnimationStep = MaxHeight; }
             }
             else
             {
