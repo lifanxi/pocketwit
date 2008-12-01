@@ -74,7 +74,11 @@ namespace FingerUI
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
-
+        private int _BitmapHeight = 0;
+        public int BitmapHeight
+        {
+            get { return _BitmapHeight; }
+        }
         
         private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
@@ -134,7 +138,9 @@ namespace FingerUI
             ClientSettings.SaveSettings();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
+            _BitmapHeight = MaxItems * ItemHeight;
+            _Rendered = new Bitmap(maxWidth, _BitmapHeight);
+            
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             
         }
