@@ -145,24 +145,26 @@ namespace FingerUI
             {
                 return;
             }
-
-            for (int i = 0; i < Items.Count; i++)
+            lock (Items)
             {
-                StatusItem s = (StatusItem)Items[i];
-                if (s.Tweet.user.screen_name.ToLower() == User)
+                for (int i = 0; i < Items.Count; i++)
                 {
-                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                    s.Render(_RenderedGraphics, itemBounds);
-                }
-                if (ClientSettings.ShowReplyImages)
-                {
-                    if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
+                    StatusItem s = (StatusItem)Items[i];
+                    if (s.Tweet.user.screen_name.ToLower() == User)
                     {
-                        string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                        if (ReplyTo == User)
+                        Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                        s.Render(_RenderedGraphics, itemBounds);
+                    }
+                    if (ClientSettings.ShowReplyImages)
+                    {
+                        if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
                         {
-                            Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
-                            s.Render(_RenderedGraphics, itemBounds);
+                            string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
+                            if (ReplyTo == User)
+                            {
+                                Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                                s.Render(_RenderedGraphics, itemBounds);
+                            }
                         }
                     }
                 }
