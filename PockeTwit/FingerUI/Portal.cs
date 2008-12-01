@@ -80,18 +80,17 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
-
-            Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-            if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
             SetBufferSize();
-            _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
-            _RenderedGraphics = Graphics.FromImage(_Rendered);
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         private void SetBufferSize()
         {
+            Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
+            
+
             //Try to create temporary bitmaps for everything we'll need so we can try it out.
             bool bGood = false;
             Bitmap TestMap = null;
@@ -135,6 +134,9 @@ namespace FingerUI
             ClientSettings.SaveSettings();
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            _Rendered = new Bitmap(maxWidth, MaxItems * ItemHeight);
+            _RenderedGraphics = Graphics.FromImage(_Rendered);
+            
         }
 
         delegate void delNewArt(string User);
@@ -268,13 +270,9 @@ namespace FingerUI
         {
             //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
             //pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
-            RenderImmediately();
-        }
-        public void RenderImmediately()
-        {
             RenderBackgroundHighPriority(null);
         }
-
+        
         private delegate void delRender();
         private void RenderBackgroundLowPriority(object state)
         {
@@ -360,8 +358,20 @@ namespace FingerUI
             }
             catch (OutOfMemoryException)
             {
-                throw new LowMemoryException();
+                PanicMode();
+                Rerender();
+                //throw new LowMemoryException();
             }
+        }
+
+        private void PanicMode()
+        {
+            _RenderedGraphics.Dispose();
+            _Rendered.Dispose();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            MaxItems = MaxItems - 5;
+            SetBufferSize();
         }
 
         private void DrawSingleItem(int i, Graphics g)

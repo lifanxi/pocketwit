@@ -1097,6 +1097,10 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
+                    using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
+                    {
+                        flickerGraphics.DrawString("Let me catch up...", this.Font, sBrush, this.Bounds);
+                    }
                     flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
                     if (XOffset > 0)
                     {
