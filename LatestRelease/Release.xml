@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.53</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv53.CAB</url>
-  <notes>Fixes for crashes on VGA devices
-Google translate in detailed view
-Resizable text in detailed view
-Clickable center menu
+  <version>.54</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv54.CAB</url>
+  <notes>Fix crash on short timelines
+No more "low memory" warning/crashes
+Fix GPS freeze
+Fix detailed view in background
 </notes>
 </LatestRelease>
