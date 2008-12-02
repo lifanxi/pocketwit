@@ -1135,17 +1135,22 @@ namespace PockeTwit
 
         protected override void OnActivated(EventArgs e)
         {
+            base.OnActivated(e);
             if (DetectDevice.DeviceType == DeviceType.Standard)
             {
+                statList.Focus();
                 return;
             }
-            inputPanel1.Enabled = false;
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                inputPanel1.Enabled = false;
+            }
             if (!IsLoaded)
             {
                 return;
             }
 
-            base.OnActivated(e);
+            
             
             if (ClientSettings.IsMaximized)
             {

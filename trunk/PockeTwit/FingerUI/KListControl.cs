@@ -684,6 +684,7 @@ namespace FingerUI
             }
         }
 
+        
         protected void OnKeyDown(object sender, KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -807,6 +808,7 @@ namespace FingerUI
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
+            fsDisplay.Visible = false;
             InFocus = false;
         }
 
