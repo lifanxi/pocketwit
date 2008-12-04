@@ -154,7 +154,7 @@ namespace FingerUI
                         int itemsBeforeScreen = YOffset / ItemHeight;
                         
                         itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
-                        int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2);
+                        int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2)-1;
                         if (itemsAfterPortal < 0)
                         {
                             itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
