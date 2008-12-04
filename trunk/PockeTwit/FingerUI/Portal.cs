@@ -72,7 +72,7 @@ namespace FingerUI
         private System.Threading.Thread CurrentRenderJob;
         private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
-        public int MaxItems = ClientSettings.PortalSize;
+        public int MaxItems = ClientSettings.MaxTweets;
         private const int PauseBeforeRerender = 50;
         private int _BitmapHeight = 0;
         public int BitmapHeight
@@ -134,8 +134,6 @@ namespace FingerUI
             ScreenMap.Dispose();
             AvatarMap.Dispose();
             System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
-            ClientSettings.PortalSize = MaxItems;
-            ClientSettings.SaveSettings();
             GC.Collect();
             GC.WaitForPendingFinalizers();
             _BitmapHeight = MaxItems * ItemHeight;
