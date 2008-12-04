@@ -396,30 +396,6 @@ namespace FingerUI
 
                 SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
                 SlidingPortal.WindowOffset = SlidingPortalOffset;
-
-                /*
-                SlidingPortalOffset = m_offset.Y % ItemHeight;
-                int newSpaces = m_offset.Y / ItemHeight;
-                if (m_items.Values.Count > 0)
-                {
-                    if (newSpaces > SlidingPortalSpaces)
-                    {
-                        SlidingPortalCurrentMin = newSpaces;
-                        SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
-                        StatusItem i = (StatusItem)m_items[SlidingPortalCurrentEnd-1];
-                        SlidingPortal.AddToEnd(i);
-                        SlidingPortalSpaces = newSpaces;
-                    }
-                    else if (newSpaces < SlidingPortalSpaces)
-                    {
-                        SlidingPortalCurrentMin = newSpaces;
-                        SlidingPortalCurrentEnd = newSpaces + SlidingPortal.MaxItems;
-                        StatusItem i = (StatusItem)m_items[SlidingPortalCurrentMin];
-                        SlidingPortal.AddItemToStart(i);
-                        SlidingPortalSpaces = newSpaces;
-                    }
-                }
-                 */
             }
         }
         public int XOffset
@@ -542,6 +518,7 @@ namespace FingerUI
         public void HookKey()
         {
             this.Parent.KeyDown += new KeyEventHandler(OnKeyDown);
+            this.Parent.KeyPress += new KeyPressEventHandler(OnKeyPress);
         }
         
         public void JumpToItem(object Value)
@@ -660,6 +637,7 @@ namespace FingerUI
         public void UnHookKey()
         {
             this.Parent.KeyDown -= new KeyEventHandler(OnKeyDown);
+            this.Parent.KeyPress -= new KeyPressEventHandler(OnKeyPress);
         }
 
 		// Protected Methods (11) 
@@ -674,6 +652,24 @@ namespace FingerUI
         {
             base.OnGotFocus(e);
             InFocus = true;
+        }
+
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            OnKeyPress(null, e);
+        }
+
+        protected void OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (LeftMenu.Contains("Back"))
+            {
+                if (e.KeyChar == (Char)Keys.Escape)
+                {
+                    this.MenuItemSelected("Back");
+                }
+            }
+            e.Handled = true;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
