@@ -366,17 +366,6 @@ namespace PockeTwit
                 TempLine.Clear();
                 TempLine.TrimExcess();
                 GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
-                if (ClientSettings.UpdateMinutes > 0)
-                {
-                    updateTimer.Enabled = true;
-                    NextUpdate = DateTime.Now.Add(new TimeSpan(0, ClientSettings.UpdateMinutes, 0));
-                    using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\NextTime.txt", true))
-                    {
-                        w.WriteLine("Now: " + DateTime.Now);
-                        w.WriteLine("Next: " + NextUpdate);
-                        w.WriteLine("___________________________");
-                    }
-                }
             }
         }
 
