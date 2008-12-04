@@ -79,7 +79,10 @@ namespace PockeTwit
             {
                 foreach (string Folder in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\ArtCache\\"))
                 {
-                    System.IO.Directory.Delete(Folder, true);
+                    if (!string.IsNullOrEmpty(Folder))
+                    {
+                        System.IO.Directory.Delete(Folder, true);
+                    }
                 }
             }
             catch

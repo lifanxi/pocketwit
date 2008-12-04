@@ -101,7 +101,10 @@ namespace PockeTwit
             }
             catch
             {
-                System.IO.File.Delete(location);   
+                if (!string.IsNullOrEmpty(location))
+                {
+                    System.IO.File.Delete(location);
+                }
             }
             
         }

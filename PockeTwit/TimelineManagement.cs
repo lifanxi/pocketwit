@@ -167,7 +167,10 @@ namespace PockeTwit
                 }
                 catch
                 {
-                    System.IO.File.Delete(cachePath);
+                    if (!string.IsNullOrEmpty(cachePath))
+                    {
+                        System.IO.File.Delete(cachePath);
+                    }
                     MessageBox.Show("Error with cache. Clearing it.");
                 }
             }
