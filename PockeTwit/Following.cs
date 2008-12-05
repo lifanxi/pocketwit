@@ -57,7 +57,7 @@ namespace PockeTwit
 
         public  void LoadFromTwitter()
         {
-            //System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFollowersFromTwitter));
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFollowersFromTwitter));
         }
 
         public  void Reset()
