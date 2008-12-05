@@ -54,7 +54,6 @@ namespace PockeTwit
             // 
             // timerStartup
             // 
-            this.timerStartup.Interval = 1000;
             this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
             // 
             // lblTitle

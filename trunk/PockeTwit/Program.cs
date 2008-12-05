@@ -61,12 +61,12 @@ namespace PockeTwit
         /// The main entry point for the application.
         /// </summary>
         [MTAThread]
-        static void Main()
+        static void Main(string[] Args)
         {
-            
+            bool bBackGround = Args.Length > 0;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             ClientSettings.LoadSettings();
-            Application.Run(new TweetList());
+            Application.Run(new TweetList(bBackGround));
             
         }
 
