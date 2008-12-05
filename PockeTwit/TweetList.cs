@@ -453,10 +453,12 @@ namespace PockeTwit
             Manager.Startup(TwitterConnections);
             Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
             Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
+            /*
             foreach (Following f in FollowingDictionary.Values)
             {
                 f.LoadFromTwitter();
             }
+             */
         }
 
         
