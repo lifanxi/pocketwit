@@ -20,6 +20,7 @@ namespace PockeTwit
             public int SelectedItemIndex = -1;
             public int itemsOffset = -1;
         }
+        
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
         private UpdateChecker Checker;
@@ -34,19 +35,29 @@ namespace PockeTwit
         private NotificationHandler Notifyer;
         private bool IsLoaded = false;
         private string ShowUserID;
+        private bool StartBackground = false;
 
         #endregion�Fields�
 
 		#region�Constructors�(1)�
-
-        public TweetList()
+        public TweetList(bool InBackGround)
         {
+            StartBackground = InBackGround;
+            
             Program.StartUp = DateTime.Now;
-            if (ClientSettings.IsMaximized)
+            if (InBackGround)
             {
-                this.WindowState = FormWindowState.Maximized;
+                this.Hide();
+            }
+            else
+            {
+                if (ClientSettings.IsMaximized)
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
             }
             InitializeComponent();
+
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
@@ -87,7 +98,14 @@ namespace PockeTwit
                 }
                 
             }
-            timerStartup.Enabled = true;
+            if (InBackGround)
+            {
+                timerStartup_Tick(null, new EventArgs());
+            }
+            else
+            {
+                timerStartup.Enabled = true;
+            }
         }
 
 		#endregion�Constructors�
@@ -384,7 +402,10 @@ namespace PockeTwit
                 ChooseAccount errorForm = new ChooseAccount();
                 errorForm.ShowDialog();
             }
-            this.Show();
+            if (!StartBackground)
+            {
+                this.Show();
+            }
             bool ret = true;
 
             if (ClientSettings.CheckVersion)
@@ -1050,6 +1071,7 @@ namespace PockeTwit
             IsLoaded = true;
             lblLoading.Text = "Please wait... re-rendering to fit orientation.";
             lblTitle.Text = "PockeTwit";
+            StartBackground = false;
         }
 
         private void SwitchToList(string ListName)
@@ -1062,6 +1084,7 @@ namespace PockeTwit
 
         private void timerStartup_Tick(object sender, EventArgs e)
         {
+            if (StartBackground) { this.Hide(); }
             timerStartup.Enabled = false;
             timerStartup.Tick -= new EventHandler(timerStartup_Tick);
             if (!SetEverythingUp())
