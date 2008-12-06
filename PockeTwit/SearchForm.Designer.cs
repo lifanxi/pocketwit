@@ -55,7 +55,6 @@ namespace PockeTwit
             this.cmbMeasurement = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblGPSStatus = new System.Windows.Forms.Label();
-            this.txtSearch = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -144,16 +143,6 @@ namespace PockeTwit
             this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);
             this.lblGPSStatus.Text = "label2";
             // 
-            // txtSearch
-            // 
-            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.txtSearch.Location = new System.Drawing.Point(58, 55);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(179, 22);
-            this.txtSearch.TabIndex = 8;
-            // 
             // SearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -161,7 +150,6 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblGPSStatus);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbMeasurement);
@@ -172,8 +160,7 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "SearchForm";
             this.Text = "Twitter Search";
-            this.ResumeLayout(false);
-
+            
         }
 
         #endregion
@@ -183,6 +170,6 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbMeasurement;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblGPSStatus;
-        private System.Windows.Forms.ComboBox txtSearch;
+        private System.Windows.Forms.Control txtSearch;
     }
 }
