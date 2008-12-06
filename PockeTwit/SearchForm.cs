@@ -41,6 +41,10 @@ namespace PockeTwit
             {
                 lblGPSStatus.Text = "GPS disabled.";
             }
+            foreach (string Item in ClientSettings.SearchItems)
+            {
+                txtSearch.Items.Add(Item);
+            }
         }
 
         void Locator_LocationReady(string Location)
@@ -105,6 +109,15 @@ namespace PockeTwit
 
         private void menuSearch_Click(object sender, EventArgs e)
         {
+            if (!ClientSettings.SearchItems.Contains(txtSearch.Text))
+            {
+                ClientSettings.SearchItems.Enqueue(txtSearch.Text);
+                if (ClientSettings.SearchItems.Count > 4)
+                {
+                    ClientSettings.SearchItems.Dequeue();
+                }
+                ClientSettings.SaveSettings();
+            }
             if (ClientSettings.UseGPS)
             {
                 Locator.StopGPS();

@@ -77,7 +77,7 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArtHandling\ThrottledArtGrabber.cs" />
+    <Compile Include="FingerUI\ThrottledArtGrabber.cs" />
     <Compile Include="ChooseAccount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -391,6 +391,9 @@
     <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
     <Compile Include="OpenNetCF\WaitHandle.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ArtHandling\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

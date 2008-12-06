@@ -95,6 +95,7 @@ public static class ClientSettings
 
 		#region Properties (7) 
 
+    public static Queue<string> SearchItems { get; set; }
     public static bool AutoTranslate { get; set; }
     public static string TranslationLanguage { get; set; }
     public static int UpdateMinutes { get; set; }
@@ -159,6 +160,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["SearchItems"]))
+            {
+                SearchItems = new Queue<string>(ConfigurationSettings.AppSettings["SearchItems"].Split('|'));
+            }
+            else
+            {
+                SearchItems = new Queue<string>();
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AutoTranslate"]))
             {
                 AutoTranslate = bool.Parse(ConfigurationSettings.AppSettings["AutoTranslate"]);
@@ -325,6 +334,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());
         ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
         ConfigurationSettings.AppSettings["ThemeName"] = ThemeName;
         ConfigurationSettings.AppSettings["ShowAvatars"] = ShowAvatars.ToString();
