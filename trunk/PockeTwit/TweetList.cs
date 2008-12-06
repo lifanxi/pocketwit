@@ -418,7 +418,22 @@ namespace PockeTwit
 
             SetUpListControl();
 
-            ResetDictionaries();
+            try
+            {
+                ResetDictionaries();
+            }
+            catch
+            {
+                MessageBox.Show("Corrupt settings.  Please reconfigure.");
+                System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
+                ClientSettings.AccountsList.Clear();
+                SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
+                if (settings.ShowDialog() == DialogResult.Cancel)
+                {
+                    Application.Exit();
+                }
+                ResetDictionaries();
+            }
 
             CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
