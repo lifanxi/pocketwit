@@ -23,6 +23,7 @@ namespace PockeTwit
         {
             Locator.LocationReady += new LocationManager.delLocationReady(Locator_LocationReady);
             InitializeComponent();
+            SetUpSearchBox();
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
@@ -41,10 +42,7 @@ namespace PockeTwit
             {
                 lblGPSStatus.Text = "GPS disabled.";
             }
-            foreach (string Item in ClientSettings.SearchItems)
-            {
-                txtSearch.Items.Add(Item);
-            }
+            
         }
 
         void Locator_LocationReady(string Location)
@@ -109,14 +107,17 @@ namespace PockeTwit
 
         private void menuSearch_Click(object sender, EventArgs e)
         {
-            if (!ClientSettings.SearchItems.Contains(txtSearch.Text))
+            if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                ClientSettings.SearchItems.Enqueue(txtSearch.Text);
-                if (ClientSettings.SearchItems.Count > 4)
+                if (!ClientSettings.SearchItems.Contains(txtSearch.Text))
                 {
-                    ClientSettings.SearchItems.Dequeue();
+                    ClientSettings.SearchItems.Enqueue(txtSearch.Text);
+                    if (ClientSettings.SearchItems.Count > 4)
+                    {
+                        ClientSettings.SearchItems.Dequeue();
+                    }
+                    ClientSettings.SaveSettings();
                 }
-                ClientSettings.SaveSettings();
             }
             if (ClientSettings.UseGPS)
             {
@@ -161,5 +162,37 @@ namespace PockeTwit
             ClientSettings.SaveSettings();
         }
 
+
+        private void SetUpSearchBox()
+        {
+
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                this.txtSearch = new System.Windows.Forms.ComboBox();
+                ComboBox txtSearchBox = (ComboBox)txtSearch;
+                txtSearchBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+                foreach (string Item in ClientSettings.SearchItems)
+                {
+                    txtSearchBox.Items.Add(Item);
+                }
+            }
+            else
+            {
+                this.txtSearch = new System.Windows.Forms.TextBox();
+            }
+            
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearch.Location = new System.Drawing.Point(58, 55);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(179, 22);
+            txtSearch.BringToFront();
+            this.txtSearch.TabIndex = 8;
+
+            
+            this.Controls.Add(this.txtSearch);
+            this.ResumeLayout(false);
+
+        }
     }
 }
