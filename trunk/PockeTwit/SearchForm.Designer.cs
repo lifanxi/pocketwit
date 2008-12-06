@@ -13,7 +13,6 @@ namespace PockeTwit
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.MenuItem menuSearch;
-        private System.Windows.Forms.TextBox txtSearch;
 
 		#endregion Fields 
 
@@ -48,15 +47,15 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuSearch = new System.Windows.Forms.MenuItem();
+            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.lblSearch = new System.Windows.Forms.Label();
-            this.txtSearch = new System.Windows.Forms.TextBox();
             this.lblWithin = new System.Windows.Forms.Label();
             this.cmbDistance = new System.Windows.Forms.ComboBox();
             this.cmbMeasurement = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblGPSStatus = new System.Windows.Forms.Label();
+            this.txtSearch = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -64,15 +63,15 @@ namespace PockeTwit
             this.mainMenu1.MenuItems.Add(this.menuSearch);
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
-            // menuCancel
-            // 
-            this.menuCancel.Text = "Cancel";
-            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
-            // 
             // menuSearch
             // 
             this.menuSearch.Text = "Search";
             this.menuSearch.Click += new System.EventHandler(this.menuSearch_Click);
+            // 
+            // menuCancel
+            // 
+            this.menuCancel.Text = "Cancel";
+            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // lblSearch
             // 
@@ -84,17 +83,6 @@ namespace PockeTwit
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(234, 20);
             this.lblSearch.Text = "Search Twitter:";
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.BackColor = System.Drawing.Color.White;
-            this.txtSearch.ForeColor = System.Drawing.Color.Black;
-            this.txtSearch.Location = new System.Drawing.Point(57, 57);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(180, 21);
-            this.txtSearch.TabIndex = 1;
             // 
             // lblWithin
             // 
@@ -156,6 +144,16 @@ namespace PockeTwit
             this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);
             this.lblGPSStatus.Text = "label2";
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.txtSearch.Location = new System.Drawing.Point(58, 55);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(179, 22);
+            this.txtSearch.TabIndex = 8;
+            // 
             // SearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -163,12 +161,12 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblGPSStatus);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbMeasurement);
             this.Controls.Add(this.cmbDistance);
             this.Controls.Add(this.lblWithin);
-            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblSearch);
             this.ForeColor = System.Drawing.Color.LightGray;
             this.Menu = this.mainMenu1;
@@ -185,5 +183,6 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbMeasurement;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblGPSStatus;
+        private System.Windows.Forms.ComboBox txtSearch;
     }
 }
