@@ -72,7 +72,7 @@ namespace FingerUI
         private System.Threading.Thread CurrentRenderJob;
         private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
-        public int MaxItems = ClientSettings.MaxTweets;
+        public int MaxItems = ClientSettings.PortalSize;
         private const int PauseBeforeRerender = 50;
         private int _BitmapHeight = 0;
         public int BitmapHeight
@@ -84,6 +84,7 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
+            if (MaxItems < 15) { MaxItems = ClientSettings.MaxTweets; }
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -136,6 +137,11 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            if (MaxItems > 20)
+            {
+                ClientSettings.PortalSize = MaxItems;
+                ClientSettings.SaveSettings();
+            }
             _BitmapHeight = MaxItems * ItemHeight;
             _Rendered = new Bitmap(maxWidth, _BitmapHeight);
             
