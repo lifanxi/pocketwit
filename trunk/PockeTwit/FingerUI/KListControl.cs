@@ -687,7 +687,7 @@ namespace FingerUI
             if (ClickablesControl.Visible)
             {
                 ClickablesControl.KeyDown(e);
-                Invalidate();
+                this.Invalidate();
                 return;
             }
             if (e.KeyCode == (Keys.LButton | Keys.MButton | Keys.Back))
@@ -744,7 +744,6 @@ namespace FingerUI
             }
             if (e.KeyCode == System.Windows.Forms.Keys.Down)
             {
-                System.Diagnostics.Debug.WriteLine("KeyDown");
                 if (CurrentlyViewing == SideShown.Middle)
                 {
                     try
@@ -798,7 +797,8 @@ namespace FingerUI
                     m_timer.Enabled = true;
                 }
             }
-            Invalidate();
+            this.Refresh();
+            
         }
 
         protected override void OnLostFocus(EventArgs e)
