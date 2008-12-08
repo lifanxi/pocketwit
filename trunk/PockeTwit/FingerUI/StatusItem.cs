@@ -604,7 +604,17 @@ namespace FingerUI
                 FirstClickableRun(CurrentLine);
                 SizeF size = g.MeasureString(CurrentLine, TextFont);
 
-                if (this.Tweet.DisplayText.IndexOf(' ') <= 0)
+                string subText;
+                if (this.Tweet.DisplayText.Split(' ')[0].StartsWith("@"))
+                {
+                    subText = this.Tweet.DisplayText.Substring(this.Tweet.DisplayText.IndexOf(' ') + 1);
+                }
+                else
+                {
+                    subText = this.Tweet.DisplayText;
+                }
+
+                if (subText.IndexOf(' ') <= 0)
                 {
                     BreakUpTheTextWithoutSpaces(g, textBounds);
                     return;
@@ -636,6 +646,11 @@ namespace FingerUI
                             }
                             else
                             {
+                                //First word is too long?
+                                //Is word a link?
+                                //If so, we should split it.
+
+                                //For now, we just move on to a new line                               
                                 currentPos = currentPos + word.Length + 1;
                                 lastBreak = currentPos;
                             }
@@ -678,13 +693,18 @@ namespace FingerUI
             string[] words = text.Split(new char[] { ' ' });
             foreach (string word in words)
             {
-                if ((word.StartsWith("http:") | word.StartsWith("@") | word.StartsWith("#")) && word.Length>1)
+                if (isClickable(word))
                 {
                     Clickable c = new Clickable();
                     c.Text = word.TrimEnd(IgnoredAtChars);
                     Tweet.Clickables.Add(c);
                 }
             }
+        }
+
+        private static bool isClickable(string word)
+        {
+            return (word.StartsWith("http:") | word.StartsWith("@") | word.StartsWith("#")) && word.Length > 1;
         }
         private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
