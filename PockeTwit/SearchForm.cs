@@ -109,7 +109,7 @@ namespace PockeTwit
         {
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                if (!ClientSettings.SearchItems.Contains(txtSearch.Text))
+                if (!string.IsNullOrEmpty(txtSearch.Text) && !ClientSettings.SearchItems.Contains(txtSearch.Text))
                 {
                     ClientSettings.SearchItems.Enqueue(txtSearch.Text);
                     if (ClientSettings.SearchItems.Count > 4)
