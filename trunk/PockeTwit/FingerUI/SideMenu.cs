@@ -315,7 +315,17 @@ namespace FingerUI
                             GradColor = ClientSettings.BackGradColor;
                             MenuTextColor = ClientSettings.ForeColor;
                         }
-                        Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        try
+                        {
+                            Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        }
+                        catch
+                        {
+                            using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                            {
+                                m_backBuffer.FillRectangle(BackBrush, menuRect);
+                            }
+                        }
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
                         using (Brush sBrush = new SolidBrush(MenuTextColor))
                         {
