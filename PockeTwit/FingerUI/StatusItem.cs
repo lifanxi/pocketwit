@@ -255,7 +255,17 @@ namespace FingerUI
                     ForeBrush = new SolidBrush(ClientSettings.SelectedForeColor);
                     if (ClientSettings.SelectedBackColor != ClientSettings.SelectedBackGradColor)
                     {
-                        Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        try
+                        {
+                            Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        }
+                        catch
+                        {
+                            using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                            {
+                                g.FillRectangle(BackBrush, InnerBounds);
+                            }
+                        }
                     }
                     else
                     {
@@ -269,7 +279,17 @@ namespace FingerUI
                 {
                     if (ClientSettings.BackColor != ClientSettings.BackGradColor)
                     {
-                        Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        try
+                        {
+                            Gradient.GradientFill.Fill(g, InnerBounds, ClientSettings.BackColor, ClientSettings.BackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        }
+                        catch
+                        {
+                            using (Brush BackBrush = new SolidBrush(ClientSettings.BackColor))
+                            {
+                                g.FillRectangle(BackBrush, InnerBounds);
+                            }
+                        }
                     }
                     else
                     {
