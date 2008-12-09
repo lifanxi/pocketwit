@@ -464,36 +464,5 @@ namespace PockeTwit
         }
 
 
-        internal void UpdateImagesForUser(string User, string NewURL)
-        {
-            try
-            {
-                foreach (TimeLine t in this.TimeLines.Values)
-                {
-                    foreach (Library.status stat in t)
-                    {
-                        if (stat.user.screen_name == User)
-                        {
-                            if (string.IsNullOrEmpty(stat.user.profile_image_url))
-                            {
-                                stat.user.profile_image_url = NewURL;
-                            }
-                            else
-                            {
-                                Uri U1 = new Uri(stat.user.profile_image_url);
-                                Uri U2 = new Uri(NewURL);
-                                if (U1.Host == U2.Host)
-                                {
-                                    stat.user.profile_image_url = NewURL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-        }
     }
 }
