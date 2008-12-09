@@ -112,7 +112,7 @@ namespace PockeTwit
                 if (!string.IsNullOrEmpty(txtSearch.Text) && !ClientSettings.SearchItems.Contains(txtSearch.Text))
                 {
                     ClientSettings.SearchItems.Enqueue(txtSearch.Text);
-                    if (ClientSettings.SearchItems.Count > 4)
+                    if (ClientSettings.SearchItems.Count > 8)
                     {
                         ClientSettings.SearchItems.Dequeue();
                     }
