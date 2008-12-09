@@ -194,6 +194,8 @@ namespace FingerUI
         /// <value>The X.</value>
         public int XIndex { get { return m_x; } set { m_x = value; } }
 
+        private float _LetterWidth = -1;
+        
 		#endregion�Properties�
 
 		#region�Delegates�and�Events�(1)�
@@ -646,13 +648,32 @@ namespace FingerUI
                             }
                             else
                             {
-                                //First word is too long?
-                                //Is word a link?
-                                //If so, we should split it.
-
-                                //For now, we just move on to a new line                               
-                                currentPos = currentPos + word.Length + 1;
-                                lastBreak = currentPos;
+                                //First word is too long!
+                                if (!isClickable(word))
+                                {
+                                    StringBuilder newWord = new StringBuilder();
+                                    int letters = 1;
+                                    foreach (char c in word)
+                                    {
+                                        newWord.Append(c);
+                                        letters++;
+                                        if (g.MeasureString(newWord.ToString(), TextFont).Width > textBounds.Width)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    if (letters > 1) { letters--; }
+                                    //If the word isn't a link, split it.
+                                    newString = new StringBuilder(word.Substring(0, letters));
+                                    currentPos = currentPos + letters;
+                                    lastBreak = currentPos;
+                                }
+                                else
+                                {
+                                    //For now, we just move on to a new line                               
+                                    currentPos = currentPos + word.Length + 1;
+                                    lastBreak = currentPos;
+                                }
                             }
                             
                             break;
