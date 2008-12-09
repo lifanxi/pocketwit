@@ -438,9 +438,6 @@ namespace PockeTwit
 
             CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
-            GlobalEventHandler.AvatarHasChanged += new GlobalEventHandler.delAvatarHasChanged(GlobalEventHandler_AvatarHasChanged);
-            GlobalEventHandler.Updated += new GlobalEventHandler.ArtWasUpdated(GlobalEventHandler_Updated);
-            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 Notifyer = new NotificationHandler();
@@ -450,17 +447,6 @@ namespace PockeTwit
             
             return ret;
             
-        }
-
-        void GlobalEventHandler_Updated(string User)
-        {
-            statList.Redraw();
-        }
-
-        void GlobalEventHandler_AvatarHasChanged(string User, string NewURL)
-        {
-            Manager.UpdateImagesForUser(User, NewURL);
-            statList.Redraw();
         }
 
         void Notifyer_MessagesNotificationClicked()
