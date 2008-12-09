@@ -143,7 +143,7 @@ namespace FingerUI
         int itemsBeforePortal = 0;
         int offSetItemsBeforePortal = 0;
         int previousItemsBeforePortal = 0;
-        void RerenderPortal()
+        public void RerenderPortal()
         {
             if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
