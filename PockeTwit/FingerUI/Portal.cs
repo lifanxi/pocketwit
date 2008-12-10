@@ -218,7 +218,6 @@ namespace FingerUI
                         SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
                         StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
                         Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
-                        //Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
                         System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
                         AddItemsToStart(ItemsToAdd);
                         return;
