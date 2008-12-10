@@ -671,6 +671,7 @@ namespace PockeTwit
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             
+            /*
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
             string ProfileURL = GetMatchingConnection(selectedItem.Tweet.Account).GetProfileURL(selectedItem.Tweet.user.screen_name);
             if (ClientSettings.UseSkweezer)
@@ -680,6 +681,9 @@ namespace PockeTwit
             pi.FileName = ProfileURL;
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
+             */
+            ProfileView v = new ProfileView(selectedItem.Tweet.user);
+            v.ShowDialog();
         }
 
         void statusList_MenuItemSelected(string ItemName)

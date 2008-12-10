@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -334,6 +334,12 @@
     <EmbeddedResource Include="FingerUI\FullScreenTweet.resx">
       <DependentUpon>FullScreenTweet.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProfileMap.resx">
+      <DependentUpon>ProfileMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProfileView.resx">
+      <DependentUpon>ProfileView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MyIco.ico" />
     <EmbeddedResource Include="SettingsHandler\AvatarSettings.resx">
       <DependentUpon>AvatarSettings.cs</DependentUpon>
@@ -390,6 +396,19 @@
     <Compile Include="OpenNetCF\UserNotificationInfoHeader.cs" />
     <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
     <Compile Include="OpenNetCF\WaitHandle.cs" />
+    <Compile Include="ProfileMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProfileMap.Designer.cs">
+      <DependentUpon>ProfileMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProfileView.Designer.cs">
+      <DependentUpon>ProfileView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
