@@ -355,8 +355,8 @@ namespace PockeTwit.Library
 
 		#region Properties (2) 
 
-        //public string location { get; set; }
-        //public string description { get; set; }
+        public string location { get; set; }
+        public string description { get; set; }
         public string profile_image_url { get; set; }
 
         private string _high_profile_image_url;
@@ -386,7 +386,7 @@ namespace PockeTwit.Library
             }
         }
         //public string id { get; set; }
-        //public string name { get; set; }
+        public string name { get; set; }
         public string screen_name { get; set; }
 
 		#endregion Properties 
