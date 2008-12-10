@@ -29,6 +29,7 @@ namespace PockeTwit
             lblFullName.Text = User.name;
             lblPosition.Text = User.location;
             lblDescription.Text = User.description;
+            lblFollowersFollowing.Text = User.followers_count + " followers";
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
         }
         private delegate void delUpdateArt(string Argument);
