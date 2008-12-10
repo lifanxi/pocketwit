@@ -388,7 +388,7 @@ namespace PockeTwit.Library
         //public string id { get; set; }
         public string name { get; set; }
         public string screen_name { get; set; }
-
+        public string followers_count { get; set; }
 		#endregion Properties 
 
 		#region Methods (1) 

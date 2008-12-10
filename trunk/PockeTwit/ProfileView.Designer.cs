@@ -36,6 +36,7 @@
             this.lblFullName = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblPosition = new System.Windows.Forms.LinkLabel();
+            this.lblFollowersFollowing = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -53,7 +54,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUserName.Location = new System.Drawing.Point(92, 23);
             this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(127, 20);
+            this.lblUserName.Size = new System.Drawing.Size(145, 20);
             this.lblUserName.Text = "label1";
             // 
             // avatarBox
@@ -68,7 +69,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFullName.Location = new System.Drawing.Point(92, 3);
             this.lblFullName.Name = "lblFullName";
-            this.lblFullName.Size = new System.Drawing.Size(127, 20);
+            this.lblFullName.Size = new System.Drawing.Size(145, 20);
             this.lblFullName.Text = "label1";
             // 
             // lblDescription
@@ -92,12 +93,22 @@
             this.lblPosition.Text = "linkLabel1";
             this.lblPosition.Click += new System.EventHandler(this.lblPosition_Click);
             // 
+            // lblFollowersFollowing
+            // 
+            this.lblFollowersFollowing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFollowersFollowing.Location = new System.Drawing.Point(92, 43);
+            this.lblFollowersFollowing.Name = "lblFollowersFollowing";
+            this.lblFollowersFollowing.Size = new System.Drawing.Size(145, 20);
+            this.lblFollowersFollowing.Text = "label1";
+            // 
             // ProfileView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblFollowersFollowing);
             this.Controls.Add(this.lblPosition);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.lblFullName);
@@ -118,5 +129,6 @@
         private System.Windows.Forms.Label lblFullName;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.LinkLabel lblPosition;
+        private System.Windows.Forms.Label lblFollowersFollowing;
     }
 }
