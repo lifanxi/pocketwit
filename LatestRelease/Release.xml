@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.54</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv54.CAB</url>
-  <notes>Fix crash on short timelines
-No more "low memory" warning/crashes
-Fix GPS freeze
-Fix detailed view in background
+  <version>.55</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv55.CAB</url>
+  <notes>Improved stability
+Saved searches (touchscreen only)
 </notes>
 </LatestRelease>
