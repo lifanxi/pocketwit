@@ -49,7 +49,7 @@ namespace PockeTwit
             }
             if (string.IsNullOrEmpty(User.description))
             {
-                lblDescription.Visible = true;
+                lblDescription.Text = "No description available.";
             }
             else
             {
