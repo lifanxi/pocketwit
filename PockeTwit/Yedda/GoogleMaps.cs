@@ -134,7 +134,39 @@ namespace Yedda
                 }
                 return new Coordinate();   
             }
+            public static string GetAddress(string CoordinateString)
+            {
+                Uri uri = GetGeocodeUri(CoordinateString);
+                System.Net.HttpWebRequest client = (HttpWebRequest)WebRequest.Create(uri);
 
+
+
+                /* The first number is the status code, 
+                * the second is the accuracy, 
+                * the third is the latitude, 
+                * the fourth one is the longitude.
+                */
+
+                try
+                {
+                    using (HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse())
+                    {
+                        using (Stream stream = httpResponse.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                string response = reader.ReadToEnd();
+                                string[] geocodeInfo = response.Split(',');
+                                return geocodeInfo[2].TrimStart('"') + ",\r\n" + geocodeInfo[3].Trim(' ') + ", " + geocodeInfo[4].Trim(' ').TrimEnd('"');
+                            }
+                        }
+                    }
+                }
+                catch (WebException ex)
+                {
+                }
+                return "";
+            }
         }
     }
 
@@ -167,3 +199,4 @@ namespace Yedda
         }
     }
 }
+

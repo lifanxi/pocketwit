@@ -555,7 +555,7 @@ namespace FingerUI
                 foreach (char c in CurrentLine)
                 {
                     newString.Append(c);
-                    if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
+                    if (g.MeasureString(newString.ToString(), TextFont).Width >= textBounds.Width - (ClientSettings.Margin*2))
                     {
                         if (!SpaceSplit | lastBreak == 0)
                         {
