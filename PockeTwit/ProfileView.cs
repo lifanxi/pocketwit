@@ -36,14 +36,15 @@ namespace PockeTwit
             if (string.IsNullOrEmpty(User.location)) { lblPosition.Visible = false; }
             else
             {
+                _User.location = User.location.Replace("iPhone: ", "");
                 Yedda.GoogleGeocoder.Coordinate c = new Yedda.GoogleGeocoder.Coordinate();
-                if (Yedda.GoogleGeocoder.Coordinate.tryParse(User.location, out c))
+                if (Yedda.GoogleGeocoder.Coordinate.tryParse(_User.location, out c))
                 {
-                    lblPosition.Text = Yedda.GoogleGeocoder.Geocode.GetAddress(User.location);
+                    lblPosition.Text = Yedda.GoogleGeocoder.Geocode.GetAddress(_User.location);
                 }
                 else
                 {
-                    lblPosition.Text = User.location;
+                    lblPosition.Text = _User.location;
                 }
             }
             if (string.IsNullOrEmpty(User.description))
