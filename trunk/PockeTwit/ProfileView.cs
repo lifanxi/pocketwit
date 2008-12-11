@@ -25,11 +25,43 @@ namespace PockeTwit
             avatarBox.Height = ClientSettings.SmallArtSize;
 
             avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(User.screen_name, User.high_profile_image_url);
+            
             lblUserName.Text = User.screen_name;
-            lblFullName.Text = User.name;
-            lblPosition.Text = User.location;
-            lblDescription.Text = User.description;
-            lblFollowersFollowing.Text = User.followers_count + " followers";
+            
+            if (string.IsNullOrEmpty(User.name)) { lblFullName.Visible = false; }
+            else
+            {
+                lblFullName.Text = User.name;
+            }
+            if (string.IsNullOrEmpty(User.location)) { lblPosition.Visible = false; }
+            else
+            {
+                Yedda.GoogleGeocoder.Coordinate c = new Yedda.GoogleGeocoder.Coordinate();
+                if (Yedda.GoogleGeocoder.Coordinate.tryParse(User.location, out c))
+                {
+                    lblPosition.Text = Yedda.GoogleGeocoder.Geocode.GetAddress(User.location);
+                }
+                else
+                {
+                    lblPosition.Text = User.location;
+                }
+            }
+            if (string.IsNullOrEmpty(User.description))
+            {
+                lblDescription.Visible = true;
+            }
+            else
+            {
+                lblDescription.Text = User.description;
+            }
+            if (string.IsNullOrEmpty(User.followers_count))
+            {
+                lblFollowersFollowing.Visible = false;
+            }
+            else
+            {
+                lblFollowersFollowing.Text = User.followers_count + " followers";
+            }
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
         }
         private delegate void delUpdateArt(string Argument);

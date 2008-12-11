@@ -1169,7 +1169,7 @@ namespace Yedda
             {
                 url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Account), GetActionTypeString(ActionType.Verify_Credentials), GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
                 string Response = ExecuteGetCommand(url);
-                return (Response == "<authorized>true</authorized>");
+                return (!string.IsNullOrEmpty(Response));
             }
             try
             {

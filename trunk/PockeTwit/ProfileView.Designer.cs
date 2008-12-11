@@ -77,9 +77,9 @@
             this.lblDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDescription.Location = new System.Drawing.Point(3, 95);
+            this.lblDescription.Location = new System.Drawing.Point(0, 146);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(234, 163);
+            this.lblDescription.Size = new System.Drawing.Size(237, 112);
             this.lblDescription.Text = "label1";
             // 
             // lblPosition
@@ -88,7 +88,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPosition.Location = new System.Drawing.Point(0, 77);
             this.lblPosition.Name = "lblPosition";
-            this.lblPosition.Size = new System.Drawing.Size(237, 18);
+            this.lblPosition.Size = new System.Drawing.Size(237, 69);
             this.lblPosition.TabIndex = 7;
             this.lblPosition.Text = "linkLabel1";
             this.lblPosition.Click += new System.EventHandler(this.lblPosition_Click);
