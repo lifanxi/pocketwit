@@ -17,11 +17,12 @@ namespace PockeTwit
         public AccountsForm()
         {
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
-            }
-            foreach(Yedda.Twitter.Account a in ClientSettings.AccountsList)
+            } 
+            foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 LocalList.Add(a);
             }
