@@ -366,6 +366,10 @@ namespace PockeTwit
                 TempLine.Clear();
                 TempLine.TrimExcess();
                 GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
+                if (ClientSettings.UpdateMinutes > 0)
+                {
+                    updateTimer.Enabled = true;
+                }
             }
         }
 
