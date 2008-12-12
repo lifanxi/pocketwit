@@ -114,5 +114,11 @@ namespace PockeTwit.SettingsHandler
         {
 
         }
+
+        private void linkLabel1_Click(object sender, EventArgs e)
+        {
+            AdvancedForm a = new AdvancedForm();
+            a.ShowDialog();
+        }
     }
 }
