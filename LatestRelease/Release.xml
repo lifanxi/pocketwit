@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.56</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv56.CAB</url>
-  <notes>Fix credential verification
-New profile page with
-  Google Map
+  <version>.57</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv57.CAB</url>
+  <notes>Fix auto-update
+Advanced settings page
 </notes>
 </LatestRelease>
