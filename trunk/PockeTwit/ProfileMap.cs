@@ -43,8 +43,11 @@ namespace PockeTwit
                 this.WindowState = FormWindowState.Maximized;
             }
             this.myPictureBox.Resize += new EventHandler(pictureBox1_Resize);
-            myPictureBox.MouseDown += new MouseEventHandler(myPictureBox_MouseDown);
-            myPictureBox.MouseMove += new MouseEventHandler(myPictureBox_MouseMove);
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                myPictureBox.MouseDown += new MouseEventHandler(myPictureBox_MouseDown);
+                myPictureBox.MouseMove += new MouseEventHandler(myPictureBox_MouseMove);
+            }
             RefreshBitmap();
             Cursor.Current = Cursors.Default;
         }
@@ -125,6 +128,26 @@ namespace PockeTwit
                     mySession.ZoomIn();
                     RefreshBitmap();
                 }
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                mySession.Pan(0 - ClientSettings.TextSize, 0);
+                RefreshBitmap();
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                mySession.Pan(ClientSettings.TextSize, 0);
+                RefreshBitmap();
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                mySession.Pan(0, 0 - ClientSettings.TextSize);
+                RefreshBitmap();
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                mySession.Pan(0, ClientSettings.TextSize);
+                RefreshBitmap();
             }
             
         }
