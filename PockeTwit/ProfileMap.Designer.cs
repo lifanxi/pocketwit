@@ -32,10 +32,9 @@
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.menuNext = new System.Windows.Forms.MenuItem();
             this.menuZoomOut = new System.Windows.Forms.MenuItem();
             this.menuZoomIn = new System.Windows.Forms.MenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.myPictureBox = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -50,15 +49,9 @@
             // 
             // menuItem2
             // 
-            this.menuItem2.MenuItems.Add(this.menuNext);
             this.menuItem2.MenuItems.Add(this.menuZoomOut);
             this.menuItem2.MenuItems.Add(this.menuZoomIn);
             this.menuItem2.Text = "Actions";
-            // 
-            // menuNext
-            // 
-            this.menuNext.Text = "Next 5";
-            this.menuNext.Click += new System.EventHandler(this.menuNext_Click);
             // 
             // menuZoomOut
             // 
@@ -70,12 +63,12 @@
             this.menuZoomIn.Text = "Zoom In";
             this.menuZoomIn.Click += new System.EventHandler(this.menuZoomIn_Click);
             // 
-            // pictureBox1
+            // myPictureBox
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(240, 268);
+            this.myPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.myPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.myPictureBox.Name = "myPictureBox";
+            this.myPictureBox.Size = new System.Drawing.Size(240, 268);
             // 
             // ProfileMap
             // 
@@ -83,7 +76,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.myPictureBox);
             this.Menu = this.mainMenu1;
             this.Name = "ProfileMap";
             this.Text = "ProfileMap";
@@ -93,10 +86,9 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox myPictureBox;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
-        private System.Windows.Forms.MenuItem menuNext;
         private System.Windows.Forms.MenuItem menuZoomOut;
         private System.Windows.Forms.MenuItem menuZoomIn;
     }

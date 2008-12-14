@@ -553,13 +553,14 @@ namespace PockeTwit
 
         private void MapList()
         {
+            Cursor.Current = Cursors.WaitCursor;
             ProfileMap m = new ProfileMap();
-            List<string> locs = new List<string>();
-            for (int i = 0; i < Manager.TimeLines[TimelineManagement.TimeLineType.Friends].Count; i++)
+            List<Library.User> users = new List<Library.User>();
+            for (int i = 0; i < statList.m_items.Count; i++)
             {
-                locs.Add(Manager.TimeLines[TimelineManagement.TimeLineType.Friends][i].user.location);
+                users.Add(statList.m_items[i].Tweet.user);
             }
-            m.Locations = locs;
+            m.Users = users;
             m.ShowDialog();
         }
 

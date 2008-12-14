@@ -64,7 +64,7 @@ namespace FingerUI
         // Background drawing
         
         int m_itemHeight = 40;
-        ItemList m_items = new ItemList();
+        public ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
         int m_itemWidth = 240;
         // Properties
@@ -1661,7 +1661,7 @@ namespace FingerUI
 		#endregion Methods 
 
 		#region Nested Classes (1) 
-        class ItemList : Dictionary<int, StatusItem>
+        public class ItemList : Dictionary<int, StatusItem>
         {
         }
 		#endregion Nested Classes 

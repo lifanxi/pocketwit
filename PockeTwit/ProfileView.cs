@@ -89,7 +89,7 @@ namespace PockeTwit
         private void lblPosition_Click(object sender, EventArgs e)
         {
             ProfileMap m = new ProfileMap();
-            m.Locations.Add(_User.location);
+            m.Users.Add(_User);
             m.ShowDialog();
         }
     }
