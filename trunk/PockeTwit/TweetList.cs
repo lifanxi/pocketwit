@@ -338,7 +338,7 @@ namespace PockeTwit
 
         private void SetLeftMenu()
         {
-            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Set Status", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Map These", "Set Status", "Settings", "About/Feedback", "Exit" });
             if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
@@ -551,6 +551,18 @@ namespace PockeTwit
             }
         }
 
+        private void MapList()
+        {
+            ProfileMap m = new ProfileMap();
+            List<string> locs = new List<string>();
+            for (int i = 0; i < Manager.TimeLines[TimelineManagement.TimeLineType.Friends].Count; i++)
+            {
+                locs.Add(Manager.TimeLines[TimelineManagement.TimeLineType.Friends][i].user.location);
+            }
+            m.Locations = locs;
+            m.ShowDialog();
+        }
+
         private void SetStatus()
         {
             SetStatus("", "");
@@ -722,6 +734,9 @@ namespace PockeTwit
                     break;
                 case "Set Status":
                     SetStatus();
+                    break;
+                case "Map These":
+                    MapList();
                     break;
                 case "Settings":
                     ChangeSettings();

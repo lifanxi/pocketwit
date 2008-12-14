@@ -63,6 +63,8 @@ namespace PockeTwit
         [MTAThread]
         static void Main(string[] Args)
         {
+
+            
             bool bBackGround = Args.Length > 0;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             ClientSettings.LoadSettings();
