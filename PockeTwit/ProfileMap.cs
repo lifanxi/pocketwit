@@ -95,6 +95,7 @@ namespace PockeTwit
 
         void pictureBox1_Resize(object sender, EventArgs e)
         {
+            RefreshBitmap();
         }
 
         void RefreshBitmap()
@@ -141,12 +142,12 @@ namespace PockeTwit
             }
             if (e.KeyCode == Keys.Up)
             {
-                mySession.Pan(0, 0 - ClientSettings.TextSize);
+                mySession.Pan(0, ClientSettings.TextSize);
                 RefreshBitmap();
             }
             if (e.KeyCode == Keys.Down)
             {
-                mySession.Pan(0, ClientSettings.TextSize);
+                mySession.Pan(0, 0 - ClientSettings.TextSize);
                 RefreshBitmap();
             }
             
