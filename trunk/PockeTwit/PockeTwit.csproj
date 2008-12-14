@@ -269,6 +269,7 @@
     <Content Include="asterisk_yellow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Marker.png" />
     <Content Include="Themes\Light\Light.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -333,12 +334,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FingerUI\FullScreenTweet.resx">
       <DependentUpon>FullScreenTweet.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileMap.resx">
       <DependentUpon>ProfileMap.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileView.resx">
       <DependentUpon>ProfileView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MyIco.ico" />
     <EmbeddedResource Include="SettingsHandler\AdvancedForm.resx">
@@ -379,6 +383,7 @@
     <Content Include="Themes\Original\url.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="TiledMaps\GoogleMaps\SampleDecodedSegments.xml" />
     <Content Include="unknownart-small.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -418,6 +423,22 @@
     <Compile Include="SettingsHandler\AdvancedForm.Designer.cs">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TiledMaps\CompositeTiledMapSession.cs" />
+    <Compile Include="TiledMaps\Directions.cs" />
+    <Compile Include="TiledMaps\Geocode.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleMapSession.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleRoadsSession.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleSatelliteSession.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleServices.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleTerrainSession.cs" />
+    <Compile Include="TiledMaps\GoogleMaps\GoogleTrafficSession.cs" />
+    <Compile Include="TiledMaps\GraphicsRenderer.cs" />
+    <Compile Include="TiledMaps\HttpMapSession.cs" />
+    <Compile Include="TiledMaps\IImage.cs" />
+    <Compile Include="TiledMaps\MapOverlay.cs" />
+    <Compile Include="TiledMaps\TiledMapSession.cs" />
+    <Compile Include="TiledMaps\userMapDrawable.cs" />
+    <Compile Include="TiledMaps\userMapOverlay.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
   </ItemGroup>

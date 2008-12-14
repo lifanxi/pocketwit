@@ -6,6 +6,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using TiledMaps;
+using System.Reflection;
 
 namespace PockeTwit
 {
@@ -13,65 +15,125 @@ namespace PockeTwit
     {
         private int _mapSize = 0;
         private int startCount = 0;
+
+        private List<Library.User> _Users = new List<Library.User>();
+        public List<Library.User> Users
+        {
+            get { return _Users; }
+            set
+            {
+                _Users = value;
+                SetMarkers();
+                RefreshBitmap();
+            }
+        }
+
+        Bitmap myBitmap;
+        GraphicsRenderer myRenderer = new GraphicsRenderer();
+        GoogleMapSession mySession = new GoogleMapSession();
         
-        public List<string> Locations = new List<string>();
 
         public ProfileMap()
         {
             InitializeComponent();
-            
+            //marker = myRenderer.LoadBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            this.pictureBox1.Resize += new EventHandler(pictureBox1_Resize);
+            this.myPictureBox.Resize += new EventHandler(pictureBox1_Resize);
+            myPictureBox.MouseDown += new MouseEventHandler(myPictureBox_MouseDown);
+            myPictureBox.MouseMove += new MouseEventHandler(myPictureBox_MouseMove);
+            RefreshBitmap();
+            Cursor.Current = Cursors.Default;
+        }
+
+
+        private void SetMarkers()
+        {
+            List<string> seenLocs = new List<string>();
+            foreach (Library.User user in _Users)
+            {
+                string location = user.location;
+                if (!seenLocs.Contains(location))
+                {
+                    seenLocs.Add(location);
+                    Yedda.GoogleGeocoder.Coordinate c;
+                    if (!Yedda.GoogleGeocoder.Coordinate.tryParse(location, out c))
+                    {
+                        c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(location);
+                    }
+                    if (c.Latitude != 0 && c.Longitude != 0)
+                    {
+                        using (Image markerMap = ThrottledArtGrabber.GetArt(user.screen_name, user.high_profile_image_url))
+                        {
+                            IMapDrawable marker = myRenderer.LoadBitmap((Bitmap)markerMap);
+                            MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
+                            mySession.Overlays.Add(o);
+                        }
+                    }
+                }
+            }
+        }
+
+        Point myLastPos = Point.Empty;
+        private void myPictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            mySession.Pan(MousePosition.X - myLastPos.X, MousePosition.Y - myLastPos.Y);
+            myLastPos = MousePosition;
+            RefreshBitmap();
+        }
+
+        private void myPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            myLastPos = MousePosition;
         }
 
         void pictureBox1_Resize(object sender, EventArgs e)
         {
-            DisplayMap(_mapSize);
         }
 
-        private void DisplayMap(int size)
+        void RefreshBitmap()
         {
+            // clear out tiles that haven't been used in 10 seconds, just to keep from running out of memory.
+            mySession.ClearAgedTiles(10000);
 
-            try
+            if (myBitmap == null || myBitmap.Width != myPictureBox.ClientSize.Width || myBitmap.Height != myPictureBox.ClientSize.Height)
             {
-                if (Locations.Count > 5)
-                {
-                    this.pictureBox1.Image = Yedda.GoogleMaps.GetMultiMap(Locations.GetRange(startCount,5).ToArray(), size, pictureBox1.Height, pictureBox1.Width);
-                }
-                else
-                {
-                    this.pictureBox1.Image = Yedda.GoogleMaps.GetMultiMap(Locations.ToArray(), size, pictureBox1.Height, pictureBox1.Width);
-                }   
-                
+                myBitmap = new Bitmap(myPictureBox.ClientSize.Width, myPictureBox.ClientSize.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
+                myRenderer.Graphics = Graphics.FromImage(myBitmap);
+                myPictureBox.Image = myBitmap;
             }
-            catch
+            mySession.DrawMap(myRenderer, 0, 0, myBitmap.Width, myBitmap.Height, (o) =>
             {
-                pictureBox1.Visible = false;
-                Label newLabel = new Label();
-                newLabel.Text = "Unable to fetch map.";
-                newLabel.Location = new Point(0, 0);
-                this.Controls.Add(newLabel);
-            }
+                Invoke(new EventHandler((sender, args) =>
+                {
+                    RefreshBitmap();
+                }));
+            }, null);
+            myPictureBox.Refresh();
         }
 
+        
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == (Keys.LButton | Keys.MButton | Keys.Back))
             {
-                _mapSize++;
+                if (mySession.CanZoomIn)
+                {
+                    mySession.ZoomIn();
+                    RefreshBitmap();
+                }
             }
-            DisplayMap(_mapSize);
+            
         }
         private void menuItem1_Click(object sender, EventArgs e)
         {
-            this.pictureBox1.Resize -= new EventHandler(pictureBox1_Resize);
-            if (this.pictureBox1.Image != null)
+            this.myPictureBox.Resize -= new EventHandler(pictureBox1_Resize);
+            if (this.myPictureBox.Image != null)
             {
-                this.pictureBox1.Image.Dispose();
+                this.myPictureBox.Image.Dispose();
             }
             this.Close();
         }
@@ -79,27 +141,30 @@ namespace PockeTwit
         
         private void menuItem4_Click(object sender, EventArgs e)
         {
-            if (_mapSize > 0)
+            if (mySession.CanZoomOut)
             {
-                _mapSize--;
+                mySession.ZoomOut();
+                RefreshBitmap();
             }
-            DisplayMap(_mapSize);
-        
         }
 
         private void menuNext_Click(object sender, EventArgs e)
         {
-            if (startCount < Locations.Count)
+            if (startCount < Users.Count)
             {
                 startCount = startCount + 5;
-                DisplayMap(_mapSize);
+                SetMarkers();
+                RefreshBitmap();
             }
         }
 
         private void menuZoomIn_Click(object sender, EventArgs e)
         {
-            _mapSize++;
-            DisplayMap(_mapSize);
+            if (mySession.CanZoomIn)
+            {
+                mySession.ZoomIn();
+                RefreshBitmap();
+            }
         }
 
         
