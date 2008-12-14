@@ -181,21 +181,36 @@ namespace Yedda
         {
             return originalLocation;
         }
-        public static System.Drawing.Bitmap GetMap(string location, int Zoom, int Height, int Width)
+        public static System.Drawing.Bitmap GetMultiMap(string[] locations, int Zoom, int Height, int Width)
         {
-            GoogleGeocoder.Coordinate c;
-            bool GetCoords = GoogleGeocoder.Coordinate.tryParse(location, out c);
-            if (!GetCoords)
+            for(int i=0;i<locations.Length;i++)
             {
-                c = GoogleGeocoder.Geocode.GetCoordinates(location);
-            }   
-            string URL = string.Format(staticMapURL, c.ToString(), Width, Height, Zoom);
+                GoogleGeocoder.Coordinate c;
+                bool GetCoords = GoogleGeocoder.Coordinate.tryParse(locations[i], out c);
+                if (!GetCoords)
+                {
+                    c = GoogleGeocoder.Geocode.GetCoordinates(locations[i]);
+                    locations[i] = c.ToString();
+                }   
+            }
+            string markers = string.Join("|", locations);
+            string URL = string.Format(staticMapURL, markers, Width, Height, Zoom);
             HttpWebRequest client = (HttpWebRequest)WebRequest.Create(URL);
             using (HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse())
             {
-                return new Bitmap(httpResponse.GetResponseStream());
+                try
+                {
+                    return new Bitmap(httpResponse.GetResponseStream());
+                }
+                catch
+                {
+                }
             }
             return null;
+        }
+        public static System.Drawing.Bitmap GetMap(string location, int Zoom, int Height, int Width)
+        {
+            return GetMultiMap(new string[] { location }, Zoom, Height, Width);
         }
     }
 }
