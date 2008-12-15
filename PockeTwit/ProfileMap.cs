@@ -15,7 +15,8 @@ namespace PockeTwit
     {
         private int _mapSize = 0;
         private int startCount = 0;
-
+        private Bitmap markerImage;
+        
         private List<Library.User> _Users = new List<Library.User>();
         public List<Library.User> Users
         {
@@ -55,23 +56,26 @@ namespace PockeTwit
 
         private void SetMarkers()
         {
-            List<string> seenLocs = new List<string>();
-            foreach (Library.User user in _Users)
+            using (markerImage = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png")))
             {
-                string location = user.location;
-                if (!seenLocs.Contains(location))
+                List<string> seenLocs = new List<string>();
+                foreach (Library.User user in _Users)
                 {
-                    seenLocs.Add(location);
-                    Yedda.GoogleGeocoder.Coordinate c;
-                    if (!Yedda.GoogleGeocoder.Coordinate.tryParse(location, out c))
+                    string location = user.location;
+                    if (!seenLocs.Contains(location))
                     {
-                        c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(location);
-                    }
-                    if (c.Latitude != 0 && c.Longitude != 0)
-                    {
-                        using (Image markerMap = ThrottledArtGrabber.GetArt(user.screen_name, user.high_profile_image_url))
+                        seenLocs.Add(location);
+                        Yedda.GoogleGeocoder.Coordinate c;
+                        if (!Yedda.GoogleGeocoder.Coordinate.tryParse(location, out c))
                         {
-                            IMapDrawable marker = myRenderer.LoadBitmap((Bitmap)markerMap);
+                            c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(location);
+                        }
+                        if (c.Latitude != 0 && c.Longitude != 0)
+                        {
+                            userMapDrawable marker = new userMapDrawable();
+                            marker.markerImage = markerImage;
+                            marker.userToDraw = user;
+                            marker.charToUse = 'a';
                             MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
                             mySession.Overlays.Add(o);
                         }
