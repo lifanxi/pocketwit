@@ -56,29 +56,25 @@ namespace PockeTwit
 
         private void SetMarkers()
         {
-            using (markerImage = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png")))
+            List<string> seenLocs = new List<string>();
+            foreach (Library.User user in _Users)
             {
-                List<string> seenLocs = new List<string>();
-                foreach (Library.User user in _Users)
+                string location = user.location;
+                if (!seenLocs.Contains(location))
                 {
-                    string location = user.location;
-                    if (!seenLocs.Contains(location))
+                    seenLocs.Add(location);
+                    Yedda.GoogleGeocoder.Coordinate c;
+                    if (!Yedda.GoogleGeocoder.Coordinate.tryParse(location, out c))
                     {
-                        seenLocs.Add(location);
-                        Yedda.GoogleGeocoder.Coordinate c;
-                        if (!Yedda.GoogleGeocoder.Coordinate.tryParse(location, out c))
-                        {
-                            c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(location);
-                        }
-                        if (c.Latitude != 0 && c.Longitude != 0)
-                        {
-                            userMapDrawable marker = new userMapDrawable();
-                            marker.markerImage = markerImage;
-                            marker.userToDraw = user;
-                            marker.charToUse = 'a';
-                            MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
-                            mySession.Overlays.Add(o);
-                        }
+                        c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(location);
+                    }
+                    if (c.Latitude != 0 && c.Longitude != 0)
+                    {
+                        userMapDrawable marker = new userMapDrawable();
+                        marker.userToDraw = user;
+                        marker.charToUse = 'a';
+                        MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
+                        mySession.Overlays.Add(o);
                     }
                 }
             }

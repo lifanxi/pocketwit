@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 namespace PockeTwit
 {
@@ -26,6 +27,7 @@ namespace PockeTwit
         private static System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]", System.Text.RegularExpressions.RegexOptions.Compiled);
         public static Bitmap FavoriteImage;
         public static Bitmap UnknownArt;
+        public static TiledMaps.WinCEImagingBitmap mapMarkerImage;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
         private static List<string> BadURLs = new List<string>();
         public static string CacheFolder;
@@ -42,6 +44,7 @@ namespace PockeTwit
             {
                 System.IO.Directory.CreateDirectory(CacheFolder+"\\Unknown");
             }
+            mapMarkerImage = new TiledMaps.WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
             FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
             Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
             UnknownArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);

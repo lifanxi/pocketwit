@@ -23,17 +23,9 @@ namespace PockeTwit
             }
             else
             {
-                if (markerImage != null)
-                {
-                    //graphics.DrawImage(markerImage, destRect.X, destRect.Y);
-                    //graphics.DrawString(charToUse.ToString(), ClientSettings.SmallFont, B, destRect);
-                    //For now until I fix it.
-                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X, destRect.Y);
-                }
-                else
-                {
-                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X, destRect.Y);
-                }
+                TiledMaps.IGraphicsDrawable graphicsDrawable = ThrottledArtGrabber.mapMarkerImage as TiledMaps.IGraphicsDrawable;
+                graphicsDrawable.Draw(graphics, destRect, sourceRect);
+                //graphics.DrawString(charToUse.ToString(), ClientSettings.SmallFont, B, destRect);
             }
         }
 
