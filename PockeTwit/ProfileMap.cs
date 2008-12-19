@@ -132,6 +132,11 @@ namespace PockeTwit
                     RefreshBitmap();
                 }));
             }, null);
+            using (Brush b = new SolidBrush(Color.Black))
+            {   
+                float pos = (float)this.Height - ClientSettings.TextSize;
+                myRenderer.Graphics.DrawString("Maps by Google", this.Font, b, 0, pos);
+            }
             myPictureBox.Refresh();
         }
 

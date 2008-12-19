@@ -162,7 +162,7 @@ namespace Yedda
                         }
                     }
                 }
-                catch (WebException ex)
+                catch 
                 {
                 }
                 return "";
