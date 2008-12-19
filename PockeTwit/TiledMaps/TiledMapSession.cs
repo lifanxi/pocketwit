@@ -109,8 +109,8 @@ namespace TiledMaps
         public Geocode CenterRelativePointToGeocode(Point point)
         {
             Geocode ret = new Geocode();
-            ret.Longitude = XToLongitudeAtZoom((myCenterTile.X << 8) + myCenterOffset.X, myZoom + 8);
-            ret.Latitude = YToLatitudeAtZoom((myCenterTile.Y << 8) + myCenterOffset.Y, myZoom + 8);
+            ret.Longitude = XToLongitudeAtZoom(point.X, myZoom + 8);
+            ret.Latitude = YToLatitudeAtZoom(point.Y, myZoom + 8);
             return ret;
         }
 

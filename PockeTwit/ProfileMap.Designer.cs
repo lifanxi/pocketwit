@@ -35,6 +35,8 @@
             this.menuZoomOut = new System.Windows.Forms.MenuItem();
             this.menuZoomIn = new System.Windows.Forms.MenuItem();
             this.myPictureBox = new System.Windows.Forms.PictureBox();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -51,6 +53,8 @@
             // 
             this.menuItem2.MenuItems.Add(this.menuZoomOut);
             this.menuItem2.MenuItems.Add(this.menuZoomIn);
+            this.menuItem2.MenuItems.Add(this.menuItem3);
+            this.menuItem2.MenuItems.Add(this.menuItem4);
             this.menuItem2.Text = "Actions";
             // 
             // menuZoomOut
@@ -69,6 +73,15 @@
             this.myPictureBox.Location = new System.Drawing.Point(0, 0);
             this.myPictureBox.Name = "myPictureBox";
             this.myPictureBox.Size = new System.Drawing.Size(240, 268);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Text = "-";
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Text = "Search Here";
+            this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click_1);
             // 
             // ProfileMap
             // 
@@ -91,5 +104,7 @@
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.MenuItem menuZoomOut;
         private System.Windows.Forms.MenuItem menuZoomIn;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem menuItem4;
     }
 }
