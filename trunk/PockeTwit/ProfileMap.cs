@@ -13,9 +13,7 @@ namespace PockeTwit
 {
     public partial class ProfileMap : Form
     {
-        private int _mapSize = 0;
         private int startCount = 0;
-        private Bitmap markerImage;
         
         private List<Library.User> _Users = new List<Library.User>();
         public List<Library.User> Users
@@ -73,7 +71,14 @@ namespace PockeTwit
 
         private void SetMarkers()
         {
+            float fSize = 9;
             List<string> seenLocs = new List<string>();
+            char theChar = 'A';
+            SizeF currentScreen = this.CurrentAutoScaleDimensions;
+            if (currentScreen.Height == 192)
+            {
+                fSize = 4;
+            }
             foreach (Library.User user in _Users)
             {
                 string location = user.location;
@@ -89,9 +94,11 @@ namespace PockeTwit
                     {
                         userMapDrawable marker = new userMapDrawable();
                         marker.userToDraw = user;
-                        marker.charToUse = 'a';
+                        marker.charToUse = theChar;
+                        marker.fSize = fSize;
                         MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
                         mySession.Overlays.Add(o);
+                        theChar++;
                     }
                 }
             }
@@ -144,35 +151,44 @@ namespace PockeTwit
         
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.KeyCode == (Keys.LButton | Keys.MButton | Keys.Back))
+            switch(e.KeyCode)
             {
-                if (mySession.CanZoomIn)
-                {
-                    mySession.ZoomIn();
+                case (Keys.LButton | Keys.MButton | Keys.Back):
+                    if (mySession.CanZoomIn)
+                    {
+                        mySession.ZoomIn();
+                        RefreshBitmap();
+                    }
+                    break;
+                case Keys.Right:
+                    mySession.Pan(0 - ClientSettings.TextSize, 0);
                     RefreshBitmap();
-                }
+                    break;
+                case Keys.Left:
+                    mySession.Pan(ClientSettings.TextSize, 0);
+                    RefreshBitmap();
+                    break;
+                case Keys.Up:
+                    mySession.Pan(0, ClientSettings.TextSize);
+                    RefreshBitmap();
+                    break;
+                case Keys.Down:
+                    mySession.Pan(0, 0 - ClientSettings.TextSize);
+                    RefreshBitmap();
+                    break;
+                default:
+                    foreach (MapOverlay o in mySession.Overlays)
+                    {
+                        userMapDrawable marker = (userMapDrawable)o.Drawable;
+                        if(marker.charToUse == ((Char)e.KeyCode))
+                        {
+                            marker.IsOpened = !marker.IsOpened;
+                            o.Offset = new Point(0, -marker.Height / 2);
+                            RefreshBitmap();
+                        }
+                    }
+                    break;
             }
-            if (e.KeyCode == Keys.Right)
-            {
-                mySession.Pan(0 - ClientSettings.TextSize, 0);
-                RefreshBitmap();
-            }
-            if (e.KeyCode == Keys.Left)
-            {
-                mySession.Pan(ClientSettings.TextSize, 0);
-                RefreshBitmap();
-            }
-            if (e.KeyCode == Keys.Up)
-            {
-                mySession.Pan(0, ClientSettings.TextSize);
-                RefreshBitmap();
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                mySession.Pan(0, 0 - ClientSettings.TextSize);
-                RefreshBitmap();
-            }
-            
         }
         private void menuItem1_Click(object sender, EventArgs e)
         {
