@@ -73,6 +73,7 @@ namespace PockeTwit
         {
             float fSize = 9;
             List<string> seenLocs = new List<string>();
+            List<Geocode> codes = new List<Geocode>();
             char theChar = 'A';
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
@@ -96,12 +97,15 @@ namespace PockeTwit
                         marker.userToDraw = user;
                         marker.charToUse = theChar;
                         marker.fSize = fSize;
-                        MapOverlay o = new MapOverlay(marker, new Geocode((double)c.Latitude, (double)c.Longitude), new Point(0, -marker.Height / 2));
+                        Geocode g = new Geocode((double)c.Latitude, (double)c.Longitude);
+                        MapOverlay o = new MapOverlay(marker, g, new Point(0, -marker.Height / 2));
+                        codes.Add(g);
                         mySession.Overlays.Add(o);
                         theChar++;
                     }
                 }
             }
+            mySession.FitPOIToDimensions(myPictureBox.Width, myPictureBox.Height, 8, codes.ToArray());
         }
 
         Point myLastPos = Point.Empty;
@@ -121,6 +125,8 @@ namespace PockeTwit
         {
             RefreshBitmap();
         }
+
+
 
         void RefreshBitmap()
         {
@@ -227,6 +233,56 @@ namespace PockeTwit
                 mySession.ZoomIn();
                 RefreshBitmap();
             }
+        }
+        private void menuItem4_Click_1(object sender, EventArgs e)
+        {
+            SearchNearHere();
+        }
+
+        
+        private void SearchNearHere()
+        {
+            MessageBox.Show("In progress");
+            Point OutsidePoint =  new Point(0, this.Height / 2);
+            Point CenterPoint = new Point(this.Width / 2, this.Height / 2);
+            Geocode g = mySession.CenterRelativePointToGeocode(OutsidePoint);
+            Geocode c = mySession.CenterRelativePointToGeocode(CenterPoint);
+            double dist = distance(g.Latitude, g.Longitude, c.Latitude, c.Longitude, 'K');
+            System.Diagnostics.Debug.WriteLine(dist);
+        }
+
+        private double distance(double lat1, double lon1, double lat2, double lon2, char unit)
+        {
+            double theta = lon1 - lon2;
+            double dist = Math.Sin(deg2rad(lat1)) * Math.Sin(deg2rad(lat2)) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Cos(deg2rad(theta));
+            dist = Math.Acos(dist);
+            dist = rad2deg(dist);
+            dist = dist * 60 * 1.1515;
+            if (unit == 'K')
+            {
+                dist = dist * 1.609344;
+            }
+            else if (unit == 'N')
+            {
+                dist = dist * 0.8684;
+            }
+            return (dist);
+        }
+
+        //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        //::  This function converts decimal degrees to radians             :::
+        //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        private double deg2rad(double deg)
+        {
+            return (deg * Math.PI / 180.0);
+        }
+
+        //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        //::  This function converts radians to decimal degrees             :::
+        //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        private double rad2deg(double rad)
+        {
+            return (rad / Math.PI * 180.0);
         }
 
         
