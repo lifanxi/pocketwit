@@ -242,7 +242,7 @@ namespace PockeTwit.Library
                     newStat.user = new User();
                     newStat.user.screen_name = userscreenName;
                     newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
-
+                    newStat.user.needsFetching = true;
                     resultList.Add(newStat);
 
                 }
@@ -354,6 +354,7 @@ namespace PockeTwit.Library
     {
 
 		#region Properties (2) 
+        public bool needsFetching { get; set; }
 
         public string location { get; set; }
         public string description { get; set; }
