@@ -48,9 +48,25 @@ namespace PockeTwit
             {
                 myPictureBox.MouseDown += new MouseEventHandler(myPictureBox_MouseDown);
                 myPictureBox.MouseMove += new MouseEventHandler(myPictureBox_MouseMove);
+                myPictureBox.MouseUp += new MouseEventHandler(myPictureBox_MouseUp);
             }
             RefreshBitmap();
             Cursor.Current = Cursors.Default;
+        }
+
+        void myPictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            Point p = new Point(e.X, e.Y);
+            foreach (MapOverlay o in mySession.Overlays)
+            {
+                userMapDrawable marker = (userMapDrawable)o.Drawable;
+                if (marker.Location.Contains(p))
+                {
+                    marker.IsOpened = !marker.IsOpened;
+                    break;
+                }
+            }
+            RefreshBitmap();
         }
 
 

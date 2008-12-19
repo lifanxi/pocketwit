@@ -14,6 +14,11 @@ namespace PockeTwit
         private PockeTwit.Library.User _User;
         public ProfileView(PockeTwit.Library.User User)
         {
+            
+            if (User.needsFetching)
+            {
+                User = FetchTheUser(User);
+            }
             _User = User;
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
@@ -64,6 +69,11 @@ namespace PockeTwit
                 lblFollowersFollowing.Text = User.followers_count + " followers";
             }
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+        }
+
+        private Library.User FetchTheUser(PockeTwit.Library.User User)
+        {
+            return Library.User.FromId(User.screen_name, ClientSettings.AccountsList[0]);
         }
         private delegate void delUpdateArt(string Argument);
 
