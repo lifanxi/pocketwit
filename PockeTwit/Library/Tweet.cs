@@ -352,8 +352,7 @@ namespace PockeTwit.Library
     [Serializable]
     public class User 
     {
-
-		#region Properties (2) 
+        #region Properties (2) 
         public bool needsFetching { get; set; }
 
         public string location { get; set; }
@@ -394,8 +393,7 @@ namespace PockeTwit.Library
 
 		#region Methods (1) 
 
-
-		// Public Methods (1) 
+        // Public Methods (1) 
 
         //public string url { get; set; }
         //[XmlElement("protected")]

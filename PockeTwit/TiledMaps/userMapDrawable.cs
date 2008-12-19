@@ -14,12 +14,26 @@ namespace PockeTwit
 
         private Brush B = new SolidBrush(Color.Black);
         #region IGraphicsDrawable Members
+        public Rectangle Location = new Rectangle();
 
         public void Draw(System.Drawing.Graphics graphics, System.Drawing.Rectangle destRect, System.Drawing.Rectangle sourceRect)
         {
             if (IsOpened)
             {
-                graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X, destRect.Y);
+                using (Brush b= new SolidBrush(Color.Red))
+                {
+
+                    graphics.FillPolygon(b, new Point[]{
+                        new Point(destRect.Left, destRect.Top),
+                        new Point(destRect.Right, destRect.Top),
+                        new Point(destRect.Right, destRect.Bottom-ClientSettings.Margin),
+                        new Point(destRect.Left + (destRect.Width/2)+ClientSettings.Margin, destRect.Bottom-ClientSettings.Margin),
+                        new Point(destRect.Left + (destRect.Width/2), destRect.Bottom),
+                        new Point(destRect.Left + (destRect.Width/2)-ClientSettings.Margin, destRect.Bottom-ClientSettings.Margin),
+                        new Point(destRect.Left, destRect.Bottom - ClientSettings.Margin),
+                        new Point(destRect.Left, destRect.Top)});
+                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X + ClientSettings.Margin, destRect.Y + ClientSettings.Margin);
+                }
             }
             else
             {
@@ -27,6 +41,7 @@ namespace PockeTwit
                 graphicsDrawable.Draw(graphics, destRect, sourceRect);
                 //graphics.DrawString(charToUse.ToString(), ClientSettings.SmallFont, B, destRect);
             }
+            Location = destRect;
         }
 
         #endregion
@@ -37,7 +52,14 @@ namespace PockeTwit
         {
             get 
             {
-                return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                if (IsOpened)
+                {
+                    return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                }
+                else
+                {
+                    return ThrottledArtGrabber.mapMarkerImage.Width;
+                }
             }
         }
 
@@ -45,7 +67,14 @@ namespace PockeTwit
         {
             get 
             {
-                return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                if (IsOpened)
+                {
+                    return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                }
+                else
+                {
+                    return ThrottledArtGrabber.mapMarkerImage.Height;
+                }
             }
         }
 

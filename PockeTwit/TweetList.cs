@@ -338,7 +338,7 @@ namespace PockeTwit
 
         private void SetLeftMenu()
         {
-            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Search/Local", "Map These", "Set Status", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Set Status", "Search/Local", "Settings", "About/Feedback", "Exit" });
             if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
