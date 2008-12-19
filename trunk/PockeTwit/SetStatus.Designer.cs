@@ -109,7 +109,7 @@ namespace PockeTwit
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(234, 226);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "Set Status";
+            this.textBox1.Text = "Post Update";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.GotFocus += new System.EventHandler(this.textBox1_GotFocus);
             // 
@@ -161,7 +161,7 @@ namespace PockeTwit
             this.Location = new System.Drawing.Point(0, 0);
             this.Menu = this.mainMenu1;
             this.Name = "SetStatus";
-            this.Text = "Set Status";
+            this.Text = "Post Update";
 
             switch (DetectDevice.DeviceType)
             {

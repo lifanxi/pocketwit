@@ -338,7 +338,7 @@ namespace PockeTwit
 
         private void SetLeftMenu()
         {
-            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Set Status", "Search/Local", "Settings", "About/Feedback", "Exit" });
+            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Post Update", "Search/Local", "Settings", "About/Feedback", "Exit" });
             if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
@@ -377,7 +377,10 @@ namespace PockeTwit
         
         private void SetConnectedMenus()
         {
-            SetConnectedMenus(TwitterConnections[0], null);
+            if (TwitterConnections.Count > 0)
+            {
+                SetConnectedMenus(TwitterConnections[0], null);
+            }
         }
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
@@ -606,7 +609,7 @@ namespace PockeTwit
                     string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + trimLength)));
                     UpdateText = NewText + " ... " + URL;
                 }
-                if (UpdateText != "Set Status")
+                if (UpdateText != "Post Update")
                 {
                     if (StatusForm.AccountToSet != null)
                     {
@@ -733,7 +736,7 @@ namespace PockeTwit
                 case "Favorites":
                     //GetTimeLineAsync();
                     break;
-                case "Set Status":
+                case "Post Update":
                     SetStatus();
                     break;
                 case "Map These":

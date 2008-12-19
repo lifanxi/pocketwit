@@ -224,7 +224,7 @@ namespace FingerUI
                     }
                 }
             }
-            catch (OverflowException)
+            catch 
             {
             }
             System.Diagnostics.Debug.WriteLine("Jumped " + SpacesMoved + " spaces");

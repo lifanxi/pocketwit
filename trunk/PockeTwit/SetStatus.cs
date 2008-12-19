@@ -246,7 +246,7 @@ namespace PockeTwit
         
         private void textBox1_GotFocus(object sender, EventArgs e)
         {
-            if (textBox1.Text == "Set Status")
+            if (textBox1.Text == "Post Update")
             {
                 textBox1.SelectionStart = 0;
                 textBox1.SelectionLength = textBox1.Text.Length;
