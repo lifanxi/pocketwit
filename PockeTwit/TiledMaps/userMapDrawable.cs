@@ -8,6 +8,8 @@ namespace PockeTwit
     class userMapDrawable : TiledMaps.IGraphicsDrawable
     {
         public Library.User userToDraw;
+        public float fSize = 9;
+                
         public char charToUse;
         public bool IsOpened = false;
         public Bitmap markerImage = null;
@@ -35,7 +37,11 @@ namespace PockeTwit
             {
                 TiledMaps.IGraphicsDrawable graphicsDrawable = ThrottledArtGrabber.mapMarkerImage as TiledMaps.IGraphicsDrawable;
                 graphicsDrawable.Draw(graphics, destRect, sourceRect);
-                //graphics.DrawString(charToUse.ToString(), ClientSettings.SmallFont, B, destRect);
+                Rectangle CharRect = new Rectangle(destRect.X + 7, destRect.Y+2, destRect.Width - 6, destRect.Height-2);
+                using(Font f = new Font(FontFamily.GenericSansSerif, fSize, FontStyle.Regular))
+                {
+                    graphics.DrawString(charToUse.ToString(), f, B, CharRect);
+                }
             }
             Location = destRect;
         }
@@ -80,7 +86,7 @@ namespace PockeTwit
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion
