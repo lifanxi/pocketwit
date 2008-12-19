@@ -24,15 +24,11 @@ namespace PockeTwit
                 {
 
                     graphics.FillPolygon(b, new Point[]{
-                        new Point(destRect.Left, destRect.Top),
-                        new Point(destRect.Right, destRect.Top),
-                        new Point(destRect.Right, destRect.Bottom-ClientSettings.Margin),
-                        new Point(destRect.Left + (destRect.Width/2)+ClientSettings.Margin, destRect.Bottom-ClientSettings.Margin),
+                        new Point(destRect.Left + (destRect.Width/2)+ClientSettings.Margin, destRect.Bottom-(ClientSettings.Margin*4)),
                         new Point(destRect.Left + (destRect.Width/2), destRect.Bottom),
-                        new Point(destRect.Left + (destRect.Width/2)-ClientSettings.Margin, destRect.Bottom-ClientSettings.Margin),
-                        new Point(destRect.Left, destRect.Bottom - ClientSettings.Margin),
-                        new Point(destRect.Left, destRect.Top)});
-                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X + ClientSettings.Margin, destRect.Y + ClientSettings.Margin);
+                        new Point(destRect.Left + (destRect.Width/2)-ClientSettings.Margin, destRect.Bottom-(ClientSettings.Margin*4)),
+                    });
+                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X, destRect.Y);
                 }
             }
             else
@@ -54,7 +50,7 @@ namespace PockeTwit
             {
                 if (IsOpened)
                 {
-                    return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                    return ClientSettings.SmallArtSize;
                 }
                 else
                 {
@@ -69,7 +65,7 @@ namespace PockeTwit
             {
                 if (IsOpened)
                 {
-                    return ClientSettings.SmallArtSize + (ClientSettings.Margin * 2);
+                    return ClientSettings.SmallArtSize + (ClientSettings.Margin * 4);
                 }
                 else
                 {

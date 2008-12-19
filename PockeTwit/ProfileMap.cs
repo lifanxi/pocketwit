@@ -63,6 +63,7 @@ namespace PockeTwit
                 if (marker.Location.Contains(p))
                 {
                     marker.IsOpened = !marker.IsOpened;
+                    o.Offset = new Point(0, -marker.Height / 2);
                     break;
                 }
             }
