@@ -565,6 +565,12 @@ namespace PockeTwit
             }
             m.Users = users;
             m.ShowDialog();
+            if (m.Range > 0)
+            {
+                string s = "geocode=" + m.CenterLocation.Latitude.ToString() + "%2C" + m.CenterLocation.Longitude.ToString() + "%2C" + Math.Round(m.Range).ToString() + "mi";
+                ShowSearchResults(s);
+            }
+            m.Close();
         }
 
         private void SetStatus()

@@ -30,7 +30,10 @@ namespace PockeTwit
         Bitmap myBitmap;
         GraphicsRenderer myRenderer = new GraphicsRenderer();
         GoogleMapSession mySession = new GoogleMapSession();
-        
+
+        public Geocode CenterLocation;
+        public double Range = 0;
+       
 
         public ProfileMap()
         {
@@ -242,13 +245,15 @@ namespace PockeTwit
         
         private void SearchNearHere()
         {
-            MessageBox.Show("In progress");
             Point OutsidePoint =  new Point(0, this.Height / 2);
             Point CenterPoint = new Point(this.Width / 2, this.Height / 2);
             Geocode g = mySession.CenterRelativePointToGeocode(OutsidePoint);
             Geocode c = mySession.CenterRelativePointToGeocode(CenterPoint);
             double dist = distance(g.Latitude, g.Longitude, c.Latitude, c.Longitude, 'K');
             System.Diagnostics.Debug.WriteLine(dist);
+            this.Range = dist;
+            this.CenterLocation = c;
+            this.Close();
         }
 
         private double distance(double lat1, double lon1, double lat2, double lon2, char unit)
