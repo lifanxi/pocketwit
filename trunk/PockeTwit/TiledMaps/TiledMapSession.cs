@@ -228,10 +228,40 @@ namespace TiledMaps
         }
 
         static readonly Pen myDirectionsPen = new Pen(Color.FromArgb(unchecked((int)0xC049BBE5)), 6);
+
+        public List<IMapOverlay> VisibleItems(int width, int height)
+        {
+            int x = 0;
+            int y = 0;
+            List<IMapOverlay> ret = new List<IMapOverlay>();
+            int midX = x + width / 2 - myCenterOffset.X;
+            int midY = y + height / 2 - myCenterOffset.Y;
+            
+            int pixelLevelZoom = myZoom + 8;
+            int centerXReference = myCenterTile.X << 8;
+            int centerYReference = myCenterTile.Y << 8;
+            Geocode tlGeo = PointToGeocode(new Point(Math.Max(centerXReference + myCenterOffset.X - width / 2, 0), Math.Max(centerYReference + myCenterOffset.Y - height / 2, 0)), pixelLevelZoom);
+            Geocode brGeo = PointToGeocode(new Point(Math.Min(centerXReference + myCenterOffset.X + width / 2, 1 << pixelLevelZoom), Math.Min(centerYReference + myCenterOffset.Y + height / 2, 1 << pixelLevelZoom)), pixelLevelZoom);
+            int adjustX = midX - centerXReference;
+            int adjustY = midY - centerYReference;
+            foreach (IMapOverlay overlay in Overlays)
+            {
+                if (GeocodeBoxContains(tlGeo, brGeo, overlay.Geocode))
+                {
+                    ret.Add(overlay);
+                }
+                else
+                {
+                    PockeTwit.userMapDrawable dr = (PockeTwit.userMapDrawable)overlay.Drawable;
+                    dr.charToUse = -1;
+                }
+            }
+            return ret;
+        }
+
         public int DrawMap(IMapRenderer renderer, int x, int y, int width, int height, WaitCallback callback, object state)
         {
             int unavailable = 0;
-
             // approximate the the top left tile (it may be off by 1), but the loop
             // below will kept it from being drawn
             int midX = x + width / 2 - myCenterOffset.X;
@@ -429,12 +459,14 @@ namespace TiledMaps
             return unavailable;
         }
 
-        void DrawAtGeocode(Geocode tlGeo, Geocode brGeo, IMapRenderer renderer, Geocode geocode, int pixelLevelZoom, int adjustX, int adjustY, IMapDrawable drawable)
+        
+        bool DrawAtGeocode(Geocode tlGeo, Geocode brGeo, IMapRenderer renderer, Geocode geocode, int pixelLevelZoom, int adjustX, int adjustY, IMapDrawable drawable)
         {
             if (!GeocodeBoxContains(tlGeo, brGeo, geocode) || drawable == null)
-                return;
+                return false;
             Point p = GeocodeToScreen(geocode, pixelLevelZoom, adjustX, adjustY);
             renderer.Draw(drawable, new Rectangle(p.X - drawable.Width / 2, p.Y - drawable.Height / 2, drawable.Width, drawable.Height), new Rectangle(0, 0, drawable.Width, drawable.Height));
+            return true;
         }
         
         Point GeocodeToScreen(Geocode geocode, int zoom, int adjustX, int adjustY)
