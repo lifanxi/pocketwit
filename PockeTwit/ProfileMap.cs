@@ -77,7 +77,6 @@ namespace PockeTwit
             float fSize = 9;
             List<string> seenLocs = new List<string>();
             List<Geocode> codes = new List<Geocode>();
-            char theChar = 'A';
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
             {
@@ -98,13 +97,12 @@ namespace PockeTwit
                     {
                         userMapDrawable marker = new userMapDrawable();
                         marker.userToDraw = user;
-                        marker.charToUse = theChar;
                         marker.fSize = fSize;
                         Geocode g = new Geocode((double)c.Latitude, (double)c.Longitude);
                         MapOverlay o = new MapOverlay(marker, g, new Point(0, -marker.Height / 2));
                         codes.Add(g);
                         mySession.Overlays.Add(o);
-                        theChar++;
+                        
                     }
                 }
             }
@@ -142,6 +140,17 @@ namespace PockeTwit
                 myRenderer.Graphics = Graphics.FromImage(myBitmap);
                 myPictureBox.Image = myBitmap;
             }
+
+            List<IMapOverlay> visitems= mySession.VisibleItems(myPictureBox.ClientSize.Width, myPictureBox.ClientSize.Height);
+            if (visitems.Count < 10)
+            {
+                for (int i = 0; i < visitems.Count;i++)
+                {
+                    userMapDrawable marker = (userMapDrawable)mySession.Overlays[i].Drawable;
+                    marker.charToUse = i;
+                }
+            }
+
             mySession.DrawMap(myRenderer, 0, 0, myBitmap.Width, myBitmap.Height, (o) =>
             {
                 Invoke(new EventHandler((sender, args) =>
@@ -189,7 +198,7 @@ namespace PockeTwit
                     foreach (MapOverlay o in mySession.Overlays)
                     {
                         userMapDrawable marker = (userMapDrawable)o.Drawable;
-                        if(marker.charToUse == ((Char)e.KeyCode))
+                        if(marker.charToUse == (e.KeyValue-48))
                         {
                             marker.IsOpened = !marker.IsOpened;
                             o.Offset = new Point(0, -marker.Height / 2);
@@ -256,6 +265,8 @@ namespace PockeTwit
             this.Close();
         }
 
+
+        #region distancestuff
         private double distance(double lat1, double lon1, double lat2, double lon2, char unit)
         {
             double theta = lon1 - lon2;
@@ -290,6 +301,6 @@ namespace PockeTwit
             return (rad / Math.PI * 180.0);
         }
 
-        
+        #endregion
     }
 }
