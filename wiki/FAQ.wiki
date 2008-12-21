@@ -1,6 +1,6 @@
 #summary Frequently Asked Questions
 = Details =
-  *  How do I manually update a timeline?
+  *  *How do I manually update a timeline?*
 It automatically updates the timeline every time you choose it from the left menu.  It will display an "updating" notification at the bottom until it's done.
 
   *  *It crashed!  What do I do?*
