@@ -4,7 +4,7 @@
 It automatically updates the timeline every time you choose it from the left menu.  It will display an "updating" notification at the bottom until it's done.
 
   *  *It crashed!  What do I do?*
-Crashes generate an "error.txt" file in the Program folder.  If you could create an Issue on this site and attach that file, it would go a long way to helping me hunt down the bug.  In the meanwhile, I've found that deleting the (user)FriendsTimeLine.xml file and ArtCache folder from the program folder often helps.
+Crashes generate an "error.txt" file in the Program folder.  If you could create an Issue on this site and attach that file, it would go a long way to helping me hunt down the bug. 
 
   *  *I can't see the whole tweet*
 Sometimes word-wrapping in the tweets causes the last word or two to be cut off from the display.  You can select the clipped tweet and click the center-button in the D-Pad to view the entire message.
