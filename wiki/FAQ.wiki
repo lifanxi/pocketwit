@@ -11,5 +11,3 @@ Sometimes word-wrapping in the tweets causes the last word or two to be cut off 
 
   *  *How do I use ping.fm?*
 If you have a ping.fm account, they will provide you with a unique "application key" at http://ping.fm/key/.  This key replaces your username and password in applications that connect to ping.fm.
-
-It's VERY long and difficult to enter.  The best way to do so is launch pocket IE to http://ping.fm/key/.  Put the cursor in the middle of the key then tap+hold to bring up the context menu.  Choose "Select All" from the menu, then copy the key.  Then you'll be able to paste it into PockeTwit when needed.
