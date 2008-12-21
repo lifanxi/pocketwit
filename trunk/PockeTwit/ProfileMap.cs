@@ -146,7 +146,7 @@ namespace PockeTwit
             {
                 for (int i = 0; i < visitems.Count;i++)
                 {
-                    userMapDrawable marker = (userMapDrawable)mySession.Overlays[i].Drawable;
+                    userMapDrawable marker = (userMapDrawable)visitems[i].Drawable;
                     marker.charToUse = i;
                 }
             }
