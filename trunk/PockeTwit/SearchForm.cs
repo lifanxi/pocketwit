@@ -15,7 +15,30 @@ namespace PockeTwit
 
         public string GPSLocation = null;
         private LocationManager Locator = new LocationManager();
-        
+
+        private string _providedLocation;
+        public string providedLocation {
+            get
+            {
+                return _providedLocation;
+            }
+            set
+            {
+                _providedLocation = value;
+                cmbLocation.Text = _providedLocation;
+            }
+        }
+
+        public string providedDistnce
+        { 
+            set 
+            {
+                cmbDistance.Items.Add(value);
+                cmbDistance.SelectedItem = value;
+                cmbDistance.Text = value;
+                cmbMeasurement.Text = "Miles";
+            }
+        }
 
 		#region Constructors (1) 
 
@@ -60,6 +83,10 @@ namespace PockeTwit
                 {
                     cmbLocation.Items.Clear();
                     cmbLocation.Items.Add("Anywhere");
+                    if (!string.IsNullOrEmpty(providedLocation))
+                    {
+                        cmbLocation.Items.Add(providedLocation);
+                    }
                     cmbLocation.Items.Add(this.GPSLocation);
                     cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation).Replace("\r\n",""));
                     Locator.StopGPS();

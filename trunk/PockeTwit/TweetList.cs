@@ -575,8 +575,35 @@ namespace PockeTwit
             m.ShowDialog();
             if (m.Range > 0)
             {
-                string s = "geocode=" + m.CenterLocation.Latitude.ToString() + "%2C" + m.CenterLocation.Longitude.ToString() + "%2C" + Math.Round(m.Range).ToString() + "mi";
-                ShowSearchResults(s);
+
+                SearchForm f = new SearchForm();
+                f.providedDistnce = m.Range.ToString();
+                string secondLoc = Yedda.GoogleGeocoder.Geocode.GetAddress(m.CenterLocation.ToString());
+                if (string.IsNullOrEmpty(secondLoc))
+                {
+                    secondLoc = m.CenterLocation.ToString();
+                }
+
+                f.providedLocation = secondLoc;
+
+                this.statList.Visible = false;
+                IsLoaded = false;
+                if (f.ShowDialog() == DialogResult.Cancel)
+                {
+                    IsLoaded = true;
+                    this.statList.Visible = true;
+                    f.Close();
+                    return;
+                }
+
+                IsLoaded = true;
+                this.statList.Visible = true;
+                f.Hide();
+                string SearchString = f.SearchText;
+                f.Close();
+                this.statList.Visible = true;
+
+                ShowSearchResults(SearchString);
             }
             m.Close();
         }
