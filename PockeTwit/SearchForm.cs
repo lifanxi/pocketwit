@@ -113,25 +113,33 @@ namespace PockeTwit
             {
                 b.Append("q=");
                 b.Append(System.Web.HttpUtility.UrlEncode(txtSearch.Text));
-                if(!string.IsNullOrEmpty(cmbDistance.Text))
-                {
-                    b.Append("&");
-                }
-            }
-            if (!string.IsNullOrEmpty(cmbDistance.Text))
-            {
-                b.Append("geocode=" + this.GPSLocation);
-                b.Append("," + cmbDistance.Text);
-                switch(cmbMeasurement.Text)
-                {
-                    case "Miles":
-                        b.Append("mi");
-                        break;
-                    case "Kilometers":
-                        b.Append("km");
-                        break;
-                }
                 
+            }
+            if (cmbLocation.Text != "Anywhere")
+            {
+                if (!string.IsNullOrEmpty(cmbLocation.Text))
+                {
+                    Yedda.GoogleGeocoder.Coordinate c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(cmbLocation.Text);
+                    this.GPSLocation = System.Web.HttpUtility.UrlEncode(c.ToString());
+                    if (!string.IsNullOrEmpty(cmbDistance.Text) && !string.IsNullOrEmpty(cmbMeasurement.Text))
+                    {
+                        if (b.Length > 0)
+                        {
+                            b.Append("&");
+                        }
+                        b.Append("geocode=" + this.GPSLocation);
+                        b.Append("," + cmbDistance.Text);
+                        switch (cmbMeasurement.Text)
+                        {
+                            case "Miles":
+                                b.Append("mi");
+                                break;
+                            case "Kilometers":
+                                b.Append("km");
+                                break;
+                        }
+                    }
+                }
             }
             this.SearchText = b.ToString();
             
