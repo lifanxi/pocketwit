@@ -61,7 +61,8 @@ namespace PockeTwit
                     cmbLocation.Items.Clear();
                     cmbLocation.Items.Add("Anywhere");
                     cmbLocation.Items.Add(this.GPSLocation);
-                    cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation));
+                    cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation).Replace("\r\n",""));
+                    Locator.StopGPS();
                 }
             }
         }
