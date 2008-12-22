@@ -56,9 +56,13 @@ namespace PockeTwit
             }
             else
             {
-                //cmbLocation.Items.Remove("Seeking GPS...Please Wait");
-                cmbLocation.Items.Add(this.GPSLocation);
-                cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation));
+                if (!string.IsNullOrEmpty(this.GPSLocation))
+                {
+                    cmbLocation.Items.Clear();
+                    cmbLocation.Items.Add("Anywhere");
+                    cmbLocation.Items.Add(this.GPSLocation);
+                    cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation));
+                }
             }
         }
         
