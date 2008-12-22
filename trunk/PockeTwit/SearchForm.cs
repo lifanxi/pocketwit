@@ -24,6 +24,7 @@ namespace PockeTwit
             Locator.LocationReady += new LocationManager.delLocationReady(Locator_LocationReady);
             InitializeComponent();
             SetUpSearchBox();
+            SetupLocationBox();
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
@@ -33,52 +34,31 @@ namespace PockeTwit
 
             if (ClientSettings.UseGPS)
             {
-                lblGPSStatus.Text = "Searching for GPS...";
                 Locator.StartGPS();
                 cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
                 cmbMeasurement.Text = ClientSettings.DistancePreference;
             }
-            else
-            {
-                lblGPSStatus.Text = "GPS disabled.";
-            }
-            
         }
 
         void Locator_LocationReady(string Location)
         {
-            SetLabelVisible();
+            GPSLocked();
             GPSLocation = Location;
-            EnableDistance();
         }
 
-        private void EnableDistance()
+        private delegate void delGPSLocked();
+        private void GPSLocked()
         {
             if (InvokeRequired)
             {
-                delEnableDistance d = new delEnableDistance(EnableDistance);
+                delGPSLocked d = new delGPSLocked(GPSLocked);
                 this.Invoke(d, null);
             }
             else
             {
-                lblWithin.Visible = true;
-                cmbDistance.Visible = true;
-                cmbMeasurement.Visible = true;
-                cmbDistance.Enabled = true;
-                cmbMeasurement.Enabled = true;
-            }
-        }
-        private delegate void delSetLabelVisible();
-        private void SetLabelVisible()
-        {
-            if (InvokeRequired)
-            {
-                delSetLabelVisible d = new delSetLabelVisible(SetLabelVisible);
-                this.Invoke(d, null);
-            }
-            else
-            {
-                lblGPSStatus.Visible = false;
+                cmbLocation.Items.Remove("Seeking GPS...Please Wait");
+                cmbLocation.Items.Add(this.GPSLocation);
+                cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation));
             }
         }
         
@@ -162,6 +142,19 @@ namespace PockeTwit
             ClientSettings.SaveSettings();
         }
 
+        private void SetupLocationBox()
+        {
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                cmbLocation.DropDownStyle = ComboBoxStyle.DropDown;
+            }
+            cmbLocation.Items.Add("Anywhere");
+            cmbLocation.Text = "Anywhere";
+            if (ClientSettings.UseGPS)
+            {
+                cmbLocation.Items.Add("Seeking GPS...Please Wait");
+            }
+        }
 
         private void SetUpSearchBox()
         {
@@ -183,7 +176,7 @@ namespace PockeTwit
             
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(58, 55);
+            this.txtSearch.Location = new System.Drawing.Point(58, 89);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(179, 22);
             txtSearch.BringToFront();

@@ -65,7 +65,6 @@ namespace PockeTwit
                 {
                     marker.IsOpened = !marker.IsOpened;
                     o.Offset = new Point(0, -marker.Height / 2);
-                    break;
                 }
             }
             RefreshBitmap();

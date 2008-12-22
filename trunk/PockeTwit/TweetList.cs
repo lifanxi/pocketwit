@@ -323,6 +323,7 @@ namespace PockeTwit
 
         private void SendDirectMessage()
         {
+            if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
             SetStatus("d " + User, selectedItem.Tweet.id);
