@@ -54,7 +54,8 @@ namespace PockeTwit
             this.cmbDistance = new System.Windows.Forms.ComboBox();
             this.cmbMeasurement = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblGPSStatus = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbLocation = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -90,7 +91,6 @@ namespace PockeTwit
             this.lblWithin.Name = "lblWithin";
             this.lblWithin.Size = new System.Drawing.Size(48, 20);
             this.lblWithin.Text = "within:";
-            this.lblWithin.Visible = false;
             // 
             // cmbDistance
             // 
@@ -107,7 +107,6 @@ namespace PockeTwit
             this.cmbDistance.Name = "cmbDistance";
             this.cmbDistance.Size = new System.Drawing.Size(44, 22);
             this.cmbDistance.TabIndex = 4;
-            this.cmbDistance.Visible = false;
             // 
             // cmbMeasurement
             // 
@@ -122,26 +121,32 @@ namespace PockeTwit
             this.cmbMeasurement.Name = "cmbMeasurement";
             this.cmbMeasurement.Size = new System.Drawing.Size(130, 22);
             this.cmbMeasurement.TabIndex = 5;
-            this.cmbMeasurement.Visible = false;
             this.cmbMeasurement.SelectedValueChanged += new System.EventHandler(this.cmbMeasurement_SelectedValueChanged);
             // 
             // label1
             // 
             this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(3, 58);
+            this.label1.Location = new System.Drawing.Point(4, 89);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 20);
             this.label1.Text = "for:";
             // 
-            // lblGPSStatus
+            // label2
             // 
-            this.lblGPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.label2.ForeColor = System.Drawing.Color.LightGray;
+            this.label2.Location = new System.Drawing.Point(3, 60);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 20);
+            this.label2.Text = "of:";
+            // 
+            // cmbLocation
+            // 
+            this.cmbLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblGPSStatus.ForeColor = System.Drawing.Color.Red;
-            this.lblGPSStatus.Location = new System.Drawing.Point(3, 29);
-            this.lblGPSStatus.Name = "lblGPSStatus";
-            this.lblGPSStatus.Size = new System.Drawing.Size(234, 25);
-            this.lblGPSStatus.Text = "label2";
+            this.cmbLocation.Location = new System.Drawing.Point(57, 58);
+            this.cmbLocation.Name = "cmbLocation";
+            this.cmbLocation.Size = new System.Drawing.Size(180, 22);
+            this.cmbLocation.TabIndex = 10;
             // 
             // SearchForm
             // 
@@ -150,7 +155,8 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.lblGPSStatus);
+            this.Controls.Add(this.cmbLocation);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbMeasurement);
             this.Controls.Add(this.cmbDistance);
@@ -160,7 +166,8 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "SearchForm";
             this.Text = "Twitter Search";
-            
+            this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -169,7 +176,8 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbDistance;
         private System.Windows.Forms.ComboBox cmbMeasurement;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblGPSStatus;
         private System.Windows.Forms.Control txtSearch;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbLocation;
     }
 }
