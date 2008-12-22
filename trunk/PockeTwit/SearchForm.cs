@@ -25,6 +25,8 @@ namespace PockeTwit
             set
             {
                 _providedLocation = value;
+                cmbLocation.Items.Add(_providedLocation);
+                cmbLocation.SelectedItem = _providedLocation;
                 cmbLocation.Text = _providedLocation;
             }
         }
@@ -61,6 +63,7 @@ namespace PockeTwit
                 cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
                 cmbMeasurement.Text = ClientSettings.DistancePreference;
             }
+            txtSearch.Focus();
         }
 
         void Locator_LocationReady(string Location)
@@ -83,9 +86,10 @@ namespace PockeTwit
                 {
                     cmbLocation.Items.Clear();
                     cmbLocation.Items.Add("Anywhere");
-                    if (!string.IsNullOrEmpty(providedLocation))
+                    if (!string.IsNullOrEmpty(_providedLocation))
                     {
-                        cmbLocation.Items.Add(providedLocation);
+                        cmbLocation.Items.Add(_providedLocation);
+                        cmbLocation.SelectedItem = _providedLocation;
                     }
                     cmbLocation.Items.Add(this.GPSLocation);
                     cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation).Replace("\r\n",""));
