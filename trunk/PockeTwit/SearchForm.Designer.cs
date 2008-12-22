@@ -95,7 +95,7 @@ namespace PockeTwit
             // cmbDistance
             // 
             this.cmbDistance.BackColor = System.Drawing.Color.White;
-            this.cmbDistance.Enabled = false;
+            this.cmbDistance.Enabled = true;
             this.cmbDistance.ForeColor = System.Drawing.Color.Black;
             this.cmbDistance.Items.Add("1");
             this.cmbDistance.Items.Add("3");
@@ -113,7 +113,7 @@ namespace PockeTwit
             this.cmbMeasurement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbMeasurement.BackColor = System.Drawing.Color.White;
-            this.cmbMeasurement.Enabled = false;
+            this.cmbMeasurement.Enabled = true;
             this.cmbMeasurement.ForeColor = System.Drawing.Color.Black;
             this.cmbMeasurement.Items.Add("Miles");
             this.cmbMeasurement.Items.Add("Kilometers");
