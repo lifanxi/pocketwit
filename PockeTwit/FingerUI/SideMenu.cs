@@ -258,6 +258,14 @@ namespace FingerUI
             IsDirty=true;
         }
 
+        public void SelectByNumber(int Number)
+        {
+            lock (Items)
+            {
+                _SelectedItem = Items[Number];
+            }
+            IsDirty = true;
+        }
         public void ReplaceItem(string Original, string New)
         {
             lock (Items)
@@ -275,6 +283,7 @@ namespace FingerUI
 
         private void DrawMenu()
         {
+            int i = 1;
             if (_Rendered == null) 
             {
                 _Rendered = new Bitmap(_Width, _Height);
@@ -286,9 +295,15 @@ namespace FingerUI
                 int CurrentTop = TopOfMenu;
                 foreach (string Item in this.GetItems())
                 {
+                    string DisplayItem = Item;
+                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+                    {
+                        DisplayItem = i.ToString() + ". " + DisplayItem;
+                    }
+                            
                     if (_Side == FingerUI.KListControl.SideShown.Left)
                     {
-                        int TextWidth = (int)m_backBuffer.MeasureString(Item, ClientSettings.MenuFont).Width + ClientSettings.Margin;
+                        int TextWidth = (int)m_backBuffer.MeasureString(DisplayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
                         LeftPos = _Width - (TextWidth + 5);
                     }
                     else
@@ -332,7 +347,7 @@ namespace FingerUI
                             StringFormat sFormat = new StringFormat();
                             sFormat.LineAlignment = StringAlignment.Center;
                             int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                            string DisplayItem = Item.Replace("@User", "@" + _UserName);
+                            DisplayItem = DisplayItem.Replace("@User", "@" + _UserName);
                             m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
                         }
                         m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
@@ -345,6 +360,7 @@ namespace FingerUI
                             m_backBuffer.DrawLine(whitePen, menuRect.Right-1, 0, menuRect.Right-1, this.Height);
                         }
                         CurrentTop = CurrentTop + ItemHeight;
+                        i++;
                     }
                 }
             }

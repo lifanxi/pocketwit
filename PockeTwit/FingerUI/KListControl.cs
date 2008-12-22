@@ -797,6 +797,23 @@ namespace FingerUI
                     m_timer.Enabled = true;
                 }
             }
+            if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+            {
+                int KeyToCheck = (e.KeyValue - 48);
+                if (0 <= KeyToCheck && KeyToCheck <= 9)
+                {
+                    if (CurrentlyViewing == SideShown.Left)
+                    {
+                        LeftMenu.SelectByNumber(KeyToCheck-1);
+                        MenuItemSelected(LeftMenu.SelectedItem);
+                    }
+                    else if (CurrentlyViewing == SideShown.Right)
+                    {
+                        RightMenu.SelectByNumber(KeyToCheck-1);
+                        MenuItemSelected(RightMenu.SelectedItem);
+                    }
+                }
+            }
             this.Refresh();
             
         }
