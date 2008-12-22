@@ -219,86 +219,95 @@ namespace PockeTwit
         {
             if (!GlobalEventHandler.MessagesUpdating)
             {
-                updateTimer.Enabled = false;
-                GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
-                List<Library.status> TempLine = new List<PockeTwit.Library.status>();
-                lock (TwitterConnections)
+                try
                 {
-                    foreach (Yedda.Twitter t in TwitterConnections)
+                    updateTimer.Enabled = false;
+                    GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
+                    List<Library.status> TempLine = new List<PockeTwit.Library.status>();
+                    lock (TwitterConnections)
                     {
-                        if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
+                        foreach (Yedda.Twitter t in TwitterConnections)
                         {
-                            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
-                            if (!string.IsNullOrEmpty(response))
+                            if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
                             {
-                                try
-                                {
-                                    Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
-                                    TempLine.AddRange(NewStats);
-                                    if (NewStats.Length > 0)
-                                    {
-                                        LastReplyID[t.AccountInfo] = NewStats[0].id;
-                                    }
-                                    ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                                }
-                                catch
-                                {
-                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                                }
-                            }
-                            else
-                            {
-                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                            }
-                            ////I HATE DIRECT MESSAGES
-
-                            if (t.DirectMessagesWork)
-                            {
-                                response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                                string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
                                 if (!string.IsNullOrEmpty(response))
                                 {
                                     try
                                     {
-                                        Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
                                         TempLine.AddRange(NewStats);
                                         if (NewStats.Length > 0)
                                         {
-                                            LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                            LastReplyID[t.AccountInfo] = NewStats[0].id;
                                         }
-                                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                                     }
                                     catch
                                     {
-                                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                                     }
                                 }
                                 else
                                 {
-                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                                }
+                                ////I HATE DIRECT MESSAGES
+
+                                if (t.DirectMessagesWork)
+                                {
+                                    response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                                    if (!string.IsNullOrEmpty(response))
+                                    {
+                                        try
+                                        {
+                                            Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                            TempLine.AddRange(NewStats);
+                                            if (NewStats.Length > 0)
+                                            {
+                                                LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                            }
+                                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                        }
+                                        catch
+                                        {
+                                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
-                if (MessagesUpdated != null && NewItems > 0)
-                {
-                    SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
-                    if (Notify)
+                    int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
+                    if (MessagesUpdated != null && NewItems > 0)
                     {
-                        MessagesUpdated(NewItems);
+                        SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
+                        if (Notify)
+                        {
+                            MessagesUpdated(NewItems);
+                        }
+                        else
+                        {
+                            HoldNewMessages = NewItems;
+                        }
                     }
-                    else
-                    {
-                        HoldNewMessages = NewItems;
-                    }
+                    TempLine.Clear();
+                    TempLine.TrimExcess();
                 }
-                TempLine.Clear();
-                TempLine.TrimExcess();
-                GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
-                if (ClientSettings.UpdateMinutes > 0)
+                catch (NullReferenceException)
                 {
-                    updateTimer.Enabled = true;
+                }
+                finally
+                {
+                    GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
+                    if (ClientSettings.UpdateMinutes > 0)
+                    {
+                        updateTimer.Enabled = true;
+                    }
                 }
             }
         }
@@ -312,64 +321,74 @@ namespace PockeTwit
         }
         private void GetFriendsTimeLine(bool Notify)
         {
-            if (!GlobalEventHandler.FriendsUpdating)
+            try
             {
-                updateTimer.Enabled = false;
-                GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
-                List<Library.status> TempLine = new List<PockeTwit.Library.status>();
-                foreach (Yedda.Twitter t in TwitterConnections)
+                if (!GlobalEventHandler.FriendsUpdating)
                 {
-                    if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
+                    updateTimer.Enabled = false;
+                    GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
+                    List<Library.status> TempLine = new List<PockeTwit.Library.status>();
+                    foreach (Yedda.Twitter t in TwitterConnections)
                     {
-                        string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Friends_Timeline);
-
-                        if (!string.IsNullOrEmpty(response))
+                        if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
                         {
-                            try
+                            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Friends_Timeline);
+
+                            if (!string.IsNullOrEmpty(response))
                             {
-                                Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
-                                TempLine.AddRange(NewStats);
-                                if (NewStats.Length > 0)
+                                try
                                 {
-                                    LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                    Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo);
+                                    TempLine.AddRange(NewStats);
+                                    if (NewStats.Length > 0)
+                                    {
+                                        LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                    }
+                                    ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                                 }
-                                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                                catch
+                                {
+                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                                }
                             }
-                            catch
+                            else
                             {
                                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
                             }
                         }
+                    }
+                    int NewItems = 0;
+                    if (TempLine.Count > 0)
+                    {
+                        NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+                        SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
+                    }
+                    if (FriendsUpdated != null && NewItems > 0)
+                    {
+                        if (Notify)
+                        {
+                            FriendsUpdated(NewItems);
+                        }
                         else
                         {
-                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                            HoldNewFriends = NewItems;
                         }
                     }
+                    TempLine.Clear();
+                    TempLine.TrimExcess();
                 }
-                int NewItems = 0;
-                if (TempLine.Count > 0)
-                {
-                    NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
-                    SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
-                }
-                if (FriendsUpdated != null && NewItems > 0)
-                {
-                    if (Notify)
-                    {
-                        FriendsUpdated(NewItems);
-                    }
-                    else
-                    {
-                        HoldNewFriends = NewItems;
-                    }
-                }
-                TempLine.Clear();
-                TempLine.TrimExcess();
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            finally
+            {
                 GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
                 if (ClientSettings.UpdateMinutes > 0)
                 {
                     updateTimer.Enabled = true;
-                }
+                }   
             }
         }
 
