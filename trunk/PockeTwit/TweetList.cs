@@ -557,11 +557,18 @@ namespace PockeTwit
         private void MapList()
         {
             Cursor.Current = Cursors.WaitCursor;
+            Application.DoEvents();
             ProfileMap m = new ProfileMap();
             List<Library.User> users = new List<Library.User>();
             for (int i = 0; i < statList.m_items.Count; i++)
             {
-                users.Add(statList.m_items[i].Tweet.user);
+                Library.User thisUser = statList.m_items[i].Tweet.user;
+                if (thisUser.needsFetching)
+                {
+                    thisUser = Library.User.FromId(thisUser.screen_name, statList.m_items[i].Tweet.Account);
+                    thisUser.needsFetching = false;
+                }
+                users.Add(thisUser);
             }
             m.Users = users;
             m.ShowDialog();

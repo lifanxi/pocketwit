@@ -240,6 +240,7 @@ namespace PockeTwit.Library
                     newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                     string userscreenName = userName.Split(new char[] { ' ' })[0];
                     newStat.user = new User();
+                    //newStat.user.location = entry.SelectSingleNode("s:google:location", nm).InnerText;
                     newStat.user.screen_name = userscreenName;
                     newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
                     newStat.user.needsFetching = true;
