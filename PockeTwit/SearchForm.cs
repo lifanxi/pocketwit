@@ -91,7 +91,7 @@ namespace PockeTwit
                         cmbLocation.Items.Add(_providedLocation);
                         cmbLocation.SelectedItem = _providedLocation;
                     }
-                    cmbLocation.Items.Add(this.GPSLocation);
+                    cmbLocation.Items.Add("Current GPS Position");
                     cmbLocation.Items.Add(Yedda.GoogleGeocoder.Geocode.GetAddress(this.GPSLocation).Replace("\r\n",""));
                     Locator.StopGPS();
                 }
@@ -220,7 +220,7 @@ namespace PockeTwit
             
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(58, 89);
+            this.txtSearch.Location = new System.Drawing.Point(57, 89);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(179, 22);
             txtSearch.BringToFront();
