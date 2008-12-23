@@ -58,7 +58,11 @@ namespace PockeTwit
             else
             {
                 lblGPS.Visible = false;
-                chkGPS.Visible = true;
+                chkGPS.Visible = DetectDevice.DeviceType== DeviceType.Professional;
+                if (menuGPS != null)
+                {
+                    menuGPS.Enabled = true;
+                }
             }
         }
 
@@ -243,7 +247,13 @@ namespace PockeTwit
             InsertURL();
         }
 
-        
+        void menuGPS_Click(object sender, EventArgs e)
+        {
+            menuGPS.Checked = !menuGPS.Checked;
+            chkGPS.Checked = menuGPS.Checked;
+        }
+
+
         private void textBox1_GotFocus(object sender, EventArgs e)
         {
             if (textBox1.Text == "Post Update")

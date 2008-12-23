@@ -20,6 +20,7 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuCamera;
         private System.Windows.Forms.MenuItem menuSubmit;
         private System.Windows.Forms.MenuItem menuURL;
+        private System.Windows.Forms.MenuItem menuGPS;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox chkGPS;
@@ -283,6 +284,12 @@ namespace PockeTwit
             menuURL.Text = "URL...";
             menuURL.Click += new EventHandler(menuURL_Click);
 
+            this.menuGPS = new MenuItem();
+            menuGPS.Text = "Update Location";
+            menuGPS.Enabled = false;
+            menuGPS.Checked = false;
+            menuGPS.Click += new EventHandler(menuGPS_Click);
+
             this.menuExist = new MenuItem();
             menuExist.Text = "Existing Picture";
             menuExist.Click += new EventHandler(menuExists_Click);
@@ -297,10 +304,12 @@ namespace PockeTwit
 
             this.chkGPS.Text = "Update GPS";
             this.chkGPS.ForeColor = ClientSettings.ForeColor;
-            this.chkGPS.Checked = ClientSettings.UseGPS;
-
+            this.chkGPS.Checked = false;
+            
             chkGPS.Location = new System.Drawing.Point(57, ClientSettings.TextSize + 20);
             chkGPS.Size = new System.Drawing.Size(140, 20);
+            chkGPS.Visible = false;
+
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
@@ -310,6 +319,7 @@ namespace PockeTwit
             this.menuItem1.MenuItems.Add(menuURL);
             this.menuItem1.MenuItems.Add(menuExist);
             this.menuItem1.MenuItems.Add(menuCamera);
+            this.menuItem1.MenuItems.Add(menuGPS);
             this.mainMenu1.MenuItems.Add(menuItem1);
 
             this.Controls.Add(chkGPS);
@@ -317,6 +327,7 @@ namespace PockeTwit
             this.Controls.Add(cameraPictureBox);
             this.Controls.Add(filePictureBox);
         }
+
 
     }
 }
