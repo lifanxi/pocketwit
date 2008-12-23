@@ -37,10 +37,10 @@ namespace PockeTwit
         const int POWER_STATE_RESET = 0x00800000;
 
 
-        [DllImport("CoreDll.DLL", EntryPoint = "PlaySound", SetLastError = true)]
+        [DllImport("CoreDll.DLL", EntryPoint = "PlaySoundW", SetLastError = true)]
         private extern static int WCE_PlaySound(string szSound, IntPtr hMod, int flags);
 
-        [DllImport("CoreDll.DLL", EntryPoint = "PlaySound", SetLastError = true)]
+        [DllImport("CoreDll.DLL", EntryPoint = "PlaySoundW", SetLastError = true)]
         private extern static int WCE_PlaySoundBytes(byte[] szSound, IntPtr hMod, int flags);
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace PockeTwit
             //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
 
             if (m_fileName != null)
-                WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_ASYNC | Flags.SND_FILENAME));
+                WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
             else
-                WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_ASYNC | Flags.SND_MEMORY));
+                WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
         }
     }
 }
