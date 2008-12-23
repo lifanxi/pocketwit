@@ -301,5 +301,32 @@ namespace PockeTwit
         }
 
         #endregion
+
+        private void menuItem5_Click(object sender, EventArgs e)
+        {
+            pictureBoxJump.Visible = true;
+            lblJump.Visible = true;
+            txtJump.Visible = true;
+            txtJump.Focus();
+        }
+
+        private void txtJump_LostFocus(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void txtJump_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                lblJump.Visible = false;
+                txtJump.Visible = false;
+                pictureBoxJump.Visible = false;
+                Yedda.GoogleGeocoder.Coordinate c = Yedda.GoogleGeocoder.Geocode.GetCoordinates(txtJump.Text);
+                mySession.FitPOIToDimensions(myPictureBox.Width, myPictureBox.Height, 12, new Geocode[] { new Geocode((double)c.Latitude, (double)c.Longitude) });
+                RefreshBitmap();
+            }
+        }
+
     }
 }
