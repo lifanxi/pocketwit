@@ -205,7 +205,6 @@ namespace PockeTwit
             LoadSettings();
             if ((Friends.Options & Options.Sound) == Options.Sound)
             {
-                MessageBox.Show(Friends.Sound);
                 Sound s = new Sound(Friends.Sound);
                 s.Play();
             }
