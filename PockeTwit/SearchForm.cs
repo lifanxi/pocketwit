@@ -60,9 +60,11 @@ namespace PockeTwit
             if (ClientSettings.UseGPS)
             {
                 Locator.StartGPS();
-                cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
-                cmbMeasurement.Text = ClientSettings.DistancePreference;
+                
             }
+            cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
+            cmbDistance.Text = "15";
+
             txtSearch.Focus();
         }
 
