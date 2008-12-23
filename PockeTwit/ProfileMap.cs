@@ -302,11 +302,13 @@ namespace PockeTwit
 
         #endregion
 
+        bool _focusing = false;
         private void menuItem5_Click(object sender, EventArgs e)
         {
             pictureBoxJump.Visible = true;
             lblJump.Visible = true;
             txtJump.Visible = true;
+            _focusing = true;
             txtJump.Focus();
         }
 
@@ -317,6 +319,7 @@ namespace PockeTwit
 
         private void txtJump_KeyUp(object sender, KeyEventArgs e)
         {
+            if (_focusing) { _focusing = false; return; }
             if (e.KeyCode == Keys.Enter)
             {
                 lblJump.Visible = false;
