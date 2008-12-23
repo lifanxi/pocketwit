@@ -28,6 +28,15 @@ namespace PockeTwit
             SND_RESOURCE = 0x00040004  /* name is resource name or atom */
         }
 
+        [DllImport("coredll.dll", SetLastError = true)]
+        static extern int SetSystemPowerState(string psState, int StateFlags, int Options);
+        const int POWER_STATE_ON = 0x00010000;
+        const int POWER_STATE_OFF = 0x00020000;
+        const int POWER_STATE_SUSPEND = 0x00200000;
+        const int POWER_FORCE = 4096;
+        const int POWER_STATE_RESET = 0x00800000;
+
+
         [DllImport("CoreDll.DLL", EntryPoint = "PlaySound", SetLastError = true)]
         private extern static int WCE_PlaySound(string szSound, IntPtr hMod, int flags);
 
@@ -59,6 +68,8 @@ namespace PockeTwit
         {
             // if a file name has been registered, call WCE_PlaySound,
             //  otherwise call WCE_PlaySoundBytes
+            SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
+
             if (m_fileName != null)
                 WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_ASYNC | Flags.SND_FILENAME));
             else
