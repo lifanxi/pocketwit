@@ -68,7 +68,7 @@ namespace PockeTwit
         {
             // if a file name has been registered, call WCE_PlaySound,
             //  otherwise call WCE_PlaySoundBytes
-            SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
+            //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
 
             if (m_fileName != null)
                 WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_ASYNC | Flags.SND_FILENAME));
