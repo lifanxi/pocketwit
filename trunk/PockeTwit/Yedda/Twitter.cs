@@ -591,7 +591,7 @@ namespace Yedda
                 }
 
                 byte[] bytes = Encoding.UTF8.GetBytes(data);
-
+                System.Net.ServicePointManager.Expect100Continue = false;   
                 request.ContentLength = bytes.Length;
                 try
                 {
@@ -601,9 +601,9 @@ namespace Yedda
                         requestStream.Flush();
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 try
                 {
