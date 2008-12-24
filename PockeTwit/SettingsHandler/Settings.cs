@@ -156,7 +156,7 @@ public static class ClientSettings
     public static void LoadSettings()
     {
         ConfigurationSettings.LoadConfig();
-
+        IFormatProvider format = new System.Globalization.CultureInfo(1033);
         AccountsList = new List<Yedda.Twitter.Account>();
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
@@ -188,7 +188,7 @@ public static class ClientSettings
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UpdateMinutes"]))
             {
-                UpdateMinutes = int.Parse(ConfigurationSettings.AppSettings["UpdateMinutes"]);
+                UpdateMinutes = int.Parse(ConfigurationSettings.AppSettings["UpdateMinutes"], format);
             }
             else
             {
@@ -288,7 +288,7 @@ public static class ClientSettings
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AnimationInterval"]))
             {
-                AnimationInterval = int.Parse(ConfigurationSettings.AppSettings["AnimationInterval"]);
+                AnimationInterval = int.Parse(ConfigurationSettings.AppSettings["AnimationInterval"],format);
             }
             else
             {
@@ -296,7 +296,7 @@ public static class ClientSettings
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MaxTweets"]))
             {
-                MaxTweets= int.Parse(ConfigurationSettings.AppSettings["MaxTweets"]);
+                MaxTweets= int.Parse(ConfigurationSettings.AppSettings["MaxTweets"],format);
             }
             else
             {
