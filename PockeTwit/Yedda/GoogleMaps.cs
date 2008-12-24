@@ -104,8 +104,8 @@ namespace Yedda
             {
                 Uri uri = GetGeocodeUri(address);
                 System.Net.HttpWebRequest client = (HttpWebRequest)WebRequest.Create(uri);
-                
 
+                IFormatProvider format = new System.Globalization.CultureInfo(1033);
 
                 /* The first number is the status code, 
                 * the second is the accuracy, 
@@ -124,7 +124,7 @@ namespace Yedda
                                 string response = reader.ReadToEnd();
                                 string[] geocodeInfo = response.Split(',');
 
-                                return new Coordinate(Convert.ToDecimal(geocodeInfo[2]), Convert.ToDecimal(geocodeInfo[3]));
+                                return new Coordinate(Convert.ToDecimal(geocodeInfo[2],format), Convert.ToDecimal(geocodeInfo[3],format));
                             }
                         }
                     }
