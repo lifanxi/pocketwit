@@ -47,15 +47,15 @@ namespace PockeTwit
 
         private void menuAccept_Click(object sender, EventArgs e)
         {
-            
+            IFormatProvider format = new System.Globalization.CultureInfo(1033);
             ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.BeepOnNew = chkBeep.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
-            if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text))
+            if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
-                ClientSettings.UpdateMinutes = int.Parse(txtUpdate.Text);
+                ClientSettings.UpdateMinutes = int.Parse(txtUpdate.Text, format);
             }
             ClientSettings.SaveSettings();
             

@@ -57,11 +57,12 @@ namespace Yedda
 
             public static bool tryParse(string original, out Coordinate Parsed)
             {
+                IFormatProvider format = new System.Globalization.CultureInfo(1033);
                 try
                 {
                     string[] set = original.Split(',');
-                    decimal lat = decimal.Parse(set[0]);
-                    decimal longi = decimal.Parse(set[1]);
+                    decimal lat = decimal.Parse(set[0], format);
+                    decimal longi = decimal.Parse(set[1], format);
                     Parsed = new Coordinate(lat, longi);
                     return true;
                 }

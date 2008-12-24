@@ -262,6 +262,7 @@ namespace FingerUI
         {
             lock (Items)
             {
+                if (Items[0] == "Back") { Number++; }
                 _SelectedItem = Items[Number];
             }
             IsDirty = true;
@@ -284,6 +285,10 @@ namespace FingerUI
         private void DrawMenu()
         {
             int i = 1;
+            if (this.Items[0] == "Back")
+            {
+                i = 0;
+            }
             if (_Rendered == null) 
             {
                 _Rendered = new Bitmap(_Width, _Height);
