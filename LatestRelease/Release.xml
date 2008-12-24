@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.57</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv57.CAB</url>
-  <notes>Fix auto-update
-Advanced settings page
+  <version>.58</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv58.CAB</url>
+  <notes>Better mapping
+Improved Search
 </notes>
 </LatestRelease>
