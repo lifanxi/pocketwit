@@ -262,8 +262,11 @@ namespace FingerUI
         {
             lock (Items)
             {
-                if (Items[0] == "Back") { Number++; }
-                _SelectedItem = Items[Number];
+                if (Items.Count >= Number)
+                {
+                    if (Items[0] == "Back") { Number++; }
+                    _SelectedItem = Items[Number];
+                }
             }
             IsDirty = true;
         }

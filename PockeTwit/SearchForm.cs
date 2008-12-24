@@ -224,7 +224,7 @@ namespace PockeTwit
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Location = new System.Drawing.Point(57, 89);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(179, 22);
+            this.txtSearch.Size = this.cmbLocation.Size;
             txtSearch.BringToFront();
             this.txtSearch.TabIndex = 8;
 
