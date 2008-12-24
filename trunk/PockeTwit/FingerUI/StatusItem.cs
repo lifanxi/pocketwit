@@ -234,6 +234,8 @@ namespace FingerUI
         {
             try
             {
+                Guid gu = Guid.NewGuid();
+                System.Diagnostics.Debug.WriteLine("Start Rendering " + gu.ToString());
                 g.Clip = new Region(bounds);
                 currentOffset = bounds;
                 SolidBrush ForeBrush = new SolidBrush(ClientSettings.ForeColor);
@@ -328,7 +330,7 @@ namespace FingerUI
                     {
                         g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
                     }
-
+                    System.Diagnostics.Debug.WriteLine("Done art from " + gu.ToString());
                     //This is usually disabled, but we may draw a smaller avatar over the first one
                     if (ClientSettings.ShowReplyImages)
                     {

@@ -161,7 +161,9 @@ namespace FingerUI
             {
                 lock (Items)
                 {
-                    
+                    lock (_RenderThreads)
+                    {
+                        _RenderThreads.Add(System.Threading.Thread.CurrentThread);
                         for (int i = 0; i < Items.Count; i++)
                         {
                             StatusItem s = (StatusItem)Items[i];
@@ -183,7 +185,8 @@ namespace FingerUI
                                 }
                             }
                         }
-                    
+                        _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
+                    }
                 }
             }
             catch
