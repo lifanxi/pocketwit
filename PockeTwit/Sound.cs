@@ -71,7 +71,20 @@ namespace PockeTwit
             //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
 
             if (m_fileName != null)
-                WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
+                if (m_fileName.EndsWith(".wav"))
+                {
+                    WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
+                }
+                else
+                {
+                    System.Diagnostics.ProcessStartInfo ps = new System.Diagnostics.ProcessStartInfo(m_fileName, "");
+                    ps.UseShellExecute = true;
+                    
+                    System.Diagnostics.Process p = new System.Diagnostics.Process();
+                    p.StartInfo = ps;
+                    p.Start();
+
+                }
             else
                 WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
         }
