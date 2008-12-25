@@ -163,7 +163,6 @@ namespace FingerUI
                 {
                     lock (_RenderThreads)
                     {
-                        _RenderThreads.Add(System.Threading.Thread.CurrentThread);
                         for (int i = 0; i < Items.Count; i++)
                         {
                             StatusItem s = (StatusItem)Items[i];
@@ -185,15 +184,15 @@ namespace FingerUI
                                 }
                             }
                         }
-                        _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
                     }
+                    NewImage();
                 }
             }
             catch
             {
                 return;
             }
-            NewImage();
+            
         }
 
         public void SetItemList(List<StatusItem> SetOfItems)
@@ -285,11 +284,14 @@ namespace FingerUI
 
         public void ReRenderItem(StatusItem Item)
         {
-            if (Items.Contains(Item))
+            lock (_RenderThreads)
             {
-                int i = Items.IndexOf(Item);
-                Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
-                Item.Render(_RenderedGraphics, itemBounds);
+                if (Items.Contains(Item))
+                {
+                    int i = Items.IndexOf(Item);
+                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
+                    Item.Render(_RenderedGraphics, itemBounds);
+                }
             }
         }
 
