@@ -164,8 +164,7 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "SearchForm";
             this.Text = "Twitter Search";
-            this.ResumeLayout(false);
-
+            
         }
 
         #endregion
