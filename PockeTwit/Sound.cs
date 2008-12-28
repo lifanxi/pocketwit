@@ -12,7 +12,7 @@ namespace PockeTwit
     {
         private byte[] m_soundBytes;
         private string m_fileName;
-        private const string m_waveDevice = "WAV1:";
+        private const string m_waveDevice = "wav1:";
 
         private enum Flags
         {
@@ -122,7 +122,9 @@ namespace PockeTwit
           // If not powered, power up the wave device
           if (CurrAudioState != CEDEVICE_POWER_STATE.D0)
           {
-            SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CEDEVICE_POWER_STATE.D0);
+                SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CEDEVICE_POWER_STATE.D0);
+                System.Windows.Forms.MessageBox.Show("Wakup wav device");
+                
           }
 
           if (m_fileName != null)
@@ -134,6 +136,7 @@ namespace PockeTwit
           if (CurrAudioState != CEDEVICE_POWER_STATE.PwrDeviceUnspecified)
           {
             // Change the wave device power state back to what it was
+              System.Windows.Forms.MessageBox.Show("sleep wav device");
             SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CurrAudioState);
           }
 
