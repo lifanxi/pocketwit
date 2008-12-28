@@ -64,7 +64,15 @@ namespace PockeTwit
                 
             }
             //cmbMeasurement.SelectedValue = ClientSettings.DistancePreference;
-            cmbMeasurement.Text = ClientSettings.DistancePreference;
+            if (!string.IsNullOrEmpty(ClientSettings.DistancePreference))
+            {
+                cmbMeasurement.Text = ClientSettings.DistancePreference;
+            }
+            else
+            {
+                cmbMeasurement.Text = "Miles";
+            }
+            
             cmbDistance.Text = "15";
 
             txtSearch.Focus();
