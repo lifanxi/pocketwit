@@ -123,6 +123,7 @@ namespace PockeTwit
           if (CurrAudioState != CEDEVICE_POWER_STATE.D0)
           {
             SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CEDEVICE_POWER_STATE.D0);
+            System.Windows.Forms.MessageBox.Show("Power up");
           }
 
           if (m_fileName != null)
@@ -135,6 +136,7 @@ namespace PockeTwit
           {
             // Change the wave device power state back to what it was
             SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CurrAudioState);
+            System.Windows.Forms.MessageBox.Show("Power down");
           }
 
         }
