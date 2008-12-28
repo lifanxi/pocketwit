@@ -10,10 +10,39 @@ namespace PockeTwit
 {
     public class Sound
     {
+
+        internal sealed class SafeNativeMethods
+        {
+            [DllImport("coredll.dll", SetLastError = true)]
+            public static extern IntPtr LocalFree(IntPtr hMem);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndPlaySync(string file, uint flags);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndOpen(string file, ref IntPtr phSound);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndPlayAsync(IntPtr hSound, uint flags);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndStop(int soundScope, IntPtr hSound);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndClose(IntPtr hSound);
+
+            [DllImport("aygshell.dll")]
+            internal static extern uint SndGetSoundDirectoriesList(
+                uint soundEvent,
+                uint location,
+                ref IntPtr soundDirectories,
+                ref IntPtr directoriesCount);
+        }
+
+
         private byte[] m_soundBytes;
         private string m_fileName;
-        private const string m_waveDevice = "wav1:";
-
+        
         private enum Flags
         {
             SND_SYNC = 0x0000,  /* play synchronously (default) */
@@ -29,51 +58,6 @@ namespace PockeTwit
             SND_RESOURCE = 0x00040004  /* name is resource name or atom */
         }
 
-        [DllImport("coredll.dll", SetLastError = true)]
-        static extern int SetSystemPowerState(string psState, int StateFlags, int Options);
-        const int POWER_STATE_ON = 0x00010000;
-        const int POWER_STATE_OFF = 0x00020000;
-        const int POWER_STATE_SUSPEND = 0x00200000;
-        const int POWER_FORCE = 4096;
-        const int POWER_STATE_RESET = 0x00800000;
-
-        public enum CEDEVICE_POWER_STATE : int
-        {
-          PwrDeviceUnspecified = -1,
-          //Full On: full power,  full functionality
-          D0 = 0,
-          /// <summary>
-          /// Low Power On: fully functional at low power/performance
-          /// </summary>
-          D1 = 1,
-          /// <summary>
-          /// Standby: partially powered with automatic wake
-          /// </summary>
-          D2 = 2,
-          /// <summary>
-          /// Sleep: partially powered with device initiated wake
-          /// </summary>
-          D3 = 3,
-          /// <summary>
-          /// Off: unpowered
-          /// </summary>
-          D4 = 4,
-          PwrDeviceMaximum
-        }
-
-        public enum DevicePowerFlags
-        {
-          None = 0,
-          /// <summary>
-          /// Specifies the name of the device whose power should be maintained at or above the DeviceState level.
-          /// </summary>
-          POWER_NAME = 0x00000001,
-          /// <summary>
-          /// Indicates that the requirement should be enforced even during a system suspend.
-          /// </summary>
-          POWER_FORCE = 0x00001000,
-          POWER_DUMPDW = 0x00002000
-        }
 
         [DllImport("CoreDll.DLL", EntryPoint = "PlaySoundW", SetLastError = true)]
         private extern static int WCE_PlaySound(string szSound, IntPtr hMod, int flags);
@@ -81,12 +65,7 @@ namespace PockeTwit
         [DllImport("CoreDll.DLL", EntryPoint = "PlaySoundW", SetLastError = true)]
         private extern static int WCE_PlaySoundBytes(byte[] szSound, IntPtr hMod, int flags);
 
-        [DllImport("CoreDLL", SetLastError = true)]
-        public static extern IntPtr SetDevicePower(string pDevice, DevicePowerFlags DeviceFlags, CEDEVICE_POWER_STATE DevicePowerState);
-
-        [DllImport("CoreDLL")]
-        public static extern int GetDevicePower(string device, DevicePowerFlags flags, out CEDEVICE_POWER_STATE PowerState);
-
+        
         /// <summary>
         /// Construct the Sound object to play sound data from the specified file.
         /// </summary>
@@ -113,29 +92,14 @@ namespace PockeTwit
           // if a file name has been registered, call WCE_PlaySound,
           //  otherwise call WCE_PlaySoundBytes
           //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
-
-          // Check to see if the wave device is powered before playing a sound
-          CEDEVICE_POWER_STATE CurrAudioState = CEDEVICE_POWER_STATE.PwrDeviceUnspecified;
-
-          GetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME, out CurrAudioState);
-
-          // If not powered, power up the wave device
-          if (CurrAudioState != CEDEVICE_POWER_STATE.D0)
-          {
-                SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CEDEVICE_POWER_STATE.D0);
-          }
-
+          /*
           if (m_fileName != null)
             WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
           else
             WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
 
-
-          if (CurrAudioState != CEDEVICE_POWER_STATE.PwrDeviceUnspecified)
-          {
-            // Change the wave device power state back to what it was
-                SetDevicePower(m_waveDevice, DevicePowerFlags.POWER_NAME | DevicePowerFlags.POWER_FORCE, CurrAudioState);
-          }
+          */
+            SafeNativeMethods.SndPlaySync(m_fileName, 0);
 
         }
     }
