@@ -10,6 +10,17 @@ namespace PockeTwit
 {
     public class Sound
     {
+        private static class CheckAYG
+        {
+            static CheckAYG()
+            {
+                if (System.IO.File.Exists("Windows\\aygshell.dll"))
+                {
+                    AYGExists = true;
+                }
+            }
+            public static bool AYGExists = false;
+        }
 
         internal sealed class SafeNativeMethods
         {
@@ -42,7 +53,7 @@ namespace PockeTwit
 
         private byte[] m_soundBytes;
         private string m_fileName;
-        
+
         private enum Flags
         {
             SND_SYNC = 0x0000,  /* play synchronously (default) */
@@ -65,7 +76,7 @@ namespace PockeTwit
         [DllImport("CoreDll.DLL", EntryPoint = "PlaySoundW", SetLastError = true)]
         private extern static int WCE_PlaySoundBytes(byte[] szSound, IntPtr hMod, int flags);
 
-        
+
         /// <summary>
         /// Construct the Sound object to play sound data from the specified file.
         /// </summary>
@@ -89,16 +100,25 @@ namespace PockeTwit
         /// </summary>
         public void Play()
         {
-          // if a file name has been registered, call WCE_PlaySound,
-          //  otherwise call WCE_PlaySoundBytes
-          //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
-          /*
-          if (m_fileName != null)
-            WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
-          else
-            WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
 
-          */
+            if (CheckAYG.AYGExists)
+            {
+                SafeNativeMethods.SndPlaySync(m_fileName, 0);
+            }
+            else
+            {
+                if (m_fileName != null)
+                    WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
+                else
+                    WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
+
+            }
+            // if a file name has been registered, call WCE_PlaySound,
+            //  otherwise call WCE_PlaySoundBytes
+            //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
+            /*
+          
+            */
             SafeNativeMethods.SndPlaySync(m_fileName, 0);
 
         }
