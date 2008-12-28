@@ -33,7 +33,8 @@ namespace PockeTwit
             }
             lblCharsLeft.Text = "140";
             PopulateAccountList();
-            
+            this.ResumeLayout(false);
+
             if (ClientSettings.UseGPS)
             {
                 Locator.StartGPS();
