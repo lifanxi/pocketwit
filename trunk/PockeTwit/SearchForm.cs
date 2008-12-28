@@ -50,6 +50,7 @@ namespace PockeTwit
             InitializeComponent();
             SetUpSearchBox();
             SetupLocationBox();
+            this.ResumeLayout(false);
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
