@@ -337,6 +337,10 @@
       <DependentUpon>FullScreenTweet.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PostUpdate.resx">
+      <DependentUpon>PostUpdate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProfileMap.resx">
       <DependentUpon>ProfileMap.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -406,6 +410,12 @@
     <Compile Include="OpenNetCF\UserNotificationInfoHeader.cs" />
     <Compile Include="OpenNetCF\UserNotificationTrigger.cs" />
     <Compile Include="OpenNetCF\WaitHandle.cs" />
+    <Compile Include="PostUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PostUpdate.Designer.cs">
+      <DependentUpon>PostUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProfileMap.cs">
       <SubType>Form</SubType>
     </Compile>
