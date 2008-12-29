@@ -85,16 +85,7 @@ namespace PockeTwit
             m_fileName = fileName;
         }
 
-        /// <summary>
-        /// Construct the Sound object to play sound data from the specified stream.
-        /// </summary>
-        public Sound(Stream stream)
-        {
-            // read the data from the stream
-            m_soundBytes = new byte[stream.Length];
-            stream.Read(m_soundBytes, 0, (int)stream.Length);
-        }
-
+        
         /// <summary>
         /// Play the sound
         /// </summary>
@@ -103,24 +94,20 @@ namespace PockeTwit
 
             if (CheckAYG.AYGExists)
             {
-                SafeNativeMethods.SndPlaySync(m_fileName, 0);
+                try
+                {
+                    SafeNativeMethods.SndPlaySync(m_fileName, 0);
+                }
+                catch
+                {
+                    CheckAYG.AYGExists = false;
+                    WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
+                }
             }
             else
             {
-                if (m_fileName != null)
-                    WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
-                else
-                    WCE_PlaySoundBytes(m_soundBytes, IntPtr.Zero, (int)(Flags.SND_MEMORY));
-
+                WCE_PlaySound(m_fileName, IntPtr.Zero, (int)(Flags.SND_FILENAME));
             }
-            // if a file name has been registered, call WCE_PlaySound,
-            //  otherwise call WCE_PlaySoundBytes
-            //SetSystemPowerState(null, POWER_STATE_ON, POWER_FORCE);
-            /*
-          
-            */
-            SafeNativeMethods.SndPlaySync(m_fileName, 0);
-
         }
     }
 }
