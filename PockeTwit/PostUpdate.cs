@@ -189,7 +189,7 @@ namespace PockeTwit
 
         void menuGPS_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            StartLocating();
         }
 
         void menuURL_Click(object sender, EventArgs e)
