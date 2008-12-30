@@ -615,8 +615,8 @@ namespace PockeTwit
 
         private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
-
-            SetStatus StatusForm = new SetStatus();
+            PostUpdate StatusForm = new PostUpdate();
+            //SetStatus StatusForm = new SetStatus();
             if (CurrentlySelectedAccount == null)
             {
                 StatusForm.AccountToSet = ClientSettings.DefaultAccount;
