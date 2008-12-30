@@ -30,8 +30,8 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuSubmit = new System.Windows.Forms.MenuItem();
             this.menuCancel = new System.Windows.Forms.MenuItem();
+            this.menuSubmit = new System.Windows.Forms.MenuItem();
             this.cmbAccount = new System.Windows.Forms.ComboBox();
             this.lblFromAccount = new System.Windows.Forms.Label();
             this.pictureURL = new System.Windows.Forms.PictureBox();
@@ -44,17 +44,17 @@
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuSubmit);
             this.mainMenu1.MenuItems.Add(this.menuCancel);
-            // 
-            // menuSubmit
-            // 
-            this.menuSubmit.Text = "Submit";
             // 
             // menuCancel
             // 
             this.menuCancel.Text = "Cancel";
             this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
+            // 
+            // menuSubmit
+            // 
+            this.menuSubmit.Text = "Submit";
+            this.menuSubmit.Click += new System.EventHandler(this.menuSubmit_Click);
             // 
             // cmbAccount
             // 
@@ -110,6 +110,7 @@
             // 
             // lblCharsLeft
             // 
+            this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCharsLeft.Location = new System.Drawing.Point(190, 40);
             this.lblCharsLeft.Name = "lblCharsLeft";
             this.lblCharsLeft.Size = new System.Drawing.Size(45, 20);

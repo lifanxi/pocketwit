@@ -71,6 +71,7 @@ namespace PockeTwit
         {
         
             InitializeComponent();
+            SetImages();
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
@@ -79,10 +80,86 @@ namespace PockeTwit
 
             lblCharsLeft.Text = "140";
             PopulateAccountList();
+            if (DetectDevice.DeviceType == DeviceType.Standard)
+            {
+                SmartPhoneMenu();
+            }
+            else
+            {
+                this.mainMenu1.MenuItems.Add(this.menuSubmit);
+                this.pictureFromCamers.Click += new EventHandler(pictureFromCamers_Click);
+                this.pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
+                this.pictureURL.Click += new EventHandler(pictureURL_Click);
+                this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
+            }
             this.ResumeLayout(false);
+
+
 
             this.txtStatusUpdate.Focus();
             
+        }
+
+        private System.Windows.Forms.MenuItem menuExist;
+        private System.Windows.Forms.MenuItem menuCamera;
+        private System.Windows.Forms.MenuItem menuURL;
+        private System.Windows.Forms.MenuItem menuGPS;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private void SmartPhoneMenu()
+        {
+            this.menuExist = new MenuItem();
+            menuExist.Text = "Existing Picture";
+            menuExist.Click += new EventHandler(menuExist_Click);
+
+            this.menuCamera = new MenuItem();
+            menuCamera.Text = "Take Picture";
+            menuCamera.Click += new EventHandler(menuCamera_Click);
+            
+            this.menuURL = new MenuItem();
+            menuURL.Text = "URL...";
+            menuURL.Click += new EventHandler(menuURL_Click);
+
+            this.menuGPS = new MenuItem();
+            menuGPS.Text = "Update Location";
+            menuGPS.Click += new EventHandler(menuGPS_Click);
+
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem1.Text = "Action";
+
+            this.menuItem1.MenuItems.Add(this.menuSubmit);
+            this.menuItem1.MenuItems.Add(menuURL);
+            this.menuItem1.MenuItems.Add(menuExist);
+            this.menuItem1.MenuItems.Add(menuCamera);
+            this.menuItem1.MenuItems.Add(menuGPS);
+            this.mainMenu1.MenuItems.Add(menuItem1);
+        }
+
+        void menuGPS_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void menuURL_Click(object sender, EventArgs e)
+        {
+            InsertURL();
+        }
+
+        void menuCamera_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromCamera();
+        }
+
+        void menuExist_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromFile();
+        }
+
+        private void SetImages()
+        {
+            this.pictureFromCamers.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+            this.pictureFromStorage.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+            this.pictureURL.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
+            this.pictureLocation.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
         }
 
         private void PopulateAccountList()
@@ -184,8 +261,30 @@ namespace PockeTwit
                 this.DialogResult = DialogResult.Cancel;
             }
         }
+        void pictureLocation_Click(object sender, EventArgs e)
+        {
+            //
+        }
+        void pictureURL_Click(object sender, EventArgs e)
+        {
+            InsertURL();
+        }
+        void pictureFromStorage_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromFile();
+        }
+        void pictureFromCamers_Click(object sender, EventArgs e)
+        {
+            InsertPictureFromCamera();
+        }
+        private void menuSubmit_Click(object sender, EventArgs e)
+        {
+            Program.LastStatus = this.StatusText;
+            this.DialogResult = DialogResult.OK;
+        }
         #endregion
 
+        
         
     }
 }
