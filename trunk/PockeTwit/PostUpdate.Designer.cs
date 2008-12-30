@@ -38,8 +38,9 @@
             this.pictureFromStorage = new System.Windows.Forms.PictureBox();
             this.pictureFromCamers = new System.Windows.Forms.PictureBox();
             this.txtStatusUpdate = new System.Windows.Forms.TextBox();
-            this.pictureLocation = new System.Windows.Forms.PictureBox();
             this.lblCharsLeft = new System.Windows.Forms.Label();
+            this.pictureLocation = new System.Windows.Forms.PictureBox();
+            this.lblGPS = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -102,19 +103,27 @@
             this.txtStatusUpdate.TabIndex = 7;
             this.txtStatusUpdate.TextChanged += new System.EventHandler(this.txtStatusUpdate_TextChanged);
             // 
+            // lblCharsLeft
+            // 
+            this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCharsLeft.Location = new System.Drawing.Point(191, 45);
+            this.lblCharsLeft.Name = "lblCharsLeft";
+            this.lblCharsLeft.Size = new System.Drawing.Size(45, 20);
+            this.lblCharsLeft.Text = "label2";
+            // 
             // pictureLocation
             // 
             this.pictureLocation.Location = new System.Drawing.Point(97, 40);
             this.pictureLocation.Name = "pictureLocation";
             this.pictureLocation.Size = new System.Drawing.Size(25, 25);
             // 
-            // lblCharsLeft
+            // lblGPS
             // 
-            this.lblCharsLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCharsLeft.Location = new System.Drawing.Point(190, 40);
-            this.lblCharsLeft.Name = "lblCharsLeft";
-            this.lblCharsLeft.Size = new System.Drawing.Size(45, 20);
-            this.lblCharsLeft.Text = "label2";
+            this.lblGPS.Location = new System.Drawing.Point(97, 45);
+            this.lblGPS.Name = "lblGPS";
+            this.lblGPS.Size = new System.Drawing.Size(88, 20);
+            this.lblGPS.Text = "Seeking GPS";
+            this.lblGPS.Visible = false;
             // 
             // PostUpdate
             // 
@@ -122,6 +131,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblGPS);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.pictureLocation);
             this.Controls.Add(this.txtStatusUpdate);
@@ -147,7 +157,8 @@
         private System.Windows.Forms.TextBox txtStatusUpdate;
         private System.Windows.Forms.MenuItem menuSubmit;
         private System.Windows.Forms.MenuItem menuCancel;
-        private System.Windows.Forms.PictureBox pictureLocation;
         private System.Windows.Forms.Label lblCharsLeft;
+        private System.Windows.Forms.PictureBox pictureLocation;
+        private System.Windows.Forms.Label lblGPS;
     }
 }
