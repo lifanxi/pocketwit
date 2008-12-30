@@ -113,17 +113,20 @@ namespace PockeTwit
         
         void l_LocationReady(string Location)
         {
-            
+
             if (InvokeRequired)
             {
                 delUpdateText d = new delUpdateText(l_LocationReady);
                 d.Invoke(Location);
             }
-            if (!string.IsNullOrEmpty(Location))
+            else
             {
-                l.StopGPS();
-                this.GPSLocation = Location;
-                lblGPS.Text = "Location Found";
+                if (!string.IsNullOrEmpty(Location))
+                {
+                    l.StopGPS();
+                    this.GPSLocation = Location;
+                    lblGPS.Text = "Location Found";
+                }
             }
         }
 
