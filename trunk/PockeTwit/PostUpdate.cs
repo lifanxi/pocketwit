@@ -316,7 +316,7 @@ namespace PockeTwit
         }
         void pictureLocation_Click(object sender, EventArgs e)
         {
-            //
+            StartLocating();
         }
         void pictureURL_Click(object sender, EventArgs e)
         {
