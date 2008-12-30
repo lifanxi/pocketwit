@@ -14,6 +14,10 @@ namespace PockeTwit
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
         public string GPSLocation = null;
+        private LocationManager l = new LocationManager();
+        
+        private delegate void delUpdateText(string text);
+
         
         #region Properties
         private Yedda.Twitter.Account _AccountToSet = ClientSettings.DefaultAccount;
@@ -92,12 +96,56 @@ namespace PockeTwit
                 this.pictureURL.Click += new EventHandler(pictureURL_Click);
                 this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
             }
+            SizeF currentScreen = this.CurrentAutoScaleDimensions;
+            if (currentScreen.Height == 192)
+            {
+                ResizeForVGA();
+            }
+
             this.ResumeLayout(false);
 
-
+            l.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
 
             this.txtStatusUpdate.Focus();
             
+        }
+
+        
+        void l_LocationReady(string Location)
+        {
+            
+            if (InvokeRequired)
+            {
+                delUpdateText d = new delUpdateText(l_LocationReady);
+                d.Invoke(Location);
+            }
+            if (!string.IsNullOrEmpty(Location))
+            {
+                l.StopGPS();
+                this.GPSLocation = Location;
+                lblGPS.Text = "Location Found";
+            }
+        }
+
+        private void StartLocating()
+        {
+            //StartAnimation
+            l.StartGPS();
+            pictureLocation.Visible = false;
+            lblGPS.Visible = true;
+        }
+
+        private void ResizeForVGA()
+        {
+            pictureFromCamers.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureFromCamers.Size = new Size(50, 50);
+            pictureFromStorage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureFromStorage.Size = new Size(50, 50);
+            pictureLocation.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureLocation.Size = new Size(50, 50);
+            pictureURL.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureURL.Size = new Size(50, 50);
+
         }
 
         private System.Windows.Forms.MenuItem menuExist;
@@ -107,6 +155,11 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuItem1;
         private void SmartPhoneMenu()
         {
+            lblGPS.Left = 5;
+            pictureFromCamers.Visible = false;
+            pictureFromStorage.Visible = false;
+            pictureLocation.Visible = false;
+            pictureURL.Visible = false;
             this.menuExist = new MenuItem();
             menuExist.Text = "Existing Picture";
             menuExist.Click += new EventHandler(menuExist_Click);
