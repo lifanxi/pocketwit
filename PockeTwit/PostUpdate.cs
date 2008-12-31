@@ -290,6 +290,10 @@ namespace PockeTwit
             try
             {
                 BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
+                if (DetectDevice.DeviceType == DeviceType.Standard && lblGPS.Visible)
+                {
+                    BoxToUpdate.Left = lblGPS.Right + 5;
+                }
                 BoxToUpdate.Visible = true;
                 txtStatusUpdate_TextChanged(null, new EventArgs());
             }
