@@ -140,13 +140,10 @@ namespace PockeTwit
 
         private void ResizeForVGA()
         {
-            pictureFromCamers.SizeMode = PictureBoxSizeMode.StretchImage;
+            
             pictureFromCamers.Size = new Size(50, 50);
-            pictureFromStorage.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureFromStorage.Size = new Size(50, 50);
-            pictureLocation.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureLocation.Size = new Size(50, 50);
-            pictureURL.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureURL.Size = new Size(50, 50);
 
         }
