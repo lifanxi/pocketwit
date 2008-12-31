@@ -209,11 +209,14 @@ namespace PockeTwit
 
         private void SetImages()
         {
-            this.pictureFromCamers.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
-            this.pictureFromStorage.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
-            this.pictureURL.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
-            this.pictureLocation.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "url.png");
+
+
+            this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+            this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+            this.pictureURL.Image = new Bitmap(ClientSettings.IconsFolder() + "url.png");
+            this.pictureLocation.Image = new Bitmap(ClientSettings.IconsFolder() + "map.png");
         }
+
 
         private void PopulateAccountList()
         {
@@ -247,7 +250,7 @@ namespace PockeTwit
                         UseTwitPic = true;
                         
                         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                        this.pictureFromStorage.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+                        this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
                         if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
                             this.pictureFromStorage.Visible = false;
@@ -272,7 +275,7 @@ namespace PockeTwit
                 //if (cameraPictureBox.Visible)
                 //{
                 System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
-                this.pictureFromCamers.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+                this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                 if (DetectDevice.DeviceType == DeviceType.Standard)
                 {
                     this.pictureFromCamers.Visible = false;
