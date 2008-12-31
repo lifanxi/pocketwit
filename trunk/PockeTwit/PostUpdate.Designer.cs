@@ -1,4 +1,5 @@
-﻿namespace PockeTwit
+﻿using System.Windows.Forms;
+namespace PockeTwit
 {
     partial class PostUpdate
     {
@@ -144,8 +145,13 @@
             this.Menu = this.mainMenu1;
             this.Name = "PostUpdate";
             this.Text = "Post Update";
-            this.ResumeLayout(false);
+            pictureFromCamers.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureFromStorage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureLocation.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureURL.SizeMode = PictureBoxSizeMode.StretchImage;
+            
 
+            
         }
 
         #endregion
