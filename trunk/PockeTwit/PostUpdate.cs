@@ -117,7 +117,7 @@ namespace PockeTwit
             if (InvokeRequired)
             {
                 delUpdateText d = new delUpdateText(l_LocationReady);
-                d.Invoke(Location);
+                this.Invoke(d, Location);
             }
             else
             {
@@ -338,7 +338,13 @@ namespace PockeTwit
             Program.LastStatus = this.StatusText;
             this.DialogResult = DialogResult.OK;
         }
+        private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
+        }
         #endregion
+
+        
 
         
         
