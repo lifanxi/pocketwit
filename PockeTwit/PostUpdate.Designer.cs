@@ -65,6 +65,7 @@
             this.cmbAccount.Name = "cmbAccount";
             this.cmbAccount.Size = new System.Drawing.Size(133, 22);
             this.cmbAccount.TabIndex = 0;
+            this.cmbAccount.SelectedIndexChanged += new System.EventHandler(this.cmbAccount_SelectedIndexChanged);
             // 
             // lblFromAccount
             // 
