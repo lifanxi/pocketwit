@@ -1111,7 +1111,7 @@ namespace PockeTwit
 
         private void StopFollowingUser()
         {
-            
+            if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
             if (MessageBox.Show("Are you sure you want to stop following " + selectedItem.Tweet.user.screen_name + "?", "Stop Following", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
