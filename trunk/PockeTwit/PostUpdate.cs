@@ -11,6 +11,11 @@ namespace PockeTwit
 {
     public partial class PostUpdate : Form
     {
+        private System.Windows.Forms.ContextMenu copyPasteMenu;
+        private System.Windows.Forms.MenuItem PasteItem;
+        private System.Windows.Forms.MenuItem CopyItem;
+		
+
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
         public string GPSLocation = null;
@@ -90,11 +95,8 @@ namespace PockeTwit
             }
             else
             {
-                this.mainMenu1.MenuItems.Add(this.menuSubmit);
-                this.pictureFromCamers.Click += new EventHandler(pictureFromCamers_Click);
-                this.pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
-                this.pictureURL.Click += new EventHandler(pictureURL_Click);
-                this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
+                SetupTouchScreen();
+                
             }
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
@@ -108,6 +110,48 @@ namespace PockeTwit
 
             this.txtStatusUpdate.Focus();
             
+        }
+
+        private void SetupTouchScreen()
+        {
+            this.mainMenu1.MenuItems.Add(this.menuSubmit);
+            this.pictureFromCamers.Click += new EventHandler(pictureFromCamers_Click);
+            this.pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
+            this.pictureURL.Click += new EventHandler(pictureURL_Click);
+            this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
+
+            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
+
+            this.PasteItem = new System.Windows.Forms.MenuItem();
+            PasteItem.Text = "Paste";
+
+            this.CopyItem = new MenuItem();
+            CopyItem.Text = "Copy";
+
+            copyPasteMenu.MenuItems.Add(CopyItem);
+            copyPasteMenu.MenuItems.Add(PasteItem);
+            this.txtStatusUpdate.ContextMenu = copyPasteMenu;
+
+            CopyItem.Click += new EventHandler(CopyItem_Click);
+            PasteItem.Click += new EventHandler(PasteItem_Click);
+        }
+
+        void PasteItem_Click(object sender, EventArgs e)
+        {
+            IDataObject iData = Clipboard.GetDataObject();
+            if (iData.GetDataPresent(DataFormats.Text))
+            {
+                this.txtStatusUpdate.SelectedText = (string)iData.GetData(DataFormats.Text);
+            }
+        }
+
+        void CopyItem_Click(object sender, EventArgs e)
+        {
+            string selText = this.txtStatusUpdate.SelectedText;
+            if (!string.IsNullOrEmpty(selText))
+            {
+                Clipboard.SetDataObject(selText);
+            }
         }
 
         
