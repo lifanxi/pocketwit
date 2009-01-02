@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.59</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv59.CAB</url>
-  <notes>Bug fixes
+  <version>.60</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv60.CAB</url>
+  <notes>Fixed audio notification in WM6
+Fixed VGA screen layout on search and post
 </notes>
 </LatestRelease>
