@@ -650,7 +650,7 @@ namespace PockeTwit
                     string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + trimLength)));
                     UpdateText = NewText + " ... " + URL;
                 }
-                if (UpdateText != "Post Update")
+                if (!string.IsNullOrEmpty(UpdateText))
                 {
                     if (StatusForm.AccountToSet != null)
                     {
@@ -692,6 +692,7 @@ namespace PockeTwit
                     Manager.RefreshFriendsTimeLine();
                 }
             }
+            this.Visible = true;
             Cursor.Current = Cursors.Default;
             IsLoaded = true;
             this.statList.Redraw();

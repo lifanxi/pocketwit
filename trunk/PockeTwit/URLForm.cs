@@ -29,7 +29,7 @@ namespace PockeTwit
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            if (DetectDevice.DeviceType == DeviceType.Standard)
+            if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 SetPasteMenu();
             }
