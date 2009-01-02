@@ -10,8 +10,8 @@ namespace PockeTwit
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.MainMenu mainMenu1;
-        private System.Windows.Forms.MenuItem menuCancel;
-        private System.Windows.Forms.MenuItem menuOK;
+        private System.Windows.Forms.MenuItem mnuOK;
+        private System.Windows.Forms.MenuItem mnuCancel;
         private System.Windows.Forms.TextBox txtURL;
 
 		#endregion Fields 
@@ -47,26 +47,26 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuCancel = new System.Windows.Forms.MenuItem();
-            this.menuOK = new System.Windows.Forms.MenuItem();
+            this.mnuCancel = new System.Windows.Forms.MenuItem();
+            this.mnuOK = new System.Windows.Forms.MenuItem();
             this.txtURL = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuOK);
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
+            this.mainMenu1.MenuItems.Add(this.mnuCancel);
+            this.mainMenu1.MenuItems.Add(this.mnuOK);
             // 
-            // menuCancel
+            // mnuCancel
             // 
-            this.menuCancel.Text = "Cancel";
-            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
+            this.mnuCancel.Text = "Cancel";
+            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
             // 
-            // menuOK
+            // mnuOK
             // 
-            this.menuOK.Text = "OK";
-            this.menuOK.Click += new System.EventHandler(this.menuOK_Click);
+            this.mnuOK.Text = "Ok";
+            this.mnuOK.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // txtURL
             // 

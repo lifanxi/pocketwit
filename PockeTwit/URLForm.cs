@@ -19,7 +19,8 @@ namespace PockeTwit
 		#endregion Fields 
 
 		#region Constructors (1) 
-
+        ContextMenu contextMen;
+        MenuItem pasteItem;
         public URLForm()
         {
             InitializeComponent();
@@ -27,6 +28,29 @@ namespace PockeTwit
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
+            }
+            if (DetectDevice.DeviceType == DeviceType.Standard)
+            {
+                SetPasteMenu();
+            }
+        }
+
+        private void SetPasteMenu()
+        {
+            contextMen = new ContextMenu();
+            pasteItem = new MenuItem();
+            pasteItem.Text = "Paste";
+            contextMen.MenuItems.Add(pasteItem);
+            this.txtURL.ContextMenu = contextMen;
+            pasteItem.Click += new EventHandler(pasteItem_Click);
+        }
+
+        void pasteItem_Click(object sender, EventArgs e)
+        {
+            IDataObject iData = Clipboard.GetDataObject();
+            if (iData.GetDataPresent(DataFormats.Text))
+            {
+                txtURL.SelectedText = (string)iData.GetData(DataFormats.Text); 
             }
         }
 
@@ -51,12 +75,6 @@ namespace PockeTwit
 
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Hide();
-        }
-
-        private void menuOK_Click(object sender, EventArgs e)
-        {
             try
             {
                 _URL = isgd.ShortenURL(this.txtURL.Text);
@@ -64,6 +82,13 @@ namespace PockeTwit
                 this.Hide();
             }
             catch { }
+            
+        }
+
+        private void menuOK_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Hide();
             
         }
 
