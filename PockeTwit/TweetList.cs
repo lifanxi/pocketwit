@@ -1077,8 +1077,15 @@ namespace PockeTwit
                 {
                     pi.FileName = TextClicked;
                 }
-                pi.UseShellExecute = true;
-                System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
+                try
+                {
+                    pi.UseShellExecute = true;
+                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
+                }
+                catch
+                {
+                    MessageBox.Show("There is no default web browser defined for the OS.");
+                }
             }
             else if (TextClicked.StartsWith("#"))
             {
