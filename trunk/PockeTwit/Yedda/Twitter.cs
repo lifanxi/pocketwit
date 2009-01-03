@@ -1118,6 +1118,12 @@ namespace Yedda
             return null;
         }
 
+        public string ShowStatus(string ID)
+        {
+            string url = string.Format(TwitterBaseUrlFormat, GetObjectTypeString(ObjectType.Statuses), GetActionTypeString(ActionType.Show) + "/" + ID, GetFormatTypeString(OutputFormatType.XML), AccountInfo.ServerURL.URL);
+            return ExecuteAnonymousGetCommand(url);
+        }
+
         #endregion
 
         #region Favorites
