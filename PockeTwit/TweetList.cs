@@ -442,12 +442,9 @@ namespace PockeTwit
 
             CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
-            if (DetectDevice.DeviceType == DeviceType.Professional)
-            {
-                Notifyer = new NotificationHandler();
-                Notifyer.LoadSettings();
-                Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
-            }
+            Notifyer = new NotificationHandler();
+            Notifyer.LoadSettings();
+            Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
             
             return ret;
             
