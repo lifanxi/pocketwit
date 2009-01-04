@@ -459,9 +459,41 @@ namespace Yedda
             return null;
         }
 
+        private string deflatereq(Stream requestStream)
+        {
+            const int intChunkSize = 2048;
+
+            ICSharpCode.SharpZipLib.GZip.GZipInputStream gz = new ICSharpCode.SharpZipLib.GZip.GZipInputStream(requestStream);
+            int intSizeRead = 0;
+            byte[] unzipBytes = new byte[intChunkSize + 1];
+
+            MemoryStream OutputStream = new MemoryStream();
+            while (true)
+            {
+                //-- this decompresses a chunk
+                //-- remember the output will be larger than the input (one would hope)
+                intSizeRead = gz.Read(unzipBytes, 0, intChunkSize);
+                if (intSizeRead > 0)
+                {
+                    OutputStream.Write(unzipBytes, 0, intSizeRead);
+                }
+                else
+                {
+                    break; // TODO: might not be correct. Was : Exit While
+                }
+            }
+
+            //-- convert our decompressed bytestream into a UTF-8 string
+            byte[] o = OutputStream.ToArray();
+            return System.Text.Encoding.UTF8.GetString(o,0,o.Length);
+
+        }
+
         protected string ExecuteGetCommand(string url)
         {
             HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
+            client.Headers.Add("Accept-Encoding", "gzip");
+
             client.Timeout = 20000;
             if (!string.IsNullOrEmpty(AccountInfo.UserName) &&
                 !string.IsNullOrEmpty(AccountInfo.Password))
@@ -469,15 +501,22 @@ namespace Yedda
                 client.Credentials = new NetworkCredential(AccountInfo.UserName, AccountInfo.Password);
             }
             client.PreAuthenticate = true;
-
+            
             try
             {
                 using (HttpWebResponse httpResponse = (HttpWebResponse)client.GetResponse())
                 {
+                    
                     using (Stream stream = httpResponse.GetResponseStream())
                     {
+                        if (httpResponse.ContentEncoding == "gzip")
+                        {
+                            return deflatereq(stream);
+                        }
+
                         using (StreamReader reader = new StreamReader(stream))
                         {
+                        
                             return reader.ReadToEnd();
                         }
                     }
@@ -566,6 +605,8 @@ namespace Yedda
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
                 request.Timeout = 20000;
+                request.Headers.Add("Accept-Encoding", "gzip");
+
                 
                 request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(AccountInfo.UserName + ":" + AccountInfo.Password))); 
 
@@ -609,8 +650,13 @@ namespace Yedda
                 {
                     using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                     {
+                        if (response.ContentEncoding == "gzip")
+                        {
+                            return deflatereq(response.GetResponseStream());
+                        }
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
+                            
                             return reader.ReadToEnd();
                         }
                     }
