@@ -43,7 +43,6 @@ namespace PockeTwit
         public TweetList(bool InBackGround)
         {
             StartBackground = InBackGround;
-            
             Program.StartUp = DateTime.Now;
             if (InBackGround)
             {

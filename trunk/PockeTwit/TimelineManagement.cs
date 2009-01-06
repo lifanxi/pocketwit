@@ -187,6 +187,7 @@ namespace PockeTwit
             if (string.IsNullOrEmpty(response))
             {
                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Search);
+                GlobalEventHandler.CallShowErrorMessage("Communications Error");
                 return null;
             }
             else
@@ -202,6 +203,7 @@ namespace PockeTwit
             if (string.IsNullOrEmpty(response))
             {
                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Show);
+                GlobalEventHandler.CallShowErrorMessage("Communications Error");
                 return null;
             }
             else
@@ -283,11 +285,13 @@ namespace PockeTwit
                             catch
                             {
                                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                                GlobalEventHandler.CallShowErrorMessage("Communications Error");
                             }
                         }
                         else
                         {
                             NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                            GlobalEventHandler.CallShowErrorMessage("Communications Error");
                         }
                         ////I HATE DIRECT MESSAGES
 
@@ -309,11 +313,13 @@ namespace PockeTwit
                                 catch
                                 {
                                     NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                    GlobalEventHandler.CallShowErrorMessage("Communications Error");
                                 }
                             }
                             else
                             {
                                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                GlobalEventHandler.CallShowErrorMessage("Communications Error");
                             }
                         }
                     }
@@ -358,11 +364,13 @@ namespace PockeTwit
                                 catch
                                 {
                                     NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                                    GlobalEventHandler.CallShowErrorMessage("Communications Error");
                                 }
                             }
                             else
                             {
                                 NoData(t.AccountInfo, Yedda.Twitter.ActionType.Friends_Timeline);
+                                GlobalEventHandler.CallShowErrorMessage("Communications Error");
                             }
                         }
                     }
