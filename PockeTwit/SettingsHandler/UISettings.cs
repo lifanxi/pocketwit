@@ -65,6 +65,7 @@ namespace PockeTwit
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
             if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsReset = true; }
             if (chkScreenName.Checked != ClientSettings.IncludeUserName) { NeedsReset = true; }
+            ClientSettings.MergeMessages = chkMerge.Checked;
             ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.UseClickables = chkClickables.Checked;
             ClientSettings.ShowExtra = chkTimestamps.Checked;
@@ -96,6 +97,7 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
+            chkMerge.Checked = ClientSettings.MergeMessages;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkTimestamps.Checked = ClientSettings.ShowExtra;
             chkClickables.Checked = ClientSettings.UseClickables;

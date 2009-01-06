@@ -224,64 +224,7 @@ namespace PockeTwit
                     updateTimer.Enabled = false;
                     GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
-                    lock (TwitterConnections)
-                    {
-                        foreach (Yedda.Twitter t in TwitterConnections)
-                        {
-                            if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
-                            {
-                                string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
-                                if (!string.IsNullOrEmpty(response))
-                                {
-                                    try
-                                    {
-                                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
-                                        TempLine.AddRange(NewStats);
-                                        if (NewStats.Length > 0)
-                                        {
-                                            LastReplyID[t.AccountInfo] = NewStats[0].id;
-                                        }
-                                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                                    }
-                                    catch
-                                    {
-                                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                                    }
-                                }
-                                else
-                                {
-                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
-                                }
-                                ////I HATE DIRECT MESSAGES
-
-                                if (t.DirectMessagesWork)
-                                {
-                                    response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
-                                    if (!string.IsNullOrEmpty(response))
-                                    {
-                                        try
-                                        {
-                                            Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
-                                            TempLine.AddRange(NewStats);
-                                            if (NewStats.Length > 0)
-                                            {
-                                                LastStatusID[t.AccountInfo] = NewStats[0].id;
-                                            }
-                                            ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
-                                        }
-                                        catch
-                                        {
-                                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    GetMessagesList(TempLine);
                     int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
                     if (MessagesUpdated != null && NewItems > 0)
                     {
@@ -307,6 +250,68 @@ namespace PockeTwit
                     if (ClientSettings.UpdateMinutes > 0)
                     {
                         updateTimer.Enabled = true;
+                    }
+                }
+            }
+        }
+
+        private void GetMessagesList(List<Library.status> TempLine)
+        {
+            lock (TwitterConnections)
+            {
+                foreach (Yedda.Twitter t in TwitterConnections)
+                {
+                    if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
+                    {
+                        string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Replies);
+                        if (!string.IsNullOrEmpty(response))
+                        {
+                            try
+                            {
+                                Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
+                                TempLine.AddRange(NewStats);
+                                if (NewStats.Length > 0)
+                                {
+                                    LastReplyID[t.AccountInfo] = NewStats[0].id;
+                                }
+                                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                            }
+                            catch
+                            {
+                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                            }
+                        }
+                        else
+                        {
+                            NoData(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
+                        }
+                        ////I HATE DIRECT MESSAGES
+
+                        if (t.DirectMessagesWork)
+                        {
+                            response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Direct_Messages);
+                            if (!string.IsNullOrEmpty(response))
+                            {
+                                try
+                                {
+                                    Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                    TempLine.AddRange(NewStats);
+                                    if (NewStats.Length > 0)
+                                    {
+                                        LastStatusID[t.AccountInfo] = NewStats[0].id;
+                                    }
+                                    ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                }
+                                catch
+                                {
+                                    NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                                }
+                            }
+                            else
+                            {
+                                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
+                            }
+                        }
                     }
                 }
             }
@@ -361,8 +366,19 @@ namespace PockeTwit
                     if (TempLine.Count > 0)
                     {
                         NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
-                        SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
                     }
+                    if (ClientSettings.MergeMessages)
+                    {
+                        TempLine = new List<PockeTwit.Library.status>();
+                        GetMessagesList(TempLine);
+                        NewItems = NewItems + TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+                        int TossNumber = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
+                        SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
+                        TempLine.Clear();
+                        TempLine.TrimExcess();
+                        
+                    }
+                    SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
                     if (FriendsUpdated != null && NewItems > 0)
                     {
                         if (Notify)
@@ -376,6 +392,8 @@ namespace PockeTwit
                     }
                     TempLine.Clear();
                     TempLine.TrimExcess();
+
+                    
                 }
             }
             catch (NullReferenceException)
