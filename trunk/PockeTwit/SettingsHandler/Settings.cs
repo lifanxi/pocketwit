@@ -121,6 +121,7 @@ public static class ClientSettings
     public static string DistancePreference { get; set; }
 
     public static bool ShowReplyImages { get; set; }
+    public static bool MergeMessages { get; set; }
 
     public static bool _ShowExtra = true;
     public static bool ShowExtra
@@ -161,6 +162,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MergeMessages"]))
+            {
+                MergeMessages = bool.Parse(ConfigurationSettings.AppSettings["MergeMessages"]);
+            }
+            else
+            {
+                MergeMessages = false;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["SearchItems"]))
             {
                 SearchItems = new Queue<string>(ConfigurationSettings.AppSettings["SearchItems"].Split('|'));
@@ -343,6 +352,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["MergeMessages"] = MergeMessages.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());
         ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
         ConfigurationSettings.AppSettings["ThemeName"] = ThemeName;

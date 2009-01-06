@@ -49,8 +49,8 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuAccept = new System.Windows.Forms.MenuItem();
+            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.label4 = new System.Windows.Forms.Label();
             this.txtMaxTweets = new System.Windows.Forms.TextBox();
             this.lblTweets = new System.Windows.Forms.Label();
@@ -61,6 +61,7 @@ namespace PockeTwit
             this.cmbTheme = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.chkMerge = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -68,15 +69,15 @@ namespace PockeTwit
             this.mainMenu1.MenuItems.Add(this.menuAccept);
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
-            // menuCancel
-            // 
-            this.menuCancel.Text = "Cancel";
-            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
-            // 
             // menuAccept
             // 
             this.menuAccept.Text = "Accept";
             this.menuAccept.Click += new System.EventHandler(this.menuAccept_Click);
+            // 
+            // menuCancel
+            // 
+            this.menuCancel.Text = "Cancel";
+            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // label4
             // 
@@ -148,9 +149,9 @@ namespace PockeTwit
             // 
             this.cmbTheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTheme.Location = new System.Drawing.Point(54, 135);
+            this.cmbTheme.Location = new System.Drawing.Point(59, 160);
             this.cmbTheme.Name = "cmbTheme";
-            this.cmbTheme.Size = new System.Drawing.Size(139, 22);
+            this.cmbTheme.Size = new System.Drawing.Size(133, 22);
             this.cmbTheme.TabIndex = 7;
             this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged);
             // 
@@ -158,20 +159,29 @@ namespace PockeTwit
             // 
             this.label1.BackColor = System.Drawing.Color.Black;
             this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(4, 137);
+            this.label1.Location = new System.Drawing.Point(3, 162);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 20);
+            this.label1.Size = new System.Drawing.Size(50, 20);
             this.label1.Text = "Theme:";
             // 
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.Location = new System.Drawing.Point(200, 137);
+            this.linkLabel1.Location = new System.Drawing.Point(199, 162);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(36, 20);
             this.linkLabel1.TabIndex = 14;
             this.linkLabel1.Text = "Edit";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
+            // 
+            // chkMerge
+            // 
+            this.chkMerge.ForeColor = System.Drawing.Color.LightGray;
+            this.chkMerge.Location = new System.Drawing.Point(2, 134);
+            this.chkMerge.Name = "chkMerge";
+            this.chkMerge.Size = new System.Drawing.Size(235, 20);
+            this.chkMerge.TabIndex = 18;
+            this.chkMerge.Text = "Merge all Timelines";
             // 
             // UISettings
             // 
@@ -179,6 +189,7 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkMerge);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbTheme);
@@ -205,6 +216,7 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbTheme;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox chkMerge;
 
     }
 }
