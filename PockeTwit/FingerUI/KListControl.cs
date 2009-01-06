@@ -56,7 +56,8 @@ namespace FingerUI
 
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
-        private NotificationPopup NotificationArea = new NotificationPopup(); 
+        private NotificationPopup NotificationArea = new NotificationPopup();
+        private NotificationPopup ErrorPopup = new NotificationPopup();
         private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
@@ -106,6 +107,11 @@ namespace FingerUI
         {
             NotificationArea.TextFont = this.Font;
             NotificationArea.parentControl = this;
+
+            ErrorPopup.TextFont = this.Font;
+            ErrorPopup.parentControl = this;
+            ErrorPopup.AtTop = true;
+
             SelectedFont = this.Font;
             HighlightedFont = this.Font;
             m_timer.Interval = ClientSettings.AnimationInterval;
@@ -125,8 +131,14 @@ namespace FingerUI
             fsDisplay.Visible = false;
             fsDisplay.Dock = DockStyle.Fill;
             this.Controls.Add(fsDisplay);
-            
 
+            PockeTwit.GlobalEventHandler.ShowErrorMessage += new PockeTwit.GlobalEventHandler.delshowErrorMessage(GlobalEventHandler_ShowErrorMessage);
+        }
+
+        void GlobalEventHandler_ShowErrorMessage(string Message)
+        {
+            ErrorPopup.ShowNotification(Message);
+            ErrorPopup.Pause = 100;
         }
 
         void SlidingPortal_NewImage()
@@ -1161,7 +1173,7 @@ namespace FingerUI
                     }
 
                     NotificationArea.DrawNotification(flickerGraphics, this.Bottom, this.Width);
-
+                    ErrorPopup.DrawNotification(flickerGraphics, this.Bottom, this.Width);
 
                     if (ClickablesControl.Visible)
                     {

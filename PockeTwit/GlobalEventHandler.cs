@@ -20,6 +20,8 @@ namespace PockeTwit
         public delegate void delNoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
         public delegate void delTimelineIsFetching(TimelineManagement.TimeLineType TType);
         public delegate void delTimelineIsDone(TimelineManagement.TimeLineType TType);
+        public delegate void delshowErrorMessage(string Message);
+
 
         // Events (1) 
 
@@ -28,6 +30,12 @@ namespace PockeTwit
         public static event delNoData NoData;
         public static event delTimelineIsFetching TimeLineFetching;
         public static event delTimelineIsDone TimeLineDone;
+        public static event delshowErrorMessage ShowErrorMessage = delegate { };
+
+        public static void CallShowErrorMessage(string Message)
+        {
+            ShowErrorMessage(Message);
+        }
 
         public static void CallArtWasUpdated(string User)
         {

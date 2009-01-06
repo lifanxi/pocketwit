@@ -440,6 +440,7 @@ namespace Yedda
                                 {
                                     DateTime NewTime = GetTimeOutTime();
                                     errorResponse.Close();
+                                    PockeTwit.GlobalEventHandler.CallShowErrorMessage("Timeout until " + NewTime.ToString());
                                     throw new Exception("Timeout until " + NewTime.ToString());
                                 }
 
@@ -515,6 +516,7 @@ namespace Yedda
                                 {
                                     DateTime NewTime = GetTimeOutTime();
                                     errorResponse.Close();
+                                    PockeTwit.GlobalEventHandler.CallShowErrorMessage("Timeout until " + NewTime.ToString());
                                     throw new Exception("Timeout until " + NewTime.ToString());
                                 }
 
@@ -641,6 +643,7 @@ namespace Yedda
                                     if (doc.SelectSingleNode("//error").InnerText.StartsWith("Rate limit exceeded"))
                                     {
                                         DateTime NewTime = GetTimeOutTime();
+                                        PockeTwit.GlobalEventHandler.CallShowErrorMessage("Timeout until " + NewTime.ToString());
                                         throw new Exception("Timeout until " + NewTime.ToString());
                                     }
 
