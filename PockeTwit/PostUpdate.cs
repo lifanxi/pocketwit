@@ -96,8 +96,8 @@ namespace PockeTwit
             else
             {
                 SetupTouchScreen();
-                
             }
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
             {

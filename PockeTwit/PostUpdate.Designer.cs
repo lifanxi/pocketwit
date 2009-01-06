@@ -43,10 +43,7 @@ namespace PockeTwit
             this.pictureLocation = new System.Windows.Forms.PictureBox();
             this.lblGPS = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // mainMenu1
-            // 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
+            
             // 
             // menuCancel
             // 
@@ -80,18 +77,21 @@ namespace PockeTwit
             this.pictureURL.Location = new System.Drawing.Point(4, 40);
             this.pictureURL.Name = "pictureURL";
             this.pictureURL.Size = new System.Drawing.Size(25, 25);
+            this.pictureURL.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // pictureFromStorage
             // 
             this.pictureFromStorage.Location = new System.Drawing.Point(35, 40);
             this.pictureFromStorage.Name = "pictureFromStorage";
             this.pictureFromStorage.Size = new System.Drawing.Size(25, 25);
+            this.pictureFromStorage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // pictureFromCamers
             // 
             this.pictureFromCamers.Location = new System.Drawing.Point(66, 40);
             this.pictureFromCamers.Name = "pictureFromCamers";
             this.pictureFromCamers.Size = new System.Drawing.Size(25, 25);
+            this.pictureFromCamers.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // txtStatusUpdate
             // 
@@ -118,6 +118,7 @@ namespace PockeTwit
             this.pictureLocation.Location = new System.Drawing.Point(97, 40);
             this.pictureLocation.Name = "pictureLocation";
             this.pictureLocation.Size = new System.Drawing.Size(25, 25);
+            this.pictureLocation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // lblGPS
             // 
@@ -145,13 +146,8 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "PostUpdate";
             this.Text = "Post Update";
-            pictureFromCamers.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureFromStorage.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureLocation.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureURL.SizeMode = PictureBoxSizeMode.StretchImage;
-            
+            this.ResumeLayout(false);
 
-            
         }
 
         #endregion
