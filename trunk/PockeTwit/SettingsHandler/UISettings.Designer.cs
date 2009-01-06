@@ -182,6 +182,8 @@ namespace PockeTwit
             this.chkMerge.Size = new System.Drawing.Size(235, 20);
             this.chkMerge.TabIndex = 18;
             this.chkMerge.Text = "Merge all Timelines";
+            this.chkMerge.CheckStateChanged += new System.EventHandler(this.chkMerge_CheckStateChanged);
+            this.chkMerge.Click += new System.EventHandler(this.chkMerge_Click);
             // 
             // UISettings
             // 

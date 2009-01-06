@@ -93,7 +93,8 @@ namespace PockeTwit
                 //SettingsForm settings = new SettingsForm();
                 if (settings.ShowDialog() == DialogResult.Cancel)
                 {
-                    Application.Exit();
+                    statList.Clear();
+                    Manager.ShutDown();
                     this.Close();
                 }
                 
@@ -250,15 +251,10 @@ namespace PockeTwit
             }
             if (settings.NeedsReset)
             {
-                Cursor.Current = Cursors.WaitCursor;
-                ResetDictionaries();
-                CurrentlySelectedAccount = ClientSettings.DefaultAccount;
-
-                CurrentStatuses = new PockeTwit.Library.status[0];
-                statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
+                MessageBox.Show("Your settings changes require that you restart the application.");
                 statList.Clear();
-                SwitchToList("Friends_TimeLine");
-                Cursor.Current = Cursors.Default;
+                Manager.ShutDown();
+                this.Close();
             }
             statList.Redraw();
             settings.Close();
@@ -339,7 +335,14 @@ namespace PockeTwit
 
         private void SetLeftMenu()
         {
-            LeftMenu = new List<string>(new string[] {"Back", "Friends TimeLine", "Messages", "Post Update", "Search/Local","Map These", "Settings", "About/Feedback", "Exit" });
+            if (ClientSettings.MergeMessages)
+            {
+                LeftMenu = new List<string>(new string[] { "Back", "TimeLine", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
+            }
+            else
+            {
+                LeftMenu = new List<string>(new string[] { "Back", "Friends TimeLine", "Messages", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
+            }
             if (History.Count <= 1)
             {
                 LeftMenu.Remove("Back");
@@ -435,7 +438,9 @@ namespace PockeTwit
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
                 if (settings.ShowDialog() == DialogResult.Cancel)
                 {
-                    Application.Exit();
+                    statList.Clear();
+                    Manager.ShutDown();
+                    this.Close();
                 }
                 ResetDictionaries();
             }
@@ -767,6 +772,9 @@ namespace PockeTwit
                     //GetTimeLineAsync();
                     break;
                 case "Reconnect":
+                case "TimeLine":
+                    ShowFriendsTimeLine();
+                    break;
                 case "Friends TimeLine":
                     ShowFriendsTimeLine();
                     

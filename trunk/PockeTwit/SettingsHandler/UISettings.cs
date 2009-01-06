@@ -143,6 +143,24 @@ namespace PockeTwit
             cmbTheme_SelectedIndexChanged(null, new EventArgs());
         }
 
+        private void chkMerge_CheckStateChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void chkMerge_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Changing this will clear the cache.  Are you sure you want to continue?", "Clear Cache?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                TimelineManagement.ClearCaches();
+                this.NeedsReset = true;
+            }
+            else
+            {
+                chkMerge.Checked = !chkMerge.Checked;
+            }
+        }
+
         
     }
 }
