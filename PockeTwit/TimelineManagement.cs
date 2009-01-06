@@ -86,8 +86,11 @@ namespace PockeTwit
             {
                 Progress(0, "Fetching Friends TimeLine");
                 GetFriendsTimeLine();
-                Progress(0, "Fetching Messages TimeLine");
-                GetMessagesTimeLine();
+                if (!ClientSettings.MergeMessages)
+                {
+                    Progress(0, "Fetching Messages TimeLine");
+                    GetMessagesTimeLine();
+                }
                 CompleteLoaded();
             } 
             if (ClientSettings.UpdateMinutes > 0)
@@ -217,6 +220,7 @@ namespace PockeTwit
         }
         private void GetMessagesTimeLine(bool Notify)
         {
+            if (ClientSettings.MergeMessages) { return; }
             if (!GlobalEventHandler.MessagesUpdating)
             {
                 try
@@ -502,6 +506,19 @@ namespace PockeTwit
             {
             }
             return response;
+        }
+
+        public static void ClearCaches()
+        {
+            string[] Caches = System.IO.Directory.GetFiles(ClientSettings.AppPath, "*.xml");
+            foreach (string Cache in Caches)
+            {
+                try
+                {
+                    System.IO.File.Delete(Cache);
+                }
+                catch { };
+            }
         }
 
 

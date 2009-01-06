@@ -39,17 +39,10 @@ namespace PockeTwit.SettingsHandler
         {
             if (MessageBox.Show("Are you sure you want to delete all cached statuses?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                string[] Caches = System.IO.Directory.GetFiles(ClientSettings.AppPath, "*.xml");
-                foreach (string Cache in Caches)
-                {
-                    try
-                    {
-                        System.IO.File.Delete(Cache);
-                    }
-                    catch { };
-                }
+                TimelineManagement.ClearCaches();
             }
         }
+
 
         private void lnkClearSettings_Click(object sender, EventArgs e)
         {
