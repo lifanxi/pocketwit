@@ -67,6 +67,7 @@ namespace FingerUI
         int m_itemHeight = 40;
         public ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
+        Dictionary<string, string> LastSelectedItems = new Dictionary<string, string>();
         int m_itemWidth = 240;
         // Properties
         int m_maxVelocity = 45;
@@ -462,6 +463,19 @@ namespace FingerUI
         }
         public void SwitchTolist(string ListName)
         {
+            string thisList = CurrentList();
+            if (!string.IsNullOrEmpty(thisList))
+            {
+                if (!LastSelectedItems.ContainsKey(thisList))
+                {
+                    LastSelectedItems.Add(thisList, "");
+                }
+                if (SelectedItem != null)
+                {
+                    LastSelectedItems[thisList] = SelectedItem.Tweet.id;
+                }
+
+            }
             if (!ItemLists.ContainsKey(ListName))
             {
                 ItemLists.Add(ListName, new ItemList());
@@ -469,6 +483,28 @@ namespace FingerUI
             _CurrentList = ListName;
             m_items = ItemLists[ListName];
             Reset();
+        }
+
+        public void JumpToLastSelected()
+        {
+            if (LastSelectedItems.ContainsKey(CurrentList()))
+            {
+                string jumpID = LastSelectedItems[CurrentList()];
+                if (!string.IsNullOrEmpty(jumpID))
+                {
+                    for (int i = 0; i < m_items.Count; i++)
+                    {
+                        if (m_items[i].Tweet.id == jumpID)
+                        {
+                            m_selectedIndex = i;
+                            SelectAndJump();
+                            break;
+                        }
+                    }
+                }
+                return;
+            }
+            SetSelectedIndexToZero();
         }
 
         public void AddItem(string text, object value)
