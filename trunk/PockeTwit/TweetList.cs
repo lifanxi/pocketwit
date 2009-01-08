@@ -206,7 +206,8 @@ namespace PockeTwit
                 }
                 else
                 {
-                    statList.SetSelectedIndexToZero();
+                    statList.JumpToLastSelected();
+                    //statList.SetSelectedIndexToZero();
                     currentItem = (FingerUI.StatusItem)statList[0];
                 }
                 if (currentItem != null)
