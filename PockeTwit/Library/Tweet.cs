@@ -20,6 +20,7 @@ namespace PockeTwit.Library
     [Serializable]
     public class status : IComparable
     {
+        private static IFormatProvider format = new System.Globalization.CultureInfo(1033);
         [XmlIgnore]
         private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
         private static XmlSerializer singleSerializer = new XmlSerializer(typeof(Library.status));
@@ -70,28 +71,21 @@ namespace PockeTwit.Library
             get { return _created_at; }
             set
             {
-                IFormatProvider format = new System.Globalization.CultureInfo(1033);
                 _created_at = value;
                 try
                 {
-                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd HH:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
+                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
                 }
                 catch(Exception ex)
                 {
+                    //Search results come in a different format :(
                     try
                     {
-                        createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
+                        createdAt = DateTime.Parse(created_at, format, System.Globalization.DateTimeStyles.AssumeUniversal);
                     }
-                    catch (Exception exx)
+                    catch
                     {
-                        try
-                        {
-                            createdAt = DateTime.Parse(created_at, format, System.Globalization.DateTimeStyles.AssumeUniversal);
-                        }
-                        catch
-                        {
-                            createdAt = new DateTime(2000, 1, 1);
-                        }
+                        createdAt = new DateTime(2000, 1, 1);
                     }
                 }
             }
