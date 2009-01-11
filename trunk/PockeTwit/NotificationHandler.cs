@@ -159,6 +159,7 @@ namespace PockeTwit
 
         private void ShowNotifications()
         {
+            if (GlobalEventHandler.isInForeground()) { return; }
             MessagesBubbler.Visible = false;
             if (NewFriendsCount > 0 && NewMessagesCount > 0)
             {
