@@ -32,6 +32,35 @@ namespace PockeTwit
         public static event delTimelineIsDone TimeLineDone;
         public static event delshowErrorMessage ShowErrorMessage = delegate { };
 
+        static GlobalEventHandler()
+        {
+            if (System.IO.File.Exists(ClientSettings.AppPath + "\\commerrors.txt"))
+            {
+                System.IO.File.Delete(ClientSettings.AppPath + "\\commerrors.txt");
+            }
+        }
+
+        public static void LogCommError(Exception ex)
+        {
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\commerrors.txt", true))
+            {
+                w.WriteLine("____");
+                w.WriteLine(DateTime.Now.ToString());
+                w.WriteLine(ex.Message);
+                w.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public static void CallShowErrorMessage(string Message, Exception ex)
+        {
+            using (System.IO.StreamWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\commerrors.txt", true))
+            {
+                w.WriteLine("____");
+                w.WriteLine(DateTime.Now.ToString());
+                w.WriteLine(ex.Message);
+            }
+            CallShowErrorMessage(Message);
+        }
         public static void CallShowErrorMessage(string Message)
         {
             ShowErrorMessage(Message);

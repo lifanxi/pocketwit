@@ -10,7 +10,7 @@ namespace FingerUI
     public class KListControl : UserControl
     {
         private FullScreenTweet fsDisplay = new FullScreenTweet();
-
+        private System.Windows.Forms.Timer animationTimer = new System.Windows.Forms.Timer();
 
         private class Velocity
         {
@@ -106,6 +106,9 @@ namespace FingerUI
 
         public KListControl()
         {
+            animationTimer.Interval = ClientSettings.AnimationInterval;
+            animationTimer.Tick += new EventHandler(animationTimer_Tick);
+
             NotificationArea.TextFont = this.Font;
             NotificationArea.parentControl = this;
 
@@ -139,7 +142,7 @@ namespace FingerUI
         void GlobalEventHandler_ShowErrorMessage(string Message)
         {
             ErrorPopup.ShowNotification(Message);
-            ErrorPopup.Pause = 100;
+            ErrorPopup.Pause = 50;
         }
 
         void SlidingPortal_NewImage()
@@ -452,8 +455,23 @@ namespace FingerUI
 		#endregion Delegates and Events 
 
 		#region Methods (49) 
+        void animationTimer_Tick(object sender, EventArgs e)
+        {
+            this.Repaint();
+        }
 
+        public void startAnimation()
+        {
+            this.animationTimer.Enabled = true;
+        }
 
+        public void stopAnimation()
+        {
+            if (!NotificationArea.isAnimating && ErrorPopup.isAnimating)
+            {
+                animationTimer.Enabled = false;
+            }
+        }
 		// Public Methods (16) 
 
         private string _CurrentList = null;
