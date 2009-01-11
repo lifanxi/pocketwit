@@ -114,8 +114,6 @@ public static class ClientSettings
 
     public static bool IsMaximized { get; set; }
 
-    public static bool BeepOnNew { get; set; }
-
     public static bool CheckVersion { get; set; }
 
     public static string DistancePreference { get; set; }
@@ -277,14 +275,6 @@ public static class ClientSettings
                 CheckVersion = true;
             }
 
-            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["BeepOnNew"]))
-            {
-                BeepOnNew = bool.Parse(ConfigurationSettings.AppSettings["BeepOnNew"]);
-            }
-            else
-            {
-                BeepOnNew = false;
-            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowExtra"]))
             {
                 ShowExtra = bool.Parse(ConfigurationSettings.AppSettings["ShowExtra"]);
@@ -360,7 +350,6 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["UseGPS"] = UseGPS.ToString();
         ConfigurationSettings.AppSettings["IsMaximized"] = IsMaximized.ToString();
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
-        ConfigurationSettings.AppSettings["BeepOnNew"] = BeepOnNew.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
         ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();

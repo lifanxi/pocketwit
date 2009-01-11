@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace PockeTwit
 {
@@ -31,6 +32,30 @@ namespace PockeTwit
         public static event delTimelineIsFetching TimeLineFetching;
         public static event delTimelineIsDone TimeLineDone;
         public static event delshowErrorMessage ShowErrorMessage = delegate { };
+
+        private static uint thisPid;
+
+        [DllImport("coredll.dll", SetLastError = true)]
+        private static extern IntPtr GetForegroundWindow();
+
+
+
+        [DllImport("coredll.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint lpdwProcessId);
+
+        public static void setPid()
+        {
+            IntPtr forePtr = GetForegroundWindow();
+            GetWindowThreadProcessId(forePtr, out thisPid);
+        }
+
+        public static bool isInForeground()
+        {
+            IntPtr forePtr = GetForegroundWindow();
+            uint pID;
+            GetWindowThreadProcessId(forePtr, out pID);
+            return pID == thisPid;
+        }
 
         static GlobalEventHandler()
         {

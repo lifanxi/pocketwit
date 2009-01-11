@@ -56,7 +56,7 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
@@ -313,10 +313,6 @@ namespace PockeTwit
         }
 
         
-        [System.Runtime.InteropServices.DllImport("coredll.dll", EntryPoint = "MessageBeep", SetLastError = true)]
-        private static extern void MessageBeep(int type);
-
-
         private void SendDirectMessage()
         {
             if (statList.SelectedItem == null) { return; }
@@ -527,18 +523,7 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
             }
-            if (this.IsFocused())
-            {
-                if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-            }
-            else
-            {
-                if (Notifyer != null)
-                {
-                    Notifyer.NewMessages(count);
-                }
-            }
-            
+            Notifyer.NewMessages(count);
         }
 
         void Manager_FriendsUpdated(int count)
@@ -547,17 +532,7 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
             }
-            if (this.IsFocused())
-            {
-                    if (ClientSettings.BeepOnNew) { MessageBeep(0); }
-            }
-            else
-            {
-                if (Notifyer != null)
-                {
-                    Notifyer.NewFriendMessages(count);
-                }
-            }
+            Notifyer.NewFriendMessages(count);
         }
 
         private void MapList()
@@ -1146,7 +1121,9 @@ namespace PockeTwit
 
             //lblLoading.Visible = false;
             //lblTitle.Visible = false;
-            
+
+            GlobalEventHandler.setPid();
+
             statList.Visible = true;
             statList.BringToFront();
             SwitchToList("Friends_TimeLine");
@@ -1251,6 +1228,7 @@ namespace PockeTwit
             {
                 inputPanel1.Enabled = false;
             }
+            GlobalEventHandler.setPid();
             if (!IsLoaded)
             {
                 return;

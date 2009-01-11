@@ -50,7 +50,6 @@ namespace PockeTwit
             IFormatProvider format = new System.Globalization.CultureInfo(1033);
             ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
-            ClientSettings.BeepOnNew = chkBeep.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
@@ -74,7 +73,6 @@ namespace PockeTwit
         {
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
-            chkBeep.Checked = ClientSettings.BeepOnNew;
             txtUpdate.Text = ClientSettings.UpdateMinutes.ToString();
             chkTranslate.Checked = ClientSettings.AutoTranslate;
             chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;

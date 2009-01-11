@@ -67,9 +67,9 @@ namespace PockeTwit
             
             bool bBackGround = Args.Length > 0;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             ClientSettings.LoadSettings();
             Application.Run(new TweetList(bBackGround));
-            
         }
 
 
