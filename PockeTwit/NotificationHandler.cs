@@ -203,16 +203,21 @@ namespace PockeTwit
             MessagesBubbler.Visible = false;
             NewFriendsCount += Count;
             LoadSettings();
-            if ((Friends.Options & Options.Sound) == Options.Sound)
-            {
-                Sound s = new Sound(Friends.Sound);
-                s.Play();
-            }
+            
             if ((Friends.Options & Options.Vibrate) == Options.Vibrate)
             {
                 VibrateStart();
-                System.Threading.Thread.Sleep(1000);
+                if ((Friends.Options & Options.Sound) == Options.Sound)
+                {
+                    Sound s = new Sound(Friends.Sound);
+                    s.Play();
+                }
                 VibrateStop();
+            }
+            else if ((Friends.Options & Options.Sound) == Options.Sound)
+            {
+                Sound s = new Sound(Friends.Sound);
+                s.Play();
             }
             if (Count > 0)
             {
@@ -228,16 +233,21 @@ namespace PockeTwit
         {
             NewMessagesCount += Count;
             LoadSettings();
-            if ((Messages.Options & Options.Sound) == Options.Sound)
-            {
-                Sound s = new Sound(Messages.Sound);
-                s.Play();
-            }
+
             if ((Messages.Options & Options.Vibrate) == Options.Vibrate)
             {
                 VibrateStart();
-                System.Threading.Thread.Sleep(1000);
+                if ((Messages.Options & Options.Sound) == Options.Sound)
+                {
+                    Sound s = new Sound(Messages.Sound);
+                    s.Play();
+                }
                 VibrateStop();
+            }
+            else if ((Messages.Options & Options.Sound) == Options.Sound)
+            {
+                Sound s = new Sound(Messages.Sound);
+                s.Play();
             }
             if (Count > 0)
             {
