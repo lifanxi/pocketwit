@@ -413,6 +413,7 @@ namespace Yedda
                 //
                 // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
                 //
+                PockeTwit.GlobalEventHandler.LogCommError(ex);
                 if (ex.Response is HttpWebResponse)
                 {
                     try
@@ -486,6 +487,7 @@ namespace Yedda
             }
             catch (WebException ex)
             {
+                PockeTwit.GlobalEventHandler.LogCommError(ex);
                 //
                 // Handle HTTP 404 errors gracefully and return a null string to indicate there is no content.
                 //
@@ -605,6 +607,7 @@ namespace Yedda
                 }
                 catch(Exception ex)
                 {
+                    PockeTwit.GlobalEventHandler.LogCommError(ex);
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 try
@@ -624,6 +627,7 @@ namespace Yedda
                     //
                     if (ex.Response is HttpWebResponse)
                     {
+                        PockeTwit.GlobalEventHandler.LogCommError(ex);
                         if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                         {
                             return null;
@@ -1187,7 +1191,6 @@ namespace Yedda
             }
             catch(WebException)
             {
-            
             }
             return false;
         }

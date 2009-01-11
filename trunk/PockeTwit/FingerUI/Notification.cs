@@ -7,6 +7,7 @@ namespace FingerUI
 {
     class NotificationPopup
     {
+        
         public bool AtTop = false;
         private string _DisplayText;
         public Font TextFont;
@@ -34,19 +35,14 @@ namespace FingerUI
         public int Pause = -1;
         private int MaxHeight = ClientSettings.TextSize + (ClientSettings.Margin * 2);
         public KListControl parentControl;
-        private System.Windows.Forms.Timer animationTimer = new System.Windows.Forms.Timer();
+        
         public NotificationPopup()
         {
-            animationTimer.Interval = ClientSettings.AnimationInterval;
-            animationTimer.Tick += new EventHandler(animationTimer_Tick);
+            
         }
 
         
 
-        void animationTimer_Tick(object sender, EventArgs e)
-        {
-            parentControl.Invalidate();
-        }
         
         
         public void ShowNotification(string Text)
@@ -54,7 +50,7 @@ namespace FingerUI
             if (!Visibility)
             {
                 _DisplayText = Text;
-                animationTimer.Enabled = true;
+                parentControl.startAnimation();
                 Visibility = true;
             }
             else
@@ -71,6 +67,13 @@ namespace FingerUI
             if (Pause <= 0)
             {
                 Visibility = false;
+            }
+        }
+        public bool isAnimating
+        {
+            get
+            {
+                return (AnimationStep != 0 && Pause != 0 && !Visibility);
             }
         }
         public void DrawNotification(Graphics g, int Bottom, int Width)
@@ -101,7 +104,7 @@ namespace FingerUI
                         AnimationStep = AnimationStep - AnimationPixels;
                     }
                 }
-                else { animationTimer.Enabled = false; }
+                else { parentControl.stopAnimation(); }
 
             }
             if (AnimationStep > 0)
