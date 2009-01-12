@@ -9,6 +9,7 @@ namespace PockeTwit
     public  class Following
     {
 
+        private static XmlSerializer userSerializer = new XmlSerializer(typeof(Library.User[]));
         public Yedda.Twitter TwitterConnection { get; set; }
         public delegate void delFollowers(Yedda.Twitter ConnectionDone);
         public event delFollowers FollowersDone;
@@ -124,7 +125,6 @@ namespace PockeTwit
 
         private  void InterpretUsers(string response)
         {
-            XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
             Library.User[] friends;
             if (string.IsNullOrEmpty(response))
             {
@@ -134,7 +134,7 @@ namespace PockeTwit
             {
                 using (System.IO.StringReader r = new System.IO.StringReader(response))
                 {
-                    friends = (Library.User[])s.Deserialize(r);
+                    friends = (Library.User[])userSerializer.Deserialize(r);
                     FollowedUsers = new List<PockeTwit.Library.User>(friends);
                 }
             }
@@ -147,7 +147,7 @@ namespace PockeTwit
             XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
             using (System.IO.StreamWriter w = new System.IO.StreamWriter(location))
             {
-                s.Serialize(w, FollowedUsers.ToArray());
+                userSerializer.Serialize(w, FollowedUsers.ToArray());
             }
         }
 

@@ -13,6 +13,10 @@ namespace FingerUI
 
         public static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>',')' };
 
+        private static System.Text.RegularExpressions.Regex GetClickables =
+            new System.Text.RegularExpressions.Regex(@"(http://([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?)|(@\w+)|(#\w+)", 
+                System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
 		#region�Fields�(15)�
 
         private Graphics _ParentGraphics;
@@ -718,9 +722,12 @@ namespace FingerUI
             }
         }
 
+        
+
         private void FirstClickableRun(string text)
         {
             Tweet.Clickables = new List<Clickable>();
+            /*
             string[] words = text.Split(new char[] { ' ' });
             foreach (string word in words)
             {
@@ -730,6 +737,14 @@ namespace FingerUI
                     c.Text = word.TrimEnd(IgnoredAtChars);
                     Tweet.Clickables.Add(c);
                 }
+            }
+             */
+            System.Text.RegularExpressions.MatchCollection m = GetClickables.Matches(text);
+            foreach (System.Text.RegularExpressions.Match match in m)
+            {
+                Clickable c = new Clickable();
+                c.Text = match.Value;
+                Tweet.Clickables.Add(c);
             }
         }
 
