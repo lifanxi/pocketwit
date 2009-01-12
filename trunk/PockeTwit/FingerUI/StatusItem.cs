@@ -610,7 +610,7 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
-            if (!ClientSettings.UseClickables) { return; }
+            if (!ClientSettings.UseClickables) { FirstClickableRun(CurrentLine); return; }
             if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
                 //How could this happen!  We have no texts!
