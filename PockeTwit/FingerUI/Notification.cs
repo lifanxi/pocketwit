@@ -128,12 +128,7 @@ namespace FingerUI
                             boxPos = new Rectangle(Left, Bottom - AnimationStep, Width, ClientSettings.TextSize + (ClientSettings.Margin * 2));
                             textPos = new Rectangle(Left + ClientSettings.Margin, (Bottom - AnimationStep) + ClientSettings.Margin, Width - ClientSettings.Margin, ClientSettings.TextSize + ClientSettings.Margin);
                         }
-                        //Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                        using(Brush backBrush = new SolidBrush(ClientSettings.BackColor))
-                        {
-                            g.FillRectangle(backBrush, boxPos);
-                        }
-                        
+                        Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
                         g.DrawRectangle(p, boxPos);
                         g.DrawString(_DisplayText, TextFont, ForeBrush, textPos);
                     }
