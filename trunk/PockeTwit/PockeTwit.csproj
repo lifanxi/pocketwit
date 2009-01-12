@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -373,6 +373,9 @@
       <DependentUpon>AvatarSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\NotificationSettings.resx">
+      <DependentUpon>NotificationSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\OtherSettings.resx">
       <DependentUpon>OtherSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -448,6 +451,12 @@
     </Compile>
     <Compile Include="SettingsHandler\AdvancedForm.Designer.cs">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\NotificationSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\NotificationSettings.Designer.cs">
+      <DependentUpon>NotificationSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="TiledMaps\CompositeTiledMapSession.cs" />
     <Compile Include="TiledMaps\Directions.cs" />

@@ -16,21 +16,21 @@ namespace PockeTwit
         public event delNotificationClicked MessagesNotificationClicked;
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
         [Flags]
-        private enum Options
+        public  enum Options
         {
             Sound = 1,
             Vibrate = 2,
             Flash = 4,
             Message = 8
         }
-        private struct NotificationInfo
+        public struct NotificationInfo
         {
             public Options Options;
             public string Sound;
         }
 
-        private static Options FriendsOptions;
-        private static Options MessagesOptions;
+        public static Options FriendsOptions;
+        public static Options MessagesOptions;
         public static bool NotifyOfFriends
         {
             get
@@ -52,8 +52,8 @@ namespace PockeTwit
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
         public const string MessageTweets = "{B4D35E62-A83F-4add-B421-F7FC28E14310}";
 
-        private NotificationInfo Friends = new NotificationInfo();
-        private NotificationInfo Messages = new NotificationInfo();
+        public static NotificationInfo Friends = new NotificationInfo();
+        public static NotificationInfo Messages = new NotificationInfo();
 
         public NotificationHandler()
         {

@@ -384,26 +384,32 @@ namespace FingerUI
                 textBounds.Width = textBounds.Width - ClientSettings.Margin;
                 textBounds.Height--;
 
-                m_stringFormat.Alignment = StringAlignment.Near;
+                //m_stringFormat.Alignment = StringAlignment.Near;
 
-                m_stringFormat.LineAlignment = StringAlignment.Near;
+                //m_stringFormat.LineAlignment = StringAlignment.Near;
+                
                 BreakUpTheText(g, textBounds);
                 int lineOffset = 0;
 
-
-                for (int i = 0; i < Tweet.SplitLines.Count; i++)
+                if (!ClientSettings.UseClickables)
                 {
-                    if (i >= ClientSettings.LinesOfText)
-                    {
-                        break;
-                    }
-                    float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
-
-                    g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
-                    lineOffset++;
+                    g.DrawString(Tweet.DisplayText, TextFont, ForeBrush, new RectangleF((float)textBounds.Left, (float)textBounds.Top, (float)textBounds.Width, (float)textBounds.Height));
+                    //g.DrawString(Tweet.DisplayText, TextFont, ForeBrush, textBounds.Left, textBounds.Top, m_stringFormat);
                 }
-                if (ClientSettings.UseClickables)
+                else
                 {
+
+                    for (int i = 0; i < Tweet.SplitLines.Count; i++)
+                    {
+                        if (i >= ClientSettings.LinesOfText)
+                        {
+                            break;
+                        }
+                        float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
+
+                        g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
+                        lineOffset++;
+                    }
                     MakeClickable(g, textBounds);
                 }
                 ForeBrush.Dispose();
@@ -538,6 +544,7 @@ namespace FingerUI
         #region Parsing Routines
         private void BreakUpTheTextWithoutSpaces(Graphics g, Rectangle textBounds)
         {
+            if (!ClientSettings.UseClickables) { return; }
             string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText);
             SizeF size = g.MeasureString(CurrentLine, TextFont);
 
@@ -599,6 +606,7 @@ namespace FingerUI
 
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
+            if (!ClientSettings.UseClickables) { return; }
             if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
                 //How could this happen!  We have no texts!
