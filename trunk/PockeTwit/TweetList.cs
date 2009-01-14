@@ -326,6 +326,14 @@ namespace PockeTwit
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
+            if (selectedItem.Tweet.isDirect)
+            {
+                if (MessageBox.Show("Are you sure you want to reply to a Direct Message?", "Repy to DM?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                {
+                    SendDirectMessage();
+                    return;
+                }
+            }
             SetStatus("@"+User, selectedItem.Tweet.id);
         }
 
