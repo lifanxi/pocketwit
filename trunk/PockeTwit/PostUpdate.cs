@@ -360,10 +360,14 @@ namespace PockeTwit
         }
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            if (!string.IsNullOrEmpty(this.txtStatusUpdate.Text))
             {
-                this.DialogResult = DialogResult.Cancel;
+                if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
+                {
+                    return;
+                }
             }
+            this.DialogResult = DialogResult.Cancel;
         }
         void pictureLocation_Click(object sender, EventArgs e)
         {

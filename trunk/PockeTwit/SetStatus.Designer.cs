@@ -313,9 +313,9 @@ namespace PockeTwit
             lblGPS.Location = chkGPS.Location;
             lblGPS.Size = chkGPS.Size;
 
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
-            
+
             this.menuItem1.MenuItems.Add(this.menuSubmit);
+            this.mainMenu1.MenuItems.Add(this.menuCancel);
             this.menuItem1.MenuItems.Add(menuURL);
             this.menuItem1.MenuItems.Add(menuExist);
             this.menuItem1.MenuItems.Add(menuCamera);
