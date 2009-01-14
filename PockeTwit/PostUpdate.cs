@@ -293,7 +293,7 @@ namespace PockeTwit
                         TwitPicFile = c.FileName;
                         UseTwitPic = true;
                         
-                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
+                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                         this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
                         if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
@@ -318,7 +318,7 @@ namespace PockeTwit
                 UseTwitPic = true;
                 //if (cameraPictureBox.Visible)
                 //{
-                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStatus));
+                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                 this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                 if (DetectDevice.DeviceType == DeviceType.Standard)
                 {
