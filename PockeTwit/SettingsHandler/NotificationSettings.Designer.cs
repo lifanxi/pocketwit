@@ -30,20 +30,23 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
+            this.mnuDone = new System.Windows.Forms.MenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbNotificationType = new System.Windows.Forms.ComboBox();
             this.chkPlaySound = new System.Windows.Forms.CheckBox();
             this.cmbSound = new System.Windows.Forms.ComboBox();
             this.lblSound = new System.Windows.Forms.Label();
             this.chkVibrate = new System.Windows.Forms.CheckBox();
-            this.mnuDone = new System.Windows.Forms.MenuItem();
-            this.mnuCancel = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.Add(this.mnuDone);
-            this.mainMenu1.MenuItems.Add(this.mnuCancel);
+            // 
+            // mnuDone
+            // 
+            this.mnuDone.Text = "Done";
+            this.mnuDone.Click += new System.EventHandler(this.mnuDone_Click);
             // 
             // label1
             // 
@@ -75,6 +78,8 @@
             this.chkPlaySound.Size = new System.Drawing.Size(100, 20);
             this.chkPlaySound.TabIndex = 2;
             this.chkPlaySound.Text = "Play Sound";
+            this.chkPlaySound.CheckStateChanged += new System.EventHandler(this.chkPlaySound_CheckStateChanged);
+            this.chkPlaySound.Click += new System.EventHandler(this.chkPlaySound_Click);
             // 
             // cmbSound
             // 
@@ -84,6 +89,7 @@
             this.cmbSound.Name = "cmbSound";
             this.cmbSound.Size = new System.Drawing.Size(233, 22);
             this.cmbSound.TabIndex = 3;
+            this.cmbSound.SelectedIndexChanged += new System.EventHandler(this.cmbSound_SelectedIndexChanged);
             // 
             // lblSound
             // 
@@ -103,14 +109,8 @@
             this.chkVibrate.Size = new System.Drawing.Size(236, 20);
             this.chkVibrate.TabIndex = 5;
             this.chkVibrate.Text = "Vibrate";
-            // 
-            // mnuDone
-            // 
-            this.mnuDone.Text = "Done";
-            // 
-            // mnuCancel
-            // 
-            this.mnuCancel.Text = "Cancel";
+            this.chkVibrate.CheckStateChanged += new System.EventHandler(this.chkVibrate_CheckStateChanged);
+            this.chkVibrate.Click += new System.EventHandler(this.chkVibrate_Click);
             // 
             // NotificationSettings
             // 
@@ -140,6 +140,5 @@
         private System.Windows.Forms.Label lblSound;
         private System.Windows.Forms.CheckBox chkVibrate;
         private System.Windows.Forms.MenuItem mnuDone;
-        private System.Windows.Forms.MenuItem mnuCancel;
     }
 }
