@@ -31,11 +31,21 @@ namespace PockeTwit
             }
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                SetPasteMenu();
+                SetPasteMenuProfesional();
+            }
+            else
+            {
+
             }
         }
+        private void SetPasteMenuStandard()
+        {
+            pasteItem = new MenuItem();
+            pasteItem.Text = "Paste";
+            pasteItem.Click+=new EventHandler(pasteItem_Click);
+        }
 
-        private void SetPasteMenu()
+        private void SetPasteMenuProfesional()
         {
             contextMen = new ContextMenu();
             pasteItem = new MenuItem();

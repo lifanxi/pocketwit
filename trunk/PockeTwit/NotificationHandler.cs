@@ -16,7 +16,7 @@ namespace PockeTwit
         public event delNotificationClicked MessagesNotificationClicked;
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
         [Flags]
-        public  enum Options
+        public enum Options
         {
             Sound = 1,
             Vibrate = 2,
@@ -25,6 +25,7 @@ namespace PockeTwit
         }
         public struct NotificationInfo
         {
+            public string GUID;
             public Options Options;
             public string Sound;
         }
@@ -57,9 +58,10 @@ namespace PockeTwit
 
         public NotificationHandler()
         {
+            MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
+                //MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 MessagesBubbler.Icon = Properties.Resources.MyIco;
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
                 MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
@@ -133,29 +135,46 @@ namespace PockeTwit
                 MessagesOptions = (Options)MessageKey.GetValue("Options");
             }
         }
-        public void LoadSettings()
+        public static void LoadSettings()
         {
+            Friends.GUID = FriendsTweets;
+            Messages.GUID = MessageTweets;
             RegistryKey FriendsKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
             RegistryKey MessageKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
-            if (FriendsKey == null)
+            if (FriendsKey != null)
             {
-                return;
+                Friends.Sound = (string)FriendsKey.GetValue("Wave");
+                if (FriendsKey.GetValue("Options") != null)
+                {
+                    Friends.Options = (Options)FriendsKey.GetValue("Options");
+                    FriendsOptions = Friends.Options;
+                }
             }
-            Friends.Sound = (string)FriendsKey.GetValue("Wave");
-            Messages.Sound = (string)MessageKey.GetValue("Wave");
 
-            if (FriendsKey.GetValue("Options")!=null)
+            if (MessageKey != null)
             {
-                Friends.Options = (Options)FriendsKey.GetValue("Options");
-                FriendsOptions = Friends.Options;
-            }
-            if (MessageKey.GetValue("Options") != null)
-            {
-                Messages.Options = (Options)MessageKey.GetValue("Options");
-                MessagesOptions = Messages.Options;
+                Messages.Sound = (string)MessageKey.GetValue("Wave");
+
+                if (MessageKey.GetValue("Options") != null)
+                {
+                    Messages.Options = (Options)MessageKey.GetValue("Options");
+                    MessagesOptions = Messages.Options;
+                }
             }
         }
 
+        public static void SaveSettings(NotificationInfo InfoSet)
+        {
+            RegistryKey TheKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + InfoSet.GUID, true);
+            if (TheKey == null)
+            {
+                TheKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + InfoSet.GUID);
+            }
+            TheKey.SetValue("Wave", InfoSet.Sound);
+            
+            TheKey.SetValue("Options", (int)InfoSet.Options);
+            LoadSettings();
+        }
 
         private void ShowNotifications()
         {

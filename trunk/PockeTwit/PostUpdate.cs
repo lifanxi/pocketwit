@@ -219,11 +219,15 @@ namespace PockeTwit
             this.menuGPS = new MenuItem();
             menuGPS.Text = "Update Location";
             menuGPS.Click += new EventHandler(menuGPS_Click);
+            this.PasteItem = new MenuItem();
+            this.PasteItem.Text = "Paste";
+            PasteItem.Click += new EventHandler(PasteItem_Click);
 
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem1.Text = "Action";
 
             this.menuItem1.MenuItems.Add(this.menuSubmit);
+            this.menuItem1.MenuItems.Add(PasteItem);
             this.menuItem1.MenuItems.Add(menuURL);
             this.menuItem1.MenuItems.Add(menuExist);
             this.menuItem1.MenuItems.Add(menuCamera);
@@ -316,8 +320,7 @@ namespace PockeTwit
             {
                 TwitPicFile = s.FileName;
                 UseTwitPic = true;
-                //if (cameraPictureBox.Visible)
-                //{
+                
                 System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                 this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                 if (DetectDevice.DeviceType == DeviceType.Standard)
@@ -325,7 +328,6 @@ namespace PockeTwit
                     this.pictureFromCamers.Visible = false;
                 }
                 AddPictureToForm(s.FileName, pictureFromStorage);
-                //}
             }
         }
 

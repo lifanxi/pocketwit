@@ -84,10 +84,18 @@ namespace PockeTwit
 
         private void linkLabel1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.ProcessStartInfo ps = new System.Diagnostics.ProcessStartInfo("\\Windows\\ctlpnl.exe", "cplmain.cpl,9,1");
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo = ps;
-            p.Start();
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                System.Diagnostics.ProcessStartInfo ps = new System.Diagnostics.ProcessStartInfo("\\Windows\\ctlpnl.exe", "cplmain.cpl,9,1");
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo = ps;
+                p.Start();
+            }
+            else
+            {
+                SettingsHandler.NotificationSettings n = new PockeTwit.SettingsHandler.NotificationSettings();
+                n.ShowDialog();
+            }
         }
 
     }
