@@ -29,23 +29,40 @@ namespace PockeTwit
             {
                 this.WindowState = FormWindowState.Maximized;
             }
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
-                SetPasteMenuProfesional();
+                ProfesionalMenus();
             }
             else
             {
-
+                StandardMenus();
             }
         }
-        private void SetPasteMenuStandard()
+        private void StandardMenus()
         {
             pasteItem = new MenuItem();
             pasteItem.Text = "Paste";
             pasteItem.Click+=new EventHandler(pasteItem_Click);
+
+            this.mnuCancel.Text = "Cancel";
+            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
+
+            MenuItem SubmitItem = new MenuItem();
+            SubmitItem.Text = "Submit";
+            SubmitItem.Click += new EventHandler(menuOK_Click);
+            
+
+            mnuAction.MenuItems.Add(pasteItem);
+            mnuAction.MenuItems.Add(SubmitItem);
+
+            this.mnuAction.Text = "Action";
+
+            this.mainMenu1.MenuItems.Add(this.mnuAction);
+            this.mainMenu1.MenuItems.Add(this.mnuCancel);
         }
 
-        private void SetPasteMenuProfesional()
+        private void ProfesionalMenus()
         {
             contextMen = new ContextMenu();
             pasteItem = new MenuItem();
@@ -53,6 +70,16 @@ namespace PockeTwit
             contextMen.MenuItems.Add(pasteItem);
             this.txtURL.ContextMenu = contextMen;
             pasteItem.Click += new EventHandler(pasteItem_Click);
+
+            this.mnuCancel.Text = "Cancel";
+            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
+
+            this.mnuAction.Text = "Ok";
+            this.mnuAction.Click += new System.EventHandler(this.menuCancel_Click);
+           
+
+            this.mainMenu1.MenuItems.Add(this.mnuAction);
+            this.mainMenu1.MenuItems.Add(this.mnuCancel);
         }
 
         void pasteItem_Click(object sender, EventArgs e)

@@ -10,7 +10,7 @@ namespace PockeTwit
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.MainMenu mainMenu1;
-        private System.Windows.Forms.MenuItem mnuOK;
+        private System.Windows.Forms.MenuItem mnuAction;
         private System.Windows.Forms.MenuItem mnuCancel;
         private System.Windows.Forms.TextBox txtURL;
 
@@ -48,25 +48,21 @@ namespace PockeTwit
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.mnuCancel = new System.Windows.Forms.MenuItem();
-            this.mnuOK = new System.Windows.Forms.MenuItem();
+            this.mnuAction = new System.Windows.Forms.MenuItem();
             this.txtURL = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.mnuOK);
-            this.mainMenu1.MenuItems.Add(this.mnuCancel);
+           
             // 
             // mnuCancel
             // 
-            this.mnuCancel.Text = "Cancel";
-            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
+           
             // 
             // mnuOK
             // 
-            this.mnuOK.Text = "Ok";
-            this.mnuOK.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // txtURL
             // 
