@@ -162,5 +162,10 @@ namespace PockeTwit
             pi.UseShellExecute = true;
             System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
         }
+
+        private void chkDefault_CheckStateChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

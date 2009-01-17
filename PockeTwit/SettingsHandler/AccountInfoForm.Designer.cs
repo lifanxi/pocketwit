@@ -89,7 +89,7 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(232, 21);
-            this.txtPassword.TabIndex = 2;
+            this.txtPassword.TabIndex = 3;
             // 
             // lblPassword
             // 
@@ -138,15 +138,16 @@
             this.chkDefault.Location = new System.Drawing.Point(5, 154);
             this.chkDefault.Name = "chkDefault";
             this.chkDefault.Size = new System.Drawing.Size(100, 20);
-            this.chkDefault.TabIndex = 5;
+            this.chkDefault.TabIndex = 4;
             this.chkDefault.Text = "Default";
+            this.chkDefault.CheckStateChanged += new System.EventHandler(this.chkDefault_CheckStateChanged);
             // 
             // linkLabel1
             // 
             this.linkLabel1.Location = new System.Drawing.Point(5, 102);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(100, 20);
-            this.linkLabel1.TabIndex = 10;
+            this.linkLabel1.TabIndex = 2;
             this.linkLabel1.Text = "Get my ping key";
             this.linkLabel1.Visible = false;
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
