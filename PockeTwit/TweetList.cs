@@ -208,7 +208,6 @@ namespace PockeTwit
                 else
                 {
                     statList.JumpToLastSelected();
-                    //statList.SetSelectedIndexToZero();
                     currentItem = (FingerUI.StatusItem)statList[0];
                 }
                 if (currentItem != null)
@@ -217,7 +216,7 @@ namespace PockeTwit
                     UpdateRightMenu();
                 }
                 statList.RerenderPortal();
-                statList.Repaint();
+                statList.Redraw();
             }
         }
 

@@ -844,7 +844,7 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    m_velocity.X = (this.Width/10);
+                    m_velocity.X = (this.Width / 2);
                     XOffset =  XOffset + 3;
                     m_timer.Enabled = true;
                 }
@@ -858,7 +858,7 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    m_velocity.X = -(this.Width / 10);
+                    m_velocity.X = -(this.Width / 2);
                     XOffset = XOffset - 3;
                     m_timer.Enabled = true;
                 }
