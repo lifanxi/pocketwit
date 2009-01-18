@@ -34,8 +34,6 @@ namespace PockeTwit
         private Dictionary<Yedda.Twitter.Account, string> LastReplyID = new Dictionary<Yedda.Twitter.Account, string>();
         private Dictionary<Yedda.Twitter.Account, string> LastDirectID = new Dictionary<Yedda.Twitter.Account, string>();
         private LargeIntervalTimer updateTimer = new LargeIntervalTimer();
-        //private System.Threading.Timer messagesTimerUpdate = new System.Threading.Timer(null, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-        //private System.Threading.Timer friendsTimerUpdate = new System.Threading.Timer(null, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
         private int HoldNewFriends = 0;
@@ -60,14 +58,16 @@ namespace PockeTwit
             }
             Progress(0, "Loading Cache");
             LoadCachedtimeline(TimeLineType.Friends, "Friends");
-            foreach (Library.status stat in TimeLines[TimeLineType.Friends])
+            for (int i = TimeLines[TimeLineType.Friends].Count-1; i >=0 ; i--)
             {
+                Library.status stat = TimeLines[TimeLineType.Friends][i];
                 LastStatusID[stat.Account] = stat.id;
             }
-
             LoadCachedtimeline(TimeLineType.Messages, "Messages");
-            foreach (Library.status stat in TimeLines[TimeLineType.Messages])
+
+            for (int i = TimeLines[TimeLineType.Messages].Count - 1; i >= 0; i--)
             {
+                Library.status stat = TimeLines[TimeLineType.Messages][i];
                 if (stat.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
                 {
                     LastDirectID[stat.Account] = stat.id;
@@ -464,7 +464,7 @@ namespace PockeTwit
                         {
                             response = t.GetFriendsTimeline(Yedda.Twitter.OutputFormatType.XML);
                         }
-                        else
+else
                         {
                             if (string.IsNullOrEmpty(LastStatusID[t.AccountInfo]))
                             {
