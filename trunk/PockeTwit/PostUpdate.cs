@@ -170,12 +170,39 @@ namespace PockeTwit
                     l.StopGPS();
                     this.GPSLocation = Location;
                     lblGPS.Text = "Location Found";
+                    if (DetectDevice.DeviceType == DeviceType.Standard)
+                    {
+                        // just enable the menuItem
+                        if (null != menuGPSInsert)
+                        {
+                            menuGPSInsert.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        // hide the label, add a new button
+                        lblGPS.Visible = false;
+                        LinkLabel llGPS = new LinkLabel();
+                        llGPS.Text = "Ins. GPS Link";
+                        llGPS.ForeColor = Color.White;
+                        llGPS.Left = lblGPS.Left;
+                        llGPS.Top = lblGPS.Top;
+                        llGPS.Height = lblGPS.Height;
+                        llGPS.Width = lblGPS.Width;
+                        llGPS.Click += new EventHandler(llGPS_Click);
+                        this.Controls.Add(llGPS);
+                    }
                 }
             }
         }
 
-        private void StartLocating()
+        void llGPS_Click(object sender, EventArgs e)
         {
+            InsertGpsLocation();
+        }
+
+        private void StartLocating()
+        {   
             //StartAnimation
             l.StartGPS();
             pictureLocation.Visible = false;
@@ -196,6 +223,7 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuCamera;
         private System.Windows.Forms.MenuItem menuURL;
         private System.Windows.Forms.MenuItem menuGPS;
+        private System.Windows.Forms.MenuItem menuGPSInsert;
         private System.Windows.Forms.MenuItem menuItem1;
         private void SmartPhoneMenu()
         {
@@ -219,6 +247,12 @@ namespace PockeTwit
             this.menuGPS = new MenuItem();
             menuGPS.Text = "Update Location";
             menuGPS.Click += new EventHandler(menuGPS_Click);
+
+            this.menuGPSInsert = new MenuItem();
+            menuGPSInsert.Text = "Insert GPS Location";
+            menuGPSInsert.Click += new EventHandler(menuGPSInsert_Click);
+            menuGPSInsert.Enabled = false;
+
             this.PasteItem = new MenuItem();
             this.PasteItem.Text = "Paste";
             PasteItem.Click += new EventHandler(PasteItem_Click);
@@ -232,7 +266,22 @@ namespace PockeTwit
             this.menuItem1.MenuItems.Add(menuExist);
             this.menuItem1.MenuItems.Add(menuCamera);
             this.menuItem1.MenuItems.Add(menuGPS);
+            this.menuItem1.MenuItems.Add(menuGPSInsert);
             this.mainMenu1.MenuItems.Add(menuItem1);
+        }
+
+        void menuGPSInsert_Click(object sender, EventArgs e)
+        {
+            InsertGpsLocation();
+        }
+
+        private void InsertGpsLocation()
+        {
+            // google maps url format
+            // http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=41.4043197631836,-1.28760504722595
+            string sUrl = string.Format(@"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q={0}", this.GPSLocation);
+            string gpsUrl = isgd.ShortenURL(sUrl);
+            txtStatusUpdate.Text = txtStatusUpdate.Text + " " + gpsUrl;
         }
 
         void menuGPS_Click(object sender, EventArgs e)
@@ -397,6 +446,7 @@ namespace PockeTwit
             this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
         }
         #endregion
+
 
         
 
