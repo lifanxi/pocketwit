@@ -463,6 +463,7 @@
     <Compile Include="SettingsHandler\NotificationSettings.Designer.cs">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="TestCode\TestStatusMaker.cs" />
     <Compile Include="TiledMaps\CompositeTiledMapSession.cs" />
     <Compile Include="TiledMaps\Directions.cs" />
     <Compile Include="TiledMaps\Geocode.cs" />
