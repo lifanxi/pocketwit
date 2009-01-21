@@ -43,7 +43,6 @@ namespace PockeTwit
             this.pictureLocation = new System.Windows.Forms.PictureBox();
             this.lblGPS = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            
             // 
             // menuCancel
             // 
@@ -124,7 +123,7 @@ namespace PockeTwit
             // 
             this.lblGPS.Location = new System.Drawing.Point(97, 45);
             this.lblGPS.Name = "lblGPS";
-            this.lblGPS.Size = new System.Drawing.Size(88, 20);
+            this.lblGPS.Size = new System.Drawing.Size(95, 20);
             this.lblGPS.Text = "Seeking GPS";
             this.lblGPS.Visible = false;
             // 
