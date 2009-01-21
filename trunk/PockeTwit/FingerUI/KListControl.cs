@@ -148,6 +148,7 @@ namespace FingerUI
         void SlidingPortal_NewImage()
         {
             SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
+            SlidingPortal.WindowOffset = SlidingPortalOffset;
             Repaint();
         }
 
@@ -157,7 +158,6 @@ namespace FingerUI
         }
 
         int itemsBeforePortal = 0;
-        int offSetItemsBeforePortal = 0;
         int previousItemsBeforePortal = 0;
         public void RerenderPortal()
         {
@@ -1184,7 +1184,7 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
-                    if (SlidingPortalOffset > SlidingPortal.BitmapHeight)
+                    if (SlidingPortalOffset > SlidingPortal.BitmapHeight | SlidingPortalOffset < 0)
                     {
                         using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
                         {
