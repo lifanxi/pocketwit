@@ -263,6 +263,10 @@ namespace PockeTwit
 
         private void GetMessagesList(List<Library.status> TempLine)
         {
+#if TESTMESSAGES
+            TempLine = new List<PockeTwit.Library.status>(TestCode.TestStatusMaker.GenerateTestStatuses(50));
+            return;
+#endif
             lock (TwitterConnections)
             {
                 foreach (Yedda.Twitter t in TwitterConnections)
@@ -343,6 +347,9 @@ namespace PockeTwit
                     updateTimer.Enabled = false;
                     GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
+#if TESTMESSAGES
+                    TempLine = new List<PockeTwit.Library.status>(TestCode.TestStatusMaker.GenerateTestStatuses(50));
+#else
                     foreach (Yedda.Twitter t in TwitterConnections)
                     {
                         if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
@@ -374,6 +381,7 @@ namespace PockeTwit
                             }
                         }
                     }
+#endif
                     int NewItems = 0;
                     if (TempLine.Count > 0)
                     {

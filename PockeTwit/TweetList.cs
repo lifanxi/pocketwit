@@ -216,7 +216,7 @@ namespace PockeTwit
                     UpdateRightMenu();
                 }
                 statList.RerenderPortal();
-                statList.Redraw();
+                statList.Repaint();
             }
         }
 
