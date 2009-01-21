@@ -279,9 +279,11 @@ namespace PockeTwit
         {
             // google maps url format
             // http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=41.4043197631836,-1.28760504722595
+            Cursor.Current = Cursors.WaitCursor;
             string sUrl = string.Format(@"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q={0}", this.GPSLocation);
             string gpsUrl = isgd.ShortenURL(sUrl);
             txtStatusUpdate.Text = txtStatusUpdate.Text + " " + gpsUrl;
+            Cursor.Current = Cursors.Default;
         }
 
         void menuGPS_Click(object sender, EventArgs e)
