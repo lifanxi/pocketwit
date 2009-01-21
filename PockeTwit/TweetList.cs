@@ -610,7 +610,6 @@ namespace PockeTwit
             {
                 StatusForm.AccountToSet = CurrentlySelectedAccount;
             }
-            this.statList.Visible = false;
             if (!string.IsNullOrEmpty(ToUser))
             {
                 StatusForm.StatusText = ToUser + " ";
@@ -619,7 +618,6 @@ namespace PockeTwit
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                this.statList.Visible = true;
                 StatusForm.Hide();
                 IsLoaded = false;
                 string UpdateText = StatusForm.StatusText;
@@ -680,8 +678,6 @@ namespace PockeTwit
             this.Visible = true;
             Cursor.Current = Cursors.Default;
             IsLoaded = true;
-            this.statList.Redraw();
-            this.statList.Visible = true;
             StatusForm.Close();   
         }
 
