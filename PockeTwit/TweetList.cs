@@ -203,7 +203,7 @@ namespace PockeTwit
                 {
                     statList.SelectedItem = statList[oldIndex + newItems];
                     currentItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);                
+                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);    
                 }
                 else
                 {
@@ -215,7 +215,8 @@ namespace PockeTwit
                     CurrentlySelectedAccount = currentItem.Tweet.Account;
                     UpdateRightMenu();
                 }
-                statList.RerenderPortal();
+
+                statList.RerenderPortal(newItems==0);
                 statList.Repaint();
             }
         }
