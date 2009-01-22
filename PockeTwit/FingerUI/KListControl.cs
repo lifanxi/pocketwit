@@ -187,11 +187,11 @@ namespace FingerUI
                         {
                             NewSet.Add(m_items[i]);
                         }
-                        if (previousItemsBeforePortal != itemsBeforePortal)
-                        {
+                        //if (previousItemsBeforePortal != itemsBeforePortal | Force)
+                        //{
                             previousItemsBeforePortal = itemsBeforePortal;
                             SlidingPortal.SetItemList(NewSet);
-                        }
+                        //}
                     }
                 }
             }
