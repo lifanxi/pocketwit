@@ -259,6 +259,7 @@ namespace PockeTwit
                     }
                 }
             }
+            GC.Collect();
         }
 
         private void GetMessagesList(List<Library.status> TempLine)
@@ -428,6 +429,7 @@ namespace PockeTwit
                     updateTimer.Enabled = true;
                 }   
             }
+            GC.Collect();
         }
 
         private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)
