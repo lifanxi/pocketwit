@@ -159,11 +159,16 @@ namespace FingerUI
 
         int itemsBeforePortal = 0;
         int previousItemsBeforePortal = 0;
+
         public void RerenderPortal()
+        {
+            RerenderPortal(false);
+        }
+        public void RerenderPortal(bool Force)
         {
             if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
-                if (m_items.Count > SlidingPortal.MaxItems)
+                if (m_items.Count > SlidingPortal.MaxItems | Force)
                 {
                     lock (m_items)
                     {
