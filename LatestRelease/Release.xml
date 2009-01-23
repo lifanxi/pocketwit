@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.61</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv61.CAB</url>
-  <notes>Smartphone audio/vibrate notifications
+  <version>.62</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv62.CAB</url>
+  <notes>Fixed blank timelines
+smartphone notifications settings link
+
+From v.61:
+Smartphone audio/vibrate notifications
 Option to insert GPS URL in status (thanks @kjhughes)
 Communication error notifications
 Option for a single merged timeline 
