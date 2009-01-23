@@ -240,7 +240,12 @@ namespace PockeTwit
             SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
             //SettingsForm settings = new SettingsForm();
             IsLoaded = false;
-            if (settings.ShowDialog() == DialogResult.Cancel) { this.statList.Visible = true; IsLoaded = true; return; }
+            if (settings.ShowDialog() == DialogResult.Cancel) 
+            { 
+                this.statList.Visible = true; 
+                IsLoaded = true; 
+                return; 
+            }
             statList.BackColor = ClientSettings.BackColor;
             statList.ForeColor = ClientSettings.ForeColor;
             IsLoaded = true;

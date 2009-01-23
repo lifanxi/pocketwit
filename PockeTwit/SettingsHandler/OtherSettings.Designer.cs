@@ -103,7 +103,7 @@ namespace PockeTwit
             this.txtUpdate.Location = new System.Drawing.Point(3, 71);
             this.txtUpdate.Name = "txtUpdate";
             this.txtUpdate.Size = new System.Drawing.Size(90, 21);
-            this.txtUpdate.TabIndex = 3;
+            this.txtUpdate.TabIndex = 2;
             // 
             // label1
             // 
@@ -129,7 +129,7 @@ namespace PockeTwit
             this.chkTranslate.Location = new System.Drawing.Point(3, 99);
             this.chkTranslate.Name = "chkTranslate";
             this.chkTranslate.Size = new System.Drawing.Size(100, 20);
-            this.chkTranslate.TabIndex = 10;
+            this.chkTranslate.TabIndex = 3;
             this.chkTranslate.Text = "Automatically translate";
             // 
             // OtherSettings

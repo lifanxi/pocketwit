@@ -18,10 +18,7 @@ namespace PockeTwit
         {
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
-            if (DetectDevice.DeviceType == DeviceType.Standard)
-            {
-                linkLabel1.Visible = false;
-            }
+            
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
