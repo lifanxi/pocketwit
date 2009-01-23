@@ -152,7 +152,7 @@ namespace PockeTwit
             this.cmbTheme.Location = new System.Drawing.Point(59, 160);
             this.cmbTheme.Name = "cmbTheme";
             this.cmbTheme.Size = new System.Drawing.Size(133, 22);
-            this.cmbTheme.TabIndex = 7;
+            this.cmbTheme.TabIndex = 6;
             this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged);
             // 
             // label1
@@ -170,7 +170,7 @@ namespace PockeTwit
             this.linkLabel1.Location = new System.Drawing.Point(199, 162);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(36, 20);
-            this.linkLabel1.TabIndex = 14;
+            this.linkLabel1.TabIndex = 7;
             this.linkLabel1.Text = "Edit";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
             // 
@@ -180,7 +180,7 @@ namespace PockeTwit
             this.chkMerge.Location = new System.Drawing.Point(2, 134);
             this.chkMerge.Name = "chkMerge";
             this.chkMerge.Size = new System.Drawing.Size(235, 20);
-            this.chkMerge.TabIndex = 18;
+            this.chkMerge.TabIndex = 5;
             this.chkMerge.Text = "Merge all Timelines";
             this.chkMerge.CheckStateChanged += new System.EventHandler(this.chkMerge_CheckStateChanged);
             this.chkMerge.Click += new System.EventHandler(this.chkMerge_Click);
@@ -189,6 +189,7 @@ namespace PockeTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.chkMerge);

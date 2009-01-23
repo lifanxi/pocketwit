@@ -170,7 +170,10 @@ namespace PockeTwit
             {
                 TheKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + InfoSet.GUID);
             }
-            TheKey.SetValue("Wave", InfoSet.Sound);
+            if (InfoSet.Sound != null)
+            {
+                TheKey.SetValue("Wave", InfoSet.Sound);
+            }
             
             TheKey.SetValue("Options", (int)InfoSet.Options);
             LoadSettings();
