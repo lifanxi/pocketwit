@@ -160,40 +160,42 @@ namespace FingerUI
         int itemsBeforePortal = 0;
         int previousItemsBeforePortal = 0;
 
+        
         public void RerenderPortal()
-        {
-            RerenderPortal(false);
-        }
-        public void RerenderPortal(bool Force)
         {
             if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
-                if (m_items.Count > SlidingPortal.MaxItems | Force)
+                if (m_items.Count > SlidingPortal.MaxItems)
                 {
-                    lock (m_items)
-                    {
-                        int itemsBeforeScreen = YOffset / ItemHeight;
-                        
-                        itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
-                        int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2)-1;
-                        if (itemsAfterPortal < 0)
-                        {
-                            itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
-                        }
-                        if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
-                        List<StatusItem> NewSet = new List<StatusItem>();
-                        int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
-                        for (int i = itemsBeforePortal; i < MaxSize; i++)
-                        {
-                            NewSet.Add(m_items[i]);
-                        }
-                        //if (previousItemsBeforePortal != itemsBeforePortal | Force)
-                        //{
-                            previousItemsBeforePortal = itemsBeforePortal;
-                            SlidingPortal.SetItemList(NewSet);
-                        //}
-                    }
+                    RecalculatePortalPosition();
                 }
+            }
+        }
+
+        private void RecalculatePortalPosition()
+        {
+            lock (m_items)
+            {
+                int itemsBeforeScreen = YOffset / ItemHeight;
+
+                itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+                int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
+                if (itemsAfterPortal < 0)
+                {
+                    itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
+                }
+                if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
+                List<StatusItem> NewSet = new List<StatusItem>();
+                int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
+                for (int i = itemsBeforePortal; i < MaxSize; i++)
+                {
+                    NewSet.Add(m_items[i]);
+                }
+                //if (previousItemsBeforePortal != itemsBeforePortal | Force)
+                //{
+                previousItemsBeforePortal = itemsBeforePortal;
+                SlidingPortal.SetItemList(NewSet);
+                //}
             }
         }
 
