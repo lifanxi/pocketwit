@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.60</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv60.CAB</url>
-  <notes>Fixed audio notification in WM6
-Fixed VGA screen layout on search and post
+  <version>.61</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv61.CAB</url>
+  <notes>Smartphone audio/vibrate notifications
+Option to insert GPS URL in status (thanks @kjhughes)
+Communication error notifications
+Option for a single merged timeline 
+Numerous bugfixes
 </notes>
 </LatestRelease>
