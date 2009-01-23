@@ -94,7 +94,10 @@ namespace PockeTwit
                 if (settings.ShowDialog() == DialogResult.Cancel)
                 {
                     statList.Clear();
-                    Manager.ShutDown();
+                    if (Manager != null)
+                    {
+                        Manager.ShutDown();
+                    }
                     this.Close();
                 }
                 
