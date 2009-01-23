@@ -215,8 +215,8 @@ namespace PockeTwit
                     CurrentlySelectedAccount = currentItem.Tweet.Account;
                     UpdateRightMenu();
                 }
-
-                statList.RerenderPortal(newItems==0);
+                statList.Redraw();
+                statList.RerenderPortal();
                 statList.Repaint();
             }
         }
