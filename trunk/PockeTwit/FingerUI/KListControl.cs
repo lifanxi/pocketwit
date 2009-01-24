@@ -1126,63 +1126,7 @@ namespace FingerUI
                 //SlidingPortal.RenderImmediately();
             }
         }
-        /*
-        private void FillBackBuffer(object state)
-        {
-            lock (m_items)
-            {
-                int FirstItem = m_offset.Y / ItemHeight;
-                int LastItem = (Screen.PrimaryScreen.Bounds.Height / ItemHeight) + FirstItem;
-                for (int i = FirstItem; i >= 0; i--)
-                {
-                    RenderItem(i);
-                }
-                for (int i = LastItem; i < m_items.Count; i++)
-                {
-                    RenderItem(i);
-                }
-            }
-        }
-
-        private void FillImmediateBuffer()
-        {
-            lock (m_items)
-            {
-                int FirstItem = m_offset.Y / ItemHeight;
-                int LastItem = (Screen.PrimaryScreen.Bounds.Height/ ItemHeight) + FirstItem;
-                for (int i = FirstItem; i < LastItem; i++)
-                {
-                    RenderItem(i);
-                }
-            }
-        }
-
-        private delegate void delRender(int i);
-        private void RenderItem(int i)
-        {
-            if (m_items.Count <= i)
-            {
-                return;
-            }
-            if (InvokeRequired)
-            {
-                delRender d = new delRender(RenderItem);
-                this.Invoke(d, i);
-            }
-            else
-            {
-                IKListItem item = m_items[i];
-                Rectangle itemRect = item.Bounds;
-                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                {
-                    m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Top, itemRect.Right, itemRect.Top);
-                    m_backBuffer.DrawLine(whitePen, itemRect.Left, itemRect.Bottom, itemRect.Right, itemRect.Bottom);
-                    m_backBuffer.DrawLine(whitePen, itemRect.Right, itemRect.Top, itemRect.Right, itemRect.Bottom);
-                }
-                item.Render(m_backBuffer, itemRect);
-            }
-        }
-        */
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             using (Image flickerBuffer = new Bitmap(this.Width, this.Height))

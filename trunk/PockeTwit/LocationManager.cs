@@ -43,6 +43,7 @@ namespace PockeTwit
 
         void gps_LocationChanged(object sender, PockeTwit.GPS.LocationChangedEventArgs args)
         {
+            IFormatProvider format = new System.Globalization.CultureInfo(1033);
             if (gps.Opened)
             {
                 try
@@ -55,7 +56,7 @@ namespace PockeTwit
                             position = args.Position;
                             if (LocationReady != null)
                             {
-                                LocationReady(position.Latitude.ToString() + "," + position.Longitude.ToString());
+                                LocationReady(position.Latitude.ToString(format) + "," + position.Longitude.ToString(format));
                             }
                         }
                     }
