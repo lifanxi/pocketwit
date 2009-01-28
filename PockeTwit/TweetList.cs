@@ -262,7 +262,10 @@ namespace PockeTwit
             {
                 MessageBox.Show("Your settings changes require that you restart the application.");
                 statList.Clear();
-                Manager.ShutDown();
+                if (Manager != null)
+                {
+                    Manager.ShutDown();
+                }
                 this.Close();
             }
             statList.Redraw();
