@@ -77,26 +77,32 @@ namespace PockeTwit
 
         public void CheckForClicks(Point p)
         {
-            int ItemHeight = (ClientSettings.TextSize * 2);
-            int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
-            foreach (string Item in TextItems)
+            try
             {
-                Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
-                if (r.Contains(p))
+                int ItemHeight = (ClientSettings.TextSize * 2);
+                int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
+                foreach (string Item in TextItems)
                 {
-                    this.Visible = false;
-                    if (TextItems[_CurrentlyFocused] == "Exit")
+                    Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
+                    if (r.Contains(p))
                     {
-                        _CurrentlyFocused = 0;
-                        return;
+                        this.Visible = false;
+                        if (TextItems[_CurrentlyFocused] == "Exit")
+                        {
+                            _CurrentlyFocused = 0;
+                            return;
+                        }
+                        if (WordClicked != null)
+                        {
+                            WordClicked(Item);
+                            _CurrentlyFocused = 0;
+                        }
                     }
-                    if (WordClicked != null)
-                    {
-                        WordClicked(Item);
-                        _CurrentlyFocused = 0;
-                    }
+                    TopOfItem = TopOfItem + ItemHeight;
                 }
-                TopOfItem = TopOfItem + ItemHeight;
+            }
+            catch (KeyNotFoundException)
+            {
             }
         }
 
