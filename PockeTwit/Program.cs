@@ -76,6 +76,12 @@ namespace PockeTwit
                 if (Arg == "/QuickPost")
                 {
                     ClientSettings.LoadSettings();
+                    if (ClientSettings.AccountsList.Count == 0)
+                    {
+                        MessageBox.Show("You must configure PockeTwit before using QuickPost.", "PockeTwit QuickPost");
+                        Application.Exit();
+                        return;
+                    }
                     PostUpdate PostForm = new PostUpdate(true);
                     PostForm.AccountToSet = ClientSettings.DefaultAccount;
                     Application.Run(PostForm);
