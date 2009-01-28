@@ -487,6 +487,10 @@ namespace PockeTwit
                     return;
                 }
             }
+            if (_StandAlone)
+            {
+                this.Close();
+            }
             this.DialogResult = DialogResult.Cancel;
         }
         void pictureLocation_Click(object sender, EventArgs e)
