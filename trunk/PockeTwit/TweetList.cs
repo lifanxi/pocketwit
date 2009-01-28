@@ -610,7 +610,7 @@ namespace PockeTwit
         private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
             PostUpdate StatusForm = new PostUpdate();
-            //SetStatus StatusForm = new SetStatus();
+            
             if (CurrentlySelectedAccount == null)
             {
                 StatusForm.AccountToSet = ClientSettings.DefaultAccount;
@@ -625,69 +625,21 @@ namespace PockeTwit
                 StatusForm.StatusText = ToUser + " ";
             }
             IsLoaded = false;
+            StatusForm.in_reply_to_status_id = in_reply_to_status_id;
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
-                Cursor.Current = Cursors.WaitCursor;
                 this.statList.Visible = true;
                 StatusForm.Hide();
                 IsLoaded = false;
-                string UpdateText = StatusForm.StatusText;
-                if (UpdateText.Length > 140)
-                {
-                    //Truncate the text to the last available space, the add the URL.
-                    string URL = Yedda.ShortText.shorten(UpdateText);
-                    int trimLength = 5;
-                    if (StatusForm.UseTwitPic)
-                    {
-                        trimLength = 30;
-                    }
-                    string NewText = UpdateText.Substring(0, UpdateText.LastIndexOf(" ",140 - (URL.Length + trimLength)));
-                    UpdateText = NewText + " ... " + URL;
-                }
-                if (!string.IsNullOrEmpty(UpdateText))
-                {
-                    if (StatusForm.AccountToSet != null)
-                    {
-                        Yedda.Twitter t = GetMatchingConnection(StatusForm.AccountToSet);
-                        if (StatusForm.GPSLocation != null)
-                        {
-                            try
-                            {
-                                t.SetLocation(StatusForm.GPSLocation);
-                            }
-                            catch { }
-                        }
-                        if (t.AllowTwitPic && StatusForm.UseTwitPic)
-                        {
-                            string retValue;
-                            try
-                            {
-                                retValue = Yedda.TwitPic.SendStoredPic(StatusForm.AccountToSet.UserName, StatusForm.AccountToSet.Password, UpdateText, StatusForm.TwitPicFile);
-                            }
-                            catch (Exception ex)
-                            {
-                                      Cursor.Current = Cursors.Default;
-                                MessageBox.Show("Error sending the image to twitpic -- " + ex.ToString());
-                            }
-                        }
-                        else
-                        {
-                            string retValue = t.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
-                            try
-                            {
-                                Library.status.DeserializeSingle(retValue, StatusForm.AccountToSet);
-                            }
-                            catch
-                            {
-                                MessageBox.Show("Error posting tweet:" + retValue);
-                            }
-                        }
-                    }
-                    Manager.RefreshFriendsTimeLine();
-                }
+                Manager.RefreshFriendsTimeLine();
+            }
+            else
+            {
+                this.statList.Visible = true;
+                StatusForm.Hide();
+                IsLoaded = false;
             }
             this.Visible = true;
-            Cursor.Current = Cursors.Default;
             IsLoaded = true;
             this.statList.Redraw();
             this.statList.Visible = true;

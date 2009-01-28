@@ -73,6 +73,8 @@ namespace PockeTwit
                 this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
             }
         }
+
+        public string in_reply_to_status_id { get; set; }
         #endregion
 
 
@@ -99,11 +101,7 @@ namespace PockeTwit
             }
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
-            if (currentScreen.Height == 192)
-            {
-                ResizeForVGA();
-            }
-
+            
             this.ResumeLayout(false);
 
             l.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
@@ -144,7 +142,6 @@ namespace PockeTwit
                 this.txtStatusUpdate.SelectedText = (string)iData.GetData(DataFormats.Text);
             }
         }
-
         void CopyItem_Click(object sender, EventArgs e)
         {
             string selText = this.txtStatusUpdate.SelectedText;
@@ -209,15 +206,7 @@ namespace PockeTwit
             lblGPS.Visible = true;
         }
 
-        private void ResizeForVGA()
-        {
-            
-            //pictureFromCamers.Size = new Size(26, 50);
-            //pictureFromStorage.Size = new Size(50, 50);
-            //pictureLocation.Size = new Size(50, 50);
-            //pictureURL.Size = new Size(50, 50);
-
-        }
+        
 
         private System.Windows.Forms.MenuItem menuExist;
         private System.Windows.Forms.MenuItem menuCamera;
@@ -398,6 +387,83 @@ namespace PockeTwit
             {
             }
         }
+
+        private string TrimTo140(string Original)
+        {
+            if (Original.Length > 140)
+            {
+                //Truncate the text to the last available space, the add the URL.
+                string URL = Yedda.ShortText.shorten(Original);
+                int trimLength = 5;
+                if (UseTwitPic)
+                {
+                    trimLength = 30;
+                }
+                string NewText = Original.Substring(0, Original.LastIndexOf(" ", 140 - (URL.Length + trimLength)));
+                return NewText + " ... " + URL;
+            }
+            return Original;
+        }
+
+        private bool PostTheUpdate()
+        {
+            if (!string.IsNullOrEmpty(StatusText))
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                string UpdateText = TrimTo140(StatusText);
+
+                Yedda.Twitter TwitterConn = new Yedda.Twitter();
+                TwitterConn.AccountInfo = this.AccountToSet;
+
+                try
+                {
+                    if (this.GPSLocation != null)
+                    {
+                        TwitterConn.SetLocation(this.GPSLocation);
+                    }
+                }
+                catch { }
+
+                if (TwitterConn.AllowTwitPic && this.UseTwitPic)
+                {
+                    string retValue;
+                    try
+                    {
+                        retValue = Yedda.TwitPic.SendStoredPic(AccountToSet.UserName, AccountToSet.Password, UpdateText, TwitPicFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        Cursor.Current = Cursors.Default;
+                        MessageBox.Show("Error sending the image to twitpic. You may want to try again later.");
+                        return false;
+                    }
+                }
+
+                else
+                {
+                    string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
+                    if (string.IsNullOrEmpty(retValue))
+                    {
+                        MessageBox.Show("Error posting status.  You may want to try again later.");
+                        return false;
+                    }
+                    try
+                    {
+                        Library.status.DeserializeSingle(retValue, AccountToSet);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Error posting status.  You may want to try again later.");
+                        return false;
+                    }
+                }
+                return true;
+                
+            }
+            return true;
+        }
+
+
         #endregion
 
         #region Events
@@ -441,7 +507,13 @@ namespace PockeTwit
         private void menuSubmit_Click(object sender, EventArgs e)
         {
             Program.LastStatus = this.StatusText;
-            this.DialogResult = DialogResult.OK;
+
+            bool Success = PostTheUpdate();
+            Cursor.Current = Cursors.Default;
+            if (Success)
+            {
+                this.DialogResult = DialogResult.OK;
+            }
         }
         private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -449,6 +521,7 @@ namespace PockeTwit
         }
         #endregion
 
+        
 
         
 
