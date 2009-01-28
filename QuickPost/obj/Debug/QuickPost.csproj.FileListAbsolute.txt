@@ -1,0 +1,5 @@
+C:\Projects\Personal\pocketwit\QuickPost\bin\Debug\QuickPost.exe
+C:\Projects\Personal\pocketwit\QuickPost\bin\Debug\QuickPost.pdb
+C:\Projects\Personal\pocketwit\QuickPost\obj\Debug\ResolveAssemblyReference.cache
+C:\Projects\Personal\pocketwit\QuickPost\obj\Debug\QuickPost.exe
+C:\Projects\Personal\pocketwit\QuickPost\obj\Debug\QuickPost.pdb
