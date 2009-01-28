@@ -31,15 +31,18 @@ namespace PockeTwit
 
         private void AddUnique(IEnumerable<Library.status> items)
         {
-            if (items == null) { return; }
-            foreach (Library.status s in items)
+            lock (InternalDictionary)
             {
-                if (!string.IsNullOrEmpty(s.id))
+                if (items == null) { return; }
+                foreach (Library.status s in items)
                 {
-                    if (!InternalDictionary.ContainsKey(s.id))
+                    if (!string.IsNullOrEmpty(s.id))
                     {
-                        InternalDictionary.Add(s.id, s);
-                        this.Add(s);
+                        if (!InternalDictionary.ContainsKey(s.id))
+                        {
+                            InternalDictionary.Add(s.id, s);
+                            this.Add(s);
+                        }
                     }
                 }
             }
