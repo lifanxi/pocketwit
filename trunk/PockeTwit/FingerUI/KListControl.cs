@@ -780,7 +780,10 @@ namespace FingerUI
                     case SideShown.Middle:
                         {
                             if (fsDisplay.Visible) { fsDisplay.Visible = false; }
-                            ShowClickablesControl();
+                            else
+                            {
+                                ShowClickablesControl();
+                            }
                             break;
                         }
                 }
@@ -1282,6 +1285,7 @@ namespace FingerUI
                 fsDisplay.Status = s.Tweet;
                 fsDisplay.Render();
                 fsDisplay.Visible = true;
+                ClickablesControl.Visible = false;
                 
                 /*
                 string fullText = null;

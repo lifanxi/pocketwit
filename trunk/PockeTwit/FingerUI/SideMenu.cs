@@ -287,92 +287,95 @@ namespace FingerUI
 
         private void DrawMenu()
         {
-            int i = 1;
-            if (this.Items[0] == "Back")
+            lock (Items)
             {
-                i = 0;
-            }
-            if (_Rendered == null) 
-            {
-                _Rendered = new Bitmap(_Width, _Height);
-            }
-            using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
-            {
-                m_backBuffer.Clear(ClientSettings.BackColor);
-                int LeftPos = 0;
-                int CurrentTop = TopOfMenu;
-                foreach (string Item in this.GetItems())
+                int i = 1;
+                if (this.Items[0] == "Back")
                 {
-                    string DisplayItem = Item;
-                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+                    i = 0;
+                }
+                if (_Rendered == null)
+                {
+                    _Rendered = new Bitmap(_Width, _Height);
+                }
+                using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
+                {
+                    m_backBuffer.Clear(ClientSettings.BackColor);
+                    int LeftPos = 0;
+                    int CurrentTop = TopOfMenu;
+                    foreach (string Item in this.GetItems())
                     {
-                        DisplayItem = i.ToString() + ". " + DisplayItem;
-                    }
-                            
-                    if (_Side == FingerUI.KListControl.SideShown.Left)
-                    {
-                        int TextWidth = (int)m_backBuffer.MeasureString(DisplayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-                        LeftPos = _Width - (TextWidth + 5);
-                    }
-                    else
-                    {
-                        LeftPos = 6;
-                    }
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
-                    {
-
-                        Rectangle menuRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
-                        Color BackColor;
-                        Color MenuTextColor;
-                        Color GradColor;
-
-                        if (Item == SelectedItem)
+                        string DisplayItem = Item;
+                        if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
                         {
-                            BackColor = ClientSettings.SelectedBackColor;
-                            GradColor = ClientSettings.SelectedBackGradColor;
-                            MenuTextColor = ClientSettings.SelectedForeColor;
+                            DisplayItem = i.ToString() + ". " + DisplayItem;
+                        }
+
+                        if (_Side == FingerUI.KListControl.SideShown.Left)
+                        {
+                            int TextWidth = (int)m_backBuffer.MeasureString(DisplayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
+                            LeftPos = _Width - (TextWidth + 5);
                         }
                         else
                         {
-                            BackColor = ClientSettings.BackColor;
-                            GradColor = ClientSettings.BackGradColor;
-                            MenuTextColor = ClientSettings.ForeColor;
+                            LeftPos = 6;
                         }
-                        try
+                        using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                         {
-                            Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                        }
-                        catch
-                        {
-                            using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+
+                            Rectangle menuRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
+                            Color BackColor;
+                            Color MenuTextColor;
+                            Color GradColor;
+
+                            if (Item == SelectedItem)
                             {
-                                m_backBuffer.FillRectangle(BackBrush, menuRect);
+                                BackColor = ClientSettings.SelectedBackColor;
+                                GradColor = ClientSettings.SelectedBackGradColor;
+                                MenuTextColor = ClientSettings.SelectedForeColor;
                             }
+                            else
+                            {
+                                BackColor = ClientSettings.BackColor;
+                                GradColor = ClientSettings.BackGradColor;
+                                MenuTextColor = ClientSettings.ForeColor;
+                            }
+                            try
+                            {
+                                Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                            }
+                            catch
+                            {
+                                using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                                {
+                                    m_backBuffer.FillRectangle(BackBrush, menuRect);
+                                }
+                            }
+                            m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
+                            using (Brush sBrush = new SolidBrush(MenuTextColor))
+                            {
+                                StringFormat sFormat = new StringFormat();
+                                sFormat.LineAlignment = StringAlignment.Center;
+                                int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
+                                DisplayItem = DisplayItem.Replace("@User", "@" + _UserName);
+                                m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
+                            }
+                            m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                            if (_Side == FingerUI.KListControl.SideShown.Right)
+                            {
+                                m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
+                            }
+                            else
+                            {
+                                m_backBuffer.DrawLine(whitePen, menuRect.Right - 1, 0, menuRect.Right - 1, this.Height);
+                            }
+                            CurrentTop = CurrentTop + ItemHeight;
+                            i++;
                         }
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                        using (Brush sBrush = new SolidBrush(MenuTextColor))
-                        {
-                            StringFormat sFormat = new StringFormat();
-                            sFormat.LineAlignment = StringAlignment.Center;
-                            int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                            DisplayItem = DisplayItem.Replace("@User", "@" + _UserName);
-                            m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
-                        }
-                        m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                        if (_Side == FingerUI.KListControl.SideShown.Right)
-                        {
-                            m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                        }
-                        else
-                        {
-                            m_backBuffer.DrawLine(whitePen, menuRect.Right-1, 0, menuRect.Right-1, this.Height);
-                        }
-                        CurrentTop = CurrentTop + ItemHeight;
-                        i++;
                     }
                 }
+                IsDirty = false;
             }
-            IsDirty = false;
         }
 
     }
