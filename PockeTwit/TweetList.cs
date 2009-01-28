@@ -609,7 +609,7 @@ namespace PockeTwit
 
         private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
-            PostUpdate StatusForm = new PostUpdate();
+            PostUpdate StatusForm = new PostUpdate(false);
             
             if (CurrentlySelectedAccount == null)
             {
