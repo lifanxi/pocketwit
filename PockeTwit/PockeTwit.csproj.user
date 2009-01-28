@@ -3,6 +3,7 @@
     <DeployDeviceID>25D984D9-0DFE-4DB1-A5A0-9A4F660BF2CE</DeployDeviceID>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DevBuild|AnyCPU' ">
-    <StartArguments>/QuickPost</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>
