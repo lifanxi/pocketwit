@@ -131,7 +131,7 @@ namespace PockeTwit
         private void linkLabel1_Click(object sender, EventArgs e)
         {
             Yedda.Twitter Twitter = new Yedda.Twitter();
-            PostUpdate s = new PostUpdate();
+            PostUpdate s = new PostUpdate(false);
             s.StatusText = "@PockeTwitDev ";
             s.ShowDialog();
             s.Hide();

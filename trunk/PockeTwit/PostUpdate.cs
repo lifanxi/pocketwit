@@ -20,7 +20,7 @@ namespace PockeTwit
         public bool UseTwitPic = false;
         public string GPSLocation = null;
         private LocationManager l = new LocationManager();
-        
+        private bool _StandAlone;
         private delegate void delUpdateText(string text);
 
         
@@ -75,12 +75,13 @@ namespace PockeTwit
         }
 
         public string in_reply_to_status_id { get; set; }
+
         #endregion
 
 
-        public PostUpdate()
+        public PostUpdate(bool Standalone)
         {
-        
+            _StandAlone = Standalone;
             InitializeComponent();
             SetImages();
             PockeTwit.Themes.FormColors.SetColors(this);
@@ -512,6 +513,10 @@ namespace PockeTwit
             Cursor.Current = Cursors.Default;
             if (Success)
             {
+                if (_StandAlone)
+                {
+                    this.Close();
+                }
                 this.DialogResult = DialogResult.OK;
             }
         }

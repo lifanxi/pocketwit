@@ -63,11 +63,27 @@ namespace PockeTwit
         [MTAThread]
         static void Main(string[] Args)
         {
+            bool bBackGround = false;
+            if (Args.Length > 0)
+            {
+                string Arg = Args[0];
 
-            
-            bool bBackGround = Args.Length > 0;
+                if (Arg == "/BackGround")
+                {
+                    bBackGround = true;
+                }
+
+                if (Arg == "/QuickPost")
+                {
+                    ClientSettings.LoadSettings();
+                    PostUpdate PostForm = new PostUpdate(true);
+                    PostForm.AccountToSet = ClientSettings.DefaultAccount;
+                    Application.Run(PostForm);
+                    PostForm.Close();
+                    Application.Exit();
+                }
+            }
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
             ClientSettings.LoadSettings();
             Application.Run(new TweetList(bBackGround));
         }
