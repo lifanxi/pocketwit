@@ -32,8 +32,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
         "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
+        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -62,8 +74,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
+        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
+        "OwnerKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -104,8 +128,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,6 +154,12 @@
         {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -299,6 +341,34 @@
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_503BCEB661496D8C1BE69DC8459AE531"
+            {
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CustomMarshalers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac"
+                "ScatterAssemblies"
+                {
+                    "_503BCEB661496D8C1BE69DC8459AE531"
+                    {
+                    "Name" = "8:CustomMarshalers.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CustomMarshalers.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -543,9 +613,35 @@
         }
         "ProjectOutput"
         {
+            "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
+            {
+            "SourcePath" = "8:..\\QuickPost\\obj\\Release\\QuickPost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:0"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_40E71D37BA55489FBE0B2DC740587735"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -703,6 +799,16 @@
         }
         "Shortcut"
         {
+            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_8EF24E4722854825ABAA5B037A6DEA7C"
+            {
+            "Name" = "8:PockeTwit QuickPost"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "Target" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
+            "Folder" = "8:_486AC490580C45378FC3ADA14D0B6083"
+            "WorkingFolder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            }
             "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_AF9AD5B5C8854D07A92A34F08DA123A4"
             {
             "Name" = "8:PockeTwit"
