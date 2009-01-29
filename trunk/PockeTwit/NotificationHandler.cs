@@ -12,6 +12,8 @@ namespace PockeTwit
         private int NewMessagesCount = 0;
         private int NewFriendsCount = 0;
         private int CurrentSpinner = 0;
+        private static RegistryKey FriendsKey;
+        private static RegistryKey MessageKey;
         public delegate void delNotificationClicked();
         public event delNotificationClicked MessagesNotificationClicked;
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
@@ -56,11 +58,35 @@ namespace PockeTwit
         public static NotificationInfo Friends = new NotificationInfo();
         public static NotificationInfo Messages = new NotificationInfo();
 
+        private static Microsoft.WindowsMobile.Status.RegistryState FriendsRegistryWatcher1;
+        private static Microsoft.WindowsMobile.Status.RegistryState MessagesRegistryWatcher1;
+        private static Microsoft.WindowsMobile.Status.RegistryState FriendsRegistryWatcher2;
+        private static Microsoft.WindowsMobile.Status.RegistryState MessagesRegistryWatcher2;
+
         public NotificationHandler()
         {
-            MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
+            //Create or oppen registry notification keys
+            FriendsKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
+            MessageKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
+
+            LoadSettings();
+            
+            FriendsRegistryWatcher1 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + FriendsTweets, "Options", true);
+            MessagesRegistryWatcher1 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + MessageTweets, "Options", false);
+            FriendsRegistryWatcher2 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + FriendsTweets, "Wave", false);
+            MessagesRegistryWatcher2 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + MessageTweets, "Wave", false);
+
+            
+
+            FriendsRegistryWatcher1.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(RegistryWatcher_Changed);
+            MessagesRegistryWatcher1.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(RegistryWatcher_Changed);
+            FriendsRegistryWatcher2.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(RegistryWatcher_Changed);
+            MessagesRegistryWatcher2.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(RegistryWatcher_Changed);
+            
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
+                MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 //MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 MessagesBubbler.Icon = Properties.Resources.MyIco;
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
@@ -70,6 +96,36 @@ namespace PockeTwit
                 MessagesBubbler.Silent = true;   
             }
         }
+        
+
+        public void ShutDown()
+        {
+            FriendsRegistryWatcher1.Dispose();
+            MessagesRegistryWatcher1.Dispose();
+            FriendsRegistryWatcher2.Dispose();
+            MessagesRegistryWatcher2.Dispose();
+        }
+
+        private void CheckRegistry()
+        {
+            if (FriendsKey.GetValue("Wave") == null)
+            {
+            }
+
+            /*
+            if (FriendsKey != null)
+            {
+                Friends.Sound = (string)FriendsKey.GetValue("Wave");
+                if (FriendsKey.GetValue("Options") != null)
+             */
+        }
+
+        void RegistryWatcher_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
+        {
+            LoadSettings();
+        }
+
+                
 
         void MessagesBubbler_SpinnerClick(object sender, christec.windowsce.forms.SpinnerClickEventArgs e)
         {
@@ -139,27 +195,34 @@ namespace PockeTwit
         {
             Friends.GUID = FriendsTweets;
             Messages.GUID = MessageTweets;
-            RegistryKey FriendsKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
-            RegistryKey MessageKey = Registry.CurrentUser.OpenSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
-            if (FriendsKey != null)
+            Friends.Sound = (string)FriendsKey.GetValue("Wave");
+            if (Friends.Sound == null)
             {
-                Friends.Sound = (string)FriendsKey.GetValue("Wave");
-                if (FriendsKey.GetValue("Options") != null)
-                {
-                    Friends.Options = (Options)FriendsKey.GetValue("Options");
-                    FriendsOptions = Friends.Options;
-                }
+                FriendsKey.SetValue("Wave", "");
             }
-
-            if (MessageKey != null)
+            if (FriendsKey.GetValue("Options") != null)
             {
-                Messages.Sound = (string)MessageKey.GetValue("Wave");
-
-                if (MessageKey.GetValue("Options") != null)
-                {
-                    Messages.Options = (Options)MessageKey.GetValue("Options");
-                    MessagesOptions = Messages.Options;
-                }
+                Friends.Options = (Options)FriendsKey.GetValue("Options");
+                FriendsOptions = Friends.Options;
+            }
+            else
+            {
+                FriendsKey.SetValue("Options", 0);
+            }
+            
+            Messages.Sound = (string)MessageKey.GetValue("Wave");
+            if (Messages.Sound == null)
+            {
+                MessageKey.SetValue("Wave", "");
+            }
+            if (MessageKey.GetValue("Options") != null)
+            {
+                Messages.Options = (Options)MessageKey.GetValue("Options");
+                MessagesOptions = Messages.Options;
+            }
+            else
+            {
+                MessageKey.SetValue("Options", 0);
             }
         }
 
@@ -176,11 +239,12 @@ namespace PockeTwit
             }
             
             TheKey.SetValue("Options", (int)InfoSet.Options);
-            LoadSettings();
+            //LoadSettings();
         }
 
         private void ShowNotifications()
         {
+            if (MessagesBubbler == null) { return; }
             if (GlobalEventHandler.isInForeground()) { return; }
             MessagesBubbler.Visible = false;
             if (NewFriendsCount > 0 && NewMessagesCount > 0)
@@ -213,19 +277,18 @@ namespace PockeTwit
 
         public void NewBoth(int MessagesCount, int FriendsCount)
         {
-            MessagesBubbler.Visible = false;
+            
             NewMessagesCount += MessagesCount;
             NewFriendsCount += FriendsCount;
-            LoadSettings();
+            //LoadSettings();
             NewFriendMessages(0);
             NewMessages(0);
             ShowNotifications();
         }
         public void NewFriendMessages(int Count)
         {
-            MessagesBubbler.Visible = false;
             NewFriendsCount += Count;
-            LoadSettings();
+            //LoadSettings();
             
             if ((Friends.Options & Options.Vibrate) == Options.Vibrate)
             {
@@ -255,7 +318,7 @@ namespace PockeTwit
         public void NewMessages(int Count)
         {
             NewMessagesCount += Count;
-            LoadSettings();
+            //LoadSettings();
 
             if ((Messages.Options & Options.Vibrate) == Options.Vibrate)
             {
