@@ -780,7 +780,14 @@ namespace PockeTwit
                     break;
                 case "Exit":
                     statList.Clear();
-                    Manager.ShutDown();
+                    if (Manager != null)
+                    {
+                        Manager.ShutDown();
+                    }
+                    if (Notifyer != null)
+                    {
+                        Notifyer.ShutDown();
+                    }
                     this.Close();
                     break;
             }
@@ -1117,6 +1124,7 @@ namespace PockeTwit
             timerStartup.Tick -= new EventHandler(timerStartup_Tick);
             if (!SetEverythingUp())
             {
+                if (Notifyer != null) { Notifyer.ShutDown(); }
                 Application.Exit();
                 return;
             }
