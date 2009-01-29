@@ -67,7 +67,7 @@ namespace FingerUI
         int m_itemHeight = 40;
         public ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
-        Dictionary<string, string> LastSelectedItems = new Dictionary<string, string>();
+        
         int m_itemWidth = 240;
         // Properties
         int m_maxVelocity = 45;
@@ -380,6 +380,7 @@ namespace FingerUI
                     {
                         item.Selected = true;
                         m_selectedIndex = i;
+                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet.id);
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     }
                     else
@@ -491,15 +492,10 @@ namespace FingerUI
             string thisList = CurrentList();
             if (!string.IsNullOrEmpty(thisList))
             {
-                if (!LastSelectedItems.ContainsKey(thisList))
-                {
-                    LastSelectedItems.Add(thisList, "");
-                }
                 if (SelectedItem != null)
                 {
-                    LastSelectedItems[thisList] = SelectedItem.Tweet.id;
+                    PockeTwit.LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet.id);
                 }
-
             }
             if (!ItemLists.ContainsKey(ListName))
             {
@@ -512,22 +508,20 @@ namespace FingerUI
 
         public void JumpToLastSelected()
         {
-            if (LastSelectedItems.ContainsKey(CurrentList()))
+
+
+            string jumpID = PockeTwit.LastSelectedItems.GetLastSelected(CurrentList());
+            if (!string.IsNullOrEmpty(jumpID))
             {
-                string jumpID = LastSelectedItems[CurrentList()];
-                if (!string.IsNullOrEmpty(jumpID))
+                for (int i = 0; i < m_items.Count; i++)
                 {
-                    for (int i = 0; i < m_items.Count; i++)
+                    if (m_items[i].Tweet.id == jumpID)
                     {
-                        if (m_items[i].Tweet.id == jumpID)
-                        {
-                            m_selectedIndex = i;
-                            SelectAndJump();
-                            break;
-                        }
+                        m_selectedIndex = i;
+                        SelectAndJump();
+                        return;
                     }
                 }
-                return;
             }
             SetSelectedIndexToZero();
         }
@@ -690,6 +684,7 @@ namespace FingerUI
                     SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     StatusItem s = (StatusItem)SelectedItem;
                     RightMenu.UserName = s.Tweet.user.screen_name;
+                    PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[0].Tweet.id);
                     //FillBuffer();
                 }
             }
@@ -1589,6 +1584,7 @@ namespace FingerUI
                 return;
             }
             item.Selected = true;
+            PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet.id);
             SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             if (SelectedItemChanged != null)
             {
@@ -1642,6 +1638,7 @@ namespace FingerUI
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         m_selectedIndex = selectedIndex.Y;
                         m_items[m_selectedIndex].Selected = true;
+                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[m_selectedIndex].Tweet.id);
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         if (SelectedItemChanged != null)
                         {

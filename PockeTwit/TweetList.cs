@@ -522,7 +522,7 @@ namespace PockeTwit
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                 statList.Startup = false;
                 statList.Visible = true;
-                statList.SetSelectedIndexToZero();
+                //statList.SetSelectedIndexToZero();
                 Program.Ready = DateTime.Now;
                 Application.DoEvents();
             }
@@ -861,11 +861,11 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            if (Redraw)
-            {
+            //if (Redraw)
+            //{
                 statList.SetSelectedMenu("Messages");
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
-            }
+            //}
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
         }
