@@ -475,7 +475,7 @@ namespace FingerUI
 
         public void stopAnimation()
         {
-            if (!NotificationArea.isAnimating && ErrorPopup.isAnimating)
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating)
             {
                 animationTimer.Enabled = false;
             }

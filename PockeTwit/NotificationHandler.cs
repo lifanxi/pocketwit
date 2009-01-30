@@ -87,7 +87,6 @@ namespace PockeTwit
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
-                //MessagesBubbler = new christec.windowsce.forms.NotificationWithSoftKeys();
                 MessagesBubbler.Icon = Properties.Resources.MyIco;
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
                 MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");

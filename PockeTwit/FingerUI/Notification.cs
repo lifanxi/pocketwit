@@ -11,7 +11,7 @@ namespace FingerUI
         public bool AtTop = false;
         private string _DisplayText;
         public Font TextFont;
-        private int AnimationStep = 0;
+        private int AnimationStep = -1;
         private int _AnimationPixels = -1;
         private int AnimationPixels
         {
@@ -51,6 +51,7 @@ namespace FingerUI
             {
                 _DisplayText = Text;
                 parentControl.startAnimation();
+                AnimationStep = 0;
                 Visibility = true;
             }
             else
@@ -73,11 +74,12 @@ namespace FingerUI
         {
             get
             {
-                return (AnimationStep != 0 && Pause != 0 && !Visibility);
+                return (AnimationStep != -1 | Pause !=-1 | Visibility);
             }
         }
         public void DrawNotification(Graphics g, int Bottom, int Width)
         {
+            if (AnimationStep < 0) { return; }
             if (Visibility)
             {
                 if (AnimationStep < MaxHeight) { AnimationStep = AnimationStep+AnimationPixels; }
@@ -87,8 +89,12 @@ namespace FingerUI
                     if (Pause == 0)
                     {
                         Visibility = false;
+                        Pause = -1;
                     }
-                    else { Pause--; }
+                    else 
+                    {
+                        if (Pause > 0) { Pause--; }
+                    }
                 }
             }
             else
@@ -104,8 +110,11 @@ namespace FingerUI
                         AnimationStep = AnimationStep - AnimationPixels;
                     }
                 }
-                else { parentControl.stopAnimation(); }
-
+                else 
+                {
+                    AnimationStep = -1;
+                    parentControl.stopAnimation(); 
+                }
             }
             if (AnimationStep > 0)
             {
