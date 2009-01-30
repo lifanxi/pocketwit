@@ -54,8 +54,8 @@ namespace PockeTwit
                 Microsoft.WindowsMobile.PocketOutlook.EmailMessage m = new Microsoft.WindowsMobile.PocketOutlook.EmailMessage();
                 m.BodyText = ErrorText;
                 m.To.Add(new Microsoft.WindowsMobile.PocketOutlook.Recipient("pocketwitdev@gmail.com"));
-                m.Subject = "Crash Report: v" +UpdateChecker.currentVersion.ToString();
-                if (UpdateChecker.devBuild)
+                m.Subject = "Crash Report: v" +UpgradeChecker.currentVersion.ToString();
+                if (UpgradeChecker.devBuild)
                 {
                     m.Subject = m.Subject + " dev build" + Environment.Version.Build.ToString();
                 }

@@ -238,7 +238,7 @@
     </Compile>
     <Compile Include="SettingsHandler\appconfig.cs" />
     <Compile Include="SettingsHandler\Settings.cs" />
-    <Compile Include="UpdateChecker.cs" />
+    <Compile Include="AutoUpgrade\UpgradeChecker.cs" />
     <Compile Include="UpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
