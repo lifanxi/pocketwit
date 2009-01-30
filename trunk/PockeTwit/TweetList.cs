@@ -23,7 +23,7 @@ namespace PockeTwit
         
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
-        private UpdateChecker Checker;
+        private UpgradeChecker Checker;
         private Library.status[] CurrentStatuses =null;
 
         private List<string> LeftMenu;
@@ -62,7 +62,7 @@ namespace PockeTwit
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
             }
-            if (UpdateChecker.devBuild)
+            if (UpgradeChecker.devBuild)
             {
                 this.lblTitle.Text = "Launching PockeTwit Dev";
             }
@@ -256,7 +256,7 @@ namespace PockeTwit
             
             if (ClientSettings.CheckVersion)
             {
-                Checker.CheckForUpdate();
+                Checker.CheckForUpgrade();
             }
             if (settings.NeedsReset)
             {
@@ -436,8 +436,8 @@ namespace PockeTwit
             {
                 lblLoading.Text = "Launching update checker";
                 Application.DoEvents();
-                Checker = new UpdateChecker();
-                Checker.UpdateFound += new UpdateChecker.delUpdateFound(UpdateChecker_UpdateFound);
+                Checker = new UpgradeChecker();
+                Checker.UpgradeFound += new UpgradeChecker.delUpgradeFound(UpdateChecker_UpdateFound);
             }
 
             SetUpListControl();
@@ -1172,7 +1172,7 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        void UpdateChecker_UpdateFound(UpdateChecker.UpdateInfo Info)
+        void UpdateChecker_UpdateFound(UpgradeChecker.UpgradeInfo Info)
         {
             UpdateForm uf = new UpdateForm();
             uf.NewVersion = Info;

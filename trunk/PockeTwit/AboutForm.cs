@@ -14,7 +14,7 @@ namespace PockeTwit
         delegate void delNothing();
 		#region Fields (1) 
 
-        private UpdateChecker Checker = new UpdateChecker(false);
+        private UpgradeChecker Checker = new UpgradeChecker(false);
         private Contributors ContributorChecker;
         public string AskedToSeeUser = null;
 		#endregion Fields 
@@ -32,12 +32,12 @@ namespace PockeTwit
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            Checker.UpdateFound += new UpdateChecker.delUpdateFound(Checker_UpdateFound);
-            Checker.CurrentVersion += new UpdateChecker.delUpdateFound(Checker_CurrentVersion);
-            lblVersion.Text = UpdateChecker.currentVersion.ToString();
-            if (UpdateChecker.devBuild)
+            Checker.UpgradeFound += new UpgradeChecker.delUpgradeFound(Checker_UpdateFound);
+            Checker.CurrentVersion += new UpgradeChecker.delUpgradeFound(Checker_CurrentVersion);
+            lblVersion.Text = "PockeTwit v" + UpgradeChecker.currentVersion.ToString();
+            if (UpgradeChecker.devBuild)
             {
-                lblVersion.Text = UpdateChecker.currentVersion.ToString() + " dev " + Environment.Version.Build.ToString();
+                lblVersion.Text = "PockeTwit v" + UpgradeChecker.currentVersion.ToString() + " d" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
             }
             this.lnkContributors.Focus();
         }
@@ -116,12 +116,12 @@ namespace PockeTwit
 
 		// Private Methods (5) 
 
-        void Checker_CurrentVersion(UpdateChecker.UpdateInfo Info)
+        void Checker_CurrentVersion(UpgradeChecker.UpgradeInfo Info)
         {
             MessageBox.Show(Info.webVersion.ToString() + " is the latest version.", "No upgrades found.");
         }
 
-        void Checker_UpdateFound(UpdateChecker.UpdateInfo Info)
+        void Checker_UpdateFound(UpgradeChecker.UpgradeInfo Info)
         {
             UpdateForm uf = new UpdateForm();
             uf.NewVersion = Info;
@@ -155,7 +155,7 @@ namespace PockeTwit
         private void menuUpdate_Click(object sender, EventArgs e)
         {
             
-            Checker.CheckForUpdate();
+            Checker.CheckForUpgrade();
         }
 
 

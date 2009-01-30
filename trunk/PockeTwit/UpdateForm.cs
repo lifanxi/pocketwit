@@ -14,7 +14,7 @@ namespace PockeTwit
 
 		#region Fields (1) 
 
-        private UpdateChecker.UpdateInfo _NewVersion;
+        private UpgradeChecker.UpgradeInfo _NewVersion;
 
 		#endregion Fields 
 
@@ -34,12 +34,12 @@ namespace PockeTwit
 
 		#region Properties (1) 
 
-        public UpdateChecker.UpdateInfo NewVersion 
+        public UpgradeChecker.UpgradeInfo NewVersion 
         {
             set
             {
                 lblVersion.Text = value.webVersion.ToString();
-                lblInfo.Text = value.UpdateNotes;
+                lblInfo.Text = value.UpgradeNotes;
                 _NewVersion = value;
             }
         }

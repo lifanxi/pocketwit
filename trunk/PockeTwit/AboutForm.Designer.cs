@@ -9,7 +9,6 @@ namespace PockeTwit
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel2;
@@ -52,7 +51,6 @@ namespace PockeTwit
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuUpdate = new System.Windows.Forms.MenuItem();
             this.menuClose = new System.Windows.Forms.MenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
@@ -77,22 +75,13 @@ namespace PockeTwit
             this.menuClose.Text = "Close";
             this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
             // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(4, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
-            this.label1.Text = "PockeTwit";
-            // 
             // lblVersion
             // 
             this.lblVersion.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             this.lblVersion.ForeColor = System.Drawing.Color.LightGray;
-            this.lblVersion.Location = new System.Drawing.Point(96, 4);
+            this.lblVersion.Location = new System.Drawing.Point(5, 4);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(120, 20);
+            this.lblVersion.Size = new System.Drawing.Size(231, 20);
             this.lblVersion.Text = "v0.0";
             // 
             // linkLabel1
@@ -159,7 +148,6 @@ namespace PockeTwit
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.lblVersion);
-            this.Controls.Add(this.label1);
             this.Menu = this.mainMenu1;
             this.Name = "AboutForm";
             this.Text = "About PockeTwit";
