@@ -297,6 +297,10 @@ namespace PockeTwit
                     Sound s = new Sound(Friends.Sound);
                     s.Play();
                 }
+                else
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
                 VibrateStop();
             }
             else if ((Friends.Options & Options.Sound) == Options.Sound)
@@ -326,6 +330,10 @@ namespace PockeTwit
                 {
                     Sound s = new Sound(Messages.Sound);
                     s.Play();
+                }
+                else
+                {
+                    System.Threading.Thread.Sleep(1000);
                 }
                 VibrateStop();
             }
