@@ -15,7 +15,7 @@ namespace PockeTwit
 		#region Fields (2) 
 
         private int _CurrentlyFocused = 0;
-        private List<string> TextItems = new List<string>(new string[]{"Exit"});
+        private List<string> TextItems = new List<string>(new string[]{"Close Menu"});
 
 		#endregion Fields 
 
@@ -45,7 +45,7 @@ namespace PockeTwit
                         TextItems.Add(c.Text);
                     }
                 }
-                TextItems.Add("Exit");
+                TextItems.Add("Close Menu");
             }
         }
 
@@ -87,7 +87,7 @@ namespace PockeTwit
                     if (r.Contains(p))
                     {
                         this.Visible = false;
-                        if (TextItems[_CurrentlyFocused] == "Exit")
+                        if (TextItems[_CurrentlyFocused] == "Close menu")
                         {
                             _CurrentlyFocused = 0;
                             return;
@@ -136,7 +136,7 @@ namespace PockeTwit
                 {
                     this.Visible = false;
 
-                    if (TextItems[_CurrentlyFocused] == "Exit")
+                    if (TextItems[_CurrentlyFocused] == "Close Menu")
                     {
                         _CurrentlyFocused = 0;
                         return;
