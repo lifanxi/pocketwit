@@ -9,35 +9,35 @@ using System.Web;
 
 namespace PockeTwit
 {
-    public class UpdateChecker
+    public class UpgradeChecker
     {
 
 		#region Fields (4) 
 
-        public static double currentVersion = .62;
-        public static bool devBuild = true;
+        public static double currentVersion = .60;
+        public static bool devBuild = false;
 
-        private string UpdateURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
-        private UpdateInfo WebVersion;
+        private string UpgradeURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
+        private UpgradeInfo WebVersion;
         private string XMLResponse;
 
 		#endregion Fields 
 
 		#region Constructors (2) 
 
-        public UpdateChecker(bool Auto)
+        public UpgradeChecker(bool Auto)
         {
             if (Auto)
             {
-                CheckForUpdate();
+                CheckForUpgrade();
             }
         }
 
-        public UpdateChecker()
+        public UpgradeChecker()
         {
             if (ClientSettings.CheckVersion)
             {
-                CheckForUpdate();
+                CheckForUpgrade();
             }
         }
 
@@ -48,14 +48,14 @@ namespace PockeTwit
 
 		// Delegates (1) 
 
-        public delegate void delUpdateFound(UpdateInfo Info);
+        public delegate void delUpgradeFound(UpgradeInfo Info);
 
 
 		// Events (2) 
 
-        public event delUpdateFound CurrentVersion;
+        public event delUpgradeFound CurrentVersion;
 
-        public event delUpdateFound UpdateFound;
+        public event delUpgradeFound UpgradeFound;
 
 
 		#endregion Delegates and Events 
@@ -65,7 +65,7 @@ namespace PockeTwit
 
 		// Public Methods (1) 
 
-        public void CheckForUpdate()
+        public void CheckForUpgrade()
         {
             if (!devBuild)
             {
@@ -79,7 +79,7 @@ namespace PockeTwit
 
         private void GetWebResponse(object o)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UpdateURL);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UpgradeURL);
             try
             {
                 HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
@@ -92,22 +92,22 @@ namespace PockeTwit
                 }
             }
             catch{}
-            XmlDocument UpdateInfoDoc = new XmlDocument();
+            XmlDocument UpgradeInfoDoc = new XmlDocument();
             try
             {
                 if (XMLResponse != null)
                 {
-                    UpdateInfoDoc.LoadXml(XMLResponse);
-                    WebVersion = new UpdateInfo();
-                    WebVersion.webVersion = double.Parse(UpdateInfoDoc.SelectSingleNode("//version").InnerText,System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-                    WebVersion.DownloadURL = UpdateInfoDoc.SelectSingleNode("//url").InnerText;
-                    WebVersion.UpdateNotes = UpdateInfoDoc.SelectSingleNode("//notes").InnerText;
+                    UpgradeInfoDoc.LoadXml(XMLResponse);
+                    WebVersion = new UpgradeInfo();
+                    WebVersion.webVersion = double.Parse(UpgradeInfoDoc.SelectSingleNode("//version").InnerText,System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+                    WebVersion.DownloadURL = UpgradeInfoDoc.SelectSingleNode("//url").InnerText;
+                    WebVersion.UpgradeNotes = UpgradeInfoDoc.SelectSingleNode("//notes").InnerText;
 
                     if (WebVersion.webVersion > currentVersion)
                     {
-                        if (UpdateFound != null)
+                        if (UpgradeFound != null)
                         {
-                            UpdateFound(WebVersion);
+                            UpgradeFound(WebVersion);
                         }
                     }
                     else
@@ -117,11 +117,6 @@ namespace PockeTwit
                             CurrentVersion(WebVersion);
                         }
                     }
-                    System.Diagnostics.Debug.WriteLine("Update check complete");
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("Update check failed");
                 }
             }
             catch
@@ -131,11 +126,11 @@ namespace PockeTwit
 
 
 		#endregion Methods 
-        public struct UpdateInfo
+        public struct UpgradeInfo
         {
             public double webVersion;
             public string DownloadURL;
-            public string UpdateNotes;
+            public string UpgradeNotes;
         }
 
     }

@@ -35,7 +35,7 @@ namespace PockeTwit
         }
 
 
-        private const string StorageRoot = @"\Software\Apps\PockeTwit\";
+        private const string StorageRoot = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
 
         private static void StoreSelectedItem(string ListName, string ID)
         {
@@ -49,7 +49,7 @@ namespace PockeTwit
             if (StoredItemsRoot == null)
             {
                 RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);
-                StoredItemsRoot = ParentKey.CreateSubKey("PockeTwit");
+                StoredItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\LastSaved");
             }
             string[] StoredItems = StoredItemsRoot.GetValueNames();
             foreach (string StoredItem in StoredItems)
