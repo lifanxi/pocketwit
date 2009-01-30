@@ -123,7 +123,7 @@ namespace PockeTwit
 
         void Checker_UpdateFound(UpgradeChecker.UpgradeInfo Info)
         {
-            UpdateForm uf = new UpdateForm();
+            UpgradeForm uf = new UpgradeForm();
             uf.NewVersion = Info;
             uf.ShowDialog();
         }
