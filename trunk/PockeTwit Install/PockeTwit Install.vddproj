@@ -45,13 +45,13 @@
         "Entry"
         {
         "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
-        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
+        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
-        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
+        "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,25 +81,7 @@
         "Entry"
         {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
         "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -123,18 +105,36 @@
         "Entry"
         {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
         "OwnerKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
-        "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
+        "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "MsmKey" = "8:_65D2CB94D5FF7C4FD90A0BA0401088C5"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -142,6 +142,12 @@
         {
         "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "OwnerKey" = "8:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -153,6 +159,24 @@
         "Entry"
         {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_324D863B1AA21738148ED3BD5481A4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -165,31 +189,19 @@
         "Entry"
         {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
-        "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_255BF6B6FA3A91AB283AACA7E719D28F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
-        "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
-        "OwnerKey" = "8:_324D863B1AA21738148ED3BD5481A4B7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_EA0262DE4D37968ABA63504CC90711AA"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EA0262DE4D37968ABA63504CC90711AA"
+        "OwnerKey" = "8:_65D2CB94D5FF7C4FD90A0BA0401088C5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -202,6 +214,12 @@
         {
         "MsmKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
         "OwnerKey" = "8:_FF1C7FC2012D3E959D20CB3F00802F44"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
+        "OwnerKey" = "8:_65D2CB94D5FF7C4FD90A0BA0401088C5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -397,6 +415,34 @@
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_65D2CB94D5FF7C4FD90A0BA0401088C5"
+            {
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.WindowsMobile.Status, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+                "ScatterAssemblies"
+                {
+                    "_65D2CB94D5FF7C4FD90A0BA0401088C5"
+                    {
+                    "Name" = "8:Microsoft.WindowsMobile.Status.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.WindowsMobile.Status.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -615,7 +661,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
             {
-            "SourcePath" = "8:..\\QuickPost\\obj\\Release\\QuickPost.exe"
+            "SourcePath" = "8:..\\QuickPost\\obj\\DevBuild\\QuickPost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -641,7 +687,7 @@
             }
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_40E71D37BA55489FBE0B2DC740587735"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -698,6 +744,46 @@
             {
                 "Keys"
                 {
+                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_2A6F6D1FACA041EDB263C7A08B9F181B"
+                    {
+                    "Name" = "8:Software"
+                    "Condition" = "8:"
+                        "Keys"
+                        {
+                            "{B1EBC968-6B66-4532-A885-748B79AF4477}:_472AA17543894CDE8F740574DD28FA0C"
+                            {
+                            "Name" = "8:Apps"
+                            "Condition" = "8:"
+                                "Keys"
+                                {
+                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_E39EE972C4A447EA9F7CC8EAB3BFA1E1"
+                                    {
+                                    "Name" = "8:Just4Fun PockeTwit"
+                                    "Condition" = "8:"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_07A7102881FB469B8C004C50D320C2E2"
+                                            {
+                                            "Name" = "8:FirstRun"
+                                            "Condition" = "8:"
+                                            "ValueTypes" = "3:4"
+                                            "Value" = "8:01"
+                                            }
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                        }
+                        "Values"
+                        {
+                        }
+                    }
                 }
             }
             "HKCU"
