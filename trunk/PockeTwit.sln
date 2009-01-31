@@ -159,9 +159,9 @@ Global
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I).ActiveCfg = Debug|Any CPU
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Debug|Any CPU
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.Debug|Windows Mobile 6 Standard SDK (ARMV4I).ActiveCfg = Debug|Any CPU
-		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.Build.0 = Debug|Any CPU
-		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.Deploy.0 = Debug|Any CPU
+		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.ActiveCfg = DevBuild|Any CPU
+		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.Build.0 = DevBuild|Any CPU
+		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Any CPU.Deploy.0 = DevBuild|Any CPU
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Mixed Platforms.ActiveCfg = DevBuild|Any CPU
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Mixed Platforms.Build.0 = DevBuild|Any CPU
 		{ABC03AF6-BE80-4F13-914E-0CA6BFF4D391}.DevBuild|Mixed Platforms.Deploy.0 = DevBuild|Any CPU
