@@ -111,15 +111,18 @@ namespace PockeTwit
         public void ReloadFromDisk()
         {
             LoadSettings();
-            using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\Notif"))
+            if (System.IO.File.Exists(ClientSettings.AppPath + "\\Notif"))
             {
-                Friends.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
-                Friends.Sound = r.ReadLine();
-                Messages.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
-                Messages.Sound = r.ReadLine();
-            }
+                using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\Notif"))
+                {
+                    Friends.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
+                    Friends.Sound = r.ReadLine();
+                    Messages.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
+                    Messages.Sound = r.ReadLine();
+                }
 
-            System.IO.File.Delete(ClientSettings.AppPath + "\\Notif");
+                System.IO.File.Delete(ClientSettings.AppPath + "\\Notif");
+            }
             SaveSettings(Friends);
             SaveSettings(Messages);
         }
