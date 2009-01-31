@@ -34,9 +34,7 @@ namespace PockeTwit
 
         private static void PerformUpdate()
         {
-            NotificationHandler n = new NotificationHandler();
-            n.ReloadFromDisk();
-            n.ShutDown();
+            NotificationHandler.ReloadFromDisk();
             SetRunOnce();
         }
 
