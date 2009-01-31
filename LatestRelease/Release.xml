@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.62</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv62.CAB</url>
-  <notes>Fixed blank timelines
-smartphone notifications settings link
-
-From v.61:
-Smartphone audio/vibrate notifications
-Option to insert GPS URL in status (thanks @kjhughes)
-Communication error notifications
-Option for a single merged timeline 
-Numerous bugfixes
+  <version>.63</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv63.CAB</url>
+  <notes>Added QuickPost
+Fixed GPS link for all locales
+Improved battery life.
+Better Upgrade code (for next time)
 </notes>
 </LatestRelease>
