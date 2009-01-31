@@ -68,10 +68,8 @@ namespace PockeTwit
 
         private void menuUpdate_Click(object sender, EventArgs e)
         {
-            NotificationHandler n = new NotificationHandler();
-            n.BackupToDisk();
-            n.ShutDown();
-
+            NotificationHandler.BackupToDisk();
+            
             System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
             request = (HttpWebRequest)HttpWebRequest.Create(_NewVersion.DownloadURL);
             request.BeginGetResponse(new AsyncCallback(ResponseReceived), null);
