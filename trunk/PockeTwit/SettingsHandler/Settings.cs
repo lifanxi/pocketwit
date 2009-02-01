@@ -31,10 +31,13 @@ public static class ClientSettings
    
     public static string PingApi = "07fcca78e725fa4d3b27ea552ef06b3b";
 
+    private static int FontSize = 9;
+
     public static int Margin = 5;
     public static int MaxTweets = 50;
     public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
     public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
+    public static System.Drawing.Font TextFont;
     public static int SmallArtSize = 65;
     
     public static Yedda.Twitter.Account DefaultAccount
@@ -379,13 +382,13 @@ public static class ClientSettings
 
     private static void GetTextSizes()
     {
-        
+        TextFont = new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, FontSize, System.Drawing.FontStyle.Regular);
         using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(100, 100))
         {
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))
             {
-                TextSize = (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Regular)).Height - 1);
-                SmallTextSize = (int)(g.MeasureString("H", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 5, System.Drawing.FontStyle.Regular)).Height - 1);
+                TextSize = (int)(g.MeasureString("H", TextFont).Height - 1);
+                SmallTextSize = (int)(g.MeasureString("H", SmallFont).Height - 1);
             }
         }
     }
