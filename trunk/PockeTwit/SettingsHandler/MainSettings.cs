@@ -12,6 +12,7 @@ namespace PockeTwit.SettingsHandler
     public partial class MainSettings : Form
     {
         public bool NeedsReset { get; set; }
+        public bool NeedsRerender { get; set; }
         private bool Initialized = false;
         public MainSettings()
         {
@@ -88,6 +89,10 @@ namespace PockeTwit.SettingsHandler
                 if (UI.NeedsReset)
                 {
                     NeedsReset = true;
+                }
+                if (UI.NeedsRerender)
+                {
+                    NeedsRerender = true;
                 }
                 PockeTwit.Themes.FormColors.SetColors(this);
             }

@@ -1208,7 +1208,7 @@ namespace FingerUI
             }
         }
 
-        private void RerenderBySize()
+        public void RerenderBySize()
         {
             base.Visible = false;
             Application.DoEvents();

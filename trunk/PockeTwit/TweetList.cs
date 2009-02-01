@@ -268,6 +268,11 @@ namespace PockeTwit
                 }
                 this.Close();
             }
+            if (settings.NeedsRerender)
+            {
+                statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
+                statList.RerenderBySize();
+            }
             statList.Redraw();
             settings.Close();
             

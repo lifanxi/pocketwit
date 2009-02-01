@@ -32,6 +32,7 @@ namespace PockeTwit
 		#region Properties (1) 
 
         public bool NeedsReset { get; set; }
+        public bool NeedsRerender { get; set; }
 
 		#endregion Properties 
 
@@ -71,7 +72,12 @@ namespace PockeTwit
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
-            ClientSettings.FontSize = (int)fontUpDown.Value;
+            if(ClientSettings.FontSize != (int)fontUpDown.Value)
+            {
+                ClientSettings.FontSize = (int)fontUpDown.Value;
+                NeedsReset = true;
+            }
+
 
             string selectedTheme = (string)cmbTheme.SelectedItem;
             if (selectedTheme != OriginalTheme)
