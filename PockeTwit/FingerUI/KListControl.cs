@@ -58,7 +58,6 @@ namespace FingerUI
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
         private Popup ErrorPopup = new Popup();
-        private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
         private bool InFocus = false;
@@ -109,15 +108,14 @@ namespace FingerUI
             animationTimer.Interval = ClientSettings.AnimationInterval;
             animationTimer.Tick += new EventHandler(animationTimer_Tick);
 
-            NotificationArea.TextFont = this.Font;
+            NotificationArea.TextFont = ClientSettings.TextFont;
             NotificationArea.parentControl = this;
 
-            ErrorPopup.TextFont = this.Font;
+            ErrorPopup.TextFont = ClientSettings.TextFont;
             ErrorPopup.parentControl = this;
             ErrorPopup.AtTop = true;
 
-            SelectedFont = this.Font;
-            HighlightedFont = this.Font;
+            SelectedFont = ClientSettings.TextFont;
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
 
@@ -1143,7 +1141,7 @@ namespace FingerUI
                     {
                         using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
                         {
-                            flickerGraphics.DrawString("Let me catch up...", this.Font, sBrush, this.Bounds);
+                            flickerGraphics.DrawString("Let me catch up...", ClientSettings.TextFont, sBrush, this.Bounds);
                         }
                     }
                     flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
@@ -1550,7 +1548,7 @@ namespace FingerUI
             if (m_items.Count == 0) { Message = "There are no items to display"; }
             using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                SlidingPortal._RenderedGraphics.DrawString(Message, this.Font, sBrush, new RectangleF(0, 0, this.Width, this.Height));
+                SlidingPortal._RenderedGraphics.DrawString(Message, ClientSettings.TextFont, sBrush, new RectangleF(0, 0, this.Width, this.Height));
             }
             m_timer.Enabled = false;
             if (m_items.Count > 0)

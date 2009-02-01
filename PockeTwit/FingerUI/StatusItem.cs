@@ -32,8 +32,6 @@ namespace FingerUI
         private int m_x = -1;
         private int m_y = -1;
         private PockeTwit.Library.User ReplyUser = null;
-        private Font TextFont;
-        private Font SelectedFont;
         #endregion�Fields�
 
 		#region�Constructors�(2)�
@@ -49,8 +47,6 @@ namespace FingerUI
             m_parent = parent;
             m_text = text;
             m_value = value;
-            TextFont = m_parent.Font;
-            SelectedFont = m_parent.SelectedFont;
         }
 
         public StatusItem()
@@ -124,8 +120,6 @@ namespace FingerUI
             set 
             {
                 m_parent = value;
-                TextFont = m_parent.Font;
-                SelectedFont = m_parent.SelectedFont;
             }
         }
 
@@ -332,7 +326,8 @@ namespace FingerUI
                     }
                     using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
                     {
-                        g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y);
+                        //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
+                        g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);
                     }
                     System.Diagnostics.Debug.WriteLine("Done art from " + gu.ToString());
                     //This is usually disabled, but we may draw a smaller avatar over the first one
@@ -363,7 +358,7 @@ namespace FingerUI
                             {
                                 g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
                             }
-                            g.DrawString("@", TextFont, sBrush, new Rectangle(ImageRect.Right - 12, ImageRect.Top - 2, 10, 20));
+                            g.DrawString("@", ClientSettings.TextFont, sBrush, new Rectangle(ImageRect.Right - 12, ImageRect.Top - 2, 10, 20));
                         }
                     }
                     else if (Tweet.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
@@ -377,7 +372,7 @@ namespace FingerUI
                             {
                                 g.FillRectangle(bBrush, new Rectangle(ImageRect.Right - 15, ImageRect.Top, 15, 15));
                             }
-                            g.DrawString("D", TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
+                            g.DrawString("D", ClientSettings.TextFont, sBrush, new Rectangle(ImageRect.Right - 10, ImageRect.Top, 10, 20));
                         }
 
                     }
@@ -397,7 +392,7 @@ namespace FingerUI
 
                 if (!ClientSettings.UseClickables)
                 {
-                    g.DrawString(Tweet.DisplayText, TextFont, ForeBrush, new RectangleF((float)textBounds.Left, (float)textBounds.Top, (float)textBounds.Width, (float)textBounds.Height));
+                    g.DrawString(Tweet.DisplayText, ClientSettings.TextFont, ForeBrush, new RectangleF((float)textBounds.Left, (float)textBounds.Top, (float)textBounds.Width, (float)textBounds.Height));
                     //g.DrawString(Tweet.DisplayText, TextFont, ForeBrush, textBounds.Left, textBounds.Top, m_stringFormat);
                 }
                 else
@@ -411,7 +406,7 @@ namespace FingerUI
                         }
                         float Position = ((lineOffset * (ClientSettings.TextSize)) + textBounds.Top);
 
-                        g.DrawString(Tweet.SplitLines[i], TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
+                        g.DrawString(Tweet.SplitLines[i], ClientSettings.TextFont, ForeBrush, textBounds.Left, Position, m_stringFormat);
                         lineOffset++;
                     }
                     MakeClickable(g, textBounds);
@@ -550,7 +545,7 @@ namespace FingerUI
         {
             if (!ClientSettings.UseClickables) { return; }
             string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText);
-            SizeF size = g.MeasureString(CurrentLine, TextFont);
+            SizeF size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
 
             bool SpaceSplit = false;
             if (size.Width < textBounds.Width)
@@ -568,7 +563,7 @@ namespace FingerUI
                 foreach (char c in CurrentLine)
                 {
                     newString.Append(c);
-                    if (g.MeasureString(newString.ToString(), TextFont).Width >= textBounds.Width - (ClientSettings.Margin*2))
+                    if (g.MeasureString(newString.ToString(), ClientSettings.TextFont).Width >= textBounds.Width - (ClientSettings.Margin * 2))
                     {
                         if (!SpaceSplit | lastBreak == 0)
                         {
@@ -597,7 +592,7 @@ namespace FingerUI
                 {
                     CurrentLine = CurrentLine.Substring(lastBreak);
                 }
-                size = g.MeasureString(CurrentLine, TextFont);
+                size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
                 if (size.Width <= textBounds.Width)
                 {
                     line = CurrentLine.TrimStart(new char[] { ' ' });
@@ -618,7 +613,7 @@ namespace FingerUI
                 Tweet.SplitLines = new List<string>();
                 string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
                 FirstClickableRun(CurrentLine);
-                SizeF size = g.MeasureString(CurrentLine, TextFont);
+                SizeF size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
 
                 string subText;
                 if (this.Tweet.DisplayText.Split(' ')[0].StartsWith("@"))
@@ -652,8 +647,8 @@ namespace FingerUI
                     bMulti = false;
                     foreach (string word in Words)
                     {
-                        newString.Append(word + ' ');    
-                        if (g.MeasureString(newString.ToString(), TextFont).Width > textBounds.Width)
+                        newString.Append(word + ' ');
+                        if (g.MeasureString(newString.ToString(), ClientSettings.TextFont).Width > textBounds.Width)
                         {
                             if (bMulti && lastBreak == 0)
                             {
@@ -671,7 +666,7 @@ namespace FingerUI
                                     {
                                         newWord.Append(c);
                                         letters++;
-                                        if (g.MeasureString(newWord.ToString(), TextFont).Width > textBounds.Width)
+                                        if (g.MeasureString(newWord.ToString(), ClientSettings.TextFont).Width > textBounds.Width)
                                         {
                                             break;
                                         }
@@ -710,7 +705,7 @@ namespace FingerUI
                     {
                         CurrentLine = CurrentLine.Substring(lastBreak);
                     }
-                    size = g.MeasureString(CurrentLine, TextFont);
+                    size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
                     if (size.Width <= textBounds.Width)
                     {
                         line = CurrentLine.TrimStart(new char[] { ' ' });
@@ -770,9 +765,9 @@ namespace FingerUI
                         {
                             if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck.TrimEnd(IgnoredAtChars)))
                             {
-                                float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                                float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
                                 //Find the size of the word
-                                SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                                SizeF WordSize = g.MeasureString(Words[i], ClientSettings.TextFont);
                                 //A structure containing info we need to know about the word.
                                 c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
 
@@ -787,7 +782,7 @@ namespace FingerUI
                                     Clickable wrapClick = new Clickable();
                                     wrapClick.Text = c.Text;
                                     //Find the size of the word
-                                    WordSize = g.MeasureString(SecondPart, TextFont);
+                                    WordSize = g.MeasureString(SecondPart, ClientSettings.TextFont);
                                     //A structure containing info we need to know about the word.
                                     float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
                                     wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
@@ -798,9 +793,9 @@ namespace FingerUI
                         else if (WordToCheck.TrimEnd(IgnoredAtChars) == c.Text)
                         {
                             //Find out how far to the right this word will appear
-                            float startpos = g.MeasureString(LineBeforeThisWord.ToString(), TextFont).Width;
+                            float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
                             //Find the size of the word
-                            SizeF WordSize = g.MeasureString(Words[i], TextFont);
+                            SizeF WordSize = g.MeasureString(Words[i], ClientSettings.TextFont);
                             //A structure containing info we need to know about the word.
                             c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
                             c.Text = WordToCheck.TrimEnd(IgnoredAtChars);
