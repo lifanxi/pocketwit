@@ -62,6 +62,8 @@ namespace PockeTwit
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkMerge = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.fontUpDown = new System.Windows.Forms.NumericUpDown();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -149,9 +151,9 @@ namespace PockeTwit
             // 
             this.cmbTheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTheme.Location = new System.Drawing.Point(59, 160);
+            this.cmbTheme.Location = new System.Drawing.Point(74, 160);
             this.cmbTheme.Name = "cmbTheme";
-            this.cmbTheme.Size = new System.Drawing.Size(133, 22);
+            this.cmbTheme.Size = new System.Drawing.Size(118, 22);
             this.cmbTheme.TabIndex = 6;
             this.cmbTheme.SelectedIndexChanged += new System.EventHandler(this.cmbTheme_SelectedIndexChanged);
             // 
@@ -185,6 +187,26 @@ namespace PockeTwit
             this.chkMerge.CheckStateChanged += new System.EventHandler(this.chkMerge_CheckStateChanged);
             this.chkMerge.Click += new System.EventHandler(this.chkMerge_Click);
             // 
+            // label2
+            // 
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(4, 191);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 20);
+            this.label2.Text = "Font Size:";
+            // 
+            // fontUpDown
+            // 
+            this.fontUpDown.Location = new System.Drawing.Point(74, 189);
+            this.fontUpDown.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.fontUpDown.Name = "fontUpDown";
+            this.fontUpDown.Size = new System.Drawing.Size(49, 22);
+            this.fontUpDown.TabIndex = 12;
+            // 
             // UISettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -192,6 +214,8 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.fontUpDown);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.chkMerge);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
@@ -220,6 +244,8 @@ namespace PockeTwit
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkMerge;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown fontUpDown;
 
     }
 }

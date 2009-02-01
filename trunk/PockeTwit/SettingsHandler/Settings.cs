@@ -31,7 +31,7 @@ public static class ClientSettings
    
     public static string PingApi = "07fcca78e725fa4d3b27ea552ef06b3b";
 
-    private static int FontSize = 9;
+    
 
     public static int Margin = 5;
     public static int MaxTweets = 50;
@@ -89,7 +89,6 @@ public static class ClientSettings
 
     static ClientSettings()
     {
-        GetTextSizes();
         LoadSettings();
         LoadColors();
     }
@@ -97,6 +96,19 @@ public static class ClientSettings
 		#endregion Constructors 
 
 		#region Properties (7) 
+    private static int _FontSize = 9;
+    public static int FontSize
+    {
+        get
+        {
+            return _FontSize;
+        }
+        set
+        {
+            _FontSize = value;
+            GetTextSizes();
+        }
+    }
 
     public static Queue<string> SearchItems { get; set; }
     public static bool AutoTranslate { get; set; }
@@ -163,6 +175,15 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["FontSize"]))
+            {
+                FontSize = int.Parse(ConfigurationSettings.AppSettings["FontSize"]);
+            }
+            else
+            {
+                FontSize = 9;
+            }
+
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MergeMessages"]))
             {
                 MergeMessages = bool.Parse(ConfigurationSettings.AppSettings["MergeMessages"]);
@@ -345,6 +366,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
         ConfigurationSettings.AppSettings["MergeMessages"] = MergeMessages.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());
         ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
