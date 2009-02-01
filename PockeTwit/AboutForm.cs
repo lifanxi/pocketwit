@@ -154,8 +154,15 @@ namespace PockeTwit
 
         private void menuUpdate_Click(object sender, EventArgs e)
         {
-            
-            Checker.CheckForUpgrade();
+            if (UpgradeChecker.devBuild)
+            {
+                UpgradeForm f = new UpgradeForm();
+                f.ShowDialog();
+            }
+            else
+            {
+                Checker.CheckForUpgrade();
+            }
         }
 
 
