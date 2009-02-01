@@ -1,6 +1,6 @@
 ﻿namespace PockeTwit
 {
-    partial class ChooseAccount
+    partial class CrashReport
     {
         /// <summary>
         /// Required designer variable.

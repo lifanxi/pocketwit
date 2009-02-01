@@ -99,13 +99,17 @@ namespace PockeTwit
 
         public static void BackupToDisk()
         {
-            using (System.IO.StreamWriter f = new System.IO.StreamWriter(ClientSettings.AppPath + "\\Notif", false))
+            try
             {
-                f.WriteLine(Friends.Options);
-                f.WriteLine(Friends.Sound);
-                f.WriteLine(Messages.Options);
-                f.WriteLine(Messages.Sound);
+                using (System.IO.StreamWriter f = new System.IO.StreamWriter(ClientSettings.AppPath + "\\Notif", false))
+                {
+                    f.WriteLine(Friends.Options);
+                    f.WriteLine(Friends.Sound);
+                    f.WriteLine(Messages.Options);
+                    f.WriteLine(Messages.Sound);
+                }
             }
+            catch { }
         }
         public static void ReloadFromDisk()
         {

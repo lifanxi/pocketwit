@@ -423,7 +423,7 @@ namespace PockeTwit
             History.Push(firstItem);
             if(System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
             {
-                ChooseAccount errorForm = new ChooseAccount();
+                CrashReport errorForm = new CrashReport();
                 errorForm.ShowDialog();
             }
             if (!StartBackground)

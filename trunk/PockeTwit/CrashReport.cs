@@ -9,13 +9,13 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class ChooseAccount : Form
+    public partial class CrashReport : Form
     {
         private string ErrorText;
         
         private Microsoft.WindowsMobile.PocketOutlook.OutlookSession sess = new Microsoft.WindowsMobile.PocketOutlook.OutlookSession();
         private Microsoft.WindowsMobile.PocketOutlook.EmailAccountCollection accounts;
-        public ChooseAccount()
+        public CrashReport()
         {
             InitializeComponent();
             accounts = sess.EmailAccounts;
@@ -32,7 +32,7 @@ namespace PockeTwit
                 comboBox1.Items.Add(acc.Name);
             }
         }
-        public ChooseAccount(string Error)
+        public CrashReport(string Error)
         {
             InitializeComponent();
             ErrorText = Error;
@@ -58,6 +58,10 @@ namespace PockeTwit
                 if (UpgradeChecker.devBuild)
                 {
                     m.Subject = m.Subject + " dev build" + Environment.Version.Build.ToString();
+                }
+                if (ClientSettings.AccountsList.Count > 0)
+                {
+                    m.Subject += " from @" + ClientSettings.AccountsList[0].UserName;
                 }
                 string accName = (string)comboBox1.SelectedItem;
                 accounts[accName].Send(m);
