@@ -56,8 +56,8 @@ namespace FingerUI
 
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
-        private NotificationPopup NotificationArea = new NotificationPopup();
-        private NotificationPopup ErrorPopup = new NotificationPopup();
+        private Popup NotificationArea = new Popup();
+        private Popup ErrorPopup = new Popup();
         private Font HighlightedFont;
         private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
         private bool HasMoved = false;
@@ -465,6 +465,10 @@ namespace FingerUI
 		#region Methods (49) 
         void animationTimer_Tick(object sender, EventArgs e)
         {
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating)
+            {
+                animationTimer.Enabled = false;
+            }
             this.Repaint();
         }
 
@@ -473,6 +477,7 @@ namespace FingerUI
             this.animationTimer.Enabled = true;
         }
 
+        /*
         public void stopAnimation()
         {
             if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating)
@@ -480,6 +485,7 @@ namespace FingerUI
                 animationTimer.Enabled = false;
             }
         }
+         */
 		// Public Methods (16) 
 
         private string _CurrentList = null;
