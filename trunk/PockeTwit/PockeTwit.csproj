@@ -95,7 +95,7 @@
     </Compile>
     <Compile Include="FingerUI\Gradient\MSDNGradient.cs" />
     <Compile Include="FingerUI\Gradient\Win32Helper.cs" />
-    <Compile Include="FingerUI\Notification.cs" />
+    <Compile Include="FingerUI\Popup.cs" />
     <Compile Include="FingerUI\SideMenu.cs">
       <SubType>Component</SubType>
     </Compile>
