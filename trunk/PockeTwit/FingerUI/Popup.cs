@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FingerUI
 {
-    class NotificationPopup
+    class Popup
     {
         
         public bool AtTop = false;
@@ -36,7 +36,7 @@ namespace FingerUI
         private int MaxHeight = ClientSettings.TextSize + (ClientSettings.Margin * 2);
         public KListControl parentControl;
         
-        public NotificationPopup()
+        public Popup()
         {
             
         }
@@ -113,7 +113,7 @@ namespace FingerUI
                 else 
                 {
                     AnimationStep = -1;
-                    parentControl.stopAnimation(); 
+                    //parentControl.stopAnimation(); 
                 }
             }
             if (AnimationStep > 0)
