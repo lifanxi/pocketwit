@@ -71,6 +71,7 @@ namespace PockeTwit
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
+            ClientSettings.FontSize = (int)fontUpDown.Value;
 
             string selectedTheme = (string)cmbTheme.SelectedItem;
             if (selectedTheme != OriginalTheme)
@@ -103,6 +104,7 @@ namespace PockeTwit
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
+            fontUpDown.Value = (decimal)ClientSettings.FontSize;
             ListThemes();
             this.DialogResult = DialogResult.Cancel;
         }
