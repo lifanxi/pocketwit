@@ -38,6 +38,11 @@ namespace PockeTwit
             {
                 this.WindowState = FormWindowState.Maximized;
             }
+            if (UpgradeChecker.devBuild)
+            {
+                this._NewVersion.DownloadURL = @"http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB";
+                PerformUpdate();
+            }
         }
 
 		#endregion Constructors 
@@ -68,15 +73,20 @@ namespace PockeTwit
 
         private void menuUpdate_Click(object sender, EventArgs e)
         {
+            PerformUpdate();
+        }
+
+        private void PerformUpdate()
+        {
             NotificationHandler.BackupToDisk();
-            
+
             System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
             request = (HttpWebRequest)HttpWebRequest.Create(_NewVersion.DownloadURL);
             request.BeginGetResponse(new AsyncCallback(ResponseReceived), null);
             menuUpdate.Enabled = false;
-            
+
             menuIgnore.Enabled = false;
-            
+
             lblDownloading.Visible = true;
             progressDownload.Visible = true;
             lblInfo.Visible = false;
@@ -85,16 +95,6 @@ namespace PockeTwit
             label2.Visible = false;
 
             Cursor.Current = Cursors.WaitCursor;
-         
-            
-            
-            /*
-            System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
-            pi.FileName = _NewVersion.DownloadURL;
-            pi.UseShellExecute = true;
-            System.Diagnostics.Process p = System.Diagnostics.Process.Start(pi);
-            Application.Exit();
-             */
         }
 
         public void SetProgressMax(object sender, EventArgs e)
