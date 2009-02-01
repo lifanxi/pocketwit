@@ -81,7 +81,7 @@ namespace FingerUI
             }
         }
 
-        private void ResetTexts()
+        public void ResetTexts()
         {
             Tweet.SplitLines = new List<string>();
             Tweet.Clickables = new List<Clickable>();

@@ -206,7 +206,7 @@ namespace PockeTwit
                 {
                     statList.SelectedItem = statList[oldIndex + newItems];
                     currentItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    statList.YOffset = OldOffset + (newItems * statList.ItemHeight);    
+                    statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);    
                 }
                 else
                 {
@@ -270,7 +270,6 @@ namespace PockeTwit
             }
             if (settings.NeedsRerender)
             {
-                statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
                 statList.RerenderBySize();
             }
             statList.Redraw();
@@ -656,7 +655,6 @@ namespace PockeTwit
 
         private void SetUpListControl()
         {
-            statList.ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
             statList.IsMaximized = ClientSettings.IsMaximized;
             statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);

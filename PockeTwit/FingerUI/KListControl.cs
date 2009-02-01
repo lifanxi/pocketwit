@@ -63,7 +63,6 @@ namespace FingerUI
         private bool InFocus = false;
         // Background drawing
         
-        int m_itemHeight = 40;
         public ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
         
@@ -145,7 +144,7 @@ namespace FingerUI
 
         void SlidingPortal_NewImage()
         {
-            SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
+            SlidingPortalOffset = YOffset - (itemsBeforePortal * ClientSettings.ItemHeight);
             SlidingPortal.WindowOffset = SlidingPortalOffset;
             Repaint();
         }
@@ -174,7 +173,7 @@ namespace FingerUI
         {
             lock (m_items)
             {
-                int itemsBeforeScreen = YOffset / ItemHeight;
+                int itemsBeforeScreen = YOffset / ClientSettings.ItemHeight;
 
                 itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
                 int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
@@ -280,21 +279,7 @@ namespace FingerUI
         
         public bool IsMaximized { get; set; }
         
-        public int ItemHeight
-        {
-            get
-            {
-                // In horizontal mode, we just use the full bounds, other modes use m_itemHeight.
-                return  m_itemHeight;
-            }
-            set
-            {
-                m_itemHeight = value;
-                CreateBackBuffer();
-                Reset();
-            }
-        }
-
+        
         public int ItemWidth
         {
             get
@@ -334,7 +319,7 @@ namespace FingerUI
         {
             get
             {
-                return Math.Max(((m_items.Count * ItemHeight)) - Bounds.Height, 0);
+                return Math.Max(((m_items.Count * ClientSettings.ItemHeight)) - Bounds.Height, 0);
             }
         }
 
@@ -416,7 +401,7 @@ namespace FingerUI
             {
                 m_offset.Y = value;
 
-                SlidingPortalOffset = YOffset - (itemsBeforePortal * ItemHeight);
+                SlidingPortalOffset = YOffset - (itemsBeforePortal * ClientSettings.ItemHeight);
                 SlidingPortal.WindowOffset = SlidingPortalOffset;
             }
         }
@@ -611,15 +596,15 @@ namespace FingerUI
             {
                 if(item.Bounds.Top > VisibleBounds.Top)
                 {
-                    YOffset  = YOffset + ItemHeight;
+                    YOffset  = YOffset + ClientSettings.ItemHeight;
                 }
                 else
                 {
-                    YOffset = YOffset - ItemHeight;
+                    YOffset = YOffset - ClientSettings.ItemHeight;
                 }
 
                 if (YOffset < 0) { YOffset = 0; }
-                if (YOffset > (m_items.Values.Count - 1) * ItemHeight) { YOffset = m_items.Values.Count * ItemHeight; }
+                if (YOffset > (m_items.Values.Count - 1) * ClientSettings.ItemHeight) { YOffset = m_items.Values.Count * ClientSettings.ItemHeight; }
 
                 VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
             }
@@ -1012,7 +997,7 @@ namespace FingerUI
             }
             // Did the click end on the same item it started on?
             bool sameX = Math.Abs(e.X - m_mouseDown.X) < m_itemWidth;
-            bool sameY = Math.Abs(e.Y - m_mouseDown.Y) < m_itemHeight;
+            bool sameY = Math.Abs(e.Y - m_mouseDown.Y) < ClientSettings.ItemHeight;
 
             if (sameY)
             {
@@ -1230,6 +1215,7 @@ namespace FingerUI
             foreach (StatusItem item in m_items.Values)
             {
                 item.Bounds = ItemBounds(0, item.Index);
+                item.ResetTexts();
             }
 
             SlidingPortal.Clear();
@@ -1441,7 +1427,7 @@ namespace FingerUI
         {
             Point index = new Point(0, 0);
 
-            index.Y = ((y + YOffset - Bounds.Top) / (m_itemHeight));
+            index.Y = ((y + YOffset - Bounds.Top) / (ClientSettings.ItemHeight));
             
             return index;
         }
@@ -1481,9 +1467,9 @@ namespace FingerUI
 
         private Rectangle ItemBounds(int x, int y)
         {
-            int itemY = Bounds.Top + (m_itemHeight * y);
+            int itemY = Bounds.Top + (ClientSettings.ItemHeight * y);
 
-            return new Rectangle(Bounds.Left, itemY, ItemWidth, ItemHeight);
+            return new Rectangle(Bounds.Left, itemY, ItemWidth, ClientSettings.ItemHeight);
             
         }
 

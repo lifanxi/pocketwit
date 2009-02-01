@@ -80,7 +80,6 @@ namespace FingerUI
             get { return _BitmapHeight; }
         }
         
-        private int ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
         private int maxWidth = 0;
         public Portal()
         {
@@ -107,8 +106,8 @@ namespace FingerUI
             {
                 try
                 {
-                    TestMap = new Bitmap(maxWidth, MaxItems * ItemHeight);
-                    SecondMap = new Bitmap(maxWidth, MaxItems * ItemHeight);
+                    TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
+                    SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
                     break;
                 }
                 catch (OutOfMemoryException ex)
@@ -142,7 +141,7 @@ namespace FingerUI
                 ClientSettings.PortalSize = MaxItems;
                 ClientSettings.SaveSettings();
             }
-            _BitmapHeight = MaxItems * ItemHeight;
+            _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
             _Rendered = new Bitmap(maxWidth, _BitmapHeight);
             
             _RenderedGraphics = Graphics.FromImage(_Rendered);
@@ -168,7 +167,7 @@ namespace FingerUI
                             StatusItem s = (StatusItem)Items[i];
                             if (s.Tweet.user.screen_name.ToLower() == User)
                             {
-                                Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                                Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
                                 s.Render(_RenderedGraphics, itemBounds);
                             }
                             if (ClientSettings.ShowReplyImages)
@@ -178,7 +177,7 @@ namespace FingerUI
                                     string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
                                     if (ReplyTo == User)
                                     {
-                                        Rectangle itemBounds = new Rectangle(0, ItemHeight * i, s.Bounds.Width, ItemHeight);
+                                        Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
                                         s.Render(_RenderedGraphics, itemBounds);
                                     }
                                 }
@@ -289,7 +288,7 @@ namespace FingerUI
                 if (Items.Contains(Item))
                 {
                     int i = Items.IndexOf(Item);
-                    Rectangle itemBounds = new Rectangle(0, ItemHeight * i, Item.Bounds.Width, ItemHeight);
+                    Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, Item.Bounds.Width, ClientSettings.ItemHeight);
                     Item.Render(_RenderedGraphics, itemBounds);
                 }
             }
@@ -333,13 +332,13 @@ namespace FingerUI
             }
             try
             {
-                using (temp = new Bitmap(maxWidth, ItemHeight * MaxItems))
+                using (temp = new Bitmap(maxWidth, ClientSettings.ItemHeight * MaxItems))
                 {
                     using (Graphics g = Graphics.FromImage(temp))
                     {
                         lock (Items)
                         {
-                            int StartItem = Math.Max(WindowOffset / ItemHeight,0);
+                            int StartItem = Math.Max(WindowOffset / ClientSettings.ItemHeight, 0);
                             int EndItem = StartItem + 4;
                             if (EndItem > Items.Count)
                             {
@@ -406,7 +405,7 @@ namespace FingerUI
         private void DrawSingleItem(int i, Graphics g)
         {
             StatusItem Item = Items[i];
-            Rectangle ItemBounds = new Rectangle(0, i * ItemHeight, Item.Bounds.Width, ItemHeight);
+            Rectangle ItemBounds = new Rectangle(0, i * ClientSettings.ItemHeight, Item.Bounds.Width, ClientSettings.ItemHeight);
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
                 g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
@@ -420,7 +419,7 @@ namespace FingerUI
             //Copy all but last item from top down one.
             IntPtr gPtr = _RenderedGraphics.GetHdc();
 
-            BitBlt(gPtr, 0, ItemHeight, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, 0, TernaryRasterOperations.SRCCOPY);
+            BitBlt(gPtr, 0, ClientSettings.ItemHeight, _Rendered.Width, _Rendered.Height - ClientSettings.ItemHeight, gPtr, 0, 0, TernaryRasterOperations.SRCCOPY);
             _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the first item.
             StatusItem Item = Items[0];
@@ -437,11 +436,11 @@ namespace FingerUI
         {
             //Copy all but first item from top up one.
             IntPtr gPtr = _RenderedGraphics.GetHdc();
-            BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ItemHeight, gPtr, 0, ItemHeight, TernaryRasterOperations.SRCCOPY);
+            BitBlt(gPtr, 0, 0, _Rendered.Width, _Rendered.Height - ClientSettings.ItemHeight, gPtr, 0, ClientSettings.ItemHeight, TernaryRasterOperations.SRCCOPY);
             _RenderedGraphics.ReleaseHdc(gPtr);
             //Draw the last item.
             StatusItem Item = Items[Items.Count - 1];
-            Rectangle ItemBounds = new Rectangle(0, (MaxItems - 1) * ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
+            Rectangle ItemBounds = new Rectangle(0, (MaxItems - 1) * ClientSettings.ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);

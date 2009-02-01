@@ -39,6 +39,13 @@ public static class ClientSettings
     public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
     public static System.Drawing.Font TextFont;
     public static int SmallArtSize = 65;
+    public static int ItemHeight
+    {
+        get
+        {
+            return (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5; ;
+        }
+    }
     
     public static Yedda.Twitter.Account DefaultAccount
     {

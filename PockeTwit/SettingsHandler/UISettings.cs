@@ -64,8 +64,8 @@ namespace PockeTwit
                 return;
             }
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
-            if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsReset = true; }
-            if (chkScreenName.Checked != ClientSettings.IncludeUserName) { NeedsReset = true; }
+            if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsRerender = true; }
+            if (chkScreenName.Checked != ClientSettings.IncludeUserName) { NeedsRerender = true; }
             ClientSettings.MergeMessages = chkMerge.Checked;
             ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.UseClickables = chkClickables.Checked;
@@ -75,7 +75,7 @@ namespace PockeTwit
             if(ClientSettings.FontSize != (int)fontUpDown.Value)
             {
                 ClientSettings.FontSize = (int)fontUpDown.Value;
-                NeedsReset = true;
+                NeedsRerender = true;
             }
 
 
