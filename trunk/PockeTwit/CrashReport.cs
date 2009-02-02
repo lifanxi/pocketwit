@@ -57,7 +57,7 @@ namespace PockeTwit
                 m.Subject = "Crash Report: v" +UpgradeChecker.currentVersion.ToString();
                 if (UpgradeChecker.devBuild)
                 {
-                    m.Subject = m.Subject + " dev build" + Environment.Version.Build.ToString();
+                    m.Subject = m.Subject + " dev build" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
                 }
                 if (ClientSettings.AccountsList.Count > 0)
                 {
