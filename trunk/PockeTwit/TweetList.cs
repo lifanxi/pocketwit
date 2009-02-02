@@ -270,6 +270,8 @@ namespace PockeTwit
             }
             if (settings.NeedsRerender)
             {
+                PockeTwit.Themes.FormColors.SetColors(this);
+                statList.ResetFullScreenColors();
                 statList.RerenderBySize();
             }
             statList.Redraw();
