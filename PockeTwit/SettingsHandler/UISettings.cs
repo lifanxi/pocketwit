@@ -72,9 +72,9 @@ namespace PockeTwit
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
-            if(ClientSettings.FontSize != (int)fontUpDown.Value)
+            if(ClientSettings.FontSize != int.Parse(this.txtFontSize.Text))
             {
-                ClientSettings.FontSize = (int)fontUpDown.Value;
+                ClientSettings.FontSize = int.Parse(txtFontSize.Text);
                 NeedsRerender = true;
             }
 
@@ -111,7 +111,7 @@ namespace PockeTwit
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
-            fontUpDown.Value = (decimal)ClientSettings.FontSize;
+            txtFontSize.Text = ClientSettings.FontSize.ToString();
             ListThemes();
             this.DialogResult = DialogResult.Cancel;
         }
@@ -167,6 +167,15 @@ namespace PockeTwit
             else
             {
                 chkMerge.Checked = !chkMerge.Checked;
+            }
+        }
+
+
+        private void txtFontSize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) & e.KeyChar != '\b')
+            {
+                e.Handled = true;
             }
         }
 

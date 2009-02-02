@@ -63,7 +63,7 @@ namespace PockeTwit
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkMerge = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.fontUpDown = new System.Windows.Forms.NumericUpDown();
+            this.txtFontSize = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -195,17 +195,13 @@ namespace PockeTwit
             this.label2.Size = new System.Drawing.Size(66, 20);
             this.label2.Text = "Font Size:";
             // 
-            // fontUpDown
+            // txtFontSize
             // 
-            this.fontUpDown.Location = new System.Drawing.Point(74, 189);
-            this.fontUpDown.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.fontUpDown.Name = "fontUpDown";
-            this.fontUpDown.Size = new System.Drawing.Size(49, 22);
-            this.fontUpDown.TabIndex = 12;
+            this.txtFontSize.Location = new System.Drawing.Point(74, 189);
+            this.txtFontSize.Name = "txtFontSize";
+            this.txtFontSize.Size = new System.Drawing.Size(118, 21);
+            this.txtFontSize.TabIndex = 17;
+            this.txtFontSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFontSize_KeyPress);
             // 
             // UISettings
             // 
@@ -214,7 +210,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.fontUpDown);
+            this.Controls.Add(this.txtFontSize);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkMerge);
             this.Controls.Add(this.linkLabel1);
@@ -245,7 +241,7 @@ namespace PockeTwit
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkMerge;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown fontUpDown;
+        private System.Windows.Forms.TextBox txtFontSize;
 
     }
 }
