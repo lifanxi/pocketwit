@@ -195,6 +195,10 @@ namespace FingerUI
                 //}
             }
         }
+        public void ResetFullScreenColors()
+        {
+            fsDisplay = new FullScreenTweet();
+        }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
         {
