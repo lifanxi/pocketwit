@@ -161,7 +161,7 @@ namespace PockeTwit
         void DoneDownloading()
         {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = ClientSettings.AppPath + "\\Update\\update.cab";
+            p.StartInfo.FileName = ClientSettings.AppPath + "\\Update\\PockeTwitUpgrade.cab";
             p.StartInfo.UseShellExecute = true;
             p.Start();
             Application.Exit();
