@@ -1220,10 +1220,13 @@ namespace FingerUI
 
             this.ItemWidth = this.Width;
 
-            foreach (StatusItem item in m_items.Values)
+            foreach (ItemList list in this.ItemLists.Values)
             {
-                item.Bounds = ItemBounds(0, item.Index);
-                item.ResetTexts();
+                foreach (StatusItem item in list.Values)
+                {
+                    item.Bounds = ItemBounds(0, item.Index);
+                    item.ResetTexts();
+                }
             }
 
             SlidingPortal.Clear();
