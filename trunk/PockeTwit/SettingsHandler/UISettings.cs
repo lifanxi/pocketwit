@@ -83,6 +83,7 @@ namespace PockeTwit
             if (selectedTheme != OriginalTheme)
             {
                 ClientSettings.ThemeName = selectedTheme;
+                NeedsRerender = true;
             }
             ClientSettings.LoadColors();
 
