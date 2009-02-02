@@ -1116,6 +1116,10 @@ namespace FingerUI
         
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (NotificationArea.isAnimating || ErrorPopup.isAnimating)
+            {
+                animationTimer.Enabled = true;
+            }
             using (Image flickerBuffer = new Bitmap(this.Width, this.Height))
             {
 
