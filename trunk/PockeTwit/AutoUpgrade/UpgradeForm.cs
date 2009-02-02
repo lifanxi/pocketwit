@@ -126,7 +126,7 @@ namespace PockeTwit
             progressDownload.Invoke(new EventHandler(SetProgressMax));
             
             // Open file stream to save received data
-            filestream = new FileStream(ClientSettings.AppPath + "\\Update\\update.cab", FileMode.Create);
+            filestream = new FileStream(ClientSettings.AppPath + "\\Update\\PockeTwitUpgrade.cab", FileMode.Create);
             // Request the first chunk
             response.GetResponseStream().BeginRead(dataBuffer, 0, DataBlockSize, new AsyncCallback(OnDataRead), this);
 
