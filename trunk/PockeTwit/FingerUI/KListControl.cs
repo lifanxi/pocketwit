@@ -10,12 +10,16 @@ namespace FingerUI
     public class KListControl : UserControl
     {
         private FullScreenTweet fsDisplay = new FullScreenTweet();
-        private System.Windows.Forms.Timer animationTimer = new System.Windows.Forms.Timer();
+        private System.Threading.Timer animationTimer;
+
+        private delegate void delPaint();
 
         private class Velocity
         {
             public delegate void delStoppedMoving();
             public event delStoppedMoving StoppedMoving = delegate { };
+
+
 
             private int _X = 0;
             public int X
@@ -104,9 +108,7 @@ namespace FingerUI
 
         public KListControl()
         {
-            animationTimer.Interval = ClientSettings.AnimationInterval;
-            animationTimer.Tick += new EventHandler(animationTimer_Tick);
-
+            animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             NotificationArea.TextFont = ClientSettings.TextFont;
             NotificationArea.parentControl = this;
 
@@ -450,18 +452,19 @@ namespace FingerUI
 		#endregion Delegates and Events 
 
 		#region Methods (49) 
-        void animationTimer_Tick(object sender, EventArgs e)
+        
+        void animationTimer_Tick(object o)
         {
             if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating)
             {
-                animationTimer.Enabled = false;
+                animationTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             }
             this.Repaint();
         }
 
         public void startAnimation()
         {
-            this.animationTimer.Enabled = true;
+            animationTimer.Change(50, 50);
         }
 
         /*
@@ -1118,12 +1121,9 @@ namespace FingerUI
             }
         }
         
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (NotificationArea.isAnimating || ErrorPopup.isAnimating)
-            {
-                animationTimer.Enabled = true;
-            }
             using (Image flickerBuffer = new Bitmap(this.Width, this.Height))
             {
 
