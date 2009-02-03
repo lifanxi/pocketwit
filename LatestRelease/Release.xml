@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.63</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv63.CAB</url>
-  <notes>Added QuickPost
-Fixed GPS link for all locales
-Improved battery life.
-Better Upgrade code (for next time)
+  <version>.64</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv64.CAB</url>
+  <notes>Adjustable font -- 
+	Fit more items or make more readable.
+
+Fix "stuck" popups
 </notes>
 </LatestRelease>
