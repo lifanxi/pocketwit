@@ -75,7 +75,7 @@ namespace PockeTwit
             if(ClientSettings.FontSize != int.Parse(this.txtFontSize.Text))
             {
                 ClientSettings.FontSize = int.Parse(txtFontSize.Text);
-                NeedsRerender = true;
+                NeedsReset = true;
             }
 
 
