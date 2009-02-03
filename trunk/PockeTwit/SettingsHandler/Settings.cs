@@ -35,9 +35,9 @@ public static class ClientSettings
 
     public static int Margin = 5;
     public static int MaxTweets = 50;
-    public static System.Drawing.Font MenuFont = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold);
-    public static Font SmallFont = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Regular);
-    public static System.Drawing.Font TextFont;
+    public static Font MenuFont;
+    public static Font SmallFont;
+    public static Font TextFont;
     public static int SmallArtSize = 65;
     public static int ItemHeight
     {
@@ -412,6 +412,14 @@ public static class ClientSettings
     private static void GetTextSizes()
     {
         TextFont = new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, FontSize, System.Drawing.FontStyle.Regular);
+        MenuFont = new Font(FontFamily.GenericSansSerif, FontSize, FontStyle.Bold);
+        int SmallFontSize = 6;
+        if (FontSize > 4)
+        {
+            SmallFontSize = FontSize - 3;
+        }
+        SmallFont = new Font(FontFamily.GenericSansSerif, SmallFontSize, FontStyle.Regular);
+    
         using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(100, 100))
         {
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))
