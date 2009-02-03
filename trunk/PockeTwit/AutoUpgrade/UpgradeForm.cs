@@ -126,7 +126,7 @@ namespace PockeTwit
             }
             catch
             {
-                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", PockeTwit, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
                     PerformUpdate();
                 }
@@ -166,7 +166,7 @@ namespace PockeTwit
             }
             catch 
             {
-                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", PockeTwit, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
                     PerformUpdate();
                 }

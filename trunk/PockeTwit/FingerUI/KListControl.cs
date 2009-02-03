@@ -199,7 +199,7 @@ namespace FingerUI
         }
         public void ResetFullScreenColors()
         {
-            fsDisplay = new FullScreenTweet();
+            fsDisplay.ResetRendering();
         }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
