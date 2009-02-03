@@ -113,48 +113,67 @@ namespace PockeTwit
             try
             {
                 response = (HttpWebResponse)request.EndGetResponse(res);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error");
-                return;
-            }
-            // Allocate data buffer
-            dataBuffer = new byte[DataBlockSize];
-            // Set up progrees bar
-            maxVal = (int)response.ContentLength;
-            progressDownload.Invoke(new EventHandler(SetProgressMax));
-            
-            // Open file stream to save received data
-            filestream = new FileStream(ClientSettings.AppPath + "\\Update\\PockeTwitUpgrade.cab", FileMode.Create);
-            // Request the first chunk
-            response.GetResponseStream().BeginRead(dataBuffer, 0, DataBlockSize, new AsyncCallback(OnDataRead), this);
+                // Allocate data buffer
+                dataBuffer = new byte[DataBlockSize];
+                // Set up progrees bar
+                maxVal = (int)response.ContentLength;
+                progressDownload.Invoke(new EventHandler(SetProgressMax));
 
+                // Open file stream to save received data
+                filestream = new FileStream(ClientSettings.AppPath + "\\Update\\PockeTwitUpgrade.cab", FileMode.Create);
+                // Request the first chunk
+                response.GetResponseStream().BeginRead(dataBuffer, 0, DataBlockSize, new AsyncCallback(OnDataRead), this);
+            }
+            catch
+            {
+                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", PockeTwit, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    PerformUpdate();
+                }
+                else
+                {
+                    MessageBox.Show("You can download the upgrade manually from http://code.google.com/p/pocketwit/");
+                }
+            }
         }
 
         void OnDataRead(IAsyncResult res)
         {
-            // How many bytes did we get this time
-            int nBytes = response.GetResponseStream().EndRead(res);
-            // Write buffer
-            filestream.Write(dataBuffer, 0, nBytes);
-            // Update progress bar using Invoke()
-            pbVal += nBytes;
-            
-            progressDownload.Invoke(new EventHandler(UpdateProgressValue));
-            
-            // Are we done yet?
-            if (nBytes > 0)
+            try
             {
-                // No, keep reading
-                response.GetResponseStream().BeginRead(dataBuffer, 0, DataBlockSize, new AsyncCallback(OnDataRead), this);
+                // How many bytes did we get this time
+                int nBytes = response.GetResponseStream().EndRead(res);
+                // Write buffer
+                filestream.Write(dataBuffer, 0, nBytes);
+                // Update progress bar using Invoke()
+                pbVal += nBytes;
+
+                progressDownload.Invoke(new EventHandler(UpdateProgressValue));
+
+                // Are we done yet?
+                if (nBytes > 0)
+                {
+                    // No, keep reading
+                    response.GetResponseStream().BeginRead(dataBuffer, 0, DataBlockSize, new AsyncCallback(OnDataRead), this);
+                }
+                else
+                {
+                    // Yes, perform cleanup and update UI.
+                    filestream.Close();
+                    filestream = null;
+                    DoneDownloading();
+                }
             }
-            else
+            catch 
             {
-                // Yes, perform cleanup and update UI.
-                filestream.Close();
-                filestream = null;
-                DoneDownloading();
+                if (MessageBox.Show("There was an error downloading the upgrade.  Would you like to try again?", PockeTwit, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    PerformUpdate();
+                }
+                else
+                {
+                    MessageBox.Show("You can download the upgrade manually from http://code.google.com/p/pocketwit/");
+                }
             }
         }
 
