@@ -355,8 +355,56 @@ namespace PockeTwit
             SetStatus("@"+User, selectedItem.Tweet.id);
         }
 
+        private void CreateLeftMenu()
+        {
+            FingerUI.SideMenuItem Back = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back");
+            
+
+            FingerUI.SideMenuItem FriendsTimeLine = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline");
+            FingerUI.SideMenuItem Messages = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages");
+            FingerUI.SideMenuItem Public = new FingerUI.SideMenuItem(null, "Public Timeline");
+
+            FingerUI.SideMenuItem TimeLines = new FingerUI.SideMenuItem(null, "TimeLines");
+            TimeLines.SubMenuItems.Add(FriendsTimeLine);
+            TimeLines.SubMenuItems.Add(Messages);
+            TimeLines.SubMenuItems.Add(Public);
+            
+            FingerUI.SideMenuItem PostUpdate = new FingerUI.SideMenuItem(this.SetStatus, "Post Update");
+            FingerUI.SideMenuItem Search = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local");
+            FingerUI.SideMenuItem Map = new FingerUI.SideMenuItem(this.MapList, "Map These");
+            FingerUI.SideMenuItem Settings = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings");
+            FingerUI.SideMenuItem About = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback");
+            FingerUI.SideMenuItem Exit = new FingerUI.SideMenuItem(this.ExitApplication, "Exit");
+
+            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{TimeLines, PostUpdate, Search, Map, Settings,
+                About, Exit});
+        }
+
+        private void CreateRightMenu()
+        {
+            // "Show Conversation", "Reply @User", "Direct @User", "Quote", 
+            //   "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following",
+            // "Minimize" 
+            FingerUI.SideMenuItem Conversation = new FingerUI.SideMenuItem(GetConversation, "Show Conversation");
+            FingerUI.SideMenuItem Reply = new FingerUI.SideMenuItem(SendReply , "Reply @User");
+            FingerUI.SideMenuItem Direct = new FingerUI.SideMenuItem(SendDirectMessage , "Direct @User");
+            FingerUI.SideMenuItem Quote = new FingerUI.SideMenuItem(this.Quote , "Quote");
+            FingerUI.SideMenuItem Favorite = new FingerUI.SideMenuItem(CreateFavoriteAsync, "Make Favorite");
+            FingerUI.SideMenuItem DestroyFavorite = new FingerUI.SideMenuItem(this.DestroyFavorite, "Remove from Favorites");
+            FingerUI.SideMenuItem UserTimeline = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline");
+            FingerUI.SideMenuItem ProfilePage = new FingerUI.SideMenuItem(ShowProfile, "@User Profile");
+            FingerUI.SideMenuItem Follow = new FingerUI.SideMenuItem(FollowUser, "Follow @User");
+            FingerUI.SideMenuItem StopFolloW = new FingerUI.SideMenuItem(StopFollowingUser, "Stop Following @User");
+            FingerUI.SideMenuItem Minimize = new FingerUI.SideMenuItem(this.Minimize, "Minimize");
+
+            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{Conversation, Reply, Direct, Quote, Favorite, 
+                DestroyFavorite, UserTimeline, ProfilePage, Follow, StopFolloW, Minimize});
+        }
+
+
         private void SetLeftMenu()
         {
+            /*
             if (ClientSettings.MergeMessages)
             {
                 LeftMenu = new List<string>(new string[] { "Back", "TimeLine", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
@@ -369,10 +417,14 @@ namespace PockeTwit
             {
                 LeftMenu.Remove("Back");
             }
+            
             statList.LeftMenu.ResetMenu(LeftMenu);
+             */
+            CreateLeftMenu();
         }
         private void UpdateRightMenu()
         {
+            /*
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter conn = GetMatchingConnection(selectedItem.Tweet.Account);
@@ -399,6 +451,8 @@ namespace PockeTwit
                     statList.RightMenu.ReplaceItem("Stop Following", "Follow");
                 }
             }
+             */
+            CreateRightMenu();
         }
         
         private void SetConnectedMenus()
@@ -410,6 +464,7 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
+            /*
             RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
             if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
             if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
@@ -420,6 +475,9 @@ namespace PockeTwit
             }
             statList.RightMenu.ResetMenu(RightMenu);
             SetLeftMenu();
+             */
+            SetLeftMenu();
+            UpdateRightMenu();
         }
 
         private bool SetEverythingUp()
@@ -658,7 +716,7 @@ namespace PockeTwit
         private void SetUpListControl()
         {
             statList.IsMaximized = ClientSettings.IsMaximized;
-            statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
+            //statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
             statList.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
@@ -784,16 +842,7 @@ namespace PockeTwit
                     Minimize();
                     break;
                 case "Exit":
-                    statList.Clear();
-                    if (Manager != null)
-                    {
-                        Manager.ShutDown();
-                    }
-                    if (Notifyer != null)
-                    {
-                        Notifyer.ShutDown();
-                    }
-                    this.Close();
+                    ExitApplication();
                     break;
             }
             if (ItemName != "Exit")
@@ -801,6 +850,20 @@ namespace PockeTwit
                 statList.SnapBack();
             }
             SetLeftMenu();
+        }
+
+        private void ExitApplication()
+        {
+            statList.Clear();
+            if (Manager != null)
+            {
+                Manager.ShutDown();
+            }
+            if (Notifyer != null)
+            {
+                Notifyer.ShutDown();
+            }
+            this.Close();
         }
 
         private void GoBackInHistory()

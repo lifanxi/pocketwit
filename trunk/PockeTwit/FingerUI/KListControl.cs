@@ -432,13 +432,13 @@ namespace FingerUI
 
         public delegate void delAddItem(StatusItem item);
         public delegate void delClearMe();
-        public delegate void delMenuItemSelected(string ItemName);
+        //public delegate void delMenuItemSelected(string ItemName);
         public delegate void delSwitchState(bool IsMaximized);
 
 
 		// Events (5) 
 
-        public event delMenuItemSelected MenuItemSelected;
+        //public event delMenuItemSelected MenuItemSelected;
 
         public event EventHandler SelectedItemChanged;
 
@@ -690,11 +690,11 @@ namespace FingerUI
         {
             if (RightMenu.Contains(RequestedMenuItem))
             {
-                RightMenu.SelectedItem = RequestedMenuItem;
+                RightMenu.SelectByText(RequestedMenuItem);
             }
             if (LeftMenu.Contains(RequestedMenuItem))
             {
-                LeftMenu.SelectedItem = RequestedMenuItem;
+                LeftMenu.SelectByText(RequestedMenuItem);
             }
         }
 
@@ -730,7 +730,7 @@ namespace FingerUI
             {
                 if (e.KeyChar == (Char)Keys.Escape)
                 {
-                    this.MenuItemSelected("Back");
+                    LeftMenu.InvokeByText("Back");
                 }
             }
             e.Handled = true;
@@ -760,12 +760,12 @@ namespace FingerUI
                 {
                     case SideShown.Left:
                         {
-                            MenuItemSelected(LeftMenu.SelectedItem);
+                            LeftMenu.InvokeSelected();
                             break;
                         }
                     case SideShown.Right:
                         {
-                            MenuItemSelected(RightMenu.SelectedItem);
+                            RightMenu.InvokeSelected();
                             break;
                         }
                     case SideShown.Middle:
@@ -872,12 +872,12 @@ namespace FingerUI
                     if (CurrentlyViewing == SideShown.Left)
                     {
                         LeftMenu.SelectByNumber(KeyToCheck-1);
-                        MenuItemSelected(LeftMenu.SelectedItem);
+                        LeftMenu.InvokeSelected();
                     }
                     else if (CurrentlyViewing == SideShown.Right)
                     {
                         RightMenu.SelectByNumber(KeyToCheck-1);
-                        MenuItemSelected(RightMenu.SelectedItem);
+                        RightMenu.InvokeSelected();
                     }
                 }
             }
@@ -1441,7 +1441,7 @@ namespace FingerUI
             return index;
         }
 
-        private string GetMenuItemForPoint(MouseEventArgs e)
+        private FingerUI.SideMenuItem GetMenuItemForPoint(MouseEventArgs e)
         {
             Point X = new Point(e.X, e.Y);
             
@@ -1461,7 +1461,7 @@ namespace FingerUI
             }
             MenuHeight = MenuToCheck.ItemHeight;
             TopOfItem = MenuToCheck.TopOfMenu;
-            foreach (string MenuItem in MenuToCheck.GetItems())
+            foreach (SideMenuItem MenuItem in MenuToCheck.GetItems())
             {
                 Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
                 TopOfItem = TopOfItem + MenuHeight;
@@ -1604,26 +1604,21 @@ namespace FingerUI
             if (e.X > this.Width-XOffset)
             {
                 //MenuItem selected
-                if(MenuItemSelected!=null)
+                SideMenuItem Item = GetMenuItemForPoint(e);
+                if (Item!=null)
                 {
-                    string ItemName = GetMenuItemForPoint(e);
-                    if (!String.IsNullOrEmpty(ItemName))
-                    {
-                        MenuItemSelected(ItemName);
-                        menuwasClicked = true;
-                    }
+                    Item.ClickedMethod();
+                    menuwasClicked = true;
                 }
             }
             else if ((XOffset) < 0 && e.X<Math.Abs(XOffset))
             {
-                if (MenuItemSelected != null)
+            
+                SideMenuItem Item = GetMenuItemForPoint(e);
+                if (Item != null) 
                 {
-                    string ItemName = GetMenuItemForPoint(e);
-                    if (!String.IsNullOrEmpty(ItemName))
-                    {
-                        MenuItemSelected(ItemName);
-                        menuwasClicked = true;
-                    }
+                    Item.ClickedMethod();
+                    menuwasClicked = true;
                 }
             }
             else
