@@ -197,6 +197,8 @@ namespace PockeTwit
             // 
             // txtFontSize
             // 
+            this.txtFontSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFontSize.Location = new System.Drawing.Point(74, 189);
             this.txtFontSize.Name = "txtFontSize";
             this.txtFontSize.Size = new System.Drawing.Size(118, 21);
