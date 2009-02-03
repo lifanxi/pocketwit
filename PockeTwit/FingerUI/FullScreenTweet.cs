@@ -47,7 +47,11 @@ namespace FingerUI
             PockeTwit.Themes.FormColors.SetColors(this);
             avatarBox.Width = ClientSettings.SmallArtSize;
             avatarBox.Height = ClientSettings.SmallArtSize;
-            
+        }
+
+        public void ResetRendering()
+        {
+            PockeTwit.Themes.FormColors.SetColors(this);
         }
 
         private delegate void delUpdateArt(string Argument);
