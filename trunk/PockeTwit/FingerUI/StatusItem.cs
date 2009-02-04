@@ -517,7 +517,7 @@ namespace FingerUI
 
 		//�Public�Methods�(2)�
 
-                        public override bool Equals(object obj)
+            public override bool Equals(object obj)
             {
                 Clickable otherClick = (Clickable)obj;
                 if (otherClick.Location.Top == this.Location.Top &&
