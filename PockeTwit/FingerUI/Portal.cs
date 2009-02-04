@@ -162,26 +162,33 @@ namespace FingerUI
                 {
                     lock (_RenderThreads)
                     {
-                        for (int i = 0; i < Items.Count; i++)
+                        try
                         {
-                            StatusItem s = (StatusItem)Items[i];
-                            if (s.Tweet.user.screen_name.ToLower() == User)
+                            for (int i = 0; i < Items.Count; i++)
                             {
-                                Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
-                                s.Render(_RenderedGraphics, itemBounds);
-                            }
-                            if (ClientSettings.ShowReplyImages)
-                            {
-                                if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
+                                StatusItem s = (StatusItem)Items[i];
+                                if (s.Tweet.user.screen_name.ToLower() == User)
                                 {
-                                    string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                                    if (ReplyTo == User)
+                                    Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
+                                    s.Render(_RenderedGraphics, itemBounds);
+                                }
+                                if (ClientSettings.ShowReplyImages)
+                                {
+                                    if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
                                     {
-                                        Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
-                                        s.Render(_RenderedGraphics, itemBounds);
+                                        string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
+                                        if (ReplyTo == User)
+                                        {
+                                            Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
+                                            s.Render(_RenderedGraphics, itemBounds);
+                                        }
                                     }
                                 }
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Windows.Forms.MessageBox.Show(ex.Message);
                         }
                     }
                     NewImage();
@@ -285,11 +292,18 @@ namespace FingerUI
         {
             lock (_RenderThreads)
             {
-                if (Items.Contains(Item))
+                try
                 {
-                    int i = Items.IndexOf(Item);
-                    Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, Item.Bounds.Width, ClientSettings.ItemHeight);
-                    Item.Render(_RenderedGraphics, itemBounds);
+                    if (Items.Contains(Item))
+                    {
+                        int i = Items.IndexOf(Item);
+                        Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, Item.Bounds.Width, ClientSettings.ItemHeight);
+                        Item.Render(_RenderedGraphics, itemBounds);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -338,49 +352,55 @@ namespace FingerUI
                     {
                         lock (Items)
                         {
-                            int StartItem = Math.Max(WindowOffset / ClientSettings.ItemHeight, 0);
-                            int EndItem = StartItem + 4;
-                            if (EndItem > Items.Count)
+                            try
                             {
-                                EndItem = Items.Count;
-                                StartItem = Math.Max(EndItem - 4,0);
-                            }
-                            System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
-                            // Onscreen items first
-                            for (int i = StartItem; i < EndItem; i++)
-                            {
-                                if (!cancelMyCurrentThread)
+                                int StartItem = Math.Max(WindowOffset / ClientSettings.ItemHeight, 0);
+                                int EndItem = StartItem + 4;
+                                if (EndItem > Items.Count)
                                 {
-                                    DrawSingleItem(i, g);
+                                    EndItem = Items.Count;
+                                    StartItem = Math.Max(EndItem - 4, 0);
                                 }
-                            }
-                            for (int i = 0; i < StartItem; i++)
-                            {
-                                if (!cancelMyCurrentThread)
+                                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                                // Onscreen items first
+                                for (int i = StartItem; i < EndItem; i++)
                                 {
-                                    DrawSingleItem(i, g);
+                                    if (!cancelMyCurrentThread)
+                                    {
+                                        DrawSingleItem(i, g);
+                                    }
                                 }
-                            }
-                            for (int i = EndItem; i < Items.Count; i++)
-                            {
-                                if (!cancelMyCurrentThread)
+                                for (int i = 0; i < StartItem; i++)
                                 {
-                                    DrawSingleItem(i, g);
+                                    if (!cancelMyCurrentThread)
+                                    {
+                                        DrawSingleItem(i, g);
+                                    }
                                 }
-                            }
+                                for (int i = EndItem; i < Items.Count; i++)
+                                {
+                                    if (!cancelMyCurrentThread)
+                                    {
+                                        DrawSingleItem(i, g);
+                                    }
+                                }
 
 
-                            if (cancelMyCurrentThread)
-                            {
+                                if (cancelMyCurrentThread)
+                                {
+                                    _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
+                                    return;
+                                }
+                                System.Diagnostics.Debug.WriteLine("Done rendering background");
+                                _RenderedGraphics.DrawImage(temp, 0, 0);
+                                NewImage();
                                 _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
-                                return;
                             }
-                            System.Diagnostics.Debug.WriteLine("Done rendering background");
-                            _RenderedGraphics.DrawImage(temp, 0, 0);
-                            NewImage();
-                            _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
+                            catch (Exception ex)
+                            {
+                                System.Windows.Forms.MessageBox.Show(ex.Message);
+                            }
                         }
-
                     }
                 }
             }

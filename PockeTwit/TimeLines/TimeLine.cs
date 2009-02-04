@@ -33,17 +33,24 @@ namespace PockeTwit
         {
             lock (InternalDictionary)
             {
-                if (items == null) { return; }
-                foreach (Library.status s in items)
+                try
                 {
-                    if (!string.IsNullOrEmpty(s.id))
+                    if (items == null) { return; }
+                    foreach (Library.status s in items)
                     {
-                        if (!InternalDictionary.ContainsKey(s.id))
+                        if (!string.IsNullOrEmpty(s.id))
                         {
-                            InternalDictionary.Add(s.id, s);
-                            this.Add(s);
+                            if (!InternalDictionary.ContainsKey(s.id))
+                            {
+                                InternalDictionary.Add(s.id, s);
+                                this.Add(s);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
             }
         }

@@ -175,25 +175,32 @@ namespace FingerUI
         {
             lock (m_items)
             {
-                int itemsBeforeScreen = YOffset / ClientSettings.ItemHeight;
+                try
+                {
+                    int itemsBeforeScreen = YOffset / ClientSettings.ItemHeight;
 
-                itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
-                int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
-                if (itemsAfterPortal < 0)
-                {
-                    itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
+                    itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+                    int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
+                    if (itemsAfterPortal < 0)
+                    {
+                        itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
+                    }
+                    if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
+                    List<StatusItem> NewSet = new List<StatusItem>();
+                    int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
+                    for (int i = itemsBeforePortal; i < MaxSize; i++)
+                    {
+                        NewSet.Add(m_items[i]);
+                    }
+                    //if (previousItemsBeforePortal != itemsBeforePortal | Force)
+                    //{
+                    previousItemsBeforePortal = itemsBeforePortal;
+                    SlidingPortal.SetItemList(NewSet);
                 }
-                if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
-                List<StatusItem> NewSet = new List<StatusItem>();
-                int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
-                for (int i = itemsBeforePortal; i < MaxSize; i++)
+                catch(Exception ex)
                 {
-                    NewSet.Add(m_items[i]);
+                    MessageBox.Show(ex.Message);
                 }
-                //if (previousItemsBeforePortal != itemsBeforePortal | Force)
-                //{
-                previousItemsBeforePortal = itemsBeforePortal;
-                SlidingPortal.SetItemList(NewSet);
                 //}
             }
         }
@@ -1590,16 +1597,17 @@ namespace FingerUI
                 if (Item!=null)
                 {
                     Item.ClickedMethod();
+                    if (Item.Text != "Exit") { SnapBack(); }
                     menuwasClicked = true;
                 }
             }
             else if ((XOffset) < 0 && e.X<Math.Abs(XOffset))
             {
-            
                 SideMenuItem Item = GetMenuItemForPoint(e);
                 if (Item != null) 
                 {
                     Item.ClickedMethod();
+                    if (Item.Text != "Exit") { SnapBack(); }
                     menuwasClicked = true;
                 }
             }
