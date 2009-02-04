@@ -16,14 +16,21 @@ namespace PockeTwit
 
         public static string ShortenURL(string URL)
         {
-            string TotalURL = "http://is.gd/api.php?longurl=" + URL;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TotalURL);
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            try
             {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(response.GetResponseStream()))
+                string TotalURL = "http://is.gd/api.php?longurl=" + URL;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TotalURL);
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    return reader.ReadToEnd();
+                    using (System.IO.StreamReader reader = new System.IO.StreamReader(response.GetResponseStream()))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
+            }
+            catch
+            {
+                return null;
             }
         }
 

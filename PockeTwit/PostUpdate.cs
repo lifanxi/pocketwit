@@ -272,6 +272,12 @@ namespace PockeTwit
             Cursor.Current = Cursors.WaitCursor;
             string sUrl = string.Format(@"http://maps.google.com/maps?q={0}", this.GPSLocation);
             string gpsUrl = isgd.ShortenURL(sUrl);
+            if (string.IsNullOrEmpty(gpsUrl))
+            {
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("A communication error occured shortening the URL. Please try again later.");
+                return;
+            }
             txtStatusUpdate.Text = txtStatusUpdate.Text + " " + gpsUrl;
             Cursor.Current = Cursors.Default;
         }

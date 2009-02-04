@@ -1443,35 +1443,17 @@ namespace FingerUI
 
         private FingerUI.SideMenuItem GetMenuItemForPoint(MouseEventArgs e)
         {
-            Point X = new Point(e.X, e.Y);
-            
             int LeftOfItem = this.Width - Math.Abs(XOffset);
-            int MenuHeight;
-            int TopOfItem;
             SideMenu MenuToCheck = null;
             if (XOffset > 0)
             {
                 MenuToCheck = RightMenu;
-                MenuHeight = RightMenu.ItemHeight;
-                TopOfItem = RightMenu.TopOfMenu;
             }
             else if (XOffset < 0)
             {
                 MenuToCheck = LeftMenu;
             }
-            MenuHeight = MenuToCheck.ItemHeight;
-            TopOfItem = MenuToCheck.TopOfMenu;
-            foreach (SideMenuItem MenuItem in MenuToCheck.GetItems())
-            {
-                Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, ItemWidth, MenuHeight);
-                TopOfItem = TopOfItem + MenuHeight;
-                if (menuRect.Contains(X))
-                {
-                    Invalidate(menuRect);
-                    return MenuItem;
-                }
-            }
-            return null;
+            return MenuToCheck.GetMenuItemForPoint(new Point(e.X, e.Y), LeftOfItem);
         }
 
         private Rectangle ItemBounds(int x, int y)
