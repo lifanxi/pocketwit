@@ -232,6 +232,7 @@ namespace PockeTwit
             }
             catch(Exception ex) 
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
 
@@ -245,9 +246,10 @@ namespace PockeTwit
             }
             
             string UserFileName = User.Replace("/","").Replace("\\","").Replace("?","").Replace("!","");
+            char SubFolder = UserFileName[0];
 
-
-            string FileName = CacheFolder + "\\" + Folder + "\\" + UserFileName;
+            string FileName = CacheFolder + "\\" + Folder + "\\" + "\\" + SubFolder + "\\" + UserFileName;
+            
             return FileName;
         }
 

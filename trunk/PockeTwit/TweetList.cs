@@ -443,11 +443,12 @@ namespace PockeTwit
             PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
             /*
-            TimeLines = new FingerUI.SideMenuItem(null, "TimeLines");
-            TimeLines.SubMenuItems.Add(FriendsTimeLine);
-            TimeLines.SubMenuItems.Add(Messages);
-            TimeLines.SubMenuItems.Add(Public);
-            */
+            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines", statList.LeftMenu);
+            TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
+            TimeLinesMenuItem.SubMenuItems.Add(MessagesMenuItem);
+            TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
+            
+             */
 
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
