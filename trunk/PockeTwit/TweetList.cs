@@ -841,113 +841,9 @@ namespace PockeTwit
             v.ShowDialog();
         }
 
-        void statusList_MenuItemSelected(string ItemName)
-        {
-            switch (ItemName)
-            {
-                case "Back":
-                    GoBackInHistory();
-                    
-                    break;
-                case "Errors":
-                    Errors errForm = new Errors();
-                    errForm.ShowDialog();
-                    break;
-                case "Search/Local":
-                    TwitterSearch();
-                    
-                    break;
-                case "Public TimeLine":
-                    ChangeCursor(Cursors.WaitCursor);
-                    SwitchToList("Public_TimeLine");
-                    statList.Redraw();
-                    //GetTimeLineAsync();
-                    break;
-                case "Reconnect":
-                case "TimeLine":
-                    ShowFriendsTimeLine();
-                    break;
-                case "Friends TimeLine":
-                    ShowFriendsTimeLine();
-                    
-                    break;
-                case "Messages":
-                    ShowMessagesTimeLine();
-                    
-                    break;
-                case "Favorites":
-                    //GetTimeLineAsync();
-                    break;
-                case "Post Update":
-                    SetStatus();
-                    break;
-                case "Map These":
-                    MapList();
-                    break;
-                case "Settings":
-                    ChangeSettings();
-                    break;
-                case "About/Feedback":
-                    ShowAbout();
-                    break;
-
-                case "@User TimeLine":
-                    ShowUserTimeLine();
-                    
-                    break;
-                case "Reply @User":
-                    SendReply();
-                    break;
-                case "Quote":
-                    Quote();
-                    break;
-                case "Show Conversation":
-                    GetConversation();
-                    break;
-                case "Destroy Favorite":
-                    DestroyFavorite();
-                    break;
-                case "Make Favorite":
-                    CreateFavoriteAsync();
-                    break;
-                case "Direct @User":
-                    SendDirectMessage();
-                    break;
-                case "Profile Page":
-                    ShowProfile();
-                    break;
-                case "Follow":
-                    FollowUser();
-                    break;
-                case "Stop Following":
-                    StopFollowingUser();
-                    break;
-
-                case "Minimize":
-                    Minimize();
-                    break;
-                case "Exit":
-                    ExitApplication();
-                    break;
-            }
-            if (ItemName != "Exit")
-            {
-                statList.SnapBack();
-            }
-            SetLeftMenu();
-        }
-
         private void ExitApplication()
         {
             statList.Clear();
-            if (Manager != null)
-            {
-                Manager.ShutDown();
-            }
-            if (Notifyer != null)
-            {
-                Notifyer.ShutDown();
-            }
             this.Close();
         }
 
@@ -1412,6 +1308,19 @@ namespace PockeTwit
         void SendToForground()
         {
             SetForegroundWindow(this.Handle);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (Manager != null)
+            {
+                Manager.ShutDown();
+            }
+            if (Notifyer != null)
+            {
+                Notifyer.ShutDown();
+            }
+            base.OnClosed(e);
         }
 
 		#endregion�Methods�

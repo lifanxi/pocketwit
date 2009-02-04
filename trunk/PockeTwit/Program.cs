@@ -81,17 +81,17 @@ namespace PockeTwit
                     if (ClientSettings.AccountsList.Count == 0)
                     {
                         MessageBox.Show("You must configure PockeTwit before using QuickPost.", "PockeTwit QuickPost");
-                        Application.Exit();
                         return;
                     }
                     PostUpdate PostForm = new PostUpdate(true);
                     PostForm.AccountToSet = ClientSettings.DefaultAccount;
                     Application.Run(PostForm);
                     PostForm.Close();
-                    Application.Exit();
+                    return;
                 }
             }
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            
             ClientSettings.LoadSettings();
             Application.Run(new TweetList(bBackGround));
         }
