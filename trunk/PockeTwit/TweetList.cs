@@ -37,9 +37,39 @@ namespace PockeTwit
         private string ShowUserID;
         private bool StartBackground = false;
 
+        #region MenuItems
+        #region LeftMenu
+        FingerUI.SideMenuItem BackMenuItem;
+
+        FingerUI.SideMenuItem FriendsTimeLineMenuItem;
+        FingerUI.SideMenuItem MessagesMenuItem;
+        FingerUI.SideMenuItem PublicMenuItem;
+
+        FingerUI.SideMenuItem TimeLinesMenuItem;
+
+        FingerUI.SideMenuItem PostUpdateMenuItem;
+        FingerUI.SideMenuItem SearchMenuItem;
+        FingerUI.SideMenuItem MapMenuItem;
+        FingerUI.SideMenuItem SettingsMenuItem;
+        FingerUI.SideMenuItem AboutMenuItem;
+        FingerUI.SideMenuItem ExitMenuItem;
+        #endregion
+        #region RightMenu
+        FingerUI.SideMenuItem ConversationMenuItem;
+        FingerUI.SideMenuItem ReplyMenuItem;
+        FingerUI.SideMenuItem DirectMenuItem;
+        FingerUI.SideMenuItem QuoteMenuItem;
+        FingerUI.SideMenuItem FavoriteMenuItem;
+        FingerUI.SideMenuItem UserTimelineMenuItem;
+        FingerUI.SideMenuItem ProfilePageMenuItem;
+        FingerUI.SideMenuItem FollowMenuItem;
+        FingerUI.SideMenuItem MinimizeMenuItem;
+        #endregion
+        #endregion MenuItems
+
         #endregion�Fields�
 
-		#region�Constructors�(1)�
+        #region�Constructors�(1)�
         public TweetList(bool InBackGround)
         {
             StartBackground = InBackGround;
@@ -279,6 +309,22 @@ namespace PockeTwit
             
         }
 
+        private void ToggleFavorite()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return; }
+            if (selectedItem.isFavorite)
+            {
+                DestroyFavorite();
+                FavoriteMenuItem.Text = "Make Favorite";
+            }
+            else
+            {
+                CreateFavoriteAsync();
+                FavoriteMenuItem.Text = "Remove Favorite";
+            }
+        }
+
         private void CreateFavorite(string ID, Yedda.Twitter.Account AccountInfo)
         {
             GetMatchingConnection(AccountInfo).SetFavorite(ID);
@@ -286,6 +332,8 @@ namespace PockeTwit
             statList.Repaint();
             ChangeCursor(Cursors.Default);
         }
+
+        
 
         private void CreateFavoriteAsync()
         {
@@ -316,9 +364,25 @@ namespace PockeTwit
         }
 
 
+        private void ToggleFollow()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return; }
+            if (selectedItem.Tweet.user == null) { return; }
+            Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
+            if(FollowingDictionary[Conn].IsFollowing(selectedItem.Tweet.user))
+            {
+                StopFollowingUser();
+                FollowMenuItem.Text = "Follow";
+            }
+            else
+            {
+                FollowUser();
+                FollowMenuItem.Text = "Stop Following";
+            }
+        }
         private void FollowUser()
         {
-            
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
@@ -328,6 +392,21 @@ namespace PockeTwit
             FollowingDictionary[Conn].AddUser(selectedItem.Tweet.user);
             UpdateRightMenu();
             ChangeCursor(Cursors.Default);
+        }
+        private void StopFollowingUser()
+        {
+            if (statList.SelectedItem == null) { return; }
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
+            if (MessageBox.Show("Are you sure you want to stop following " + selectedItem.Tweet.user.screen_name + "?", "Stop Following", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                ChangeCursor(Cursors.WaitCursor);
+                Conn.StopFollowingUser(selectedItem.Tweet.user.screen_name);
+                FollowingDictionary[Conn].StopFollowing(selectedItem.Tweet.user);
+                UpdateRightMenu();
+                ChangeCursor(Cursors.Default);
+            }
+
         }
 
         
@@ -357,27 +436,28 @@ namespace PockeTwit
 
         private void CreateLeftMenu()
         {
-            FingerUI.SideMenuItem Back = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back");
-            
+            BackMenuItem = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
 
-            FingerUI.SideMenuItem FriendsTimeLine = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline");
-            FingerUI.SideMenuItem Messages = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages");
-            FingerUI.SideMenuItem Public = new FingerUI.SideMenuItem(null, "Public Timeline");
+            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
+            MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
+            PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
-            FingerUI.SideMenuItem TimeLines = new FingerUI.SideMenuItem(null, "TimeLines");
+            /*
+            TimeLines = new FingerUI.SideMenuItem(null, "TimeLines");
             TimeLines.SubMenuItems.Add(FriendsTimeLine);
             TimeLines.SubMenuItems.Add(Messages);
             TimeLines.SubMenuItems.Add(Public);
-            
-            FingerUI.SideMenuItem PostUpdate = new FingerUI.SideMenuItem(this.SetStatus, "Post Update");
-            FingerUI.SideMenuItem Search = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local");
-            FingerUI.SideMenuItem Map = new FingerUI.SideMenuItem(this.MapList, "Map These");
-            FingerUI.SideMenuItem Settings = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings");
-            FingerUI.SideMenuItem About = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback");
-            FingerUI.SideMenuItem Exit = new FingerUI.SideMenuItem(this.ExitApplication, "Exit");
+            */
 
-            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{TimeLines, PostUpdate, Search, Map, Settings,
-                About, Exit});
+            PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
+            SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
+            MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
+            SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
+            AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
+            ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
+
+            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
+                AboutMenuItem, ExitMenuItem});
         }
 
         private void CreateRightMenu()
@@ -385,25 +465,24 @@ namespace PockeTwit
             // "Show Conversation", "Reply @User", "Direct @User", "Quote", 
             //   "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following",
             // "Minimize" 
-            FingerUI.SideMenuItem Conversation = new FingerUI.SideMenuItem(GetConversation, "Show Conversation");
-            FingerUI.SideMenuItem Reply = new FingerUI.SideMenuItem(SendReply , "Reply @User");
-            FingerUI.SideMenuItem Direct = new FingerUI.SideMenuItem(SendDirectMessage , "Direct @User");
-            FingerUI.SideMenuItem Quote = new FingerUI.SideMenuItem(this.Quote , "Quote");
-            FingerUI.SideMenuItem Favorite = new FingerUI.SideMenuItem(CreateFavoriteAsync, "Make Favorite");
-            FingerUI.SideMenuItem DestroyFavorite = new FingerUI.SideMenuItem(this.DestroyFavorite, "Remove from Favorites");
-            FingerUI.SideMenuItem UserTimeline = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline");
-            FingerUI.SideMenuItem ProfilePage = new FingerUI.SideMenuItem(ShowProfile, "@User Profile");
-            FingerUI.SideMenuItem Follow = new FingerUI.SideMenuItem(FollowUser, "Follow @User");
-            FingerUI.SideMenuItem StopFolloW = new FingerUI.SideMenuItem(StopFollowingUser, "Stop Following @User");
-            FingerUI.SideMenuItem Minimize = new FingerUI.SideMenuItem(this.Minimize, "Minimize");
+            ConversationMenuItem = new FingerUI.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
+            ReplyMenuItem = new FingerUI.SideMenuItem(SendReply, "Reply @User", statList.RightMenu);
+            DirectMenuItem = new FingerUI.SideMenuItem(SendDirectMessage, "Direct @User", statList.RightMenu);
+            QuoteMenuItem = new FingerUI.SideMenuItem(this.Quote, "Quote", statList.RightMenu);
+            FavoriteMenuItem = new FingerUI.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
+            UserTimelineMenuItem = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline", statList.RightMenu);
+            ProfilePageMenuItem = new FingerUI.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
+            FollowMenuItem = new FingerUI.SideMenuItem(FollowUser, "Follow @User", statList.RightMenu);
+            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.RightMenu);
 
-            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{Conversation, Reply, Direct, Quote, Favorite, 
-                DestroyFavorite, UserTimeline, ProfilePage, Follow, StopFolloW, Minimize});
+            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReplyMenuItem, DirectMenuItem, QuoteMenuItem, FavoriteMenuItem, 
+                UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem, MinimizeMenuItem});
         }
 
 
         private void SetLeftMenu()
         {
+            BackMenuItem.Visible = History.Count > 1;
             /*
             if (ClientSettings.MergeMessages)
             {
@@ -420,11 +499,11 @@ namespace PockeTwit
             
             statList.LeftMenu.ResetMenu(LeftMenu);
              */
-            CreateLeftMenu();
+            
         }
         private void UpdateRightMenu()
         {
-            /*
+            
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter conn = GetMatchingConnection(selectedItem.Tweet.Account);
@@ -434,25 +513,23 @@ namespace PockeTwit
                 {
                     if (selectedItem.isFavorite)
                     {
-                        statList.RightMenu.ReplaceItem("Make Favorite", "Destroy Favorite");
+                        FavoriteMenuItem.Text = "Remove Favorite";
                     }
                     else
                     {
-                        statList.RightMenu.ReplaceItem("Destroy Favorite", "Make Favorite");
+                        FavoriteMenuItem.Text = "Make Favorite";
                     }
                 }
 
                 if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
                 {
-                    statList.RightMenu.ReplaceItem("Follow", "Stop Following");
+                    FollowMenuItem.Text = "Stop Following";
                 }
                 else
                 {
-                    statList.RightMenu.ReplaceItem("Stop Following", "Follow");
+                    FollowMenuItem.Text = "Follow";
                 }
             }
-             */
-            CreateRightMenu();
         }
         
         private void SetConnectedMenus()
@@ -1144,22 +1221,6 @@ namespace PockeTwit
             return;
         }
 
-        private void StopFollowingUser()
-        {
-            if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
-            if (MessageBox.Show("Are you sure you want to stop following " + selectedItem.Tweet.user.screen_name + "?", "Stop Following", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-            {
-                ChangeCursor(Cursors.WaitCursor);
-                Conn.StopFollowingUser(selectedItem.Tweet.user.screen_name);
-                FollowingDictionary[Conn].StopFollowing(selectedItem.Tweet.user);
-                UpdateRightMenu();
-                ChangeCursor(Cursors.Default);
-            }
-            
-        }
-
         private void SwitchToDone()
         {
 
@@ -1188,6 +1249,8 @@ namespace PockeTwit
         private void timerStartup_Tick(object sender, EventArgs e)
         {
             if (StartBackground) { this.Hide(); }
+            CreateLeftMenu();
+            CreateRightMenu();
             timerStartup.Enabled = false;
             timerStartup.Tick -= new EventHandler(timerStartup_Tick);
             if (!SetEverythingUp())
