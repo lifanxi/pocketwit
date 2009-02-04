@@ -1596,7 +1596,10 @@ namespace FingerUI
                 SideMenuItem Item = GetMenuItemForPoint(e);
                 if (Item!=null)
                 {
-                    Item.ClickedMethod();
+                    if (Item.ClickedMethod != null)
+                    {
+                        Item.ClickedMethod();
+                    }
                     if (Item.Text != "Exit") { SnapBack(); }
                     menuwasClicked = true;
                 }
@@ -1606,7 +1609,10 @@ namespace FingerUI
                 SideMenuItem Item = GetMenuItemForPoint(e);
                 if (Item != null) 
                 {
-                    Item.ClickedMethod();
+                    if (Item.ClickedMethod != null)
+                    {
+                        Item.ClickedMethod();
+                    }
                     if (Item.Text != "Exit") { SnapBack(); }
                     menuwasClicked = true;
                 }
