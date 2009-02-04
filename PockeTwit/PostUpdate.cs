@@ -401,6 +401,10 @@ namespace PockeTwit
             {
                 //Truncate the text to the last available space, the add the URL.
                 string URL = Yedda.ShortText.shorten(Original);
+                if (string.IsNullOrEmpty(URL))
+                {
+                    return null;
+                }
                 int trimLength = 5;
                 if (UseTwitPic)
                 {
@@ -419,6 +423,11 @@ namespace PockeTwit
                 Cursor.Current = Cursors.WaitCursor;
                 string UpdateText = TrimTo140(StatusText);
 
+                if (string.IsNullOrEmpty(UpdateText))
+                {
+                    MessageBox.Show("There was an error shortening the text. Please shorten the message or try again later.");
+                    return false;
+                }
                 Yedda.Twitter TwitterConn = new Yedda.Twitter();
                 TwitterConn.AccountInfo = this.AccountToSet;
 
