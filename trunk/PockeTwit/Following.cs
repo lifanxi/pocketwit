@@ -16,7 +16,7 @@ namespace PockeTwit
 
 		#region Fields (2) 
 
-        private  List<Library.User> FollowedUsers = new List<PockeTwit.Library.User>();
+        private  List<string> FollowedUsers = new List<string>();
         private  bool OnceLoaded = false;
 
 		#endregion Fields 
@@ -38,16 +38,16 @@ namespace PockeTwit
 
         public void AddUser(Library.User userToAdd)
         {
-            FollowedUsers.Add(userToAdd);
+            FollowedUsers.Add(userToAdd.id);
             SaveUsers();
         }
 
         public bool IsFollowing(Library.User userToCheck)
         {
             bool bFound = false;
-            foreach (Library.User User in FollowedUsers)
+            foreach (string User in FollowedUsers)
             {
-                if (User.screen_name == userToCheck.screen_name)
+                if (User == userToCheck.id)
                 {
                     bFound = true;
                     break;
@@ -56,7 +56,7 @@ namespace PockeTwit
             return bFound;
         }
 
-        public  void LoadFromTwitter()
+        public void LoadFromTwitter()
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetFollowersFromTwitter));
         }
@@ -71,9 +71,9 @@ namespace PockeTwit
 
         public void StopFollowing(Library.User usertoStop)
         {
-            foreach(Library.User User in FollowedUsers)
+            foreach(string User in FollowedUsers)
             {
-                if(User.screen_name == usertoStop.screen_name)
+                if(User == usertoStop.id)
                 {
                     FollowedUsers.Remove(User);
                     break;
@@ -114,7 +114,7 @@ namespace PockeTwit
         {
             try
             {
-                string response = this.TwitterConnection.GetFriends(Yedda.Twitter.OutputFormatType.XML);
+                string response = this.TwitterConnection.GetFriendsIDs();
                 InterpretUsers(response);
                 SaveUsers();
             }
@@ -125,17 +125,15 @@ namespace PockeTwit
 
         private  void InterpretUsers(string response)
         {
-            Library.User[] friends;
-            if (string.IsNullOrEmpty(response))
+            if (!string.IsNullOrEmpty(response))
             {
-                friends = new PockeTwit.Library.User[0];
-            }
-            else
-            {
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+                d.LoadXml(response);
+                
+                System.Xml.XmlNodeList l = d.SelectNodes("//id");
+                foreach (System.Xml.XmlNode n in l)
                 {
-                    friends = (Library.User[])userSerializer.Deserialize(r);
-                    FollowedUsers = new List<PockeTwit.Library.User>(friends);
+                    FollowedUsers.Add(n.InnerText);
                 }
             }
         }
@@ -143,12 +141,19 @@ namespace PockeTwit
         private  void SaveUsers()
         {
             string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
-            
-            XmlSerializer s = new XmlSerializer(typeof(Library.User[]));
-            using (System.IO.StreamWriter w = new System.IO.StreamWriter(location))
+
+            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+            System.Xml.XmlElement root = d.CreateElement("ids");
+            d.AppendChild(root);
+
+            foreach (string ID in FollowedUsers)
             {
-                userSerializer.Serialize(w, FollowedUsers.ToArray());
+                System.Xml.XmlElement idElement = d.CreateElement("id");
+                idElement.InnerText = ID;
+                root.AppendChild(idElement);
             }
+            
+            d.Save(location);
         }
 
 

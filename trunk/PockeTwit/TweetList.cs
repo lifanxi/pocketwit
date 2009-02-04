@@ -521,13 +521,21 @@ namespace PockeTwit
                     }
                 }
 
-                if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
+                if (string.IsNullOrEmpty(selectedItem.Tweet.user.id))
                 {
-                    FollowMenuItem.Text = "Stop Following";
+                    FollowMenuItem.Visible = false;
                 }
                 else
                 {
-                    FollowMenuItem.Text = "Follow";
+                    FollowMenuItem.Visible = true;
+                    if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
+                    {
+                        FollowMenuItem.Text = "Stop Following";
+                    }
+                    else
+                    {
+                        FollowMenuItem.Text = "Follow";
+                    }
                 }
             }
         }
