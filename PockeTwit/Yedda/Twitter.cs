@@ -1267,5 +1267,11 @@ namespace Yedda
             string url = string.Format(TwitterConversationUrlFormat, threadID);
             return ExecuteGetCommand(url);
         }
+
+        public string GetFriendsIDs()
+        {
+            string url = "http://twitter.com/friends/ids.xml";
+            return ExecuteGetCommand(url);
+        }
     }
 }

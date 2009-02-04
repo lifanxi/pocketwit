@@ -234,12 +234,10 @@ namespace PockeTwit.Library
                     newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                     string userscreenName = userName.Split(new char[] { ' ' })[0];
                     newStat.user = new User();
-                    //newStat.user.location = entry.SelectSingleNode("s:google:location", nm).InnerText;
                     newStat.user.screen_name = userscreenName;
                     newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
                     newStat.user.needsFetching = true;
                     resultList.Add(newStat);
-
                 }
             }
             catch { }
@@ -380,7 +378,7 @@ namespace PockeTwit.Library
                 return _high_profile_image_url;
             }
         }
-        //public string id { get; set; }
+        public string id { get; set; }
         public string name { get; set; }
         public string screen_name { get; set; }
         public string followers_count { get; set; }
