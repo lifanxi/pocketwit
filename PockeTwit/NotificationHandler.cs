@@ -96,38 +96,6 @@ namespace PockeTwit
             }
         }
 
-
-        public static void BackupToDisk()
-        {
-            try
-            {
-                using (System.IO.StreamWriter f = new System.IO.StreamWriter(ClientSettings.AppPath + "\\Notif", false))
-                {
-                    f.WriteLine(Friends.Options);
-                    f.WriteLine(Friends.Sound);
-                    f.WriteLine(Messages.Options);
-                    f.WriteLine(Messages.Sound);
-                }
-            }
-            catch { }
-        }
-        public static void ReloadFromDisk()
-        {
-            
-            if (System.IO.File.Exists(ClientSettings.AppPath + "\\Notif"))
-            {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(ClientSettings.AppPath + "\\Notif"))
-                {
-                    Friends.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
-                    Friends.Sound = r.ReadLine();
-                    Messages.Options = (Options)Enum.Parse(typeof(Options), r.ReadLine(), true);
-                    Messages.Sound = r.ReadLine();
-                }
-            }
-            SaveSettings(Friends);
-            SaveSettings(Messages);
-        }
-
         public void ShutDown()
         {
             FriendsRegistryWatcher1.Dispose();
@@ -153,7 +121,6 @@ namespace PockeTwit
         void RegistryWatcher_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
         {
             LoadSettings();
-            BackupToDisk();
         }
 
                 

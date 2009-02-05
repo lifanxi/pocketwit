@@ -78,8 +78,6 @@ namespace PockeTwit
 
         private void PerformUpdate()
         {
-            NotificationHandler.BackupToDisk();
-
             System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
             request = (HttpWebRequest)HttpWebRequest.Create(_NewVersion.DownloadURL);
             request.BeginGetResponse(new AsyncCallback(ResponseReceived), null);
