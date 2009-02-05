@@ -460,7 +460,7 @@ namespace PockeTwit
                     string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
                     if (string.IsNullOrEmpty(retValue))
                     {
-                        MessageBox.Show("Error posting status.  You may want to try again later.");
+                        MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
                         return false;
                     }
                     try
@@ -469,7 +469,7 @@ namespace PockeTwit
                     }
                     catch
                     {
-                        MessageBox.Show("Error posting status.  You may want to try again later.");
+                        MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
                         return false;
                     }
                 }
