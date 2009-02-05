@@ -29,6 +29,7 @@ namespace Yedda
         public static Dictionary<string, Twitter.ServerURL> ServerList = new Dictionary<string, Twitter.ServerURL>();
         static Servers()
         {
+            System.Net.ServicePointManager.Expect100Continue = false;   
             string appPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
             using (System.IO.StreamReader r = new StreamReader(appPath + "\\laconicaservers.txt"))
             {
@@ -595,7 +596,6 @@ namespace Yedda
                 }
 
                 byte[] bytes = Encoding.UTF8.GetBytes(data);
-                System.Net.ServicePointManager.Expect100Continue = false;   
                 request.ContentLength = bytes.Length;
                 try
                 {
