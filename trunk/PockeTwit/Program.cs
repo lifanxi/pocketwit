@@ -63,8 +63,6 @@ namespace PockeTwit
         [MTAThread]
         static void Main(string[] Args)
         {
-            FirstRunChecker.CheckFirstRun();
-
             bool bBackGround = false;
             if (Args.Length > 0)
             {

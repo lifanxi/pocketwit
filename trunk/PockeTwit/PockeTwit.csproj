@@ -419,7 +419,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoUpgrade\FirstRunChecker.cs" />
     <Compile Include="FingerUI\FullScreenTweet.cs">
       <SubType>UserControl</SubType>
     </Compile>
