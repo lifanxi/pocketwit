@@ -327,7 +327,6 @@ namespace FingerUI
             {
                 if (Items.Count >= Number)
                 {
-                    if (this.Items[0].Text == "Back" && this.Items[0].Visible) { Number++; }
                     _SelectedItem = Items[Number];
                 }
             }
@@ -353,7 +352,7 @@ namespace FingerUI
             lock (Items)
             {
                 int i = 1;
-                if (this.Items[0].Text == "Back" && this.Items[0].Visible)
+                if (this.Items[0].CanHide && this.Items[0].Visible)
                 {
                     i = 0;
                 }
