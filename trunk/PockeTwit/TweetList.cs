@@ -510,6 +510,15 @@ namespace PockeTwit
             Yedda.Twitter conn = GetMatchingConnection(selectedItem.Tweet.Account);
             if (selectedItem != null)
             {
+                statList.SetRightMenuUser();
+                if (string.IsNullOrEmpty(selectedItem.Tweet.in_reply_to_status_id))
+                {
+                    ConversationMenuItem.Visible = false;
+                }
+                else
+                {
+                    ConversationMenuItem.Visible = true;
+                }
                 if (conn.FavoritesWork)
                 {
                     if (selectedItem.isFavorite)

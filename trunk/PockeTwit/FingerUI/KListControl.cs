@@ -1552,7 +1552,7 @@ namespace FingerUI
             Invalidate();
         }
 
-        private void SetRightMenuUser()
+        public void SetRightMenuUser()
         {
             if (CurrentlyViewing != SideShown.Left)
             {
