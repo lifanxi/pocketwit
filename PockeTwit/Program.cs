@@ -10,6 +10,8 @@ namespace PockeTwit
         public static string LastStatus;
         public static DateTime StartUp;
         public static DateTime Ready;
+
+        public static bool IgnoreDisposed = false;
 		#region Methods (2) 
 
 		// Private Methods (2) 
@@ -19,7 +21,7 @@ namespace PockeTwit
             
             string ErrorPath = ClientSettings.AppPath;
             Exception ex = (Exception)e.ExceptionObject;
-            if (ex is ObjectDisposedException)
+            if (ex is ObjectDisposedException && IgnoreDisposed)
             {
                 return;
             }

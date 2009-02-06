@@ -1358,6 +1358,7 @@ namespace PockeTwit
 
         protected override void OnClosed(EventArgs e)
         {
+            Program.IgnoreDisposed = true;
             if (Manager != null)
             {
                 Manager.ShutDown();
