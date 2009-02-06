@@ -882,11 +882,13 @@ namespace FingerUI
                     {
                         LeftMenu.SelectByNumber(KeyToCheck);
                         LeftMenu.InvokeSelected();
+                        SnapBack();
                     }
                     else if (CurrentlyViewing == SideShown.Right)
                     {
                         RightMenu.SelectByNumber(KeyToCheck);
                         RightMenu.InvokeSelected();
+                        SnapBack();
                     }
                 }
             }

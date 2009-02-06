@@ -24,10 +24,7 @@ namespace PockeTwit
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
 		#region�Fields�(12)�
         private UpgradeChecker Checker;
-        private Library.status[] CurrentStatuses =null;
-
-        private List<string> LeftMenu;
-        private List<string> RightMenu;
+        
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
@@ -437,6 +434,7 @@ namespace PockeTwit
         private void CreateLeftMenu()
         {
             BackMenuItem = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
+            BackMenuItem.CanHide = true;
 
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
@@ -467,6 +465,8 @@ namespace PockeTwit
             //   "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following",
             // "Minimize" 
             ConversationMenuItem = new FingerUI.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
+            ConversationMenuItem.CanHide = true;
+
             ReplyMenuItem = new FingerUI.SideMenuItem(SendReply, "Reply @User", statList.RightMenu);
             DirectMenuItem = new FingerUI.SideMenuItem(SendDirectMessage, "Direct @User", statList.RightMenu);
             QuoteMenuItem = new FingerUI.SideMenuItem(this.Quote, "Quote", statList.RightMenu);

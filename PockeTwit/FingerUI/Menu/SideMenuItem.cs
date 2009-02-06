@@ -36,6 +36,7 @@ namespace FingerUI
                 }
             }
         }
+        public bool CanHide = false;
 
 
         public delMenuClicked ClickedMethod;
