@@ -605,10 +605,11 @@ namespace FingerUI
 
         public void JumpToItem(StatusItem item)
         {
+            if (!this.Visible) { return; }
             Rectangle VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
             while (!VisibleBounds.Contains(item.Bounds))
             {
-                if(item.Bounds.Top > VisibleBounds.Top)
+                if(item.Bounds.Top >= VisibleBounds.Top)
                 {
                     YOffset  = YOffset + ClientSettings.ItemHeight;
                 }
@@ -621,6 +622,7 @@ namespace FingerUI
                 if (YOffset > (m_items.Values.Count - 1) * ClientSettings.ItemHeight) { YOffset = m_items.Values.Count * ClientSettings.ItemHeight; }
 
                 VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
+
             }
             Invalidate();
         }
@@ -878,12 +880,12 @@ namespace FingerUI
                 {
                     if (CurrentlyViewing == SideShown.Left)
                     {
-                        LeftMenu.SelectByNumber(KeyToCheck-1);
+                        LeftMenu.SelectByNumber(KeyToCheck);
                         LeftMenu.InvokeSelected();
                     }
                     else if (CurrentlyViewing == SideShown.Right)
                     {
-                        RightMenu.SelectByNumber(KeyToCheck-1);
+                        RightMenu.SelectByNumber(KeyToCheck);
                         RightMenu.InvokeSelected();
                     }
                 }
