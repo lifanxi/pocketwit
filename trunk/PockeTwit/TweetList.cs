@@ -436,7 +436,7 @@ namespace PockeTwit
             BackMenuItem = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
             BackMenuItem.CanHide = true;
 
-            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
+            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends", statList.LeftMenu);
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
             PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
@@ -1157,6 +1157,17 @@ namespace PockeTwit
             if (statList.CurrentList() != ListName)
             {
                 statList.SwitchTolist(ListName);
+            }
+            switch (ListName)
+            {
+                case "Friends_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends";
+                    MessagesMenuItem.Text = "Messages";
+                    break;
+                case "Messages_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Friends";
+                    MessagesMenuItem.Text = "Refresh Messages";
+                    break;
             }
         }
 
