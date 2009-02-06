@@ -772,11 +772,13 @@ namespace FingerUI
                     case SideShown.Left:
                         {
                             LeftMenu.InvokeSelected();
+                            SnapBack();
                             break;
                         }
                     case SideShown.Right:
                         {
                             RightMenu.InvokeSelected();
+                            SnapBack();
                             break;
                         }
                     case SideShown.Middle:
