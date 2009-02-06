@@ -265,6 +265,10 @@ namespace FingerUI
                     _SelectedItem = Items[0];
                 }
             }
+            if (!_SelectedItem.Visible)
+            {
+                SelectDown();
+            }
             IsDirty=true;
         }
         public void SelectUp()
@@ -280,6 +284,10 @@ namespace FingerUI
                 {
                     _SelectedItem = Items[Items.Count- 1];
                 }
+            }
+            if (!_SelectedItem.Visible)
+            {
+                SelectUp();
             }
             IsDirty=true;
         }
@@ -303,7 +311,7 @@ namespace FingerUI
 
         public void InvokeSelected()
         {
-            _SelectedItem.ClickedMethod();
+            SelectedItem.ClickedMethod();
         }
 
         public void InvokeByText(string ItemToInvoke)
