@@ -42,6 +42,8 @@ namespace PockeTwit
         FingerUI.SideMenuItem MessagesMenuItem;
         FingerUI.SideMenuItem PublicMenuItem;
 
+        FingerUI.SideMenuItem MergedTimeLineMenuItem;
+
         FingerUI.SideMenuItem TimeLinesMenuItem;
 
         FingerUI.SideMenuItem PostUpdateMenuItem;
@@ -440,6 +442,7 @@ namespace PockeTwit
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
             PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
+            MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "TimeLine", statList.LeftMenu);
             /*
             TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines", statList.LeftMenu);
             TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
@@ -455,8 +458,16 @@ namespace PockeTwit
             AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
             ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
 
-            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
+            if (ClientSettings.MergeMessages)
+            {
+                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, MergedTimeLineMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
                 AboutMenuItem, ExitMenuItem});
+            }
+            else
+            {
+                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
+                AboutMenuItem, ExitMenuItem});
+            }
         }
 
         private void CreateRightMenu()
@@ -1163,11 +1174,17 @@ namespace PockeTwit
                 case "Friends_TimeLine":
                     FriendsTimeLineMenuItem.Text = "Refresh Friends";
                     MessagesMenuItem.Text = "Messages";
+                    MergedTimeLineMenuItem.Text = "Refresh TimeLine";
                     break;
                 case "Messages_TimeLine":
                     FriendsTimeLineMenuItem.Text = "Friends";
                     MessagesMenuItem.Text = "Refresh Messages";
+                    MergedTimeLineMenuItem.Text = "TimeLine";
                     break;
+                default:
+                    MergedTimeLineMenuItem.Text = "TimeLine";
+                    break;
+
             }
         }
 
