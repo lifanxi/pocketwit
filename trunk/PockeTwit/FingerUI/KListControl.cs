@@ -605,9 +605,11 @@ namespace FingerUI
 
         public void JumpToItem(StatusItem item)
         {
-            if (!this.Visible) { return; }
-            Rectangle VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
-            while (!VisibleBounds.Contains(item.Bounds))
+            //if (!this.Visible) { return; }
+            
+            Rectangle VisibleBounds = new Rectangle(0, YOffset, 10, this.Height);
+            Rectangle CheckAgainstBounds = new Rectangle(0, item.Bounds.Top, 10, item.Bounds.Height);
+            while (!VisibleBounds.Contains(CheckAgainstBounds))
             {
                 if(item.Bounds.Top >= VisibleBounds.Top)
                 {
@@ -621,7 +623,7 @@ namespace FingerUI
                 if (YOffset < 0) { YOffset = 0; }
                 if (YOffset > (m_items.Values.Count - 1) * ClientSettings.ItemHeight) { YOffset = m_items.Values.Count * ClientSettings.ItemHeight; }
 
-                VisibleBounds = new Rectangle(0, YOffset, this.Width, this.Height);
+                VisibleBounds = new Rectangle(0, YOffset, 10, this.Height);
 
             }
             Invalidate();
