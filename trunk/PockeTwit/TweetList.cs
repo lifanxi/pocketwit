@@ -1238,13 +1238,16 @@ namespace PockeTwit
             }
         }
 
+        private bool isChangingingWindowState = false;
+
         protected override void OnActivated(EventArgs e)
         {
-            base.OnActivated(e);
+            //base.OnActivated(e);
+            if (isChangingingWindowState) { return; }
+            isChangingingWindowState = true;
             if (DetectDevice.DeviceType == DeviceType.Standard)
             {
                 statList.Focus();
-                return;
             }
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
@@ -1266,7 +1269,8 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
-            //statList.Visible = true;
+            statList.Visible = true;
+            isChangingingWindowState = false;
             /*
             if (statList.CurrentList() == "Friends_TimeLine")
             {
@@ -1293,6 +1297,7 @@ namespace PockeTwit
 
         void Minimize()
         {
+            isChangingingWindowState = true;
             // The Taskbar must be enabled to be able to do a Smart Minimize
             statList.Visible = false;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -1307,9 +1312,10 @@ namespace PockeTwit
             statList.Clear();
              */
             ShowWindow(this.Handle, SW_MINIMIZED);
-            statList.Visible = true;
+            isChangingingWindowState = false;
             GC.Collect();
             GC.WaitForPendingFinalizers();
+            
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll")]
