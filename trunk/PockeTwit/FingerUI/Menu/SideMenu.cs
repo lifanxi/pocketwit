@@ -45,7 +45,7 @@ namespace FingerUI
                     }
                     if(_SelectedItem==null)
                     {
-                        return Items[0];
+                        return Items[1];
                     }
                     return _SelectedItem;
                 }
