@@ -1560,11 +1560,8 @@ namespace FingerUI
 
         public void SetRightMenuUser()
         {
-            if (CurrentlyViewing != SideShown.Left)
-            {
-                StatusItem s = (StatusItem)m_items[m_selectedIndex];
-                RightMenu.UserName = s.Tweet.user.screen_name;
-            }
+            StatusItem s = (StatusItem)m_items[m_selectedIndex];
+            RightMenu.UserName = s.Tweet.user.screen_name;
         }
 
         private void SelectAndJump()
