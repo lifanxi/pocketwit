@@ -697,15 +697,16 @@ namespace FingerUI
             }
         }
 
-        public void SetSelectedMenu(string RequestedMenuItem)
+
+        public void SetSelectedMenu(SideMenuItem RequestedMenuItem)
         {
             if (RightMenu.Contains(RequestedMenuItem))
             {
-                RightMenu.SelectByText(RequestedMenuItem);
+                RightMenu.SelectedItem = RequestedMenuItem;
             }
             if (LeftMenu.Contains(RequestedMenuItem))
             {
-                LeftMenu.SelectByText(RequestedMenuItem);
+                LeftMenu.SelectedItem = RequestedMenuItem;
             }
         }
 
