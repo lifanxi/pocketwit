@@ -20,11 +20,11 @@ namespace PockeTwit
             public int SelectedItemIndex = -1;
             public int itemsOffset = -1;
         }
-        
+
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
-		#region�Fields�(12)�
+        #region�Fields�(12)�
         private UpgradeChecker Checker;
-        
+
         private Yedda.Twitter.Account CurrentlySelectedAccount;
         private List<Yedda.Twitter> TwitterConnections = new List<Yedda.Twitter>();
         private Dictionary<Yedda.Twitter, Following> FollowingDictionary = new Dictionary<Yedda.Twitter, Following>();
@@ -72,7 +72,7 @@ namespace PockeTwit
         public TweetList(bool InBackGround)
         {
             StartBackground = InBackGround;
-            
+
             Program.StartUp = DateTime.Now;
             if (InBackGround)
             {
@@ -86,7 +86,7 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-            
+
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
@@ -129,7 +129,7 @@ namespace PockeTwit
                     }
                     this.Close();
                 }
-                
+
             }
             if (InBackGround)
             {
@@ -141,12 +141,12 @@ namespace PockeTwit
             }
         }
 
-		#endregion�Constructors�
+        #endregion�Constructors�
 
-		#region�Delegates�and�Events�(2)�
+        #region�Delegates�and�Events�(2)�
 
 
-		//�Delegates�(2)�
+        //�Delegates�(2)�
         private delegate void delSetWindowState(FormWindowState state);
         private delegate void delAddStatuses(Library.status[] arrayOfStats, int Count);
         private delegate void delChangeCursor(Cursor CursorToset);
@@ -154,12 +154,12 @@ namespace PockeTwit
         private delegate bool delBool();
         private delegate void delNone();
 
-		#endregion�Delegates�and�Events�
+        #endregion�Delegates�and�Events�
 
-		#region�Methods�(38)�
+        #region�Methods�(38)�
 
 
-		//�Private�Methods�(38)�
+        //�Private�Methods�(38)�
 
 
         public bool IsFocused()
@@ -209,10 +209,10 @@ namespace PockeTwit
         {
             if (mergedstatuses == null) { return; }
             if (mergedstatuses.Length == 0) { return; }
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 delAddStatuses d = new delAddStatuses(AddStatusesToList);
-                this.Invoke(d, new object[] {mergedstatuses, newItems});
+                this.Invoke(d, new object[] { mergedstatuses, newItems });
             }
             else
             {
@@ -220,7 +220,6 @@ namespace PockeTwit
                 int oldIndex = statList.SelectedIndex;
                 int oldCount = statList.Count;
                 statList.Clear();
-                
                 foreach (Library.status stat in mergedstatuses)
                 {
                     if (stat != null && stat.user != null && stat.user.screen_name != null)
@@ -230,12 +229,19 @@ namespace PockeTwit
                         statList.AddItem(item);
                     }
                 }
-                FingerUI.StatusItem currentItem;
-                if (oldIndex>=0 && newItems<oldCount)
+                FingerUI.StatusItem currentItem = null;
+                if (oldIndex >= 0 && newItems < oldCount)
                 {
-                    statList.SelectedItem = statList[oldIndex + newItems];
-                    currentItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);    
+                    try
+                    {
+                        statList.SelectedItem = statList[oldIndex + newItems];
+                        currentItem = (FingerUI.StatusItem)statList.SelectedItem;
+                        statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        //What to do?
+                    }
                 }
                 else
                 {
@@ -272,17 +278,17 @@ namespace PockeTwit
             SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
             //SettingsForm settings = new SettingsForm();
             IsLoaded = false;
-            if (settings.ShowDialog() == DialogResult.Cancel) 
-            { 
-                this.statList.Visible = true; 
-                IsLoaded = true; 
-                return; 
+            if (settings.ShowDialog() == DialogResult.Cancel)
+            {
+                this.statList.Visible = true;
+                IsLoaded = true;
+                return;
             }
             statList.BackColor = ClientSettings.BackColor;
             statList.ForeColor = ClientSettings.ForeColor;
             IsLoaded = true;
             this.statList.Visible = true;
-            
+
             if (ClientSettings.CheckVersion)
             {
                 Checker.CheckForUpgrade();
@@ -305,7 +311,7 @@ namespace PockeTwit
             }
             statList.Redraw();
             settings.Close();
-            
+
         }
 
         private void ToggleFavorite()
@@ -332,14 +338,14 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        
+
 
         private void CreateFavoriteAsync()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter.Account ChosenAccount = selectedItem.Tweet.Account;
-            
+
             ChangeCursor(Cursors.WaitCursor);
             selectedItem.isFavorite = true;
 
@@ -369,7 +375,7 @@ namespace PockeTwit
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
             Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
-            if(FollowingDictionary[Conn].IsFollowing(selectedItem.Tweet.user))
+            if (FollowingDictionary[Conn].IsFollowing(selectedItem.Tweet.user))
             {
                 StopFollowingUser();
                 FollowMenuItem.Text = "Follow";
@@ -408,7 +414,7 @@ namespace PockeTwit
 
         }
 
-        
+
         private void SendDirectMessage()
         {
             if (statList.SelectedItem == null) { return; }
@@ -430,7 +436,7 @@ namespace PockeTwit
                     return;
                 }
             }
-            SetStatus("@"+User, selectedItem.Tweet.id);
+            SetStatus("@" + User, selectedItem.Tweet.id);
         }
 
         private void CreateLeftMenu()
@@ -511,11 +517,11 @@ namespace PockeTwit
             
             statList.LeftMenu.ResetMenu(LeftMenu);
              */
-            
+
         }
         private void UpdateRightMenu()
         {
-            
+
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter conn = GetMatchingConnection(selectedItem.Tweet.Account);
@@ -560,7 +566,7 @@ namespace PockeTwit
                 }
             }
         }
-        
+
         private void SetConnectedMenus()
         {
             if (TwitterConnections.Count > 0)
@@ -591,7 +597,7 @@ namespace PockeTwit
             HistoryItem firstItem = new HistoryItem();
             firstItem.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(firstItem);
-            if(System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
+            if (System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
             {
                 CrashReport errorForm = new CrashReport();
                 errorForm.ShowDialog();
@@ -636,15 +642,15 @@ namespace PockeTwit
             Notifyer = new NotificationHandler();
             NotificationHandler.LoadSettings();
             Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
-            
+
             return ret;
-            
+
         }
 
         void Notifyer_MessagesNotificationClicked()
         {
             this.Show();
-        } 
+        }
 
         private void ResetDictionaries()
         {
@@ -653,7 +659,7 @@ namespace PockeTwit
             foreach (Yedda.Twitter.Account a in ClientSettings.AccountsList)
             {
                 Yedda.Twitter TwitterConn = new Yedda.Twitter();
-                TwitterConn.AccountInfo.ServerURL= a.ServerURL;
+                TwitterConn.AccountInfo.ServerURL = a.ServerURL;
                 TwitterConn.AccountInfo.UserName = a.UserName;
                 TwitterConn.AccountInfo.Password = a.Password;
                 TwitterConn.AccountInfo.Enabled = a.Enabled;
@@ -668,14 +674,14 @@ namespace PockeTwit
             Manager.Startup(TwitterConnections);
             Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
             Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
-            
+
             foreach (Following f in FollowingDictionary.Values)
             {
                 f.LoadFromTwitter();
             }
         }
 
-        
+
         void Manager_CompleteLoaded()
         {
             if (InvokeRequired)
@@ -688,7 +694,7 @@ namespace PockeTwit
                 lblLoading.Text = "Preparing UI";
                 Application.DoEvents();
                 statList.SwitchTolist("Friends_TimeLine");
-                
+
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                 statList.Startup = false;
                 statList.Visible = true;
@@ -783,7 +789,7 @@ namespace PockeTwit
         private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
             PostUpdate StatusForm = new PostUpdate(false);
-            
+
             if (CurrentlySelectedAccount == null)
             {
                 StatusForm.AccountToSet = ClientSettings.DefaultAccount;
@@ -816,7 +822,7 @@ namespace PockeTwit
             IsLoaded = true;
             this.statList.Redraw();
             this.statList.Visible = true;
-            StatusForm.Close();   
+            StatusForm.Close();
         }
 
         private void SetUpListControl()
@@ -846,7 +852,7 @@ namespace PockeTwit
         {
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            
+
             /*
             System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
             string ProfileURL = GetMatchingConnection(selectedItem.Tweet.Account).GetProfileURL(selectedItem.Tweet.user.screen_name);
@@ -911,7 +917,7 @@ namespace PockeTwit
                     }
                     catch (KeyNotFoundException) { }
                 }
-                if(prev.itemsOffset>=0)
+                if (prev.itemsOffset >= 0)
                 {
                     statList.YOffset = prev.itemsOffset;
                 }
@@ -947,8 +953,8 @@ namespace PockeTwit
             History.Push(i);
             //if (Redraw)
             //{
-                statList.SetSelectedMenu(MessagesMenuItem);
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+            statList.SetSelectedMenu(MessagesMenuItem);
+            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
             //}
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
@@ -1024,7 +1030,7 @@ namespace PockeTwit
                 {
                     lastStatus = Library.status.DeserializeSingle(Conn.ShowSingleStatus(lastStatus.in_reply_to_status_id), Conn.AccountInfo);
                 }
-                catch 
+                catch
                 {
                     lastStatus = null;
                     break;
@@ -1043,7 +1049,7 @@ namespace PockeTwit
         private List<PockeTwit.Library.status> GetConversationFROMTHEFUTURE(PockeTwit.Library.status lastStatus)
         {
             Yedda.Twitter Conn = GetMatchingConnection(lastStatus.Account);
-            Library.status[] SearchResults = Manager.SearchTwitter(Conn, "@"+lastStatus.user.screen_name);
+            Library.status[] SearchResults = Manager.SearchTwitter(Conn, "@" + lastStatus.user.screen_name);
             List<Library.status> Results = new List<PockeTwit.Library.status>();
             foreach (Library.status s in SearchResults)
             {
@@ -1060,7 +1066,7 @@ namespace PockeTwit
             return Results;
         }
 
-        
+
         private void Quote()
         {
             if (statList.SelectedItem == null) { return; }
@@ -1215,7 +1221,7 @@ namespace PockeTwit
 
         private void TwitterSearch()
         {
-            
+
             SearchForm f = new SearchForm();
             this.statList.Visible = false;
             IsLoaded = false;
@@ -1223,10 +1229,10 @@ namespace PockeTwit
             {
                 IsLoaded = true;
                 this.statList.Visible = true;
-                f.Close(); 
-                return; 
+                f.Close();
+                return;
             }
-            
+
             IsLoaded = true;
             this.statList.Visible = true;
             f.Hide();
@@ -1296,8 +1302,8 @@ namespace PockeTwit
                 return;
             }
 
-            
-            
+
+
             if (ClientSettings.IsMaximized)
             {
                 SetWindowState(FormWindowState.Maximized);
@@ -1352,7 +1358,7 @@ namespace PockeTwit
             isChangingingWindowState = false;
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            
+
         }
 
         [System.Runtime.InteropServices.DllImport("coredll.dll")]
@@ -1377,7 +1383,7 @@ namespace PockeTwit
             base.OnClosed(e);
         }
 
-		#endregion�Methods�
+        #endregion�Methods�
 
     }
 }
