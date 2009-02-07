@@ -438,11 +438,11 @@ namespace PockeTwit
             BackMenuItem = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
             BackMenuItem.CanHide = true;
 
-            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends", statList.LeftMenu);
+            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
             PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
-            MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "TimeLine", statList.LeftMenu);
+            MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
             /*
             TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines", statList.LeftMenu);
             TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
@@ -881,18 +881,25 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         ShowFriendsTimeLine();
-                        statList.SetSelectedMenu("Friends TimeLine");
+                        if (ClientSettings.MergeMessages)
+                        {
+                            statList.SetSelectedMenu(TimeLinesMenuItem);
+                        }
+                        else
+                        {
+                            statList.SetSelectedMenu(FriendsTimeLineMenuItem);
+                        }
                         break;
                     case Yedda.Twitter.ActionType.Replies:
-                        statList.SetSelectedMenu("Messages");
+                        statList.SetSelectedMenu(MessagesMenuItem);
                         ShowMessagesTimeLine();
                         break;
                     case Yedda.Twitter.ActionType.Search:
-                        statList.SetSelectedMenu("Search/Local");
+                        statList.SetSelectedMenu(SearchMenuItem);
                         ShowSearchResults(prev.Argument);
                         break;
                     case Yedda.Twitter.ActionType.User_Timeline:
-                        statList.SetSelectedMenu("");
+                        statList.SetSelectedMenu(UserTimelineMenuItem);
                         SwitchToUserTimeLine(prev.Argument);
                         break;
                 }
@@ -922,7 +929,7 @@ namespace PockeTwit
             History.Push(i);
             if (Redraw)
             {
-                statList.SetSelectedMenu("Friends TimeLine");
+                statList.SetSelectedMenu(FriendsTimeLineMenuItem);
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
             }
             Manager.RefreshFriendsTimeLine();
@@ -940,7 +947,7 @@ namespace PockeTwit
             History.Push(i);
             //if (Redraw)
             //{
-                statList.SetSelectedMenu("Messages");
+                statList.SetSelectedMenu(MessagesMenuItem);
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
             //}
             Manager.RefreshMessagesTimeLine();
@@ -1172,12 +1179,12 @@ namespace PockeTwit
             switch (ListName)
             {
                 case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends";
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline";
                     MessagesMenuItem.Text = "Messages";
                     MergedTimeLineMenuItem.Text = "Refresh TimeLine";
                     break;
                 case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends";
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
                     MessagesMenuItem.Text = "Refresh Messages";
                     MergedTimeLineMenuItem.Text = "TimeLine";
                     break;
@@ -1234,7 +1241,7 @@ namespace PockeTwit
         {
             UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
-            statList.SetSelectedMenu("Search/Local");
+            statList.SetSelectedMenu(SearchMenuItem);
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Search;
             i.Argument = SearchString;
