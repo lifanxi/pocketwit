@@ -76,14 +76,28 @@ namespace PockeTwit
             PerformUpdate();
         }
 
+        private delegate void delToggleState(bool state);
+        private void EnableMenu(bool state)
+        {
+            if (InvokeRequired)
+            {
+                delToggleState d = new delToggleState(EnableMenu);
+                this.Invoke(d, state);
+            }
+            else
+            {
+                menuUpdate.Enabled = state;
+                menuIgnore.Enabled = state;
+            }
+        }
+
+
         private void PerformUpdate()
         {
             System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
             request = (HttpWebRequest)HttpWebRequest.Create(_NewVersion.DownloadURL);
             request.BeginGetResponse(new AsyncCallback(ResponseReceived), null);
-            menuUpdate.Enabled = false;
-
-            menuIgnore.Enabled = false;
+            EnableMenu(false);
 
             lblDownloading.Visible = true;
             progressDownload.Visible = true;
@@ -131,6 +145,7 @@ namespace PockeTwit
                 else
                 {
                     MessageBox.Show("You can download the upgrade manually from http://code.google.com/p/pocketwit/");
+                    this.Close();
                 }
             }
         }
@@ -171,6 +186,7 @@ namespace PockeTwit
                 else
                 {
                     MessageBox.Show("You can download the upgrade manually from http://code.google.com/p/pocketwit/");
+                    this.Close();
                 }
             }
         }
