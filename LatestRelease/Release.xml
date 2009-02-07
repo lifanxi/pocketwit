@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.64</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv64.CAB</url>
-  <notes>Adjustable font to fit more or less items.	
-Fix "stuck" popups
+  <version>.65</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv65.CAB</url>
+  <notes>Improved menus
+Bugfixes
 </notes>
 </LatestRelease>
