@@ -202,7 +202,6 @@ namespace FingerUI
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Blank render from portal?");
             }
             
         }
