@@ -202,7 +202,7 @@ namespace FingerUI
             }
             catch
             {
-                return;
+                System.Windows.Forms.MessageBox.Show("Blank render from portal?");
             }
             
         }
@@ -211,35 +211,29 @@ namespace FingerUI
         {
             StatusItem FirstNewItem = SetOfItems[0];
             int SpacesMoved = 0;
-            try
+            if (Items.Contains(FirstNewItem) && SetOfItems.Count > SpacesMoved)
             {
-                if (Items.Contains(FirstNewItem) && SetOfItems.Count > SpacesMoved)
+                //Items added to the end
+                SpacesMoved = Items.IndexOf(FirstNewItem);
+                StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
+                Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
+                System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the end of the image.");
+                AddItemsToEnd(ItemsToAdd);
+                return;
+            }
+            else
+            {
+                StatusItem LastNewItem = SetOfItems[SetOfItems.Count - 1];
+                if (Items.Contains(LastNewItem))
                 {
-                    //Items added to the end
-                    SpacesMoved = Items.IndexOf(FirstNewItem);
+                    //Items added to the start
+                    SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
                     StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
-                    Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
-                    System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the end of the image.");
-                    AddItemsToEnd(ItemsToAdd);
+                    Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
+                    System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
+                    AddItemsToStart(ItemsToAdd);
                     return;
                 }
-                else
-                {
-                    StatusItem LastNewItem = SetOfItems[SetOfItems.Count - 1];
-                    if (Items.Contains(LastNewItem))
-                    {
-                        //Items added to the start
-                        SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
-                        StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
-                        Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
-                        System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
-                        AddItemsToStart(ItemsToAdd);
-                        return;
-                    }
-                }
-            }
-            catch 
-            {
             }
             System.Diagnostics.Debug.WriteLine("Jumped " + SpacesMoved + " spaces");
             Items.Clear();
