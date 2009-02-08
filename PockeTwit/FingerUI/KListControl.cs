@@ -214,7 +214,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(this.Invalidate);
-                this.Invoke(d);
+                this.BeginInvoke(d);
             }
             else
             {
@@ -227,7 +227,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(this.Invalidate);
-                this.Invoke(d);
+                this.BeginInvoke(d);
             }
             else
             {
@@ -542,7 +542,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delAddItem d = new delAddItem(AddItem);
-                this.Invoke(d, new object[] { item });
+                this.BeginInvoke(d, new object[] { item });
             }
             else
             {
@@ -560,7 +560,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(Clear);
-                this.Invoke(d, null);
+                this.BeginInvoke(d, null);
             }
             else
             {
@@ -576,7 +576,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(ClearVisible);
-                this.Invoke(d, null);
+                this.BeginInvoke(d, null);
             }
             else
             {
@@ -634,7 +634,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(Repaint);
-                this.Invoke(d, null);
+                this.BeginInvoke(d, null);
             }
             else
             {
@@ -649,7 +649,7 @@ namespace FingerUI
                 if (InvokeRequired)
                 {
                     delClearMe d = new delClearMe(Redraw);
-                    this.Invoke(d, null);
+                    this.BeginInvoke(d, null);
                 }
                 else
                 {
@@ -678,7 +678,7 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(SetSelectedIndexToZero);
-                this.Invoke(d, null);
+                this.BeginInvoke(d, null);
             }
             else
             {
