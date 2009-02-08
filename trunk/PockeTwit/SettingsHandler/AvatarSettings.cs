@@ -75,6 +75,7 @@ namespace PockeTwit
 
         private static void ClearCache()
         {
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                 foreach (string Folder in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\ArtCache\\"))
@@ -90,6 +91,7 @@ namespace PockeTwit
                 MessageBox.Show("There was an error when clearing the cache. You may want to try again.", "PockeTwit");
                 return;
             }
+            Cursor.Current = Cursors.Default;
             MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
 
