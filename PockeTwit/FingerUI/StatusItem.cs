@@ -416,6 +416,7 @@ namespace FingerUI
             }
             catch (ObjectDisposedException)
             {
+                MessageBox.Show("Blank render??");
             }
             
             
