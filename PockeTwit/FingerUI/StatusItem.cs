@@ -324,10 +324,17 @@ namespace FingerUI
                     {
                         artURL = Tweet.user.profile_image_url;
                     }
-                    using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
+                    try
                     {
-                        //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
-                        g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);
+                        using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
+                        {
+                            //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
+                            g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+
                     }
                     System.Diagnostics.Debug.WriteLine("Done art from " + gu.ToString());
                     //This is usually disabled, but we may draw a smaller avatar over the first one
@@ -416,7 +423,6 @@ namespace FingerUI
             }
             catch (ObjectDisposedException)
             {
-                MessageBox.Show("Blank render??");
             }
             
             
