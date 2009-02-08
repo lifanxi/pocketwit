@@ -19,7 +19,7 @@ namespace PockeTwit
         public string TwitPicFile = null;
         public bool UseTwitPic = false;
         public string GPSLocation = null;
-        private LocationManager l = new LocationManager();
+        private LocationManager LocationFinder = new LocationManager();
         private bool _StandAlone;
         private delegate void delUpdateText(string text);
 
@@ -105,7 +105,7 @@ namespace PockeTwit
             
             this.ResumeLayout(false);
 
-            l.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
+            LocationFinder.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
 
             this.txtStatusUpdate.Focus();
             
@@ -159,13 +159,13 @@ namespace PockeTwit
             if (InvokeRequired)
             {
                 delUpdateText d = new delUpdateText(l_LocationReady);
-                this.Invoke(d, Location);
+                this.BeginInvoke(d, Location);
             }
             else
             {
                 if (!string.IsNullOrEmpty(Location))
                 {
-                    l.StopGPS();
+                    LocationFinder.StopGPS();
                     this.GPSLocation = Location;
                     lblGPS.Text = "Location Found";
                     if (DetectDevice.DeviceType == DeviceType.Standard)
@@ -202,7 +202,7 @@ namespace PockeTwit
         private void StartLocating()
         {   
             //StartAnimation
-            l.StartGPS();
+            LocationFinder.StartGPS();
             pictureLocation.Visible = false;
             lblGPS.Visible = true;
         }
@@ -418,6 +418,7 @@ namespace PockeTwit
 
         private bool PostTheUpdate()
         {
+            LocationFinder.StopGPS();
             if (!string.IsNullOrEmpty(StatusText))
             {
                 Cursor.Current = Cursors.WaitCursor;
