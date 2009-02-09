@@ -108,6 +108,7 @@ namespace FingerUI
                         }
                         _Rendered = new Bitmap(_Width, _Height);
                     }
+                    IsDirty = true;
                 }
             }
         }
