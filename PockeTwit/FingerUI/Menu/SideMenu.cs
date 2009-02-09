@@ -137,6 +137,10 @@ namespace FingerUI
             }
         }
 
+        public void ForceRerender()
+        {
+            IsDirty = true;
+        }
 
         public void SetMenuHeight()
         {

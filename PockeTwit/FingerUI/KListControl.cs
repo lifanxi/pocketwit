@@ -200,6 +200,8 @@ namespace FingerUI
         public void ResetFullScreenColors()
         {
             fsDisplay.ResetRendering();
+            RightMenu.ForceRerender();
+            LeftMenu.ForceRerender();
         }
 
         void GlobalEventHandler_TimeLineFetching(PockeTwit.TimelineManagement.TimeLineType TType)
