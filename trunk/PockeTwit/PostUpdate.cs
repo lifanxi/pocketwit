@@ -448,7 +448,7 @@ namespace PockeTwit
                     {
                         retValue = Yedda.TwitPic.SendStoredPic(AccountToSet.UserName, AccountToSet.Password, UpdateText, TwitPicFile);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         Cursor.Current = Cursors.Default;
                         MessageBox.Show("Error sending the image to twitpic. You may want to try again later.");

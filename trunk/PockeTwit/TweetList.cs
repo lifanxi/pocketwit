@@ -805,6 +805,7 @@ namespace PockeTwit
             }
             IsLoaded = false;
             StatusForm.in_reply_to_status_id = in_reply_to_status_id;
+            Manager.Pause();
             if (StatusForm.ShowDialog() == DialogResult.OK)
             {
                 this.statList.Visible = true;
@@ -818,6 +819,7 @@ namespace PockeTwit
                 StatusForm.Hide();
                 IsLoaded = false;
             }
+            Manager.Start();
             this.Visible = true;
             IsLoaded = true;
             this.statList.Redraw();
