@@ -46,11 +46,11 @@ namespace PockeTwit
             pasteItem.Click+=new EventHandler(pasteItem_Click);
 
             this.mnuCancel.Text = "Cancel";
-            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
+            this.mnuCancel.Click += new System.EventHandler(this.menuCancel_Click);
 
             MenuItem SubmitItem = new MenuItem();
             SubmitItem.Text = "Submit";
-            SubmitItem.Click += new EventHandler(menuOK_Click);
+            SubmitItem.Click += new EventHandler(menuCancel_Click);
             
 
             mnuAction.MenuItems.Add(pasteItem);
@@ -72,10 +72,10 @@ namespace PockeTwit
             pasteItem.Click += new EventHandler(pasteItem_Click);
 
             this.mnuCancel.Text = "Cancel";
-            this.mnuCancel.Click += new System.EventHandler(this.menuOK_Click);
+            this.mnuCancel.Click += new System.EventHandler(this.menuCancel_Click);
 
             this.mnuAction.Text = "Ok";
-            this.mnuAction.Click += new System.EventHandler(this.menuCancel_Click);
+            this.mnuAction.Click += new System.EventHandler(this.menuSubmit_Click);
            
 
             this.mainMenu1.MenuItems.Add(this.mnuAction);
@@ -110,7 +110,7 @@ namespace PockeTwit
 
 		// Private Methods (2) 
 
-        private void menuCancel_Click(object sender, EventArgs e)
+        private void menuSubmit_Click(object sender, EventArgs e)
         {
             try
             {
@@ -123,11 +123,14 @@ namespace PockeTwit
                 this.DialogResult = DialogResult.OK;
                 this.Hide();
             }
-            catch { }
+            catch 
+            {
+                return;
+            }
             
         }
 
-        private void menuOK_Click(object sender, EventArgs e)
+        private void menuCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Hide();

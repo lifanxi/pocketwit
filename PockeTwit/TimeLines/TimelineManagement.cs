@@ -115,6 +115,22 @@ namespace PockeTwit
                 updateTimer = null;
             }
         }
+
+        public void Pause()
+        {
+            if (updateTimer != null)
+            {
+                updateTimer.Enabled = false;
+            }
+        }
+        public void Start()
+        {
+            if (updateTimer != null)
+            {
+                updateTimer.Enabled = true;
+            }
+        }
+
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdateBoth));   
