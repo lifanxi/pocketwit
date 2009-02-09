@@ -1288,16 +1288,17 @@ namespace PockeTwit
         protected override void OnActivated(EventArgs e)
         {
             //base.OnActivated(e);
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                inputPanel1.Enabled = false;
+            }
             if (isChangingingWindowState) { return; }
             isChangingingWindowState = true;
             if (DetectDevice.DeviceType == DeviceType.Standard)
             {
                 statList.Focus();
             }
-            if (DetectDevice.DeviceType == DeviceType.Professional)
-            {
-                inputPanel1.Enabled = false;
-            }
+            
             GlobalEventHandler.setPid();
             if (!IsLoaded)
             {
