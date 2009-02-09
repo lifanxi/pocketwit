@@ -1224,8 +1224,6 @@ namespace FingerUI
             LeftMenu.Height = this.Height;
             LeftMenu.Width = this.Width;
             
-
-
             RightMenu.Height = this.Height;
             RightMenu.Width = this.Width;
 
