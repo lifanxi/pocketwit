@@ -1217,7 +1217,11 @@ namespace Yedda
 
             url = "http://api.ping.fm/v1/user.validate";
             string Response = ExecutePostCommand(url, string.Format("user_app_key={0}&api_key={1}", this.AccountInfo.UserName, this.AccountInfo.Password));
-            return Response.IndexOf("<rsp status=\"OK\">") > 0;
+            if (!string.IsNullOrEmpty(Response))
+            {
+                return Response.IndexOf("<rsp status=\"OK\">") > 0;
+            }
+            return false;
         }
         #endregion
 
