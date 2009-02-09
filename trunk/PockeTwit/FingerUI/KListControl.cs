@@ -173,36 +173,29 @@ namespace FingerUI
 
         private void RecalculatePortalPosition()
         {
-            lock (m_items)
+            int itemsBeforeScreen = YOffset / ClientSettings.ItemHeight;
+
+            itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
+            int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
+            if (itemsAfterPortal < 0)
+            {
+                itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
+            }
+            if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
+            List<StatusItem> NewSet = new List<StatusItem>();
+            int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
+            for (int i = itemsBeforePortal; i < MaxSize; i++)
             {
                 try
                 {
-                    int itemsBeforeScreen = YOffset / ClientSettings.ItemHeight;
-
-                    itemsBeforePortal = itemsBeforeScreen - (SlidingPortal.MaxItems / 2);
-                    int itemsAfterPortal = (m_items.Count - itemsBeforeScreen) - (SlidingPortal.MaxItems / 2) - 1;
-                    if (itemsAfterPortal < 0)
-                    {
-                        itemsBeforePortal = itemsBeforePortal + itemsAfterPortal;
-                    }
-                    if (itemsBeforePortal < 0) { itemsBeforePortal = 0; }
-                    List<StatusItem> NewSet = new List<StatusItem>();
-                    int MaxSize = Math.Min(itemsBeforePortal + SlidingPortal.MaxItems, m_items.Count);
-                    for (int i = itemsBeforePortal; i < MaxSize; i++)
-                    {
-                        NewSet.Add(m_items[i]);
-                    }
-                    //if (previousItemsBeforePortal != itemsBeforePortal | Force)
-                    //{
-                    previousItemsBeforePortal = itemsBeforePortal;
-                    SlidingPortal.SetItemList(NewSet);
+                    NewSet.Add(m_items[i]);
                 }
-                catch(Exception ex)
+                catch (KeyNotFoundException)
                 {
-                    MessageBox.Show(ex.Message);
                 }
-                //}
             }
+            previousItemsBeforePortal = itemsBeforePortal;
+            SlidingPortal.SetItemList(NewSet);
         }
         public void ResetFullScreenColors()
         {
