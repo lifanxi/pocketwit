@@ -1199,7 +1199,7 @@ namespace PockeTwit
                 default:
                     MergedTimeLineMenuItem.Text = "TimeLine";
                     MessagesMenuItem.Text = "Messages";
-                    FriendsTimeLineMenuItem.Text = "Friends";
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
                     break;
 
             }
