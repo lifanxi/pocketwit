@@ -50,12 +50,11 @@ namespace PockeTwit
 
             MenuItem SubmitItem = new MenuItem();
             SubmitItem.Text = "Submit";
-            SubmitItem.Click += new EventHandler(menuCancel_Click);
-            
+            SubmitItem.Click += new EventHandler(this.menuSubmit_Click);
 
-            mnuAction.MenuItems.Add(pasteItem);
             mnuAction.MenuItems.Add(SubmitItem);
-
+            mnuAction.MenuItems.Add(pasteItem);
+            
             this.mnuAction.Text = "Action";
 
             this.mainMenu1.MenuItems.Add(this.mnuAction);
