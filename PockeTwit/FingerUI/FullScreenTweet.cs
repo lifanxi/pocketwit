@@ -16,7 +16,7 @@ namespace FingerUI
 
         public PockeTwit.Library.status Status;
         private bool _Visible = false;
-        public bool Visible
+        public new bool Visible
         {
             get
             {

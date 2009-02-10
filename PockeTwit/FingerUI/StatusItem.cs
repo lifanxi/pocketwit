@@ -192,7 +192,6 @@ namespace FingerUI
         /// <value>The X.</value>
         public int XIndex { get { return m_x; } set { m_x = value; } }
 
-        private float _LetterWidth = -1;
         
 		#endregion�Properties�
 
@@ -334,7 +333,7 @@ namespace FingerUI
                     }
                     catch(Exception ex)
                     {
-
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
                     }
                     System.Diagnostics.Debug.WriteLine("Done art from " + gu.ToString());
                     //This is usually disabled, but we may draw a smaller avatar over the first one

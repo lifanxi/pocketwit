@@ -366,8 +366,10 @@ public static class ClientSettings
                 AccountsList.Add(a);
             }
         }
-        catch(Exception e)
-        {}
+        catch(Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+        }
         
     }
 

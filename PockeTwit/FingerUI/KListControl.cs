@@ -395,9 +395,7 @@ namespace FingerUI
         }
 
         private int SlidingPortalOffset = 0;
-        private int SlidingPortalCurrentMin;
         private int SlidingPortalCurrentEnd;
-        private int SlidingPortalSpaces = 0;
 
         public int YOffset
         {
@@ -1133,7 +1131,6 @@ namespace FingerUI
                 FillBackBuffer(null);
                  */
                 SlidingPortal.SetItemList(new List<StatusItem>(m_items.Values));
-                SlidingPortalCurrentMin = 0;
                 SlidingPortalCurrentEnd = SlidingPortal.MaxItems;
                 //SlidingPortal.RenderImmediately();
             }
@@ -1361,20 +1358,6 @@ namespace FingerUI
                     sItem.ParentGraphics = SlidingPortal._RenderedGraphics;
                 }
             }
-        }
-
-        [System.Runtime.InteropServices.DllImport("coredll.dll", SetLastError = true)]
-        static extern void GlobalMemoryStatus(ref MEMORYSTATUS lpBuffer);
-        struct MEMORYSTATUS
-        {
-            public UInt32 dwLength;
-            public UInt32 dwMemoryLoad;
-            public UInt32 dwTotalPhys;
-            public UInt32 dwAvailPhys;
-            public UInt32 dwTotalPageFile;
-            public UInt32 dwAvailPageFile;
-            public UInt32 dwTotalVirtual;
-            public UInt32 dwAvailVirtual;
         }
 
         private void DrawMenu(Graphics m_backBuffer, SideShown Side)

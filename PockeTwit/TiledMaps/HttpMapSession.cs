@@ -132,8 +132,9 @@ namespace TiledMaps
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 CleanupTileData(data);
             }
         }
@@ -150,8 +151,9 @@ namespace TiledMaps
 
                 data.ResponseStream.BeginRead(data.Buffer, 0, data.Buffer.Length, new AsyncCallback(ReadCallback), data);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 CleanupTileData(data);
             }
         }
@@ -167,8 +169,9 @@ namespace TiledMaps
                 data.Request = request;
                 request.BeginGetResponse(new AsyncCallback(GetResponseCallback), data);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 CleanupTileData(data);
             }
         }
@@ -260,8 +263,9 @@ namespace TiledMaps
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                     if (TileCache != null)
                     {
                         TileCache.Remove(data.Key);

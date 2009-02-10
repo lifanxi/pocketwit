@@ -28,7 +28,6 @@ namespace PockeTwit
 
         public static event ArtWasUpdated Updated;
         public static event delAvatarHasChanged AvatarHasChanged;
-        public static event delNoData NoData;
         public static event delTimelineIsFetching TimeLineFetching;
         public static event delTimelineIsDone TimeLineDone;
         public static event delshowErrorMessage ShowErrorMessage = delegate { };

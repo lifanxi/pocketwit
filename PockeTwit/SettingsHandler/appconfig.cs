@@ -117,6 +117,7 @@ public class ConfigurationSettings
         }
         catch(Exception ex) 
         {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
         }
     }
 
