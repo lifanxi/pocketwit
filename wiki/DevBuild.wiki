@@ -6,6 +6,8 @@ This is a link to the latest unstable development testing build.  I use it to te
 
 Installing it will not overwrite or affect an installed "release" build.  It creates its own separate folder and shortcut.
 
+There is no upgrade checker built into the dev build.  However you can always get the latest build by going to the "About" page and choosing "Upgrade".
+
 = Details =
 
 Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB here].
