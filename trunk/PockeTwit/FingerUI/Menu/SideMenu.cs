@@ -246,7 +246,7 @@ namespace FingerUI
             {
                 foreach (SideMenuItem Item in Items)
                 {
-                    if (Item.Text == TextOfMenuItem)
+                    if (Item.Text == TextOfMenuItem && Item.Visible)
                     {
                         bFound = true;
                         break;
