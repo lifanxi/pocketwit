@@ -10,4 +10,4 @@ There is no upgrade checker built into the dev build.  However you can always ge
 
 = Details =
 
-Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB here].
+*Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB here].*
