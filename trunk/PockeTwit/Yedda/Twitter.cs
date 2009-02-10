@@ -1176,8 +1176,10 @@ namespace Yedda
             else if (this.AccountInfo.ServerURL.ServerType == TwitterServer.brightkite)
             {
                 return true;
+                /*  For later development
                 url = "http://brightkite.com/me";
                 return !string.IsNullOrEmpty(ExecutePostCommand(url, ""));
+                 */
             }
             else
             {
@@ -1185,14 +1187,6 @@ namespace Yedda
                 string Response = ExecuteGetCommand(url);
                 return (!string.IsNullOrEmpty(Response));
             }
-            try
-            {
-                
-            }
-            catch(WebException)
-            {
-            }
-            return false;
         }
 
         private bool PingValidate()

@@ -69,7 +69,6 @@ namespace FingerUI
             }
         }
 
-        private System.Threading.Thread CurrentRenderJob;
         private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = ClientSettings.PortalSize;
@@ -112,6 +111,7 @@ namespace FingerUI
                 }
                 catch (OutOfMemoryException ex)
                 {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                     if (MaxItems == 5)
                     {
                         throw new LowMemoryException();

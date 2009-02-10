@@ -78,6 +78,7 @@ namespace PockeTwit.Library
                 }
                 catch(Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                     //Search results come in a different format :(
                     try
                     {

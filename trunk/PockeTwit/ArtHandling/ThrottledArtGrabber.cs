@@ -181,6 +181,7 @@ namespace PockeTwit
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 lock (BadURLs)
                 {
                     BadURLs.Add(r.URL);

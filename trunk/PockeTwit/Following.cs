@@ -12,7 +12,6 @@ namespace PockeTwit
         private static XmlSerializer userSerializer = new XmlSerializer(typeof(Library.User[]));
         public Yedda.Twitter TwitterConnection { get; set; }
         public delegate void delFollowers(Yedda.Twitter ConnectionDone);
-        public event delFollowers FollowersDone;
 
 		#region Fields (2) 
 

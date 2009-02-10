@@ -132,6 +132,7 @@ namespace Yedda
                 }
                 catch (WebException ex)
                 {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 return new Coordinate();   
             }

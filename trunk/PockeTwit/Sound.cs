@@ -51,7 +51,6 @@ namespace PockeTwit
         }
 
 
-        private byte[] m_soundBytes;
         private string m_fileName;
 
         private enum Flags
