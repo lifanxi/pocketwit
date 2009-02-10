@@ -761,7 +761,7 @@ namespace FingerUI
             float Position = ((lineOffSet * (ClientSettings.TextSize)));
             for (int i = 0; i < Words.Length; i++)
             {
-                string WordToCheck = Words[i].TrimEnd(IgnoredAtChars);
+                string WordToCheck = Words[i].Trim(IgnoredAtChars);
                 if (!string.IsNullOrEmpty(WordToCheck))
                 {
                     List<Clickable> OriginalClicks = new List<Clickable>(Tweet.Clickables);
