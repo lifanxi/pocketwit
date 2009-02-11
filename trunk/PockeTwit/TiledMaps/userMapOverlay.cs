@@ -37,5 +37,15 @@ namespace PockeTwit
         }
 
         #endregion
+
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            userMapOverlay otherOverLay = (userMapOverlay)obj;
+            return otherOverLay.Geocode.Latitude.CompareTo(this.Geocode.Latitude);
+        }
+
+        #endregion
     }
 }
