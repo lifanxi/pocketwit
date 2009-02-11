@@ -99,7 +99,7 @@ namespace PockeTwit
         {
             if (chkReplyImages.Checked)
             {
-                MessageBox.Show("Replay avatars may cause instability.  Please disable them if you have any problems.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Reply avatars may cause instability.  Please disable them if you have any problems.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             }
         }
 
