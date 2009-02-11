@@ -155,42 +155,47 @@ namespace PockeTwit
         
         void l_LocationReady(string Location)
         {
-
-            if (InvokeRequired)
+            try
             {
-                delUpdateText d = new delUpdateText(l_LocationReady);
-                this.BeginInvoke(d, Location);
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(Location))
+                if (InvokeRequired)
                 {
-                    LocationFinder.StopGPS();
-                    this.GPSLocation = Location;
-                    lblGPS.Text = "Location Found";
-                    if (DetectDevice.DeviceType == DeviceType.Standard)
+                    delUpdateText d = new delUpdateText(l_LocationReady);
+                    this.BeginInvoke(d, Location);
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(Location))
                     {
-                        // just enable the menuItem
-                        if (null != menuGPSInsert)
+                        LocationFinder.StopGPS();
+                        this.GPSLocation = Location;
+                        lblGPS.Text = "Location Found";
+                        if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
-                            menuGPSInsert.Enabled = true;
+                            // just enable the menuItem
+                            if (null != menuGPSInsert)
+                            {
+                                menuGPSInsert.Enabled = true;
+                            }
+                        }
+                        else
+                        {
+                            // hide the label, add a new button
+                            lblGPS.Visible = false;
+                            LinkLabel llGPS = new LinkLabel();
+                            llGPS.Text = "Ins. GPS Link";
+                            llGPS.ForeColor = Color.White;
+                            llGPS.Left = lblGPS.Left;
+                            llGPS.Top = lblGPS.Top;
+                            llGPS.Height = lblGPS.Height;
+                            llGPS.Width = lblGPS.Width;
+                            llGPS.Click += new EventHandler(llGPS_Click);
+                            this.Controls.Add(llGPS);
                         }
                     }
-                    else
-                    {
-                        // hide the label, add a new button
-                        lblGPS.Visible = false;
-                        LinkLabel llGPS = new LinkLabel();
-                        llGPS.Text = "Ins. GPS Link";
-                        llGPS.ForeColor = Color.White;
-                        llGPS.Left = lblGPS.Left;
-                        llGPS.Top = lblGPS.Top;
-                        llGPS.Height = lblGPS.Height;
-                        llGPS.Width = lblGPS.Width;
-                        llGPS.Click += new EventHandler(llGPS_Click);
-                        this.Controls.Add(llGPS);
-                    }
                 }
+            }
+            catch (ObjectDisposedException)
+            {
             }
         }
 
