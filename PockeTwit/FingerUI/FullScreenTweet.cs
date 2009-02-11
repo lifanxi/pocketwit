@@ -122,7 +122,7 @@ namespace FingerUI
                 {
                     fullText = Yedda.GoogleTranslate.GetTranslation(fullText);
                 }
-                lblText.Text = fullText;
+                lblText.Text = System.Web.HttpUtility.HtmlDecode(fullText).Replace("&", "&&");
                 Cursor.Current = Cursors.Default;
             }
         }
