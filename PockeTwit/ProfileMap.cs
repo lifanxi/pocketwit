@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using TiledMaps;
 using System.Reflection;
+using System.Collections;
 
 namespace PockeTwit
 {
@@ -70,7 +71,6 @@ namespace PockeTwit
             RefreshBitmap();
         }
 
-
         private void SetMarkers()
         {
             float fSize = 9;
@@ -101,7 +101,6 @@ namespace PockeTwit
                         MapOverlay o = new MapOverlay(marker, g, new Point(0, -marker.Height / 2));
                         codes.Add(g);
                         mySession.Overlays.Add(o);
-                        
                     }
                 }
             }

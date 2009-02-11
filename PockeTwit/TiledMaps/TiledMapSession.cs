@@ -451,6 +451,7 @@ namespace TiledMaps
                     renderer.DrawLines(route.LineWidth, Color.Cyan, points.ToArray());
             }
 
+            Overlays.Sort();
             foreach (IMapOverlay overlay in Overlays)
             {
                 DrawAtGeocode(tlGeo, brGeo, renderer, overlay.Geocode, pixelLevelZoom, adjustX + overlay.Offset.X, adjustY + overlay.Offset.Y, overlay.Drawable);

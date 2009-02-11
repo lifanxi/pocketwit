@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 
 namespace TiledMaps
 {
-    public interface IMapOverlay
+    public interface IMapOverlay: System.IComparable
     {
         IMapDrawable Drawable
         {
@@ -19,12 +19,19 @@ namespace TiledMaps
         {
             get;
         }
+
     }
 
     public class MapOverlay : IMapOverlay
     {
         public MapOverlay()
         {
+        }
+
+        public int CompareTo(object obj)
+        {
+            MapOverlay otherOverLay = (MapOverlay)obj;
+            return otherOverLay.Geocode.Latitude.CompareTo(this.Geocode.Latitude);
         }
 
         public MapOverlay(IMapDrawable drawable, Geocode geocode, Point offset)
