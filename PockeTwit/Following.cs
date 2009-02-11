@@ -37,8 +37,11 @@ namespace PockeTwit
 
         public void AddUser(Library.User userToAdd)
         {
-            FollowedUsers.Add(userToAdd.id);
-            SaveUsers();
+            if (!FollowedUsers.Contains(userToAdd.id))
+            {
+                FollowedUsers.Add(userToAdd.id);
+                SaveUsers();
+            }
         }
 
         public bool IsFollowing(Library.User userToCheck)
@@ -132,7 +135,10 @@ namespace PockeTwit
                 System.Xml.XmlNodeList l = d.SelectNodes("//id");
                 foreach (System.Xml.XmlNode n in l)
                 {
-                    FollowedUsers.Add(n.InnerText);
+                    if (!FollowedUsers.Contains(n.InnerText))
+                    {
+                        FollowedUsers.Add(n.InnerText);
+                    }
                 }
             }
         }
