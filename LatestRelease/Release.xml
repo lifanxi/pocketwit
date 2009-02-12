@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
   <version>.66</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv66.CAB</url>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv66a.CAB</url>
   <notes>Fix freezing on post
 Fix freezing on start
 Fix follow/unfollow
