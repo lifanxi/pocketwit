@@ -55,6 +55,9 @@ namespace PockeTwit
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.chkTranslate = new System.Windows.Forms.CheckBox();
+            this.chkSkweezer = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtCaheDir = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -126,11 +129,44 @@ namespace PockeTwit
             // 
             // chkTranslate
             // 
+            this.chkTranslate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkTranslate.ForeColor = System.Drawing.Color.White;
             this.chkTranslate.Location = new System.Drawing.Point(3, 99);
             this.chkTranslate.Name = "chkTranslate";
-            this.chkTranslate.Size = new System.Drawing.Size(100, 20);
+            this.chkTranslate.Size = new System.Drawing.Size(220, 20);
             this.chkTranslate.TabIndex = 3;
             this.chkTranslate.Text = "Automatically translate";
+            // 
+            // chkSkweezer
+            // 
+            this.chkSkweezer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkSkweezer.ForeColor = System.Drawing.Color.LightGray;
+            this.chkSkweezer.Location = new System.Drawing.Point(3, 125);
+            this.chkSkweezer.Name = "chkSkweezer";
+            this.chkSkweezer.Size = new System.Drawing.Size(216, 20);
+            this.chkSkweezer.TabIndex = 4;
+            this.chkSkweezer.Text = "Load URLs in Skweezer";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(4, 152);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(233, 20);
+            this.label2.Text = "Cache Directory:";
+            // 
+            // txtCaheDir
+            // 
+            this.txtCaheDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCaheDir.Location = new System.Drawing.Point(4, 176);
+            this.txtCaheDir.Name = "txtCaheDir";
+            this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
+            this.txtCaheDir.TabIndex = 8;
             // 
             // OtherSettings
             // 
@@ -138,6 +174,9 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.txtCaheDir);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkTranslate);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
@@ -161,6 +200,9 @@ namespace PockeTwit
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox chkTranslate;
+        private System.Windows.Forms.CheckBox chkSkweezer;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtCaheDir;
 
     }
 }

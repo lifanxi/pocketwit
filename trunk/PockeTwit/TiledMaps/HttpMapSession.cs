@@ -16,7 +16,15 @@ namespace TiledMaps
         {
             try
             {
-                myCachePath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath);
+                if (string.IsNullOrEmpty(ClientSettings.CacheDir))
+                {
+                    myCachePath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath);
+                }
+                else
+                {
+                    myCachePath = ClientSettings.CacheDir;
+                }
+
             }
             catch (Exception)
             {
