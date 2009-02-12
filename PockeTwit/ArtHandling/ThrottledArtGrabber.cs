@@ -34,7 +34,27 @@ namespace PockeTwit
         private static System.Threading.Thread WorkerThread;
         static ThrottledArtGrabber()
         {
-            CacheFolder = ClientSettings.AppPath + "\\ArtCache";
+            SetupCacheDir();
+            mapMarkerImage = new TiledMaps.WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
+            FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");            
+        }
+
+        public static void ResetCacheDir()
+        {
+            System.IO.Directory.Delete(CacheFolder, true);
+            SetupCacheDir();
+        }
+
+        private static void SetupCacheDir()
+        {
+            if (string.IsNullOrEmpty(ClientSettings.CacheDir))
+            {
+                CacheFolder = ClientSettings.AppPath + "\\ArtCache";
+            }
+            else
+            {
+                CacheFolder = ClientSettings.CacheDir + "\\ArtCache";
+            }
 
             if (!System.IO.Directory.Exists(CacheFolder))
             {
@@ -42,20 +62,17 @@ namespace PockeTwit
             }
             if (!System.IO.Directory.Exists(CacheFolder + "\\Unknown"))
             {
-                System.IO.Directory.CreateDirectory(CacheFolder+"\\Unknown");
+                System.IO.Directory.CreateDirectory(CacheFolder + "\\Unknown");
             }
-            mapMarkerImage = new TiledMaps.WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
-            FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
-            Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
             UnknownArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+            Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
             Graphics g = Graphics.FromImage(UnknownArt);
             g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             g.Dispose();
-            if(!System.IO.File.Exists(CacheFolder+"\\Unknown"+"\\PockeTwitUnknownUser"))
+            if (!System.IO.File.Exists(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser"))
             {
-                UnknownArt.Save(CacheFolder+"\\Unknown"+"\\PockeTwitUnknownUser", System.Drawing.Imaging.ImageFormat.Bmp);
+                UnknownArt.Save(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser", System.Drawing.Imaging.ImageFormat.Bmp);
             }
-            
         }
 
         public delegate void ArtIsReady(string Argument);

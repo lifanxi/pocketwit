@@ -117,6 +117,8 @@ public static class ClientSettings
         }
     }
 
+    public static string CacheDir { get; set; }
+
     public static Queue<string> SearchItems { get; set; }
     public static bool AutoTranslate { get; set; }
     public static string TranslationLanguage { get; set; }
@@ -182,6 +184,15 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CacheDir"]))
+            {
+                CacheDir = ConfigurationSettings.AppSettings["CacheDir"];
+            }
+            else
+            {
+                CacheDir = "";
+            }
+
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["FontSize"]))
             {
                 FontSize = int.Parse(ConfigurationSettings.AppSettings["FontSize"]);
@@ -375,6 +386,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
         ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
         ConfigurationSettings.AppSettings["MergeMessages"] = MergeMessages.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());

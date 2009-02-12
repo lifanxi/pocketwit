@@ -57,7 +57,6 @@ namespace PockeTwit
             this.chkTimestamps = new System.Windows.Forms.CheckBox();
             this.chkClickables = new System.Windows.Forms.CheckBox();
             this.chkScreenName = new System.Windows.Forms.CheckBox();
-            this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.cmbTheme = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -132,26 +131,17 @@ namespace PockeTwit
             // chkScreenName
             // 
             this.chkScreenName.ForeColor = System.Drawing.Color.LightGray;
-            this.chkScreenName.Location = new System.Drawing.Point(2, 108);
+            this.chkScreenName.Location = new System.Drawing.Point(2, 82);
             this.chkScreenName.Name = "chkScreenName";
             this.chkScreenName.Size = new System.Drawing.Size(216, 20);
             this.chkScreenName.TabIndex = 4;
             this.chkScreenName.Text = "Include screenname";
             // 
-            // chkSkweezer
-            // 
-            this.chkSkweezer.ForeColor = System.Drawing.Color.LightGray;
-            this.chkSkweezer.Location = new System.Drawing.Point(2, 82);
-            this.chkSkweezer.Name = "chkSkweezer";
-            this.chkSkweezer.Size = new System.Drawing.Size(216, 20);
-            this.chkSkweezer.TabIndex = 3;
-            this.chkSkweezer.Text = "Load URLs in Skweezer";
-            // 
             // cmbTheme
             // 
             this.cmbTheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTheme.Location = new System.Drawing.Point(74, 160);
+            this.cmbTheme.Location = new System.Drawing.Point(74, 134);
             this.cmbTheme.Name = "cmbTheme";
             this.cmbTheme.Size = new System.Drawing.Size(102, 22);
             this.cmbTheme.TabIndex = 6;
@@ -161,7 +151,7 @@ namespace PockeTwit
             // 
             this.label1.BackColor = System.Drawing.Color.Black;
             this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(3, 162);
+            this.label1.Location = new System.Drawing.Point(3, 136);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 20);
             this.label1.Text = "Theme:";
@@ -169,7 +159,7 @@ namespace PockeTwit
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.Location = new System.Drawing.Point(182, 162);
+            this.linkLabel1.Location = new System.Drawing.Point(182, 136);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(36, 20);
             this.linkLabel1.TabIndex = 7;
@@ -179,7 +169,7 @@ namespace PockeTwit
             // chkMerge
             // 
             this.chkMerge.ForeColor = System.Drawing.Color.LightGray;
-            this.chkMerge.Location = new System.Drawing.Point(2, 134);
+            this.chkMerge.Location = new System.Drawing.Point(2, 108);
             this.chkMerge.Name = "chkMerge";
             this.chkMerge.Size = new System.Drawing.Size(216, 20);
             this.chkMerge.TabIndex = 5;
@@ -190,7 +180,7 @@ namespace PockeTwit
             // label2
             // 
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 191);
+            this.label2.Location = new System.Drawing.Point(4, 165);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 20);
             this.label2.Text = "Font Size:";
@@ -199,7 +189,7 @@ namespace PockeTwit
             // 
             this.txtFontSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFontSize.Location = new System.Drawing.Point(74, 189);
+            this.txtFontSize.Location = new System.Drawing.Point(74, 163);
             this.txtFontSize.Name = "txtFontSize";
             this.txtFontSize.Size = new System.Drawing.Size(102, 21);
             this.txtFontSize.TabIndex = 17;
@@ -218,7 +208,6 @@ namespace PockeTwit
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbTheme);
-            this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkScreenName);
             this.Controls.Add(this.chkClickables);
             this.Controls.Add(this.chkTimestamps);
@@ -237,7 +226,6 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkTimestamps;
         private System.Windows.Forms.CheckBox chkClickables;
         private System.Windows.Forms.CheckBox chkScreenName;
-        private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.ComboBox cmbTheme;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;

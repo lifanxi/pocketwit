@@ -66,12 +66,13 @@ namespace PockeTwit
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
             if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsRerender = true; }
             if (chkScreenName.Checked != ClientSettings.IncludeUserName) { NeedsRerender = true; }
+            
             ClientSettings.MergeMessages = chkMerge.Checked;
             ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.UseClickables = chkClickables.Checked;
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
-            ClientSettings.UseSkweezer = chkSkweezer.Checked;
+            
             if(ClientSettings.FontSize != int.Parse(this.txtFontSize.Text))
             {
                 ClientSettings.FontSize = int.Parse(txtFontSize.Text);
@@ -110,7 +111,6 @@ namespace PockeTwit
             chkTimestamps.Checked = ClientSettings.ShowExtra;
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
-            chkSkweezer.Checked = ClientSettings.UseSkweezer;
             txtFontSize.Text = ClientSettings.FontSize.ToString();
             ListThemes();
             this.DialogResult = DialogResult.Cancel;

@@ -48,10 +48,28 @@ namespace PockeTwit
             ClientSettings.UseGPS = chkGPS.Checked;
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
+            ClientSettings.UseSkweezer = chkSkweezer.Checked;
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
                 ClientSettings.UpdateMinutes = int.Parse(txtUpdate.Text, format);
+            }
+            if (ClientSettings.CacheDir != txtCaheDir.Text)
+            {
+                try
+                {
+                    if (!System.IO.Directory.Exists(txtCaheDir.Text))
+                    {
+                        System.IO.Directory.CreateDirectory(txtCaheDir.Text);
+                    }
+                    ClientSettings.CacheDir = txtCaheDir.Text;
+                    ThrottledArtGrabber.ResetCacheDir();
+
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to use that folder as a cache directory");
+                }
             }
             ClientSettings.SaveSettings();
             
@@ -68,10 +86,12 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
+            chkSkweezer.Checked = ClientSettings.UseSkweezer;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
             txtUpdate.Text = ClientSettings.UpdateMinutes.ToString();
             chkTranslate.Checked = ClientSettings.AutoTranslate;
+            txtCaheDir.Text = ClientSettings.CacheDir;
             chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;
             this.DialogResult = DialogResult.Cancel;
         }
