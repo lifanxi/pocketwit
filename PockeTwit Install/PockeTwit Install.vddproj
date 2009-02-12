@@ -661,7 +661,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_1BE4C422BB6E4C3BAB3BCC45BA037EF1"
             {
-            "SourcePath" = "8:..\\QuickPost\\obj\\DevBuild\\QuickPost.exe"
+            "SourcePath" = "8:..\\QuickPost\\obj\\Release\\QuickPost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -687,7 +687,7 @@
             }
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_40E71D37BA55489FBE0B2DC740587735"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
