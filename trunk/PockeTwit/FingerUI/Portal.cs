@@ -397,6 +397,8 @@ namespace FingerUI
                             }
                             catch (Exception ex)
                             {
+                                //JeepNaked's error here?
+                                //Specified argument was out of range of valid values. Parameter name: index
                                 System.Windows.Forms.MessageBox.Show(ex.Message);
                             }
                         }

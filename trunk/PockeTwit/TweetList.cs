@@ -33,6 +33,8 @@ namespace PockeTwit
         private bool IsLoaded = false;
         private string ShowUserID;
         private bool StartBackground = false;
+        private int displayedNewMessages;
+        private int displayedNewUpdates;
 
         #region MenuItems
         #region LeftMenu
@@ -716,14 +718,27 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
             }
+            else
+            {
+                displayedNewMessages += count;
+                MessagesMenuItem.Text = "Messages (" + displayedNewMessages.ToString() + ")";
+            }
             Notifyer.NewMessages(count);
+            
         }
+
+
 
         void Manager_FriendsUpdated(int count)
         {
             if (statList.CurrentList() == "Friends_TimeLine")
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
+            }
+            else
+            {
+                displayedNewUpdates += count;
+                FriendsTimeLineMenuItem.Text = "Friends Timeline (" + displayedNewUpdates.ToString()+")";
             }
             Notifyer.NewFriendMessages(count);
         }
@@ -942,6 +957,7 @@ namespace PockeTwit
             }
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
+            displayedNewUpdates = 0;
         }
 
         private void ShowMessagesTimeLine()
@@ -960,6 +976,7 @@ namespace PockeTwit
             //}
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
+            displayedNewMessages = 0;
         }
 
         private void ShowUserTimeLine()
@@ -1188,18 +1205,46 @@ namespace PockeTwit
             {
                 case "Friends_TimeLine":
                     FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline";
-                    MessagesMenuItem.Text = "Messages";
+                    if (displayedNewMessages > 0)
+                    {
+                        MessagesMenuItem.Text =  "Messages - " + displayedNewMessages.ToString();
+                    }
+                    else
+                    {
+                        MessagesMenuItem.Text = "Messages";
+                    }
                     MergedTimeLineMenuItem.Text = "Refresh TimeLine";
                     break;
                 case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
+                    if (displayedNewUpdates > 0)
+                    {
+                        FriendsTimeLineMenuItem.Text = "Friends Timeline  (" + displayedNewUpdates.ToString()+")";
+                    }
+                    else
+                    {
+                        FriendsTimeLineMenuItem.Text = "Friends Timeline";
+                    }
                     MessagesMenuItem.Text = "Refresh Messages";
                     MergedTimeLineMenuItem.Text = "TimeLine";
                     break;
                 default:
                     MergedTimeLineMenuItem.Text = "TimeLine";
-                    MessagesMenuItem.Text = "Messages";
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
+                    if (displayedNewMessages > 0)
+                    {
+                        MessagesMenuItem.Text = "Messages (" + displayedNewMessages.ToString()+")";
+                    }
+                    else
+                    {
+                        MessagesMenuItem.Text = "Messages";
+                    }
+                    if (displayedNewUpdates > 0)
+                    {
+                        FriendsTimeLineMenuItem.Text = "Friends Timeline (" + displayedNewUpdates.ToString()+")";
+                    }
+                    else
+                    {
+                        FriendsTimeLineMenuItem.Text = "Friends Timeline";
+                    }
                     break;
 
             }
