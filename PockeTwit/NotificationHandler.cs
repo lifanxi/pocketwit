@@ -191,36 +191,42 @@ namespace PockeTwit
         }
         public static void LoadSettings()
         {
-            Friends.GUID = FriendsTweets;
-            Messages.GUID = MessageTweets;
-            Friends.Sound = (string)FriendsKey.GetValue("Wave");
-            if (Friends.Sound == null)
+            try
             {
-                FriendsKey.SetValue("Wave", "");
+                Friends.GUID = FriendsTweets;
+                Messages.GUID = MessageTweets;
+                Friends.Sound = (string)FriendsKey.GetValue("Wave");
+                if (Friends.Sound == null)
+                {
+                    FriendsKey.SetValue("Wave", "");
+                }
+                if (FriendsKey.GetValue("Options") != null)
+                {
+                    Friends.Options = (Options)FriendsKey.GetValue("Options");
+                    FriendsOptions = Friends.Options;
+                }
+                else
+                {
+                    FriendsKey.SetValue("Options", 0);
+                }
+
+                Messages.Sound = (string)MessageKey.GetValue("Wave");
+                if (Messages.Sound == null)
+                {
+                    MessageKey.SetValue("Wave", "");
+                }
+                if (MessageKey.GetValue("Options") != null)
+                {
+                    Messages.Options = (Options)MessageKey.GetValue("Options");
+                    MessagesOptions = Messages.Options;
+                }
+                else
+                {
+                    MessageKey.SetValue("Options", 0);
+                }
             }
-            if (FriendsKey.GetValue("Options") != null)
+            catch (NullReferenceException)
             {
-                Friends.Options = (Options)FriendsKey.GetValue("Options");
-                FriendsOptions = Friends.Options;
-            }
-            else
-            {
-                FriendsKey.SetValue("Options", 0);
-            }
-            
-            Messages.Sound = (string)MessageKey.GetValue("Wave");
-            if (Messages.Sound == null)
-            {
-                MessageKey.SetValue("Wave", "");
-            }
-            if (MessageKey.GetValue("Options") != null)
-            {
-                Messages.Options = (Options)MessageKey.GetValue("Options");
-                MessagesOptions = Messages.Options;
-            }
-            else
-            {
-                MessageKey.SetValue("Options", 0);
             }
         }
 
