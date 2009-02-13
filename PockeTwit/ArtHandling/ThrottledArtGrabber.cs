@@ -207,7 +207,7 @@ namespace PockeTwit
             }
             if (ArtResponse == null)
             {
-
+                return;
             }
             System.IO.Stream responseStream = null;
             System.IO.MemoryStream ArtWriter = null;
