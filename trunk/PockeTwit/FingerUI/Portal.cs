@@ -212,27 +212,35 @@ namespace FingerUI
             int SpacesMoved = 0;
             if (Items.Contains(FirstNewItem) && SetOfItems.Count > SpacesMoved)
             {
-                //Items added to the end
-                SpacesMoved = Items.IndexOf(FirstNewItem);
-                StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
-                Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
-                System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the end of the image.");
-                AddItemsToEnd(ItemsToAdd);
-                return;
+                try
+                {
+                    //Items added to the end
+                    SpacesMoved = Items.IndexOf(FirstNewItem);
+                    StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
+                    Array.Copy(SetOfItems.ToArray(), SetOfItems.Count - SpacesMoved, ItemsToAdd, 0, SpacesMoved);
+                    System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the end of the image.");
+                    AddItemsToEnd(ItemsToAdd);
+                    return;
+                }
+                catch(ArgumentOutOfRangeException) { }
             }
             else
             {
-                StatusItem LastNewItem = SetOfItems[SetOfItems.Count - 1];
-                if (Items.Contains(LastNewItem))
+                try
                 {
-                    //Items added to the start
-                    SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
-                    StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
-                    Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
-                    System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
-                    AddItemsToStart(ItemsToAdd);
-                    return;
+                    StatusItem LastNewItem = SetOfItems[SetOfItems.Count - 1];
+                    if (Items.Contains(LastNewItem))
+                    {
+                        //Items added to the start
+                        SpacesMoved = MaxItems - (Items.IndexOf(LastNewItem) + 1);
+                        StatusItem[] ItemsToAdd = new StatusItem[SpacesMoved];
+                        Array.Copy(SetOfItems.ToArray(), 0, ItemsToAdd, 0, SpacesMoved);
+                        System.Diagnostics.Debug.WriteLine("Blitting " + SpacesMoved + " to the start of the image.");
+                        AddItemsToStart(ItemsToAdd);
+                        return;
+                    }
                 }
+                catch (ArgumentOutOfRangeException) { }
             }
             System.Diagnostics.Debug.WriteLine("Jumped " + SpacesMoved + " spaces");
             Items.Clear();
