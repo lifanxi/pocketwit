@@ -108,6 +108,9 @@ namespace FingerUI
 
         public KListControl()
         {
+
+            LeftMenu.ItemWasClicked+=new SideMenu.delClearMe(delegate{SnapBack();});
+            RightMenu.ItemWasClicked += new SideMenu.delClearMe(delegate { SnapBack(); });
             animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             NotificationArea.TextFont = ClientSettings.TextFont;
             NotificationArea.parentControl = this;
@@ -773,13 +776,11 @@ namespace FingerUI
                     case SideShown.Left:
                         {
                             LeftMenu.InvokeSelected();
-                            SnapBack();
                             break;
                         }
                     case SideShown.Right:
                         {
                             RightMenu.InvokeSelected();
-                            SnapBack();
                             break;
                         }
                     case SideShown.Middle:
@@ -887,13 +888,11 @@ namespace FingerUI
                     {
                         LeftMenu.SelectByNumber(KeyToCheck);
                         LeftMenu.InvokeSelected();
-                        SnapBack();
                     }
                     else if (CurrentlyViewing == SideShown.Right)
                     {
                         RightMenu.SelectByNumber(KeyToCheck);
                         RightMenu.InvokeSelected();
-                        SnapBack();
                     }
                 }
             }
@@ -1585,11 +1584,7 @@ namespace FingerUI
                 SideMenuItem Item = GetMenuItemForPoint(e);
                 if (Item!=null)
                 {
-                    if (Item.ClickedMethod != null)
-                    {
-                        Item.ClickedMethod();
-                    }
-                    if (Item.Text != "Exit") { SnapBack(); }
+                    Item.ClickMe();
                     menuwasClicked = true;
                 }
             }
@@ -1598,11 +1593,7 @@ namespace FingerUI
                 SideMenuItem Item = GetMenuItemForPoint(e);
                 if (Item != null) 
                 {
-                    if (Item.ClickedMethod != null)
-                    {
-                        Item.ClickedMethod();
-                    }
-                    if (Item.Text != "Exit") { SnapBack(); }
+                    Item.ClickMe();
                     menuwasClicked = true;
                 }
             }
