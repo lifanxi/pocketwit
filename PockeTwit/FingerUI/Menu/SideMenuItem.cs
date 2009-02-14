@@ -19,6 +19,7 @@ namespace FingerUI
                 return SubMenuItems.Count > 0;
             }
         }
+        public bool Expanded { get; set; }
         private bool _Visible = true;
         public bool Visible
         {
@@ -37,9 +38,26 @@ namespace FingerUI
             }
         }
         public bool CanHide = false;
+        
+        private delMenuClicked ClickedMethod;
 
+        public void ClickMe()
+        {
+            if (SubMenuItems.Count > 0)
+            {
+                Expanded = !Expanded;
+                MenuExpandedOrCollapsed(Expanded);
+            }
+            else
+            {
+                ClickedMethod();
+                DoneWithClick();
+            }
+        }
 
-        public delMenuClicked ClickedMethod;
+        public event delMenuClicked DoneWithClick = delegate { };
+        public delegate void delItemExpanded(bool Opened);
+        public event delItemExpanded MenuExpandedOrCollapsed = delegate { };
         private string _TextTemplate;
         public string Text
         {

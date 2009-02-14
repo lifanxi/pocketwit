@@ -451,21 +451,27 @@ namespace PockeTwit
             PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
 
             MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
-            /*
+            
             TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines", statList.LeftMenu);
-            TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
-            TimeLinesMenuItem.SubMenuItems.Add(MessagesMenuItem);
+            if (ClientSettings.MergeMessages)
+            {
+                TimeLinesMenuItem.SubMenuItems.Add(MergedTimeLineMenuItem);
+            }
+            else
+            {
+                TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
+                TimeLinesMenuItem.SubMenuItems.Add(MessagesMenuItem);
+            }
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             
-             */
-
+            
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
             MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
             SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
             AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
             ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
-
+            
             if (ClientSettings.MergeMessages)
             {
                 statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, MergedTimeLineMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
@@ -476,6 +482,10 @@ namespace PockeTwit
                 statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
                 AboutMenuItem, ExitMenuItem});
             }
+            /*
+            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
+                AboutMenuItem, ExitMenuItem});
+             */
         }
 
         private void CreateRightMenu()
