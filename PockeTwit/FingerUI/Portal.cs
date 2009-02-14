@@ -194,7 +194,7 @@ namespace FingerUI
                         catch (Exception ex)
                         {
                             //What happened here?
-                            System.Windows.Forms.MessageBox.Show(ex.Message);
+                            //System.Windows.Forms.MessageBox.Show(ex.Message);
                         }
                     }
                     
@@ -310,7 +310,7 @@ namespace FingerUI
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show(ex.Message);
+                    //System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -407,7 +407,7 @@ namespace FingerUI
                             {
                                 //JeepNaked's error here?
                                 //Specified argument was out of range of valid values. Parameter name: index
-                                System.Windows.Forms.MessageBox.Show(ex.Message);
+                                //System.Windows.Forms.MessageBox.Show(ex.Message);
                             }
                         }
                     }
