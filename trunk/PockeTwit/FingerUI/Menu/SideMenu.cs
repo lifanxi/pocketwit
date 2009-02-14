@@ -405,7 +405,7 @@ namespace FingerUI
                     {
                         if (Item.Visible)
                         {
-                            LeftPos = DrawSingleItem(i, m_backBuffer, LeftPos, CurrentTop, Item);
+                            DrawSingleItem(i, m_backBuffer, LeftPos, CurrentTop, Item);
 
                             i++;
                             CurrentTop = CurrentTop + ItemHeight;
@@ -416,7 +416,7 @@ namespace FingerUI
             }
         }
 
-        private int DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int CurrentTop, SideMenuItem Item)
+        private void DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int CurrentTop, SideMenuItem Item)
         {
             string DisplayItem = Item.Text;
             if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
@@ -488,7 +488,6 @@ namespace FingerUI
                 }
                  */
             }
-            return LeftPos;
         }
 
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)

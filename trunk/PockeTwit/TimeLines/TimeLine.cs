@@ -50,7 +50,8 @@ namespace PockeTwit
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show(ex.Message);
+                    //POSSIBLE JEEPNAKED error here?
+                    //System.Windows.Forms.MessageBox.Show(ex.Message);
                 }
             }
         }
