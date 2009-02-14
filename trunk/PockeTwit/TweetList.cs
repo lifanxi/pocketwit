@@ -728,15 +728,20 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
             }
-            else
-            {
-                displayedNewMessages += count;
-                MessagesMenuItem.Text = "Messages (" + displayedNewMessages.ToString() + ")";
-            }
+            displayedNewMessages += count;
+            MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
             Notifyer.NewMessages(count);
             
         }
 
+        private string newItemsText(int count)
+        {
+            if (count > 0)
+            {
+                return " (" + count.ToString() + ")";
+            }
+            return "";
+        }
 
 
         void Manager_FriendsUpdated(int count)
@@ -745,11 +750,8 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
             }
-            else
-            {
-                displayedNewUpdates += count;
-                FriendsTimeLineMenuItem.Text = "Friends Timeline (" + displayedNewUpdates.ToString()+")";
-            }
+            displayedNewUpdates += count;
+            FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
             Notifyer.NewFriendMessages(count);
         }
 
@@ -1112,6 +1114,22 @@ namespace PockeTwit
             SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
             UpdateRightMenu();
             UpdateHistoryPosition();
+            if (statList.CurrentList() == "Messages_TimeLine")
+            {
+                if (statItem.Index < displayedNewMessages)
+                {
+                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - statItem.Index);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
+                }
+            }
+            else if (statList.CurrentList() == "Friends_TimeLine")
+            {
+                if (statItem.Index < displayedNewMessages)
+                {
+                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                }
+            }
         }
 
         private void UpdateHistoryPosition()
@@ -1239,22 +1257,8 @@ namespace PockeTwit
                     break;
                 default:
                     MergedTimeLineMenuItem.Text = "TimeLine";
-                    if (displayedNewMessages > 0)
-                    {
-                        MessagesMenuItem.Text = "Messages (" + displayedNewMessages.ToString()+")";
-                    }
-                    else
-                    {
-                        MessagesMenuItem.Text = "Messages";
-                    }
-                    if (displayedNewUpdates > 0)
-                    {
-                        FriendsTimeLineMenuItem.Text = "Friends Timeline (" + displayedNewUpdates.ToString()+")";
-                    }
-                    else
-                    {
-                        FriendsTimeLineMenuItem.Text = "Friends Timeline";
-                    }
+                    MessagesMenuItem.Text = "Messages"+ newItemsText(displayedNewMessages);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
                     break;
 
             }
