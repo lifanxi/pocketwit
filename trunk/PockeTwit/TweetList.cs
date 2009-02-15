@@ -529,7 +529,24 @@ namespace PockeTwit
             
             statList.LeftMenu.ResetMenu(LeftMenu);
              */
-
+            switch (statList.CurrentList())
+            {
+                case "Friends_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
+                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(displayedNewUpdates);
+                    break;
+                case "Messages_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(displayedNewMessages);
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
+                    break;
+                default:
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                    break;
+            }
         }
         private void UpdateRightMenu()
         {
@@ -1119,18 +1136,19 @@ namespace PockeTwit
             {
                 if (clickedNumber< displayedNewMessages)
                 {
-                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - clickedNumber);
+                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - -statItem.Index);
                     MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
                 }
             }
             else if (statList.CurrentList() == "Friends_TimeLine")
             {
-                if (statItem.Index+1 < displayedNewMessages)
+                if (clickedNumber < displayedNewUpdates)
                 {
-                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - clickedNumber);
+                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
                 }
             }
+            SetLeftMenu();
         }
 
         private void UpdateHistoryPosition()
@@ -1230,25 +1248,7 @@ namespace PockeTwit
             {
                 statList.SwitchTolist(ListName);
             }
-            switch (ListName)
-            {
-                case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(displayedNewUpdates);
-                    break;
-                case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
-                    break;
-                default:
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages"+ newItemsText(displayedNewMessages);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                    break;
-
-            }
+            SetLeftMenu();
         }
 
         private void timerStartup_Tick(object sender, EventArgs e)

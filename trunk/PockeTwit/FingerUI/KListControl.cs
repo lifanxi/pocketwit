@@ -637,7 +637,14 @@ namespace FingerUI
             if (InvokeRequired)
             {
                 delClearMe d = new delClearMe(Repaint);
-                this.BeginInvoke(d, null);
+                try
+                {
+                    this.BeginInvoke(d, null);
+                }
+                catch (ObjectDisposedException)
+                {
+                    this.Dispose();
+                }
             }
             else
             {
