@@ -986,7 +986,6 @@ namespace PockeTwit
             }
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
-            displayedNewUpdates = 0;
         }
 
         private void ShowMessagesTimeLine()
@@ -1005,7 +1004,6 @@ namespace PockeTwit
             //}
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
-            displayedNewMessages = 0;
         }
 
         private void ShowUserTimeLine()
