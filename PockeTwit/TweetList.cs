@@ -1134,7 +1134,7 @@ namespace PockeTwit
             int clickedNumber = statItem.Index + 1;
             if (statList.CurrentList() == "Messages_TimeLine")
             {
-                if (clickedNumber< displayedNewMessages)
+                if (clickedNumber <= displayedNewMessages)
                 {
                     displayedNewMessages = displayedNewMessages - (displayedNewMessages - -statItem.Index);
                     MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
@@ -1142,7 +1142,7 @@ namespace PockeTwit
             }
             else if (statList.CurrentList() == "Friends_TimeLine")
             {
-                if (clickedNumber < displayedNewUpdates)
+                if (clickedNumber <= displayedNewUpdates)
                 {
                     displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
