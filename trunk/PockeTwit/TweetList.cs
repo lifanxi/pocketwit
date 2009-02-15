@@ -1114,19 +1114,20 @@ namespace PockeTwit
             SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
             UpdateRightMenu();
             UpdateHistoryPosition();
+            int clickedNumber = statItem.Index + 1;
             if (statList.CurrentList() == "Messages_TimeLine")
             {
-                if (statItem.Index < displayedNewMessages)
+                if (clickedNumber< displayedNewMessages)
                 {
-                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - statItem.Index);
+                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - clickedNumber);
                     MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
                 }
             }
             else if (statList.CurrentList() == "Friends_TimeLine")
             {
-                if (statItem.Index < displayedNewMessages)
+                if (statItem.Index+1 < displayedNewMessages)
                 {
-                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
+                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - clickedNumber);
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
                 }
             }
@@ -1232,31 +1233,17 @@ namespace PockeTwit
             switch (ListName)
             {
                 case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline";
-                    if (displayedNewMessages > 0)
-                    {
-                        MessagesMenuItem.Text =  "Messages - " + displayedNewMessages.ToString();
-                    }
-                    else
-                    {
-                        MessagesMenuItem.Text = "Messages";
-                    }
-                    MergedTimeLineMenuItem.Text = "Refresh TimeLine";
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
+                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(displayedNewUpdates);
                     break;
                 case "Messages_TimeLine":
-                    if (displayedNewUpdates > 0)
-                    {
-                        FriendsTimeLineMenuItem.Text = "Friends Timeline  (" + displayedNewUpdates.ToString()+")";
-                    }
-                    else
-                    {
-                        FriendsTimeLineMenuItem.Text = "Friends Timeline";
-                    }
-                    MessagesMenuItem.Text = "Refresh Messages";
-                    MergedTimeLineMenuItem.Text = "TimeLine";
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(displayedNewMessages);
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
                     break;
                 default:
-                    MergedTimeLineMenuItem.Text = "TimeLine";
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
                     MessagesMenuItem.Text = "Messages"+ newItemsText(displayedNewMessages);
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
                     break;
