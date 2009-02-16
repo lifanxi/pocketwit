@@ -360,7 +360,10 @@ namespace PockeTwit
             {
                 if (!GlobalEventHandler.FriendsUpdating)
                 {
-                    updateTimer.Enabled = false;
+                    if (updateTimer != null)
+                    {
+                        updateTimer.Enabled = false;
+                    }
                     GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
 #if TESTMESSAGES

@@ -748,7 +748,7 @@ namespace PockeTwit
             displayedNewMessages += count;
             MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
             Notifyer.NewMessages(count);
-            
+            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
         }
 
         private string newItemsText(int count)
@@ -761,6 +761,20 @@ namespace PockeTwit
         }
 
 
+        delegate void delText(string Text);
+        private void setCaption(string text)
+        {
+            if (InvokeRequired)
+            {
+                delText d = new delText(setCaption);
+                this.BeginInvoke(d, text);
+            }
+            else
+            {
+                this.Text = "PockeTwit" + text;
+            }
+        }
+
         void Manager_FriendsUpdated(int count)
         {
             if (statList.CurrentList() == "Friends_TimeLine")
@@ -770,6 +784,7 @@ namespace PockeTwit
             displayedNewUpdates += count;
             FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
             Notifyer.NewFriendMessages(count);
+            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
         }
 
         private void MapList()
@@ -1146,6 +1161,7 @@ namespace PockeTwit
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
                 }
             }
+            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
             SetLeftMenu();
         }
 
