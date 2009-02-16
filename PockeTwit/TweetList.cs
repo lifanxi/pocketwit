@@ -1338,14 +1338,12 @@ namespace PockeTwit
             }
             if (isChangingingWindowState) { return; }
             isChangingingWindowState = true;
-            if (DetectDevice.DeviceType == DeviceType.Standard)
-            {
-                statList.Focus();
-            }
+            
             
             GlobalEventHandler.setPid();
             if (!IsLoaded)
             {
+                isChangingingWindowState = false;
                 return;
             }
 
@@ -1360,6 +1358,10 @@ namespace PockeTwit
                 SetWindowState(FormWindowState.Normal);
             }
             statList.Visible = true;
+            if (DetectDevice.DeviceType == DeviceType.Standard)
+            {
+                statList.Focus();
+            }
             isChangingingWindowState = false;
             /*
             if (statList.CurrentList() == "Friends_TimeLine")
