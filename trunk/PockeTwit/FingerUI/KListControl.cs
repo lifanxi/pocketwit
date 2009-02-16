@@ -249,6 +249,11 @@ namespace FingerUI
             }
             set
             {
+                if (!value)
+                {
+                    fsDisplay.Visible = false;
+                }
+
                 if (value && !_Visible)
                 {
                     if (OldSize != new Point(this.Width, this.Height))
