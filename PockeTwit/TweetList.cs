@@ -1392,12 +1392,12 @@ namespace PockeTwit
             isChangingingWindowState = true;
             // The Taskbar must be enabled to be able to do a Smart Minimize
             statList.Visible = false;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            //this.FormBorderStyle = FormBorderStyle.FixedDialog;
             //statList.Visible = false;
-            this.WindowState = FormWindowState.Normal;
-            this.ControlBox = true;
-            this.MinimizeBox = true;
-            this.MaximizeBox = true;
+            //this.WindowState = FormWindowState.Normal;
+            //this.ControlBox = true;
+            //this.MinimizeBox = true;
+            //this.MaximizeBox = true;
 
             // Since there is no WindowState.Minimize, we have to P/Invoke ShowWindow
             /*
@@ -1433,6 +1433,14 @@ namespace PockeTwit
         }
 
         #endregion�Methods�
+
+        private void TweetList_LostFocus(object sender, EventArgs e)
+        {
+            if (!statList.Focused)
+            {
+                statList.Visible = false;
+            }
+        }
 
     }
 }
