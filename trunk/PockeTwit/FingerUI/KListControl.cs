@@ -139,6 +139,15 @@ namespace FingerUI
             this.Controls.Add(fsDisplay);
 
             PockeTwit.GlobalEventHandler.ShowErrorMessage += new PockeTwit.GlobalEventHandler.delshowErrorMessage(GlobalEventHandler_ShowErrorMessage);
+            this.LostFocus += new EventHandler(KListControl_LostFocus);
+        }
+
+        void KListControl_LostFocus(object sender, EventArgs e)
+        {
+            if (!this.Parent.Focused)
+            {
+                this.Visible = false;
+            }
         }
 
         void GlobalEventHandler_ShowErrorMessage(string Message)

@@ -101,6 +101,7 @@ namespace PockeTwit
             this.Controls.Add(this.statList);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
+            this.LostFocus += new System.EventHandler(this.TweetList_LostFocus);
             this.ResumeLayout(false);
 
         }
