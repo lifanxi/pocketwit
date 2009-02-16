@@ -930,6 +930,7 @@ namespace FingerUI
 
         private long ticks = 0;
 
+        private bool movingItems = true;
         protected override void OnMouseDown(MouseEventArgs e)
         {
             HasMoved = false;
@@ -948,16 +949,30 @@ namespace FingerUI
             m_mouseDown.X = e.X;
             m_mouseDown.Y = e.Y;
             m_mousePrev = m_mouseDown;
-            
+
+            if (XOffset < 0 && (0 - e.X) > XOffset)
+            {
+                movingItems = false;
+                return;
+            }
+            if (XOffset > 0 && e.X > (ItemWidth-XOffset))
+            {
+                movingItems = false;
+                return;
+            }
+            movingItems = true;
+
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             
             base.OnMouseMove(e);
-            
+            if (!movingItems) { return; }
+
             if (e.Button == MouseButtons.Left)
             {
+                
                 //Fast scroll
                 if (m_scrollBarMove)
                 {
@@ -1127,18 +1142,22 @@ namespace FingerUI
 
         public void SnapBack()
         {
-            if (CurrentlyViewing == SideShown.Right)
+            try
             {
-                Capture = false;
-                m_timer.Enabled = true;
-                m_velocity.X = -(this.Width / 10);
+                if (CurrentlyViewing == SideShown.Right)
+                {
+                    Capture = false;
+                    m_timer.Enabled = true;
+                    m_velocity.X = -(this.Width / 10);
+                }
+                else if (CurrentlyViewing == SideShown.Left)
+                {
+                    Capture = false;
+                    m_timer.Enabled = true;
+                    m_velocity.X = (this.Width / 10);
+                }
             }
-            else if (CurrentlyViewing == SideShown.Left)
-            {
-                Capture = false;
-                m_timer.Enabled = true;
-                m_velocity.X = (this.Width / 10);
-            }
+            catch (ObjectDisposedException) { }
         }
 
         private void FillBuffer()
