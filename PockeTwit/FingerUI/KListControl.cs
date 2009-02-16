@@ -111,6 +111,10 @@ namespace FingerUI
 
             LeftMenu.ItemWasClicked+=new SideMenu.delClearMe(delegate{SnapBack();});
             RightMenu.ItemWasClicked += new SideMenu.delClearMe(delegate { SnapBack(); });
+
+            LeftMenu.NeedRedraw+=new SideMenu.delClearMe(delegate{Repaint();});
+            RightMenu.NeedRedraw += new SideMenu.delClearMe(delegate { Repaint(); });
+
             animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             NotificationArea.TextFont = ClientSettings.TextFont;
             NotificationArea.parentControl = this;
@@ -966,10 +970,21 @@ namespace FingerUI
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            
+            if (!movingItems) 
+            {
+                
+                int LeftOfItem = this.Width - XOffset;
+                if (CurrentlyViewing == SideShown.Left)
+                {
+                    LeftMenu.OnMouseMove(e);
+                }
+                else
+                {
+                    RightMenu.OnMouseMove(e);
+                }
+                return; 
+            }
             base.OnMouseMove(e);
-            if (!movingItems) { return; }
-
             if (e.Button == MouseButtons.Left)
             {
                 
@@ -1024,6 +1039,19 @@ namespace FingerUI
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            if (!movingItems) 
+            {
+                
+                if (CurrentlyViewing == SideShown.Left)
+                {
+                    LeftMenu.OnMouseUp(e);
+                }
+                else
+                {
+                    RightMenu.OnMouseUp(e);
+                }
+                return; 
+            }
             base.OnMouseUp(e);
 
             if (ClickablesControl.Visible)

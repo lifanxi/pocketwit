@@ -15,6 +15,7 @@ namespace FingerUI
         }
         public delegate void delClearMe();
         public event delClearMe ItemWasClicked = delegate { };
+        public event delClearMe NeedRedraw = delegate { };
 
         private Bitmap _Rendered = null;
         public Bitmap Rendered
@@ -58,6 +59,7 @@ namespace FingerUI
                     if (Items.Contains(value))
                     {
                         _SelectedItem = value;
+                        IsDirty = true;
                     }
                     else
                     {
@@ -382,6 +384,29 @@ namespace FingerUI
             IsDirty=true;
         }
 
+        public void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
+        {
+            SideMenuItem i = GetMenuItemForTransposedPoint(new Point(e.X, e.Y));
+            if (i != null)
+            {
+                SelectedItem = i;
+                IsDirty = true;
+                NeedRedraw();
+            }
+        }
+
+        public void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
+        {
+            SideMenuItem i = GetMenuItemForTransposedPoint(new Point(e.X, e.Y));
+            if (i != null)
+            {
+                SelectedItem = i;
+                IsDirty = true;
+                NeedRedraw();
+                i.ClickMe();
+            }
+        }
+
         private void DrawMenu()
         {
 
@@ -511,6 +536,26 @@ namespace FingerUI
                     }
                 }
             }
+        }
+
+        public FingerUI.SideMenuItem GetMenuItemForTransposedPoint(Point X)
+        {
+            int TopOfItem = TopOfMenu;
+
+            foreach (SideMenuItem MenuItem in Items)
+            {
+                if (MenuItem.Visible)
+                {
+                    Rectangle menuRect = new Rectangle(0, TopOfItem, Width, ItemHeight);
+                    
+                    TopOfItem = TopOfItem + ItemHeight;
+                    if (menuRect.Contains(X))
+                    {
+                        return MenuItem;
+                    }
+                }
+            }
+            return null;
         }
 
         public FingerUI.SideMenuItem GetMenuItemForPoint(Point X, int LeftOfItem)
