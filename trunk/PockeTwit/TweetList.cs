@@ -900,7 +900,9 @@ namespace PockeTwit
         {
             AboutForm a = new AboutForm();
             IsLoaded = false;
+            statList.Visible = false;
             a.ShowDialog();
+            statList.Visible = true;
             if (!string.IsNullOrEmpty(a.AskedToSeeUser))
             {
                 SwitchToUserTimeLine(a.AskedToSeeUser);
