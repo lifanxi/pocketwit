@@ -937,11 +937,13 @@ namespace FingerUI
         private bool movingItems = true;
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("MouseDown!");
             HasMoved = false;
             //Fast scrolling on the right 10 pixels
             if (e.X > this.Width - PointerSize)
             {
                 m_scrollBarMove = true;
+                movingItems = true;
                 return;
             }
             
@@ -1036,6 +1038,8 @@ namespace FingerUI
                 Invalidate();
             }
         }
+
+        
 
         protected override void OnMouseUp(MouseEventArgs e)
         {

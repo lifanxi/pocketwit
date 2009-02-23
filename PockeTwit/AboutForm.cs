@@ -106,7 +106,7 @@ namespace PockeTwit
             if (l.Text.StartsWith("@"))
             {
                 AskedToSeeUser = l.Text;
-                this.Close();
+                this.DialogResult = DialogResult.OK;
             }
         }
 
@@ -150,7 +150,7 @@ namespace PockeTwit
 
         private void menuClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void menuUpdate_Click(object sender, EventArgs e)
