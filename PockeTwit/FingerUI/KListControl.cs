@@ -1039,10 +1039,15 @@ namespace FingerUI
             }
         }
 
-        
+        public bool IgnoreMouse = false;
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            if (IgnoreMouse)
+            {
+                IgnoreMouse = false;
+                return;
+            }
             if (!movingItems) 
             {
                 
