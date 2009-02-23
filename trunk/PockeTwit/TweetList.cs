@@ -902,13 +902,18 @@ namespace PockeTwit
             IsLoaded = false;
             statList.Visible = false;
             a.ShowDialog();
+
+            this.Visible = true;
+            
             statList.Visible = true;
-            if (!string.IsNullOrEmpty(a.AskedToSeeUser))
+            IsLoaded = true;
+            string ReqedUser = a.AskedToSeeUser;
+            a.Close();
+            
+            if (!string.IsNullOrEmpty(ReqedUser))
             {
                 SwitchToUserTimeLine(a.AskedToSeeUser);
             }
-            a.Close();
-            IsLoaded = true;
         }
 
         private void ShowProfile()
