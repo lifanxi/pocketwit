@@ -74,7 +74,7 @@ namespace PockeTwit
         public TweetList(bool InBackGround)
         {
             StartBackground = InBackGround;
-
+            Microsoft.WindowsCE.Forms.MobileDevice.Hibernate += new EventHandler(MobileDevice_Hibernate);
             Program.StartUp = DateTime.Now;
             if (InBackGround)
             {
@@ -141,6 +141,11 @@ namespace PockeTwit
             {
                 timerStartup.Enabled = true;
             }
+        }
+
+        void MobileDevice_Hibernate(object sender, EventArgs e)
+        {
+            MessageBox.Show("The device is running low on memory. You may want to close PockeTwit or other applications.");
         }
 
         #endregion�Constructors�
