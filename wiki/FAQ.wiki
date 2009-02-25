@@ -1,6 +1,6 @@
 #summary Frequently Asked Questions
 = Details =
-  *  *I keep getting "Communication Error" popups? What does that mean?
+  *  *I keep getting "Communication Error" popups? What does that mean?*
 This means exactly what it says -- PockeTwit is having trouble communicating with the twitter server.  This could be due to any number of things, such as poor cellular service or even twitter's server's being temporarily offline.  There's little more PockeTwit can do to diagnose the problem. 
 
   *  *How do I manually update a timeline?*
