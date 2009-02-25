@@ -744,7 +744,7 @@ namespace FingerUI
             foreach (System.Text.RegularExpressions.Match match in m)
             {
                 Clickable c = new Clickable();
-                c.Text = match.Value;
+                c.Text = match.Value.TrimEnd(IgnoredAtChars);
                 Tweet.Clickables.Add(c);
             }
         }
@@ -773,7 +773,7 @@ namespace FingerUI
                             {
                                 float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
                                 //Find the size of the word
-                                SizeF WordSize = g.MeasureString(Words[i], ClientSettings.TextFont);
+                                SizeF WordSize = g.MeasureString(WordToCheck, ClientSettings.TextFont);
                                 //A structure containing info we need to know about the word.
                                 c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
 
@@ -801,10 +801,10 @@ namespace FingerUI
                             //Find out how far to the right this word will appear
                             float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
                             //Find the size of the word
-                            SizeF WordSize = g.MeasureString(Words[i], ClientSettings.TextFont);
+                            SizeF WordSize = g.MeasureString(WordToCheck, ClientSettings.TextFont);
                             //A structure containing info we need to know about the word.
                             c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-                            c.Text = WordToCheck.TrimEnd(IgnoredAtChars);
+                            c.Text = WordToCheck;
                         }
                     }
                 }
