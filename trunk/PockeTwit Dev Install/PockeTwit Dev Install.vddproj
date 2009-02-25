@@ -62,12 +62,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4D33984A565974F79A24E6A8DD2BE829"
-        "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
         "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
@@ -152,18 +146,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_96D51F4F2C6A75982C0782A86161B215"
-        "OwnerKey" = "8:_4D33984A565974F79A24E6A8DD2BE829"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96D51F4F2C6A75982C0782A86161B215"
-        "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "MsmSig" = "8:_UNDEFINED"
@@ -202,18 +184,6 @@
         {
         "MsmKey" = "8:_B234899FC5AC47ABBB3FC7EE8320AD95"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B7CDAF04783DB5EC64071A79EE1769E0"
-        "OwnerKey" = "8:_96D51F4F2C6A75982C0782A86161B215"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B7CDAF04783DB5EC64071A79EE1769E0"
-        "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -392,34 +362,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_4D33984A565974F79A24E6A8DD2BE829"
-            {
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:slockimp, Version=1.0.2721.30528, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_4D33984A565974F79A24E6A8DD2BE829"
-                    {
-                    "Name" = "8:slockimp.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:slockimp.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
-            "Condition" = "8:"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "Register" = "3:0"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_503BCEB661496D8C1BE69DC8459AE531"
             {
             "AssemblyIsInGAC" = "11:FALSE"
@@ -500,7 +442,7 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -560,34 +502,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_96D51F4F2C6A75982C0782A86161B215"
-            {
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
-                "ScatterAssemblies"
-                {
-                    "_96D51F4F2C6A75982C0782A86161B215"
-                    {
-                    "Name" = "8:System.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
-            "Condition" = "8:"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "Register" = "3:0"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_A5BEC62F022195F9327047851A24F816"
             {
             "AssemblyIsInGAC" = "11:FALSE"
@@ -601,34 +515,6 @@
                     }
                 }
             "SourcePath" = "8:System.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
-            "Condition" = "8:"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "Register" = "3:0"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_B7CDAF04783DB5EC64071A79EE1769E0"
-            {
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:System.Xml, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
-                "ScatterAssemblies"
-                {
-                    "_B7CDAF04783DB5EC64071A79EE1769E0"
-                    {
-                    "Name" = "8:System.Xml.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Xml.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -775,7 +661,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_B234899FC5AC47ABBB3FC7EE8320AD95"
             {
-            "SourcePath" = "8:..\\QuickPost\\obj\\DevBuild\\QuickPost.exe"
+            "SourcePath" = "8:..\\QuickPost\\obj\\Release\\QuickPost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -801,7 +687,7 @@
             }
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_CCAD80857091443DBD4217B0BFDADB7C"
             {
-            "SourcePath" = "8:..\\PockeTwit\\obj\\DevBuild\\PockeTwit.exe"
+            "SourcePath" = "8:..\\PockeTwit\\obj\\Release\\PockeTwit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
