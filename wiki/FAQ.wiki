@@ -14,3 +14,6 @@ Sometimes word-wrapping in the tweets causes the last word or two to be cut off 
 
   *  *How do I use ping.fm?*
 If you have a ping.fm account, they will provide you with a unique "application key" at http://ping.fm/key/.  This key replaces your username and password in applications that connect to ping.fm.
+
+  *  *I can't type with my slide-out keyboard*
+Some devices with a slide out keyboard suffered from a bug with the .NET framework. An update from the manufacturer should fix the issue.  Try looking at http://www.phonenews.com/verizon-xv6800-gets-keyboard-fix-2714/
