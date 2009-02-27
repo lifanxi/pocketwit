@@ -33,9 +33,16 @@ namespace PockeTwit
             copyPasteMenu.MenuItems.Add(PasteItem);
             PasteItem.Click += new System.EventHandler(PasteItem_Click);
         }
+        private void SetupStandard()
+        {
+            Microsoft.WindowsCE.Forms.InputModeEditor.SetInputMode(txtUserName, Microsoft.WindowsCE.Forms.InputMode.AlphaCurrent);
+            Microsoft.WindowsCE.Forms.InputModeEditor.SetInputMode(txtPassword, Microsoft.WindowsCE.Forms.InputMode.AlphaCurrent);
+
+        }
         public AccountInfoForm()
         {
             InitializeComponent();
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 SetupProfessional();
