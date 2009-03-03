@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -383,6 +383,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\NotificationSettings.resx">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\OtherSettings.resx">
       <DependentUpon>OtherSettings.cs</DependentUpon>
@@ -487,6 +488,10 @@
     <Compile Include="TimeLines\LastSelectedItems.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
+    <Compile Include="Yedda\GPSObject.cs" />
+    <Compile Include="Yedda\IPictureService.cs" />
+    <Compile Include="Yedda\MobyPicture.cs" />
+    <Compile Include="Yedda\PicturePostObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
