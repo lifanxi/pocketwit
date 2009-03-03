@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using Yedda;
+
 namespace PockeTwit
 {
     public partial class PostUpdate : Form
@@ -23,6 +25,7 @@ namespace PockeTwit
         private bool _StandAlone;
         private delegate void delUpdateText(string text);
 
+        private IPictureService pictureService;
         
         #region Properties
         private Yedda.Twitter.Account _AccountToSet = ClientSettings.DefaultAccount;
@@ -338,10 +341,11 @@ namespace PockeTwit
             f.Close();
         }
 
-        private void InsertPictureFromCamera()
+        private string InsertPictureFromCamera()
         {
             using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
             {
+                String pictureUrl = string.Empty;
                 try
                 {
                     if (c.ShowDialog() == DialogResult.OK)
@@ -356,17 +360,28 @@ namespace PockeTwit
                             this.pictureFromStorage.Visible = false;
                         }
                         AddPictureToForm(c.FileName, pictureFromCamers);
+
+                        pictureService = TwitPic.Instance;
+                        using (PicturePostObject ppo = new PicturePostObject())
+                        {
+                            ppo.Filename = c.FileName;
+                            ppo.Username = AccountToSet.UserName;
+                            ppo.Password = AccountToSet.Password;
+                            pictureUrl = pictureService.PostPicture(ppo); 
+                        }
                     }
                 }
                 catch
                 {
                     MessageBox.Show("The camera is not available.", "PockeTwit");
                 }
+                return pictureUrl;
             }
         }
 
-        private void InsertPictureFromFile()
+        private string InsertPictureFromFile()
         {
+            String pictureUrl = string.Empty;
             Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
             if (s.ShowDialog() == DialogResult.OK)
             {
@@ -380,7 +395,18 @@ namespace PockeTwit
                     this.pictureFromCamers.Visible = false;
                 }
                 AddPictureToForm(s.FileName, pictureFromStorage);
+
+                //This call takes a while. Might not be handy before redrawing.
+                pictureService = TwitPic.Instance;
+                using (PicturePostObject ppo = new PicturePostObject())
+                {
+                    ppo.Filename = s.FileName;
+                    ppo.Username = AccountToSet.UserName;
+                    ppo.Password = AccountToSet.Password;
+                    pictureUrl = pictureService.PostPicture(ppo);
+                }
             }
+            return pictureUrl;
         }
 
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
@@ -445,7 +471,7 @@ namespace PockeTwit
                     }
                 }
                 catch { }
-
+                /*
                 if (TwitterConn.AllowTwitPic && this.UseTwitPic)
                 {
                     string retValue;
@@ -460,9 +486,9 @@ namespace PockeTwit
                         return false;
                     }
                 }
-
-                else
-                {
+                */
+                //else
+                //{
                     string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
                     if (string.IsNullOrEmpty(retValue))
                     {
@@ -478,7 +504,7 @@ namespace PockeTwit
                         MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
                         return false;
                     }
-                }
+                //}
                 return true;
                 
             }
@@ -524,11 +550,14 @@ namespace PockeTwit
         }
         void pictureFromStorage_Click(object sender, EventArgs e)
         {
-            InsertPictureFromFile();
+            string pictureURL = InsertPictureFromFile();
+            txtStatusUpdate.Text += pictureURL;
         }
         void pictureFromCamers_Click(object sender, EventArgs e)
         {
-            InsertPictureFromCamera();
+            string pictureURL = InsertPictureFromCamera();
+            //Append the picture URL
+            txtStatusUpdate.Text += pictureURL;
         }
         private void menuSubmit_Click(object sender, EventArgs e)
         {
