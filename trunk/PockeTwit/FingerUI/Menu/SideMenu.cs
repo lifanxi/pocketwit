@@ -17,6 +17,8 @@ namespace FingerUI
         public event delClearMe ItemWasClicked = delegate { };
         public event delClearMe NeedRedraw = delegate { };
 
+        private SideMenuItem ExpandedItem = null;
+
         private Bitmap _Rendered = null;
         public Bitmap Rendered
         {
@@ -409,7 +411,7 @@ namespace FingerUI
 
         private void DrawMenu()
         {
-
+            Rectangle ExpandedRect = new Rectangle();
             lock (Items)
             {
                 int i = 1;
@@ -433,12 +435,24 @@ namespace FingerUI
                             DrawSingleItem(i, m_backBuffer, LeftPos, CurrentTop, Item);
 
                             i++;
+                            
+                            if (Item.Expanded)
+                            {
+                                ExpandedItem = Item;
+                                ExpandedRect = new Rectangle(LeftPos, CurrentTop, _Width, ItemHeight);
+                            }
                             CurrentTop = CurrentTop + ItemHeight;
                         }
+                    }
+
+                    if (ExpandedItem != null)
+                    {
+                        DrawSubMenu(ExpandedItem, ExpandedRect);
                     }
                 }
                 IsDirty = false;
             }
+
         }
 
         private void DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int CurrentTop, SideMenuItem Item)
@@ -519,10 +533,14 @@ namespace FingerUI
         {
             int i = 0;
             int ItemsCount = Item.SubMenuItems.Count;
-            int TopofMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Bottom) - (ItemsCount * ItemHeight / 2);
-
+            int TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
+            if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
             int LeftPos = 0;
-            int CurrentTop = TopOfMenu;
+            if (_Side == KListControl.SideShown.Left)
+            {
+                LeftPos = -15;
+            }
+            int CurrentTop = TopOfSubMenu;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
             {
                 foreach (SideMenuItem subItem in Item.SubMenuItems)
@@ -540,6 +558,10 @@ namespace FingerUI
 
         public FingerUI.SideMenuItem GetMenuItemForTransposedPoint(Point X)
         {
+            if (ExpandedItem != null)
+            {
+                return null;
+            }
             int TopOfItem = TopOfMenu;
 
             foreach (SideMenuItem MenuItem in Items)
