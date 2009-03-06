@@ -145,7 +145,7 @@ namespace PockeTwit
 
         void MobileDevice_Hibernate(object sender, EventArgs e)
         {
-            MessageBox.Show("The device is running low on memory. You may want to close PockeTwit or other applications.");
+            //MessageBox.Show("The device is running low on memory. You may want to close PockeTwit or other applications.");
         }
 
         #endregion�Constructors�

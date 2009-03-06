@@ -19,7 +19,13 @@ namespace FingerUI
         private int TopOfSubMenu;
 
         private SideMenuItem ExpandedItem = null;
-
+        public bool IsExpanded
+        {
+            get
+            {
+                return ExpandedItem != null;
+            }
+        }
         private Bitmap _Rendered = null;
         public Bitmap Rendered
         {
@@ -190,6 +196,14 @@ namespace FingerUI
                 {
                     item.DoneWithClick -= new delMenuClicked(item_DoneWithClick);
                     item.MenuExpandedOrCollapsed -= new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                    if (item.HasChildren)
+                    {
+                        foreach (SideMenuItem subItem in item.SubMenuItems)
+                        {
+                            subItem.DoneWithClick -= new delMenuClicked(item_DoneWithClick);
+                            subItem.MenuExpandedOrCollapsed -= new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                        }
+                    }
                 }
                 Items.Clear();
                 Items.AddRange(NewItems);
@@ -198,6 +212,14 @@ namespace FingerUI
                 {
                     item.DoneWithClick += new delMenuClicked(item_DoneWithClick);
                     item.MenuExpandedOrCollapsed += new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                    if (item.HasChildren)
+                    {
+                        foreach (SideMenuItem subItem in item.SubMenuItems)
+                        {
+                            subItem.DoneWithClick += new delMenuClicked(item_DoneWithClick);
+                            subItem.MenuExpandedOrCollapsed += new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                        }
+                    }
                 }
             }
             IsDirty=true;
@@ -316,7 +338,7 @@ namespace FingerUI
                 }
                 else
                 {
-                    _SelectedItem = ItemsToUse[Items.Count - 1];
+                    _SelectedItem = ItemsToUse[ItemsToUse.Count - 1];
                 }
             }
             if (!_SelectedItem.Visible)
@@ -328,9 +350,14 @@ namespace FingerUI
 
         public void SelectByText(string ItemToSelect)
         {
-            lock (Items)
+            List<SideMenuItem> ItemsToUse = Items;
+            if (ExpandedItem != null)
             {
-                foreach (SideMenuItem Item in Items)
+                ItemsToUse = ExpandedItem.SubMenuItems;
+            }
+            lock (ItemsToUse)
+            {
+                foreach (SideMenuItem Item in ItemsToUse)
                 {
                     if (Item.Text == ItemToSelect)
                     {
@@ -365,11 +392,16 @@ namespace FingerUI
 
         public void SelectByNumber(int Number)
         {
-            lock (Items)
+            List<SideMenuItem> ItemsToUse = Items;
+            if (ExpandedItem != null)
             {
-                if (Items.Count >= Number)
+                ItemsToUse = ExpandedItem.SubMenuItems;
+            }
+            lock (ItemsToUse)
+            {
+                if (ItemsToUse.Count >= Number)
                 {
-                    _SelectedItem = Items[Number];
+                    _SelectedItem = ItemsToUse[Number];
                 }
             }
             IsDirty = true;
@@ -407,24 +439,22 @@ namespace FingerUI
             {
                 SelectedItem = i;
                 CollapseExpandedMenu();
-                IsDirty = true;
-                NeedRedraw();
                 i.ClickMe();
             }
             else
             {
                 CollapseExpandedMenu();
-                IsDirty = true;
-                NeedRedraw();
             }
         }
 
-        private void CollapseExpandedMenu()
+        public void CollapseExpandedMenu()
         {
             if (ExpandedItem != null)
             {
                 ExpandedItem.Expanded = false;
                 ExpandedItem = null;
+                IsDirty = true;
+                NeedRedraw();
             }
         }
 
