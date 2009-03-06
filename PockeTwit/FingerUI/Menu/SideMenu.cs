@@ -16,6 +16,7 @@ namespace FingerUI
         public delegate void delClearMe();
         public event delClearMe ItemWasClicked = delegate { };
         public event delClearMe NeedRedraw = delegate { };
+        private int TopOfSubMenu;
 
         private SideMenuItem ExpandedItem = null;
 
@@ -403,9 +404,25 @@ namespace FingerUI
             if (i != null)
             {
                 SelectedItem = i;
+                CollapseExpandedMenu();
                 IsDirty = true;
                 NeedRedraw();
                 i.ClickMe();
+            }
+            else
+            {
+                CollapseExpandedMenu();
+                IsDirty = true;
+                NeedRedraw();
+            }
+        }
+
+        private void CollapseExpandedMenu()
+        {
+            if (ExpandedItem != null)
+            {
+                ExpandedItem.Expanded = false;
+                ExpandedItem = null;
             }
         }
 
@@ -533,7 +550,7 @@ namespace FingerUI
         {
             int i = 0;
             int ItemsCount = Item.SubMenuItems.Count;
-            int TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
+            TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
             int LeftPos = 0;
             if (_Side == KListControl.SideShown.Left)
@@ -558,13 +575,16 @@ namespace FingerUI
 
         public FingerUI.SideMenuItem GetMenuItemForTransposedPoint(Point X)
         {
+            List<SideMenuItem> ListOfItems = Items;
+            int TopOfItem = TopOfMenu;
             if (ExpandedItem != null)
             {
-                return null;
+                ListOfItems = ExpandedItem.SubMenuItems;
+                TopOfItem = TopOfSubMenu;
             }
-            int TopOfItem = TopOfMenu;
+            
 
-            foreach (SideMenuItem MenuItem in Items)
+            foreach (SideMenuItem MenuItem in ListOfItems)
             {
                 if (MenuItem.Visible)
                 {
