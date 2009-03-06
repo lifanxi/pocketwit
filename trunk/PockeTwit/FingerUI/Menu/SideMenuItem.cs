@@ -50,7 +50,10 @@ namespace FingerUI
             }
             else
             {
-                ClickedMethod();
+                if (ClickedMethod != null)
+                {
+                    ClickedMethod();
+                }
                 DoneWithClick();
             }
         }
