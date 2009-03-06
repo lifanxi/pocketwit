@@ -57,8 +57,13 @@ namespace PockeTwit
         #endregion
         #region RightMenu
         FingerUI.SideMenuItem ConversationMenuItem;
+        
+        FingerUI.SideMenuItem ReponsesMenuItem;
+
         FingerUI.SideMenuItem ReplyMenuItem;
         FingerUI.SideMenuItem DirectMenuItem;
+
+        FingerUI.SideMenuItem EmailMenuItem;
         FingerUI.SideMenuItem QuoteMenuItem;
         FingerUI.SideMenuItem FavoriteMenuItem;
         FingerUI.SideMenuItem UserTimelineMenuItem;
@@ -454,10 +459,11 @@ namespace PockeTwit
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
             PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
+            SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
 
             MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
             
-            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines", statList.LeftMenu);
+            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines ...", statList.LeftMenu);
             if (ClientSettings.MergeMessages)
             {
                 TimeLinesMenuItem.SubMenuItems.Add(MergedTimeLineMenuItem);
@@ -467,25 +473,27 @@ namespace PockeTwit
                 TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
                 TimeLinesMenuItem.SubMenuItems.Add(MessagesMenuItem);
             }
+            TimeLinesMenuItem.SubMenuItems.Add(SearchMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             
             
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
-            SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
+            
             MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
             SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
             AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
+            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.RightMenu);
             ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
             
             if (ClientSettings.MergeMessages)
             {
                 statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, MergedTimeLineMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, ExitMenuItem});
+                AboutMenuItem, MinimizeMenuItem, ExitMenuItem});
             }
             else
             {
-                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, ExitMenuItem});
+                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, MapMenuItem, SettingsMenuItem,
+                AboutMenuItem, MinimizeMenuItem, ExitMenuItem});
                 //statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem, AboutMenuItem, ExitMenuItem});
             }
             /*
@@ -502,17 +510,24 @@ namespace PockeTwit
             ConversationMenuItem = new FingerUI.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
             ConversationMenuItem.CanHide = true;
 
+            ReponsesMenuItem = new FingerUI.SideMenuItem(null, "Respond to @User...", statList.RightMenu);
+
             ReplyMenuItem = new FingerUI.SideMenuItem(SendReply, "Reply @User", statList.RightMenu);
             DirectMenuItem = new FingerUI.SideMenuItem(SendDirectMessage, "Direct @User", statList.RightMenu);
+
+            ReponsesMenuItem.SubMenuItems.Add(ReplyMenuItem);
+            ReponsesMenuItem.SubMenuItems.Add(DirectMenuItem);
+
+            EmailMenuItem = new FingerUI.SideMenuItem(EmailThisItem, "Email Status", statList.RightMenu);
             QuoteMenuItem = new FingerUI.SideMenuItem(this.Quote, "Quote", statList.RightMenu);
             FavoriteMenuItem = new FingerUI.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
             UserTimelineMenuItem = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline", statList.RightMenu);
             ProfilePageMenuItem = new FingerUI.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
             FollowMenuItem = new FingerUI.SideMenuItem(ToggleFollow, "Follow @User", statList.RightMenu);
-            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.RightMenu);
 
-            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReplyMenuItem, DirectMenuItem, QuoteMenuItem, FavoriteMenuItem, 
-                UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem, MinimizeMenuItem});
+
+            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, FavoriteMenuItem, 
+                UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem});
         }
 
 
@@ -922,7 +937,30 @@ namespace PockeTwit
                 SwitchToUserTimeLine(a.AskedToSeeUser);
             }
         }
+        private void EmailThisItem()
+        {
+            if (statList.SelectedItem == null) { return; }
+            FingerUI.StatusItem selectedItem = statList.SelectedItem;
+            Microsoft.WindowsMobile.PocketOutlook.OutlookSession sess = new Microsoft.WindowsMobile.PocketOutlook.OutlookSession();
+            Microsoft.WindowsMobile.PocketOutlook.EmailAccountCollection accounts = sess.EmailAccounts;
 
+            if (accounts.Count == 0)
+            {
+                MessageBox.Show("You don't have any email accounts set up on this phone.");
+                return;
+            }
+            else if (accounts.Count>1)
+            {
+                EmailStatusForm f = new EmailStatusForm(selectedItem.Tweet.text);
+                f.ShowDialog();
+                f.Close();
+                return;
+            }
+
+            Microsoft.WindowsMobile.PocketOutlook.EmailMessage m = new Microsoft.WindowsMobile.PocketOutlook.EmailMessage();
+            m.BodyText = selectedItem.Tweet.text;
+            Microsoft.WindowsMobile.PocketOutlook.MessagingApplication.DisplayComposeForm(accounts[0], m);
+        }
         private void ShowProfile()
         {
             if (statList.SelectedItem == null) { return; }

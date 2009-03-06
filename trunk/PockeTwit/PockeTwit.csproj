@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -263,6 +263,10 @@
     <Content Include="asterisk_yellow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="EmailStatusForm.resx">
+      <DependentUpon>EmailStatusForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Marker.png" />
     <Content Include="Themes\NoGradient\existingimage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -421,6 +425,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmailStatusForm.Designer.cs">
+      <DependentUpon>EmailStatusForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FingerUI\FullScreenTweet.cs">
       <SubType>UserControl</SubType>
     </Compile>
