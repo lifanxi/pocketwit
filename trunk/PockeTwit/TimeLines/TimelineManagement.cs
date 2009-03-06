@@ -444,7 +444,10 @@ namespace PockeTwit
                 GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Friends);
                 if (ClientSettings.UpdateMinutes > 0)
                 {
-                    updateTimer.Enabled = true;
+                    if (updateTimer != null)
+                    {
+                        updateTimer.Enabled = true;
+                    }
                 }   
             }
         }
