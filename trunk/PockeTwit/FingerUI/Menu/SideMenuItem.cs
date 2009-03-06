@@ -46,7 +46,14 @@ namespace FingerUI
             if (SubMenuItems.Count > 0)
             {
                 Expanded = !Expanded;
-                MenuExpandedOrCollapsed(Expanded);
+                if (Expanded)
+                {
+                    MenuExpandedOrCollapsed(this, Expanded);
+                }
+                else
+                {
+                    MenuExpandedOrCollapsed(null, Expanded);
+                }
             }
             else
             {
@@ -59,7 +66,7 @@ namespace FingerUI
         }
 
         public event delMenuClicked DoneWithClick = delegate { };
-        public delegate void delItemExpanded(bool Opened);
+        public delegate void delItemExpanded(SideMenuItem sender, bool Opened);
         public event delItemExpanded MenuExpandedOrCollapsed = delegate { };
         private string _TextTemplate;
         public string Text
