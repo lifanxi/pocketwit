@@ -1,0 +1,5 @@
+#summary We use UserVoice to track feature requests and bugs.
+
+= FeedBack =
+
+You can make [http://pocketwit.uservoice.com/pages/general feature requests] and [http://pocketwit.uservoice.com/pages/issues report bugs] at http://pocketwit.uservoice.com.
