@@ -453,7 +453,7 @@ namespace PockeTwit
 
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu);
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
-            PublicMenuItem = new FingerUI.SideMenuItem(null, "Public Timeline", statList.LeftMenu);
+            PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
 
             MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
             
@@ -986,6 +986,24 @@ namespace PockeTwit
                     statList.YOffset = prev.itemsOffset;
                 }
             }
+        }
+
+        private void ShowPublicTimeLine()
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (statItem == null) { return; }
+            ShowUserID = statItem.Tweet.user.screen_name;
+            CurrentlySelectedAccount = statItem.Tweet.Account;
+            Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
+            
+            SwitchToList("Public_TimeLine");
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Public_Timeline;
+            History.Push(i);
+            statList.SetSelectedMenu(PublicMenuItem);
+            AddStatusesToList(Manager.GetPublicTimeLine(Conn));
+            ChangeCursor(Cursors.Default);
         }
 
         private void ShowFriendsTimeLine()

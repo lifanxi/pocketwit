@@ -212,7 +212,21 @@ namespace PockeTwit
             }
             return Library.status.DeserializeFromAtom(response, t.AccountInfo);
         }
-
+        public PockeTwit.Library.status[] GetPublicTimeLine(Yedda.Twitter t)
+        {
+            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Public_Timeline, null);
+            if (string.IsNullOrEmpty(response))
+            {
+                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Public_Timeline);
+                GlobalEventHandler.CallShowErrorMessage("Communications Error");
+                return null;
+            }
+            else
+            {
+                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Public_Timeline);
+            }
+            return Library.status.Deserialize(response, t.AccountInfo);
+        }
         public Library.status[] GetUserTimeLine(Yedda.Twitter t, string UserID)
         {
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Show, UserID);
@@ -561,5 +575,7 @@ else
         }
 
 
+
+        
     }
 }

@@ -21,6 +21,7 @@ public static class ClientSettings
     public static System.Drawing.Color FieldForeColor = System.Drawing.Color.Black;
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color HashLinkColor = System.Drawing.Color.Sienna;
+    public static System.Drawing.Color DimmedColor = Color.FromArgb(75,75,75);
     #endregion
 
     #region Fields (13)
