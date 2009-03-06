@@ -885,9 +885,23 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing != SideShown.Right)
                 {
-                    m_velocity.X = (this.Width / 2);
-                    XOffset =  XOffset + 3;
-                    m_timer.Enabled = true;
+                    if (LeftMenu.IsExpanded)
+                    {
+                        LeftMenu.CollapseExpandedMenu();
+                    }
+                    else
+                    {
+                        m_velocity.X = (this.Width / 2);
+                        XOffset = XOffset + 3;
+                        m_timer.Enabled = true;
+                    }
+                }
+                else if (CurrentlyViewing == SideShown.Right)
+                {
+                    if (RightMenu.SelectedItem.HasChildren && !RightMenu.SelectedItem.Expanded)
+                    {
+                        RightMenu.SelectedItem.ClickMe();
+                    }
                 }
             }
             if (e.KeyCode == Keys.Left | e.KeyCode == Keys.F1)
@@ -899,9 +913,23 @@ namespace FingerUI
                 }
                 if (CurrentlyViewing != SideShown.Left)
                 {
-                    m_velocity.X = -(this.Width / 2);
-                    XOffset = XOffset - 3;
-                    m_timer.Enabled = true;
+                    if (RightMenu.IsExpanded)
+                    {
+                        RightMenu.CollapseExpandedMenu();
+                    }
+                    else
+                    {
+                        m_velocity.X = -(this.Width / 2);
+                        XOffset = XOffset - 3;
+                        m_timer.Enabled = true;
+                    }
+                }
+                else if (CurrentlyViewing == SideShown.Left)
+                {
+                    if (LeftMenu.SelectedItem.HasChildren && !LeftMenu.SelectedItem.Expanded)
+                    {
+                        LeftMenu.SelectedItem.ClickMe();
+                    }
                 }
             }
             if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
