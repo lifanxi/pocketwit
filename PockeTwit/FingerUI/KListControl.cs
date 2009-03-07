@@ -178,12 +178,10 @@ namespace FingerUI
         
         public void RerenderPortal()
         {
+            //Only rerender if we're not moving -- otherwise it makes scrolling choppy.
             if (!Capture && m_velocity.Y == 0 && m_velocity.X==0)
             {
-                if (m_items.Count > SlidingPortal.MaxItems)
-                {
-                    RecalculatePortalPosition();
-                }
+                RecalculatePortalPosition();
             }
         }
 
