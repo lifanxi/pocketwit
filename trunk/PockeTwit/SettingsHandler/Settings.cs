@@ -5,7 +5,8 @@ using System.Reflection;
 using System.Drawing;
 public static class ClientSettings
 {
-
+    [System.Runtime.InteropServices.DllImport("coredll.dll")]
+    private static extern int SHCreateShortcut(StringBuilder szShortcut, StringBuilder szTarget);
 
     #region DefaultColors
     public static System.Drawing.Color BackColor = System.Drawing.Color.Black;
@@ -93,7 +94,7 @@ public static class ClientSettings
     }
 		#endregion Fields 
 
-		#region Constructors (1) 
+    #region Constructors (1) 
 
     static ClientSettings()
     {
@@ -101,9 +102,42 @@ public static class ClientSettings
         LoadColors();
     }
 
-		#endregion Constructors 
+    #endregion Constructors 
 
-		#region Properties (7) 
+    #region Properties (7) 
+    public static bool RunOnStartUp
+    {
+        get
+        {
+            return System.IO.File.Exists(@"\Windows\StartUp\PockeTwit.lnk");
+        }
+        set
+        {
+            if (value)
+            {
+                StringBuilder shortcut = new StringBuilder(@"\Windows\StartUp\PockeTwit.lnk");
+                StringBuilder target;
+                if (ClientSettings.AppPath.IndexOf(' ') > 0)
+                {
+                    target = new StringBuilder("\"" + ClientSettings.AppPath + "\\PockeTwit.exe" + "\"" + " /BackGround");
+                }
+                else
+                {
+                    target = new StringBuilder(ClientSettings.AppPath + "\\PockeTwit.exe /BackGround");
+                }
+
+                SHCreateShortcut(shortcut, target);
+            }
+            else
+            {
+                if (RunOnStartUp)
+                {
+                    System.IO.File.Delete(@"\Windows\StartUp\PockeTwit.lnk");
+                }
+            }
+        }
+    }
+
     private static int _FontSize = 9;
     public static int FontSize
     {
@@ -152,8 +186,7 @@ public static class ClientSettings
         get { return _ShowExtra; }
         set { _ShowExtra = value; }
     }
-    public static int SmallTextSize
-    { get; set; }
+    public static int SmallTextSize{ get; set; }
     public static int TextSize 
     {
         get
@@ -167,16 +200,11 @@ public static class ClientSettings
         }
     }
 
-    //public static string UserName { get; set; }
-
+    
     public static List<Yedda.Twitter.Account> AccountsList { get; set; }
-		#endregion Properties 
+	#endregion Properties 
 
-		#region Methods (4) 
-
-
-		// Public Methods (2) 
-
+    #region Methods (4) 
     public static void LoadSettings()
     {
         ConfigurationSettings.LoadConfig();
@@ -421,9 +449,6 @@ public static class ClientSettings
     }
 
 
-
-		// Private Methods (2) 
-
     private static void GetTextSizes()
     {
         TextFont = new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, FontSize, System.Drawing.FontStyle.Regular);
@@ -470,8 +495,6 @@ public static class ClientSettings
 
         }
     }
-
-
-		#endregion Methods 
+	#endregion Methods 
 
 }
