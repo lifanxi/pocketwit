@@ -11,3 +11,4 @@ SmallTextColor:128:128:128
 ErrorColor:255:0:0
 FieldBackColor:255:255:255
 FieldForeColor:0:0:0
+DimmedColor:75:75:75
