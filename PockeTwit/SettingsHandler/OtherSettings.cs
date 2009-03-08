@@ -49,6 +49,7 @@ namespace PockeTwit
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
+            ClientSettings.RunOnStartUp = chkStartup.Checked;
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
@@ -86,6 +87,8 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
+
+            chkStartup.Checked = ClientSettings.RunOnStartUp;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
@@ -113,6 +116,11 @@ namespace PockeTwit
                 SettingsHandler.NotificationSettings n = new PockeTwit.SettingsHandler.NotificationSettings();
                 n.ShowDialog();
             }
+        }
+
+        private void OtherSettings_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

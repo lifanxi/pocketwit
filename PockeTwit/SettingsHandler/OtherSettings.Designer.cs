@@ -58,6 +58,7 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCaheDir = new System.Windows.Forms.TextBox();
+            this.chkStartup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -154,7 +155,7 @@ namespace PockeTwit
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 152);
+            this.label2.Location = new System.Drawing.Point(4, 174);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 20);
             this.label2.Text = "Cache Directory:";
@@ -163,10 +164,21 @@ namespace PockeTwit
             // 
             this.txtCaheDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCaheDir.Location = new System.Drawing.Point(4, 176);
+            this.txtCaheDir.Location = new System.Drawing.Point(4, 197);
             this.txtCaheDir.Name = "txtCaheDir";
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
-            this.txtCaheDir.TabIndex = 8;
+            this.txtCaheDir.TabIndex = 6;
+            // 
+            // chkStartup
+            // 
+            this.chkStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;
+            this.chkStartup.Location = new System.Drawing.Point(3, 151);
+            this.chkStartup.Name = "chkStartup";
+            this.chkStartup.Size = new System.Drawing.Size(216, 20);
+            this.chkStartup.TabIndex = 5;
+            this.chkStartup.Text = "Launch PockeTwit on startup";
             // 
             // OtherSettings
             // 
@@ -174,6 +186,7 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkStartup);
             this.Controls.Add(this.txtCaheDir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkSkweezer);
@@ -187,6 +200,7 @@ namespace PockeTwit
             this.Menu = this.mainMenu1;
             this.Name = "OtherSettings";
             this.Text = "Other Settings";
+            this.Load += new System.EventHandler(this.OtherSettings_Load);
             this.ResumeLayout(false);
 
         }
@@ -203,6 +217,7 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCaheDir;
+        private System.Windows.Forms.CheckBox chkStartup;
 
     }
 }
