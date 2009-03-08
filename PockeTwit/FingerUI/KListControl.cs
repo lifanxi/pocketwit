@@ -474,7 +474,7 @@ namespace FingerUI
         
         void animationTimer_Tick(object o)
         {
-            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating)
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating)
             {
                 animationTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             }

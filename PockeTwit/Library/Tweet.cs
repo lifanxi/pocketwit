@@ -381,7 +381,19 @@ namespace PockeTwit.Library
         }
         public string id { get; set; }
         public string name { get; set; }
-        public string screen_name { get; set; }
+        private string _screen_name;
+        public string screen_name 
+        { 
+            get
+            {
+                return _screen_name;
+            }
+            set
+            {
+                _screen_name = value;
+                PockeTwit.AddressBook.AddName(value);
+            }
+        }
         public string followers_count { get; set; }
 		#endregion Properties 
 
