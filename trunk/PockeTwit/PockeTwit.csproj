@@ -67,6 +67,7 @@
     <Reference Include="Microsoft.WindowsMobile.PocketOutlook, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="Microsoft.WindowsMobile.Status, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json.Compact, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="slockimp, Version=1.0.2721.30528, Culture=neutral" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -425,6 +426,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressBook.cs" />
     <Compile Include="EmailStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>

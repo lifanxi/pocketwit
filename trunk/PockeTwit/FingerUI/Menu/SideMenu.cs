@@ -7,6 +7,8 @@ namespace FingerUI
 {
     public class SideMenu : System.Windows.Forms.Control
     {
+        public bool IsAnimating { get; set; }
+
         public SideMenu(FingerUI.KListControl.SideShown Side)
         {
             _Side = Side;
