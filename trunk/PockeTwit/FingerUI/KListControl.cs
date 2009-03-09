@@ -209,7 +209,10 @@ namespace FingerUI
                 }
             }
             previousItemsBeforePortal = itemsBeforePortal;
-            SlidingPortal.SetItemList(NewSet);
+            if (NewSet.Count > 0)
+            {
+                SlidingPortal.SetItemList(NewSet);
+            }
         }
         public void ResetFullScreenColors()
         {
@@ -1296,6 +1299,7 @@ namespace FingerUI
                     {
                         ClickablesControl.Render(flickerGraphics);
                     }
+                    //This always makes it appear??
                     e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
             }
