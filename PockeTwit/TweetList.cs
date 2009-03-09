@@ -747,7 +747,10 @@ namespace PockeTwit
 
                 AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
                 statList.Startup = false;
-                statList.Visible = true;
+                if (!StartBackground)
+                {
+                    statList.Visible = true;
+                }
                 //statList.SetSelectedIndexToZero();
                 Program.Ready = DateTime.Now;
                 Application.DoEvents();
@@ -1306,12 +1309,16 @@ namespace PockeTwit
 
             GlobalEventHandler.setPid();
 
-            statList.Visible = true;
+            if (!StartBackground)
+            {
+                statList.Visible = true;
+            }
             statList.BringToFront();
             SwitchToList("Friends_TimeLine");
             IsLoaded = true;
             lblLoading.Text = "Please wait... re-rendering to fit orientation.";
             lblTitle.Text = "PockeTwit";
+            
             StartBackground = false;
         }
 
@@ -1406,7 +1413,6 @@ namespace PockeTwit
 
         protected override void OnActivated(EventArgs e)
         {
-            //base.OnActivated(e);
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1.Enabled = false;
@@ -1432,26 +1438,15 @@ namespace PockeTwit
             {
                 SetWindowState(FormWindowState.Normal);
             }
+            //How do we tell if it was launched in background and is not being activated by user?
+            // This is occuring after the initial run/setup is complete.
             statList.Visible = true;
             if (DetectDevice.DeviceType == DeviceType.Standard)
             {
                 statList.Focus();
             }
             isChangingingWindowState = false;
-            /*
-            if (statList.CurrentList() == "Friends_TimeLine")
-            {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
-                statList.SetSelectedIndexToZero();
-                statList.Visible = true;
-            }
-            else if (statList.CurrentList() == "Messages_TimeLine")
-            {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
-                statList.SetSelectedIndexToZero();
-                statList.Visible = true;
-            }
-            */
+           
             SendToForground();
 
             this.Invalidate();

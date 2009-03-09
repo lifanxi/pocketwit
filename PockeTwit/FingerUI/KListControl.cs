@@ -1300,6 +1300,7 @@ namespace FingerUI
                         ClickablesControl.Render(flickerGraphics);
                     }
                     //This always makes it appear??
+                    
                     e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
             }
