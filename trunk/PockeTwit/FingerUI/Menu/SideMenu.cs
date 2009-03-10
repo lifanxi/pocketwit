@@ -489,7 +489,7 @@ namespace FingerUI
                     {
                         if (Item.Visible)
                         {
-                            DrawSingleItem(i, m_backBuffer, LeftPos, CurrentTop, Item, MenuColor);
+                            DrawSingleItem(i, m_backBuffer, LeftPos,0, CurrentTop, Item, MenuColor);
 
                             i++;
                             
@@ -505,13 +505,24 @@ namespace FingerUI
                     {
                         DrawSubMenu(ExpandedItem, ExpandedRect);
                     }
+                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                    {
+                        if (_Side == FingerUI.KListControl.SideShown.Right)
+                        {
+                            m_backBuffer.DrawLine(whitePen, 0, 0, 0, this.Height);
+                        }
+                        else
+                        {
+                            m_backBuffer.DrawLine(whitePen, _Width-1, 0, _Width- 1, this.Height);
+                        }
+                    }
                 }
                 IsDirty = false;
             }
 
         }
 
-        private void DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int CurrentTop, SideMenuItem Item, System.Drawing.Color MenuColor)
+        private void DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int Offset, int CurrentTop, SideMenuItem Item, System.Drawing.Color MenuColor)
         {
             string DisplayItem = Item.Text;
             if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
@@ -522,7 +533,7 @@ namespace FingerUI
             if (_Side == FingerUI.KListControl.SideShown.Left)
             {
                 int TextWidth = (int)m_backBuffer.MeasureString(DisplayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-                LeftPos = _Width - (TextWidth + 5);
+                LeftPos = _Width - (TextWidth + 5 + Offset);
             }
             else
             {
@@ -530,7 +541,16 @@ namespace FingerUI
             }
             using (Pen whitePen = new Pen(MenuColor))
             {
-                Rectangle menuRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
+                Rectangle menuRect;
+                if (_Side == KListControl.SideShown.Left)
+                {
+                    menuRect = new Rectangle(0, CurrentTop, _Width - Offset, ItemHeight);
+                }
+                else
+                {
+                    menuRect = new Rectangle(Offset, CurrentTop, _Width, ItemHeight);
+                }
+
                 Color BackColor;
                 Color MenuTextColor;
                 Color GradColor;
@@ -568,6 +588,7 @@ namespace FingerUI
                     m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
                 }
                 m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                /*
                 if (_Side == FingerUI.KListControl.SideShown.Right)
                 {
                     m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
@@ -575,11 +596,6 @@ namespace FingerUI
                 else
                 {
                     m_backBuffer.DrawLine(whitePen, menuRect.Right - 1, 0, menuRect.Right - 1, this.Height);
-                }
-                /*
-                if (Item.HasChildren && Item.Expanded)
-                {
-                    DrawSubMenu(Item, menuRect);
                 }
                  */
             }
@@ -604,7 +620,7 @@ namespace FingerUI
                     
                     if (subItem.Visible)
                     {
-                        DrawSingleItem(i, m_backBuffer, LeftPos, CurrentTop, subItem, ClientSettings.ForeColor);
+                        DrawSingleItem(i, m_backBuffer, LeftPos, ClientSettings.TextSize * 3, CurrentTop, subItem, ClientSettings.ForeColor);
                         i++;
                         CurrentTop = CurrentTop + ItemHeight;
                     }
