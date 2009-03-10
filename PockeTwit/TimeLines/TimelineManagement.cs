@@ -212,6 +212,31 @@ namespace PockeTwit
             }
             return Library.status.DeserializeFromAtom(response, t.AccountInfo);
         }
+
+        public PockeTwit.Library.status[] GetFavorites()
+        {
+            List<Library.status> TempLine = new List<PockeTwit.Library.status>();
+            foreach (Yedda.Twitter t in TwitterConnections)
+            {
+                if (t.AccountInfo.Enabled && t.FavoritesWork)
+                {
+                    try
+                    {
+                        string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Favorites);
+                        Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
+                        TempLine.AddRange(NewStats);
+                        ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Favorites);
+                    }
+                    catch
+                    {
+                        NoData(t.AccountInfo, Yedda.Twitter.ActionType.Favorites);
+                        GlobalEventHandler.CallShowErrorMessage("Communications Error");
+                    }
+                }
+            }
+            TempLine.Sort();
+            return TempLine.ToArray();
+        }
         public PockeTwit.Library.status[] GetPublicTimeLine(Yedda.Twitter t)
         {
             string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Public_Timeline, null);
