@@ -20,7 +20,22 @@ namespace FingerUI
         public event delClearMe NeedRedraw = delegate { };
         private int TopOfSubMenu;
 
-        private SideMenuItem ExpandedItem = null;
+        private SideMenuItem _ExpandedItem = null;
+        private SideMenuItem ExpandedItem
+        {
+            get
+            {
+                return _ExpandedItem;
+            }
+            set
+            {
+                _ExpandedItem = value;
+                if (_ExpandedItem != null)
+                {
+                    SelectedItem = value.SubMenuItems[0];
+                }
+            }
+        }
         public bool IsExpanded
         {
             get
@@ -588,22 +603,13 @@ namespace FingerUI
                     m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
                 }
                 m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
-                /*
-                if (_Side == FingerUI.KListControl.SideShown.Right)
-                {
-                    m_backBuffer.DrawLine(whitePen, menuRect.Left, 0, menuRect.Left, this.Height);
-                }
-                else
-                {
-                    m_backBuffer.DrawLine(whitePen, menuRect.Right - 1, 0, menuRect.Right - 1, this.Height);
-                }
-                 */
             }
         }
 
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
             int i = 0;
+            int OffSet = ClientSettings.TextSize;
             int ItemsCount = Item.SubMenuItems.Count;
             TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
@@ -611,6 +617,10 @@ namespace FingerUI
             if (_Side == KListControl.SideShown.Left)
             {
                 LeftPos = -15;
+            }
+            else
+            {
+                LeftPos = 15;
             }
             int CurrentTop = TopOfSubMenu;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
@@ -620,9 +630,20 @@ namespace FingerUI
                     
                     if (subItem.Visible)
                     {
-                        DrawSingleItem(i, m_backBuffer, LeftPos, ClientSettings.TextSize * 3, CurrentTop, subItem, ClientSettings.ForeColor);
+                        DrawSingleItem(i, m_backBuffer, LeftPos, OffSet, CurrentTop, subItem, ClientSettings.ForeColor);
                         i++;
                         CurrentTop = CurrentTop + ItemHeight;
+                    }
+                }
+                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                {
+                    if (_Side == KListControl.SideShown.Left)
+                    {
+                        m_backBuffer.DrawLine(whitePen, _Width - OffSet, TopOfSubMenu, _Width - OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
+                    }
+                    else
+                    {
+                        m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
                     }
                 }
             }
@@ -632,10 +653,12 @@ namespace FingerUI
         {
             List<SideMenuItem> ListOfItems = Items;
             int TopOfItem = TopOfMenu;
+            int Offset = 0;
             if (ExpandedItem != null)
             {
                 ListOfItems = ExpandedItem.SubMenuItems;
                 TopOfItem = TopOfSubMenu;
+                Offset = ClientSettings.TextSize; 
             }
             
 
@@ -643,8 +666,16 @@ namespace FingerUI
             {
                 if (MenuItem.Visible)
                 {
-                    Rectangle menuRect = new Rectangle(0, TopOfItem, Width, ItemHeight);
-                    
+
+                    Rectangle menuRect;
+                    if (_Side == KListControl.SideShown.Left)
+                    {
+                        menuRect = new Rectangle(0, TopOfItem, Width-Offset, ItemHeight);
+                    }
+                    else
+                    {
+                        menuRect = new Rectangle(Offset, TopOfItem, Width, ItemHeight);
+                    }
                     TopOfItem = TopOfItem + ItemHeight;
                     if (menuRect.Contains(X))
                     {
