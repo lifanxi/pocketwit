@@ -42,14 +42,15 @@ namespace PockeTwit
 
         FingerUI.SideMenuItem FriendsTimeLineMenuItem;
         FingerUI.SideMenuItem MessagesMenuItem;
+        
         FingerUI.SideMenuItem PublicMenuItem;
-
+        FingerUI.SideMenuItem SearchMenuItem;
+        FingerUI.SideMenuItem ViewFavoritesMenuItem;
         FingerUI.SideMenuItem MergedTimeLineMenuItem;
 
         FingerUI.SideMenuItem TimeLinesMenuItem;
 
         FingerUI.SideMenuItem PostUpdateMenuItem;
-        FingerUI.SideMenuItem SearchMenuItem;
         FingerUI.SideMenuItem MapMenuItem;
         FingerUI.SideMenuItem SettingsMenuItem;
         FingerUI.SideMenuItem AboutMenuItem;
@@ -65,7 +66,7 @@ namespace PockeTwit
 
         FingerUI.SideMenuItem EmailMenuItem;
         FingerUI.SideMenuItem QuoteMenuItem;
-        FingerUI.SideMenuItem FavoriteMenuItem;
+        FingerUI.SideMenuItem ToggleFavoriteMenuItem;
         FingerUI.SideMenuItem UserTimelineMenuItem;
         FingerUI.SideMenuItem ProfilePageMenuItem;
         FingerUI.SideMenuItem FollowMenuItem;
@@ -333,12 +334,12 @@ namespace PockeTwit
             if (selectedItem.isFavorite)
             {
                 DestroyFavorite();
-                FavoriteMenuItem.Text = "Make Favorite";
+                ToggleFavoriteMenuItem.Text = "Make Favorite";
             }
             else
             {
                 CreateFavoriteAsync();
-                FavoriteMenuItem.Text = "Remove Favorite";
+                ToggleFavoriteMenuItem.Text = "Remove Favorite";
             }
         }
 
@@ -460,21 +461,14 @@ namespace PockeTwit
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu);
             PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
+            ViewFavoritesMenuItem = new FingerUI.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
 
             MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
             
-            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "TimeLines ...", statList.LeftMenu);
-            if (ClientSettings.MergeMessages)
-            {
-                TimeLinesMenuItem.SubMenuItems.Add(MergedTimeLineMenuItem);
-            }
-            else
-            {
-                TimeLinesMenuItem.SubMenuItems.Add(FriendsTimeLineMenuItem);
-                TimeLinesMenuItem.SubMenuItems.Add(MessagesMenuItem);
-            }
+            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "Other TimeLines ...", statList.LeftMenu);
             TimeLinesMenuItem.SubMenuItems.Add(SearchMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
+            TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
             
             
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
@@ -492,9 +486,8 @@ namespace PockeTwit
             }
             else
             {
-                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, MapMenuItem, SettingsMenuItem,
+                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, MapMenuItem, SettingsMenuItem,
                 AboutMenuItem, MinimizeMenuItem, ExitMenuItem});
-                //statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem, AboutMenuItem, ExitMenuItem});
             }
             /*
             statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
@@ -520,13 +513,13 @@ namespace PockeTwit
 
             EmailMenuItem = new FingerUI.SideMenuItem(EmailThisItem, "Email Status", statList.RightMenu);
             QuoteMenuItem = new FingerUI.SideMenuItem(this.Quote, "Quote", statList.RightMenu);
-            FavoriteMenuItem = new FingerUI.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
+            ToggleFavoriteMenuItem = new FingerUI.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
             UserTimelineMenuItem = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline", statList.RightMenu);
             ProfilePageMenuItem = new FingerUI.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
             FollowMenuItem = new FingerUI.SideMenuItem(ToggleFollow, "Follow @User", statList.RightMenu);
 
 
-            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, FavoriteMenuItem, 
+            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, ToggleFavoriteMenuItem, 
                 UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem});
         }
 
@@ -590,11 +583,11 @@ namespace PockeTwit
                 {
                     if (selectedItem.isFavorite)
                     {
-                        FavoriteMenuItem.Text = "Remove Favorite";
+                        ToggleFavoriteMenuItem.Text = "Remove Favorite";
                     }
                     else
                     {
-                        FavoriteMenuItem.Text = "Make Favorite";
+                        ToggleFavoriteMenuItem.Text = "Make Favorite";
                     }
                 }
 
@@ -1028,7 +1021,18 @@ namespace PockeTwit
                 }
             }
         }
-
+        private void ShowFavorites()
+        {
+            ChangeCursor(Cursors.WaitCursor);
+            
+            SwitchToList("Favorites_TimeLine");
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Favorites;
+            History.Push(i);
+            statList.SetSelectedMenu(ViewFavoritesMenuItem);
+            AddStatusesToList(Manager.GetFavorites());
+            ChangeCursor(Cursors.Default);
+        }
         private void ShowPublicTimeLine()
         {
             ChangeCursor(Cursors.WaitCursor);
