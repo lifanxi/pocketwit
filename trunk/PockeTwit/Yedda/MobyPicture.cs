@@ -10,20 +10,43 @@ namespace Yedda
 {
     public class MobyPicture : IPictureService
     {
+        #region public properties
+
+        public event UploadFinishEventHandler UploadFinish;
+        public event DownloadFinishEventHandler DownloadFinish;
+        public event ErrorOccuredEventHandler ErrorOccured;
+        public event MessageReadyEventHandler MessageReady;
+
+
+        public bool HasEventHandlersSet { get; set; }
+
+        #endregion
+
+        #region private properties
         private static volatile MobyPicture _instance;
         private static object syncRoot = new Object();
 
-        private const string DEVELOPER_KEY = "";
+        private const string APPLICATION_NAME = "p0ck3tTTTTw";
         private const string API_URL = "http://api.mobypicture.com";
 
-        private const string API_UPLOAD = "http://api.mobypicture.com/postMediaUrl";
-        private const string API_UPLOAD_POST = "http://api.mobypicture.com/postMedia";
-        private const string API_GET_THUMB = "http://api.mobypicture.com/getThumb";  //The extra / for directly sticking the image-id on.
+        private const string API_UPLOAD = "http://api.mobypicture.com/";
+        private const string API_UPLOAD_POST = "http://api.mobypicture.com/";
+        private const string API_GET_THUMB = "http://api.mobypicture.com/";  //The extra / for directly sticking the image-id on.
         private const string API_SAVE_TO_PATH = "\\ArtCache\\www.mobypicture.com\\";
         private const string PT_DEFAULT_FILENAME = "image1.jpg";
         private const int PT_READ_BUFFER_SIZE = 512;
         private const bool PT_USE_DEFAULT_FILENAME = true;
 
+        #endregion
+
+        #region private objects
+
+        private System.Threading.Thread workerThread;
+        private PicturePostObject workerPPO;
+
+        #endregion
+
+        #region constructor
         /// <summary>
         /// Private constructor for usage in singleton.
         /// </summary>
@@ -46,77 +69,163 @@ namespace Yedda
                         if (_instance == null)
                         {
                             _instance = new MobyPicture();
+                            _instance.HasEventHandlersSet = false;
                         }
                     }
                 }
                 return _instance;
             }
         }
-        
+
+        #endregion
+
         #region IPictureService Members
 
-        public string PostPicture(PicturePostObject postData)
+        public void PostPicture(PicturePostObject postData)
         {
             #region Argument check
 
             //Check for empty path
             if (string.IsNullOrEmpty(postData.Filename))
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to MobyPicture.", ""));
             }
 
             //Check for empty credentials
             if (string.IsNullOrEmpty(postData.Username) ||
                 string.IsNullOrEmpty(postData.Password))
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to MobyPicture.", ""));
             }
 
             #endregion
 
+
             using (System.IO.FileStream file = new FileStream(postData.Filename, FileMode.Open, FileAccess.Read))
             {
-                byte[] incoming = new byte[file.Length];
-                file.Read(incoming, 0, incoming.Length);
-                postData.PictureData = incoming;
-
-                XmlDocument uploadResult = UploadPicture(API_UPLOAD, postData);
-
-                if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                try
                 {
-                    string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
-                    throw new Exception(ErrorText);
+                    workerPPO = (PicturePostObject)postData.Clone();
+
+                    //Load the picture data
+                    byte[] incoming = new byte[file.Length];
+                    file.Read(incoming, 0, incoming.Length);
+                    workerPPO.PictureData = incoming;
+
+                    if (workerThread == null)
+                    {
+                        workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
+                        workerThread.Name = "PictureUpload";
+                        workerThread.Start();
+                    }
+                    else
+                    {
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "A request is already running.", ""));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    string URL = uploadResult.SelectSingleNode("//mediaurl").InnerText;
-                    return URL;
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to TwitPic.", ""));
                 }
             }
         }
 
-        public string FetchPicture(string pictureURL)
+        public void FetchPicture(string pictureURL)
         {
             #region Argument check
 
             //Need a url to read from.
             if (string.IsNullOrEmpty(pictureURL))
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to download picture from MobyPicture.", ""));
             }
 
             #endregion
 
-            string resultURL = string.Empty;
 
-            resultURL = RetrievePicture(pictureURL);
+            try
+            {
+                workerPPO = new PicturePostObject();
+                workerPPO.Message = pictureURL;
 
-            return resultURL;
+                if (workerThread == null)
+                {
+                    workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessDownload));
+                    workerThread.Name = "PictureUpload";
+                    workerThread.Start();
+                }
+                else
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "A request is already running.", ""));
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to download picture from TwitPic.", ""));
+            } 
+
+            
         }
 
         #endregion
 
-        private XmlDocument UploadPicture(string url, PicturePostObject ppo)
+        #region thread implementation
+
+        private void ProcessDownload()
+        {
+            try
+            {
+                string pictureURL = workerPPO.Message;
+                int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
+                string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
+
+
+                string resultFileName = RetrievePicture(pictureURL);
+
+                if (string.IsNullOrEmpty(resultFileName))
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture."));
+                }
+                else
+                {
+                    OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, ""));
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture, try again later."));
+            }
+            workerThread = null;
+        }
+
+        private void ProcessUpload()
+        {
+            try
+            {
+                string uploadResult = UploadPicture(API_UPLOAD, workerPPO);
+
+                if (!string.IsNullOrEmpty( uploadResult) )
+                {
+                    OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, uploadResult, "", workerPPO.Filename));
+                }
+                else
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture")); 
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+            }
+            workerThread = null;
+        }
+
+        #endregion
+
+        #region private methods
+
+        private string UploadPicture(string url, PicturePostObject ppo)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
@@ -125,7 +234,7 @@ namespace Yedda
             request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
             request.PreAuthenticate = true;
             request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
-
+            request.Headers.Add("Action", "postMediaUrl");
 
             //request.ContentType = "application/x-www-form-urlencoded";
             request.Method = "POST";
@@ -134,16 +243,21 @@ namespace Yedda
             string ender = "\r\n" + header + "\r\n";
 
             StringBuilder contents = new StringBuilder();
-
+            
             contents.Append(CreateContentPartString(header, "u", ppo.Username));
             contents.Append(CreateContentPartString(header, "p", ppo.Password));
-            contents.Append(CreateContentPartString(header, "k", DEVELOPER_KEY));
-            //Don't send the picture to twitter just yet.
+            contents.Append(CreateContentPartString(header, "k", APPLICATION_NAME));
+            //Don't send the picture to twitter or any service just yet.
             contents.Append(CreateContentPartString(header, "s", "none"));
 
             if (!string.IsNullOrEmpty(ppo.Message))
             {
                 contents.Append(CreateContentPartString(header, "message", ppo.Message));
+                contents.Append(CreateContentPartString(header, "action", "postMedia"));
+            }
+            else
+            {
+                contents.Append(CreateContentPartString(header, "action", "postMediaUrl"));
             }
 
             contents.Append(CreateContentPartMedia(header));
@@ -165,14 +279,15 @@ namespace Yedda
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        XmlDocument responseXML = new XmlDocument();
-                        responseXML.LoadXml(reader.ReadToEnd());
-                        return responseXML;
+                        String receiverResponse = reader.ReadToEnd();
+                        //should be 0 with a following URL for the picture.
+
+                        return receiverResponse;
                     }
                 }
 
             }
-            return null;
+            return string.Empty;
         }
 
         /// <summary>
@@ -310,6 +425,38 @@ namespace Yedda
             return true; ;
         }
 
+        #endregion
+
+        #region event handlers
+
+        protected virtual void OnDownloadFinish(PictureServiceEventArgs e)
+        {
+            if (DownloadFinish != null)
+            {
+                DownloadFinish(this, e);
+            }
+        }
+
+        protected virtual void OnUploadFinish(PictureServiceEventArgs e)
+        {
+            if (UploadFinish != null)
+            {
+                UploadFinish(this, e);
+            }
+        }
+
+        protected virtual void OnErrorOccured(PictureServiceEventArgs e)
+        {
+            if (ErrorOccured != null)
+            {
+                ErrorOccured(this, e);
+            }
+        }
+
+
+        #endregion
+
+        #region helper methods
 
         private string CreateContentPartString(string header, string dispositionName, string valueToSend)
         {
@@ -337,5 +484,7 @@ namespace Yedda
 
             return contents.ToString();
         }
+
+        #endregion
     }
 }

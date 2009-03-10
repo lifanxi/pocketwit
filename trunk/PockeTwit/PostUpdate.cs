@@ -26,7 +26,15 @@ namespace PockeTwit
         private delegate void delUpdateText(string text);
 
         private IPictureService pictureService;
-        
+        private string uploadedPictureOrigin = string.Empty;
+        private string uploadedPictureURL = string.Empty;
+        private bool uploadingPicture = false;
+        private bool pictureUsed = false;
+        private bool localPictureEventsSet = false;
+
+        public delegate void delAddPicture(string ImageFile, PictureBox BoxToUpdate);
+        public delegate void delUpdatePictureData(string pictureUrl, bool uploadingPicture);
+
         #region Properties
         private Yedda.Twitter.Account _AccountToSet = ClientSettings.DefaultAccount;
         public Yedda.Twitter.Account AccountToSet
@@ -312,14 +320,11 @@ namespace PockeTwit
 
         private void SetImages()
         {
-
-
             this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
             this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
             this.pictureURL.Image = new Bitmap(ClientSettings.IconsFolder() + "url.png");
             this.pictureLocation.Image = new Bitmap(ClientSettings.IconsFolder() + "map.png");
         }
-
 
         private void PopulateAccountList()
         {
@@ -341,90 +346,239 @@ namespace PockeTwit
             f.Close();
         }
 
-        private string InsertPictureFromCamera()
+        private void InsertPictureFromCamera()
         {
-            using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
+            if (!uploadingPicture)
             {
-                String pictureUrl = string.Empty;
-                try
+                using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
                 {
-                    if (c.ShowDialog() == DialogResult.OK)
+                    String pictureUrl = string.Empty;
+                    try
                     {
-                        TwitPicFile = c.FileName;
-                        UseTwitPic = true;
-                        
-                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                        this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
-                        if (DetectDevice.DeviceType == DeviceType.Standard)
+                        if (c.ShowDialog() == DialogResult.OK)
                         {
-                            this.pictureFromStorage.Visible = false;
-                        }
-                        AddPictureToForm(c.FileName, pictureFromCamers);
-
-                        pictureService = TwitPic.Instance;
-                        using (PicturePostObject ppo = new PicturePostObject())
-                        {
-                            ppo.Filename = c.FileName;
-                            ppo.Username = AccountToSet.UserName;
-                            ppo.Password = AccountToSet.Password;
-                            pictureUrl = pictureService.PostPicture(ppo); 
+                            TwitPicFile = c.FileName;
+                            UseTwitPic = true;
+                            
+                            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
+                            this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+                            if (DetectDevice.DeviceType == DeviceType.Standard)
+                            {
+                                this.pictureFromStorage.Visible = false;
+                            }
+                            AddPictureToForm(ClientSettings.IconsFolder() + "wait24trans.gif", pictureFromCamers);
+                            //AddPictureToForm(c.FileName, pictureFromCamers);
+                            uploadedPictureOrigin = "camera";
+                            uploadingPicture = true;
+                            pictureService = GetMediaService();
+                            using (PicturePostObject ppo = new PicturePostObject())
+                            {
+                                ppo.Filename = c.FileName;
+                                ppo.Username = AccountToSet.UserName;
+                                ppo.Password = AccountToSet.Password;
+                                pictureService.PostPicture(ppo); 
+                            }
                         }
                     }
+                    catch
+                    {
+                        MessageBox.Show("The camera is not available.", "PockeTwit");
+                    }
                 }
-                catch
-                {
-                    MessageBox.Show("The camera is not available.", "PockeTwit");
-                }
-                return pictureUrl;
+            }
+            else
+            {
+                MessageBox.Show("Uploading picture...");
             }
         }
 
-        private string InsertPictureFromFile()
+        private void InsertPictureFromFile()
         {
-            String pictureUrl = string.Empty;
-            Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
-            if (s.ShowDialog() == DialogResult.OK)
+            if (!uploadingPicture)
             {
-                TwitPicFile = s.FileName;
-                UseTwitPic = true;
-                
-                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
-                if (DetectDevice.DeviceType == DeviceType.Standard)
+                String pictureUrl = string.Empty;
+                Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
+                if (s.ShowDialog() == DialogResult.OK)
                 {
-                    this.pictureFromCamers.Visible = false;
-                }
-                AddPictureToForm(s.FileName, pictureFromStorage);
+                    TwitPicFile = s.FileName;
+                    UseTwitPic = true;
 
-                //This call takes a while. Might not be handy before redrawing.
-                pictureService = TwitPic.Instance;
-                using (PicturePostObject ppo = new PicturePostObject())
-                {
-                    ppo.Filename = s.FileName;
-                    ppo.Username = AccountToSet.UserName;
-                    ppo.Password = AccountToSet.Password;
-                    pictureUrl = pictureService.PostPicture(ppo);
+                    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
+                    this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+                    if (DetectDevice.DeviceType == DeviceType.Standard)
+                    {
+                        this.pictureFromCamers.Visible = false;
+                    }
+                    AddPictureToForm(ClientSettings.IconsFolder() + "wait24trans.gif", pictureFromStorage);
+                    //AddPictureToForm(s.FileName, pictureFromStorage);
+
+                    uploadedPictureOrigin = "file";
+                    uploadingPicture = true;
+                    pictureService = GetMediaService();
+                    using (PicturePostObject ppo = new PicturePostObject())
+                    {
+                        ppo.Filename = s.FileName;
+                        ppo.Username = AccountToSet.UserName;
+                        ppo.Password = AccountToSet.Password;
+                        pictureService.PostPicture(ppo);
+                    }
                 }
             }
-            return pictureUrl;
+            else
+            {
+                MessageBox.Show("Uploading picture...");
+            }
+        }
+
+        /// <summary>
+        /// Set all the event handlers for the chosen picture service.
+        /// Aparently after posting, event set are lost so these have to be set again.
+        /// </summary>
+        /// <param name="pictureService">Picture service on which the event handlers should be set.</param>
+        private void SetPictureEventHandlers(IPictureService pictureService)
+        {
+            if (!localPictureEventsSet)
+            {
+                pictureService.DownloadFinish += new DownloadFinishEventHandler(pictureService_DownloadFinish);
+                pictureService.UploadFinish += new UploadFinishEventHandler(pictureService_UploadFinish);
+                pictureService.MessageReady += new MessageReadyEventHandler(pictureService_MessageReady);
+                pictureService.ErrorOccured += new ErrorOccuredEventHandler(pictureService_ErrorOccured);
+
+                localPictureEventsSet = true;
+            }
+        }
+
+        private void pictureService_ErrorOccured(object sender, PictureServiceEventArgs eventArgs)
+        {
+            //Show the error message
+            MessageBox.Show(eventArgs.ErrorMessage);
+
+            if (uploadedPictureOrigin == "file")
+            {
+                AddPictureToForm(ClientSettings.IconsFolder() + "existingimage.png", pictureFromStorage);
+            }
+            else //camera
+            {
+                AddPictureToForm(ClientSettings.IconsFolder() + "takepicture.png", pictureFromCamers);
+            }
+            UpdatePictureData(string.Empty, false);
+        }
+
+        private void pictureService_MessageReady(object sender, PictureServiceEventArgs eventArgs)
+        {
+            //Show the message
+            MessageBox.Show(eventArgs.ReturnMessage);
+
+            if (uploadedPictureOrigin == "file")
+            {
+                AddPictureToForm(ClientSettings.IconsFolder() + "existingimage.png", pictureFromStorage);
+            }
+            else //camera
+            {
+                AddPictureToForm(ClientSettings.IconsFolder() + "takepicture.png", pictureFromCamers);
+            }
+            UpdatePictureData(string.Empty, false);
+
+        }
+
+        /// <summary>
+        /// Event handling for when the download is finished
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void pictureService_DownloadFinish(object sender, PictureServiceEventArgs eventArgs)
+        {
+            MessageBox.Show(eventArgs.ReturnMessage);
+
+            //Reset up and download settings from before uploading or downloading
+
+        }
+
+        /// <summary>
+        /// Event handling for when the upload is finished
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void pictureService_UploadFinish(object sender, PictureServiceEventArgs eventArgs)
+        {
+            if (uploadedPictureOrigin == "file")
+            {
+                AddPictureToForm(eventArgs.PictureFileName, pictureFromStorage);
+            }
+            else //camera
+            {
+                AddPictureToForm(eventArgs.PictureFileName, pictureFromCamers);
+            }
+            UpdatePictureData(eventArgs.ReturnMessage, false);
+        }
+
+
+
+        private IPictureService GetMediaService()
+        {
+            if (ClientSettings.MediaService == "TwitPic")
+            {
+                SetPictureEventHandlers(TwitPic.Instance);
+                return TwitPic.Instance;
+            }
+            else if (ClientSettings.MediaService == "MobyPicture")
+            {
+                SetPictureEventHandlers(MobyPicture.Instance);
+                return MobyPicture.Instance;
+            }
+            else
+            {
+                //For default, use twitpic.
+                return TwitPic.Instance;
+            }
+
         }
 
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
         {
-            try
+            if (InvokeRequired)
             {
-                BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
-                if (DetectDevice.DeviceType == DeviceType.Standard && lblGPS.Visible)
-                {
-                    BoxToUpdate.Left = lblGPS.Right + 5;
-                }
-                BoxToUpdate.Visible = true;
-                txtStatusUpdate_TextChanged(null, new EventArgs());
+                delAddPicture d = new delAddPicture(AddPictureToForm);
+                this.BeginInvoke(d, ImageFile, BoxToUpdate);
             }
-            catch (OutOfMemoryException)
+            else
             {
+                try
+                {
+                    BoxToUpdate.Image = new System.Drawing.Bitmap(ImageFile);
+                    if (DetectDevice.DeviceType == DeviceType.Standard && lblGPS.Visible)
+                    {
+                        BoxToUpdate.Left = lblGPS.Right + 5;
+                    }
+                    BoxToUpdate.Visible = true;
+                    txtStatusUpdate_TextChanged(null, new EventArgs());
+                }
+                catch (OutOfMemoryException)
+                {
+                }
             }
         }
+
+        private void UpdatePictureData(string pictureURL, bool uploadingPicture)
+        {
+            if (InvokeRequired)
+            {
+                delUpdatePictureData d = new delUpdatePictureData(UpdatePictureData);
+                this.BeginInvoke(d, pictureURL, uploadingPicture);
+            }
+            else
+            {
+                try
+                {
+                    uploadedPictureURL = pictureURL;
+                    uploadingPicture = false;
+                }
+                catch (OutOfMemoryException)
+                {
+                }
+            }
+        }
+
 
         private string TrimTo140(string Original)
         {
@@ -490,6 +644,10 @@ namespace PockeTwit
                 //else
                 //{
                     string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
+
+                    uploadedPictureURL = string.Empty;
+                    uploadingPicture = false;
+
                     if (string.IsNullOrEmpty(retValue))
                     {
                         MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
@@ -548,19 +706,72 @@ namespace PockeTwit
         {
             InsertURL();
         }
+
         void pictureFromStorage_Click(object sender, EventArgs e)
         {
-            string pictureURL = InsertPictureFromFile();
-            txtStatusUpdate.Text += pictureURL;
+            if (String.IsNullOrEmpty(uploadedPictureURL))
+            {
+                pictureUsed = false;
+                InsertPictureFromFile();
+            }
+            else
+            {
+                if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    txtStatusUpdate.Text += uploadedPictureURL;
+                    this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                    pictureUsed = true;
+                }
+                else
+                {
+                    if (MessageBox.Show("Load a new picture?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    {
+                        uploadedPictureURL = string.Empty;
+                        pictureUsed = false;
+                        InsertPictureFromFile();
+                    }
+                }
+            }
+            
         }
         void pictureFromCamers_Click(object sender, EventArgs e)
         {
-            string pictureURL = InsertPictureFromCamera();
-            //Append the picture URL
-            txtStatusUpdate.Text += pictureURL;
+            if (String.IsNullOrEmpty(uploadedPictureURL))
+            {
+                pictureUsed = false;
+                InsertPictureFromCamera();
+            }
+            else
+            {
+                if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    txtStatusUpdate.Text += uploadedPictureURL;
+                    this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                    pictureUsed = true;
+                }
+                else
+                {
+                    if (MessageBox.Show("Take a new picture?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    {
+                        uploadedPictureURL = string.Empty;
+                        pictureUsed = false;
+                        InsertPictureFromCamera();
+                    }
+                }
+            }
         }
+        
         private void menuSubmit_Click(object sender, EventArgs e)
         {
+            if (!pictureUsed)
+            {
+                if (MessageBox.Show("Uploaded picture not used, are you sure?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            
+            
             Program.LastStatus = this.StatusText;
 
             bool Success = PostTheUpdate();
@@ -578,6 +789,7 @@ namespace PockeTwit
         {
             this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
         }
+
         #endregion
 
         

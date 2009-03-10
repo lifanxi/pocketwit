@@ -58,8 +58,7 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCaheDir = new System.Windows.Forms.TextBox();
-            this.chkStartup = new System.Windows.Forms.CheckBox();
-            this.SuspendLayout();
+            this.chkStartup = new System.Windows.Forms.CheckBox();            this.lblPhotoService = new System.Windows.Forms.Label();            this.cmbMediaService = new System.Windows.Forms.ComboBox();            this.SuspendLayout();
             // 
             // mainMenu1
             // 
@@ -169,25 +168,13 @@ namespace PockeTwit
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
             this.txtCaheDir.TabIndex = 6;
             // 
-            // chkStartup
-            // 
-            this.chkStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;
-            this.chkStartup.Location = new System.Drawing.Point(3, 151);
-            this.chkStartup.Name = "chkStartup";
-            this.chkStartup.Size = new System.Drawing.Size(216, 20);
-            this.chkStartup.TabIndex = 5;
-            this.chkStartup.Text = "Launch PockeTwit on startup";
-            // 
-            // OtherSettings
+            // chkStartup            //             this.chkStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)                        | System.Windows.Forms.AnchorStyles.Right)));            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;            this.chkStartup.Location = new System.Drawing.Point(3, 151);            this.chkStartup.Name = "chkStartup";            this.chkStartup.Size = new System.Drawing.Size(216, 20);            this.chkStartup.TabIndex = 5;            this.chkStartup.Text = "Launch PockeTwit on startup";            //                         // lblPhotoService            //             this.lblPhotoService.ForeColor = System.Drawing.SystemColors.ControlLight;            this.lblPhotoService.Location = new System.Drawing.Point(4, 205);            this.lblPhotoService.Name = "lblPhotoService";            this.lblPhotoService.Size = new System.Drawing.Size(89, 20);            this.lblPhotoService.Text = "MediaService";            //             // cmbMediaService            //             this.cmbMediaService.Items.Add("TwitPic");            this.cmbMediaService.Items.Add("MobyPicture");            this.cmbMediaService.Location = new System.Drawing.Point(99, 203);            this.cmbMediaService.Name = "cmbMediaService";            this.cmbMediaService.Size = new System.Drawing.Size(138, 22);            this.cmbMediaService.TabIndex = 13;            //            // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.chkStartup);
-            this.Controls.Add(this.txtCaheDir);
+            this.Controls.Add(this.chkStartup);            this.Controls.Add(this.cmbMediaService);            this.Controls.Add(this.lblPhotoService);            this.Controls.Add(this.txtCaheDir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkTranslate);
@@ -217,7 +204,6 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCaheDir;
-        private System.Windows.Forms.CheckBox chkStartup;
-
+        private System.Windows.Forms.CheckBox chkStartup;        private System.Windows.Forms.Label lblPhotoService;        private System.Windows.Forms.ComboBox cmbMediaService;
     }
 }

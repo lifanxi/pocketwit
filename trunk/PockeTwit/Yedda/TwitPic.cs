@@ -10,6 +10,19 @@ namespace Yedda
 {
     public class TwitPic: IPictureService
     {
+        #region public properties
+
+        public event UploadFinishEventHandler UploadFinish;
+        public event DownloadFinishEventHandler DownloadFinish;
+        public event ErrorOccuredEventHandler ErrorOccured;
+        public event MessageReadyEventHandler MessageReady;
+
+        public bool HasEventHandlersSet { get; set; }
+
+        #endregion
+
+        #region private properties
+
         private static volatile TwitPic _instance;
         private static object syncRoot = new Object();
 
@@ -21,6 +34,16 @@ namespace Yedda
         private const int PT_READ_BUFFER_SIZE = 512;
         private const bool PT_USE_DEFAULT_FILENAME = true;
 
+        #endregion
+
+        #region private objects
+
+        private System.Threading.Thread workerThread;
+        private PicturePostObject workerPPO;
+
+        #endregion
+
+        #region constructor
         /// <summary>
         /// Private constructor for usage in singleton.
         /// </summary>
@@ -43,6 +66,7 @@ namespace Yedda
                        if (_instance == null)
                        {
                            _instance = new TwitPic();
+                           _instance.HasEventHandlersSet = false;
                        }
                    }
                }
@@ -50,206 +74,152 @@ namespace Yedda
            }
         }
 
-        #region old methods
-
-        private string ExecutePostCommand(string url, string userName, string password, byte[] photo, string message)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
-            {
-
-                string boundary = System.Guid.NewGuid().ToString();
-                request.Credentials = new NetworkCredential(userName, password);
-                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
-                request.PreAuthenticate = true;
-                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
-                
-
-                //request.ContentType = "application/x-www-form-urlencoded";
-                request.Method = "POST";
-                request.Timeout = 20000;
-                string header = string.Format("--{0}", boundary);
-                string footer = header + "--";
-
-                StringBuilder contents = new StringBuilder();
-
-                
-                contents.Append(header);
-                contents.Append("\r\n");
-                contents.Append("Content-Disposition: form-data;name=\"username\"\r\n");
-                contents.Append("\r\n");
-                contents.Append(userName);
-                contents.Append("\r\n");
-
-                contents.Append(header);
-                contents.Append("\r\n");
-                contents.Append("Content-Disposition: form-data;name=\"password\"\r\n");
-                contents.Append("\r\n");
-                contents.Append(password);
-                contents.Append("\r\n");
-
-                contents.Append(header);
-                contents.Append("\r\n");
-                contents.Append("Content-Disposition: form-data;name=\"source\"\r\n");
-                contents.Append("\r\n");
-                contents.Append("pocketwit");
-                contents.Append("\r\n");
-
-                if (!string.IsNullOrEmpty(message))
-                {
-                    contents.Append(header);
-                    contents.Append("\r\n");
-                    contents.Append("Content-Disposition: form-data;name=\"message\"\r\n");
-                    contents.Append("\r\n");
-                    contents.Append(message);
-                    contents.Append("\r\n");
-                }
-                
-                contents.Append(header);
-                contents.Append("\r\n");
-                contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"image.jpg\"\r\n"));
-                contents.Append("Content-Type: image/jpeg\r\n");
-                contents.Append("\r\n");
-                
-                string End = "\r\n" + header + "\r\n";
-                byte[] bytes = Encoding.UTF8.GetBytes(contents.ToString());
-                byte[] footBytes = Encoding.UTF8.GetBytes(End);
-                request.ContentLength = bytes.Length + photo.Length + footBytes.Length ;
-                using (Stream requestStream = request.GetRequestStream())
-                {
-                    requestStream.Write(bytes, 0, bytes.Length);
-                    requestStream.Write(photo, 0, photo.Length);
-                    requestStream.Write(footBytes, 0, footBytes.Length);
-                    requestStream.Flush();
-                    requestStream.Close();
-                    
-                    using (WebResponse response = request.GetResponse())
-                    {
-                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                        {
-                            return reader.ReadToEnd();
-                        }
-                    }
-                    
-                }
-            }
-
-            return null;
-        }
-
-        private string SendStoredPic(string userName, string password, string Message, string Path)
-        {
-
-            using(System.IO.FileStream f = new FileStream(Path,FileMode.Open, FileAccess.Read))
-            {
-                byte[] incoming = new byte[f.Length];
-                f.Read(incoming, 0, incoming.Length);
-                string ret = ExecutePostCommand("http://twitpic.com/api/uploadAndPost", userName, password, incoming, Message);
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(ret);
-                if (doc.SelectSingleNode("rsp").Attributes["status"].Value == "fail")
-                {
-                    string ErrorText = doc.SelectSingleNode("//err").Attributes["msg"].Value;
-                    throw new Exception(ErrorText);
-                }
-                else
-                {
-                    string URL = doc.SelectSingleNode("//mediaurl").InnerText;
-                    return URL;
-                }
-                throw new Exception("Error communicating with twitpic.  Please try again.");
-            }
-        }
-
-        private string JustUpload(string userName, string password, string path)
-        {
-            using (System.IO.FileStream f = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                byte[] incoming = new byte[f.Length];
-                f.Read(incoming, 0, incoming.Length);
-                string ret = ExecutePostCommand("http://twitpic.com/api/upload", userName, password, incoming, null);
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(ret);
-                if (doc.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
-                {
-                    string ErrorText = doc.SelectSingleNode("//err").Attributes["msg"].Value;
-                    throw new Exception(ErrorText);
-                }
-                else
-                {
-                    string URL = doc.SelectSingleNode("//mediaurl").InnerText;
-                    return URL;
-                }
-                throw new Exception("Error communicating with twitpic.  Please try again.");
-            }
-        }
 
         #endregion
 
         #region IPictureService Members
 
-        public string PostPicture(PicturePostObject postData)
+        public void PostPicture(PicturePostObject postData)
         {
             #region Argument check
 
             //Check for empty path
             if (string.IsNullOrEmpty(postData.Filename))
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to TwitPic.", ""));
             }
 
             //Check for empty credentials
             if (string.IsNullOrEmpty(postData.Username) ||
                 string.IsNullOrEmpty(postData.Password) )
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to TwitPic.", ""));
             }
 
             #endregion
 
             using (System.IO.FileStream file = new FileStream(postData.Filename, FileMode.Open, FileAccess.Read))
             {
-                byte[] incoming = new byte[file.Length];
-                file.Read(incoming, 0, incoming.Length);
-                postData.PictureData = incoming;
-
-                XmlDocument uploadResult = UploadPicture(API_UPLOAD, postData);
-
-                if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                try
                 {
-                    string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
-                    throw new Exception(ErrorText);
+                    workerPPO = (PicturePostObject) postData.Clone();
+
+                    //Load the picture data
+                    byte[] incoming = new byte[file.Length];
+                    file.Read(incoming, 0, incoming.Length);
+                    workerPPO.PictureData = incoming;
+
+                    if (workerThread == null)
+                    {
+                        workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
+                        workerThread.Name = "PictureUpload";
+                        workerThread.Start();
+                    }
+                    else
+                    {
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    string URL = uploadResult.SelectSingleNode("//mediaurl").InnerText;
-                    return URL;
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to upload picture to TwitPic."));
                 }
             }
         }
 
-        public string FetchPicture(string pictureURL)
+        public void FetchPicture(string pictureURL)
         {
             #region Argument check
 
             //Need a url to read from.
             if (string.IsNullOrEmpty(pictureURL))
             {
-                return string.Empty;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download picture from TwitPic."));
             }
 
             #endregion
 
-            string resultURL = string.Empty;
+            try
+            {
+                workerPPO = new PicturePostObject();
+                workerPPO.Message = pictureURL;
 
-            int imageIdStartIndex = pictureURL.LastIndexOf('/')+1;
-            string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
-
-            resultURL = RetrievePicture(imageID);
-            
-            return resultURL;
+                if (workerThread == null)
+                {
+                    workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessDownload));
+                    workerThread.Name = "PictureUpload";
+                    workerThread.Start();
+                }
+                else
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download picture from TwitPic."));
+            } 
         }
+
+
+        #endregion
+
+        #region thread implementation
+
+        private void ProcessDownload()
+        {
+            try
+            {
+                string pictureURL = workerPPO.Message;
+                int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
+                string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
+
+                string resultFileName = RetrievePicture(imageID);
+
+                if (string.IsNullOrEmpty(resultFileName))
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture."));
+                }
+                else
+                {
+                    OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, "", pictureURL));
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+            }
+            workerThread = null;
+        }
+
+
+        private void ProcessUpload()
+        {
+            try
+            {
+                XmlDocument uploadResult = UploadPicture(API_UPLOAD, workerPPO);
+
+                if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                {
+                    string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, ErrorText, ""));
+                }
+                else
+                {
+                    string URL = uploadResult.SelectSingleNode("//mediaurl").InnerText;
+                    OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK,URL,"",workerPPO.Filename));
+                }
+            }
+            catch (Exception e)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
+            }
+            workerThread = null;
+        }
+
+        #endregion
+
+        #region private methods
 
         /// <summary>
         /// Use a imageId to retrieve and save a thumbnail to the device.
@@ -293,7 +263,6 @@ namespace Yedda
             return pictureFileName;
         }
 
-
         private static bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
         {
             #region argument check
@@ -330,12 +299,6 @@ namespace Yedda
             }
             return true; ;
         }
-
-
-
-        //
-
-
 
         /// <summary>
         /// Lookup the path and filename intended for the image. When it does not exist, create it.
@@ -385,60 +348,134 @@ namespace Yedda
 
         private XmlDocument UploadPicture(string url, PicturePostObject ppo)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            string boundary = System.Guid.NewGuid().ToString();
-            request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
-            request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
-            request.PreAuthenticate = true;
-            request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
-
-
-            //request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "POST";
-            request.Timeout = 20000;
-            string header = string.Format("--{0}", boundary);
-            string ender = "\r\n" + header + "\r\n";
-
-            StringBuilder contents = new StringBuilder();
-
-            contents.Append(CreateContentPartString(header, "username",ppo.Username) );
-            contents.Append(CreateContentPartString(header, "password", ppo.Password));
-            contents.Append(CreateContentPartString(header, "source", "pocketwit"));
-
-            if (!string.IsNullOrEmpty(ppo.Message))
+            try
             {
-                contents.Append(CreateContentPartString(header, "message", ppo.Message));
-            }
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-            contents.Append(CreateContentPartPicture(header));
-                
-            //Create the form message to send in bytes
+                string boundary = System.Guid.NewGuid().ToString();
+                request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
+                request.PreAuthenticate = true;
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
 
-            byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
-            byte[] footer = Encoding.UTF8.GetBytes(ender);
-            request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(message, 0, message.Length);
-                requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
-                requestStream.Write(footer, 0, footer.Length);
-                requestStream.Flush();
-                requestStream.Close();
-                
-                using (WebResponse response = request.GetResponse())
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string ender = "\r\n" + header + "\r\n";
+
+                StringBuilder contents = new StringBuilder();
+
+                contents.Append(CreateContentPartString(header, "username", ppo.Username));
+                contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "source", "pocketwit"));
+
+                if (!string.IsNullOrEmpty(ppo.Message))
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    contents.Append(CreateContentPartString(header, "message", ppo.Message));
+                }
+
+                contents.Append(CreateContentPartPicture(header));
+
+                //Create the form message to send in bytes
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
+                    requestStream.Write(footer, 0, footer.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
                     {
-                        XmlDocument responseXML = new XmlDocument();
-                        responseXML.LoadXml(reader.ReadToEnd());
-                        return responseXML;
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            XmlDocument responseXML = new XmlDocument();
+                            responseXML.LoadXml(reader.ReadToEnd());
+                            return responseXML;
+                        }
                     }
                 }
-                
+               
             }
-            return null;
+            catch (Exception e)
+            {
+                //Socket exception 10054 could occur when sending large files.
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
+                return null;
+            }
         }
+
+#endregion
+
+        #region event handlers
+
+        protected virtual void OnDownloadFinish(PictureServiceEventArgs e)
+        {
+            if (DownloadFinish != null)
+            {
+                try
+                {
+                    DownloadFinish(this, e);
+                }
+                catch
+                {
+                    //Always continue after a missed event
+                }
+            }
+        }
+
+        protected virtual void OnUploadFinish(PictureServiceEventArgs e)
+        {
+            if (UploadFinish != null)
+            {
+                try
+                {
+                    UploadFinish(this, e);
+                }
+                catch
+                {
+                    //Always continue after a missed event
+                }
+            }
+        }
+
+        protected virtual void OnErrorOccured(PictureServiceEventArgs e)
+        {
+            if (ErrorOccured != null)
+            {
+                try
+                {
+                    ErrorOccured(this, e);
+                }
+                catch
+                {
+                    //Always continue after a missed event
+                }
+            }
+        }
+
+        protected virtual void OnMessageReady(PictureServiceEventArgs e)
+        {
+            if (MessageReady != null)
+            {
+                try
+                {
+                    MessageReady(this, e);
+                }
+                catch
+                {
+                    //Always continue after a missed event
+                }
+            }
+        }
+
+        #endregion
+
+        #region helper methods
 
         private string CreateContentPartString(string header, string dispositionName, string valueToSend)
         {
