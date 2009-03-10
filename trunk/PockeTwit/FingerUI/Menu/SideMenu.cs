@@ -251,6 +251,7 @@ namespace FingerUI
 
         void item_DoneWithClick()
         {
+            ExpandedItem = null;
             ItemWasClicked();
         }
 

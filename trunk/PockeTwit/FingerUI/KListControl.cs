@@ -767,11 +767,26 @@ namespace FingerUI
 
         protected void OnKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (LeftMenu.Contains("Back"))
+            if(LeftMenu.IsExpanded && e.KeyChar == (Char)Keys.Escape && CurrentlyViewing == SideShown.Left)
+            {
+                LeftMenu.CollapseExpandedMenu();
+            }
+            else if (RightMenu.IsExpanded && CurrentlyViewing == SideShown.Right && e.KeyChar == (Char)Keys.Escape)
+            {
+                RightMenu.CollapseExpandedMenu();
+            }
+            else if (LeftMenu.Contains("Back"))
             {
                 if (e.KeyChar == (Char)Keys.Escape)
                 {
                     LeftMenu.InvokeByText("Back");
+                }
+            }
+            else
+            {
+                if (CurrentlyViewing != SideShown.Middle)
+                {
+                    SnapBack();
                 }
             }
             e.Handled = true;
