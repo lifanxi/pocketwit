@@ -153,7 +153,7 @@ public static class ClientSettings
     }
 
     public static string CacheDir { get; set; }
-
+    public static string MediaService { get; set; }
     public static Queue<string> SearchItems { get; set; }
     public static bool AutoTranslate { get; set; }
     public static string TranslationLanguage { get; set; }
@@ -220,6 +220,15 @@ public static class ClientSettings
             else
             {
                 CacheDir = "";
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MediaService"]))
+            {
+                MediaService = ConfigurationSettings.AppSettings["MediaService"];
+            }
+            else
+            {
+                MediaService = "TwitPic";
             }
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["FontSize"]))
@@ -416,6 +425,7 @@ public static class ClientSettings
     public static void SaveSettings()
     {
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
+        ConfigurationSettings.AppSettings["MediaService"] = MediaService;
         ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
         ConfigurationSettings.AppSettings["MergeMessages"] = MergeMessages.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());

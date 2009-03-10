@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Yedda
 {
-    public class PicturePostObject: IDisposable
+    public class PicturePostObject: IDisposable, ICloneable
     {
         private string _username = string.Empty;
         private string _password = string.Empty;
@@ -155,6 +155,21 @@ namespace Yedda
             }
         }
 
-       
+
+
+        #region ICloneable Members
+
+        public object Clone()
+        {
+            //shallow clone, without the object data.
+            //As long as no other objects are cloned no need to cast it to a PicturePostObject
+            object clone = this.MemberwiseClone();
+
+            //space for cloning objects.
+
+            return clone;
+        }
+
+        #endregion
     }
 }
