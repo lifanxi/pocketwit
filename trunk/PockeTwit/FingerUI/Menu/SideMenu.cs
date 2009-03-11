@@ -38,7 +38,7 @@ namespace FingerUI
                 else
                 {
                     SelectedItem = value.SubMenuItems[0];
-                    _animationStep = 5;
+                    _animationStep = 6;
                     AnimateMe();
                 }
                 _ExpandedItem = value;
@@ -623,7 +623,7 @@ namespace FingerUI
         {
             get
             {
-                return ClientSettings.TextSize / 5;
+                return ClientSettings.TextSize / 6;
             }
         }
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
@@ -660,7 +660,7 @@ namespace FingerUI
             }
             if (_animationStep > 0)
             {
-                _animationStep--;
+                _animationStep = _animationStep - 2;
                 IsDirty = true;
             }
         }
