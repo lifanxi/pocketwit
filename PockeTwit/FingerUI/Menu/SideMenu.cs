@@ -39,6 +39,7 @@ namespace FingerUI
                 {
                     SelectedItem = value.SubMenuItems[0];
                     _animationStep = 6;
+                    _animationColor = ClientSettings.ForeColor;
                     AnimateMe();
                 }
                 _ExpandedItem = value;
@@ -68,7 +69,6 @@ namespace FingerUI
 
         private FingerUI.KListControl.SideShown _Side;
         private List<SideMenuItem> Items = new List<SideMenuItem>();
-        private SideMenuItem _ParentItem = null;
         private SideMenuItem _SelectedItem = null;
         
         public SideMenuItem SelectedItem
@@ -494,7 +494,7 @@ namespace FingerUI
                 System.Drawing.Color MenuColor = ClientSettings.ForeColor;
                 if(ExpandedItem!=null)
                 {
-                        MenuColor = ClientSettings.DimmedColor;
+                        MenuColor = animationColor;
                 }
 
                 int i = 1;
@@ -617,19 +617,60 @@ namespace FingerUI
             }
         }
 
+        
 
         private int _animationStep;
         private int _animationDelta
         {
             get
             {
-                return ClientSettings.TextSize / 6;
+                return ClientSettings.TextSize / 3;
             }
         }
+        private int rColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedColor.R - ClientSettings.ForeColor.R) / 3;
+            }
+        }
+        private int gColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedColor.G - ClientSettings.ForeColor.G) / 3;
+            }
+        }
+        private int bColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedColor.B - ClientSettings.ForeColor.B) / 3;
+            }
+        }
+        private Color _animationColor;
+        private Color animationColor
+        {
+            get
+            {
+                if (_animationStep > 0)
+                {
+                    Color newColor = Color.FromArgb(_animationColor.R + rColorDelta, _animationColor.G + gColorDelta, _animationColor.B + bColorDelta);
+                    _animationColor = newColor;
+                    return newColor;
+                }
+                else
+                {
+                    return _animationColor;
+                }
+            }
+        }
+        
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
             int i = 0;
-            int OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
+            int OffSet = 0;
+            OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
             int ItemsCount = Item.SubMenuItems.Count;
             TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
@@ -661,7 +702,7 @@ namespace FingerUI
             if (_animationStep > 0)
             {
                 _animationStep = _animationStep - 2;
-                IsDirty = true;
+                //IsDirty = true;
             }
         }
 
