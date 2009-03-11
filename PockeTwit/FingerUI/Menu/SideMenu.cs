@@ -9,7 +9,7 @@ namespace FingerUI
     {
         public delegate void delAnimateMe();
         public event delAnimateMe AnimateMe = delegate { };
-        public bool IsAnimating { get { return _animationStep > 0; }}
+        public bool IsAnimating { get { return _animationStep >= 0; }}
 
         public SideMenu(FingerUI.KListControl.SideShown Side)
         {
@@ -668,6 +668,7 @@ namespace FingerUI
         
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
+            if (_animationStep == 0) { _animationStep = -1;}
             int i = 0;
             int OffSet = 0;
             OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
