@@ -29,11 +29,15 @@ namespace FingerUI
             }
             set
             {
-                _ExpandedItem = value;
-                if (_ExpandedItem != null)
+                if (value == null)
+                {
+                    SelectedItem = _ExpandedItem;
+                }
+                else
                 {
                     SelectedItem = value.SubMenuItems[0];
                 }
+                _ExpandedItem = value;
             }
         }
         public bool IsExpanded
@@ -60,7 +64,9 @@ namespace FingerUI
 
         private FingerUI.KListControl.SideShown _Side;
         private List<SideMenuItem> Items = new List<SideMenuItem>();
+        private SideMenuItem _ParentItem = null;
         private SideMenuItem _SelectedItem = null;
+        
         public SideMenuItem SelectedItem
         {
             get 

@@ -665,9 +665,9 @@ namespace PockeTwit
             {
                 ResetDictionaries();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Corrupt settings.  Please reconfigure.");
+                MessageBox.Show("Corrupt settings-- " +ex.Message + "\r\nPlease reconfigure.");
                 System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
                 ClientSettings.AccountsList.Clear();
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
