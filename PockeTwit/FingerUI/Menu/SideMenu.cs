@@ -7,7 +7,9 @@ namespace FingerUI
 {
     public class SideMenu : System.Windows.Forms.Control
     {
-        public bool IsAnimating { get; set; }
+        public delegate void delAnimateMe();
+        public event delAnimateMe AnimateMe = delegate { };
+        public bool IsAnimating { get { return _animationStep > 0; }}
 
         public SideMenu(FingerUI.KListControl.SideShown Side)
         {
@@ -36,6 +38,8 @@ namespace FingerUI
                 else
                 {
                     SelectedItem = value.SubMenuItems[0];
+                    _animationStep = 5;
+                    AnimateMe();
                 }
                 _ExpandedItem = value;
             }
@@ -505,19 +509,18 @@ namespace FingerUI
                 using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
                 {
                     m_backBuffer.Clear(ClientSettings.BackColor);
-                    int LeftPos = 0;
                     int CurrentTop = TopOfMenu;
                     foreach (SideMenuItem Item in this.GetItems())
                     {
                         if (Item.Visible)
                         {
-                            DrawSingleItem(i, m_backBuffer, LeftPos,0, CurrentTop, Item, MenuColor);
+                            DrawSingleItem(i, m_backBuffer,0, CurrentTop, Item, MenuColor);
 
                             i++;
                             
                             if (Item.Expanded)
                             {
-                                ExpandedRect = new Rectangle(LeftPos, CurrentTop, _Width, ItemHeight);
+                                ExpandedRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
                             }
                             CurrentTop = CurrentTop + ItemHeight;
                         }
@@ -539,13 +542,14 @@ namespace FingerUI
                         }
                     }
                 }
-                IsDirty = false;
+                IsDirty = IsAnimating;
             }
 
         }
 
-        private void DrawSingleItem(int i, Graphics m_backBuffer, int LeftPos, int Offset, int CurrentTop, SideMenuItem Item, System.Drawing.Color MenuColor)
+        private void DrawSingleItem(int i, Graphics m_backBuffer, int Offset, int CurrentTop, SideMenuItem Item, System.Drawing.Color MenuColor)
         {
+            int LeftPos = 0;
             string DisplayItem = Item.Text;
             if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
             {
@@ -559,7 +563,7 @@ namespace FingerUI
             }
             else
             {
-                LeftPos = LeftPos + ClientSettings.Margin;
+                LeftPos = LeftPos + ClientSettings.Margin + 5 + Offset;
             }
             using (Pen whitePen = new Pen(MenuColor))
             {
@@ -613,22 +617,22 @@ namespace FingerUI
             }
         }
 
+
+        private int _animationStep;
+        private int _animationDelta
+        {
+            get
+            {
+                return ClientSettings.TextSize / 5;
+            }
+        }
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
             int i = 0;
-            int OffSet = ClientSettings.TextSize;
+            int OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
             int ItemsCount = Item.SubMenuItems.Count;
             TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
-            int LeftPos = 0;
-            if (_Side == KListControl.SideShown.Left)
-            {
-                LeftPos = -15;
-            }
-            else
-            {
-                LeftPos = 15;
-            }
             int CurrentTop = TopOfSubMenu;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
             {
@@ -637,7 +641,7 @@ namespace FingerUI
                     
                     if (subItem.Visible)
                     {
-                        DrawSingleItem(i, m_backBuffer, LeftPos, OffSet, CurrentTop, subItem, ClientSettings.ForeColor);
+                        DrawSingleItem(i, m_backBuffer, OffSet, CurrentTop, subItem, ClientSettings.ForeColor);
                         i++;
                         CurrentTop = CurrentTop + ItemHeight;
                     }
@@ -653,6 +657,11 @@ namespace FingerUI
                         m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
                     }
                 }
+            }
+            if (_animationStep > 0)
+            {
+                _animationStep--;
+                IsDirty = true;
             }
         }
 

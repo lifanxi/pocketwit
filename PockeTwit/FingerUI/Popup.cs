@@ -32,7 +32,6 @@ namespace FingerUI
             }
         }
         private bool Visibility = false;
-        public int Pause = -1;
         private int MaxHeight = ClientSettings.TextSize + (ClientSettings.Margin * 2);
         public KListControl parentControl;
         
@@ -65,16 +64,17 @@ namespace FingerUI
 
         public void HideNotification()
         {
-            if (Pause <= 0)
+            if (Visibility)
             {
-                Visibility = false;
+                parentControl.startAnimation();
             }
+            Visibility = false;
         }
         public bool isAnimating
         {
             get
             {
-                return (AnimationStep != -1 | Pause !=-1 | Visibility);
+                return ((AnimationStep != -1 && AnimationStep!=MaxHeight));
             }
         }
         public void DrawNotification(Graphics g, int Bottom, int Width)
@@ -86,29 +86,13 @@ namespace FingerUI
                 if (AnimationStep >= MaxHeight) 
                 { 
                     AnimationStep = MaxHeight;
-                    if (Pause == 0)
-                    {
-                        Visibility = false;
-                        Pause = -1;
-                    }
-                    else 
-                    {
-                        if (Pause > 0) { Pause--; }
-                    }
                 }
             }
             else
             {
                 if (AnimationStep > 0) 
                 {
-                    if (Pause > 0)
-                    {
-                        Pause--;
-                    }
-                    else
-                    {
-                        AnimationStep = AnimationStep - AnimationPixels;
-                    }
+                    AnimationStep = AnimationStep - AnimationPixels;
                 }
                 else 
                 {

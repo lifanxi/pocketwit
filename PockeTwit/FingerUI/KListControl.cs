@@ -11,6 +11,7 @@ namespace FingerUI
     {
         private FullScreenTweet fsDisplay = new FullScreenTweet();
         private System.Threading.Timer animationTimer;
+        private System.Threading.Timer errorTimer;
 
         private delegate void delPaint();
 
@@ -112,10 +113,14 @@ namespace FingerUI
             LeftMenu.ItemWasClicked+=new SideMenu.delClearMe(delegate{SnapBack();});
             RightMenu.ItemWasClicked += new SideMenu.delClearMe(delegate { SnapBack(); });
 
+            LeftMenu.AnimateMe += new SideMenu.delAnimateMe(this.startAnimation);
+            RightMenu.AnimateMe+=new SideMenu.delAnimateMe(this.startAnimation);
+
             LeftMenu.NeedRedraw+=new SideMenu.delClearMe(delegate{Repaint();});
             RightMenu.NeedRedraw += new SideMenu.delClearMe(delegate { Repaint(); });
 
             animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            errorTimer = new System.Threading.Timer(new System.Threading.TimerCallback(errorTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             NotificationArea.TextFont = ClientSettings.TextFont;
             NotificationArea.parentControl = this;
 
@@ -146,6 +151,8 @@ namespace FingerUI
             this.LostFocus += new EventHandler(KListControl_LostFocus);
         }
 
+        
+
         void KListControl_LostFocus(object sender, EventArgs e)
         {
             if (!this.Parent.Focused)
@@ -157,7 +164,7 @@ namespace FingerUI
         void GlobalEventHandler_ShowErrorMessage(string Message)
         {
             ErrorPopup.ShowNotification(Message);
-            ErrorPopup.Pause = 50;
+            errorTimer.Change(15000, System.Threading.Timeout.Infinite);
         }
 
         void SlidingPortal_NewImage()
@@ -484,6 +491,12 @@ namespace FingerUI
             this.Repaint();
         }
 
+        void errorTimer_Tick(object o)
+        {
+            errorTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            ErrorPopup.HideNotification();
+            this.Repaint();
+        }
         public void startAnimation()
         {
             animationTimer.Change(50, 50);
