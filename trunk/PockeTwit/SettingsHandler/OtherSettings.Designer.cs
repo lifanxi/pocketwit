@@ -58,7 +58,10 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCaheDir = new System.Windows.Forms.TextBox();
-            this.chkStartup = new System.Windows.Forms.CheckBox();            this.lblPhotoService = new System.Windows.Forms.Label();            this.cmbMediaService = new System.Windows.Forms.ComboBox();            this.SuspendLayout();
+            this.chkStartup = new System.Windows.Forms.CheckBox();
+            this.lblPhotoService = new System.Windows.Forms.Label();
+            this.cmbMediaService = new System.Windows.Forms.ComboBox();
+            this.SuspendLayout();
             // 
             // mainMenu1
             // 
@@ -78,7 +81,7 @@ namespace PockeTwit
             // chkGPS
             // 
             this.chkGPS.ForeColor = System.Drawing.Color.LightGray;
-            this.chkGPS.Location = new System.Drawing.Point(2, 29);
+            this.chkGPS.Location = new System.Drawing.Point(2, 28);
             this.chkGPS.Name = "chkGPS";
             this.chkGPS.Size = new System.Drawing.Size(235, 20);
             this.chkGPS.TabIndex = 1;
@@ -132,7 +135,7 @@ namespace PockeTwit
             this.chkTranslate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.chkTranslate.ForeColor = System.Drawing.Color.White;
-            this.chkTranslate.Location = new System.Drawing.Point(3, 99);
+            this.chkTranslate.Location = new System.Drawing.Point(3, 98);
             this.chkTranslate.Name = "chkTranslate";
             this.chkTranslate.Size = new System.Drawing.Size(220, 20);
             this.chkTranslate.TabIndex = 3;
@@ -143,7 +146,7 @@ namespace PockeTwit
             this.chkSkweezer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.chkSkweezer.ForeColor = System.Drawing.Color.LightGray;
-            this.chkSkweezer.Location = new System.Drawing.Point(3, 125);
+            this.chkSkweezer.Location = new System.Drawing.Point(3, 122);
             this.chkSkweezer.Name = "chkSkweezer";
             this.chkSkweezer.Size = new System.Drawing.Size(216, 20);
             this.chkSkweezer.TabIndex = 4;
@@ -154,7 +157,7 @@ namespace PockeTwit
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 174);
+            this.label2.Location = new System.Drawing.Point(4, 168);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 20);
             this.label2.Text = "Cache Directory:";
@@ -163,18 +166,45 @@ namespace PockeTwit
             // 
             this.txtCaheDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCaheDir.Location = new System.Drawing.Point(4, 197);
+            this.txtCaheDir.Location = new System.Drawing.Point(3, 186);
             this.txtCaheDir.Name = "txtCaheDir";
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
             this.txtCaheDir.TabIndex = 6;
             // 
-            // chkStartup            //             this.chkStartup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)                        | System.Windows.Forms.AnchorStyles.Right)));            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;            this.chkStartup.Location = new System.Drawing.Point(3, 151);            this.chkStartup.Name = "chkStartup";            this.chkStartup.Size = new System.Drawing.Size(216, 20);            this.chkStartup.TabIndex = 5;            this.chkStartup.Text = "Launch PockeTwit on startup";            //                         // lblPhotoService            //             this.lblPhotoService.ForeColor = System.Drawing.SystemColors.ControlLight;            this.lblPhotoService.Location = new System.Drawing.Point(4, 205);            this.lblPhotoService.Name = "lblPhotoService";            this.lblPhotoService.Size = new System.Drawing.Size(89, 20);            this.lblPhotoService.Text = "MediaService";            //             // cmbMediaService            //             this.cmbMediaService.Items.Add("TwitPic");            this.cmbMediaService.Items.Add("MobyPicture");            this.cmbMediaService.Location = new System.Drawing.Point(99, 203);            this.cmbMediaService.Name = "cmbMediaService";            this.cmbMediaService.Size = new System.Drawing.Size(138, 22);            this.cmbMediaService.TabIndex = 13;            //            // OtherSettings
+            // chkStartup
+            // 
+            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;
+            this.chkStartup.Location = new System.Drawing.Point(3, 145);
+            this.chkStartup.Name = "chkStartup";
+            this.chkStartup.Size = new System.Drawing.Size(181, 20);
+            this.chkStartup.TabIndex = 0;
+            this.chkStartup.Text = "Start with Windows";
+            // 
+            // lblPhotoService
+            // 
+            this.lblPhotoService.ForeColor = System.Drawing.Color.LightGray;
+            this.lblPhotoService.Location = new System.Drawing.Point(4, 213);
+            this.lblPhotoService.Name = "lblPhotoService";
+            this.lblPhotoService.Size = new System.Drawing.Size(100, 20);
+            this.lblPhotoService.Text = "Media Service";
+            // 
+            // cmbMediaService
+            // 
+            this.cmbMediaService.Location = new System.Drawing.Point(97, 211);
+            this.cmbMediaService.Name = "cmbMediaService";
+            this.cmbMediaService.Size = new System.Drawing.Size(138, 22);
+            this.cmbMediaService.TabIndex = 1;
+            // 
+            // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.chkStartup);            this.Controls.Add(this.cmbMediaService);            this.Controls.Add(this.lblPhotoService);            this.Controls.Add(this.txtCaheDir);
+            this.Controls.Add(this.chkStartup);
+            this.Controls.Add(this.cmbMediaService);
+            this.Controls.Add(this.lblPhotoService);
+            this.Controls.Add(this.txtCaheDir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkSkweezer);
             this.Controls.Add(this.chkTranslate);
