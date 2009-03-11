@@ -29,7 +29,7 @@ namespace PockeTwit
         private string uploadedPictureOrigin = string.Empty;
         private string uploadedPictureURL = string.Empty;
         private bool uploadingPicture = false;
-        private bool pictureUsed = false;
+        private bool pictureUsed = true;
         private bool localPictureEventsSet = false;
 
         public delegate void delAddPicture(string ImageFile, PictureBox BoxToUpdate);
