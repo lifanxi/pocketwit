@@ -243,7 +243,7 @@ namespace PockeTwit
             List<Library.status> TempLine = new List<PockeTwit.Library.status>();
             foreach (Yedda.Twitter t in TwitterConnections)
             {
-                if (!twitterDone && t.AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter)
+                if (!(twitterDone && t.AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter))
                 {
                     if (t.AccountInfo.Enabled)
                     {
