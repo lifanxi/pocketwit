@@ -619,7 +619,7 @@ namespace FingerUI
 
         
 
-        private int _animationStep;
+        private int _animationStep = -1;
         private int _animationDelta
         {
             get
