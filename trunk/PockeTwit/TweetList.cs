@@ -1036,18 +1036,13 @@ namespace PockeTwit
         private void ShowPublicTimeLine()
         {
             ChangeCursor(Cursors.WaitCursor);
-            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
-            if (statItem == null) { return; }
-            ShowUserID = statItem.Tweet.user.screen_name;
-            CurrentlySelectedAccount = statItem.Tweet.Account;
-            Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             
             SwitchToList("Public_TimeLine");
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Public_Timeline;
             History.Push(i);
             statList.SetSelectedMenu(PublicMenuItem);
-            AddStatusesToList(Manager.GetPublicTimeLine(Conn));
+            AddStatusesToList(Manager.GetPublicTimeLine());
             ChangeCursor(Cursors.Default);
         }
 

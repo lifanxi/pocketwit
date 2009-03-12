@@ -237,20 +237,37 @@ namespace PockeTwit
             TempLine.Sort();
             return TempLine.ToArray();
         }
-        public PockeTwit.Library.status[] GetPublicTimeLine(Yedda.Twitter t)
+        public PockeTwit.Library.status[] GetPublicTimeLine()
         {
-            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Public_Timeline, null);
-            if (string.IsNullOrEmpty(response))
+            bool twitterDone = false;
+            List<Library.status> TempLine = new List<PockeTwit.Library.status>();
+            foreach (Yedda.Twitter t in TwitterConnections)
             {
-                NoData(t.AccountInfo, Yedda.Twitter.ActionType.Public_Timeline);
-                GlobalEventHandler.CallShowErrorMessage("Communications Error");
-                return null;
+                if (!twitterDone && t.AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter)
+                {
+                    if (t.AccountInfo.Enabled)
+                    {
+                        try
+                        {
+                            string response = FetchSpecificFromTwitter(t, Yedda.Twitter.ActionType.Public_Timeline, null);
+                            if (!string.IsNullOrEmpty(response))
+                            {
+                                Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
+                                TempLine.AddRange(NewStats);
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    if (t.AccountInfo.Server == Yedda.Twitter.TwitterServer.twitter)
+                    {
+                        twitterDone = true;
+                    }
+                }
             }
-            else
-            {
-                ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Public_Timeline);
-            }
-            return Library.status.Deserialize(response, t.AccountInfo);
+            TempLine.Sort();
+            return TempLine.ToArray();
         }
         public Library.status[] GetUserTimeLine(Yedda.Twitter t, string UserID)
         {
