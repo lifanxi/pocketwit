@@ -34,11 +34,16 @@ namespace FingerUI
                 if (value == null)
                 {
                     SelectedItem = _ExpandedItem;
+                    _animationColor = ClientSettings.DimmedColor;
+                    isFading = false;
+                    _animationStep = 6;
+                    AnimateMe();
                 }
                 else
                 {
                     SelectedItem = value.SubMenuItems[0];
                     _animationStep = 6;
+                    isFading = true;
                     _animationColor = ClientSettings.ForeColor;
                     AnimateMe();
                 }
@@ -491,12 +496,8 @@ namespace FingerUI
             Rectangle ExpandedRect = new Rectangle();
             lock (Items)
             {
-                System.Drawing.Color MenuColor = ClientSettings.ForeColor;
-                if(ExpandedItem!=null)
-                {
-                        MenuColor = animationColor;
-                }
-
+                System.Drawing.Color MenuColor = animationColor;
+                
                 int i = 1;
                 if (this.Items[0].CanHide && this.Items[0].Visible)
                 {
@@ -540,6 +541,12 @@ namespace FingerUI
                         {
                             m_backBuffer.DrawLine(whitePen, _Width-1, 0, _Width- 1, this.Height);
                         }
+                    }
+                    if (_animationStep == 0) { _animationStep = -1; }
+                    if (_animationStep > 0)
+                    {
+                        _animationStep = _animationStep - 2;
+                        //IsDirty = true;
                     }
                 }
                 IsDirty = IsAnimating;
@@ -648,14 +655,23 @@ namespace FingerUI
                 return (ClientSettings.DimmedColor.B - ClientSettings.ForeColor.B) / 3;
             }
         }
-        private Color _animationColor;
+        private bool isFading = true;
+        private Color _animationColor = ClientSettings.ForeColor;
         private Color animationColor
         {
             get
             {
                 if (_animationStep > 0)
                 {
-                    Color newColor = Color.FromArgb(_animationColor.R + rColorDelta, _animationColor.G + gColorDelta, _animationColor.B + bColorDelta);
+                    Color newColor;
+                    if (isFading)
+                    {
+                        newColor = Color.FromArgb(_animationColor.R + rColorDelta, _animationColor.G + gColorDelta, _animationColor.B + bColorDelta);
+                    }
+                    else
+                    {
+                        newColor = Color.FromArgb(_animationColor.R - rColorDelta, _animationColor.G - gColorDelta, _animationColor.B - bColorDelta);
+                    }
                     _animationColor = newColor;
                     return newColor;
                 }
@@ -668,8 +684,7 @@ namespace FingerUI
         
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
-            if (_animationStep == 0) { _animationStep = -1;}
-            int i = 0;
+                        int i = 0;
             int OffSet = 0;
             OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
             int ItemsCount = Item.SubMenuItems.Count;
@@ -699,11 +714,6 @@ namespace FingerUI
                         m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
                     }
                 }
-            }
-            if (_animationStep > 0)
-            {
-                _animationStep = _animationStep - 2;
-                //IsDirty = true;
             }
         }
 
