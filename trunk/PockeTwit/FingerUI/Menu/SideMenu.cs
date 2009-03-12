@@ -33,11 +33,14 @@ namespace FingerUI
             {
                 if (value == null)
                 {
+                    if (_ExpandedItem != null)
+                    {
+                        _animationColor = ClientSettings.DimmedColor;
+                        isFading = false;
+                        _animationStep = 6;
+                        AnimateMe();
+                    }
                     SelectedItem = _ExpandedItem;
-                    _animationColor = ClientSettings.DimmedColor;
-                    isFading = false;
-                    _animationStep = 6;
-                    AnimateMe();
                 }
                 else
                 {
