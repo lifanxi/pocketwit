@@ -636,6 +636,7 @@ namespace FingerUI
             
             Rectangle VisibleBounds = new Rectangle(0, YOffset, 10, this.Height);
             Rectangle CheckAgainstBounds = new Rectangle(0, item.Bounds.Top, 10, item.Bounds.Height);
+            int searchItems = 0;
             while (!VisibleBounds.Contains(CheckAgainstBounds))
             {
                 if(item.Bounds.Top >= VisibleBounds.Top)
@@ -659,7 +660,11 @@ namespace FingerUI
                 }
 
                 VisibleBounds = new Rectangle(0, YOffset, 10, this.Height);
-
+                searchItems++;
+                if (searchItems > ClientSettings.MaxTweets)
+                {
+                    break;
+                }
             }
             Invalidate();
         }
@@ -780,26 +785,26 @@ namespace FingerUI
 
         protected void OnKeyPress(object sender, KeyPressEventArgs e)
         {
-            if(LeftMenu.IsExpanded && e.KeyChar == (Char)Keys.Escape && CurrentlyViewing == SideShown.Left)
+            if (e.KeyChar == (Char)Keys.Escape)
             {
-                LeftMenu.CollapseExpandedMenu();
-            }
-            else if (RightMenu.IsExpanded && CurrentlyViewing == SideShown.Right && e.KeyChar == (Char)Keys.Escape)
-            {
-                RightMenu.CollapseExpandedMenu();
-            }
-            else if (LeftMenu.Contains("Back"))
-            {
-                if (e.KeyChar == (Char)Keys.Escape)
+                if (LeftMenu.IsExpanded && CurrentlyViewing == SideShown.Left)
+                {
+                    LeftMenu.CollapseExpandedMenu();
+                }
+                else if (RightMenu.IsExpanded && CurrentlyViewing == SideShown.Right)
+                {
+                    RightMenu.CollapseExpandedMenu();
+                }
+                else if (LeftMenu.Contains("Back"))
                 {
                     LeftMenu.InvokeByText("Back");
                 }
-            }
-            else
-            {
-                if (CurrentlyViewing != SideShown.Middle)
+                else
                 {
-                    SnapBack();
+                    if (CurrentlyViewing != SideShown.Middle)
+                    {
+                        SnapBack();
+                    }
                 }
             }
             e.Handled = true;
