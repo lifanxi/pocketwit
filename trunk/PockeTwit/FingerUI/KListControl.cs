@@ -1002,7 +1002,7 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("MouseDown!");
             HasMoved = false;
             //Fast scrolling on the right 10 pixels
-            if (e.X > this.Width - PointerSize)
+            if (e.X > this.Width - PointerSize - m_offset.X)
             {
                 m_scrollBarMove = true;
                 movingItems = true;
@@ -1299,7 +1299,6 @@ namespace FingerUI
                     {
                         DrawMenu(flickerGraphics, SideShown.Left);
                     }
-
                     DrawPointer(flickerGraphics);
                     if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
                     {
@@ -1539,6 +1538,7 @@ namespace FingerUI
 
         private void DrawPointer(Graphics g)
         {
+            int x = Width - m_offset.X;
             float Percentage = 0;
             if (YOffset > 0)
             {
@@ -1547,9 +1547,9 @@ namespace FingerUI
             int Position = (int)Math.Round(Height * Percentage);
             using (SolidBrush SBrush = new SolidBrush(ClientSettings.ForeColor))
             {
-                Point a = new Point(Width - PointerSize, Position);
-                Point b = new Point(Width, Position - PointerHalf);
-                Point c = new Point(Width, Position + PointerHalf);
+                Point a = new Point(x - PointerSize, Position);
+                Point b = new Point(x, Position - PointerHalf);
+                Point c = new Point(x, Position + PointerHalf);
                 Point[] Triangle = new Point[]{a,b,c};
                 g.FillPolygon(SBrush, Triangle);
             }
