@@ -72,6 +72,7 @@ namespace PockeTwit
             ClientSettings.UseClickables = chkClickables.Checked;
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
+            ClientSettings.AutoScrollToTop = chkAutoScrroll.Checked;
             
             if(ClientSettings.FontSize != int.Parse(this.txtFontSize.Text))
             {
@@ -111,7 +112,9 @@ namespace PockeTwit
             chkTimestamps.Checked = ClientSettings.ShowExtra;
             chkClickables.Checked = ClientSettings.UseClickables;
             chkScreenName.Checked = ClientSettings.IncludeUserName;
+            chkAutoScrroll.Checked = ClientSettings.AutoScrollToTop;
             txtFontSize.Text = ClientSettings.FontSize.ToString();
+            
             ListThemes();
             this.DialogResult = DialogResult.Cancel;
         }

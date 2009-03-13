@@ -229,8 +229,13 @@ namespace PockeTwit
             }
             else
             {
-                int OldOffset = statList.YOffset;
-                int oldIndex = statList.SelectedIndex;
+                int OldOffset = 0;
+                int oldIndex = 0;
+
+                
+                OldOffset = statList.YOffset;
+                oldIndex = statList.SelectedIndex;
+
                 int oldCount = statList.Count;
                 statList.Clear();
                 foreach (Library.status stat in mergedstatuses)
@@ -243,23 +248,31 @@ namespace PockeTwit
                     }
                 }
                 FingerUI.StatusItem currentItem = null;
-                if (oldIndex >= 0 && newItems < oldCount)
+                if (!ClientSettings.AutoScrollToTop)
                 {
-                    try
+                    if (oldIndex >= 0 && newItems < oldCount)
                     {
-                        statList.SelectedItem = statList[oldIndex + newItems];
-                        currentItem = (FingerUI.StatusItem)statList.SelectedItem;
-                        statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);
+                        try
+                        {
+                            statList.SelectedItem = statList[oldIndex + newItems];
+                            currentItem = (FingerUI.StatusItem)statList.SelectedItem;
+                            statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            //What to do?
+                        }
                     }
-                    catch (KeyNotFoundException)
+                    else
                     {
-                        //What to do?
+                        statList.JumpToLastSelected();
+                        currentItem = (FingerUI.StatusItem)statList[0];
                     }
                 }
                 else
                 {
-                    statList.JumpToLastSelected();
-                    currentItem = (FingerUI.StatusItem)statList[0];
+                    statList.SelectedItem = statList[0];
+                    statList.YOffset = 0;
                 }
                 if (currentItem != null)
                 {
