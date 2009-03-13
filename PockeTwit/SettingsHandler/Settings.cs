@@ -105,6 +105,8 @@ public static class ClientSettings
     #endregion Constructors 
 
     #region Properties (7) 
+    public static bool AutoScrollToTop { get; set; }
+    
     public static bool RunOnStartUp
     {
         get
@@ -213,6 +215,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AutoScrollToTop"]))
+            {
+                AutoScrollToTop = Boolean.Parse(ConfigurationSettings.AppSettings["AutoScrollToTop"]);
+            }
+            else
+            {
+                AutoScrollToTop = false;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["CacheDir"]))
             {
                 CacheDir = ConfigurationSettings.AppSettings["CacheDir"];
@@ -444,6 +454,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["HighQualityAvatars"] = HighQualityAvatars.ToString();
         ConfigurationSettings.AppSettings["UseSkweezer"] = UseSkweezer.ToString();
         ConfigurationSettings.AppSettings["PortalSize"] = PortalSize.ToString();
+        ConfigurationSettings.AppSettings["AutoScrollToTop"] = ClientSettings.AutoScrollToTop.ToString();
         if (ConfigurationSettings.AppSettings["UserName"] != null)
         {
             ConfigurationSettings.AppSettings.Remove("UserName");
