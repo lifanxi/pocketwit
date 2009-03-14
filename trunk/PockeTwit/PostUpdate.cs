@@ -516,22 +516,29 @@ namespace PockeTwit
 
         private IPictureService GetMediaService()
         {
-            if (ClientSettings.MediaService == "TwitPic")
-            {
-                SetPictureEventHandlers(TwitPic.Instance);
-                return TwitPic.Instance;
-            }
-            else if (ClientSettings.MediaService == "MobyPicture")
-            {
-                SetPictureEventHandlers(MobyPicture.Instance);
-                return MobyPicture.Instance;
-            }
-            else
-            {
-                //For default, use twitpic.
-                return TwitPic.Instance;
-            }
+            IPictureService service;
+            
+            service = PictureServiceFactory.Instance.GetServiceByName(ClientSettings.MediaService);
 
+            SetPictureEventHandlers(service);
+
+            return service;
+
+            //if (ClientSettings.MediaService == "TwitPic")
+            //{
+            //    SetPictureEventHandlers(TwitPic.Instance);
+            //    return TwitPic.Instance;
+            //}
+            //else if (ClientSettings.MediaService == "MobyPicture")
+            //{
+            //    SetPictureEventHandlers(MobyPicture.Instance);
+            //    return MobyPicture.Instance;
+            //}
+            //else
+            //{
+            //    //For default, use twitpic.
+            //    return TwitPic.Instance;
+            //}
         }
 
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
