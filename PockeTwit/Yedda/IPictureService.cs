@@ -88,8 +88,24 @@ namespace Yedda
         /// <returns>Local path for downloaded picture.</returns>
         void FetchPicture(string pictureURL);
 
+        /// <summary>
+        /// Check for possibility of getting the picture with current service.
+        /// </summary>
+        /// <param name="URL"></param>
+        /// <returns></returns>
+        bool CanFetchUrl(string URL);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         bool HasEventHandlersSet { get; set; }
-
-
+        bool UseDefaultFileName {  set; }
+        string DefaultFileName {  set; }
+        bool UseDefaultFilePath {  set; }
+        string DefaultFilePath {  set; }
+        string RootPath {  set; }
+        int ReadBufferSize { set; }
+        string ServiceName { get; }
     }
 }

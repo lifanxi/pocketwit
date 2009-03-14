@@ -18,13 +18,14 @@ namespace Yedda
         public event MessageReadyEventHandler MessageReady;
 
 
-        public bool HasEventHandlersSet { get; set; }
+        
 
         #endregion
 
         #region private properties
         private static volatile MobyPicture _instance;
         private static object syncRoot = new Object();
+        private const string SERVICE_NAME = "MobyPicture";
 
         private const string APPLICATION_NAME = "p0ck3tTTTTw";
         private const string API_URL = "http://api.mobypicture.com";
@@ -32,10 +33,16 @@ namespace Yedda
         private const string API_UPLOAD = "http://api.mobypicture.com/";
         private const string API_UPLOAD_POST = "http://api.mobypicture.com/";
         private const string API_GET_THUMB = "http://api.mobypicture.com/";  //The extra / for directly sticking the image-id on.
+        
         private const string API_SAVE_TO_PATH = "\\ArtCache\\www.mobypicture.com\\";
-        private const string PT_DEFAULT_FILENAME = "image1.jpg";
-        private const int PT_READ_BUFFER_SIZE = 512;
-        private const bool PT_USE_DEFAULT_FILENAME = true;
+        
+
+        private string PT_DEFAULT_FILENAME = "image1.jpg";
+        private string PT_DEFAULT_PATH = "ArtCache";
+        private string PT_ROOT_PATH = "";
+        private int PT_READ_BUFFER_SIZE = 512;
+        private bool PT_USE_DEFAULT_FILENAME = true;
+        private bool PT_USE_DEFAULT_PATH = true;
 
         #endregion
 
@@ -165,6 +172,68 @@ namespace Yedda
             } 
 
             
+        }
+
+        public bool CanFetchUrl(string URL)
+        {
+            const string siteMarker = "mobypicture";
+            string url = URL.ToLower();
+
+            return (url.IndexOf(siteMarker) >= 0);
+        }
+
+
+
+        public bool HasEventHandlersSet { get; set; }
+        public bool UseDefaultFileName 
+        {
+            set
+            {
+                PT_USE_DEFAULT_FILENAME = value;
+            }
+        }
+        public string DefaultFileName 
+        {
+            set
+            {
+                PT_DEFAULT_FILENAME = value;
+            } 
+        }
+        public bool UseDefaultFilePath 
+        {
+            set
+            {
+                PT_USE_DEFAULT_PATH = value;
+            } 
+        }
+        public string DefaultFilePath 
+        {
+            set
+            {
+                PT_DEFAULT_PATH = value;
+            } 
+        }
+        public string RootPath 
+        {
+            set
+            {
+                PT_ROOT_PATH = value;
+            } 
+        }
+        public int ReadBufferSize 
+        {
+            set
+            {
+                PT_READ_BUFFER_SIZE = value;
+            }
+        }
+
+        public string ServiceName 
+        {
+            get
+            {
+                return SERVICE_NAME;
+            }
         }
 
         #endregion
@@ -322,7 +391,7 @@ namespace Yedda
                         {
                             responseSize = 0;
                         }
-                        System.Threading.Thread.Sleep(100);
+                        System.Threading.Thread.Sleep(200);
                     }
                     dataStream.Close();
                 }
@@ -337,13 +406,13 @@ namespace Yedda
         /// </summary>
         /// <param name="imageId">Image ID</param>
         /// <returns>Path to save the picture in.</returns>
-        private static string GetPicturePath(string pictureURL)
+        private string GetPicturePath(string pictureURL)
         {
             #region argument check
 
             if (string.IsNullOrEmpty(pictureURL))
             {
-                return ClientSettings.AppPath + API_SAVE_TO_PATH + "\\" + PT_DEFAULT_FILENAME;
+               
             }
 
             #endregion
@@ -353,14 +422,23 @@ namespace Yedda
             int imageIdStartIndex = pictureURL.LastIndexOf('?') + 1;
             string imageId = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
 
+            string rootpath = string.Empty;
+            if (PT_USE_DEFAULT_PATH)
+            {
+                rootpath = Path.Combine(rootpath, PT_DEFAULT_PATH);
+            }
+            else
+            {
+                rootpath = Path.Combine(rootpath, API_SAVE_TO_PATH);
+            }
+            if (!Directory.Exists(rootpath))
+            {
+                Directory.CreateDirectory(rootpath);
+            }
+
             if (PT_USE_DEFAULT_FILENAME)
             {
-                picturePath = ClientSettings.AppPath + API_SAVE_TO_PATH;
-                if (!Directory.Exists(picturePath))
-                {
-                    Directory.CreateDirectory(picturePath);
-                }
-                picturePath = picturePath + PT_DEFAULT_FILENAME;
+                picturePath = rootpath + "\\" + PT_DEFAULT_FILENAME;
                 if (File.Exists(picturePath))
                 {
                     File.Delete(picturePath);
@@ -369,14 +447,14 @@ namespace Yedda
             else
             {
                 string firstChar = imageId.Substring(0, 1);
-                picturePath = ClientSettings.AppPath + API_SAVE_TO_PATH + firstChar + "\\";
+                picturePath = Path.Combine( rootpath, firstChar);
 
                 if (!System.IO.Directory.Exists(picturePath))
                 {
                     System.IO.Directory.CreateDirectory(picturePath);
                 }
 
-                picturePath = picturePath + imageId + ".jpg";
+                picturePath = picturePath + "\\" + imageId + ".jpg";
             }
             return picturePath;
         }
@@ -388,7 +466,7 @@ namespace Yedda
         /// <param name="pictureData"></param>
         /// <param name="bufferSize"></param>
         /// <returns></returns>
-        private static bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
+        private bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
         {
             #region argument check
             if (String.IsNullOrEmpty(picturePath))

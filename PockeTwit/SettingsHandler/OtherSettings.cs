@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Yedda;
 
 namespace PockeTwit
 {
@@ -49,7 +50,16 @@ namespace PockeTwit
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
-            ClientSettings.RunOnStartUp = chkStartup.Checked;            if (string.IsNullOrEmpty(cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString()))            {                ClientSettings.MediaService = "TwitPic";            }            else            {                ClientSettings.MediaService = cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString();            }            if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
+            ClientSettings.RunOnStartUp = chkStartup.Checked;            
+            if (string.IsNullOrEmpty(cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString()))            
+            { 
+                ClientSettings.MediaService = "TwitPic";            
+            }            
+            else            
+            {                
+                ClientSettings.MediaService = cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString();           
+            }            
+            if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
                 ClientSettings.UpdateMinutes = int.Parse(txtUpdate.Text, format);
@@ -95,13 +105,20 @@ namespace PockeTwit
             chkTranslate.Checked = ClientSettings.AutoTranslate;
             txtCaheDir.Text = ClientSettings.CacheDir;
             setMediaService(ClientSettings.MediaService);
-            cmbMediaService.SelectedValue = 
+            
             chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;
             this.DialogResult = DialogResult.Cancel;
         }
 
         private void setMediaService(string value)
         {
+            foreach (string serviceName in PictureServiceFactory.Instance.GetServiceNames())
+            {
+                cmbMediaService.Items.Add(serviceName);
+            }
+            
+            
+            
             foreach (string comboValue in cmbMediaService.Items)
             {
                 if (comboValue == value)

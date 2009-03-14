@@ -25,14 +25,21 @@ namespace Yedda
 
         private static volatile TwitPic _instance;
         private static object syncRoot = new Object();
+        private const string SERVICE_NAME = "TwitPic";
 
         private const string API_UPLOAD = "http://twitpic.com/api/upload";
         private const string API_UPLOAD_POST = "http://twitpic.com/api/uploadAndPost";
         private const string API_SHOW_THUMB = "http://twitpic.com/show/thumb/";  //The extra / for directly sticking the image-id on.
         private const string API_SAVE_TO_PATH = "\\ArtCache\\www.twitpic.com\\";
-        private const string PT_DEFAULT_FILENAME = "image1.jpg";
-        private const int PT_READ_BUFFER_SIZE = 512;
-        private const bool PT_USE_DEFAULT_FILENAME = true;
+
+
+        private string PT_DEFAULT_FILENAME = string.Empty;
+        private int PT_READ_BUFFER_SIZE = 512;
+        private bool PT_USE_DEFAULT_FILENAME = true;
+        private bool PT_USE_DEFAULT_PATH = true;
+        private string PT_DEFAULT_PATH = string.Empty;
+        private string PT_ROOT_PATH = string.Empty;
+
 
         #endregion
 
@@ -161,6 +168,64 @@ namespace Yedda
             } 
         }
 
+        public bool CanFetchUrl(string URL)
+        {
+            const string siteMarker = "twitpic";
+            string url = URL.ToLower();
+
+            return (url.IndexOf(siteMarker) >= 0);
+        }
+
+        public bool UseDefaultFileName
+        {
+            set
+            {
+                PT_USE_DEFAULT_FILENAME = value;
+            }
+        }
+        public string DefaultFileName
+        {
+            set
+            {
+                PT_DEFAULT_FILENAME = value;
+            }
+        }
+        public bool UseDefaultFilePath
+        {
+            set
+            {
+                PT_USE_DEFAULT_PATH = value;
+            }
+        }
+        public string DefaultFilePath
+        {
+            set
+            {
+                PT_DEFAULT_PATH = value;
+            }
+        }
+        public string RootPath
+        {
+            set
+            {
+                PT_ROOT_PATH = value;
+            }
+        }
+        public int ReadBufferSize
+        {
+            set
+            {
+                PT_READ_BUFFER_SIZE = value;
+            }
+        }
+
+        public string ServiceName
+        {
+            get
+            {
+                return SERVICE_NAME;
+            }
+        }
 
         #endregion
 
@@ -263,7 +328,7 @@ namespace Yedda
             return pictureFileName;
         }
 
-        private static bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
+        private bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
         {
             #region argument check
             if (String.IsNullOrEmpty(picturePath))
@@ -305,7 +370,7 @@ namespace Yedda
         /// </summary>
         /// <param name="imageId">Image ID</param>
         /// <returns>Path to save the picture in.</returns>
-        private static string GetPicturePath(string imageId)
+        private string GetPicturePath(string imageId)
         {
             #region argument check
 
