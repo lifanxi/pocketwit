@@ -46,13 +46,15 @@ namespace PockeTwit
             {
                 int controlbigSide = pictureBox1.Image.Width > pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
                 int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
-                //int imageScaleSide = pictureBox1.Width > pictureBox1.Height ? imageToShow.Width : imageToShow.Height;
                 int controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
 
                 decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
 
+                int leftOfImage = (pictureBox1.Image.Width - (int)(imageToShow.Width * scaleFactor)) / 2;
+                int topOfImage = (pictureBox1.Image.Height - (int)(imageToShow.Height * scaleFactor)) / 2;
+
+                Rectangle destRect = new Rectangle(leftOfImage, topOfImage, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
                 
-                Rectangle destRect = new Rectangle(0, 0, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
                 using (Graphics g = Graphics.FromImage(pictureBox1.Image))
                 {
                     g.Clear(ClientSettings.BackColor);
