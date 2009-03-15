@@ -11,7 +11,6 @@ namespace PockeTwit
 {
     public partial class ImagePreview : Form
     {
-        private Bitmap imageToShow;
         private string fullURL;
         public ImagePreview(string ImageToShow, string FullURL)
         {
@@ -23,19 +22,24 @@ namespace PockeTwit
             }
 
             fullURL = FullURL;
-            imageToShow = new Bitmap(ImageToShow);
-            this.pictureBox1.Image = imageToShow;
-            
+            using (Bitmap imageToShow = new Bitmap(ImageToShow))
+            {
+                this.pictureBox1.Image = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
+                using (Graphics g = Graphics.FromImage(pictureBox1.Image))
+                {
+                    g.DrawImage(imageToShow, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height), new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
+                }
+            }
         }
 
         private void menuItem1_Click(object sender, EventArgs e)
         {
-            imageToShow.Dispose();
+            pictureBox1.Image.Dispose();
             this.Close();
         }
         protected override void OnClosed(EventArgs e)
         {
-            imageToShow.Dispose();
+            pictureBox1.Image.Dispose();
             base.OnClosed(e);
             
         }
@@ -46,7 +50,7 @@ namespace PockeTwit
             p.StartInfo.FileName = fullURL;
             p.StartInfo.UseShellExecute = true;
             p.Start();
-            imageToShow.Dispose();
+            pictureBox1.Image.Dispose();
             this.Close();
         }
     }
