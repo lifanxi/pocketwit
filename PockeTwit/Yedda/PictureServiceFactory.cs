@@ -58,7 +58,7 @@ namespace Yedda
             //Adding services hardcoded, maybe something like reflection could be used?
             serviceList.Add(TwitPic.Instance);
             serviceList.Add(MobyPicture.Instance);
-
+            serviceList.Add(yFrog.Instance);
             foreach (IPictureService service in serviceList)
             {
                 service.ReadBufferSize = 512;
