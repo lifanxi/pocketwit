@@ -1332,15 +1332,16 @@ namespace PockeTwit
             }
             else
             {
+
+
                 Yedda.IPictureService p = (Yedda.IPictureService)sender;
                 p.DownloadFinish -= new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
                 p.ErrorOccured -= new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
 
                 Cursor.Current = Cursors.Default;
-                System.Diagnostics.Process viewer = new System.Diagnostics.Process();
-                viewer.StartInfo.FileName = eventArgs.ReturnMessage;
-                viewer.StartInfo.UseShellExecute = true;
-                viewer.Start();
+
+                ImagePreview ip = new ImagePreview(eventArgs.ReturnMessage, eventArgs.PictureFileName);
+                ip.ShowDialog();
             }
         }
 

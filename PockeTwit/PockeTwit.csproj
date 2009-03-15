@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -268,6 +268,9 @@
       <DependentUpon>EmailStatusForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ImagePreview.resx">
+      <DependentUpon>ImagePreview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Marker.png" />
     <Content Include="Themes\HighlightBlue\wait24trans.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -460,6 +463,12 @@
     <Compile Include="FingerUI\Menu\SideMenuItem.cs" />
     <Compile Include="FingerUI\Portal.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ImagePreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImagePreview.Designer.cs">
+      <DependentUpon>ImagePreview.cs</DependentUpon>
     </Compile>
     <Compile Include="OpenNetCF\LED.cs" />
     <Compile Include="OpenNetCF\Notify.cs" />
