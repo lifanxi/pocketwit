@@ -12,36 +12,59 @@ namespace PockeTwit
     public partial class ImagePreview : Form
     {
         private string fullURL;
+        private string imagePathToShow = "";
         public ImagePreview(string ImageToShow, string FullURL)
         {
             InitializeComponent();
+            this.pictureBox1.Image = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
             }
 
+            pictureBox1.Resize += new EventHandler(pictureBox1_Resize);
             fullURL = FullURL;
-            using (Bitmap imageToShow = new Bitmap(ImageToShow))
+            imagePathToShow = ImageToShow;
+            DrawPreview();
+        }
+
+        void pictureBox1_Resize(object sender, EventArgs e)
+        {
+            this.pictureBox1.Image.Dispose();
+            this.pictureBox1.Image = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
+            DrawPreview();
+        }
+
+        private void DrawPreview()
+        {
+            if (string.IsNullOrEmpty(imagePathToShow))
             {
-                this.pictureBox1.Image = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
+                return;
+            }
+            using (Bitmap imageToShow = new Bitmap(imagePathToShow))
+            {
+                int controlbigSide = pictureBox1.Image.Width > pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
+                int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
+                //int imageScaleSide = pictureBox1.Width > pictureBox1.Height ? imageToShow.Width : imageToShow.Height;
+                int controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
+
+                decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
+
+                
+                Rectangle destRect = new Rectangle(0, 0, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
                 using (Graphics g = Graphics.FromImage(pictureBox1.Image))
                 {
-                    g.DrawImage(imageToShow, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height), new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
+                    g.Clear(ClientSettings.BackColor);
+                    g.DrawImage(imageToShow, destRect, new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
                 }
+
             }
         }
 
         private void menuItem1_Click(object sender, EventArgs e)
         {
-            pictureBox1.Image.Dispose();
             this.Close();
-        }
-        protected override void OnClosed(EventArgs e)
-        {
-            pictureBox1.Image.Dispose();
-            base.OnClosed(e);
-            
         }
 
         private void menuItem2_Click(object sender, EventArgs e)
@@ -50,7 +73,6 @@ namespace PockeTwit
             p.StartInfo.FileName = fullURL;
             p.StartInfo.UseShellExecute = true;
             p.Start();
-            pictureBox1.Image.Dispose();
             this.Close();
         }
     }
