@@ -1265,6 +1265,17 @@ namespace PockeTwit
         {
             if (TextClicked.StartsWith("http"))
             {
+                if (Yedda.PictureServiceFactory.Instance.FetchServiceAvailable(TextClicked))
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    Yedda.IPictureService p = Yedda.PictureServiceFactory.Instance.LocateFetchService(TextClicked);
+                    p.FetchPicture(TextClicked);
+                    p.DownloadFinish += new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
+                    p.ErrorOccured += new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+                    return;
+                }
+                
+
                 System.Diagnostics.ProcessStartInfo pi = new System.Diagnostics.ProcessStartInfo();
                 if (ClientSettings.UseSkweezer)
                 {
@@ -1291,6 +1302,45 @@ namespace PockeTwit
             else if (TextClicked.StartsWith("@"))
             {
                 SwitchToUserTimeLine(TextClicked);
+            }
+        }
+
+        void p_ErrorOccured(object sender, Yedda.PictureServiceEventArgs eventArgs)
+        {
+            if (InvokeRequired)
+            {
+                delPictureDone d = new delPictureDone(p_ErrorOccured);
+                this.Invoke(d, sender, eventArgs);
+            }
+            else
+            {
+                Yedda.IPictureService p = (Yedda.IPictureService)sender;
+                p.DownloadFinish -= new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
+                p.ErrorOccured -= new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Unable to fetch picture.  You may want to try again.");
+            }
+        }
+
+        delegate void delPictureDone(object sender, Yedda.PictureServiceEventArgs eventArgs);
+        void p_DownloadFinish(object sender, Yedda.PictureServiceEventArgs eventArgs)
+        {
+            if (InvokeRequired)
+            {
+                delPictureDone d = new delPictureDone(p_DownloadFinish);
+                this.Invoke(d, sender, eventArgs);
+            }
+            else
+            {
+                Yedda.IPictureService p = (Yedda.IPictureService)sender;
+                p.DownloadFinish -= new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
+                p.ErrorOccured -= new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+
+                Cursor.Current = Cursors.Default;
+                System.Diagnostics.Process viewer = new System.Diagnostics.Process();
+                viewer.StartInfo.FileName = eventArgs.ReturnMessage;
+                viewer.StartInfo.UseShellExecute = true;
+                viewer.Start();
             }
         }
 
