@@ -80,7 +80,6 @@ namespace PockeTwit
         #region�Constructors�(1)�
         public TweetList(bool InBackGround)
         {
-            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
             StartBackground = InBackGround;
             Microsoft.WindowsCE.Forms.MobileDevice.Hibernate += new EventHandler(MobileDevice_Hibernate);
             Program.StartUp = DateTime.Now;
