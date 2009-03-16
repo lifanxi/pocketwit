@@ -255,6 +255,7 @@ namespace PockeTwit
             pictureFromStorage.Visible = false;
             pictureLocation.Visible = false;
             pictureURL.Visible = false;
+            picAddressBook.Visible = false;
             this.menuExist = new MenuItem();
             menuExist.Text = "Existing Picture";
             menuExist.Click += new EventHandler(menuExist_Click);
@@ -828,6 +829,23 @@ namespace PockeTwit
         }
 
         #endregion
+
+        private void txtStatusUpdate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '@')
+            {
+                userListControl1.Visible = true;
+                userListControl1.Focus();
+            }
+            else if(e.KeyChar == ' ')
+            {
+                if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 1, 1) == "d")
+                {
+                    userListControl1.Visible = true;
+                    userListControl1.Focus();
+                }
+            }
+        }
 
         
 
