@@ -119,7 +119,7 @@ namespace PockeTwit
             LocationFinder.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
 
             this.txtStatusUpdate.Focus();
-            
+            userListControl1.ItemChosen += new userListControl.delItemChose(userListControl1_ItemChosen);
         }
 
         private void SetupTouchScreen()
@@ -129,6 +129,8 @@ namespace PockeTwit
             this.pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
             this.pictureURL.Click += new EventHandler(pictureURL_Click);
             this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
+
+            this.picAddressBook.Click += new EventHandler(picAddressBook_Click);
 
             this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
 
@@ -144,6 +146,20 @@ namespace PockeTwit
 
             CopyItem.Click += new EventHandler(CopyItem_Click);
             PasteItem.Click += new EventHandler(PasteItem_Click);
+
+        }
+
+        void picAddressBook_Click(object sender, EventArgs e)
+        {
+            userListControl1.Visible = true;
+            userListControl1.Focus();
+        }
+
+        void userListControl1_ItemChosen(string itemText)
+        {
+            txtStatusUpdate.Text = txtStatusUpdate.Text + itemText;
+            txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+            txtStatusUpdate.Focus();
         }
 
         void PasteItem_Click(object sender, EventArgs e)
@@ -230,6 +246,7 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuURL;
         private System.Windows.Forms.MenuItem menuGPS;
         private System.Windows.Forms.MenuItem menuGPSInsert;
+        private System.Windows.Forms.MenuItem menuAddressBook;
         private System.Windows.Forms.MenuItem menuItem1;
         private void SmartPhoneMenu()
         {
@@ -259,6 +276,11 @@ namespace PockeTwit
             menuGPSInsert.Click += new EventHandler(menuGPSInsert_Click);
             menuGPSInsert.Enabled = false;
 
+            this.menuAddressBook = new MenuItem();
+            menuAddressBook.Text = "Address Book";
+            menuAddressBook.Click += new EventHandler(menuAddressBook_Click);
+            menuAddressBook.Enabled = true;
+
             this.PasteItem = new MenuItem();
             this.PasteItem.Text = "Paste";
             PasteItem.Click += new EventHandler(PasteItem_Click);
@@ -267,6 +289,7 @@ namespace PockeTwit
             this.menuItem1.Text = "Action";
 
             this.menuItem1.MenuItems.Add(this.menuSubmit);
+            this.menuItem1.MenuItems.Add(menuAddressBook);
             this.menuItem1.MenuItems.Add(PasteItem);
             this.menuItem1.MenuItems.Add(menuURL);
             this.menuItem1.MenuItems.Add(menuExist);
@@ -274,6 +297,12 @@ namespace PockeTwit
             this.menuItem1.MenuItems.Add(menuGPS);
             this.menuItem1.MenuItems.Add(menuGPSInsert);
             this.mainMenu1.MenuItems.Add(menuItem1);
+        }
+
+        void menuAddressBook_Click(object sender, EventArgs e)
+        {
+            userListControl1.Visible = true;
+            userListControl1.Focus();
         }
 
         void menuGPSInsert_Click(object sender, EventArgs e)
@@ -324,6 +353,7 @@ namespace PockeTwit
             this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
             this.pictureURL.Image = new Bitmap(ClientSettings.IconsFolder() + "url.png");
             this.pictureLocation.Image = new Bitmap(ClientSettings.IconsFolder() + "map.png");
+            this.picAddressBook.Image = new Bitmap(ClientSettings.IconsFolder() + "address.png");
         }
 
         private void PopulateAccountList()

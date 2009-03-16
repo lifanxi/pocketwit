@@ -42,6 +42,8 @@ namespace PockeTwit
             this.lblCharsLeft = new System.Windows.Forms.Label();
             this.pictureLocation = new System.Windows.Forms.PictureBox();
             this.lblGPS = new System.Windows.Forms.Label();
+            this.picAddressBook = new System.Windows.Forms.PictureBox();
+            this.userListControl1 = new PockeTwit.userListControl();
             this.SuspendLayout();
             // 
             // menuCancel
@@ -114,18 +116,36 @@ namespace PockeTwit
             // 
             // pictureLocation
             // 
-            this.pictureLocation.Location = new System.Drawing.Point(97, 40);
+            this.pictureLocation.Location = new System.Drawing.Point(128, 40);
             this.pictureLocation.Name = "pictureLocation";
             this.pictureLocation.Size = new System.Drawing.Size(25, 25);
             this.pictureLocation.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // lblGPS
             // 
-            this.lblGPS.Location = new System.Drawing.Point(97, 45);
+            this.lblGPS.Location = new System.Drawing.Point(128, 45);
             this.lblGPS.Name = "lblGPS";
             this.lblGPS.Size = new System.Drawing.Size(95, 20);
             this.lblGPS.Text = "Seeking GPS";
             this.lblGPS.Visible = false;
+            // 
+            // picAddressBook
+            // 
+            this.picAddressBook.Location = new System.Drawing.Point(97, 40);
+            this.picAddressBook.Name = "picAddressBook";
+            this.picAddressBook.Size = new System.Drawing.Size(25, 25);
+            this.picAddressBook.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            // 
+            // userListControl1
+            // 
+            this.userListControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.userListControl1.Location = new System.Drawing.Point(42, 68);
+            this.userListControl1.Name = "userListControl1";
+            this.userListControl1.Size = new System.Drawing.Size(150, 166);
+            this.userListControl1.TabIndex = 12;
+            this.userListControl1.Visible = false;
             // 
             // PostUpdate
             // 
@@ -133,6 +153,8 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.picAddressBook);
+            this.Controls.Add(this.userListControl1);
             this.Controls.Add(this.lblGPS);
             this.Controls.Add(this.lblCharsLeft);
             this.Controls.Add(this.pictureLocation);
@@ -161,6 +183,8 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem menuCancel;
         private System.Windows.Forms.Label lblCharsLeft;
         private System.Windows.Forms.PictureBox pictureLocation;
-        private System.Windows.Forms.Label lblGPS;
+        private userListControl userListControl1;
+        private Label lblGPS;
+        private PictureBox picAddressBook;
     }
 }
