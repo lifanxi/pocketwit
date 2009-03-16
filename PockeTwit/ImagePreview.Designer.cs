@@ -31,8 +31,10 @@
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -45,6 +47,13 @@
             this.menuItem1.Text = "Dismiss";
             this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
             // 
+            // menuItem2
+            // 
+            this.menuItem2.MenuItems.Add(this.menuItem3);
+            this.menuItem2.MenuItems.Add(this.menuItem4);
+            this.menuItem2.Text = "View";
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
@@ -54,10 +63,15 @@
             this.pictureBox1.Size = new System.Drawing.Size(240, 268);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             // 
-            // menuItem2
+            // menuItem3
             // 
-            this.menuItem2.Text = "Launch URL";
-            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            this.menuItem3.Text = "Image Viewer";
+            this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Text = "Launch URL";
+            this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click);
             // 
             // ImagePreview
             // 
@@ -68,7 +82,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Menu = this.mainMenu1;
             this.Name = "ImagePreview";
-            this.Text = "ImagePreview";
+            this.Text = "Image Preview";
             this.ResumeLayout(false);
 
         }
@@ -78,5 +92,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem menuItem4;
     }
 }
