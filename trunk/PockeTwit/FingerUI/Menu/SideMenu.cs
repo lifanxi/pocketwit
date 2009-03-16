@@ -545,7 +545,10 @@ namespace FingerUI
                             m_backBuffer.DrawLine(whitePen, _Width-1, 0, _Width- 1, this.Height);
                         }
                     }
-                    if (_animationStep == 0) { _animationStep = -1; }
+                    if (_animationStep == 0) 
+                    {
+                        _animationStep = -1; 
+                    }
                     if (_animationStep > 0)
                     {
                         _animationStep = _animationStep - 2;
@@ -687,9 +690,16 @@ namespace FingerUI
         
         private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
         {
-                        int i = 0;
+            int i = 0;
             int OffSet = 0;
-            OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
+            if (_animationStep >= 0)
+            {
+                OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
+            }
+            else
+            {
+                OffSet = ClientSettings.TextSize;
+            }
             int ItemsCount = Item.SubMenuItems.Count;
             TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }

@@ -71,11 +71,23 @@ namespace PockeTwit
 
         private void menuItem2_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        private void menuItem4_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process p = new System.Diagnostics.Process();
             p.StartInfo.FileName = fullURL;
             p.StartInfo.UseShellExecute = true;
             p.Start();
-            this.Close();
+        }
+
+        private void menuItem3_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = imagePathToShow;
+            p.StartInfo.UseShellExecute = true;
+            p.Start();
         }
     }
 }
