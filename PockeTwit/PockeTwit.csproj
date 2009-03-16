@@ -272,16 +272,31 @@
       <DependentUpon>ImagePreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Marker.png" />
+    <Content Include="Themes\HighlightBlue\address.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\HighlightBlue\wait24trans.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Themes\HighlightGreen\address.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Themes\HighlightGreen\wait24trans.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Themes\HighlightRed\address.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\HighlightRed\wait24trans.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Themes\Light\address.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\Light\wait24trans.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Themes\NoGradient\address.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Themes\NoGradient\existingimage.png">
@@ -362,6 +377,9 @@
     <Content Include="Themes\NoGradient\wait24trans.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Themes\Original\address.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Themes\Original\map.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -427,6 +445,9 @@
     <EmbeddedResource Include="SettingsHandler\MainSettings.resx">
       <DependentUpon>MainSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="userListControl.resx">
+      <DependentUpon>userListControl.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="PockeTwit.ico" />
     <Content Include="Themes\Original\existingimage.png">
@@ -525,6 +546,12 @@
     <Compile Include="TiledMaps\userMapDrawable.cs" />
     <Compile Include="TiledMaps\userMapOverlay.cs" />
     <Compile Include="TimeLines\LastSelectedItems.cs" />
+    <Compile Include="userListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="userListControl.Designer.cs">
+      <DependentUpon>userListControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Yedda\yFrog.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
