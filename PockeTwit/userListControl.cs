@@ -80,6 +80,15 @@ namespace PockeTwit
 
         private void txtInput_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (e.KeyChar == '\b')
+            {
+                if (string.IsNullOrEmpty(txtInput.Text))
+                {
+                    this.Visible = false;
+                    ItemChosen("");
+                    e.Handled = true;
+                }
+            }
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)

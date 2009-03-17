@@ -834,7 +834,7 @@ namespace PockeTwit
         {
             if ((e.KeyChar >= 'a' && e.KeyChar <= 'z') || (e.KeyChar >= 'A' && e.KeyChar <= 'Z'))
             {
-                if (txtStatusUpdate.Text.Length >= 1)
+                if (txtStatusUpdate.SelectionStart >= 1)
                 {
                     if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 1, 1) == "@")
                     {
@@ -844,7 +844,7 @@ namespace PockeTwit
                         e.Handled = true;
                     }
                 }
-                if (txtStatusUpdate.Text.Length >= 2)
+                if (txtStatusUpdate.SelectionStart >= 2)
                 {
                     if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 2, 2) == "d ")
                     {
