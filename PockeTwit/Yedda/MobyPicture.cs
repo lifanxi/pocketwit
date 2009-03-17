@@ -181,9 +181,6 @@ namespace Yedda
 
             return (url.IndexOf(siteMarker) >= 0);
         }
-
-
-
         public bool HasEventHandlersSet { get; set; }
         public bool UseDefaultFileName 
         {
@@ -425,11 +422,11 @@ namespace Yedda
             string rootpath = string.Empty;
             if (PT_USE_DEFAULT_PATH)
             {
-                rootpath = Path.Combine(rootpath, PT_DEFAULT_PATH);
+                rootpath = Path.Combine(PT_ROOT_PATH, PT_DEFAULT_PATH);
             }
             else
             {
-                rootpath = Path.Combine(rootpath, API_SAVE_TO_PATH);
+                rootpath = Path.Combine(PT_ROOT_PATH, API_SAVE_TO_PATH);
             }
             if (!Directory.Exists(rootpath))
             {
@@ -447,13 +444,11 @@ namespace Yedda
             else
             {
                 string firstChar = imageId.Substring(0, 1);
-                picturePath = Path.Combine( rootpath, firstChar);
-
+                picturePath = Path.Combine(rootpath, firstChar);
                 if (!System.IO.Directory.Exists(picturePath))
                 {
                     System.IO.Directory.CreateDirectory(picturePath);
                 }
-
                 picturePath = picturePath + "\\" + imageId + ".jpg";
             }
             return picturePath;

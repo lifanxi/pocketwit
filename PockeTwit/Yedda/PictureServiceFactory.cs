@@ -17,7 +17,7 @@ namespace Yedda
         
         #endregion
 
-         #region constructor
+        #region constructor
         /// <summary>
         /// Private constructor for usage in singleton.
         /// </summary>
@@ -59,6 +59,7 @@ namespace Yedda
             serviceList.Add(TwitPic.Instance);
             serviceList.Add(MobyPicture.Instance);
             serviceList.Add(yFrog.Instance);
+            
             foreach (IPictureService service in serviceList)
             {
                 service.ReadBufferSize = 512;
