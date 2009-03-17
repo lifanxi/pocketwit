@@ -445,7 +445,7 @@ namespace PockeTwit
 
                     uploadedPictureOrigin = "file";
                     uploadingPicture = true;
-                    pictureService = GetMediaService();
+                    pictureService = GetMediaService();                     
                     using (PicturePostObject ppo = new PicturePostObject())
                     {
                         ppo.Filename = s.FileName;
@@ -482,8 +482,8 @@ namespace PockeTwit
         private void pictureService_ErrorOccured(object sender, PictureServiceEventArgs eventArgs)
         {
             //Show the error message
-            MessageBox.Show(eventArgs.ErrorMessage);
-
+            UpdatePictureData(string.Empty, false);
+            
             if (uploadedPictureOrigin == "file")
             {
                 AddPictureToForm(ClientSettings.IconsFolder() + "existingimage.png", pictureFromStorage);
@@ -492,7 +492,7 @@ namespace PockeTwit
             {
                 AddPictureToForm(ClientSettings.IconsFolder() + "takepicture.png", pictureFromCamers);
             }
-            UpdatePictureData(string.Empty, false);
+            MessageBox.Show(eventArgs.ErrorMessage);
         }
 
         private void pictureService_MessageReady(object sender, PictureServiceEventArgs eventArgs)
@@ -522,6 +522,7 @@ namespace PockeTwit
             MessageBox.Show(eventArgs.ReturnMessage);
 
             //Reset up and download settings from before uploading or downloading
+            UpdatePictureData(string.Empty, false);
 
         }
 
@@ -555,21 +556,7 @@ namespace PockeTwit
 
             return service;
 
-            //if (ClientSettings.MediaService == "TwitPic")
-            //{
-            //    SetPictureEventHandlers(TwitPic.Instance);
-            //    return TwitPic.Instance;
-            //}
-            //else if (ClientSettings.MediaService == "MobyPicture")
-            //{
-            //    SetPictureEventHandlers(MobyPicture.Instance);
-            //    return MobyPicture.Instance;
-            //}
-            //else
-            //{
-            //    //For default, use twitpic.
-            //    return TwitPic.Instance;
-            //}
+            
         }
 
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
@@ -609,7 +596,9 @@ namespace PockeTwit
                 try
                 {
                     uploadedPictureURL = pictureURL;
-                    uploadingPicture = false;
+                    uploadingPicture = uploadingPicture;
+                    //when uploading picture, it's not used.
+                    pictureUsed = !uploadingPicture;
                 }
                 catch (OutOfMemoryException)
                 {
@@ -723,6 +712,8 @@ namespace PockeTwit
         }
         private void menuCancel_Click(object sender, EventArgs e)
         {
+            UpdatePictureData(string.Empty, false);
+
             if (!string.IsNullOrEmpty(this.txtStatusUpdate.Text))
             {
                 if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
@@ -809,13 +800,14 @@ namespace PockeTwit
                 }
             }
             
-            
+            UpdatePictureData(string.Empty, false);
             Program.LastStatus = this.StatusText;
 
             bool Success = PostTheUpdate();
             Cursor.Current = Cursors.Default;
             if (Success)
             {
+                UpdatePictureData(string.Empty, false);
                 if (_StandAlone)
                 {
                     this.Close();
