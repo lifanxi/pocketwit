@@ -832,8 +832,36 @@ namespace PockeTwit
 
         private void txtStatusUpdate_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if ((e.KeyChar >= 'a' && e.KeyChar <= 'z') || (e.KeyChar >= 'A' && e.KeyChar <= 'Z'))
+            {
+                if (txtStatusUpdate.Text.Length >= 1)
+                {
+                    if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 1, 1) == "@")
+                    {
+                        userListControl1.inputText = e.KeyChar.ToString();
+                        userListControl1.Visible = true;
+                        userListControl1.Focus();
+                        e.Handled = true;
+                    }
+                }
+                if (txtStatusUpdate.Text.Length >= 2)
+                {
+                    if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 2, 2) == "d ")
+                    {
+                        if (txtStatusUpdate.Text.Length == 2 || txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 3, 1) == " ")
+                        {
+                            userListControl1.inputText = e.KeyChar.ToString();
+                            userListControl1.Visible = true;
+                            userListControl1.Focus();
+                            e.Handled = true;
+                        }
+                    }
+                }
+            }
+            /*
             if (e.KeyChar == '@')
             {
+
                 userListControl1.Visible = true;
                 userListControl1.Focus();
             }
@@ -845,6 +873,7 @@ namespace PockeTwit
                     userListControl1.Focus();
                 }
             }
+             */
         }
 
         

@@ -30,6 +30,7 @@ namespace PockeTwit
         public static TiledMaps.WinCEImagingBitmap mapMarkerImage;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
         private static List<string> BadURLs = new List<string>();
+        private static List<string> BadUsers = new List<string>();
         public static string CacheFolder;
         private static System.Threading.Thread WorkerThread;
         static ThrottledArtGrabber()
@@ -98,6 +99,13 @@ namespace PockeTwit
                     return new Bitmap(UnknownArt);
                 }
             }
+            lock (BadUsers)
+            {
+                if (BadUsers.Contains(user))
+                {
+                    return new Bitmap(UnknownArt);
+                }
+            }
                         
             if (!System.IO.File.Exists(ArtName + ".ID"))
             {
@@ -118,6 +126,7 @@ namespace PockeTwit
                     {
                         ArtRequest r = new ArtRequest(user, url);
                         QueueRequest(r);
+                        BadUsers.Add(user);
                         return new Bitmap(UnknownArt);
                     }
                     else
