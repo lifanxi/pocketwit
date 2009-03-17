@@ -15,10 +15,20 @@ namespace PockeTwit
         public delegate void delItemChose(string itemText);
         public event delItemChose ItemChosen = delegate { };
         private DeviceType dt = DetectDevice.DeviceType;
+
         public userListControl()
         {
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
+        }
+
+        public string inputText
+        {
+            set
+            {
+                txtInput.Text = value;
+                txtInput.SelectionStart = txtInput.Text.Length;
+            }
         }
 
         private void txtInput_TextChanged(object sender, EventArgs e)
