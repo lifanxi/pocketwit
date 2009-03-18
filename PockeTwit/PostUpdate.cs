@@ -397,7 +397,7 @@ namespace PockeTwit
                             {
                                 this.pictureFromStorage.Visible = false;
                             }
-                            AddPictureToForm(ClientSettings.IconsFolder() + "wait24trans.gif", pictureFromCamers);
+                            AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
                             //AddPictureToForm(c.FileName, pictureFromCamers);
                             uploadedPictureOrigin = "camera";
                             uploadingPicture = true;
@@ -440,7 +440,7 @@ namespace PockeTwit
                     {
                         this.pictureFromCamers.Visible = false;
                     }
-                    AddPictureToForm(ClientSettings.IconsFolder() + "wait24trans.gif", pictureFromStorage);
+                    AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
                     //AddPictureToForm(s.FileName, pictureFromStorage);
 
                     uploadedPictureOrigin = "file";
