@@ -55,13 +55,14 @@ namespace PockeTwit
                     LinkLabel lblItem = new LinkLabel();
                     lblItem.Text = Name;
                     lblItem.Top = top;
+                    lblItem.Height = ClientSettings.TextSize + 10;
                     lblItem.Width = this.Width;
                     lblItem.Click += new EventHandler(lblItem_Click);
                     lblItem.Font = ClientSettings.TextFont;
                     lblItem.ForeColor = ClientSettings.ForeColor;
 
                     this.Controls.Add(lblItem);
-                    top = top + lblItem.Height;
+                    top = top + ClientSettings.TextSize + 10;
                     VisibleItems.Add(lblItem);
                     
                 }
