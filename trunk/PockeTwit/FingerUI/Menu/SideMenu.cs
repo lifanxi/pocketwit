@@ -35,6 +35,10 @@ namespace FingerUI
                 {
                     if (_ExpandedItem != null)
                     {
+                        ExpandedItem.Expanded = false;
+                        IsDirty = true;
+                        NeedRedraw();
+
                         _animationColor = ClientSettings.DimmedColor;
                         isFading = false;
                         _animationStep = 6;
