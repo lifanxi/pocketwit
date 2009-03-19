@@ -638,7 +638,7 @@ namespace FingerUI
                 }
                 if (size.Width < textBounds.Width)
                 {
-                    string line = CurrentLine.TrimStart(new char[] { ' '});
+                    string line = CurrentLine.TrimStart(new char[] { ' ' });
                     Tweet.SplitLines.Add(line);
                     FindClickables(line, g, 0);
                 }
@@ -653,7 +653,8 @@ namespace FingerUI
                     bMulti = false;
                     foreach (string word in Words)
                     {
-                        newString.Append(word + ' ');
+                        newString.Append(word);
+                        newString.Append(" ");
                         if (g.MeasureString(newString.ToString(), ClientSettings.TextFont).Width > textBounds.Width)
                         {
                             if (bMulti && lastBreak == 0)
@@ -743,7 +744,29 @@ namespace FingerUI
         }
         private void FindClickables(string Line, Graphics g, int lineOffSet)
         {
+
+            //Still need to handle "wrapped" links
             if (!ClientSettings.UseClickables) { return; }
+            float Position = ((lineOffSet * (ClientSettings.TextSize)));
+            foreach (Clickable c in Tweet.Clickables)
+            {
+                int i = Line.IndexOf(c.Text);
+                float startpos = 0;
+                if (i >= 0)
+                {
+                    if (i > 0)
+                    {
+                        string LineBeforeThisWord = Line.Substring(0, i);
+
+                        startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
+                    }
+                    SizeF WordSize = g.MeasureString(c.Text, ClientSettings.TextFont);
+                    c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+                }
+                
+
+            }
+            /*
             string[] Words = Line.Split(' ');
             StringBuilder LineBeforeThisWord = new StringBuilder();
             float Position = ((lineOffSet * (ClientSettings.TextSize)));
@@ -798,6 +821,7 @@ namespace FingerUI
                 }
                 LineBeforeThisWord.Append(Words[i]+" ");
             }
+             */
         }
         #endregion
 
