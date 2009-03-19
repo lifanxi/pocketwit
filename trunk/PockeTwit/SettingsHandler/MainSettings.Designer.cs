@@ -36,6 +36,7 @@
             this.lnkUI = new System.Windows.Forms.LinkLabel();
             this.lnkGPS = new System.Windows.Forms.LinkLabel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.lnkNotifications = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -88,10 +89,10 @@
             this.lnkGPS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkGPS.ForeColor = System.Drawing.Color.LightBlue;
-            this.lnkGPS.Location = new System.Drawing.Point(3, 69);
+            this.lnkGPS.Location = new System.Drawing.Point(3, 89);
             this.lnkGPS.Name = "lnkGPS";
             this.lnkGPS.Size = new System.Drawing.Size(234, 20);
-            this.lnkGPS.TabIndex = 3;
+            this.lnkGPS.TabIndex = 4;
             this.lnkGPS.Text = "Other Settings";
             this.lnkGPS.Click += new System.EventHandler(this.lnkGPS_Click);
             // 
@@ -100,12 +101,24 @@
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.ForeColor = System.Drawing.Color.LightBlue;
-            this.linkLabel1.Location = new System.Drawing.Point(3, 89);
+            this.linkLabel1.Location = new System.Drawing.Point(3, 109);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(234, 20);
-            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabIndex = 5;
             this.linkLabel1.Text = "Advanced Options";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
+            // 
+            // lnkNotifications
+            // 
+            this.lnkNotifications.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkNotifications.ForeColor = System.Drawing.Color.LightBlue;
+            this.lnkNotifications.Location = new System.Drawing.Point(3, 69);
+            this.lnkNotifications.Name = "lnkNotifications";
+            this.lnkNotifications.Size = new System.Drawing.Size(130, 20);
+            this.lnkNotifications.TabIndex = 3;
+            this.lnkNotifications.Text = "Configure Notifications";
+            this.lnkNotifications.Click += new System.EventHandler(this.lnkNotifications_Click);
             // 
             // MainSettings
             // 
@@ -114,6 +127,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lnkNotifications);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.lnkGPS);
             this.Controls.Add(this.lnkUI);
@@ -138,5 +152,6 @@
         private System.Windows.Forms.LinkLabel lnkGPS;
         private System.Windows.Forms.MenuItem menuDone;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel lnkNotifications;
     }
 }
