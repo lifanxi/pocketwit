@@ -34,8 +34,6 @@ namespace PockeTwit
                 if (!_Names.Contains(Name))
                 {
                     _Names.Add(Name);
-                    _Names.Sort();
-                    Save();
                 }
             }
         }
@@ -64,7 +62,8 @@ namespace PockeTwit
                 }
             }
         }
-        private static void Save()
+        //Has to match System.Threading.WaitCallback to be called from threadpool
+        public static void Save(object o)
         {
             System.Xml.XmlDocument d = new System.Xml.XmlDocument();
             System.Xml.XmlElement root = d.CreateElement("usernames");
