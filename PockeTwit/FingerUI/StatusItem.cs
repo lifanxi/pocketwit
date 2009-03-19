@@ -622,7 +622,7 @@ namespace FingerUI
                 SizeF size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
 
                 string subText;
-                if (this.Tweet.DisplayText.Split(' ')[0].StartsWith("@"))
+                if (this.Tweet.DisplayText.StartsWith("@"))
                 {
                     subText = this.Tweet.DisplayText.Substring(this.Tweet.DisplayText.IndexOf(' ') + 1);
                 }
@@ -728,18 +728,6 @@ namespace FingerUI
         private void FirstClickableRun(string text)
         {
             Tweet.Clickables = new List<Clickable>();
-            /*
-            string[] words = text.Split(new char[] { ' ' });
-            foreach (string word in words)
-            {
-                if (isClickable(word))
-                {
-                    Clickable c = new Clickable();
-                    c.Text = word.TrimEnd(IgnoredAtChars);
-                    Tweet.Clickables.Add(c);
-                }
-            }
-             */
             System.Text.RegularExpressions.MatchCollection m = GetClickables.Matches(text);
             foreach (System.Text.RegularExpressions.Match match in m)
             {

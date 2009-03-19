@@ -125,5 +125,21 @@ namespace PockeTwit.SettingsHandler
             AdvancedForm a = new AdvancedForm();
             a.ShowDialog();
         }
+
+        private void lnkNotifications_Click(object sender, EventArgs e)
+        {
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                System.Diagnostics.ProcessStartInfo ps = new System.Diagnostics.ProcessStartInfo("\\Windows\\ctlpnl.exe", "cplmain.cpl,9,1");
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo = ps;
+                p.Start();
+            }
+            else
+            {
+                SettingsHandler.NotificationSettings n = new PockeTwit.SettingsHandler.NotificationSettings();
+                n.ShowDialog();
+            }
+        }
     }
 }
