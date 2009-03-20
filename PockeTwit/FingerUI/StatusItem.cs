@@ -619,19 +619,25 @@ namespace FingerUI
                 string TextToDisplay = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
                 FirstClickableRun(Tweet.DisplayText);
                 SizeF size = g.MeasureString(TextToDisplay, ClientSettings.TextFont);
-                while (size.Width > textBounds.Width)
+                while (size.Width > textBounds.Width - ClientSettings.Margin)
                 {
                     {
                         int totalChars = TextToDisplay.Length;
-                        int estimatedChars = (textBounds.Width * totalChars) / (int)size.Width;
+                        int estimatedChars = ((textBounds.Width-ClientSettings.Margin) * totalChars) / (int)size.Width;
+                            
                         int endOfLine = TextToDisplay.LastIndexOf(' ', estimatedChars);
-                        if (endOfLine <= 0)
-                        {
-                            endOfLine = estimatedChars;
-                        }
+                        bool spaceBreak = true;
+                        if (endOfLine < 0) { endOfLine = estimatedChars; spaceBreak = false; }
                         string Line = TextToDisplay.Substring(0, endOfLine);
                         Tweet.SplitLines.Add(Line);
-                        TextToDisplay = TextToDisplay.Substring(endOfLine+1);
+                        if (spaceBreak)
+                        {
+                            TextToDisplay = TextToDisplay.Substring(endOfLine + 1);
+                        }
+                        else
+                        {
+                            TextToDisplay = TextToDisplay.Substring(endOfLine);
+                        }
                         size = g.MeasureString(TextToDisplay, ClientSettings.TextFont);
                         FindClickables(Line, g, LineOffset - 1);
                         LineOffset++;
@@ -789,14 +795,11 @@ namespace FingerUI
                     if (i > 0)
                     {
                         string LineBeforeThisWord = Line.Substring(0, i);
-
                         startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
                     }
                     SizeF WordSize = g.MeasureString(c.Text, ClientSettings.TextFont);
                     c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
                 }
-                
-
             }
             /*
             string[] Words = Line.Split(' ');
