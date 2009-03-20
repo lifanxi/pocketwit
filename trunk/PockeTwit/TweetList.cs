@@ -669,12 +669,11 @@ namespace PockeTwit
 
             if (ClientSettings.CheckVersion)
             {
-                lblLoading.Text = "Launching update checker";
-                Application.DoEvents();
                 Checker = new UpgradeChecker();
                 Checker.UpgradeFound += new UpgradeChecker.delUpgradeFound(UpdateChecker_UpdateFound);
             }
-
+            //lblLoading.Text = "Preparing";
+            //Application.DoEvents();
             SetUpListControl();
 
             try
