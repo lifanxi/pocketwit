@@ -57,26 +57,12 @@ namespace PockeTwit
                 LastDirectID.Add(t.AccountInfo, "");
             }
             Progress(0, "Loading Cache");
+
+            
             LoadCachedtimeline(TimeLineType.Friends, "Friends");
-            for (int i = TimeLines[TimeLineType.Friends].Count-1; i >=0 ; i--)
-            {
-                Library.status stat = TimeLines[TimeLineType.Friends][i];
-                LastStatusID[stat.Account] = stat.id;
-            }
             LoadCachedtimeline(TimeLineType.Messages, "Messages");
 
-            for (int i = TimeLines[TimeLineType.Messages].Count - 1; i >= 0; i--)
-            {
-                Library.status stat = TimeLines[TimeLineType.Messages][i];
-                if (stat.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
-                {
-                    LastDirectID[stat.Account] = stat.id;
-                }
-                else
-                {
-                    LastReplyID[stat.Account] = stat.id;
-                }
-            }
+            SetLastItems();
 
             if (TimeLines[TimeLineType.Friends].Count > 0)
             {
@@ -167,6 +153,30 @@ namespace PockeTwit
             if (!GlobalEventHandler.MessagesUpdating)
             {
                 System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetMessagesTimeLine));
+            }
+        }
+
+        private void SetLastItems()
+        {
+            TimeLineType[] TimeTypes = new TimeLineType[] { TimeLineType.Friends, TimeLineType.Messages};
+            foreach(TimeLineType TimeType in TimeTypes)
+            {
+                for (int i = TimeLines[TimeType].Count - 1; i >= 0; i--)
+                {
+                    Library.status stat = TimeLines[TimeType][i];
+                    if (stat.TypeofMessage == PockeTwit.Library.StatusTypes.Direct)
+                    {
+                        LastDirectID[stat.Account] = stat.id;
+                    }
+                    else if (stat.TypeofMessage == PockeTwit.Library.StatusTypes.Reply)
+                    {
+                        LastReplyID[stat.Account] = stat.id;
+                    }
+                    else
+                    {
+                        LastStatusID[stat.Account] = stat.id;
+                    }
+                }
             }
         }
 

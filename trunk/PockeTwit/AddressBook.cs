@@ -12,7 +12,7 @@ namespace PockeTwit
 
         static AddressBook()
         {
-            Load();
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Load));
         }
 
         public static string[] GetList()
@@ -38,7 +38,7 @@ namespace PockeTwit
             }
         }
 
-        private static void Load()
+        private static void Load(object o)
         {
             if (System.IO.File.Exists(location))
             {
