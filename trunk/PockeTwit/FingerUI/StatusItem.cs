@@ -612,6 +612,37 @@ namespace FingerUI
         private void BreakUpTheText(Graphics g, Rectangle textBounds)
         {
             if (!ClientSettings.UseClickables) { FirstClickableRun(Tweet.DisplayText); return; }
+
+            int LineOffset = 1;
+            if (Tweet.SplitLines == null || Tweet.SplitLines.Count == 0)
+            {
+                string TextToDisplay = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
+                FirstClickableRun(Tweet.DisplayText);
+                SizeF size = g.MeasureString(TextToDisplay, ClientSettings.TextFont);
+                while (size.Width > textBounds.Width)
+                {
+                    {
+                        int totalChars = TextToDisplay.Length;
+                        int estimatedChars = (textBounds.Width * totalChars) / (int)size.Width;
+                        int endOfLine = TextToDisplay.LastIndexOf(' ', estimatedChars);
+                        if (endOfLine <= 0)
+                        {
+                            endOfLine = estimatedChars;
+                        }
+                        string Line = TextToDisplay.Substring(0, endOfLine);
+                        Tweet.SplitLines.Add(Line);
+                        TextToDisplay = TextToDisplay.Substring(endOfLine+1);
+                        size = g.MeasureString(TextToDisplay, ClientSettings.TextFont);
+                        FindClickables(Line, g, LineOffset - 1);
+                        LineOffset++;
+                    }
+                }
+                Tweet.SplitLines.Add(TextToDisplay);
+                FindClickables(TextToDisplay, g, LineOffset - 1);
+            }
+            return;
+            
+            /*
             if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
             {
                 //How could this happen!  We have no texts!
@@ -722,6 +753,7 @@ namespace FingerUI
                     LineOffset++;
                 }
             }
+             */
         }
 
         

@@ -990,10 +990,19 @@ namespace PockeTwit
 
         private void GoBackInHistory()
         {
+            
             if (History.Count > 0)
             {
-                HistoryItem current = History.Pop();
-                HistoryItem prev = History.Pop();
+                HistoryItem prev = null;
+                try
+                {
+                    HistoryItem current = History.Pop();
+                    prev = History.Pop();
+                }
+                catch
+                {
+                    return;
+                }
                 switch (prev.Action)
                 {
                     case Yedda.Twitter.ActionType.Conversation:
