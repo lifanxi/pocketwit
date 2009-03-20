@@ -25,7 +25,8 @@ namespace PockeTwit
         public Following(Yedda.Twitter Connection )
         {
             TwitterConnection = Connection;
-            GetCachedFollowers();
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(GetCachedFollowers));
+            //GetCachedFollowers();
         }
 
 		#endregion Constructors 
@@ -88,7 +89,7 @@ namespace PockeTwit
 
 		// Private Methods (4) 
 
-        private  void GetCachedFollowers()
+        private void GetCachedFollowers(object o)
         {
             string location = ClientSettings.AppPath + "\\Following" + TwitterConnection.AccountInfo.UserName + TwitterConnection.AccountInfo.ServerURL.Name + ".xml";
             try

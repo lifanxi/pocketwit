@@ -76,9 +76,8 @@ namespace PockeTwit.Library
                 {
                     createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
                 }
-                catch(Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
                     //Search results come in a different format :(
                     try
                     {

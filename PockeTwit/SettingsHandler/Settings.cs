@@ -41,11 +41,16 @@ public static class ClientSettings
     public static Font SmallFont;
     public static Font TextFont;
     public static int SmallArtSize = 65;
+    private static int _ItemHeight = -1;
     public static int ItemHeight
     {
         get
         {
-            return (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5; ;
+            if (_ItemHeight == -1)
+            {
+                _ItemHeight = (ClientSettings.TextSize * ClientSettings.LinesOfText) + 5;
+            }
+            return _ItemHeight;
         }
     }
     
@@ -78,18 +83,23 @@ public static class ClientSettings
         }
     }
 
+    private static int _LinesOfText = -1;
     public static int LinesOfText
     {
         get
         {
-            if (ShowExtra)
+            if (_LinesOfText == -1)
             {
-                return 6;
+                if (ShowExtra)
+                {
+                    _LinesOfText = 6;
+                }
+                else
+                {
+                    _LinesOfText = 5;
+                }
             }
-            else
-            {
-                return 5;
-            }
+            return _LinesOfText;
         }
     }
 		#endregion Fields 
@@ -186,7 +196,12 @@ public static class ClientSettings
     public static bool ShowExtra
     {
         get { return _ShowExtra; }
-        set { _ShowExtra = value; }
+        set 
+        { 
+            _ShowExtra = value;
+            _LinesOfText = -1;
+            _ItemHeight = -1;
+        }
     }
     public static int SmallTextSize{ get; set; }
     public static int TextSize 
@@ -199,6 +214,7 @@ public static class ClientSettings
         {
             _TextSize = value;
             SmallArtSize = _TextSize * 5;
+            _ItemHeight = -1;
         }
     }
 
