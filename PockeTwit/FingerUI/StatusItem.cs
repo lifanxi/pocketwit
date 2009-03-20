@@ -647,119 +647,6 @@ namespace FingerUI
                 FindClickables(TextToDisplay, g, LineOffset - 1);
             }
             return;
-            
-            /*
-            if (Tweet.SplitLines==null ||  Tweet.SplitLines.Count == 0)
-            {
-                //How could this happen!  We have no texts!
-                if (this.Tweet.DisplayText == null) { return; }
-                Tweet.SplitLines = new List<string>();
-                string CurrentLine = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
-                FirstClickableRun(CurrentLine);
-                SizeF size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
-
-                string subText;
-                if (this.Tweet.DisplayText.StartsWith("@"))
-                {
-                    subText = this.Tweet.DisplayText.Substring(this.Tweet.DisplayText.IndexOf(' ') + 1);
-                }
-                else
-                {
-                    subText = this.Tweet.DisplayText;
-                }
-
-                if (subText.IndexOf(' ') <= 0)
-                {
-                    BreakUpTheTextWithoutSpaces(g, textBounds);
-                    return;
-                }
-                if (size.Width < textBounds.Width)
-                {
-                    string line = CurrentLine.TrimStart(new char[] { ' ' });
-                    Tweet.SplitLines.Add(line);
-                    FindClickables(line, g, 0);
-                }
-                int LineOffset = 1;
-                bool bMulti;
-                while (size.Width > textBounds.Width)
-                {
-                    int lastBreak = 0;
-                    int currentPos = 0;
-                    StringBuilder newString = new StringBuilder();
-                    string[] Words = CurrentLine.Split(new char[]{' ','-'});
-                    bMulti = false;
-                    foreach (string word in Words)
-                    {
-                        newString.Append(word);
-                        newString.Append(" ");
-                        if (g.MeasureString(newString.ToString(), ClientSettings.TextFont).Width > textBounds.Width)
-                        {
-                            if (bMulti && lastBreak == 0)
-                            {
-                                lastBreak = currentPos;
-                                newString = new StringBuilder(CurrentLine.Substring(0, lastBreak));
-                            }
-                            else
-                            {
-                                //First word is too long!
-                                if (!isClickable(word))
-                                {
-                                    StringBuilder newWord = new StringBuilder();
-                                    int letters = 1;
-                                    foreach (char c in word)
-                                    {
-                                        newWord.Append(c);
-                                        letters++;
-                                        if (g.MeasureString(newWord.ToString(), ClientSettings.TextFont).Width > textBounds.Width)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                    if (letters > 1) { letters--; }
-                                    //If the word isn't a link, split it.
-                                    newString = new StringBuilder(word.Substring(0, letters));
-                                    currentPos = currentPos + letters;
-                                    lastBreak = currentPos;
-                                }
-                                else
-                                {
-                                    //For now, we just move on to a new line                               
-                                    currentPos = currentPos + word.Length + 1;
-                                    lastBreak = currentPos;
-                                }
-                            }
-                            
-                            break;
-                        }
-                        bMulti = true;
-                        currentPos = currentPos + word.Length + 1;
-                    }
-                    string line = newString.ToString().Trim(new char[] { ' ' });
-                    Tweet.SplitLines.Add(line);
-                    FindClickables(line, g, LineOffset-1);
-                    if (Tweet.SplitLines.Count >= ClientSettings.LinesOfText || Tweet.text.IndexOf("http://shortText.com/") > 0)
-                    {
-                        Tweet.Clipped = true;
-                    }
-                    if (lastBreak > CurrentLine.Length)
-                    {
-                        lastBreak = CurrentLine.Length;
-                    }
-                    if (lastBreak != 0)
-                    {
-                        CurrentLine = CurrentLine.Substring(lastBreak);
-                    }
-                    size = g.MeasureString(CurrentLine, ClientSettings.TextFont);
-                    if (size.Width <= textBounds.Width)
-                    {
-                        line = CurrentLine.TrimStart(new char[] { ' ' });
-                        Tweet.SplitLines.Add(line);
-                        FindClickables(line,g,LineOffset);
-                    }
-                    LineOffset++;
-                }
-            }
-             */
         }
 
         
@@ -786,6 +673,7 @@ namespace FingerUI
             //Still need to handle "wrapped" links
             if (!ClientSettings.UseClickables) { return; }
             float Position = ((lineOffSet * (ClientSettings.TextSize)));
+            Clickable wrappedClick = null;
             foreach (Clickable c in Tweet.Clickables)
             {
                 int i = Line.IndexOf(c.Text);
@@ -800,63 +688,41 @@ namespace FingerUI
                     SizeF WordSize = g.MeasureString(c.Text, ClientSettings.TextFont);
                     c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
                 }
-            }
-            /*
-            string[] Words = Line.Split(' ');
-            StringBuilder LineBeforeThisWord = new StringBuilder();
-            float Position = ((lineOffSet * (ClientSettings.TextSize)));
-            for (int i = 0; i < Words.Length; i++)
-            {
-                string WordToCheck = Words[i].Trim(IgnoredAtChars);
-                if (!string.IsNullOrEmpty(WordToCheck))
-                {
-                    List<Clickable> OriginalClicks = new List<Clickable>(Tweet.Clickables);
-                    foreach (Clickable c in OriginalClicks)
+                else{
+                    //Check to see if clickable got wrapped
+                    string lastWord = Line;
+                    string LineBeforeThisWord = "";
+                    if (Line.IndexOf(" ") > 0)
                     {
-                        if (i == Words.Length - 1)
-                        {
-                            if (!string.IsNullOrEmpty(WordToCheck) && c.Text.StartsWith(WordToCheck.TrimEnd(IgnoredAtChars)))
-                            {
-                                float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
-                                //Find the size of the word
-                                SizeF WordSize = g.MeasureString(WordToCheck, ClientSettings.TextFont);
-                                //A structure containing info we need to know about the word.
-                                c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+                        lastWord = Line.Substring(Line.LastIndexOf(" "));
+                        LineBeforeThisWord = Line.Substring(0, Line.LastIndexOf(" "));
+                    }
 
-                                string SecondPart = null;
-                                if (WordToCheck.Length < c.Text.Length)
-                                {
-                                    SecondPart = c.Text.Substring(WordToCheck.Length);
-                                }
-
-                                if (!string.IsNullOrEmpty(SecondPart))
-                                {
-                                    Clickable wrapClick = new Clickable();
-                                    wrapClick.Text = c.Text;
-                                    //Find the size of the word
-                                    WordSize = g.MeasureString(SecondPart, ClientSettings.TextFont);
-                                    //A structure containing info we need to know about the word.
-                                    float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
-                                    wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
-                                    Tweet.Clickables.Add(wrapClick);
-                                }
-                            }
-                        }
-                        else if (WordToCheck.TrimEnd(IgnoredAtChars) == c.Text)
+                    if (c.Text.StartsWith(lastWord))
+                    {
+                        startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
+                        SizeF WordSize = g.MeasureString(lastWord, ClientSettings.TextFont);
+                        c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
+                        //Find the rest of the word on the next line
+                        if (lastWord.Length < c.Text.Length)
                         {
-                            //Find out how far to the right this word will appear
-                            float startpos = g.MeasureString(LineBeforeThisWord.ToString(), ClientSettings.TextFont).Width;
+                            string SecondPart = c.Text.Substring(lastWord.Length);
+                            Clickable wrapClick = new Clickable();
+                            wrapClick.Text = c.Text;
                             //Find the size of the word
-                            SizeF WordSize = g.MeasureString(WordToCheck, ClientSettings.TextFont);
+                            WordSize = g.MeasureString(SecondPart, ClientSettings.TextFont);
                             //A structure containing info we need to know about the word.
-                            c.Location = new RectangleF(startpos, Position, WordSize.Width, WordSize.Height);
-                            c.Text = WordToCheck;
+                            float NextPosition = (((lineOffSet + 1) * (ClientSettings.TextSize)));
+                            wrapClick.Location = new RectangleF(0F, NextPosition, WordSize.Width, WordSize.Height);
+                            wrappedClick = wrapClick;
                         }
                     }
                 }
-                LineBeforeThisWord.Append(Words[i]+" ");
             }
-             */
+            if (wrappedClick != null)
+            {
+                Tweet.Clickables.Add(wrappedClick);
+            }
         }
         #endregion
 
