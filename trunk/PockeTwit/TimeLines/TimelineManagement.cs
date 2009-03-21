@@ -339,7 +339,6 @@ namespace PockeTwit
                     {
                         updateTimer.Enabled = true;
                     }
-                    GC.Collect();
                 }
             }
         }
@@ -515,8 +514,7 @@ namespace PockeTwit
                     {
                         updateTimer.Enabled = true;
                     }
-                }
-                GC.Collect();
+                }   
             }
         }
 
