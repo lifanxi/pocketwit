@@ -646,6 +646,8 @@ namespace FingerUI
                 Tweet.SplitLines.Add(TextToDisplay);
                 FindClickables(TextToDisplay, g, LineOffset - 1);
             }
+            this.Tweet.Clickables.TrimExcess();
+            this.Tweet.SplitLines.TrimExcess();
             return;
         }
 
