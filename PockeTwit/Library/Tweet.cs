@@ -118,7 +118,26 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
+        
+        public string AccountSummary
+        {
+            get
+            {
+                if (_Account != null)
+                {
+                    return _Account.Summary;
+                }
+                return ClientSettings.DefaultAccount.Summary;
+            }
+            set
+            {
+                _Account = Yedda.Twitter.Account.fromSummary(value);
+            }
+        }
+
+        [XmlIgnore]
         private Yedda.Twitter.Account _Account;
+        [XmlIgnore]
         public Yedda.Twitter.Account Account {
             get
             {

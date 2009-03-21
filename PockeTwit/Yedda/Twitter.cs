@@ -69,6 +69,34 @@ namespace Yedda
         [Serializable]
         public class Account
         {
+            
+            public static Account fromSummary(string Summary)
+            {
+                string[] parts = Summary.Split(',');
+                foreach (Account a in ClientSettings.AccountsList)
+                {
+                    if (a.UserName == parts[0] && a.ServerURL.Name == parts[1])
+                    {
+                        return a;
+                    }
+                }
+                return ClientSettings.DefaultAccount;
+            }
+
+            private string _Summary;
+            [System.Xml.Serialization.XmlIgnore]
+            public string Summary
+            {
+                get
+                {
+                    if(string.IsNullOrEmpty(_Summary))
+                    {
+                        _Summary = UserName + "," + ServerURL.Name;
+                    }
+                    return _Summary;
+                }
+            }
+
             public string UserName { get; set; }
             [System.Xml.Serialization.XmlIgnore]
             public string Password { get; set; }
