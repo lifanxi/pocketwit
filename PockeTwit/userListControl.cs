@@ -112,6 +112,12 @@ namespace PockeTwit
                     e.Handled = true;
                 }
             }
+            if (e.KeyChar == '\r' || e.KeyChar == ' ')
+            {
+                this.Visible = false;
+                ItemChosen(txtInput.Text);
+                e.Handled = true;
+            }
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
