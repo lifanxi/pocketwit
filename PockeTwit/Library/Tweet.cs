@@ -21,7 +21,6 @@ namespace PockeTwit.Library
     public class status : IComparable
     {
         private static IFormatProvider format = new System.Globalization.CultureInfo(1033);
-        [XmlIgnore]
         private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
         private static XmlSerializer singleSerializer = new XmlSerializer(typeof(Library.status));
 

@@ -94,6 +94,7 @@ namespace Yedda
                         _Summary = UserName + "," + ServerURL.Name;
                     }
                     return _Summary;
+                    
                 }
             }
 
