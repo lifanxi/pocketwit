@@ -419,6 +419,7 @@ namespace FingerUI
                 }
                 ForeBrush.Dispose();
                 g.Clip = new Region();
+                this.Tweet.SplitLines = null;
             }
             catch (ObjectDisposedException)
             {
@@ -616,6 +617,7 @@ namespace FingerUI
             int LineOffset = 1;
             if (Tweet.SplitLines == null || Tweet.SplitLines.Count == 0)
             {
+                Tweet.SplitLines = new List<string>();
                 string TextToDisplay = System.Web.HttpUtility.HtmlDecode(this.Tweet.DisplayText).Replace('\n', ' ');
                 FirstClickableRun(Tweet.DisplayText);
                 SizeF size = g.MeasureString(TextToDisplay, ClientSettings.TextFont);
@@ -646,8 +648,6 @@ namespace FingerUI
                 Tweet.SplitLines.Add(TextToDisplay);
                 FindClickables(TextToDisplay, g, LineOffset - 1);
             }
-            this.Tweet.Clickables.TrimExcess();
-            this.Tweet.SplitLines.TrimExcess();
             return;
         }
 

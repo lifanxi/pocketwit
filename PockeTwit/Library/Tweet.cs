@@ -363,7 +363,7 @@ namespace PockeTwit.Library
     [Serializable]
     public class User 
     {
-        #region Properties (2) 
+        #region Properties
         public bool needsFetching { get; set; }
 
         public string location { get; set; }

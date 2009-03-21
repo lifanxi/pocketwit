@@ -335,7 +335,7 @@ namespace PockeTwit
                 finally
                 {
                     GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Messages);
-                    if (ClientSettings.UpdateMinutes > 0)
+                    if (ClientSettings.UpdateMinutes > 0 && updateTimer!=null)
                     {
                         updateTimer.Enabled = true;
                     }
