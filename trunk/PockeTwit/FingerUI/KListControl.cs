@@ -1283,6 +1283,7 @@ namespace FingerUI
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
+
                     if (SlidingPortalOffset > SlidingPortal.BitmapHeight | SlidingPortalOffset < 0)
                     {
                         using (Brush sBrush = new SolidBrush(ClientSettings.ForeColor))
@@ -1291,6 +1292,7 @@ namespace FingerUI
                         }
                     }
                     flickerGraphics.DrawImage(SlidingPortal.Rendered, 0 - XOffset, 0 - SlidingPortalOffset);
+                    
                     if (XOffset > 0)
                     {
                         DrawMenu(flickerGraphics, SideShown.Right);
