@@ -82,6 +82,7 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
+            
             if (MaxItems < 15) { MaxItems = ClientSettings.MaxTweets; }
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
@@ -112,12 +113,12 @@ namespace FingerUI
                 catch (OutOfMemoryException ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
-                    if (MaxItems == 5)
+                    if (MaxItems < 15)
                     {
                         throw new LowMemoryException();
                     }
                     MaxItems = MaxItems - 5;
-                    if (MaxItems < 5) { MaxItems = 5; }
+                    if (MaxItems < 15) { MaxItems = 15; }
                 }
                 finally
                 {
@@ -136,11 +137,12 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            if (MaxItems > 20)
+            if (MaxItems >= 15)
             {
                 ClientSettings.PortalSize = MaxItems;
                 ClientSettings.SaveSettings();
             }
+
             _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
             _Rendered = new Bitmap(maxWidth, _BitmapHeight);
             
