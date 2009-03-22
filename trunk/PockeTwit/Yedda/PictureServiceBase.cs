@@ -193,10 +193,10 @@ namespace Yedda
         /// <summary>
         /// Save the picture data to disk.
         /// </summary>
-        /// <param name="picturePath"></param>
-        /// <param name="pictureData"></param>
-        /// <param name="bufferSize"></param>
-        /// <returns></returns>
+        /// <param name="picturePath">Path to save picture to, with filename</param>
+        /// <param name="pictureData">Data to save</param>
+        /// <param name="bufferSize">Length of data in buffer.</param>
+        /// <returns>Succes or failure</returns>
         protected bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
         {
             #region argument check
@@ -215,23 +215,30 @@ namespace Yedda
             }
             #endregion
 
-            if (!File.Exists(picturePath))
+            try
             {
-                using (FileStream pictureFile = File.Create(picturePath))
+                if (!File.Exists(picturePath))
                 {
-                    pictureFile.Write(pictureData, 0, bufferSize);
-                    pictureFile.Close();
+                    using (FileStream pictureFile = File.Create(picturePath))
+                    {
+                        pictureFile.Write(pictureData, 0, bufferSize);
+                        pictureFile.Close();
+                    }
                 }
+                else
+                {
+                    using (FileStream pictureFile = File.Open(picturePath, FileMode.Append, FileAccess.Write))
+                    {
+                        pictureFile.Write(pictureData, 0, bufferSize);
+                        pictureFile.Close();
+                    }
+                }
+                return true;
             }
-            else
+            catch
             {
-                using (FileStream pictureFile = File.Open(picturePath, FileMode.Append, FileAccess.Write))
-                {
-                    pictureFile.Write(pictureData, 0, bufferSize);
-                    pictureFile.Close();
-                }
+                return false;
             }
-            return true; ;
         }
 
         #endregion
@@ -242,6 +249,7 @@ namespace Yedda
         public event DownloadFinishEventHandler DownloadFinish;
         public event ErrorOccuredEventHandler ErrorOccured;
         public event MessageReadyEventHandler MessageReady;
+        public event DownloadPartEventHandler DownloadPart;
 
         protected virtual void OnDownloadFinish(PictureServiceEventArgs e)
         {
@@ -302,6 +310,22 @@ namespace Yedda
                 }
             }
         }
+
+        protected virtual void OnDownloadPart(PictureServiceEventArgs e)
+        {
+            if (DownloadPart != null)
+            {
+                try
+                {
+                    DownloadPart(this, e);
+                }
+                catch (Exception ex)
+                {
+                    //Always continue after a missed event
+                }
+            }
+        }
+
 
         #endregion
 
