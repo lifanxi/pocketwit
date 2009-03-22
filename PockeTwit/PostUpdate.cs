@@ -445,7 +445,7 @@ namespace PockeTwit
 
                     uploadedPictureOrigin = "file";
                     uploadingPicture = true;
-                    pictureService = GetMediaService();                     
+                    pictureService = GetMediaService();
                     using (PicturePostObject ppo = new PicturePostObject())
                     {
                         ppo.Filename = s.FileName;
@@ -470,20 +470,16 @@ namespace PockeTwit
         {
             if (!localPictureEventsSet && addEvents)
             {
-                
                 pictureService.UploadFinish += new UploadFinishEventHandler(pictureService_UploadFinish);
                 pictureService.MessageReady += new MessageReadyEventHandler(pictureService_MessageReady);
                 pictureService.ErrorOccured += new ErrorOccuredEventHandler(pictureService_ErrorOccured);
-
                 localPictureEventsSet = true;
             }
             else if (localPictureEventsSet && !addEvents)
             {
-               
                 pictureService.UploadFinish -= new UploadFinishEventHandler(pictureService_UploadFinish);
                 pictureService.MessageReady -= new MessageReadyEventHandler(pictureService_MessageReady);
                 pictureService.ErrorOccured -= new ErrorOccuredEventHandler(pictureService_ErrorOccured);
-
                 localPictureEventsSet = false;
             }
         }
@@ -522,27 +518,12 @@ namespace PockeTwit
         }
 
         /// <summary>
-        /// Event handling for when the download is finished
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
-        private void pictureService_DownloadFinish(object sender, PictureServiceEventArgs eventArgs)
-        {
-            MessageBox.Show(eventArgs.ReturnMessage);
-
-            //Reset up and download settings from before uploading or downloading
-            UpdatePictureData(string.Empty, false);
-
-        }
-
-        /// <summary>
         /// Event handling for when the upload is finished
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
         private void pictureService_UploadFinish(object sender, PictureServiceEventArgs eventArgs)
         {
-            
             if (uploadedPictureOrigin == "file")
             {
                 AddPictureToForm(eventArgs.PictureFileName, pictureFromStorage);
@@ -554,8 +535,6 @@ namespace PockeTwit
             UpdatePictureData(eventArgs.ReturnMessage, false);
         }
 
-
-
         private IPictureService GetMediaService()
         {
             IPictureService service;
@@ -565,10 +544,13 @@ namespace PockeTwit
             SetPictureEventHandlers(service,true);
 
             return service;
-
-            
         }
 
+        /// <summary>
+        /// Put the picture in the form.
+        /// </summary>
+        /// <param name="ImageFile"></param>
+        /// <param name="BoxToUpdate"></param>
         private void AddPictureToForm(string ImageFile, PictureBox BoxToUpdate)
         {
             if (InvokeRequired)
@@ -608,7 +590,7 @@ namespace PockeTwit
                     uploadedPictureURL = pictureURL;
                     uploadingPicture = uploadingPicture;
                     //when uploading picture, it's not used.
-                    pictureUsed = !uploadingPicture;
+                    pictureUsed = uploadingPicture;
                 }
                 catch (OutOfMemoryException)
                 {

@@ -21,6 +21,11 @@ namespace Yedda
         private const string API_UPLOAD_POST = "http://api.mobypicture.com/";
         private const string API_GET_THUMB = "http://api.mobypicture.com/";  //The extra / for directly sticking the image-id on.
 
+        private byte[] readBuffer;
+        private Stream dataStream;
+        private bool useAsyncCall = false;
+
+
         #endregion
 
         #region private objects
@@ -68,6 +73,10 @@ namespace Yedda
 
         #region IPictureService Members
 
+        /// <summary>
+        /// Start posting a picture
+        /// </summary>
+        /// <param name="postData"></param>
         public override void PostPicture(PicturePostObject postData)
         {
             #region Argument check
@@ -173,16 +182,21 @@ namespace Yedda
                 int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
                 string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
 
-
-                string resultFileName = RetrievePicture(pictureURL);
-
-                if (string.IsNullOrEmpty(resultFileName))
+                if (!useAsyncCall)
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture."));
+                    string resultFileName = RetrievePicture(pictureURL);
+                    if (string.IsNullOrEmpty(resultFileName))
+                    {
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture."));
+                    }
+                    else
+                    {
+                        OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, ""));
+                    }
                 }
                 else
                 {
-                    OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, ""));
+                    RetrievePictureAsync(pictureURL);
                 }
             }
             catch (Exception e)
@@ -297,13 +311,16 @@ namespace Yedda
 
             using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
             {
-                using (Stream dataStream = response.GetResponseStream())
+                using (dataStream = response.GetResponseStream())
                 {
                     int totalSize = 0;
-                    byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                    readBuffer = new byte[PT_READ_BUFFER_SIZE];
                     pictureFileName = GetPicturePath(pictureURL);
+                    int totalResponseSize = (int) response.ContentLength;
 
                     int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                    totalSize = responseSize;
+                    OnDownloadPart(new PictureServiceEventArgs(responseSize, responseSize, totalResponseSize));
                     while (responseSize > 0)
                     {
                         base.SavePicture(pictureFileName, readBuffer, responseSize);
@@ -311,12 +328,13 @@ namespace Yedda
                         {
                             totalSize += responseSize;
                             responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                            OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
                         }
                         catch
                         {
                             responseSize = 0;
                         }
-                        System.Threading.Thread.Sleep(200);
+                        System.Threading.Thread.Sleep(100);
                     }
                     dataStream.Close();
                 }
@@ -326,6 +344,76 @@ namespace Yedda
             return pictureFileName;
         }
 
+        /// <summary>
+        /// Use a imageId to retrieve and save a thumbnail to the device.
+        /// </summary>
+        /// <param name="imageId">Id for the image</param>
+        /// <returns></returns>
+        private string RetrievePictureAsync(string pictureURL)
+        {
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB);
+            myRequest.Method = "GET";
+            String pictureFileName = String.Empty;
+
+            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            {
+                using (dataStream = response.GetResponseStream())
+                {
+                    int totalSize = 0;
+                    readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                    pictureFileName = GetPicturePath(pictureURL);
+
+                    AsyncStateData state = new AsyncStateData();
+                    
+                    state.dataHolder = readBuffer;
+                    state.dataStream = dataStream;
+                    state.fileName = pictureFileName;
+                    state.totalBytesToDownload = (int) response.ContentLength;
+
+                    dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
+
+                }
+                response.Close();
+            }
+
+            return pictureFileName;
+        }
+
+        /// <summary>
+        /// Asynchronised callback method
+        /// </summary>
+        /// <param name="ar"></param>
+        private void DownloadPartFinished(IAsyncResult ar)
+        {
+            AsyncStateData state = (AsyncStateData)ar.AsyncState;
+
+            try
+            {
+                int len = state.dataStream.EndRead(ar);
+                
+                state.bytesRead = len;
+                state.totalBytesRead += state.bytesRead;
+
+                bool saveSucces = SavePicture(state.fileName, state.dataHolder, PT_READ_BUFFER_SIZE);
+                if (!saveSucces)
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download"));
+                }
+
+                OnDownloadPart(new PictureServiceEventArgs(state.bytesRead, state.totalBytesRead, state.totalBytesToDownload));
+
+                if (ar.IsCompleted)
+                {
+                    //OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, state.fileName, ""));
+                }
+
+                dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download"));
+            }
+        }
 
 
         #endregion

@@ -8,14 +8,18 @@ using System.Text;
 
 namespace Yedda
 {
+    
     public class PictureServiceEventArgs : EventArgs
     {
         private PictureServiceErrorLevel _pictureServiceErrorLevel = PictureServiceErrorLevel.OK; 
         private string _returnMessage = string.Empty;
         private string _errorMessage = string.Empty;
         private string _pictureFileName = string.Empty;
+        private int _totalBytesDownloaded = -1;
+        private int _totalBytesToDownload = -1;
+        private int _bytesDownloaded = -1;
         
-        // Constructor
+        // Constructors
         public PictureServiceEventArgs(PictureServiceErrorLevel pictureServiceErrorLevel, string returnMessage, string errorMessage)
         {
             _pictureServiceErrorLevel = pictureServiceErrorLevel;
@@ -28,6 +32,12 @@ namespace Yedda
             _returnMessage = returnMessage;
             _errorMessage = errorMessage;
             _pictureFileName = pictureFileName;
+        }
+        public PictureServiceEventArgs(int bytesDownloaded, int totalBytesDownloaded, int totalBytesToDownload)
+        {
+            _bytesDownloaded = bytesDownloaded;
+            _totalBytesDownloaded = totalBytesDownloaded;
+            _totalBytesToDownload = totalBytesToDownload;
         }
 
         public PictureServiceErrorLevel ErrorLevel
@@ -46,6 +56,18 @@ namespace Yedda
         {
             get { return _pictureFileName; }
         }
+        public int TotalBytesDownloaded
+        {
+            get { return _totalBytesDownloaded; }
+        }
+        public int TotalBytesToDownload
+        {
+            get { return _totalBytesToDownload; }
+        }
+        public int BytesDownloaded
+        {
+            get { return _bytesDownloaded; }
+        }
     }
 
     public enum PictureServiceErrorLevel
@@ -62,6 +84,7 @@ namespace Yedda
     public delegate void DownloadFinishEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void ErrorOccuredEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void MessageReadyEventHandler(object sender, PictureServiceEventArgs eventArgs);
+    public delegate void DownloadPartEventHandler(object sender, PictureServiceEventArgs eventArgs);
 
 
     /// <summary>
@@ -73,6 +96,7 @@ namespace Yedda
         event DownloadFinishEventHandler DownloadFinish;
         event ErrorOccuredEventHandler ErrorOccured;
         event MessageReadyEventHandler MessageReady;
+        event DownloadPartEventHandler DownloadPart;
 
         /// <summary>
         /// Send a picture to a twitter picture framework
@@ -107,5 +131,20 @@ namespace Yedda
         string RootPath {  set; get; }
         int ReadBufferSize { set; get; }
         string ServiceName { get; }
+    }
+
+    /// <summary>
+    /// State object for downloading in a-sync mode.
+    /// </summary>
+    public class AsyncStateData
+    {
+        internal int totalBytesToDownload = -1;
+        internal int bytesRead = 0;
+        internal int totalBytesRead = 0;
+
+        internal byte[] dataHolder;
+        internal string fileName;
+        internal Stream dataStream;
+        internal WebResponse response;
     }
 }

@@ -233,10 +233,13 @@ namespace Yedda
                 using (Stream dataStream = response.GetResponseStream())
                 {
                     int totalSize = 0;
+                    int totalResponseSize = (int)response.ContentLength;
                     byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
                     pictureFileName = GetPicturePath(imageId);
 
                     int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                    totalSize = responseSize;
+                    OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
                     while (responseSize > 0)
                     {
                         SavePicture(pictureFileName, readBuffer, responseSize);
@@ -244,6 +247,7 @@ namespace Yedda
                         {
                             totalSize += responseSize;
                             responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                            OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
                         }
                         catch
                         {
