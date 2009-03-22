@@ -383,13 +383,8 @@ namespace FingerUI
 
 
                 textBounds.Offset(ClientSettings.Margin, 1);
-                textBounds.Width = textBounds.Width - ClientSettings.Margin;
                 textBounds.Height--;
 
-                //m_stringFormat.Alignment = StringAlignment.Near;
-
-                //m_stringFormat.LineAlignment = StringAlignment.Near;
-                
                 BreakUpTheText(g, textBounds);
                 int lineOffset = 0;
 
