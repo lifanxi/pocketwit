@@ -617,12 +617,18 @@ namespace FingerUI
                 {
                     {
                         int totalChars = TextToDisplay.Length;
-                        int estimatedChars = ((textBounds.Width-ClientSettings.Margin) * totalChars) / (int)size.Width;
-                            
-                        int endOfLine = TextToDisplay.LastIndexOf(' ', estimatedChars);
+                        int estimatedChars = Math.Min((((textBounds.Width-ClientSettings.Margin) * totalChars) / (int)size.Width)+2, TextToDisplay.Length-1);
                         bool spaceBreak = true;
-                        if (endOfLine < 0) { endOfLine = estimatedChars; spaceBreak = false; }
-                        string Line = TextToDisplay.Substring(0, endOfLine);
+                        string Line = TextToDisplay;
+                        int endOfLine = estimatedChars;
+                        while (size.Width > textBounds.Width - ClientSettings.Margin)
+                        {
+                            endOfLine = TextToDisplay.LastIndexOf(' ', estimatedChars);
+                            if (endOfLine < 0) { endOfLine = estimatedChars; spaceBreak = false; }
+                            Line = TextToDisplay.Substring(0, endOfLine);
+                            size = g.MeasureString(Line, ClientSettings.TextFont);
+                            estimatedChars = endOfLine-1;
+                        }
                         Tweet.SplitLines.Add(Line);
                         if (spaceBreak)
                         {
