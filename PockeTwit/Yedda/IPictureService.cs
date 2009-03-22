@@ -100,12 +100,12 @@ namespace Yedda
         /// 
         /// </summary>
         bool HasEventHandlersSet { get; set; }
-        bool UseDefaultFileName {  set; }
-        string DefaultFileName {  set; }
-        bool UseDefaultFilePath {  set; }
-        string DefaultFilePath {  set; }
-        string RootPath {  set; }
-        int ReadBufferSize { set; }
+        bool UseDefaultFileName { set; get; }
+        string DefaultFileName { set; get; }
+        bool UseDefaultFilePath { set; get; }
+        string DefaultFilePath { set; get; }
+        string RootPath {  set; get; }
+        int ReadBufferSize { set; get; }
         string ServiceName { get; }
     }
 }
