@@ -8,39 +8,17 @@ using System.Text;
 
 namespace Yedda
 {
-    public class yFrog: IPictureService
+    public class yFrog : PictureServiceBase
     {
-        #region public properties
-
-        public event UploadFinishEventHandler UploadFinish;
-        public event DownloadFinishEventHandler DownloadFinish;
-        public event ErrorOccuredEventHandler ErrorOccured;
-        public event MessageReadyEventHandler MessageReady;
-
-        public bool HasEventHandlersSet { get; set; }
-
-        #endregion
-
         #region private properties
 
         private static volatile yFrog _instance;
         private static object syncRoot = new Object();
-        private const string SERVICE_NAME = "yFrog";
-
+        
         private const string API_UPLOAD = "http://yFrog.com/api/upload";
         private const string API_UPLOAD_POST = "http://yFrog.com/api/uploadAndPost";
         private const string API_SHOW_THUMB = "http://yFrog.com/";  //The extra / for directly sticking the image-id on.
-        private const string API_SAVE_TO_PATH = "\\ArtCache\\www.yFrog.com\\";
-
-
-        private string PT_DEFAULT_FILENAME = string.Empty;
-        private int PT_READ_BUFFER_SIZE = 512;
-        private bool PT_USE_DEFAULT_FILENAME = true;
-        private bool PT_USE_DEFAULT_PATH = true;
-        private string PT_DEFAULT_PATH = string.Empty;
-        private string PT_ROOT_PATH = string.Empty;
-
-
+        
         #endregion
 
         #region private objects
@@ -56,6 +34,8 @@ namespace Yedda
         /// </summary>
         private yFrog()
         {
+            API_SAVE_TO_PATH = "\\ArtCache\\www.yFrog.com\\";
+            API_SERVICE_NAME = "yFrog";
         }
 
         /// <summary>
@@ -81,12 +61,11 @@ namespace Yedda
            }
         }
 
-
         #endregion
 
         #region IPictureService Members
 
-        public void PostPicture(PicturePostObject postData)
+        public override void  PostPicture(PicturePostObject postData)
         {
             #region Argument check
 
@@ -134,7 +113,7 @@ namespace Yedda
             }
         }
 
-        public void FetchPicture(string pictureURL)
+        public override void  FetchPicture(string pictureURL)
         {
             #region Argument check
 
@@ -168,63 +147,12 @@ namespace Yedda
             } 
         }
 
-        public bool CanFetchUrl(string URL)
+        public override bool CanFetchUrl(string URL)
         {
             const string siteMarker = "yfrog";
             string url = URL.ToLower();
 
             return (url.IndexOf(siteMarker) >= 0);
-        }
-
-        public bool UseDefaultFileName
-        {
-            set
-            {
-                PT_USE_DEFAULT_FILENAME = value;
-            }
-        }
-        public string DefaultFileName
-        {
-            set
-            {
-                PT_DEFAULT_FILENAME = value;
-            }
-        }
-        public bool UseDefaultFilePath
-        {
-            set
-            {
-                PT_USE_DEFAULT_PATH = value;
-            }
-        }
-        public string DefaultFilePath
-        {
-            set
-            {
-                PT_DEFAULT_PATH = value;
-            }
-        }
-        public string RootPath
-        {
-            set
-            {
-                PT_ROOT_PATH = value;
-            }
-        }
-        public int ReadBufferSize
-        {
-            set
-            {
-                PT_READ_BUFFER_SIZE = value;
-            }
-        }
-
-        public string ServiceName
-        {
-            get
-            {
-                return SERVICE_NAME;
-            }
         }
 
         #endregion
@@ -329,89 +257,6 @@ namespace Yedda
             return pictureFileName;
         }
 
-        private bool SavePicture(String picturePath, byte[] pictureData, int bufferSize)
-        {
-            #region argument check
-            if (String.IsNullOrEmpty(picturePath))
-            {
-                return false;
-            }
-
-            if (pictureData == null)
-            {
-                return false;
-            }
-            if (pictureData.Length == 0)
-            {
-                return false;
-            }
-            #endregion
-
-            if (!File.Exists(picturePath))
-            {
-                using (FileStream pictureFile = File.Create(picturePath))
-                {
-                    pictureFile.Write(pictureData, 0, bufferSize);
-                    pictureFile.Close();
-                }
-            }
-            else
-            {
-                using (FileStream pictureFile = File.Open(picturePath, FileMode.Append, FileAccess.Write))
-                {
-                    pictureFile.Write(pictureData, 0, bufferSize);
-                    pictureFile.Close();
-                }
-            }
-            return true; ;
-        }
-
-        /// <summary>
-        /// Lookup the path and filename intended for the image. When it does not exist, create it.
-        /// </summary>
-        /// <param name="imageId">Image ID</param>
-        /// <returns>Path to save the picture in.</returns>
-        private string GetPicturePath(string imageId)
-        {
-            #region argument check
-
-            if (string.IsNullOrEmpty(imageId))
-            {
-                return ClientSettings.AppPath + API_SAVE_TO_PATH + "\\" + PT_DEFAULT_FILENAME;
-            }
-
-            #endregion
-
-            String picturePath = String.Empty;
-
-            if (PT_USE_DEFAULT_FILENAME)
-            {
-                picturePath = ClientSettings.AppPath + API_SAVE_TO_PATH;
-                if (!Directory.Exists(picturePath))
-                {
-                    Directory.CreateDirectory(picturePath);
-                }
-                picturePath = picturePath + PT_DEFAULT_FILENAME;
-                if (File.Exists(picturePath))
-                {
-                    File.Delete(picturePath);
-                }
-            }
-            else
-            {
-                string firstChar = imageId.Substring(0, 1);
-                picturePath = ClientSettings.AppPath + API_SAVE_TO_PATH + firstChar + "\\";
-
-                if (!System.IO.Directory.Exists(picturePath))
-                {
-                    System.IO.Directory.CreateDirectory(picturePath);
-                }
-
-                picturePath = picturePath + imageId + ".jpg";
-            }
-            return picturePath;
-        }
-
         private XmlDocument UploadPicture(string url, PicturePostObject ppo)
         {
             try
@@ -477,100 +322,7 @@ namespace Yedda
 
 #endregion
 
-        #region event handlers
 
-        protected virtual void OnDownloadFinish(PictureServiceEventArgs e)
-        {
-            if (DownloadFinish != null)
-            {
-                try
-                {
-                    DownloadFinish(this, e);
-                }
-                catch
-                {
-                    //Always continue after a missed event
-                }
-            }
-        }
-
-        protected virtual void OnUploadFinish(PictureServiceEventArgs e)
-        {
-            if (UploadFinish != null)
-            {
-                try
-                {
-                    UploadFinish(this, e);
-                }
-                catch
-                {
-                    //Always continue after a missed event
-                }
-            }
-        }
-
-        protected virtual void OnErrorOccured(PictureServiceEventArgs e)
-        {
-            if (ErrorOccured != null)
-            {
-                try
-                {
-                    ErrorOccured(this, e);
-                }
-                catch
-                {
-                    //Always continue after a missed event
-                }
-            }
-        }
-
-        protected virtual void OnMessageReady(PictureServiceEventArgs e)
-        {
-            if (MessageReady != null)
-            {
-                try
-                {
-                    MessageReady(this, e);
-                }
-                catch
-                {
-                    //Always continue after a missed event
-                }
-            }
-        }
-
-        #endregion
-
-        #region helper methods
-
-        private string CreateContentPartString(string header, string dispositionName, string valueToSend)
-        {
-            StringBuilder contents = new StringBuilder();
-
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n",dispositionName));
-            contents.Append("\r\n");
-            contents.Append(valueToSend);
-            contents.Append("\r\n");
-
-            return contents.ToString();
-        }
-
-        private string CreateContentPartPicture(string header)
-        {
-            StringBuilder contents = new StringBuilder();
-
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"image.jpg\"\r\n"));
-            contents.Append("Content-Type: image/jpeg\r\n");
-            contents.Append("\r\n");
-
-            return contents.ToString();
-        }
-
-
-        #endregion
+        
     }
 }

@@ -466,16 +466,25 @@ namespace PockeTwit
         /// Aparently after posting, event set are lost so these have to be set again.
         /// </summary>
         /// <param name="pictureService">Picture service on which the event handlers should be set.</param>
-        private void SetPictureEventHandlers(IPictureService pictureService)
+        private void SetPictureEventHandlers(IPictureService pictureService, bool addEvents)
         {
-            if (!localPictureEventsSet)
+            if (!localPictureEventsSet && addEvents)
             {
-                pictureService.DownloadFinish += new DownloadFinishEventHandler(pictureService_DownloadFinish);
+                
                 pictureService.UploadFinish += new UploadFinishEventHandler(pictureService_UploadFinish);
                 pictureService.MessageReady += new MessageReadyEventHandler(pictureService_MessageReady);
                 pictureService.ErrorOccured += new ErrorOccuredEventHandler(pictureService_ErrorOccured);
 
                 localPictureEventsSet = true;
+            }
+            else if (localPictureEventsSet && !addEvents)
+            {
+               
+                pictureService.UploadFinish -= new UploadFinishEventHandler(pictureService_UploadFinish);
+                pictureService.MessageReady -= new MessageReadyEventHandler(pictureService_MessageReady);
+                pictureService.ErrorOccured -= new ErrorOccuredEventHandler(pictureService_ErrorOccured);
+
+                localPictureEventsSet = false;
             }
         }
 
@@ -533,6 +542,7 @@ namespace PockeTwit
         /// <param name="eventArgs"></param>
         private void pictureService_UploadFinish(object sender, PictureServiceEventArgs eventArgs)
         {
+            
             if (uploadedPictureOrigin == "file")
             {
                 AddPictureToForm(eventArgs.PictureFileName, pictureFromStorage);
@@ -552,7 +562,7 @@ namespace PockeTwit
             
             service = PictureServiceFactory.Instance.GetServiceByName(ClientSettings.MediaService);
 
-            SetPictureEventHandlers(service);
+            SetPictureEventHandlers(service,true);
 
             return service;
 
@@ -712,8 +722,6 @@ namespace PockeTwit
         }
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            UpdatePictureData(string.Empty, false);
-
             if (!string.IsNullOrEmpty(this.txtStatusUpdate.Text))
             {
                 if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
@@ -721,6 +729,10 @@ namespace PockeTwit
                     return;
                 }
             }
+
+            SetPictureEventHandlers(pictureService, false);
+            UpdatePictureData(string.Empty, false);
+
             if (_StandAlone)
             {
                 this.Close();
@@ -800,7 +812,6 @@ namespace PockeTwit
                 }
             }
             
-            UpdatePictureData(string.Empty, false);
             Program.LastStatus = this.StatusText;
 
             bool Success = PostTheUpdate();
@@ -808,6 +819,7 @@ namespace PockeTwit
             if (Success)
             {
                 UpdatePictureData(string.Empty, false);
+                SetPictureEventHandlers(pictureService, false);
                 if (_StandAlone)
                 {
                     this.Close();
