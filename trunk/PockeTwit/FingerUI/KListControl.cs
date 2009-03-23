@@ -1193,7 +1193,7 @@ namespace FingerUI
                 if (XOffset > 0 && XOffset <= this.Width)
                 {
                     m_timer.Enabled = true;
-                    if (XOffset > (this.Width * .6))
+                    if (XOffset > (this.Width * .51))
                     {
                         //Scroll to other side
                         m_velocity.X = (this.Width / 10);
