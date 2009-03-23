@@ -10,6 +10,9 @@ namespace Yedda
     {
         #region private variables
 
+        /// <summary>
+        /// Settings for outside.
+        /// </summary>
         protected string PT_DEFAULT_FILENAME = string.Empty;
         protected int PT_READ_BUFFER_SIZE = 512;
         protected bool PT_USE_DEFAULT_FILENAME = true;
@@ -25,8 +28,16 @@ namespace Yedda
 
         #region IPictureService Members
 
+        /// <summary>
+        /// PostPicture method that must be overridden.
+        /// </summary>
+        /// <param name="postData">Data to post</param>
         public abstract void PostPicture(PicturePostObject postData);
 
+        /// <summary>
+        /// FetchPicture method that must be overridden.
+        /// </summary>
+        /// <param name="pictureURL">URL to fetch</param>
         public abstract void FetchPicture(string pictureURL);
 
         #region getters and setters

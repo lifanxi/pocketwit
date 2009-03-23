@@ -12,7 +12,9 @@ namespace Yedda
         #region private properties
         private static volatile PictureServiceFactory _instance;
         private static object syncRoot = new Object();
-        
+        /// <summary>
+        /// Internal list of services
+        /// </summary>
         private ArrayList serviceList;
         
         #endregion
@@ -60,6 +62,7 @@ namespace Yedda
             serviceList.Add(MobyPicture.Instance);
             serviceList.Add(yFrog.Instance);
             
+            //setup every service the same way
             foreach (IPictureService service in serviceList)
             {
                 service.ReadBufferSize = 512;
@@ -76,6 +79,11 @@ namespace Yedda
 
         #region public methods
 
+        /// <summary>
+        /// retrieve service by name. For getting the configured srvice.
+        /// </summary>
+        /// <param name="ServiceName">Name of the service</param>
+        /// <returns>The service</returns>
         public IPictureService GetServiceByName(string ServiceName)
         {
             foreach (IPictureService service in serviceList)
@@ -85,9 +93,20 @@ namespace Yedda
                     return service;
                 }
             }
+            //return first possible service when not found.
+            if (serviceList.Count > 0)
+            {
+                return (IPictureService) serviceList[0];
+            }
+            //return null when no services defined.
             return null;
         }
 
+        /// <summary>
+        /// Lookup whether a services for downloading a image is available. 
+        /// </summary>
+        /// <param name="URL">URL to the picture</param>
+        /// <returns>True when a service can fetch the image</returns>
         public bool FetchServiceAvailable(string URL)
         {
             foreach (IPictureService service in serviceList)
@@ -100,6 +119,11 @@ namespace Yedda
             return false;
         }
 
+        /// <summary>
+        /// Get the fetch services which can download the picture.
+        /// </summary>
+        /// <param name="URL">URL to the picture</param>
+        /// <returns>The service that can fetch the picture</returns>
         public IPictureService LocateFetchService(string URL)
         {
             foreach (IPictureService service in serviceList)
@@ -112,6 +136,10 @@ namespace Yedda
             return null;
         }
 
+        /// <summary>
+        /// Get the names of the available services.
+        /// </summary>
+        /// <returns>Collection of services.</returns>
         public ArrayList GetServiceNames()
         {
             ArrayList servicesList = new ArrayList();
@@ -132,32 +160,15 @@ namespace Yedda
         /// Aparently after posting, event set are lost so these have to be set again.
         /// </summary>
         /// <param name="pictureService">Picture service on which the event handlers should be set.</param>
-        private void SetPictureEventHandlers(IPictureService service)
-        {
-            if (!service.HasEventHandlersSet)
-            {
-                service.DownloadFinish += new DownloadFinishEventHandler(service_DownloadFinish);
-                service.ErrorOccured += new ErrorOccuredEventHandler(service_ErrorOccured);
-            }
-        }
-
-        private void service_ErrorOccured(object sender, PictureServiceEventArgs eventArgs)
-        {
-            
-        }
-
-        /// <summary>
-        /// Event handling for when the download is finished
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
-        private void service_DownloadFinish(object sender, PictureServiceEventArgs eventArgs)
-        {
-            
-
-        }
-
-     
+        //private void SetPictureEventHandlers(IPictureService service)
+        //{
+        //    if (!service.HasEventHandlersSet)
+        //    {
+        //        service.DownloadFinish += new DownloadFinishEventHandler(service_DownloadFinish);
+        //        service.ErrorOccured += new ErrorOccuredEventHandler(service_ErrorOccured);
+        //    }
+        //}
+  
 
 
 
