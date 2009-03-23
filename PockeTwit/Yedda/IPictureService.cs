@@ -18,14 +18,29 @@ namespace Yedda
         private int _totalBytesDownloaded = -1;
         private int _totalBytesToDownload = -1;
         private int _bytesDownloaded = -1;
-        
-        // Constructors
+
+        #region  Constructors
+
+        /// <summary>
+        /// Constructor for returning error/messaga data
+        /// </summary>
+        /// <param name="pictureServiceErrorLevel"></param>
+        /// <param name="returnMessage"></param>
+        /// <param name="errorMessage"></param>
         public PictureServiceEventArgs(PictureServiceErrorLevel pictureServiceErrorLevel, string returnMessage, string errorMessage)
         {
             _pictureServiceErrorLevel = pictureServiceErrorLevel;
             _returnMessage = returnMessage;
             _errorMessage = errorMessage;
         }
+
+        /// <summary>
+        /// Constructor for returning upload finish data
+        /// </summary>
+        /// <param name="pictureServiceErrorLevel"></param>
+        /// <param name="returnMessage"></param>
+        /// <param name="errorMessage"></param>
+        /// <param name="pictureFileName"></param>
         public PictureServiceEventArgs(PictureServiceErrorLevel pictureServiceErrorLevel, string returnMessage, string errorMessage, string pictureFileName)
         {
             _pictureServiceErrorLevel = pictureServiceErrorLevel;
@@ -33,12 +48,22 @@ namespace Yedda
             _errorMessage = errorMessage;
             _pictureFileName = pictureFileName;
         }
+
+        /// <summary>
+        /// Constructor for returning download stats.
+        /// </summary>
+        /// <param name="bytesDownloaded"></param>
+        /// <param name="totalBytesDownloaded"></param>
+        /// <param name="totalBytesToDownload"></param>
         public PictureServiceEventArgs(int bytesDownloaded, int totalBytesDownloaded, int totalBytesToDownload)
         {
             _bytesDownloaded = bytesDownloaded;
             _totalBytesDownloaded = totalBytesDownloaded;
             _totalBytesToDownload = totalBytesToDownload;
         }
+        #endregion
+
+        #region getters
 
         public PictureServiceErrorLevel ErrorLevel
         {
@@ -68,23 +93,42 @@ namespace Yedda
         {
             get { return _bytesDownloaded; }
         }
+
+        #endregion
     }
 
+    /// <summary>
+    /// Errorlevel list
+    /// </summary>
     public enum PictureServiceErrorLevel
     {
+        /// <summary>
+        /// everything OK
+        /// </summary>
         OK = 0,
+        /// <summary>
+        /// Service not ready for down/upload
+        /// </summary>
         NotReady = 10,
+        /// <summary>
+        /// Service not available for up/download
+        /// </summary>
         UnAvailable = 20,
+        /// <summary>
+        /// Service failed to down/upload
+        /// </summary>
         Failed = 99
 
         //Allways room te expand.
     }
 
+    #region picture services delegates
     public delegate void UploadFinishEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void DownloadFinishEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void ErrorOccuredEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void MessageReadyEventHandler(object sender, PictureServiceEventArgs eventArgs);
     public delegate void DownloadPartEventHandler(object sender, PictureServiceEventArgs eventArgs);
+    #endregion
 
 
     /// <summary>
@@ -121,7 +165,7 @@ namespace Yedda
 
 
         /// <summary>
-        /// 
+        /// Methods for getting and setting properties
         /// </summary>
         bool HasEventHandlersSet { get; set; }
         bool UseDefaultFileName { set; get; }
