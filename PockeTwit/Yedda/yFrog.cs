@@ -222,7 +222,7 @@ namespace Yedda
         private string RetrievePicture(string imageId)
         {
             //We use the "iphone" optimized images
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_SHOW_THUMB + imageId + ":iphone");
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_SHOW_THUMB + imageId + ".th.jpg");
             myRequest.Method = "GET";
             String pictureFileName = String.Empty;
 
