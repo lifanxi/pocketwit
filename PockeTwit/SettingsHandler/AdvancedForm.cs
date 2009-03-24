@@ -20,11 +20,16 @@ namespace PockeTwit.SettingsHandler
                 this.WindowState = FormWindowState.Maximized;
             }
             showBuffer();
+            showAddressBook();
         }
 
         private void showBuffer()
         {
-            lblRenderBuffer.Text = "Current buffer size: " + ClientSettings.PortalSize.ToString();
+            lnkResetBuffer.Text = "Reset current buffer size: " + ClientSettings.PortalSize.ToString();
+        }
+        private void showAddressBook()
+        {
+            lnkAddressbook.Text = "Clear addressbook: " + AddressBook.Count().ToString();
         }
 
         private void lnkResetBuffer_Click(object sender, EventArgs e)
@@ -55,6 +60,12 @@ namespace PockeTwit.SettingsHandler
         private void menuItem1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void lnkAddressbook_Click(object sender, EventArgs e)
+        {
+            AddressBook.Clear();
+            showAddressBook();
         }
     }
 }
