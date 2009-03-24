@@ -49,17 +49,8 @@ namespace PockeTwit
                 {
                     int controlSmallSide = pictureBox1.Image.Width < pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
                     int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
-                    int controlScaleSide = -1;
-                    if (imageToShow.Width == imageToShow.Height)
-                    {
-                        controlScaleSide = controlSmallSide;
-                    }
-                    else
-                    {
-                        controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
-                    }
-
-                    decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
+                    
+                    decimal scaleFactor = (decimal)controlSmallSide / imagebigSide;
 
                     int leftOfImage = (pictureBox1.Image.Width - (int)(imageToShow.Width * scaleFactor)) / 2;
                     int topOfImage = (pictureBox1.Image.Height - (int)(imageToShow.Height * scaleFactor)) / 2;
