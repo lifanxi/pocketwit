@@ -17,9 +17,6 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem PasteItem;
         private System.Windows.Forms.MenuItem CopyItem;
 		
-
-        public string TwitPicFile = null;
-        public bool UseTwitPic = false;
         public string GPSLocation = null;
         private LocationManager LocationFinder = new LocationManager();
         private bool _StandAlone;
@@ -388,9 +385,6 @@ namespace PockeTwit
                     {
                         if (c.ShowDialog() == DialogResult.OK)
                         {
-                            TwitPicFile = c.FileName;
-                            UseTwitPic = true;
-                            
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                             this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
@@ -398,7 +392,7 @@ namespace PockeTwit
                                 this.pictureFromStorage.Visible = false;
                             }
                             AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
-                            //AddPictureToForm(c.FileName, pictureFromCamers);
+
                             uploadedPictureOrigin = "camera";
                             uploadingPicture = true;
                             pictureService = GetMediaService();
@@ -431,9 +425,6 @@ namespace PockeTwit
                 Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
                 if (s.ShowDialog() == DialogResult.OK)
                 {
-                    TwitPicFile = s.FileName;
-                    UseTwitPic = true;
-
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                     this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
                     if (DetectDevice.DeviceType == DeviceType.Standard)
@@ -441,7 +432,6 @@ namespace PockeTwit
                         this.pictureFromCamers.Visible = false;
                     }
                     AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
-                    //AddPictureToForm(s.FileName, pictureFromStorage);
 
                     uploadedPictureOrigin = "file";
                     uploadingPicture = true;
@@ -610,10 +600,7 @@ namespace PockeTwit
                     return null;
                 }
                 int trimLength = 5;
-                if (UseTwitPic)
-                {
-                    trimLength = 30;
-                }
+                
                 string NewText = Original.Substring(0, Original.LastIndexOf(" ", 140 - (URL.Length + trimLength)));
                 return NewText + " ... " + URL;
             }
@@ -644,44 +631,28 @@ namespace PockeTwit
                     }
                 }
                 catch { }
-                /*
-                if (TwitterConn.AllowTwitPic && this.UseTwitPic)
+                
+                
+                string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
+
+                uploadedPictureURL = string.Empty;
+                uploadingPicture = false;
+
+                if (string.IsNullOrEmpty(retValue))
                 {
-                    string retValue;
-                    try
-                    {
-                        retValue = Yedda.TwitPic.SendStoredPic(AccountToSet.UserName, AccountToSet.Password, UpdateText, TwitPicFile);
-                    }
-                    catch (Exception)
-                    {
-                        Cursor.Current = Cursors.Default;
-                        MessageBox.Show("Error sending the image to twitpic. You may want to try again later.");
-                        return false;
-                    }
+                    MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
+                    return false;
                 }
-                */
-                //else
-                //{
-                    string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
-
-                    uploadedPictureURL = string.Empty;
-                    uploadingPicture = false;
-
-                    if (string.IsNullOrEmpty(retValue))
-                    {
-                        MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
-                        return false;
-                    }
-                    try
-                    {
-                        Library.status.DeserializeSingle(retValue, AccountToSet);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
-                        return false;
-                    }
-                //}
+                try
+                {
+                    Library.status.DeserializeSingle(retValue, AccountToSet);
+                }
+                catch
+                {
+                    MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
+                    return false;
+                }
+                
                 return true;
                 
             }
@@ -695,10 +666,7 @@ namespace PockeTwit
         private void txtStatusUpdate_TextChanged(object sender, EventArgs e)
         {
             int charsAvail = 140;
-            if (this.UseTwitPic)
-            {
-                charsAvail = charsAvail - 27;
-            }
+            
             int lengthLeft = charsAvail - txtStatusUpdate.Text.Length;
             lblCharsLeft.Text = lengthLeft.ToString();
         }
