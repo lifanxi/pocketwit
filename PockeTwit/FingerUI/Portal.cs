@@ -176,18 +176,6 @@ namespace FingerUI
                                         Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
                                         s.Render(_RenderedGraphics, itemBounds);
                                     }
-                                    if (ClientSettings.ShowReplyImages)
-                                    {
-                                        if (!string.IsNullOrEmpty(s.Tweet.in_reply_to_user_id))
-                                        {
-                                            string ReplyTo = s.Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(StatusItem.IgnoredAtChars).TrimStart('@').ToLower();
-                                            if (ReplyTo == User)
-                                            {
-                                                Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
-                                                s.Render(_RenderedGraphics, itemBounds);
-                                            }
-                                        }
-                                    }
                                 }
                             }
                             NewImage();

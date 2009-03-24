@@ -5,7 +5,6 @@ namespace PockeTwit
 
 		#region Fields (17) 
 
-        private System.Windows.Forms.CheckBox chkReplyImages;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -47,9 +46,8 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.menuAccept = new System.Windows.Forms.MenuItem();
-            this.chkReplyImages = new System.Windows.Forms.CheckBox();
+            this.menuCancel = new System.Windows.Forms.MenuItem();
             this.lnkClearAvatars = new System.Windows.Forms.LinkLabel();
             this.chkAvatar = new System.Windows.Forms.CheckBox();
             this.chkHighQuality = new System.Windows.Forms.CheckBox();
@@ -60,25 +58,15 @@ namespace PockeTwit
             this.mainMenu1.MenuItems.Add(this.menuAccept);
             this.mainMenu1.MenuItems.Add(this.menuCancel);
             // 
-            // menuCancel
-            // 
-            this.menuCancel.Text = "Cancel";
-            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
-            // 
             // menuAccept
             // 
             this.menuAccept.Text = "Accept";
             this.menuAccept.Click += new System.EventHandler(this.menuAccept_Click);
             // 
-            // chkReplyImages
+            // menuCancel
             // 
-            this.chkReplyImages.ForeColor = System.Drawing.Color.LightGray;
-            this.chkReplyImages.Location = new System.Drawing.Point(3, 55);
-            this.chkReplyImages.Name = "chkReplyImages";
-            this.chkReplyImages.Size = new System.Drawing.Size(235, 20);
-            this.chkReplyImages.TabIndex = 2;
-            this.chkReplyImages.Text = "Show Reply Avatars";
-            this.chkReplyImages.CheckStateChanged += new System.EventHandler(this.chkReplyImages_CheckStateChanged);
+            this.menuCancel.Text = "Cancel";
+            this.menuCancel.Click += new System.EventHandler(this.menuCancel_Click);
             // 
             // lnkClearAvatars
             // 
@@ -118,7 +106,6 @@ namespace PockeTwit
             this.Controls.Add(this.chkHighQuality);
             this.Controls.Add(this.chkAvatar);
             this.Controls.Add(this.lnkClearAvatars);
-            this.Controls.Add(this.chkReplyImages);
             this.Menu = this.mainMenu1;
             this.Name = "AvatarSettings";
             this.Text = "Avatar Settings";

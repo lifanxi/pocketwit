@@ -459,8 +459,6 @@ namespace PockeTwit.Library
                 return toReturn;
             }
         }
-
-
 		#endregion Methods 
 
     }

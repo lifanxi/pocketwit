@@ -31,7 +31,6 @@ namespace FingerUI
         private object m_value;
         private int m_x = -1;
         private int m_y = -1;
-        private PockeTwit.Library.User ReplyUser = null;
         #endregion�Fields�
 
 		#region�Constructors�(2)�
@@ -333,11 +332,6 @@ namespace FingerUI
                     {
                         System.Diagnostics.Debug.WriteLine(ex.Message);
                     }
-                    //This is usually disabled, but we may draw a smaller avatar over the first one
-                    if (ClientSettings.ShowReplyImages)
-                    {
-                        DrawReplyImage(g, ImageLocation);
-                    }
 
                     //Only occasionally is an item "starred", but we draw one on there if it is.
                     if (hasFavoriteStar)
@@ -426,52 +420,6 @@ namespace FingerUI
         }
 
 		//�Private�Methods�(2)�
-
-        private void DrawReplyImage(Graphics g, Point ImageLocation)
-        {
-            ImageLocation.Offset(-5, -5);
-            if (Tweet.SplitLines.Count > 0 && Tweet.SplitLines[0].IndexOf(' ')>0)
-            {
-                if (Tweet.SplitLines[0].Split(new char[] { ' ' })[0].StartsWith("@"))
-                {
-                    string ReplyTo = Tweet.SplitLines[0].Split(new char[] { ' ' })[0].TrimEnd(IgnoredAtChars).TrimStart('@');
-                    Image ReplyImage = null;
-                    if (!PockeTwit.ThrottledArtGrabber.HasArt(ReplyTo))
-                    {
-                        if (ReplyUser == null)
-                        {
-                            ReplyUser = PockeTwit.Library.User.FromId(ReplyTo, this.Tweet.Account);
-                        }
-                        if (ReplyUser != null)
-                        {
-                            if (ClientSettings.HighQualityAvatars)
-                            {
-                                ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyUser.screen_name, ReplyUser.high_profile_image_url);
-                            }
-                            else
-                            {
-                                ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyUser.screen_name, ReplyUser.profile_image_url);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ReplyImage = PockeTwit.ThrottledArtGrabber.GetArt(ReplyTo, "");
-                    }
-
-                    if (ReplyImage != null)
-                    {
-                        Rectangle ReplyRect = new Rectangle(ImageLocation.X + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), ImageLocation.Y + ClientSettings.Margin + (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2), (ClientSettings.SmallArtSize / 2));
-                        g.DrawImage(ReplyImage, ReplyRect, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), GraphicsUnit.Pixel);
-                        using (Pen sPen = new Pen(ClientSettings.ForeColor))
-                        {
-                            g.DrawRectangle(sPen, ReplyRect);
-                        }
-                        ReplyImage.Dispose();
-                    }
-                }
-            }
-        }
 
         //texbounds is the area we're allowed to draw within
         //lineOffset is how many lines we've already drawn in these bounds
