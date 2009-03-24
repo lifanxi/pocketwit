@@ -16,6 +16,7 @@ namespace PockeTwit
         public ImagePreview(string ImageToShow, string FullURL)
         {
             InitializeComponent();
+            menuZoom.Checked = ClientSettings.ZoomPreview;
             this.pictureBox1.Image = new Bitmap(this.pictureBox1.Width, this.pictureBox1.Height);
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
@@ -115,6 +116,7 @@ namespace PockeTwit
         private void menuZoom_Click(object sender, EventArgs e)
         {
             menuZoom.Checked = !menuZoom.Checked;
+            ClientSettings.ZoomPreview = menuZoom.Checked;
             DrawPreview();
         }
     }

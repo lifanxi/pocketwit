@@ -214,6 +214,7 @@ public static class ClientSettings
         }
     }
 
+    public static bool ZoomPreview { get; set; }
     
     public static List<Yedda.Twitter.Account> AccountsList { get; set; }
 	#endregion Properties 
@@ -227,6 +228,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ZoomPreview"]))
+            {
+                ZoomPreview = Boolean.Parse(ConfigurationSettings.AppSettings["ZoomPreview"]);
+            }
+            else
+            {
+                ZoomPreview = true;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AutoScrollToTop"]))
             {
                 AutoScrollToTop = Boolean.Parse(ConfigurationSettings.AppSettings["AutoScrollToTop"]);
@@ -438,6 +447,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["ZoomPreview"] = ZoomPreview.ToString();
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
         ConfigurationSettings.AppSettings["MediaService"] = MediaService;
         ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
