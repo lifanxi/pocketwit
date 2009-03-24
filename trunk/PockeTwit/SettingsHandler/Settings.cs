@@ -189,7 +189,6 @@ public static class ClientSettings
 
     public static string DistancePreference { get; set; }
 
-    public static bool ShowReplyImages { get; set; }
     public static bool MergeMessages { get; set; }
 
     public static bool _ShowExtra = true;
@@ -407,14 +406,6 @@ public static class ClientSettings
             {
                 MaxTweets = 50;
             }
-            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ShowReplyImages"]))
-            {
-                ShowReplyImages = bool.Parse(ConfigurationSettings.AppSettings["ShowReplyImages"]);
-            }
-            else
-            {
-                ShowReplyImages = false;
-            }
             if (!string.IsNullOrEmpty(LegacySettingsAccount.UserName))
             {
                 AccountsList.Add(LegacySettingsAccount);
@@ -463,7 +454,6 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["CheckVersion"] = CheckVersion.ToString();
         ConfigurationSettings.AppSettings["AnimationInterval"] = AnimationInterval.ToString();
         ConfigurationSettings.AppSettings["MaxTweets"] = MaxTweets.ToString();
-        ConfigurationSettings.AppSettings["ShowReplyImages"] = ShowReplyImages.ToString();
         ConfigurationSettings.AppSettings["DistancePreference"] = DistancePreference;
         ConfigurationSettings.AppSettings["UseClickables"] = UseClickables.ToString();
         ConfigurationSettings.AppSettings["IncludeScreenName"] = IncludeUserName.ToString();

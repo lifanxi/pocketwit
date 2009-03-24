@@ -40,7 +40,6 @@ namespace PockeTwit
                 }
             }
             ClientSettings.ShowAvatars = chkAvatar.Checked;
-            ClientSettings.ShowReplyImages = chkReplyImages.Checked;
             ClientSettings.HighQualityAvatars = chkHighQuality.Checked;
             ClientSettings.SaveSettings();
             
@@ -58,7 +57,6 @@ namespace PockeTwit
         private void PopulateForm()
         {
             chkAvatar.Checked = ClientSettings.ShowAvatars;
-            chkReplyImages.Checked = ClientSettings.ShowReplyImages;
             chkHighQuality.Checked = ClientSettings.HighQualityAvatars;
             this.DialogResult = DialogResult.Cancel;
         }
@@ -94,14 +92,5 @@ namespace PockeTwit
             Cursor.Current = Cursors.Default;
             MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
         }
-
-        private void chkReplyImages_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (chkReplyImages.Checked)
-            {
-                MessageBox.Show("Reply avatars may cause instability.  Please disable them if you have any problems.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-            }
-        }
-
     }
 }
