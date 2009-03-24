@@ -164,10 +164,11 @@ namespace Yedda
 
         public override bool CanFetchUrl(string URL)
         {
-            const string siteMarker = "mobypicture";
-            string url = URL.ToLower();
+            //const string siteMarker = "mobypicture";
+            //string url = URL.ToLower();
+            //return (url.IndexOf(siteMarker) >= 0);
 
-            return (url.IndexOf(siteMarker) >= 0);
+            return false;
         }
 
         #endregion
