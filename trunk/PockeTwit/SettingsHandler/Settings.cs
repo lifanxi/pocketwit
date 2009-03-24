@@ -58,18 +58,15 @@ public static class ClientSettings
     {
         get
         {
-            lock (AccountsList)
+            foreach (Yedda.Twitter.Account a in AccountsList)
             {
-                foreach (Yedda.Twitter.Account a in AccountsList)
-                {
-                    if (a.IsDefault) { return a; }
-                }
-                if (AccountsList.Count > 0)
-                {
-                    return AccountsList[0];
-                }
-                return null;
+                if (a.IsDefault) { return a; }
             }
+            if (AccountsList.Count > 0)
+            {
+                return AccountsList[0];
+            }
+            return null;
         }
         set
         {

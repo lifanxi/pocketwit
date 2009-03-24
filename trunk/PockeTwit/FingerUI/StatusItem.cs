@@ -11,7 +11,7 @@ namespace FingerUI
     public class StatusItem : IDisposable, IComparable
     {
 
-        public static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>',')' };
+        public static char[] IgnoredAtChars = new char[] { ':', ',', '-', '.', '!', '?', '~','=','&','*','>',')', '(' };
 
         private static System.Text.RegularExpressions.Regex GetClickables =
             new System.Text.RegularExpressions.Regex(@"(http://([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)|(@\w+)|(#\w+)(http://([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)|(@\w+)|(#\w+)", 
@@ -606,7 +606,7 @@ namespace FingerUI
             foreach (System.Text.RegularExpressions.Match match in m)
             {
                 Clickable c = new Clickable();
-                c.Text = match.Value.TrimEnd(IgnoredAtChars);
+                c.Text = match.Value.Trim(IgnoredAtChars);
                 Tweet.Clickables.Add(c);
             }
         }

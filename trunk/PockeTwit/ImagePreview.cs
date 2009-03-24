@@ -44,31 +44,45 @@ namespace PockeTwit
             }
             using (Bitmap imageToShow = new Bitmap(imagePathToShow))
             {
-                int controlSmallSide = pictureBox1.Image.Width < pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
-                int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
-                int controlScaleSide = -1;
-                if (imageToShow.Width == imageToShow.Height)
+                if (menuZoom.Checked)
                 {
-                    controlScaleSide = controlSmallSide;
+                    int controlSmallSide = pictureBox1.Image.Width < pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
+                    int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
+                    int controlScaleSide = -1;
+                    if (imageToShow.Width == imageToShow.Height)
+                    {
+                        controlScaleSide = controlSmallSide;
+                    }
+                    else
+                    {
+                        controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
+                    }
+
+                    decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
+
+                    int leftOfImage = (pictureBox1.Image.Width - (int)(imageToShow.Width * scaleFactor)) / 2;
+                    int topOfImage = (pictureBox1.Image.Height - (int)(imageToShow.Height * scaleFactor)) / 2;
+
+                    Rectangle destRect = new Rectangle(leftOfImage, topOfImage, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
+
+                    using (Graphics g = Graphics.FromImage(pictureBox1.Image))
+                    {
+                        g.Clear(ClientSettings.BackColor);
+                        g.DrawImage(imageToShow, destRect, new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
+                    }
                 }
                 else
                 {
-                    controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
+                    int leftOfImage = (pictureBox1.Width - imageToShow.Width) / 2;
+                    int topOfImage = (pictureBox1.Height - imageToShow.Height) / 2;
+
+                    using(Graphics g = Graphics.FromImage(pictureBox1.Image))
+                    {
+                        g.Clear(ClientSettings.BackColor);
+                        g.DrawImage(imageToShow, leftOfImage, topOfImage);
+                    }
                 }
-
-                decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
-
-                int leftOfImage = (pictureBox1.Image.Width - (int)(imageToShow.Width * scaleFactor)) / 2;
-                int topOfImage = (pictureBox1.Image.Height - (int)(imageToShow.Height * scaleFactor)) / 2;
-
-                Rectangle destRect = new Rectangle(leftOfImage, topOfImage, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
-                
-                using (Graphics g = Graphics.FromImage(pictureBox1.Image))
-                {
-                    g.Clear(ClientSettings.BackColor);
-                    g.DrawImage(imageToShow, destRect, new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
-                }
-
+                pictureBox1.Refresh();
             }
         }
 
@@ -96,6 +110,12 @@ namespace PockeTwit
             p.StartInfo.FileName = imagePathToShow;
             p.StartInfo.UseShellExecute = true;
             p.Start();
+        }
+
+        private void menuZoom_Click(object sender, EventArgs e)
+        {
+            menuZoom.Checked = !menuZoom.Checked;
+            DrawPreview();
         }
     }
 }
