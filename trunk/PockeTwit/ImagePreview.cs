@@ -44,9 +44,17 @@ namespace PockeTwit
             }
             using (Bitmap imageToShow = new Bitmap(imagePathToShow))
             {
-                int controlbigSide = pictureBox1.Image.Width > pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
+                int controlSmallSide = pictureBox1.Image.Width < pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
                 int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
-                int controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
+                int controlScaleSide = -1;
+                if (imageToShow.Width == imageToShow.Height)
+                {
+                    controlScaleSide = controlSmallSide;
+                }
+                else
+                {
+                    controlScaleSide = imageToShow.Width > imageToShow.Height ? pictureBox1.Width : pictureBox1.Height;
+                }
 
                 decimal scaleFactor = (decimal)controlScaleSide / imagebigSide;
 
