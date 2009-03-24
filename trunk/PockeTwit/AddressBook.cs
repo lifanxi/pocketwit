@@ -28,6 +28,11 @@ namespace PockeTwit
             }).ToArray();
         }
 
+        public static int Count()
+        {
+            return _Names.Count;
+        }
+
         public static void AddName(string Name)
         {
             lock(_Names){
@@ -79,6 +84,14 @@ namespace PockeTwit
             d.Save(location);
         }
 
+        public static void Clear()
+        {
+            lock (_Names)
+            {
+                _Names.Clear();
+            }
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Save));
+        }
         
     }
 }

@@ -673,8 +673,6 @@ namespace PockeTwit
                 Checker = new UpgradeChecker();
                 Checker.UpgradeFound += new UpgradeChecker.delUpgradeFound(UpdateChecker_UpdateFound);
             }
-            //lblLoading.Text = "Preparing";
-            //Application.DoEvents();
             SetUpListControl();
 
             try
