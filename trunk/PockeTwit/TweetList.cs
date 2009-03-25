@@ -284,8 +284,7 @@ namespace PockeTwit
                 statList.RerenderPortal();
                 statList.Repaint();
                 
-                //This is the best time to save the addressbook.
-                System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(AddressBook.Save));
+                
             }
         }
 
