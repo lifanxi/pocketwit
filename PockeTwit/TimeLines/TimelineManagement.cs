@@ -535,6 +535,10 @@ namespace PockeTwit
                     w.Flush();
                     w.Close();  //Shouldn't need this in using, but I'm desperate   
                 }
+                foreach (Library.status s in statuses)
+                {
+                    AddressBook.AddName(s.user.name);
+                }
             }
             catch
             {
