@@ -80,8 +80,14 @@ namespace PockeTwit
                 idElement.InnerText = ID;
                 root.AppendChild(idElement);
             }
-
-            d.Save(location);
+            try
+            {
+                d.Save(location);
+            }
+            catch
+            {
+                //If it fails it's most likely because it's already open by another thread
+            }
         }
 
         public static void Clear()
