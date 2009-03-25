@@ -19,7 +19,7 @@ namespace Yedda
 
         private const string API_UPLOAD = "http://api.mobypicture.com/";
         private const string API_UPLOAD_POST = "http://api.mobypicture.com/";
-        private const string API_GET_THUMB = "http://api.mobypicture.com/";  //The extra / for directly sticking the image-id on.
+        private const string API_GET_THUMB = "http://api.mobypicture.com/?s=small&format=plain&k="+APPLICATION_NAME;  //The extra / for directly sticking the image-id on.
 
         private byte[] readBuffer;
         private Stream dataStream;
@@ -164,11 +164,9 @@ namespace Yedda
 
         public override bool CanFetchUrl(string URL)
         {
-            //const string siteMarker = "mobypicture";
-            //string url = URL.ToLower();
-            //return (url.IndexOf(siteMarker) >= 0);
-
-            return false;
+            const string siteMarker = "mobypicture";
+            string url = URL.ToLower();
+            return (url.IndexOf(siteMarker) >= 0);
         }
 
         #endregion
@@ -182,6 +180,7 @@ namespace Yedda
                 string pictureURL = workerPPO.Message;
                 int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
                 string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
+                
 
                 if (!useAsyncCall)
                 {
@@ -306,7 +305,7 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePicture(string pictureURL)
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB);
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB + "&t="+pictureURL);
             myRequest.Method = "GET";
             String pictureFileName = String.Empty;
 
