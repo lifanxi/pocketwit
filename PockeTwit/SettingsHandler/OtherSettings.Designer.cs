@@ -57,7 +57,6 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCaheDir = new System.Windows.Forms.TextBox();
-            this.chkStartup = new System.Windows.Forms.CheckBox();
             this.lblPhotoService = new System.Windows.Forms.Label();
             this.cmbMediaService = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
@@ -145,7 +144,7 @@ namespace PockeTwit
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 168);
+            this.label2.Location = new System.Drawing.Point(4, 145);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 20);
             this.label2.Text = "Cache Directory:";
@@ -154,31 +153,22 @@ namespace PockeTwit
             // 
             this.txtCaheDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCaheDir.Location = new System.Drawing.Point(3, 186);
+            this.txtCaheDir.Location = new System.Drawing.Point(4, 168);
             this.txtCaheDir.Name = "txtCaheDir";
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
             this.txtCaheDir.TabIndex = 6;
             // 
-            // chkStartup
-            // 
-            this.chkStartup.ForeColor = System.Drawing.Color.LightGray;
-            this.chkStartup.Location = new System.Drawing.Point(3, 145);
-            this.chkStartup.Name = "chkStartup";
-            this.chkStartup.Size = new System.Drawing.Size(181, 20);
-            this.chkStartup.TabIndex = 0;
-            this.chkStartup.Text = "Start with Windows";
-            // 
             // lblPhotoService
             // 
             this.lblPhotoService.ForeColor = System.Drawing.Color.LightGray;
-            this.lblPhotoService.Location = new System.Drawing.Point(4, 213);
+            this.lblPhotoService.Location = new System.Drawing.Point(3, 197);
             this.lblPhotoService.Name = "lblPhotoService";
             this.lblPhotoService.Size = new System.Drawing.Size(100, 20);
             this.lblPhotoService.Text = "Media Service";
             // 
             // cmbMediaService
             // 
-            this.cmbMediaService.Location = new System.Drawing.Point(97, 211);
+            this.cmbMediaService.Location = new System.Drawing.Point(99, 195);
             this.cmbMediaService.Name = "cmbMediaService";
             this.cmbMediaService.Size = new System.Drawing.Size(138, 22);
             this.cmbMediaService.TabIndex = 1;
@@ -189,7 +179,6 @@ namespace PockeTwit
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.chkStartup);
             this.Controls.Add(this.cmbMediaService);
             this.Controls.Add(this.lblPhotoService);
             this.Controls.Add(this.txtCaheDir);
@@ -219,7 +208,6 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkTranslate;
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtCaheDir;
-        private System.Windows.Forms.CheckBox chkStartup;        private System.Windows.Forms.Label lblPhotoService;        private System.Windows.Forms.ComboBox cmbMediaService;
+        private System.Windows.Forms.TextBox txtCaheDir; private System.Windows.Forms.Label lblPhotoService; private System.Windows.Forms.ComboBox cmbMediaService;
     }
 }
