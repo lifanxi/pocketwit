@@ -39,6 +39,7 @@
             this.txtInput.Size = new System.Drawing.Size(258, 21);
             this.txtInput.TabIndex = 0;
             this.txtInput.TextChanged += new System.EventHandler(this.txtInput_TextChanged);
+            this.txtInput.GotFocus += new System.EventHandler(this.txtInput_GotFocus);
             this.txtInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInput_KeyDown);
             this.txtInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtInput_KeyPress);
             // 

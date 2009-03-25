@@ -13,25 +13,7 @@ namespace PockeTwit
     public partial class userListControl : UserControl
     {
 
-        [DllImport("aygshell.dll", EntryPoint = "SHSetInputContext")]
-        private static extern int SHSetInputContext(IntPtr hwnd, SHIC_FEATURE dwFeature, bool lpValue);
-
-        private enum SHIC_FEATURE : uint
-        {
-            RESTOREDEFAULT = 0,
-            AUTOCORRECT = 1,
-            AUTOSUGGEST = 2,
-            HAVETRAILER = 3,
-            CLASS = 4
-        };
-
-        public static void SetAutoSuggest(Control window, bool enabled)
-        {
-            
-            SHSetInputContext(window.Handle, SHIC_FEATURE.AUTOSUGGEST, enabled);
-        }
-
-
+        
         private List<LinkLabel> VisibleItems = new List<LinkLabel>();
         public delegate void delItemChose(string itemText);
         public event delItemChose ItemChosen = delegate { };
@@ -40,7 +22,6 @@ namespace PockeTwit
         public userListControl()
         {
             InitializeComponent();
-            SetAutoSuggest(txtInput, false);
             PockeTwit.Themes.FormColors.SetColors(this);
         }
 
@@ -147,6 +128,11 @@ namespace PockeTwit
                     e.Handled = true;
                 }
             }
+        }
+
+        private void txtInput_GotFocus(object sender, EventArgs e)
+        {
+            DisableCompletion.SIPHelper.DisableCompletion(txtInput);
         }
     }
 }
