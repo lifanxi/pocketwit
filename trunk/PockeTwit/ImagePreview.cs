@@ -37,6 +37,50 @@ namespace PockeTwit
             DrawPreview();
         }
 
+        public Size GenerateImageDimensions(int currW, int currH, int destW, int destH)
+        {
+            //double to hold the final multiplier to use when scaling the image
+            double multiplier = 0;
+
+            //string for holding layout
+            string layout;
+
+            //determine if it's Portrait or Landscape
+            if (currH > currW) layout = "portrait";
+            else layout = "landscape";
+
+            switch (layout.ToLower())
+            {
+                case "portrait":
+                    //calculate multiplier on heights
+                    if (destH > destW)
+                    {
+                        multiplier = (double)destW / (double)currW;
+                    }
+
+                    else
+                    {
+                        multiplier = (double)destH / (double)currH;
+                    }
+                    break;
+                case "landscape":
+                    //calculate multiplier on widths
+                    if (destH > destW)
+                    {
+                        multiplier = (double)destW / (double)currW;
+                    }
+
+                    else
+                    {
+                        multiplier = (double)destH / (double)currH;
+                    }
+                    break;
+            }
+
+            //return the new image dimensions
+            return new Size((int)(currW * multiplier), (int)(currH * multiplier));
+        }
+
         private void DrawPreview()
         {
             if (string.IsNullOrEmpty(imagePathToShow))
@@ -47,16 +91,13 @@ namespace PockeTwit
             {
                 if (menuZoom.Checked)
                 {
-                    int controlSmallSide = pictureBox1.Image.Width < pictureBox1.Image.Height ? pictureBox1.Image.Width : pictureBox1.Image.Height;
-                    int imagebigSide = imageToShow.Width > imageToShow.Height ? imageToShow.Width : imageToShow.Height;
+
+                    Size NewSize = GenerateImageDimensions(imageToShow.Width, imageToShow.Height, pictureBox1.Width, pictureBox1.Height);
                     
-                    decimal scaleFactor = (decimal)controlSmallSide / imagebigSide;
+                    int leftOfImage = (pictureBox1.Image.Width - NewSize.Width)/2;
+                    int topOfImage = (pictureBox1.Image.Height - NewSize.Height) / 2;
 
-                    int leftOfImage = (pictureBox1.Image.Width - (int)(imageToShow.Width * scaleFactor)) / 2;
-                    int topOfImage = (pictureBox1.Image.Height - (int)(imageToShow.Height * scaleFactor)) / 2;
-
-                    Rectangle destRect = new Rectangle(leftOfImage, topOfImage, (int)(imageToShow.Width * scaleFactor), (int)(imageToShow.Height * scaleFactor));
-
+                    Rectangle destRect = new Rectangle(leftOfImage, topOfImage, NewSize.Width, NewSize.Height);
                     using (Graphics g = Graphics.FromImage(pictureBox1.Image))
                     {
                         g.Clear(ClientSettings.BackColor);
