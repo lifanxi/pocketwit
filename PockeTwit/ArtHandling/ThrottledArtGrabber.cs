@@ -24,13 +24,14 @@ namespace PockeTwit
     }
     static class ThrottledArtGrabber
     {
+        public static bool running = true;
         private static System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]", System.Text.RegularExpressions.RegexOptions.Compiled);
         public static Bitmap FavoriteImage;
         public static Bitmap UnknownArt;
+        public static Bitmap DefaultArt;
         public static TiledMaps.WinCEImagingBitmap mapMarkerImage;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
         private static List<string> BadURLs = new List<string>();
-        private static List<string> BadUsers = new List<string>();
         public static string CacheFolder;
         private static System.Threading.Thread WorkerThread;
         static ThrottledArtGrabber()
@@ -66,14 +67,31 @@ namespace PockeTwit
                 System.IO.Directory.CreateDirectory(CacheFolder + "\\Unknown");
             }
             UnknownArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+            DefaultArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
+
+
+            
             Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
-            Graphics g = Graphics.FromImage(UnknownArt);
-            g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
-            g.Dispose();
+            Bitmap DiskDefault = new Bitmap(ClientSettings.AppPath + "\\default_profile_bigger.png");
+            using (Graphics g = Graphics.FromImage(UnknownArt))
+            {
+                g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
+            }
+
+            using (Graphics g = Graphics.FromImage(DefaultArt))
+            {
+                g.DrawImage(DiskDefault, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskDefault.Width, DiskDefault.Height), GraphicsUnit.Pixel);
+            }
+            DiskUnknown.Dispose();
+            DiskDefault.Dispose();
+
             if (!System.IO.File.Exists(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser"))
             {
                 UnknownArt.Save(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser", System.Drawing.Imaging.ImageFormat.Bmp);
             }
+
+            
+
         }
 
         public delegate void ArtIsReady(string Argument);
@@ -81,14 +99,14 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                url = TryToFindURL(user);
-            }
             if(string.IsNullOrEmpty(url))
             {
                 //Don't re-queue -- we won't be able to get it for now.
                 return new Bitmap(UnknownArt);
+            }
+            if (url == "http://static.twitter.com/images/default_profile_normal.png")
+            {
+                return new Bitmap(DefaultArt);
             }
             string ID = url.Replace("_bigger","").Replace("_normal","") ;
             string ArtName = DetermineCacheFileName(user, url);
@@ -99,18 +117,14 @@ namespace PockeTwit
                     return new Bitmap(UnknownArt);
                 }
             }
-            lock (BadUsers)
-            {
-                if (BadUsers.Contains(user))
-                {
-                    return new Bitmap(UnknownArt);
-                }
-            }
                         
             if (!System.IO.File.Exists(ArtName + ".ID"))
             {
+                //No existing ID, we'll queue a fetch
                 ArtRequest r = new ArtRequest(user, url);
                 QueueRequest(r);
+
+                //Should we write ID now to prevent multiple requests?
                 return new Bitmap(UnknownArt);
             }
             else
@@ -126,21 +140,25 @@ namespace PockeTwit
                     {
                         ArtRequest r = new ArtRequest(user, url);
                         QueueRequest(r);
-                        BadUsers.Add(user);
                         return new Bitmap(UnknownArt);
                     }
                     else
                     {
-                        using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                        try
                         {
-                            return new Bitmap(s);
+                            using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                            {
+                                return new Bitmap(s);
+                            }
+                        }
+                        catch
+                        {
+                            return new Bitmap(UnknownArt);
                         }
                     }
                 }
                 catch
                 {
-                    ArtRequest r = new ArtRequest(user, url);
-                    QueueRequest(r);
                     return new Bitmap(UnknownArt);
                 }
             }
@@ -171,7 +189,7 @@ namespace PockeTwit
         }
         private static void ProcessQueue()
         {
-            while (Requests.Count > 0)
+            while (Requests.Count > 0 && running)
             {
                 ArtRequest r;
                 lock (Requests)
@@ -191,32 +209,48 @@ namespace PockeTwit
             WorkerThread = null;
         }
 
+        private static void AddBadURL(string URL)
+        {
+            if (URL == "http://static.twitter.com/images/default_profile_normal.png")
+            {
+                return;
+            }
+            lock (BadURLs)
+            {
+                BadURLs.Add(URL);
+            }
+        }
+
         private static void FetchRequest(ArtRequest r)
         {
             System.Diagnostics.Debug.WriteLine("Processing " + r.User);
             if (string.IsNullOrEmpty(r.URL))
             {
-                r.URL = TryToFindURL(r.User);
+                return;
             }
             string LocalFileName = DetermineCacheFileName(r.User, r.URL);
             System.Net.HttpWebResponse ArtResponse = null;
             try
             {
                 System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(r.URL);
+                GetArt.Timeout = 20000;
                 ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
                 lock (BadURLs)
                 {
-                    BadURLs.Add(r.URL);
+                    AddBadURL(r.URL);
                     return;
                 }
             }
             if (ArtResponse == null)
             {
-                return;
+                lock (BadURLs)
+                {
+                    AddBadURL(r.URL);
+                    return;
+                }
             }
             System.IO.Stream responseStream = null;
             System.IO.MemoryStream ArtWriter = null;
@@ -259,7 +293,12 @@ namespace PockeTwit
             }
             catch(Exception ex) 
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                lock (BadURLs)
+                {
+                    AddBadURL(r.URL);
+                    DeleteID(LocalFileName);
+                    return;
+                }
             }
         }
 
@@ -281,18 +320,6 @@ namespace PockeTwit
         }
 
 
-        public static string TryToFindURL(string User)
-        {
-            Library.User newUser = null;
-            foreach (Yedda.Twitter.Account Account in ClientSettings.AccountsList)
-            {
-                newUser = Library.User.FromId(User, Account);
-                if (newUser != null) { break; }
-            }
-            if (newUser == null) { return null; }
-            return newUser.profile_image_url;
-        }
-
         private static void WriteID(string ArtPath, string ID)
         {
             System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.Create, System.IO.FileAccess.Write);
@@ -302,6 +329,14 @@ namespace PockeTwit
                 sw.Flush();
                 sw.Close();
             }
+        }
+        private static void DeleteID(string ArtPath)
+        {
+            try
+            {
+                System.IO.File.Delete(ArtPath + ".ID");
+            }
+            catch { }
         }
     }
 }

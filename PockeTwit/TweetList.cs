@@ -331,6 +331,7 @@ namespace PockeTwit
                 {
                     Manager.ShutDown();
                 }
+                ThrottledArtGrabber.running = false;
                 this.Close();
             }
             if (settings.NeedsRerender)
@@ -1415,6 +1416,7 @@ namespace PockeTwit
             {
                 if (Notifyer != null) { Notifyer.ShutDown(); }
                 Application.Exit();
+                ThrottledArtGrabber.running = false;
                 return;
             }
             SwitchToDone();
@@ -1572,6 +1574,7 @@ namespace PockeTwit
             {
                 Notifyer.ShutDown();
             }
+            ThrottledArtGrabber.running = false;
             base.OnClosed(e);
         }
 
