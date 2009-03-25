@@ -719,6 +719,7 @@ namespace PockeTwit
                     {
                         uploadedPictureURL = string.Empty;
                         pictureUsed = false;
+                        uploadingPicture = false;
                         InsertPictureFromFile();
                     }
                 }
@@ -746,6 +747,7 @@ namespace PockeTwit
                     {
                         uploadedPictureURL = string.Empty;
                         pictureUsed = false;
+                        uploadingPicture = false;
                         InsertPictureFromCamera();
                     }
                 }
