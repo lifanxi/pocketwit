@@ -548,7 +548,7 @@ namespace PockeTwit
         {
             foreach (Library.status s in statuses)
             {
-                AddressBook.AddName(s.user.name);
+                AddressBook.AddName(s.user.screen_name);
             }
             //This is the best time to save the addressbook.
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(AddressBook.Save));

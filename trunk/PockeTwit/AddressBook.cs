@@ -12,7 +12,6 @@ namespace PockeTwit
 
         static AddressBook()
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Load));
         }
 
         public static string[] GetList()
@@ -41,6 +40,11 @@ namespace PockeTwit
                     _Names.Add(Name);
                 }
             }
+        }
+
+        public static void Load()
+        {
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Load));
         }
 
         private static void Load(object o)
