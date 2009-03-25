@@ -408,7 +408,6 @@ namespace PockeTwit.Library
             set
             {
                 _screen_name = value;
-                PockeTwit.AddressBook.AddName(value);
             }
         }
         public string followers_count { get; set; }
