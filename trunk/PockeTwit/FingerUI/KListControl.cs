@@ -1038,6 +1038,10 @@ namespace FingerUI
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (ClickablesControl.Visible)
+            {
+                return;
+            }
             if (!movingItems) 
             {
                 
