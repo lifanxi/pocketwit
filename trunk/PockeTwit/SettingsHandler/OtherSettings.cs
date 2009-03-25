@@ -50,7 +50,6 @@ namespace PockeTwit
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
-            ClientSettings.RunOnStartUp = chkStartup.Checked;            
             if (string.IsNullOrEmpty(cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString()))            
             { 
                 ClientSettings.MediaService = "TwitPic";            
@@ -97,7 +96,6 @@ namespace PockeTwit
         private void PopulateForm()
         {
 
-            chkStartup.Checked = ClientSettings.RunOnStartUp;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
