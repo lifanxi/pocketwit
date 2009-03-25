@@ -71,7 +71,7 @@ namespace FingerUI
         public ItemList m_items = new ItemList();
         Dictionary<string, ItemList> ItemLists = new Dictionary<string, ItemList>();
         
-        int m_itemWidth = 240;
+        int m_itemWidth = -1;
         // Properties
         int m_maxVelocity = 45;
         Point m_mouseDown = new Point(-1, -1);
@@ -322,6 +322,10 @@ namespace FingerUI
             get
             {
                 // In vertical mode, we just use the full bounds, other modes use m_itemWidth.
+                if (m_itemWidth < 0)
+                {
+                    m_itemWidth = this.Width;
+                }
                 return m_itemWidth;
             }
             set
