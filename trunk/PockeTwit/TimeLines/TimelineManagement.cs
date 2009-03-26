@@ -45,19 +45,30 @@ namespace PockeTwit
         public TimelineManagement()
         {
             //Not working out so well on my device.  Will investigate more later.
-            //PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
+            PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
         }
 
         void s_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
         {
-            if (((int)SystemState.GetValue(SystemProperty.PowerBatteryStrength) <= 20))
+            BatteryLevel level = (BatteryLevel)SystemState.GetValue(SystemProperty.PowerBatteryStrength);
+            if (ClientSettings.UpdateMinutes > 0)
             {
-                updateTimer.Enabled = false;
-                MessageBox.Show("Battery low - disabling auto-updates.", "PockeTwit Battery Low");
-            }
-            else
-            {
-                updateTimer.Enabled = true;
+                if (level <= BatteryLevel.VeryLow)
+                {
+                    updateTimer.Enabled = false;
+                    MessageBox.Show("Battery low - disabling auto-updates.", "PockeTwit Battery");
+                }
+                else
+                {
+                    if (!updateTimer.Enabled)
+                    {
+                        if (level >= BatteryLevel.Low)
+                        {
+                            updateTimer.Enabled = false;
+                            MessageBox.Show("Battery charged - re-enabling auto-updates.", "PockeTwit Battery");
+                        }
+                    }
+                }
             }
         }
 
