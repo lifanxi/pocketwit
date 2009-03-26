@@ -45,7 +45,7 @@ namespace PockeTwit
         public TimelineManagement()
         {
             //Not working out so well on my device.  Will investigate more later.
-            PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
+            //PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
         }
 
         void s_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
