@@ -50,6 +50,8 @@
             this.Controls.Add(this.txtInput);
             this.Name = "userListControl";
             this.Size = new System.Drawing.Size(258, 22);
+            this.GotFocus += new System.EventHandler(this.userListControl_GotFocus);
+            this.LostFocus += new System.EventHandler(this.userListControl_LostFocus);
             this.ResumeLayout(false);
 
         }

@@ -796,7 +796,7 @@ namespace PockeTwit
                     {
                         userListControl1.inputText = e.KeyChar.ToString();
                         userListControl1.Visible = true;
-                        userListControl1.Focus();
+                        //userListControl1.Focus();
                         e.Handled = true;
                     }
                 }
@@ -808,7 +808,7 @@ namespace PockeTwit
                         {
                             userListControl1.inputText = e.KeyChar.ToString();
                             userListControl1.Visible = true;
-                            userListControl1.Focus();
+                            //userListControl1.Focus();
                             e.Handled = true;
                         }
                     }

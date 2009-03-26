@@ -18,11 +18,12 @@ namespace PockeTwit
         public delegate void delItemChose(string itemText);
         public event delItemChose ItemChosen = delegate { };
         private DeviceType dt = DetectDevice.DeviceType;
-
+        
         public userListControl()
         {
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
+            txtInput.LostFocus += new EventHandler(userListControl_LostFocus);
         }
 
         public string inputText
@@ -41,6 +42,7 @@ namespace PockeTwit
             foreach (LinkLabel existing in VisibleItems)
             {
                 existing.Click -= new EventHandler(lblItem_Click);
+                existing.LostFocus -= new EventHandler(userListControl_LostFocus);
                 this.Controls.Remove(existing);
             }
 
@@ -61,6 +63,7 @@ namespace PockeTwit
                     lblItem.Height = ClientSettings.TextSize + 10;
                     lblItem.Width = this.Width;
                     lblItem.Click += new EventHandler(lblItem_Click);
+                    lblItem.LostFocus += new EventHandler(userListControl_LostFocus);
                     lblItem.Font = ClientSettings.TextFont;
                     lblItem.ForeColor = ClientSettings.ForeColor;
 
@@ -133,6 +136,23 @@ namespace PockeTwit
         private void txtInput_GotFocus(object sender, EventArgs e)
         {
             DisableCompletion.SIPHelper.DisableCompletion(txtInput);
+        }
+
+        void userListControl_LostFocus(object sender, EventArgs e)
+        {
+            if (!this.Visible) { return; }
+            if (txtInput.Focused) { return; }
+            foreach (LinkLabel l in VisibleItems)
+            {
+                if (l.Focused) { return; }
+            }
+            this.Visible = false;
+            ItemChosen(" ");
+        }
+
+        private void userListControl_GotFocus(object sender, EventArgs e)
+        {
+            txtInput.Focus();
         }
     }
 }
