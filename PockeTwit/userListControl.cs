@@ -50,7 +50,7 @@ namespace PockeTwit
                 this.Height = top * 2;
                 return; 
             }
-            string[] Names = AddressBook.GetList(txtInput.Text);
+            string[] Names = AddressBook.GetList(txtInput.Text.ToLower());
             if (Names.Length > 0)
             {
                 foreach (string Name in Names)

@@ -34,10 +34,11 @@ namespace PockeTwit
 
         public static void AddName(string Name)
         {
+            string nameToAdd = Name.ToLower();
             lock(_Names){
-                if (!_Names.Contains(Name))
+                if (!_Names.Contains(nameToAdd))
                 {
-                    _Names.Add(Name);
+                    _Names.Add(nameToAdd);
                 }
             }
         }
