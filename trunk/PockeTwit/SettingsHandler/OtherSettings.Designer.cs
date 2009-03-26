@@ -156,27 +156,30 @@ namespace PockeTwit
             this.txtCaheDir.Location = new System.Drawing.Point(4, 168);
             this.txtCaheDir.Name = "txtCaheDir";
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
-            this.txtCaheDir.TabIndex = 6;
+            this.txtCaheDir.TabIndex = 5;
             // 
             // lblPhotoService
             // 
             this.lblPhotoService.ForeColor = System.Drawing.Color.LightGray;
             this.lblPhotoService.Location = new System.Drawing.Point(3, 197);
             this.lblPhotoService.Name = "lblPhotoService";
-            this.lblPhotoService.Size = new System.Drawing.Size(100, 20);
+            this.lblPhotoService.Size = new System.Drawing.Size(90, 20);
             this.lblPhotoService.Text = "Media Service";
             // 
             // cmbMediaService
             // 
+            this.cmbMediaService.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbMediaService.Location = new System.Drawing.Point(99, 195);
             this.cmbMediaService.Name = "cmbMediaService";
             this.cmbMediaService.Size = new System.Drawing.Size(138, 22);
-            this.cmbMediaService.TabIndex = 1;
+            this.cmbMediaService.TabIndex = 6;
             // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.cmbMediaService);
