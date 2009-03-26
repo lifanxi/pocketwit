@@ -115,7 +115,7 @@
             this.lnkNotifications.ForeColor = System.Drawing.Color.LightBlue;
             this.lnkNotifications.Location = new System.Drawing.Point(3, 69);
             this.lnkNotifications.Name = "lnkNotifications";
-            this.lnkNotifications.Size = new System.Drawing.Size(130, 20);
+            this.lnkNotifications.Size = new System.Drawing.Size(234, 20);
             this.lnkNotifications.TabIndex = 3;
             this.lnkNotifications.Text = "Configure Notifications";
             this.lnkNotifications.Click += new System.EventHandler(this.lnkNotifications_Click);
