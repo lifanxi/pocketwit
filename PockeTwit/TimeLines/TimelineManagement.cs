@@ -40,7 +40,7 @@ namespace PockeTwit
         private int HoldNewFriends = 0;
         public DateTime NextUpdate;
 
-        private Microsoft.WindowsMobile.Status.SystemState PowerState = new Microsoft.WindowsMobile.Status.SystemState(Microsoft.WindowsMobile.Status.SystemProperty.PowerBatteryState);
+        //private Microsoft.WindowsMobile.Status.SystemState PowerState = new Microsoft.WindowsMobile.Status.SystemState(Microsoft.WindowsMobile.Status.SystemProperty.PowerBatteryState);
 
         public TimelineManagement()
         {
