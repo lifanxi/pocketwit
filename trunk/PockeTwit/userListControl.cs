@@ -96,7 +96,7 @@ namespace PockeTwit
             if (e.KeyChar == '\r' || e.KeyChar == ' ')
             {
                 this.Visible = false;
-                ItemChosen(txtInput.Text);
+                ItemChosen(txtInput.Text + " ");
                 e.Handled = true;
             }
         }
