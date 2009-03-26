@@ -794,24 +794,28 @@ namespace FingerUI
                 if (LeftMenu.IsExpanded && CurrentlyViewing == SideShown.Left)
                 {
                     LeftMenu.CollapseExpandedMenu();
+                    e.Handled = true;
                 }
                 else if (RightMenu.IsExpanded && CurrentlyViewing == SideShown.Right)
                 {
                     RightMenu.CollapseExpandedMenu();
+                    e.Handled = true;
                 }
                 else if (LeftMenu.Contains("Back"))
                 {
                     LeftMenu.InvokeByText("Back");
+                    e.Handled = true;
                 }
                 else
                 {
                     if (CurrentlyViewing != SideShown.Middle)
                     {
                         SnapBack();
+                        e.Handled = true;
                     }
                 }
             }
-            e.Handled = true;
+            
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
