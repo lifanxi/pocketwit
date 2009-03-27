@@ -63,7 +63,7 @@ namespace FingerUI
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
         private Popup ErrorPopup = new Popup();
-        private PockeTwit.Clickables ClickablesControl = new PockeTwit.Clickables();
+        private ClickablesMenu ClickablesControl = new ClickablesMenu();
         private bool HasMoved = false;
         private bool InFocus = false;
         // Background drawing
@@ -118,6 +118,8 @@ namespace FingerUI
 
             LeftMenu.NeedRedraw+=new SideMenu.delClearMe(delegate{Repaint();});
             RightMenu.NeedRedraw += new SideMenu.delClearMe(delegate { Repaint(); });
+
+            ClickablesControl.NeedRedraw += new ClickablesMenu.delClearMe(delegate { Repaint();});
 
             animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             errorTimer = new System.Threading.Timer(new System.Threading.TimerCallback(errorTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -1044,6 +1046,7 @@ namespace FingerUI
         {
             if (ClickablesControl.Visible)
             {
+                ClickablesControl.SelectAtPoint(new Point(e.X, e.Y));
                 return;
             }
             if (!movingItems) 
@@ -1139,7 +1142,10 @@ namespace FingerUI
 
             if (ClickablesControl.Visible)
             {
-                ClickablesControl.CheckForClicks(new Point(e.X, e.Y));
+                if (!ClickablesControl.CheckForClicks(new Point(e.X, e.Y)))
+                {
+                    ClickablesControl.Visible = false;
+                }
                 Invalidate();
                 return;
             }

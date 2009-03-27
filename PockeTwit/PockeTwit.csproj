@@ -135,7 +135,7 @@
     <Compile Include="SettingsHandler\AccountsForm.Designer.cs">
       <DependentUpon>AccountsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Clickables.cs">
+    <Compile Include="FingerUI\Menu\ClickablesMenu.cs">
     </Compile>
     <Compile Include="DetectDevice.cs" />
     <Compile Include="FingerUI\KListControl.cs">
