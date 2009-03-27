@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.67</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv67.CAB</url>
-  <notes>"Unread" item counts
-Minor bugfixes
+  <version>.68</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv68.CAB</url>
+  <notes>Picture Services:
+   Choose between multiple hosts
+   Show pictures without a browser
+AddressBook:
+   Easily enter @reply names
+New Timelines:
+   Public timeline
+   View your favorites
+Copy tweet to email
 </notes>
 </LatestRelease>
