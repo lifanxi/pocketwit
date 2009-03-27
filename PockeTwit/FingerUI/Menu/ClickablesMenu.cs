@@ -180,9 +180,11 @@ namespace FingerUI
                 {
                     Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
                     int TextTop = ((r.Bottom - r.Top) / 2) + r.Top;
+                    Color TextColor = ClientSettings.ForeColor;
                     if (i == _CurrentlyFocused)
                     {
                         Gradient.GradientFill.Fill(g, r, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                        TextColor = ClientSettings.SelectedForeColor;
                     }
                     else
                     {
@@ -194,11 +196,7 @@ namespace FingerUI
                     g.DrawRectangle(whitePen, r);
                     StringFormat sFormat = new StringFormat();
                     sFormat.LineAlignment = StringAlignment.Center;
-                    Color TextColor = ClientSettings.ForeColor;
-                    if (i == _CurrentlyFocused)
-                    {
-                        TextColor = ClientSettings.SelectedForeColor;
-                    }
+                    
                     using (Brush c = new SolidBrush(TextColor))
                     {
                         g.DrawString(Item, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), c, r.Left + 4, TextTop, sFormat);
