@@ -176,7 +176,9 @@ namespace FingerUI
             int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
 
             Region originalClip = g.Clip;
-            g.Clip = new Region(new Rectangle(this.Left, this.Top, this.Width + 1, this.Height + 1));
+            Rectangle DrawingArea = new Rectangle(this.Left, TopOfItem, this.Width+1, (ItemHeight * TextItems.Count)+1);
+            g.Clip = new Region(DrawingArea);
+
             int i = 0;
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
@@ -184,7 +186,6 @@ namespace FingerUI
                 {
                     Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
                     int TextTop = ((r.Bottom - r.Top) / 2) + r.Top;
-                    Color BackColor;
                     if (i == _CurrentlyFocused)
                     {
                         Gradient.GradientFill.Fill(g, r, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
@@ -212,6 +213,7 @@ namespace FingerUI
                     i++;
                 }
             }
+            
             g.Clip = originalClip;
         }
 

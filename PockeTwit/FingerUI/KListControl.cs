@@ -1349,6 +1349,7 @@ namespace FingerUI
 
                     if (ClickablesControl.Visible)
                     {
+                        AdjustBrightness((Bitmap)flickerBuffer, -50);
                         ClickablesControl.Render(flickerGraphics);
                     }
                     //This always makes it appear??
@@ -1821,6 +1822,39 @@ namespace FingerUI
                 m_items[m_selectedIndex].Selected = false;
                 SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             }
+        }
+
+        public static void AdjustBrightness(Bitmap image, int brightness)
+        {
+            int offset = 0;
+            brightness = (brightness * 255) / 100;
+            // GDI+ still lies to us - the return format is BGR, NOT RGB.
+            System.Drawing.Imaging.BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            int stride = bmData.Stride;
+            IntPtr Scan0 = bmData.Scan0;
+
+            int nVal = 0;
+            int nOffset = stride - image.Width * 3;
+            int nWidth = image.Width * 3;
+
+            for (int y = 0; y < image.Height; ++y)
+            {
+                for (int x = 0; x < nWidth; ++x)
+                {
+                    nVal = System.Runtime.InteropServices.Marshal.ReadByte(Scan0, offset) + brightness;
+
+                    if (nVal < 0)
+                        nVal = 0;
+                    if (nVal > 255)
+                        nVal = 255;
+
+                    System.Runtime.InteropServices.Marshal.WriteByte(Scan0, offset, (byte)nVal);
+                    ++offset;
+                }
+                offset += nOffset;
+            }
+            image.UnlockBits(bmData);
         }
 
 
