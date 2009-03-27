@@ -58,9 +58,6 @@ namespace FingerUI
         }
         
 		#region Fields (23) 
-        private int brightness = 0;
-        private bool isDimming = false;
-        private bool isBrightening = false;
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
@@ -493,7 +490,7 @@ namespace FingerUI
         
         void animationTimer_Tick(object o)
         {
-            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating && !isDimming && !isBrightening)
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating)
             {
                 animationTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             }
@@ -1300,7 +1297,6 @@ namespace FingerUI
         {
             using (Image flickerBuffer = new Bitmap(this.Width, this.Height))
             {
-
                 using (Graphics flickerGraphics = Graphics.FromImage(flickerBuffer))
                 {
                     flickerGraphics.Clear(ClientSettings.BackColor);
@@ -1352,31 +1348,8 @@ namespace FingerUI
 
                     if (ClickablesControl.Visible)
                     {
-                        if (brightness > -44)
-                        {
-                            brightness = brightness - 15;
-                        }
-                        else
-                        {
-                            isDimming = false;
-                        }
-                        AdjustBrightness((Bitmap)flickerBuffer, brightness);
+                        AdjustBrightness((Bitmap)flickerBuffer, -60);
                         ClickablesControl.Render(flickerGraphics);
-                    }
-                    else
-                    {
-                        if (isBrightening)
-                        {
-                            if (brightness < 0)
-                            {
-                                brightness = brightness + 15;
-                            }
-                            else
-                            {
-                                isBrightening = false;
-                            }
-                            AdjustBrightness((Bitmap)flickerBuffer, brightness);
-                        }
                     }
                     e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
@@ -1825,14 +1798,11 @@ namespace FingerUI
 
         private void HideClickablesControl()
         {
-            isDimming = false;
-            isBrightening = true;
             ClickablesControl.Visible = false;
             startAnimation();
         }
         private void ShowClickablesControl()
         {
-            isDimming = true;
             StatusItem s = null;
             try
             {
