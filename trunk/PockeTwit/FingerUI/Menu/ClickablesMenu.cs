@@ -11,9 +11,7 @@ namespace FingerUI
 {
     public class ClickablesMenu
     {
-        public delegate void delClearMe();
-        public event delClearMe NeedRedraw = delegate { };
-
+        
         #region Fields (2)
 
         private int _CurrentlyFocused = 0;
@@ -62,13 +60,12 @@ namespace FingerUI
 
         #endregion Properties
 
-        #region Delegates and Events (1)
-
-
-        // Events (1) 
-
-        public event FingerUI.StatusItem.ClickedWordDelegate WordClicked;
-
+        #region Delegates and Events
+        public delegate void delNoArgs();
+        public event delNoArgs NeedRedraw = delegate { };
+        public event delNoArgs Dismissed = delegate { };
+        public event FingerUI.StatusItem.ClickedWordDelegate WordClicked = delegate { };
+        
 
         #endregion Delegates and Events
 
@@ -109,11 +106,11 @@ namespace FingerUI
                     Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
                     if (r.Contains(p))
                     {
-                        this.Visible = false;
-                        if (TextItems[_CurrentlyFocused] != "Close menu")
+                        if (TextItems[_CurrentlyFocused] != "Close Menu")
                         {
                             WordClicked(Item);
                         }
+                        Dismissed();
                         _CurrentlyFocused = 0;
                         return true;
                     }

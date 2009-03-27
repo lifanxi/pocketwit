@@ -60,6 +60,7 @@ namespace FingerUI
 		#region Fields (23) 
         private int brightness = 0;
         private bool isDimming = false;
+        private bool isBrightening = false;
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
@@ -120,7 +121,8 @@ namespace FingerUI
             LeftMenu.NeedRedraw+=new SideMenu.delClearMe(delegate{Repaint();});
             RightMenu.NeedRedraw += new SideMenu.delClearMe(delegate { Repaint(); });
 
-            ClickablesControl.NeedRedraw += new ClickablesMenu.delClearMe(delegate { Repaint();});
+            ClickablesControl.NeedRedraw += new ClickablesMenu.delNoArgs(delegate { Repaint();});
+            ClickablesControl.Dismissed += new ClickablesMenu.delNoArgs(delegate {HideClickablesControl();});
 
             animationTimer = new System.Threading.Timer(new System.Threading.TimerCallback(animationTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             errorTimer = new System.Threading.Timer(new System.Threading.TimerCallback(errorTimer_Tick), null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -135,7 +137,7 @@ namespace FingerUI
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
 
-            HideClickablesControl();
+            ClickablesControl.Visible = false;
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
 
             //Need to repaint when fetching state has changed.
@@ -491,7 +493,7 @@ namespace FingerUI
         
         void animationTimer_Tick(object o)
         {
-            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating && !isDimming)
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating && !isDimming && !isBrightening)
             {
                 animationTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             }
@@ -1361,6 +1363,21 @@ namespace FingerUI
                         AdjustBrightness((Bitmap)flickerBuffer, brightness);
                         ClickablesControl.Render(flickerGraphics);
                     }
+                    else
+                    {
+                        if (isBrightening)
+                        {
+                            if (brightness < 0)
+                            {
+                                brightness = brightness + 10;
+                            }
+                            else
+                            {
+                                isBrightening = false;
+                            }
+                            AdjustBrightness((Bitmap)flickerBuffer, brightness);
+                        }
+                    }
                     //This always makes it appear??
                     
                     e.Graphics.DrawImage(flickerBuffer, 0, 0);
@@ -1811,8 +1828,9 @@ namespace FingerUI
         private void HideClickablesControl()
         {
             isDimming = false;
-            brightness = 0;
+            isBrightening = true;
             ClickablesControl.Visible = false;
+            startAnimation();
         }
         private void ShowClickablesControl()
         {
@@ -1847,7 +1865,7 @@ namespace FingerUI
             int offset = 0;
             brightness = (brightness * 255) / 100;
             // GDI+ still lies to us - the return format is BGR, NOT RGB.
-            System.Drawing.Imaging.BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            System.Drawing.Imaging.BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 
             int stride = bmData.Stride;
             IntPtr Scan0 = bmData.Scan0;
