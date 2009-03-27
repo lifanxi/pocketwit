@@ -562,6 +562,7 @@ namespace PockeTwit
                 }
                 catch (OutOfMemoryException)
                 {
+                    BoxToUpdate.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "insertlink.png");
                 }
             }
         }
