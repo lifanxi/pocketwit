@@ -7,28 +7,30 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PockeTwit
+namespace FingerUI
 {
-    public class Clickables
+    public class ClickablesMenu
     {
+        public delegate void delClearMe();
+        public event delClearMe NeedRedraw = delegate { };
 
-		#region Fields (2) 
+        #region Fields (2)
 
         private int _CurrentlyFocused = 0;
-        private List<string> TextItems = new List<string>(new string[]{"Close Menu"});
+        private List<string> TextItems = new List<string>(new string[] { "Close Menu" });
 
-		#endregion Fields 
+        #endregion Fields
 
-		#region Constructors (1) 
+        #region Constructors (1)
 
-        public Clickables()
+        public ClickablesMenu()
         {
-            
+
         }
 
-		#endregion Constructors 
+        #endregion Constructors
 
-		#region Properties (7) 
+        #region Properties (7)
 
         public int Height { get; set; }
 
@@ -58,24 +60,45 @@ namespace PockeTwit
 
         public int Width { get; set; }
 
-		#endregion Properties 
+        #endregion Properties
 
-		#region Delegates and Events (1) 
+        #region Delegates and Events (1)
 
 
-		// Events (1) 
+        // Events (1) 
 
         public event FingerUI.StatusItem.ClickedWordDelegate WordClicked;
 
 
-		#endregion Delegates and Events 
+        #endregion Delegates and Events
 
-		#region Methods (2) 
+        #region Methods
 
+        public void SelectAtPoint(Point p)
+        {
+            try
+            {
+                int ItemHeight = (ClientSettings.TextSize * 2);
+                int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
+                int i = 0;
+                foreach (string Item in TextItems)
+                {
+                    Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
+                    if (r.Contains(p))
+                    {
+                        _CurrentlyFocused = i;
+                        NeedRedraw();
+                    }
+                    TopOfItem = TopOfItem + ItemHeight;
+                    i++;
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+            }
+        }
 
-		// Public Methods (2) 
-
-        public void CheckForClicks(Point p)
+        public bool CheckForClicks(Point p)
         {
             try
             {
@@ -87,16 +110,12 @@ namespace PockeTwit
                     if (r.Contains(p))
                     {
                         this.Visible = false;
-                        if (TextItems[_CurrentlyFocused] == "Close menu")
-                        {
-                            _CurrentlyFocused = 0;
-                            return;
-                        }
-                        if (WordClicked != null)
+                        if (TextItems[_CurrentlyFocused] != "Close menu")
                         {
                             WordClicked(Item);
-                            _CurrentlyFocused = 0;
                         }
+                        _CurrentlyFocused = 0;
+                        return true;
                     }
                     TopOfItem = TopOfItem + ItemHeight;
                 }
@@ -104,6 +123,7 @@ namespace PockeTwit
             catch (KeyNotFoundException)
             {
             }
+            return false;
         }
 
         public void KeyDown(KeyEventArgs e)
@@ -156,7 +176,7 @@ namespace PockeTwit
             int TopOfItem = ((this.Height / 2) - ((TextItems.Count * ItemHeight) / 2));
 
             Region originalClip = g.Clip;
-            g.Clip = new Region(new Rectangle(this.Left, this.Top, this.Width+1, this.Height+1));
+            g.Clip = new Region(new Rectangle(this.Left, this.Top, this.Width + 1, this.Height + 1));
             int i = 0;
             using (Pen whitePen = new Pen(ClientSettings.ForeColor))
             {
@@ -167,23 +187,21 @@ namespace PockeTwit
                     Color BackColor;
                     if (i == _CurrentlyFocused)
                     {
-                        BackColor = ClientSettings.SelectedBackColor;
+                        Gradient.GradientFill.Fill(g, r, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
                     }
                     else
                     {
-                        BackColor = ClientSettings.BackColor;
-                    }
-                    using (Brush b = new SolidBrush(BackColor))
-                    {
-                        g.FillRectangle(b, r);
-                        g.DrawRectangle(whitePen, r);
-                        StringFormat sFormat = new StringFormat();
-                        sFormat.LineAlignment = StringAlignment.Center;
-                        using (Brush c = new SolidBrush(ClientSettings.ForeColor))
+                        using (Brush b = new SolidBrush(ClientSettings.BackColor))
                         {
-                            
-                            g.DrawString(Item, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), c, r.Left + 4, TextTop, sFormat);
+                            g.FillRectangle(b, r);
                         }
+                    }
+                    g.DrawRectangle(whitePen, r);
+                    StringFormat sFormat = new StringFormat();
+                    sFormat.LineAlignment = StringAlignment.Center;
+                    using (Brush c = new SolidBrush(ClientSettings.ForeColor))
+                    {
+                        g.DrawString(Item, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), c, r.Left + 4, TextTop, sFormat);
                     }
                     TopOfItem = TopOfItem + ItemHeight;
                     i++;
@@ -192,8 +210,7 @@ namespace PockeTwit
             g.Clip = originalClip;
         }
 
-
-		#endregion Methods 
+        #endregion Methods
 
     }
 }
