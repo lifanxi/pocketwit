@@ -40,12 +40,12 @@ namespace PockeTwit
         private int HoldNewFriends = 0;
         public DateTime NextUpdate;
 
-        //private Microsoft.WindowsMobile.Status.SystemState PowerState = new Microsoft.WindowsMobile.Status.SystemState(Microsoft.WindowsMobile.Status.SystemProperty.PowerBatteryState);
+        private Microsoft.WindowsMobile.Status.SystemState PowerState = new Microsoft.WindowsMobile.Status.SystemState(Microsoft.WindowsMobile.Status.SystemProperty.PowerBatteryState);
 
         public TimelineManagement()
         {
             //Not working out so well on my device.  Will investigate more later.
-            //PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
+            PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
         }
 
         void s_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
@@ -56,7 +56,7 @@ namespace PockeTwit
                 if (level <= BatteryLevel.VeryLow)
                 {
                     updateTimer.Enabled = false;
-                    MessageBox.Show("Battery low - disabling auto-updates.", "PockeTwit Battery");
+                    MessageBox.Show("Battery low - disabling auto-updates.\r\n"+level.ToString() , "PockeTwit Battery");
                 }
                 else
                 {
@@ -65,7 +65,7 @@ namespace PockeTwit
                         if (level >= BatteryLevel.Low)
                         {
                             updateTimer.Enabled = false;
-                            MessageBox.Show("Battery charged - re-enabling auto-updates.", "PockeTwit Battery");
+                            MessageBox.Show("Battery charged - re-enabling auto-updates.\r\n" + level.ToString(), "PockeTwit Battery");
                         }
                     }
                 }
