@@ -58,7 +58,8 @@ namespace FingerUI
         }
         
 		#region Fields (23) 
-
+        private int brightness = 0;
+        private bool isDimming = false;
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
@@ -134,7 +135,7 @@ namespace FingerUI
             m_timer.Interval = ClientSettings.AnimationInterval;
             m_timer.Tick += new EventHandler(m_timer_Tick);
 
-            ClickablesControl.Visible = false;
+            HideClickablesControl();
             ClickablesControl.WordClicked += new StatusItem.ClickedWordDelegate(ClickablesControl_WordClicked);
 
             //Need to repaint when fetching state has changed.
@@ -490,7 +491,7 @@ namespace FingerUI
         
         void animationTimer_Tick(object o)
         {
-            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating)
+            if (!NotificationArea.isAnimating && !ErrorPopup.isAnimating && !LeftMenu.IsAnimating && !RightMenu.IsAnimating && !isDimming)
             {
                 animationTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
             }
@@ -1144,7 +1145,7 @@ namespace FingerUI
             {
                 if (!ClickablesControl.CheckForClicks(new Point(e.X, e.Y)))
                 {
-                    ClickablesControl.Visible = false;
+                    HideClickablesControl();
                 }
                 Invalidate();
                 return;
@@ -1349,7 +1350,15 @@ namespace FingerUI
 
                     if (ClickablesControl.Visible)
                     {
-                        AdjustBrightness((Bitmap)flickerBuffer, -50);
+                        if (brightness > -69)
+                        {
+                            brightness = brightness - 10;
+                        }
+                        else
+                        {
+                            isDimming = false;
+                        }
+                        AdjustBrightness((Bitmap)flickerBuffer, brightness);
                         ClickablesControl.Render(flickerGraphics);
                     }
                     //This always makes it appear??
@@ -1452,7 +1461,7 @@ namespace FingerUI
                 fsDisplay.Status = s.Tweet;
                 fsDisplay.Render();
                 fsDisplay.Visible = true;
-                ClickablesControl.Visible = false;
+                HideClickablesControl();
                 
                 /*
                 string fullText = null;
@@ -1798,8 +1807,16 @@ namespace FingerUI
 
         }
 
+
+        private void HideClickablesControl()
+        {
+            isDimming = false;
+            brightness = 0;
+            ClickablesControl.Visible = false;
+        }
         private void ShowClickablesControl()
         {
+            isDimming = true;
             StatusItem s = null;
             try
             {
@@ -1812,7 +1829,8 @@ namespace FingerUI
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
             ClickablesControl.Visible = true;
-            Invalidate();
+            startAnimation();
+            //Invalidate();
         }
 
         private void UnselectCurrentItem()
