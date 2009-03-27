@@ -1378,8 +1378,6 @@ namespace FingerUI
                             AdjustBrightness((Bitmap)flickerBuffer, brightness);
                         }
                     }
-                    //This always makes it appear??
-                    
                     e.Graphics.DrawImage(flickerBuffer, 0, 0);
                 }
             }
@@ -1865,7 +1863,7 @@ namespace FingerUI
             int offset = 0;
             brightness = (brightness * 255) / 100;
             // GDI+ still lies to us - the return format is BGR, NOT RGB.
-            System.Drawing.Imaging.BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            System.Drawing.Imaging.BitmapData bmData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             int stride = bmData.Stride;
             IntPtr Scan0 = bmData.Scan0;
