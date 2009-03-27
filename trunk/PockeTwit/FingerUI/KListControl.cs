@@ -1352,9 +1352,9 @@ namespace FingerUI
 
                     if (ClickablesControl.Visible)
                     {
-                        if (brightness > -69)
+                        if (brightness > -59)
                         {
-                            brightness = brightness - 10;
+                            brightness = brightness - 15;
                         }
                         else
                         {
@@ -1369,7 +1369,7 @@ namespace FingerUI
                         {
                             if (brightness < 0)
                             {
-                                brightness = brightness + 10;
+                                brightness = brightness + 15;
                             }
                             else
                             {
