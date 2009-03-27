@@ -151,15 +151,14 @@ namespace FingerUI
                 }
                 if (e.KeyCode == Keys.Enter)
                 {
-                    if (TextItems[_CurrentlyFocused] == "Close Menu")
+                    if (TextItems[_CurrentlyFocused] != "Close Menu")
                     {
-                        _CurrentlyFocused = 0;
+                        if (WordClicked != null)
+                        {
+                            WordClicked(TextItems[_CurrentlyFocused]);
+                        }
                     }
-                    if (WordClicked != null)
-                    {
-                        WordClicked(TextItems[_CurrentlyFocused]);
-                        _CurrentlyFocused = 0;
-                    }
+                    _CurrentlyFocused = 0;
                     Dismissed();
                 }
             }
