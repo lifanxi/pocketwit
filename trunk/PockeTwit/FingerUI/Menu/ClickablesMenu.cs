@@ -199,7 +199,12 @@ namespace FingerUI
                     g.DrawRectangle(whitePen, r);
                     StringFormat sFormat = new StringFormat();
                     sFormat.LineAlignment = StringAlignment.Center;
-                    using (Brush c = new SolidBrush(ClientSettings.ForeColor))
+                    Color TextColor = ClientSettings.ForeColor;
+                    if (i == _CurrentlyFocused)
+                    {
+                        TextColor = ClientSettings.SelectedForeColor;
+                    }
+                    using (Brush c = new SolidBrush(TextColor))
                     {
                         g.DrawString(Item, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), c, r.Left + 4, TextTop, sFormat);
                     }
