@@ -148,6 +148,7 @@ namespace PockeTwit
 
         void picAddressBook_Click(object sender, EventArgs e)
         {
+            txtStatusUpdate.Text = txtStatusUpdate.Text + "@";
             userListControl1.Visible = true;
             userListControl1.Focus();
         }
@@ -299,6 +300,7 @@ namespace PockeTwit
 
         void menuAddressBook_Click(object sender, EventArgs e)
         {
+            txtStatusUpdate.Text = txtStatusUpdate.Text + "@";
             userListControl1.Visible = true;
             userListControl1.Focus();
         }
@@ -815,22 +817,6 @@ namespace PockeTwit
                     }
                 }
             }
-            /*
-            if (e.KeyChar == '@')
-            {
-
-                userListControl1.Visible = true;
-                userListControl1.Focus();
-            }
-            else if(e.KeyChar == ' ')
-            {
-                if (txtStatusUpdate.Text.Substring(txtStatusUpdate.SelectionStart - 1, 1) == "d")
-                {
-                    userListControl1.Visible = true;
-                    userListControl1.Focus();
-                }
-            }
-             */
         }
 
         
