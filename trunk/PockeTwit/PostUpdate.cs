@@ -349,11 +349,11 @@ namespace PockeTwit
 
         private void SetImages()
         {
-            this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
-            this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
-            this.pictureURL.Image = new Bitmap(ClientSettings.IconsFolder() + "url.png");
-            this.pictureLocation.Image = new Bitmap(ClientSettings.IconsFolder() + "map.png");
-            this.picAddressBook.Image = new Bitmap(ClientSettings.IconsFolder() + "address.png");
+            this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
+            this.pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
+            this.pictureURL.Image = PockeTwit.Themes.FormColors.GetThemeIcon("url.png");
+            this.pictureLocation.Image = PockeTwit.Themes.FormColors.GetThemeIcon("map.png");
+            this.picAddressBook.Image = PockeTwit.Themes.FormColors.GetThemeIcon("address.png");
         }
 
         private void PopulateAccountList()
@@ -388,7 +388,7 @@ namespace PockeTwit
                         if (c.ShowDialog() == DialogResult.OK)
                         {
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                            this.pictureFromStorage.Image = new Bitmap(ClientSettings.IconsFolder() + "existingimage.png");
+                            this.pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
                                 this.pictureFromStorage.Visible = false;
@@ -428,7 +428,7 @@ namespace PockeTwit
                 if (s.ShowDialog() == DialogResult.OK)
                 {
                     System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                    this.pictureFromCamers.Image = new Bitmap(ClientSettings.IconsFolder() + "takepicture.png");
+                    this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
                     if (DetectDevice.DeviceType == DeviceType.Standard)
                     {
                         this.pictureFromCamers.Visible = false;
@@ -564,7 +564,7 @@ namespace PockeTwit
                 }
                 catch (OutOfMemoryException)
                 {
-                    BoxToUpdate.Image = new System.Drawing.Bitmap(ClientSettings.IconsFolder() + "insertlink.png");
+                    BoxToUpdate.Image = PockeTwit.Themes.FormColors.GetThemeIcon("insertlink.png");
                 }
             }
         }
