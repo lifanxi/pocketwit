@@ -55,6 +55,10 @@ namespace PockeTwit
         FingerUI.SideMenuItem MapMenuItem;
         FingerUI.SideMenuItem SettingsMenuItem;
         FingerUI.SideMenuItem AboutMenuItem;
+
+        FingerUI.SideMenuItem WindowMenuItem;
+        FingerUI.SideMenuItem FullScreenMenuItem;
+        FingerUI.SideMenuItem MinimizeMenuItem;
         FingerUI.SideMenuItem ExitMenuItem;
         #endregion
         #region RightMenu
@@ -71,7 +75,7 @@ namespace PockeTwit
         FingerUI.SideMenuItem UserTimelineMenuItem;
         FingerUI.SideMenuItem ProfilePageMenuItem;
         FingerUI.SideMenuItem FollowMenuItem;
-        FingerUI.SideMenuItem MinimizeMenuItem;
+        
         #endregion
         #endregion MenuItems
 
@@ -494,18 +498,27 @@ namespace PockeTwit
             MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
             SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
             AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
+
+
+            WindowMenuItem = new FingerUI.SideMenuItem(null, "Window ...", statList.LeftMenu);
+
+            FullScreenMenuItem = new FingerUI.SideMenuItem(ToggleFullScreen, "Toggle FullScreen", statList.LeftMenu);
             MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.RightMenu);
             ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
+
+            WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
+            WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
             
+
             if (ClientSettings.MergeMessages)
             {
                 statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, MergedTimeLineMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, MinimizeMenuItem, ExitMenuItem});
+                AboutMenuItem, WindowMenuItem, ExitMenuItem});
             }
             else
             {
                 statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, MinimizeMenuItem, ExitMenuItem});
+                AboutMenuItem, WindowMenuItem, ExitMenuItem});
             }
             /*
             statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
@@ -870,6 +883,20 @@ namespace PockeTwit
                 ShowSearchResults(SearchString);
             }
             m.Close();
+        }
+
+        private void ToggleFullScreen()
+        {
+            ClientSettings.IsMaximized = !ClientSettings.IsMaximized;
+            ClientSettings.SaveSettings();
+            if (ClientSettings.IsMaximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+            }
         }
 
         private void SetStatus()
