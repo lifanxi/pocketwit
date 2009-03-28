@@ -467,10 +467,7 @@ namespace FingerUI
 
         public delegate void delAddItem(StatusItem item);
         public delegate void delClearMe();
-        //public delegate void delMenuItemSelected(string ItemName);
-        public delegate void delSwitchState(bool IsMaximized);
-
-
+        
 		// Events (5) 
 
         //public event delMenuItemSelected MenuItemSelected;
@@ -478,8 +475,6 @@ namespace FingerUI
         public event EventHandler SelectedItemChanged;
 
         public event EventHandler SelectedItemClicked;
-
-        public event delSwitchState SwitchWindowState;
 
         public event StatusItem.ClickedWordDelegate WordClicked;
 
@@ -935,9 +930,7 @@ namespace FingerUI
                     }
                     else
                     {
-                        m_velocity.X = (this.Width / 2);
-                        XOffset = XOffset + 3;
-                        m_timer.Enabled = true;
+                        OpenRightMenu();
                     }
                 }
                 else if (CurrentlyViewing == SideShown.Right)
@@ -963,9 +956,7 @@ namespace FingerUI
                     }
                     else
                     {
-                        m_velocity.X = -(this.Width / 2);
-                        XOffset = XOffset - 3;
-                        m_timer.Enabled = true;
+                        OpenLeftMenu();
                     }
                 }
                 else if (CurrentlyViewing == SideShown.Left)
@@ -995,6 +986,20 @@ namespace FingerUI
             }
             this.Refresh();
             
+        }
+
+        public void OpenRightMenu()
+        {
+            m_velocity.X = (this.Width / 2);
+            XOffset = XOffset + 3;
+            m_timer.Enabled = true;
+        }
+
+        public void OpenLeftMenu()
+        {
+            m_velocity.X = -(this.Width / 2);
+            XOffset = XOffset - 3;
+            m_timer.Enabled = true;
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -1150,18 +1155,6 @@ namespace FingerUI
                 return;
             }
 
-            if (XOffset > 15)
-            {
-                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
-                if (cLocation.Contains(new Point(e.X, e.Y)))
-                {
-                    IsMaximized = !IsMaximized;
-                    if (SwitchWindowState != null)
-                    {
-                        SwitchWindowState(IsMaximized);
-                    }
-                }
-            }
 
             //If we're fast-scrolling. stop
             if (m_scrollBarMove)

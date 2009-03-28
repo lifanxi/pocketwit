@@ -50,6 +50,9 @@ namespace PockeTwit
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.statList = new FingerUI.KListControl();
+            this.mainMenu1 = new System.Windows.Forms.MainMenu();
+            this.globalMenu = new System.Windows.Forms.MenuItem();
+            this.specificMenu = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // timerStartup
@@ -76,7 +79,7 @@ namespace PockeTwit
             this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
             this.lblLoading.Location = new System.Drawing.Point(0, 31);
             this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(240, 263);
+            this.lblLoading.Size = new System.Drawing.Size(240, 188);
             this.lblLoading.Text = "Loading. . .";
             // 
             // statList
@@ -86,16 +89,31 @@ namespace PockeTwit
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.statList.Location = new System.Drawing.Point(0, 0);
             this.statList.Name = "statList";
-            this.statList.Size = new System.Drawing.Size(240, 294);
+            this.statList.Size = new System.Drawing.Size(240, 268);
             this.statList.TabIndex = 0;
             this.statList.Visible = false;
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.Add(this.globalMenu);
+            this.mainMenu1.MenuItems.Add(this.specificMenu);
+            // 
+            // globalMenu
+            // 
+            this.globalMenu.Text = "Global";
+            this.globalMenu.Click += new System.EventHandler(this.globalMenu_Click);
+            // 
+            // specificMenu
+            // 
+            this.specificMenu.Text = "Specific";
+            this.specificMenu.Click += new System.EventHandler(this.specificMenu_Click);
             // 
             // TweetList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(240, 294);
+            this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblLoading);
             this.Controls.Add(this.statList);
@@ -109,6 +127,9 @@ namespace PockeTwit
         #endregion
 
         private Microsoft.WindowsCE.Forms.InputPanel inputPanel1;
+        private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem globalMenu;
+        private System.Windows.Forms.MenuItem specificMenu;
     }
 }
 

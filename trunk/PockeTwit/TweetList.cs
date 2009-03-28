@@ -97,6 +97,11 @@ namespace PockeTwit
                 if (ClientSettings.IsMaximized)
                 {
                     this.WindowState = FormWindowState.Maximized;
+                    this.Menu = null;
+                }
+                else
+                {
+                    AddMainMenuItems();
                 }
             }
             InitializeComponent();
@@ -153,6 +158,11 @@ namespace PockeTwit
             {
                 timerStartup.Enabled = true;
             }
+        }
+
+        private void AddMainMenuItems()
+        {
+            this.Menu = mainMenu1;
         }
 
         void MobileDevice_Hibernate(object sender, EventArgs e)
@@ -892,10 +902,12 @@ namespace PockeTwit
             if (ClientSettings.IsMaximized)
             {
                 this.WindowState = FormWindowState.Maximized;
+                this.Menu = null;
             }
             else
             {
                 this.WindowState = FormWindowState.Normal;
+                AddMainMenuItems();
             }
         }
 
@@ -951,7 +963,6 @@ namespace PockeTwit
             //statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
-            statList.SwitchWindowState += new FingerUI.KListControl.delSwitchState(statusList_SwitchWindowState);
             statList.HookKey();
         }
 
@@ -1284,20 +1295,7 @@ namespace PockeTwit
             i.itemsOffset = statList.YOffset;
         }
 
-        void statusList_SwitchWindowState(bool IsMaximized)
-        {
-            ClientSettings.IsMaximized = IsMaximized;
-            ClientSettings.SaveSettings();
-            if (IsMaximized)
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Normal;
-            }
-        }
-
+        
         void statusList_WordClicked(string TextClicked)
         {
             if (TextClicked.StartsWith("http"))
@@ -1535,10 +1533,12 @@ namespace PockeTwit
             if (ClientSettings.IsMaximized)
             {
                 SetWindowState(FormWindowState.Maximized);
+                this.Menu = null;
             }
             else
             {
                 SetWindowState(FormWindowState.Normal);
+                AddMainMenuItems();
             }
             //How do we tell if it was launched in background and is not being activated by user?
             // This is occuring after the initial run/setup is complete.
@@ -1613,6 +1613,16 @@ namespace PockeTwit
             {
                 statList.Visible = false;
             }
+        }
+
+        private void globalMenu_Click(object sender, EventArgs e)
+        {
+            statList.OpenLeftMenu();
+        }
+
+        private void specificMenu_Click(object sender, EventArgs e)
+        {
+            statList.OpenRightMenu();
         }
 
     }
