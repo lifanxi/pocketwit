@@ -19,6 +19,8 @@
     <FormFactorID>
     </FormFactorID>
     <ApplicationIcon>PockeTwit.ico</ApplicationIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>PockeTwitKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -480,6 +482,7 @@
     <Content Include="Themes\Original\url.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="PockeTwitKey.snk" />
     <None Include="TiledMaps\GoogleMaps\SampleDecodedSegments.xml" />
     <Content Include="Themes\Original\wait.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

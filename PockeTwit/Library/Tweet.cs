@@ -282,8 +282,12 @@ namespace PockeTwit.Library
                 newStat.id = entry.SelectSingleNode("id").InnerText;
                 newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
                 string userName = entry.SelectSingleNode("sender/screen_name").InnerText;
+                
                 newStat.user = new User();
                 newStat.user.screen_name = userName;
+                newStat.user.profile_image_url = entry.SelectSingleNode("sender/profile_image_url").InnerText;
+                newStat.user.location = entry.SelectSingleNode("sender/location").InnerText;
+                newStat.user.description = entry.SelectSingleNode("sender/description").InnerText;
 
                 resultList.Add(newStat);
 
