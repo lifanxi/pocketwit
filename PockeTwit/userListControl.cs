@@ -146,7 +146,6 @@ namespace PockeTwit
             {
                 if (l.Focused) { return; }
             }
-            DisableCompletion.SIPHelper.EnableCompletion(txtInput);
             this.Visible = false;
             ItemChosen(" ");
         }
