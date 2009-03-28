@@ -9,11 +9,8 @@ Posting an image is a two-step process.  First you mush use the icon (or menu it
   *  *How do I manually update a timeline?*
 It automatically updates the timeline every time you choose it from the left menu.  It will display an "updating" notification at the bottom until it's done.
 
-  *  *It crashed!  What do I do?*
-Crashes generate an "error.txt" file in the Program folder.  If you could create an Issue on this site and attach that file, it would go a long way to helping me hunt down the bug. 
-
   *  *I can't see the whole tweet*
-Sometimes word-wrapping in the tweets causes the last word or two to be cut off from the display.  You can select the clipped tweet and click the center-button in the D-Pad to view the entire message.
+Sometimes word-wrapping in the tweets causes the last word or two to be cut off from the display.  You can select the clipped tweet, click the center-button in the D-Pad, and choose "Detailed View" from that menu to view the entire message.
 
   *  *How do I use ping.fm?*
 If you have a ping.fm account, they will provide you with a unique "application key" at http://ping.fm/key/.  This key replaces your username and password in applications that connect to ping.fm.
