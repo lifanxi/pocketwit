@@ -105,6 +105,7 @@ namespace PockeTwit
             this.txtStatusUpdate.Size = new System.Drawing.Size(232, 193);
             this.txtStatusUpdate.TabIndex = 7;
             this.txtStatusUpdate.TextChanged += new System.EventHandler(this.txtStatusUpdate_TextChanged);
+            this.txtStatusUpdate.GotFocus += new System.EventHandler(this.txtStatusUpdate_GotFocus);
             this.txtStatusUpdate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtStatusUpdate_KeyPress);
             // 
             // lblCharsLeft

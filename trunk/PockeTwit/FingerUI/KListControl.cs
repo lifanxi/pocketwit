@@ -1763,7 +1763,6 @@ namespace FingerUI
         private void HideClickablesControl()
         {
             ClickablesControl.Visible = false;
-            startAnimation();
         }
         private void ShowClickablesControl()
         {
@@ -1779,8 +1778,6 @@ namespace FingerUI
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
             ClickablesControl.Visible = true;
-            startAnimation();
-            //Invalidate();
         }
 
         private void UnselectCurrentItem()
