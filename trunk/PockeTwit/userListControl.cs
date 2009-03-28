@@ -153,6 +153,7 @@ namespace PockeTwit
         private void userListControl_GotFocus(object sender, EventArgs e)
         {
             txtInput.Focus();
+            DisableCompletion.SIPHelper.DisableCompletion(txtInput);
         }
     }
 }
