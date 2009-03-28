@@ -7,6 +7,17 @@ namespace PockeTwit.Themes
 {
     class FormColors
     {
+        public static System.Drawing.Bitmap GetThemeIcon(string iconName)
+        {
+            if (System.IO.File.Exists(ClientSettings.IconsFolder() + iconName))
+            {
+                return new System.Drawing.Bitmap(ClientSettings.IconsFolder() + iconName);
+            }
+            else
+            {
+                return new System.Drawing.Bitmap(1, 1);
+            }
+        }
         public static void SetColors(UserControl f)
         {
             foreach (Control c in f.Controls)
