@@ -1319,21 +1319,7 @@ namespace FingerUI
                         DrawMenu(flickerGraphics, SideShown.Left);
                     }
                     DrawPointer(flickerGraphics);
-                    if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Professional && this.Width < this.Height)
-                    {
-                        if (XOffset > 15)
-                        {
-                            if (IsMaximized)
-                            {
-                                DrawMaxWindowSwitcher(flickerGraphics);
-                            }
-                            else
-                            {
-                                DrawStandardWindowSwitcher(flickerGraphics);
-                            }
-                        }
-                    }
-
+                    
                     if ((CurrentList() == "Friends_TimeLine" && PockeTwit.GlobalEventHandler.FriendsUpdating) || (CurrentList() == "Messages_TimeLine" && PockeTwit.GlobalEventHandler.MessagesUpdating))
                     {
                         NotificationArea.ShowNotification("Updating...");
@@ -1361,16 +1347,25 @@ namespace FingerUI
             // Do nothing
         }
 
+
+        private Size oldSize = new Size(0,0);
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
 
-            
 
             if (this.Visible)
             {
-                RerenderBySize();
+                if (this.Width != oldSize.Width)
+                {
+                    RerenderBySize();
+                }
+                LeftMenu.Height = this.Height;
+                RightMenu.Height = this.Height;
+                LeftMenu.Width = this.Width;
+                RightMenu.Width = this.Width;
             }
+            oldSize = new Size(this.Width, this.Height);
         }
 
         public void RerenderBySize()
@@ -1539,18 +1534,7 @@ namespace FingerUI
             
         }
 
-        private void DrawMaxWindowSwitcher(Graphics g)
-        {
-            using (Pen sPen = new Pen(ClientSettings.ForeColor))
-            {
-                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
-                Rectangle cInterior = new Rectangle(this.Width - 13, 7, 6, 6);
-                g.DrawRectangle(sPen, cLocation);
-                sPen.Width = 1;
-                g.DrawLine(sPen, cInterior.Left, cInterior.Bottom, cInterior.Right, cInterior.Bottom);
-            }
-        }
-
+        
         int PointerSize = ClientSettings.TextSize;
         int PointerHalf = ClientSettings.TextSize / 2;
 
@@ -1575,19 +1559,6 @@ namespace FingerUI
 
         }
 
-
-        private void DrawStandardWindowSwitcher(Graphics g)
-        {
-            using(Pen sPen = new Pen(ClientSettings.ForeColor))
-            {
-                sPen.Width = 2;
-                Rectangle cLocation = new Rectangle(this.Width - 15, 5, 10, 10);
-                Rectangle cInterior = new Rectangle(this.Width - 13, 7, 6, 6);
-                g.DrawRectangle(sPen, cLocation);
-                sPen.Width = 1;
-                g.DrawRectangle(sPen, cInterior);
-            }
-        }
 
         private Point FindIndex(int x, int y)
         {
