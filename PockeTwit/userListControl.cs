@@ -141,7 +141,6 @@ namespace PockeTwit
 
         void userListControl_LostFocus(object sender, EventArgs e)
         {
-            DisableCompletion.SIPHelper.EnableCompletion(txtInput);
             if (!this.Visible) { return; }
             if (txtInput.Focused) { return; }
             foreach (LinkLabel l in VisibleItems)
