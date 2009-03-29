@@ -35,3 +35,4 @@ Vince:Sponsor
 @QuantumTom:Sponsor
 @VMDoug:Sponsor
 @furrypotato:Sponsor
+@sstranger:Sponsor
