@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.68</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv68.CAB</url>
-  <notes>Picture Services:
+  <version>.69</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv69.CAB</url>
+  <notes>Fix posting images in smartphone
+Fix avatars in direct messages
+Fix crash with old theme
+
+From v.68:
+Picture Services:
    Choose between multiple hosts
    Show pictures without a browser
 AddressBook:
