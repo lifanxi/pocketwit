@@ -19,6 +19,7 @@ namespace DisableCompletion
             m_dwSipFlasg = info.fdwFlags;
             info.fdwFlags |= SIPF_DISABLECOMPLETION;
             SHSipInfo(SPI_SETSIPINFO, 0, info, 0);
+            SHSipInfo(SPI_SETCOMPLETIONINFO, 0, info, 0);
         }
 
 
@@ -28,10 +29,12 @@ namespace DisableCompletion
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
             info.fdwFlags &= ~SIPF_DISABLECOMPLETION;
             SHSipInfo(SPI_SETSIPINFO, 0, info, 0);
+            SHSipInfo(SPI_SETCOMPLETIONINFO, 0, info, 0);
         }
 
         #region p/invoke
 
+        private const int SPI_SETCOMPLETIONINFO = 223;
         private const int SPI_SETSIPINFO = 224;
         private const int SPI_GETSIPINFO = 225;
         private const int SIPF_DISABLECOMPLETION = 0x08;
