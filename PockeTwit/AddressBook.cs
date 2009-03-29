@@ -52,23 +52,30 @@ namespace PockeTwit
         {
             if (System.IO.File.Exists(location))
             {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(location))
+                try
                 {
-                    string Addresses = r.ReadToEnd();
-                    if (!string.IsNullOrEmpty(Addresses))
+                    using (System.IO.StreamReader r = new System.IO.StreamReader(location))
                     {
-                        System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-                        d.LoadXml(Addresses);
-
-                        System.Xml.XmlNodeList l = d.SelectNodes("//name");
-                        foreach (System.Xml.XmlNode n in l)
+                        string Addresses = r.ReadToEnd();
+                        if (!string.IsNullOrEmpty(Addresses))
                         {
-                            if (!_Names.Contains(n.InnerText))
+                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
+                            d.LoadXml(Addresses);
+
+                            System.Xml.XmlNodeList l = d.SelectNodes("//name");
+                            foreach (System.Xml.XmlNode n in l)
                             {
-                                _Names.Add(n.InnerText);
+                                if (!_Names.Contains(n.InnerText))
+                                {
+                                    _Names.Add(n.InnerText);
+                                }
                             }
                         }
                     }
+                }
+                catch
+                {
+                    //Addressbook xml must have gotten corrupt.  Best to start over.
                 }
             }
         }
