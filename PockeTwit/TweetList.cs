@@ -162,7 +162,10 @@ namespace PockeTwit
 
         private void AddMainMenuItems()
         {
-            this.Menu = mainMenu1;
+            if(this.Menu==null)
+            {
+                this.Menu = mainMenu1;
+            }
         }
 
         void MobileDevice_Hibernate(object sender, EventArgs e)
