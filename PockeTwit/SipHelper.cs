@@ -15,7 +15,7 @@ namespace DisableCompletion
         public static void DisableCompletion(TextBox textBox)
         {
             textBox.Capture = true;
-            IntPtr m_hWnd = GetCapture();
+            IntPtr m_hWnd = textBox.Handle;
             textBox.Capture = false;
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
@@ -30,11 +30,11 @@ namespace DisableCompletion
         public static void EnableCompletion(TextBox textBox)
         {
             textBox.Capture = true;
-            IntPtr m_hWnd = GetCapture();
+            IntPtr m_hWnd = textBox.Handle;
             textBox.Capture = false;
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
-            info.fdwFlags = m_dwSipFlasg;
+            info.fdwFlags &= ~SIPF_DISABLECOMPLETION;
             SHSipInfo(SPI_SETSIPINFO, 0, info, 0);
             SHSipPreference(m_hWnd, SIPSTATE.SIP_FORCEDOWN);
             SHSipPreference(m_hWnd, SIPSTATE.SIP_UP);
