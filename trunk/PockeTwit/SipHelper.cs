@@ -14,9 +14,7 @@ namespace DisableCompletion
 
         public static void DisableCompletion(TextBox textBox)
         {
-            textBox.Capture = true;
             IntPtr m_hWnd = textBox.Handle;
-            textBox.Capture = false;
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
             m_dwSipFlasg = info.fdwFlags;
@@ -29,9 +27,7 @@ namespace DisableCompletion
 
         public static void EnableCompletion(TextBox textBox)
         {
-            textBox.Capture = true;
             IntPtr m_hWnd = textBox.Handle;
-            textBox.Capture = false;
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
             info.fdwFlags &= ~SIPF_DISABLECOMPLETION;
