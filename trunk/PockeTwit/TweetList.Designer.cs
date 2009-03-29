@@ -79,7 +79,7 @@ namespace PockeTwit
             this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
             this.lblLoading.Location = new System.Drawing.Point(0, 31);
             this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(240, 188);
+            this.lblLoading.Size = new System.Drawing.Size(240, 237);
             this.lblLoading.Text = "Loading. . .";
             // 
             // statList

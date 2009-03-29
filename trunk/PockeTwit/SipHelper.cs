@@ -12,7 +12,7 @@ namespace DisableCompletion
 
         private static int m_dwSipFlasg;
 
-        public static void DisableCompletion(TextBox textBox)
+        public static void DisableCompletion()
         {
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
@@ -23,7 +23,7 @@ namespace DisableCompletion
         }
 
 
-        public static void EnableCompletion(TextBox textBox)
+        public static void EnableCompletion()
         {
             SIPINFO info = new SIPINFO();
             SHSipInfo(SPI_GETSIPINFO, 0, info, 0);
