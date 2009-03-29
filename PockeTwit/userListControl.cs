@@ -106,7 +106,6 @@ namespace PockeTwit
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {
-            DisableCompletion.SIPHelper.DisableCompletion(txtInput);
             if (e.KeyCode == Keys.Back)
             {
                 if (string.IsNullOrEmpty(txtInput.Text))
