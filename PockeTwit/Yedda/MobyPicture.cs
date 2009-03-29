@@ -100,22 +100,41 @@ namespace Yedda
             {
                 try
                 {
-                    workerPPO = (PicturePostObject)postData.Clone();
-
                     //Load the picture data
                     byte[] incoming = new byte[file.Length];
                     file.Read(incoming, 0, incoming.Length);
-                    workerPPO.PictureData = incoming;
 
-                    if (workerThread == null)
+                    if (postData.UseAsync)
                     {
-                        workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
-                        workerThread.Name = "PictureUpload";
-                        workerThread.Start();
+                        workerPPO = (PicturePostObject)postData.Clone();
+                        workerPPO.PictureData = incoming;
+
+                        if (workerThread == null)
+                        {
+                            workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
+                            workerThread.Name = "PictureUpload";
+                            workerThread.Start();
+                        }
+                        else
+                        {
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "A request is already running.", ""));
+                        }
                     }
                     else
                     {
-                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "A request is already running.", ""));
+                        //use sync.
+                        postData.PictureData = incoming;
+                        string uploadResult = UploadPicture(API_UPLOAD, postData);
+
+                        if (!string.IsNullOrEmpty(uploadResult))
+                        {
+                            OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, uploadResult, "", postData.Filename));
+                        }
+                        else
+                        {
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture"));
+
+                        }
                     }
                 }
                 catch (Exception e)

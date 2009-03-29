@@ -7,12 +7,16 @@ namespace Yedda
 {
     public class PicturePostObject: IDisposable, ICloneable
     {
+        #region private properties
+
         private string _username = string.Empty;
         private string _password = string.Empty;
-        //private GPSObject _GPSObject = null;
         private string _filename = string.Empty;
         private string _message = string.Empty;
         private byte[] _pictureData = null;
+        private bool _useAsync = true;
+
+        #endregion
 
         #region constructor/deconstructor
 
@@ -36,6 +40,8 @@ namespace Yedda
         #endregion
 
         #endregion
+
+        #region getters and setters
 
         /// <summary>
         /// Byte data from a picture
@@ -97,21 +103,6 @@ namespace Yedda
         }
 
         /// <summary>
-        /// Get or set the GPS data
-        /// </summary>
-        //public GPSObject GPS
-        //{
-        //    get
-        //    {
-        //        return _GPSObject;
-        //    }
-        //    set
-        //    {
-        //        _GPSObject = value;
-        //    }
-        //}
-
-        /// <summary>
         /// Get or set the Filename
         /// </summary>
         public string Filename
@@ -155,7 +146,23 @@ namespace Yedda
             }
         }
 
+        /// <summary>
+        /// Do or do not use async. 
+        /// </summary>
+        public bool UseAsync
+        {
+            get
+            {
+                return _useAsync;
+            }
+            set
+            {
+                _useAsync = value;
+            }
+        }
 
+
+        #endregion
 
         #region ICloneable Members
 

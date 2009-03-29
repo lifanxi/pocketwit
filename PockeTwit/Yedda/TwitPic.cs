@@ -89,22 +89,42 @@ namespace Yedda
             {
                 try
                 {
-                    workerPPO = (PicturePostObject) postData.Clone();
-
                     //Load the picture data
                     byte[] incoming = new byte[file.Length];
                     file.Read(incoming, 0, incoming.Length);
-                    workerPPO.PictureData = incoming;
 
-                    if (workerThread == null)
+                    if (postData.UseAsync)
                     {
-                        workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
-                        workerThread.Name = "PictureUpload";
-                        workerThread.Start();
+                        workerPPO = (PicturePostObject) postData.Clone();
+                        workerPPO.PictureData = incoming;
+
+                        if (workerThread == null)
+                        {
+                            workerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessUpload));
+                            workerThread.Name = "PictureUpload";
+                            workerThread.Start();
+                        }
+                        else
+                        {
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
+                        }
                     }
                     else
                     {
-                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
+                        //use sync.
+                        postData.PictureData = incoming;
+                        XmlDocument uploadResult = UploadPicture(API_UPLOAD, postData);
+
+                        if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                        {
+                            string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, ErrorText, ""));
+                        }
+                        else
+                        {
+                            string URL = uploadResult.SelectSingleNode("//mediaurl").InnerText;
+                            OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, "", postData.Filename));
+                        }
                     }
                 }
                 catch (Exception e)

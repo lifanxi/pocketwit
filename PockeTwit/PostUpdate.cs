@@ -403,6 +403,10 @@ namespace PockeTwit
                                 ppo.Filename = c.FileName;
                                 ppo.Username = AccountToSet.UserName;
                                 ppo.Password = AccountToSet.Password;
+                                if (DetectDevice.DeviceType == DeviceType.Standard)
+                                {
+                                    ppo.UseAsync = false;
+                                }
                                 pictureService.PostPicture(ppo); 
                             }
                         }
@@ -443,6 +447,10 @@ namespace PockeTwit
                         ppo.Filename = s.FileName;
                         ppo.Username = AccountToSet.UserName;
                         ppo.Password = AccountToSet.Password;
+                        if (DetectDevice.DeviceType == DeviceType.Standard)
+                        {
+                            ppo.UseAsync = false;
+                        }
                         pictureService.PostPicture(ppo);
                     }
                 }
@@ -569,6 +577,8 @@ namespace PockeTwit
             }
         }
 
+       
+
         private void UpdatePictureData(string pictureURL, bool uploadingPicture)
         {
             if (InvokeRequired)
@@ -580,10 +590,23 @@ namespace PockeTwit
             {
                 try
                 {
-                    uploadedPictureURL = pictureURL;
-                    uploadingPicture = uploadingPicture;
-                    //when uploading picture, it's not used.
                     pictureUsed = uploadingPicture;
+                    if (DetectDevice.DeviceType == DeviceType.Standard && !string.IsNullOrEmpty(pictureURL))
+                    {
+                        if (txtStatusUpdate.Text.Length > 0)
+                        {
+                            txtStatusUpdate.Text = txtStatusUpdate.Text + ' ' + pictureURL;
+                        }
+                        else
+                        {
+                            txtStatusUpdate.Text = txtStatusUpdate.Text + pictureURL;
+                        }
+                        txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                        pictureUsed = true;
+                    }
+
+                    uploadedPictureURL = pictureURL;
+                    this.uploadingPicture = uploadingPicture;
                 }
                 catch (OutOfMemoryException)
                 {
