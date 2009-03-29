@@ -135,7 +135,7 @@ namespace PockeTwit
 
         private void txtInput_GotFocus(object sender, EventArgs e)
         {
-            DisableCompletion.SIPHelper.DisableCompletion(txtInput);
+            DisableCompletion.SIPHelper.DisableCompletion();
         }
 
         void userListControl_LostFocus(object sender, EventArgs e)

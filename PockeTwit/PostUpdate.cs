@@ -837,7 +837,7 @@ namespace PockeTwit
 
         private void txtStatusUpdate_GotFocus(object sender, EventArgs e)
         {
-            //DisableCompletion.SIPHelper.EnableCompletion(txtStatusUpdate);
+            DisableCompletion.SIPHelper.EnableCompletion();
         }
 
         
