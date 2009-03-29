@@ -54,18 +54,8 @@ namespace PockeTwit
         {
             set
             {
-                if (DetectDevice.DeviceType == DeviceType.Professional)
-                {
-                    pictureFromCamers.Visible = value;
-                    pictureFromStorage.Visible = value;
-                }
-                else
-                {
-                    /*
-                    menuCamera.Enabled = value;
-                    menuExist.Enabled = value;
-                     */
-                }
+                pictureFromCamers.Visible = value;
+                pictureFromStorage.Visible = value;
             }
         }
 
@@ -406,6 +396,7 @@ namespace PockeTwit
                                 if (DetectDevice.DeviceType == DeviceType.Standard)
                                 {
                                     ppo.UseAsync = false;
+                                    Cursor.Current = Cursors.WaitCursor;
                                 }
                                 pictureService.PostPicture(ppo); 
                             }
@@ -450,6 +441,7 @@ namespace PockeTwit
                         if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
                             ppo.UseAsync = false;
+                            Cursor.Current = Cursors.WaitCursor;
                         }
                         pictureService.PostPicture(ppo);
                     }
@@ -590,6 +582,7 @@ namespace PockeTwit
             {
                 try
                 {
+                    Cursor.Current = Cursors.Default;
                     pictureUsed = uploadingPicture;
                     if (DetectDevice.DeviceType == DeviceType.Standard && !string.IsNullOrEmpty(pictureURL))
                     {
