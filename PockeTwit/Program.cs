@@ -65,7 +65,6 @@ namespace PockeTwit
         [MTAThread]
         static void Main(string[] Args)
         {
-            
             bool bBackGround = false;
             if (Args.Length > 0)
             {
