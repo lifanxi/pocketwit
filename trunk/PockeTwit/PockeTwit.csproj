@@ -509,6 +509,7 @@
     <Compile Include="FingerUI\Portal.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GraphicsLibs\DIB.cs" />
     <Compile Include="ImagePreview.cs">
       <SubType>Form</SubType>
     </Compile>

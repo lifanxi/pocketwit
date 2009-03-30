@@ -106,8 +106,12 @@ namespace FingerUI
             {
                 try
                 {
+                    /*
                     TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
                     SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
+                     */
+                    TestMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
+                    //SecondMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
                     break;
                 }
                 catch (OutOfMemoryException ex)
@@ -126,10 +130,12 @@ namespace FingerUI
                     {
                         TestMap.Dispose();
                     }
+                    /*
                     if (SecondMap != null)
                     {
                         SecondMap.Dispose();
                     }
+                     */
                 }
             }
             ScreenMap.Dispose();
@@ -144,8 +150,8 @@ namespace FingerUI
             }
 
             _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
-            _Rendered = new Bitmap(maxWidth, _BitmapHeight);
-            
+            //_Rendered = new Bitmap(maxWidth, _BitmapHeight);
+            _Rendered = GraphicsLibs.DIB.CreateDIB(maxWidth, _BitmapHeight);
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             
         }
