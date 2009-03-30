@@ -174,19 +174,17 @@ namespace GraphicsLibs
 
 
 
-        private static MemoryStream m;
-        private static byte[] buffer;
         public static Bitmap CreateDIB(int x, int y)
         {
 
             //Set up a BitmapHeader
-            BITMAPINFOHEADER bmpInfo = new BITMAPINFOHEADER(24, x, y);
+            BITMAPINFOHEADER bmpInfo = new BITMAPINFOHEADER(8, x, y);
             BITMAPFILEHEADER bmpFile = new BITMAPFILEHEADER(bmpInfo);
 
 
             byte[] buffer = new byte[bmpFile.bfSize];
 
-            m = new MemoryStream(buffer);
+            MemoryStream m = new MemoryStream(buffer);
             using (BinaryWriter writer = new BinaryWriter(m))
             {
                 bmpFile.Store(writer);

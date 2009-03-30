@@ -106,12 +106,12 @@ namespace FingerUI
             {
                 try
                 {
-                    /*
+#if USEDDB
                     TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
                     SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                     */
+#else
                     TestMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                    //SecondMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
+#endif
                     break;
                 }
                 catch (OutOfMemoryException ex)
@@ -130,12 +130,10 @@ namespace FingerUI
                     {
                         TestMap.Dispose();
                     }
-                    /*
                     if (SecondMap != null)
                     {
                         SecondMap.Dispose();
                     }
-                     */
                 }
             }
             ScreenMap.Dispose();
@@ -150,8 +148,11 @@ namespace FingerUI
             }
 
             _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
-            //_Rendered = new Bitmap(maxWidth, _BitmapHeight);
+#if USEDDB
+            _Rendered = new Bitmap(maxWidth, _BitmapHeight);
+#else
             _Rendered = GraphicsLibs.DIB.CreateDIB(maxWidth, _BitmapHeight);
+#endif
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             
         }
