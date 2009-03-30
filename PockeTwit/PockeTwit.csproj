@@ -55,7 +55,7 @@
     <NoConfig>true</NoConfig>
     <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
     <OutputPath>bin\DevBuild\</OutputPath>
-    <DefineConstants>TRACE;PocketPC</DefineConstants>
+    <DefineConstants>TRACE;PocketPC USEDDB</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
