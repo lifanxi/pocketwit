@@ -92,30 +92,40 @@ namespace PockeTwit
                 if (menuZoom.Checked)
                 {
 
-                    Size NewSize = GenerateImageDimensions(imageToShow.Width, imageToShow.Height, pictureBox1.Width, pictureBox1.Height);
-                    
-                    int leftOfImage = (pictureBox1.Image.Width - NewSize.Width)/2;
-                    int topOfImage = (pictureBox1.Image.Height - NewSize.Height) / 2;
-
-                    Rectangle destRect = new Rectangle(leftOfImage, topOfImage, NewSize.Width, NewSize.Height);
-                    using (Graphics g = Graphics.FromImage(pictureBox1.Image))
-                    {
-                        g.Clear(ClientSettings.BackColor);
-                        g.DrawImage(imageToShow, destRect, new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
-                    }
+                    DrawScaled(imageToShow);
                 }
                 else
                 {
-                    int leftOfImage = (pictureBox1.Width - imageToShow.Width) / 2;
-                    int topOfImage = (pictureBox1.Height - imageToShow.Height) / 2;
-
-                    using(Graphics g = Graphics.FromImage(pictureBox1.Image))
-                    {
-                        g.Clear(ClientSettings.BackColor);
-                        g.DrawImage(imageToShow, leftOfImage, topOfImage);
-                    }
+                    DrawOriginalSize(imageToShow);
                 }
                 pictureBox1.Refresh();
+            }
+        }
+
+        private void DrawScaled(Bitmap imageToShow)
+        {
+            Size NewSize = GenerateImageDimensions(imageToShow.Width, imageToShow.Height, pictureBox1.Width, pictureBox1.Height);
+
+            int leftOfImage = (pictureBox1.Image.Width - NewSize.Width) / 2;
+            int topOfImage = (pictureBox1.Image.Height - NewSize.Height) / 2;
+
+            Rectangle destRect = new Rectangle(leftOfImage, topOfImage, NewSize.Width, NewSize.Height);
+            using (Graphics g = Graphics.FromImage(pictureBox1.Image))
+            {
+                g.Clear(ClientSettings.BackColor);
+                g.DrawImage(imageToShow, destRect, new Rectangle(0, 0, imageToShow.Width, imageToShow.Height), GraphicsUnit.Pixel);
+            }
+        }
+
+        private void DrawOriginalSize(Bitmap imageToShow)
+        {
+            int leftOfImage = (pictureBox1.Width - imageToShow.Width) / 2;
+            int topOfImage = (pictureBox1.Height - imageToShow.Height) / 2;
+
+            using (Graphics g = Graphics.FromImage(pictureBox1.Image))
+            {
+                g.Clear(ClientSettings.BackColor);
+                g.DrawImage(imageToShow, leftOfImage, topOfImage);
             }
         }
 
