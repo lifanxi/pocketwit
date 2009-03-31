@@ -484,9 +484,7 @@
     <Content Include="Themes\Original\url.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="LocalStorage\LocalCache.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="LocalStorage\LocalCache.db" />
     <None Include="PockeTwitKey.snk" />
     <None Include="TiledMaps\GoogleMaps\SampleDecodedSegments.xml" />
     <Content Include="Themes\Original\wait.png">

@@ -22,9 +22,50 @@ namespace LocalStorage
         private const string SQLFetchSearches = "(statuses.statustypes & 4)";
         private const string SQLOrder = " ORDER BY statuses.[timestamp] DESC LIMIT @count ";
 
+        private static string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
         public static System.Data.SQLite.SQLiteConnection GetConnection()
         {
+            if (!System.IO.File.Exists(DBPath)) { CreateDB(); }
             return new SQLiteConnection("Data Source=" + ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db");
+        }
+
+        private static void CreateDB()
+        {
+            if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
+            {
+                System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\LocalStorage");
+            }
+            SQLiteConnection.CreateFile(DBPath);
+            using(SQLiteConnection conn = GetConnection())
+            {
+                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                {
+                    comm.CommandText =
+                        @"CREATE TABLE statuses (id VARCHAR(50) PRIMARY KEY,
+                            fulltext NVARCHAR(255),
+                            userid VARCHAR(50),
+                            timestamp DATETIME,
+                            in_reply_to_id VARCHAR(50),
+                            favorited BIT,
+                            clientSource VARCHAR(50),
+                            accountSummary VARCHAR(50),
+                            statustypes SMALLINT(2))
+                                       ";
+                    conn.Open();
+                    SQLiteTransaction t = conn.BeginTransaction();
+                    comm.ExecuteNonQuery();
+                    comm.CommandText =
+                        @"CREATE TABLE users (id VARCHAR(50) PRIMARY KEY,
+                            screenname NVARCHAR(255),
+                            fullname NVARCHAR(255),
+                            description NVARCHAR(255),
+                            avatarURL TEXT)
+                                       ";
+                    comm.ExecuteNonQuery();
+                    t.Commit();
+                    conn.Close();
+                }
+            }
         }
 
 
