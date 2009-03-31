@@ -51,6 +51,7 @@ namespace FingerUI
         }
         #endregion
 
+        private bool useDDB = true;
         private static List<Thread> _RenderThreads = new List<Thread>();
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
@@ -71,7 +72,7 @@ namespace FingerUI
 
         private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
-        public int MaxItems = ClientSettings.PortalSize;
+        public int MaxItems = 20;
         private const int PauseBeforeRerender = 50;
         private int _BitmapHeight = 0;
         public int BitmapHeight
@@ -82,11 +83,8 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
-#if USEDDB            
-            if (MaxItems < 15) { MaxItems = ClientSettings.MaxTweets; }
-#else
-            MaxItems = 20;
-#endif
+          
+            
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -97,43 +95,40 @@ namespace FingerUI
             Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
 
-#if USEDDB
-
             //Try to create temporary bitmaps for everything we'll need so we can try it out.
-            bool bGood = false;
             Bitmap TestMap = null;
             Bitmap SecondMap = null;
 
             Bitmap ScreenMap = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
             Bitmap AvatarMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
-            while (!bGood)
+            try
             {
+                TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
+                SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                useDDB = false;
                 try
                 {
-                    TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                    SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                    break;
+                    TestMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
+                    SecondMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
                 }
-                catch (OutOfMemoryException ex)
+                catch(OutOfMemoryException)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    if (MaxItems < 15)
-                    {
-                        throw new LowMemoryException();
-                    }
-                    MaxItems = MaxItems - 5;
-                    if (MaxItems < 15) { MaxItems = 15; }
+                    throw;                     
                 }
-                finally
+            }
+            finally
+            {
+                if (TestMap != null)
                 {
-                    if (TestMap != null)
-                    {
-                        TestMap.Dispose();
-                    }
-                    if (SecondMap != null)
-                    {
-                        SecondMap.Dispose();
-                    }
+                    TestMap.Dispose();
+                }
+                if (SecondMap != null)
+                {
+                    SecondMap.Dispose();
                 }
             }
             ScreenMap.Dispose();
@@ -141,18 +136,16 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("Portal size:" + MaxItems);
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            if (MaxItems >= 15)
-            {
-                ClientSettings.PortalSize = MaxItems;
-                ClientSettings.SaveSettings();
-            }
-#endif
+            
             _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
-#if USEDDB
-            _Rendered = new Bitmap(maxWidth, _BitmapHeight);
-#else
-            _Rendered = GraphicsLibs.DIB.CreateDIB(maxWidth, _BitmapHeight);
-#endif
+            if (useDDB)
+            {
+                _Rendered = new Bitmap(maxWidth, _BitmapHeight);
+            }
+            else
+            {
+                _Rendered = GraphicsLibs.DIB.CreateDIB(maxWidth, _BitmapHeight);
+            }
             _RenderedGraphics = Graphics.FromImage(_Rendered);
             
         }
@@ -424,7 +417,6 @@ namespace FingerUI
             _Rendered.Dispose();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            MaxItems = MaxItems - 5;
             SetBufferSize();
         }
 
