@@ -69,10 +69,9 @@
     <Reference Include="Microsoft.WindowsMobile.PocketOutlook, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="Microsoft.WindowsMobile.Status, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json.Compact, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="slockimp, Version=1.0.2721.30528, Culture=neutral" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -275,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Marker.png" />
     <Content Include="default_profile_bigger.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQLite.Interop.060.DLL">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Themes\HighlightBlue\address.png">
@@ -482,7 +484,9 @@
     <Content Include="Themes\Original\url.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="LocalStorage\LocalCache.db" />
+    <Content Include="LocalStorage\LocalCache.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="PockeTwitKey.snk" />
     <None Include="TiledMaps\GoogleMaps\SampleDecodedSegments.xml" />
     <Content Include="Themes\Original\wait.png">
@@ -517,6 +521,7 @@
     <Compile Include="ImagePreview.Designer.cs">
       <DependentUpon>ImagePreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="LocalStorage\DataBaseUtility.cs" />
     <Compile Include="OpenNetCF\LED.cs" />
     <Compile Include="OpenNetCF\Notify.cs" />
     <Compile Include="OpenNetCF\SYSTEMTIME.cs" />
