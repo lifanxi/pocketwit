@@ -82,8 +82,11 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
-            
+#if USEDDB            
             if (MaxItems < 15) { MaxItems = ClientSettings.MaxTweets; }
+#else
+            MaxItems = 20;
+#endif
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -93,7 +96,8 @@ namespace FingerUI
         {
             Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             if (Screen.Width > Screen.Height) { maxWidth = Screen.Width; } else { maxWidth = Screen.Height; }
-            
+
+#if USEDDB
 
             //Try to create temporary bitmaps for everything we'll need so we can try it out.
             bool bGood = false;
@@ -106,12 +110,8 @@ namespace FingerUI
             {
                 try
                 {
-#if USEDDB
                     TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
                     SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
-#else
-                    TestMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
-#endif
                     break;
                 }
                 catch (OutOfMemoryException ex)
@@ -146,7 +146,7 @@ namespace FingerUI
                 ClientSettings.PortalSize = MaxItems;
                 ClientSettings.SaveSettings();
             }
-
+#endif
             _BitmapHeight = MaxItems * ClientSettings.ItemHeight;
 #if USEDDB
             _Rendered = new Bitmap(maxWidth, _BitmapHeight);
