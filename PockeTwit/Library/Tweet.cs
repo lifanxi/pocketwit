@@ -372,7 +372,7 @@ namespace PockeTwit.Library
                 comm.Parameters.Add(new SQLiteParameter("@favorited", this.favorited));
                 comm.Parameters.Add(new SQLiteParameter("@clientSource", this.source));
                 comm.Parameters.Add(new SQLiteParameter("@accountSummary", this.AccountSummary));
-                comm.Parameters.Add(new SQLiteParameter("@statustypes", this.type));
+                comm.Parameters.Add(new SQLiteParameter("@statustypes", this.TypeofMessage));
 
                 try
                 {

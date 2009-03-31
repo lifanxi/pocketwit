@@ -209,6 +209,7 @@ namespace PockeTwit
             }
         }
 
+        
         private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
         {
             Library.status[] newstats = null;
@@ -234,6 +235,10 @@ namespace PockeTwit
             }
             TimeLine CachedLines = new TimeLine(newstats);
             TimeLines[TimeType] = CachedLines;
+            if (newstats != null)
+            {
+                LocalStorage.DataBaseUtility.SaveItems(new List<Library.status>(newstats));
+            }
         }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
@@ -344,7 +349,7 @@ namespace PockeTwit
                     GetMessagesList(TempLine);
                     int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
                     AddUsersToAddressBook(TempLine);
-                    SaveItems(TempLine);
+                    LocalStorage.DataBaseUtility.SaveItems(TempLine);
                     if (MessagesUpdated != null && NewItems > 0)
                     {
                         SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
@@ -392,6 +397,10 @@ namespace PockeTwit
                             try
                             {
                                 Library.status[] NewStats = Library.status.Deserialize(response, t.AccountInfo, PockeTwit.Library.StatusTypes.Reply);
+                                foreach (Library.status s in NewStats)
+                                {
+                                    s.TypeofMessage = PockeTwit.Library.StatusTypes.Reply;
+                                }
                                 TempLine.AddRange(NewStats);
                                 if (NewStats.Length > 0)
                                 {
@@ -420,6 +429,10 @@ namespace PockeTwit
                                 try
                                 {
                                     Library.status[] NewStats = Library.status.FromDirectReplies(response, t.AccountInfo);
+                                    foreach (Library.status s in NewStats)
+                                    {
+                                        s.TypeofMessage = PockeTwit.Library.StatusTypes.Direct;
+                                    }
                                     TempLine.AddRange(NewStats);
                                     if (NewStats.Length > 0)
                                     {
@@ -501,9 +514,26 @@ namespace PockeTwit
                     int NewItems = 0;
                     if (TempLine.Count > 0)
                     {
-                        NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+                        //NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
+                        
+                        NewItems = TempLine.Count;
+                        int ItemsFromCache = ClientSettings.MaxTweets - NewItems;
+
+                        if (ItemsFromCache > 0)
+                        {
+                            List<Library.status> OldItems = LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ItemsFromCache);
+                            LocalStorage.DataBaseUtility.SaveItems(TempLine);
+                            TempLine.AddRange(OldItems);
+                        }
+                        else
+                        {
+                            LocalStorage.DataBaseUtility.SaveItems(TempLine);
+                        }
+                        TempLine.Sort();
+                        TimeLines[TimeLineType.Friends].Clear();
+                        TimeLines[TimeLineType.Friends].AddRange(TempLine);
                         AddUsersToAddressBook(TempLine);
-                        SaveItems(TempLine);
+                        
                     }
                     if (ClientSettings.MergeMessages)
                     {
@@ -516,7 +546,6 @@ namespace PockeTwit
                         TempLine.TrimExcess();
                         
                     }
-                    SaveStatuses(TimeLines[TimeLineType.Friends].ToArray(), "Friends");
                     if (FriendsUpdated != null && NewItems > 0)
                     {
                         if (Notify)
@@ -551,20 +580,7 @@ namespace PockeTwit
             }
         }
 
-        private void SaveItems(List<PockeTwit.Library.status> TempLine)
-        {
-            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
-            {
-                conn.Open();
-                System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction();
-                foreach (Library.status user in TempLine)
-                {
-                    user.Save(conn);
-                }
-                t.Commit();
-                conn.Close();
-            }
-        }
+        
 
         private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)
         {
