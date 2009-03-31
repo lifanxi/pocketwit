@@ -344,6 +344,7 @@ namespace PockeTwit
                     GetMessagesList(TempLine);
                     int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
                     AddUsersToAddressBook(TempLine);
+                    SaveItems(TempLine);
                     if (MessagesUpdated != null && NewItems > 0)
                     {
                         SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
@@ -502,6 +503,7 @@ namespace PockeTwit
                     {
                         NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
                         AddUsersToAddressBook(TempLine);
+                        SaveItems(TempLine);
                     }
                     if (ClientSettings.MergeMessages)
                     {
@@ -546,6 +548,21 @@ namespace PockeTwit
                         updateTimer.Enabled = true;
                     }
                 }   
+            }
+        }
+
+        private void SaveItems(List<PockeTwit.Library.status> TempLine)
+        {
+            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction();
+                foreach (Library.status user in TempLine)
+                {
+                    user.Save(conn);
+                }
+                t.Commit();
+                conn.Close();
             }
         }
 

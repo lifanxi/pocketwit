@@ -5,16 +5,16 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-
+using System.Data.SQLite;
 namespace PockeTwit.Library
 {
-
+    [Flags]
     public enum StatusTypes
     {
-        Normal,
-        Reply,
-        Direct,
-        SearchResult
+        Normal = 0x0,
+        Reply = 0x1,
+        Direct = 0x2,
+        SearchResult = 0x4
     }
 
     [Serializable]
@@ -33,6 +33,12 @@ namespace PockeTwit.Library
         public List<string> SplitLines { get; set; }
         [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
+
+        public StatusTypes type
+        {
+            get;
+            set;
+        }
 
         public string in_reply_to_status_id { get; set; }
 
@@ -340,6 +346,46 @@ namespace PockeTwit.Library
 
 		#endregion Methods 
 
+        private const string SQLSave = @"INSERT INTO statuses (id, fulltext, userid, timestamp, in_reply_to_id, favorited, clientSource, accountSummary, statustypes)
+                                          VALUES
+                                        (@id, @fulltext, @userid, @timestamp, @in_reply_to_id, @favorited, @clientSource, @accountSummary, @statustypes);";
+        private const string SQLCheck = @"SELECT COUNT(id) from statuses WHERE id=@id;";
+        public void Save(SQLiteConnection conn)
+        {
+            using (SQLiteCommand comm = new SQLiteCommand(SQLCheck, conn))
+            {
+                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
+
+                object ret = comm.ExecuteScalar();
+                if (ret != null && (long)ret != 0)
+                {
+                    return;
+                }
+            }
+            using (SQLiteCommand comm = new SQLiteCommand(SQLSave, conn))
+            {
+                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
+                comm.Parameters.Add(new SQLiteParameter("@fulltext", this.text));
+                comm.Parameters.Add(new SQLiteParameter("@userid", this.user.id));
+                comm.Parameters.Add(new SQLiteParameter("@timestamp", this.createdAt));
+                comm.Parameters.Add(new SQLiteParameter("@in_reply_to_id", this.in_reply_to_status_id));
+                comm.Parameters.Add(new SQLiteParameter("@favorited", this.favorited));
+                comm.Parameters.Add(new SQLiteParameter("@clientSource", this.source));
+                comm.Parameters.Add(new SQLiteParameter("@accountSummary", this.AccountSummary));
+                comm.Parameters.Add(new SQLiteParameter("@statustypes", this.type));
+
+                try
+                {
+                    comm.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            this.user.Save(conn);
+        }
+
         public override bool Equals(object obj)
         {
             try
@@ -418,13 +464,40 @@ namespace PockeTwit.Library
 		#endregion Properties 
 
 		#region Methods (1) 
+        private const string SQLSave = @"INSERT INTO users (screenname, fullname, description, avatarURL, id)
+                                          VALUES
+                                        (@screenname, @fullname, @description, @avatarURL, @id);";
+        private const string SQLCheck = @"SELECT COUNT(id) from users WHERE id=@id;";
+        public void Save(SQLiteConnection conn)
+        {
+            using (SQLiteCommand comm = new SQLiteCommand(SQLCheck, conn))
+            {
+                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
 
-        // Public Methods (1) 
+                object ret = comm.ExecuteScalar();
+                if (ret != null && (long)ret!=0)
+                {
+                    return;
+                }
+            }
+            using (SQLiteCommand comm = new SQLiteCommand(SQLSave, conn))
+            {
+                comm.Parameters.Add(new SQLiteParameter("@screenname", this.screen_name));
+                comm.Parameters.Add(new SQLiteParameter("@fullname", this.name));
+                comm.Parameters.Add(new SQLiteParameter("@description", this.description));
+                comm.Parameters.Add(new SQLiteParameter("@avatarURL", this.profile_image_url));
+                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
 
-        //public string url { get; set; }
-        //[XmlElement("protected")]
-        //public bool is_protected { get; set; }
-        //public int followers_count { get; set; }
+                try
+                {
+                    comm.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+        
         public static User FromId(string ID, Yedda.Twitter.Account Account)
         {
             Yedda.Twitter t = new Yedda.Twitter();
