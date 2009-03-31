@@ -212,6 +212,8 @@ namespace PockeTwit
         
         private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
         {
+            TimeLines[TimeType] = new TimeLine(LocalStorage.DataBaseUtility.GetList(TimeType, ClientSettings.MaxTweets));
+            /*
             Library.status[] newstats = null;
             string cachePath = ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml";
             if (System.IO.File.Exists(cachePath))
@@ -239,6 +241,7 @@ namespace PockeTwit
             {
                 LocalStorage.DataBaseUtility.SaveItems(new List<Library.status>(newstats));
             }
+             */
         }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
