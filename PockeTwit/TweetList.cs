@@ -151,14 +151,18 @@ namespace PockeTwit
                 }
 
             }
-            if (InBackGround)
+
+            if (StartBackground) { this.Hide(); }
+            CreateLeftMenu();
+            CreateRightMenu();
+            if (!SetEverythingUp())
             {
-                timerStartup_Tick(null, new EventArgs());
+                if (Notifyer != null) { Notifyer.ShutDown(); }
+                Application.Exit();
+                ThrottledArtGrabber.running = false;
+                return;
             }
-            else
-            {
-                timerStartup.Enabled = true;
-            }
+            SwitchToDone();
         }
 
         private void AddMainMenuItems()
@@ -1439,23 +1443,7 @@ namespace PockeTwit
             SetLeftMenu();
         }
 
-        private void timerStartup_Tick(object sender, EventArgs e)
-        {
-            if (StartBackground) { this.Hide(); }
-            CreateLeftMenu();
-            CreateRightMenu();
-            timerStartup.Enabled = false;
-            timerStartup.Tick -= new EventHandler(timerStartup_Tick);
-            if (!SetEverythingUp())
-            {
-                if (Notifyer != null) { Notifyer.ShutDown(); }
-                Application.Exit();
-                ThrottledArtGrabber.running = false;
-                return;
-            }
-            SwitchToDone();
-        }
-
+        
         private void TwitterSearch()
         {
 

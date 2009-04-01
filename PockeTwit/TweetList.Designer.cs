@@ -12,7 +12,6 @@ namespace PockeTwit
         private System.Windows.Forms.Label lblLoading;
         private System.Windows.Forms.Label lblTitle;
         private FingerUI.KListControl statList;
-        private System.Windows.Forms.Timer timerStartup;
         
 		#endregion Fields 
 
@@ -46,7 +45,6 @@ namespace PockeTwit
         /// </summary>
         private void InitializeComponent()
         {
-            this.timerStartup = new System.Windows.Forms.Timer();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
             this.statList = new FingerUI.KListControl();
@@ -54,10 +52,6 @@ namespace PockeTwit
             this.globalMenu = new System.Windows.Forms.MenuItem();
             this.specificMenu = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
-            // 
-            // timerStartup
-            // 
-            this.timerStartup.Tick += new System.EventHandler(this.timerStartup_Tick);
             // 
             // lblTitle
             // 
