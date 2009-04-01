@@ -105,7 +105,6 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-            AddressBook.Load();
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();

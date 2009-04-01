@@ -351,7 +351,6 @@ namespace PockeTwit
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
                     GetMessagesList(TempLine);
                     int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
-                    AddUsersToAddressBook(TempLine);
                     LocalStorage.DataBaseUtility.SaveItems(TempLine);
                     if (MessagesUpdated != null && NewItems > 0)
                     {
@@ -535,8 +534,6 @@ namespace PockeTwit
                         TempLine.Sort();
                         TimeLines[TimeLineType.Friends].Clear();
                         TimeLines[TimeLineType.Friends].AddRange(TempLine);
-                        AddUsersToAddressBook(TempLine);
-                        
                     }
                     if (ClientSettings.MergeMessages)
                     {
@@ -609,16 +606,7 @@ namespace PockeTwit
             }
         }
 
-        private void AddUsersToAddressBook(List<Library.status> statuses)
-        {
-            foreach (Library.status s in statuses)
-            {
-                AddressBook.AddName(s.user.screen_name);
-            }
-            //This is the best time to save the addressbook.
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(AddressBook.Save));
-        }
-
+        
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)
         {
             return FetchSpecificFromTwitter(t, TimelineType, null);

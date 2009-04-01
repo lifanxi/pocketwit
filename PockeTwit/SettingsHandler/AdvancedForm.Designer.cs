@@ -34,7 +34,6 @@
             this.lnkResetBuffer = new System.Windows.Forms.LinkLabel();
             this.lnkClearCaches = new System.Windows.Forms.LinkLabel();
             this.lnkClearSettings = new System.Windows.Forms.LinkLabel();
-            this.lnkAddressbook = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -75,24 +74,12 @@
             this.lnkClearSettings.Text = "Clear Application Settings";
             this.lnkClearSettings.Click += new System.EventHandler(this.lnkClearSettings_Click);
             // 
-            // lnkAddressbook
-            // 
-            this.lnkAddressbook.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkAddressbook.Location = new System.Drawing.Point(4, 69);
-            this.lnkAddressbook.Name = "lnkAddressbook";
-            this.lnkAddressbook.Size = new System.Drawing.Size(233, 20);
-            this.lnkAddressbook.TabIndex = 3;
-            this.lnkAddressbook.Text = "Clear Addressbook";
-            this.lnkAddressbook.Click += new System.EventHandler(this.lnkAddressbook_Click);
-            // 
             // AdvancedForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.lnkAddressbook);
             this.Controls.Add(this.lnkClearSettings);
             this.Controls.Add(this.lnkClearCaches);
             this.Controls.Add(this.lnkResetBuffer);
@@ -109,6 +96,5 @@
         private System.Windows.Forms.LinkLabel lnkClearCaches;
         private System.Windows.Forms.LinkLabel lnkClearSettings;
         private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.LinkLabel lnkAddressbook;
     }
 }
