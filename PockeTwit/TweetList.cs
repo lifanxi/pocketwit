@@ -48,6 +48,8 @@ namespace PockeTwit
         FingerUI.SideMenuItem SearchMenuItem;
         FingerUI.SideMenuItem ViewFavoritesMenuItem;
         FingerUI.SideMenuItem MergedTimeLineMenuItem;
+        FingerUI.SideMenuItem GroupsMenuItem;
+        List<FingerUI.SideMenu> GroupsMenuItems;
 
         FingerUI.SideMenuItem TimeLinesMenuItem;
 
@@ -503,6 +505,11 @@ namespace PockeTwit
             TimeLinesMenuItem.SubMenuItems.Add(SearchMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
+            GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
+            FingerUI.SideMenuItem item1 = new FingerUI.SideMenuItem(null, "1", statList.LeftMenu);
+            GroupsMenuItem.SubMenuItems.Add(item1);
+            //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
+
             
             
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);

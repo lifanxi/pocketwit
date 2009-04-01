@@ -12,7 +12,7 @@ namespace LocalStorage
                         @"SELECT     statuses.id, statuses.fulltext, statuses.userid, statuses.[timestamp], 
                                      statuses.in_reply_to_id, statuses.favorited, statuses.clientSource, 
                                      statuses.accountSummary, statuses.statustypes, users.screenname, 
-                                     users.fullname, users.description, users.avatarURL
+                                     users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
         private const string SQLFetchFriends = "(statuses.statustypes == 0)";
         private const string SQLFetchMessages = "(statuses.statustypes & 1)";
@@ -97,12 +97,13 @@ namespace LocalStorage
                             PockeTwit.Library.status newStat = new PockeTwit.Library.status();
                             newStat.id = r.GetString(0);
                             newStat.text = r.GetString(1);
+                            newStat.TypeofMessage = (PockeTwit.Library.StatusTypes)r.GetInt32(13);
                             newStat.createdAt = r.GetDateTime(3);
                             newStat.in_reply_to_status_id = r.GetString(4);
                             newStat.favorited = r.GetString(5);
                             newStat.source = r.GetString(6);
                             newStat.AccountSummary = r.GetString(7);
-                            
+
                             PockeTwit.Library.User u = new PockeTwit.Library.User();
                             u.id = r.GetString(2);
                             u.screen_name = r.GetString(9);
