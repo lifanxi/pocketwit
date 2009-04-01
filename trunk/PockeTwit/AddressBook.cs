@@ -7,109 +7,29 @@ namespace PockeTwit
 {
     static class AddressBook
     {
-        private static string location = ClientSettings.AppPath + "\\AddressBook.xml";
-        private static List<string> _Names = new List<string>();
-
-        static AddressBook()
-        {
-        }
-
-        public static string[] GetList()
-        {
-            return _Names.ToArray();
-        }
-
+        
         public static string[] GetList(string startsWith)
         {
-            return _Names.FindAll(delegate(string s)
+            List<string> ret = new List<string>();
+            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
-                return s.StartsWith(startsWith);
-            }).ToArray();
-        }
-
-        public static int Count()
-        {
-            return _Names.Count;
-        }
-
-        public static void AddName(string Name)
-        {
-            string nameToAdd = Name.ToLower();
-            lock(_Names){
-                if (!_Names.Contains(nameToAdd))
+                string SQL = "SELECT screenname FROM users WHERE screenname LIKE @startswith";
+                using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(SQL, conn))
                 {
-                    _Names.Add(nameToAdd);
-                }
-            }
-        }
-
-        public static void Load()
-        {
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Load));
-        }
-
-        private static void Load(object o)
-        {
-            if (System.IO.File.Exists(location))
-            {
-                try
-                {
-                    using (System.IO.StreamReader r = new System.IO.StreamReader(location))
+                    comm.Parameters.Add(new System.Data.SQLite.SQLiteParameter("@startswith", startsWith + '%'));
+                    conn.Open();
+                    using (System.Data.SQLite.SQLiteDataReader r = comm.ExecuteReader())
                     {
-                        string Addresses = r.ReadToEnd();
-                        if (!string.IsNullOrEmpty(Addresses))
+                        while (r.Read())
                         {
-                            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-                            d.LoadXml(Addresses);
-
-                            System.Xml.XmlNodeList l = d.SelectNodes("//name");
-                            foreach (System.Xml.XmlNode n in l)
-                            {
-                                if (!_Names.Contains(n.InnerText))
-                                {
-                                    _Names.Add(n.InnerText);
-                                }
-                            }
+                            ret.Add(r.GetString(0));
                         }
                     }
-                }
-                catch
-                {
-                    //Addressbook xml must have gotten corrupt.  Best to start over.
+                    conn.Clone();
                 }
             }
-        }
-        //Has to match System.Threading.WaitCallback to be called from threadpool
-        public static void Save(object o)
-        {
-            System.Xml.XmlDocument d = new System.Xml.XmlDocument();
-            System.Xml.XmlElement root = d.CreateElement("usernames");
-            d.AppendChild(root);
-
-            foreach (string ID in _Names)
-            {
-                System.Xml.XmlElement idElement = d.CreateElement("name");
-                idElement.InnerText = ID;
-                root.AppendChild(idElement);
-            }
-            try
-            {
-                d.Save(location);
-            }
-            catch
-            {
-                //If it fails it's most likely because it's already open by another thread
-            }
+            return ret.ToArray();
         }
 
-        public static void Clear()
-        {
-            lock (_Names)
-            {
-                _Names.Clear();
-            }
-            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(Save));
-        }
-        
     }
 }
