@@ -108,7 +108,7 @@ namespace PockeTwit
             {
                 return new Bitmap(DefaultArt);
             }
-            string ID = url.Replace("_bigger","").Replace("_normal","") ;
+            string ID = url.Replace("_bigger","").Replace("_normal","").Replace("https","").Replace("http","").ToLower() ;
             string ArtName = DetermineCacheFileName(user, url);
             lock (BadURLs)
             {
@@ -134,7 +134,7 @@ namespace PockeTwit
                     string ID2;
                     using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtName + ".ID"))
                     {
-                        ID2 = reader.ReadToEnd();
+                        ID2 = reader.ReadToEnd().ToLower();
                     }
                     if (ID != ID2)
                     {
@@ -288,7 +288,7 @@ namespace PockeTwit
                         resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
                     }
                 }
-                WriteID(LocalFileName, r.URL.Replace("_normal","").Replace("_bigger", ""));
+                WriteID(LocalFileName, r.URL.Replace("_bigger","").Replace("_normal","").Replace("https","").Replace("http","").ToLower());
                 ArtWriter.Close();
             }
             catch(Exception ex) 
