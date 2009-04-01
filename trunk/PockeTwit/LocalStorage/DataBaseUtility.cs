@@ -14,9 +14,15 @@ namespace LocalStorage
                                      statuses.accountSummary, statuses.statustypes, users.screenname, 
                                      users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
+        private const string SQLGetLastStatusID =
+                        @"SELECT    statuses.id
+                          FROM statuses 
+                          WHERE statuses.accountSummary = @accountsummary";
+        
         private const string SQLFetchFriends = "(statuses.statustypes == 0)";
-        private const string SQLFetchMessages = "(statuses.statustypes & 1)";
-        private const string SQLFetchFriendsAndMessages = " statuses.statustypes & 1 OR statuses.statustypes & 2 ";
+        private const string SQLFetchReplies = "(statuses.statustypes & 1)";
+        
+        private const string SQLFetchRepliesAndMessages = " statuses.statustypes & 1 OR statuses.statustypes & 2 ";
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
         private const string SQLFetchSearches = "(statuses.statustypes & 4)";
@@ -82,7 +88,7 @@ namespace LocalStorage
                         FetchQuery = FetchQuery + " WHERE " + SQLFetchFriends + SQLOrder;
                         break;
                     case PockeTwit.TimelineManagement.TimeLineType.Messages:
-                        FetchQuery = FetchQuery + " WHERE " + SQLFetchFriendsAndMessages + SQLOrder;
+                        FetchQuery = FetchQuery + " WHERE " + SQLFetchRepliesAndMessages + SQLOrder;
                         break;
                 }
                 
@@ -133,6 +139,38 @@ namespace LocalStorage
                 }
                 t.Commit();
                 conn.Close();
+            }
+        }
+
+        public static string GetLatestItem(Yedda.Twitter.Account account, PockeTwit.TimelineManagement.TimeLineType typeToGet)
+        {
+            string FetchQuery = SQLGetLastStatusID;
+            switch (typeToGet)
+            {
+                case PockeTwit.TimelineManagement.TimeLineType.Friends:
+                    FetchQuery = FetchQuery + " AND " + SQLFetchFriends + SQLOrder;
+                    break;
+                case PockeTwit.TimelineManagement.TimeLineType.Replies:
+                    FetchQuery = FetchQuery + " AND " + SQLFetchReplies + SQLOrder;
+                    break;
+                case PockeTwit.TimelineManagement.TimeLineType.Direct:
+                    FetchQuery = FetchQuery + " AND " + SQLFetchDirects + SQLOrder;
+                    break;
+                case PockeTwit.TimelineManagement.TimeLineType.Messages:
+                    FetchQuery = FetchQuery + " AND " + SQLFetchRepliesAndMessages + SQLOrder;
+                    break;
+            }
+                
+            using (SQLiteConnection conn = GetConnection())
+            {
+                using (SQLiteCommand comm = new SQLiteCommand(FetchQuery, conn))
+                {
+                    comm.Parameters.Add(new SQLiteParameter("@accountsummary", account.Summary));
+                    comm.Parameters.Add(new SQLiteParameter("@count", 1));
+
+                    conn.Open();
+                    return (string)comm.ExecuteScalar();
+                }
             }
         }
     }
