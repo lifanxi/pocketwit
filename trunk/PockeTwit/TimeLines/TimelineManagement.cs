@@ -599,7 +599,6 @@ namespace PockeTwit
                     w.Flush();
                     w.Close();  //Shouldn't need this in using, but I'm desperate   
                 }
-
             }
             catch
             {

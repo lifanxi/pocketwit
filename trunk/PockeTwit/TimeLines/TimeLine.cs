@@ -97,5 +97,17 @@ namespace PockeTwit
                 this.TrimExcess();
             }
         }
+
+        public Library.status FetchByID(string ID)
+        {
+            foreach (Library.status s in this)
+            {
+                if (s.id == ID)
+                {
+                    return s;
+                }
+            }
+            return null;
+        }
     }
 }
