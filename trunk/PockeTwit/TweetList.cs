@@ -49,7 +49,7 @@ namespace PockeTwit
         FingerUI.SideMenuItem ViewFavoritesMenuItem;
         FingerUI.SideMenuItem MergedTimeLineMenuItem;
         FingerUI.SideMenuItem GroupsMenuItem;
-        List<FingerUI.SideMenu> GroupsMenuItems;
+        List<FingerUI.SideMenuItem> GroupsMenuItems = new List<FingerUI.SideMenuItem>();
 
         FingerUI.SideMenuItem TimeLinesMenuItem;
 
@@ -77,7 +77,9 @@ namespace PockeTwit
         FingerUI.SideMenuItem UserTimelineMenuItem;
         FingerUI.SideMenuItem ProfilePageMenuItem;
         FingerUI.SideMenuItem FollowMenuItem;
-        
+        FingerUI.SideMenuItem AddToGroupMenuItem;
+        FingerUI.SideMenuItem NewGroupMenuItem;
+        List<FingerUI.SideMenuItem> AddGroupsMenuItems = new List<FingerUI.SideMenuItem>();
         #endregion
         #endregion MenuItems
 
@@ -131,6 +133,7 @@ namespace PockeTwit
 
             PockeTwit.Themes.FormColors.SetColors(this);
             Application.DoEvents();
+            SpecialTimeLines.Load();
 
             if (ClientSettings.AccountsList.Count == 0)
             {
@@ -422,6 +425,48 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
+        private void CreateNewGroup()
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return; }
+            if (selectedItem.Tweet.user == null) { return; }
+
+            DefineGroup d = new DefineGroup();
+            if (d.ShowDialog() == DialogResult.OK)
+            {
+                SpecialTimeLine t = new SpecialTimeLine();
+                t.name = d.GroupName;
+                GroupingItem i = new GroupingItem();
+                i.GroupType = GroupingType.user;
+                i.Term = selectedItem.Tweet.user.screen_name;
+                t.Terms = new GroupingItem[] { i };
+
+                SpecialTimeLines.Add(t);
+
+                AddGroupSelectMenuItem(t);
+
+                AddAddUserToGroupMenuItem(t);
+                SpecialTimeLines.Save();
+            }
+        }
+
+
+        
+        private void ShowUserGroup(SpecialTimeLine t)
+        {
+
+        }
+
+        private void AddUserToGroup(SpecialTimeLine t)
+        {
+            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            if (selectedItem == null) { return ; }
+            if (selectedItem.Tweet.user == null) { return; }
+            GroupingItem i = new GroupingItem();
+            i.Term = selectedItem.Tweet.user.screen_name;
+            t.AddItem(i);
+            SpecialTimeLines.Save();
+        }
 
         private void ToggleFollow()
         {
@@ -511,7 +556,11 @@ namespace PockeTwit
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
             GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
-            //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
+            TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
+            foreach(SpecialTimeLine t in SpecialTimeLines.GetList())
+            {
+                AddGroupSelectMenuItem(t);
+            }
 
             
             
@@ -525,7 +574,7 @@ namespace PockeTwit
             WindowMenuItem = new FingerUI.SideMenuItem(null, "Window ...", statList.LeftMenu);
 
             FullScreenMenuItem = new FingerUI.SideMenuItem(ToggleFullScreen, "Toggle FullScreen", statList.LeftMenu);
-            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.RightMenu);
+            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.LeftMenu);
             ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
 
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
@@ -548,11 +597,27 @@ namespace PockeTwit
              */
         }
 
+        private void AddGroupSelectMenuItem(SpecialTimeLine t)
+        {
+            FingerUI.delMenuClicked showItemClicked = delegate()
+            {
+                ShowUserGroup(t);
+            };
+
+
+            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu);
+            GroupsMenuItems.Add(item);
+            GroupsMenuItem.SubMenuItems.Add(item);
+        }
+
+
         private void CreateRightMenu()
         {
             // "Show Conversation", "Reply @User", "Direct @User", "Quote", 
             //   "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following",
             // "Minimize" 
+
+
             ConversationMenuItem = new FingerUI.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
             ConversationMenuItem.CanHide = true;
 
@@ -571,9 +636,28 @@ namespace PockeTwit
             ProfilePageMenuItem = new FingerUI.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
             FollowMenuItem = new FingerUI.SideMenuItem(ToggleFollow, "Follow @User", statList.RightMenu);
 
+            AddToGroupMenuItem = new FingerUI.SideMenuItem(null, "Add to Group...", statList.RightMenu);
+            NewGroupMenuItem = new FingerUI.SideMenuItem(CreateNewGroup, "New Group", statList.RightMenu);
+            AddToGroupMenuItem.SubMenuItems.Add(NewGroupMenuItem);
+            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+            {
+                AddAddUserToGroupMenuItem(t);
+            }
 
             statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, ToggleFavoriteMenuItem, 
-                UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem});
+                UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem, AddToGroupMenuItem});
+        }
+
+        private void AddAddUserToGroupMenuItem(SpecialTimeLine t)
+        {
+            FingerUI.delMenuClicked addItemClicked = delegate()
+            {
+                AddUserToGroup(t);
+            };
+
+            FingerUI.SideMenuItem additem = new FingerUI.SideMenuItem(addItemClicked, t.name, statList.RightMenu);
+            AddToGroupMenuItem.SubMenuItems.Add(additem);
+
         }
 
 
