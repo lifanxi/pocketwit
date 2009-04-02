@@ -8,6 +8,8 @@ namespace LocalStorage
 {
     class DataBaseUtility
     {
+        
+        #region SQL Constants
         private const string SQLFetchFromCache =
                         @"SELECT     statuses.id, statuses.fulltext, statuses.userid, statuses.[timestamp], 
                                      statuses.in_reply_to_id, statuses.favorited, statuses.clientSource, 
@@ -27,14 +29,50 @@ namespace LocalStorage
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
         private const string SQLFetchSearches = "(statuses.statustypes & 4)";
         private const string SQLOrder = " ORDER BY statuses.[timestamp] DESC LIMIT @count ";
+        #endregion
 
         private static string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
+
+        public static void CheckDBSchema()
+        {
+            try
+            {
+                using (SQLiteConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        
+                        comm.CommandText = "SELECT value from DBProperties WHERE name='dbversion'";
+                        string versionNum = (string)comm.ExecuteScalar();
+
+                        if (versionNum == DBVersion) { return; }
+                    }
+                    conn.Close();
+                }
+            }
+            catch { }
+
+            DeleteDB();
+        }
+
+        private static void DeleteDB()
+        {
+            if (System.IO.File.Exists(DBPath))
+            {
+                System.IO.File.Delete(DBPath);
+            }
+        }
+        
         public static System.Data.SQLite.SQLiteConnection GetConnection()
         {
             if (!System.IO.File.Exists(DBPath)) { CreateDB(); }
             return new SQLiteConnection("Data Source=" + ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db");
         }
 
+        //Update this number if you change the schema of the database -- it'll
+        // force the client to recreate it.
+        private const string DBVersion = "0002";
         private static void CreateDB()
         {
             if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
@@ -46,6 +84,22 @@ namespace LocalStorage
             {
                 using (SQLiteCommand comm = new SQLiteCommand(conn))
                 {
+                    conn.Open();
+                    SQLiteTransaction t = conn.BeginTransaction();
+
+                    comm.CommandText =
+                        @"CREATE TABLE DBProperties (name VARCHAR(50) PRIMARY KEY,
+                            value NVARCHAR(255))
+                            ";
+                    comm.ExecuteNonQuery();
+
+                    comm.CommandText =
+                        @"INSERT INTO DBProperties (name,value) VALUES (@name,@value)";
+                    comm.Parameters.Add(new SQLiteParameter("@name", "dbversion"));
+                    comm.Parameters.Add(new SQLiteParameter("@value", DBVersion));
+                    comm.ExecuteNonQuery();
+                    comm.Parameters.Clear();
+
                     comm.CommandText =
                         @"CREATE TABLE statuses (id VARCHAR(50) PRIMARY KEY,
                             fulltext NVARCHAR(255),
@@ -55,19 +109,22 @@ namespace LocalStorage
                             favorited BIT,
                             clientSource VARCHAR(50),
                             accountSummary VARCHAR(50),
-                            statustypes SMALLINT(2))
+                            statustypes SMALLINT(2),
+                            UNIQUE (id) )
                                        ";
-                    conn.Open();
-                    SQLiteTransaction t = conn.BeginTransaction();
                     comm.ExecuteNonQuery();
+                    
                     comm.CommandText =
                         @"CREATE TABLE users (id VARCHAR(50) PRIMARY KEY,
                             screenname NVARCHAR(255),
                             fullname NVARCHAR(255),
                             description NVARCHAR(255),
-                            avatarURL TEXT)
+                            avatarURL TEXT,
+                            UNIQUE (id) )
                                        ";
                     comm.ExecuteNonQuery();
+
+
                     t.Commit();
                     conn.Close();
                 }
