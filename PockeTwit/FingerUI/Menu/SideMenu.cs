@@ -31,6 +31,7 @@ namespace FingerUI
             }
             set
             {
+                
                 if (value == null)
                 {
                     if (_ExpandedItem != null)
@@ -48,6 +49,13 @@ namespace FingerUI
                 }
                 else
                 {
+                    if (_ExpandedItem != null)
+                    {
+                        _ExpandedItem.Expanded = false;
+                        IsDirty = true;
+                        NeedRedraw();
+                    }
+
                     SelectedItem = value.SubMenuItems[0];
                     _animationStep = 6;
                     isFading = true;
@@ -518,14 +526,16 @@ namespace FingerUI
                 {
                     m_backBuffer.Clear(ClientSettings.BackColor);
                     int CurrentTop = TopOfMenu;
-                    foreach (SideMenuItem Item in this.GetItems())
+
+                    SideMenuItem[] ItemList = this.GetItems();
+                    foreach (SideMenuItem Item in ItemList)
                     {
                         if (Item.Visible)
                         {
-                            DrawSingleItem(i, m_backBuffer,0, CurrentTop, Item, MenuColor);
+                            DrawSingleItem(i, m_backBuffer, 0, CurrentTop, Item, MenuColor);
 
                             i++;
-                            
+
                             if (Item.Expanded)
                             {
                                 ExpandedRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
@@ -533,7 +543,6 @@ namespace FingerUI
                             CurrentTop = CurrentTop + ItemHeight;
                         }
                     }
-
                     if (ExpandedItem != null)
                     {
                         DrawSubMenu(ExpandedItem, ExpandedRect);
@@ -705,7 +714,14 @@ namespace FingerUI
                 OffSet = ClientSettings.TextSize;
             }
             int ItemsCount = Item.SubMenuItems.Count;
-            TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
+            if (menuRect.Height > 0)
+            {
+                TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
+            }
+            else
+            {
+                TopOfSubMenu = this.Height/2 - (ItemsCount * ItemHeight / 2);
+            }
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
             int CurrentTop = TopOfSubMenu;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))

@@ -116,6 +116,7 @@ namespace PockeTwit
                 this.lblTitle.Text = "Launching PockeTwit Dev";
             }
 
+            LocalStorage.DataBaseUtility.CheckDBSchema();
 
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
@@ -510,8 +511,6 @@ namespace PockeTwit
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
             GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
-            FingerUI.SideMenuItem item1 = new FingerUI.SideMenuItem(null, "1", statList.LeftMenu);
-            GroupsMenuItem.SubMenuItems.Add(item1);
             //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
 
             
