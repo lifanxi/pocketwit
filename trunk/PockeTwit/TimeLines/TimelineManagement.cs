@@ -33,7 +33,6 @@ namespace PockeTwit
             Direct=2,
             Messages=3
         }
-        public Dictionary<TimeLineType, TimeLine> TimeLines = new Dictionary<TimeLineType, TimeLine>();
         private LargeIntervalTimer updateTimer = new LargeIntervalTimer();
         private List<Yedda.Twitter> TwitterConnections;
         private int HoldNewMessages = 0;
@@ -75,16 +74,10 @@ namespace PockeTwit
         public void Startup(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
             Progress(0, "Starting");
-            TimeLines.Add(TimeLineType.Friends, new TimeLine());
-            TimeLines.Add(TimeLineType.Messages, new TimeLine());
             TwitterConnections = TwitterConnectionsToFollow;
             Progress(0, "Loading Cache");
 
-            
-            LoadCachedtimeline(TimeLineType.Friends, "Friends");
-            LoadCachedtimeline(TimeLineType.Messages, "Messages");
-
-            if (TimeLines[TimeLineType.Friends].Count > 0)
+            if (LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets).Count > 0)
             {
                 CompleteLoaded();
             }
@@ -153,7 +146,16 @@ namespace PockeTwit
             GetMessagesTimeLine(true);
         }
 
-        
+
+        public Library.status[] GetFriendsImmediately()
+        {
+            return LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets).ToArray();
+        }
+
+        public Library.status[] GetMessagesImmediately()
+        {
+            return LocalStorage.DataBaseUtility.GetList(TimeLineType.Messages, ClientSettings.MaxTweets).ToArray();
+        }
 
         private void BackgroundFriendsUpdate(object o)
         {
@@ -176,40 +178,6 @@ namespace PockeTwit
             }
         }
 
-        
-        private void LoadCachedtimeline(TimeLineType TimeType, string TimeLineName)
-        {
-            TimeLines[TimeType] = new TimeLine(LocalStorage.DataBaseUtility.GetList(TimeType, ClientSettings.MaxTweets));
-            /*
-            Library.status[] newstats = null;
-            string cachePath = ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml";
-            if (System.IO.File.Exists(cachePath))
-            {
-                try
-                {
-                    using (System.IO.StreamReader r = new System.IO.StreamReader(cachePath))
-                    {
-                        string s = r.ReadToEnd();
-                        newstats = Library.status.Deserialize(s);
-                    }
-                }
-                catch
-                {
-                    if (!string.IsNullOrEmpty(cachePath))
-                    {
-                        System.IO.File.Delete(cachePath);
-                    }
-                    MessageBox.Show("Error with cache. Clearing it.");
-                }
-            }
-            TimeLine CachedLines = new TimeLine(newstats);
-            TimeLines[TimeType] = CachedLines;
-            if (newstats != null)
-            {
-                LocalStorage.DataBaseUtility.SaveItems(new List<Library.status>(newstats));
-            }
-             */
-        }
 
         public Library.status[] SearchTwitter(Yedda.Twitter t, string SearchString)
         {
@@ -323,18 +291,16 @@ namespace PockeTwit
                     GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Messages);
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
                     GetMessagesList(TempLine);
-                    int NewItems = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
                     LocalStorage.DataBaseUtility.SaveItems(TempLine);
-                    if (MessagesUpdated != null && NewItems > 0)
+                    if (MessagesUpdated != null && TempLine.Count > 0)
                     {
-                        SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
                         if (Notify)
                         {
-                            MessagesUpdated(NewItems);
+                            MessagesUpdated(TempLine.Count);
                         }
                         else
                         {
-                            HoldNewMessages = NewItems;
+                            HoldNewMessages = TempLine.Count;
                         }
                     }
                     TempLine.Clear();
@@ -493,9 +459,8 @@ namespace PockeTwit
                             LocalStorage.DataBaseUtility.SaveItems(TempLine);
                         }
                         TempLine.Sort();
-                        TimeLines[TimeLineType.Friends].Clear();
-                        TimeLines[TimeLineType.Friends].AddRange(TempLine);
                     }
+                    /*
                     if (ClientSettings.MergeMessages)
                     {
                         TempLine = new List<PockeTwit.Library.status>();
@@ -507,6 +472,7 @@ namespace PockeTwit
                         TempLine.TrimExcess();
                         
                     }
+                     */
                     if (FriendsUpdated != null && NewItems > 0)
                     {
                         if (Notify)
@@ -541,30 +507,7 @@ namespace PockeTwit
             }
         }
 
-        
 
-        private void SaveStatuses(PockeTwit.Library.status[] statuses, string TimeLineName)
-        {
-            if (statuses.Length <= 20)
-            {
-                //No need to cache less than 20 tweets.  
-                return;
-            }
-
-            try
-            {
-                string StatusString = Library.status.Serialize(statuses);
-                using (System.IO.TextWriter w = new System.IO.StreamWriter(ClientSettings.AppPath + "\\" + TimeLineName + "Time.xml"))
-                {
-                    w.Write(StatusString);
-                    w.Flush();
-                    w.Close();  //Shouldn't need this in using, but I'm desperate   
-                }
-            }
-            catch
-            {
-            }
-        }
 
         
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)

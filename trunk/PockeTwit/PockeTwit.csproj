@@ -191,7 +191,6 @@
     <Compile Include="Sound.cs" />
     <Compile Include="Contributors.cs" />
     <Compile Include="Themes\FormColors.cs" />
-    <Compile Include="TimeLines\TimeLine.cs" />
     <Compile Include="TimeLines\TimelineManagement.cs" />
     <Compile Include="TweetList.cs">
       <SubType>Form</SubType>
