@@ -393,11 +393,8 @@ namespace PockeTwit
                                 ppo.Filename = c.FileName;
                                 ppo.Username = AccountToSet.UserName;
                                 ppo.Password = AccountToSet.Password;
-                                if (DetectDevice.DeviceType == DeviceType.Standard)
-                                {
-                                    ppo.UseAsync = false;
-                                    Cursor.Current = Cursors.WaitCursor;
-                                }
+                                ppo.UseAsync = false;
+                                Cursor.Current = Cursors.WaitCursor;
                                 pictureService.PostPicture(ppo); 
                             }
                         }
