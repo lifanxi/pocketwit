@@ -809,9 +809,18 @@ namespace PockeTwit
             {
                 ResetDictionaries();
             }
-            catch(Exception ex)
+            catch (OutOfMemoryException ex)
             {
-                MessageBox.Show("Corrupt settings-- " +ex.Message + "\r\nPlease reconfigure.");
+                MessageBox.Show("There's not enough memory to run PockeTwit. You may want to close some applications and try again.");
+                if (Manager != null)
+                {
+                    Manager.ShutDown();
+                }
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Corrupt settings-- " + ex.Message + "\r\nPlease reconfigure.");
                 System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
                 ClientSettings.AccountsList.Clear();
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
