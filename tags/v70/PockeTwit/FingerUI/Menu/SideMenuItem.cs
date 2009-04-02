@@ -1,0 +1,94 @@
+﻿using System;
+
+using System.Collections.Generic;
+using System.Text;
+
+namespace FingerUI
+{
+    public delegate void delMenuClicked();
+
+    public class SideMenuItem
+    {
+        private SideMenu ParentMenu;
+        public List<SideMenuItem> SubMenuItems = new List<SideMenuItem>();
+
+        public bool HasChildren
+        {
+            get
+            {
+                return SubMenuItems.Count > 0;
+            }
+        }
+        public bool Expanded { get; set; }
+        private bool _Visible = true;
+        public bool Visible
+        {
+            get
+            {
+                return _Visible;
+            }
+            set
+            {
+                if (value != _Visible)
+                {
+                    _Visible = value;
+                    ParentMenu.IsDirty = true;
+                    ParentMenu.SetMenuHeight();
+                }
+            }
+        }
+        public bool CanHide = false;
+        
+        private delMenuClicked ClickedMethod;
+
+        public void ClickMe()
+        {
+            if (SubMenuItems.Count > 0)
+            {
+                Expanded = !Expanded;
+                if (Expanded)
+                {
+                    MenuExpandedOrCollapsed(this, Expanded);
+                }
+                else
+                {
+                    MenuExpandedOrCollapsed(null, Expanded);
+                }
+            }
+            else
+            {
+                if (ClickedMethod != null)
+                {
+                    ClickedMethod();
+                }
+                DoneWithClick();
+            }
+        }
+
+        public event delMenuClicked DoneWithClick = delegate { };
+        public delegate void delItemExpanded(SideMenuItem sender, bool Opened);
+        public event delItemExpanded MenuExpandedOrCollapsed = delegate { };
+        private string _TextTemplate;
+        public string Text
+        {
+            get
+            {
+                return _TextTemplate;
+            }
+            set
+            {
+                if (value != _TextTemplate)
+                {
+                    ParentMenu.IsDirty = true;
+                    _TextTemplate = value;
+                }
+            }
+        }
+        public SideMenuItem(delMenuClicked Callback, string TextTemplate, SideMenu Parent)
+        {
+            _TextTemplate = TextTemplate;
+            ClickedMethod = Callback;
+            ParentMenu = Parent;
+        }
+    }
+}
