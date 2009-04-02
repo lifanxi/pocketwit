@@ -187,8 +187,13 @@ namespace LocalStorage
             return cache;
         }
 
-        public static void CleanDB()
+        public static void CleanDB(int OlderThan)
         {
+            DateTime SinceDate = DateTime.Now.AddDays(1);
+            if (OlderThan > 0)
+            {
+                SinceDate = DateTime.Now.Subtract(new TimeSpan(OlderThan, 0, 0, 0));
+            }
             using (SQLiteConnection conn = GetConnection())
             {
                 conn.Open();
@@ -196,12 +201,17 @@ namespace LocalStorage
                 {
                     using (SQLiteCommand comm = new SQLiteCommand(conn))
                     {
-                        comm.CommandText = "DELETE FROM statuses";
+                        comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay";
+                        comm.Parameters.Add(new SQLiteParameter("@SinceDay", SinceDate));
                         comm.ExecuteNonQuery();
+                        comm.Parameters.Clear();
 
+                        /*
                         comm.CommandText = "DELETE FROM users";
                         comm.ExecuteNonQuery();
+                         */
                     }
+                    t.Commit();
                 }
                 conn.Close();
             }

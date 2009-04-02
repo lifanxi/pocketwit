@@ -649,20 +649,5 @@ else
             }
             return response;
         }
-
-        public static void ClearCaches()
-        {
-            string[] Caches = System.IO.Directory.GetFiles(ClientSettings.AppPath, "*.xml");
-            foreach (string Cache in Caches)
-            {
-                try
-                {
-                    System.IO.File.Delete(Cache);
-                }
-                catch { };
-            }
-        }
-
-       
     }
 }
