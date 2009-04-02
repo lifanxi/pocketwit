@@ -891,7 +891,7 @@ namespace PockeTwit
                 Application.DoEvents();
                 statList.SwitchTolist("Friends_TimeLine");
 
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                AddStatusesToList(Manager.GetFriendsImmediately());
                 statList.Startup = false;
                 if (!StartBackground)
                 {
@@ -913,7 +913,7 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Messages_TimeLine")
             {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray(), count);
+                AddStatusesToList(Manager.GetMessagesImmediately(), count);
             }
             displayedNewMessages += count;
             MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
@@ -949,7 +949,7 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Friends_TimeLine")
             {
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray(), count);
+                AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
             displayedNewUpdates += count;
             FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
@@ -1235,7 +1235,7 @@ namespace PockeTwit
             if (Redraw)
             {
                 statList.SetSelectedMenu(FriendsTimeLineMenuItem);
-                AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Friends].ToArray());
+                AddStatusesToList(Manager.GetFriendsImmediately());
             }
             Manager.RefreshFriendsTimeLine();
             ChangeCursor(Cursors.Default);
@@ -1253,7 +1253,7 @@ namespace PockeTwit
             //if (Redraw)
             //{
             statList.SetSelectedMenu(MessagesMenuItem);
-            AddStatusesToList(Manager.TimeLines[TimelineManagement.TimeLineType.Messages].ToArray());
+            AddStatusesToList(Manager.GetMessagesImmediately());
             //}
             Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
