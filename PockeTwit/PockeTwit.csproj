@@ -265,6 +265,9 @@
     <Content Include="asterisk_yellow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="DefineGroup.resx">
+      <DependentUpon>DefineGroup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EmailStatusForm.resx">
       <DependentUpon>EmailStatusForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -496,6 +499,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressBook.cs" />
+    <Compile Include="DefineGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DefineGroup.Designer.cs">
+      <DependentUpon>DefineGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="EmailStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -513,6 +522,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GraphicsLibs\DIB.cs" />
+    <Compile Include="GroupingCode.cs" />
     <Compile Include="ImagePreview.cs">
       <SubType>Form</SubType>
     </Compile>
