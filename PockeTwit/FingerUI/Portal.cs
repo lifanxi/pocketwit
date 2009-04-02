@@ -108,9 +108,14 @@ namespace FingerUI
             }
             catch (OutOfMemoryException ex)
             {
-                TestMap.Dispose();
-                SecondMap.Dispose();
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                if (TestMap != null)
+                {
+                    TestMap.Dispose();
+                }
+                if (SecondMap != null)
+                {
+                    SecondMap.Dispose();
+                }
                 useDDB = false;
                 try
                 {

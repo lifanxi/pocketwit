@@ -31,7 +31,6 @@
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.lnkResetBuffer = new System.Windows.Forms.LinkLabel();
             this.lnkClearCaches = new System.Windows.Forms.LinkLabel();
             this.lnkClearSettings = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
@@ -45,20 +44,9 @@
             this.menuItem1.Text = "Done";
             this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
             // 
-            // lnkResetBuffer
-            // 
-            this.lnkResetBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkResetBuffer.Location = new System.Drawing.Point(4, 9);
-            this.lnkResetBuffer.Name = "lnkResetBuffer";
-            this.lnkResetBuffer.Size = new System.Drawing.Size(233, 20);
-            this.lnkResetBuffer.TabIndex = 0;
-            this.lnkResetBuffer.Text = "Reset Buffer Size";
-            this.lnkResetBuffer.Click += new System.EventHandler(this.lnkResetBuffer_Click);
-            // 
             // lnkClearCaches
             // 
-            this.lnkClearCaches.Location = new System.Drawing.Point(4, 29);
+            this.lnkClearCaches.Location = new System.Drawing.Point(3, 0);
             this.lnkClearCaches.Name = "lnkClearCaches";
             this.lnkClearCaches.Size = new System.Drawing.Size(233, 20);
             this.lnkClearCaches.TabIndex = 1;
@@ -67,7 +55,7 @@
             // 
             // lnkClearSettings
             // 
-            this.lnkClearSettings.Location = new System.Drawing.Point(4, 49);
+            this.lnkClearSettings.Location = new System.Drawing.Point(3, 20);
             this.lnkClearSettings.Name = "lnkClearSettings";
             this.lnkClearSettings.Size = new System.Drawing.Size(233, 20);
             this.lnkClearSettings.TabIndex = 2;
@@ -82,7 +70,6 @@
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.lnkClearSettings);
             this.Controls.Add(this.lnkClearCaches);
-            this.Controls.Add(this.lnkResetBuffer);
             this.Menu = this.mainMenu1;
             this.Name = "AdvancedForm";
             this.Text = "AdvancedForm";
@@ -92,7 +79,6 @@
 
         #endregion
 
-        private System.Windows.Forms.LinkLabel lnkResetBuffer;
         private System.Windows.Forms.LinkLabel lnkClearCaches;
         private System.Windows.Forms.LinkLabel lnkClearSettings;
         private System.Windows.Forms.MenuItem menuItem1;

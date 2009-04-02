@@ -19,27 +19,13 @@ namespace PockeTwit.SettingsHandler
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            showBuffer();
-        }
-
-        private void showBuffer()
-        {
-            lnkResetBuffer.Text = "Reset current buffer size: " + ClientSettings.PortalSize.ToString();
         }
         
-        private void lnkResetBuffer_Click(object sender, EventArgs e)
-        {
-            ClientSettings.PortalSize = ClientSettings.MaxTweets;
-            ClientSettings.SaveSettings();
-            showBuffer();
-            MessageBox.Show("You must restart PockeTwit for the buffer to reset.", "PockeTwit");
-        }
-
         private void lnkClearCaches_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to delete all cached statuses?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                TimelineManagement.ClearCaches();
+                LocalStorage.DataBaseUtility.CleanDB(0);
             }
         }
 
