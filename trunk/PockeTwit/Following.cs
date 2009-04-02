@@ -107,7 +107,10 @@ namespace PockeTwit
             {
                 if (!string.IsNullOrEmpty(location))
                 {
-                    System.IO.File.Delete(location);
+                    if (System.IO.File.Exists(location))
+                    {
+                        System.IO.File.Delete(location);
+                    }
                 }
             }
             
