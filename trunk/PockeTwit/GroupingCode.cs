@@ -16,7 +16,7 @@ namespace PockeTwit
         public GroupingType GroupType { get; set; }
         public string Term;
     }
-    public struct SpecialTimeLine
+    public class SpecialTimeLine
     {
         public string name { get; set; }
         public GroupingItem[] Terms { get; set; }
@@ -30,11 +30,32 @@ namespace PockeTwit
             }
             Terms = items.ToArray();
         }
+
+        public string GetConstraints()
+        {
+            string ret = "";
+            List<string> UserList = new List<string>();
+            foreach (GroupingItem t in Terms)
+            {
+                switch (t.GroupType)
+                {
+                    case GroupingType.user:
+                        UserList.Add("'"+t.Term+"'");
+                        break;
+                }
+            }
+            if (UserList.Count > 0)
+            {
+                ret = " AND users.screenname IN(" + string.Join(",", UserList.ToArray()) + ") ";
+            }
+
+            return ret;
+        }
     }
 
     public static class SpecialTimeLines
     {
-        private static string configPath = ClientSettings.AppPath + "savedTimelines.xml";
+        private static string configPath = ClientSettings.AppPath + "\\savedTimelines.xml";
         private static List<SpecialTimeLine> _Items = new List<SpecialTimeLine>();
 
         public static SpecialTimeLine[] GetList()

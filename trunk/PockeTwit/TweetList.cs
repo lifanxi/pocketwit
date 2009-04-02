@@ -454,7 +454,17 @@ namespace PockeTwit
         
         private void ShowUserGroup(SpecialTimeLine t)
         {
+            UpdateHistoryPosition();
+            ChangeCursor(Cursors.WaitCursor);
+            HistoryItem i = new HistoryItem();
+            i.Action = Yedda.Twitter.ActionType.Search;
+            i.Argument = t.name;
+            History.Push(i);
 
+            SwitchToList("Grouped_TimeLine");
+            this.statList.ClearVisible();
+            AddStatusesToList(Manager.GetGroupedTimeLine(t));
+            ChangeCursor(Cursors.Default);
         }
 
         private void AddUserToGroup(SpecialTimeLine t)
