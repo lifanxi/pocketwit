@@ -187,6 +187,26 @@ namespace LocalStorage
             return cache;
         }
 
+        public static void CleanDB()
+        {
+            using (SQLiteConnection conn = GetConnection())
+            {
+                conn.Open();
+                using (SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        comm.CommandText = "DELETE FROM statuses";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "DELETE FROM users";
+                        comm.ExecuteNonQuery();
+                    }
+                }
+                conn.Close();
+            }
+        }
+
         public static void SaveItems(List<PockeTwit.Library.status> TempLine)
         {
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())

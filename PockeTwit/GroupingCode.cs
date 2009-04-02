@@ -87,25 +87,38 @@ namespace PockeTwit
         public static void Load()
         {
             if(!System.IO.File.Exists(configPath)){return;}
-            XmlSerializer s = new XmlSerializer(typeof(List<SpecialTimeLine>));
-            lock (_Items)
+            try
             {
-                using (System.IO.StreamReader r = new System.IO.StreamReader(configPath))
+                XmlSerializer s = new XmlSerializer(typeof(List<SpecialTimeLine>));
+                lock (_Items)
                 {
-                    _Items = (List<SpecialTimeLine>)s.Deserialize(r);
+                    using (System.IO.StreamReader r = new System.IO.StreamReader(configPath))
+                    {
+                        _Items = (List<SpecialTimeLine>)s.Deserialize(r);
+                        return;
+                    }
                 }
             }
+            catch 
+            {
+                System.IO.File.Delete(configPath);
+            }
+            
         }
         public static void Save()
         {
-            XmlSerializer s = new XmlSerializer(typeof(List<SpecialTimeLine>));
-            lock (_Items)
+            try
             {
-                using (System.IO.StreamWriter w = new System.IO.StreamWriter(configPath))
+                XmlSerializer s = new XmlSerializer(typeof(List<SpecialTimeLine>));
+                lock (_Items)
                 {
-                    s.Serialize(w, _Items);
+                    using (System.IO.StreamWriter w = new System.IO.StreamWriter(configPath))
+                    {
+                        s.Serialize(w, _Items);
+                    }
                 }
             }
+            catch { }
         }
     }
 }
