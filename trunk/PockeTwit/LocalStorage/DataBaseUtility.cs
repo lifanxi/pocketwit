@@ -16,6 +16,11 @@ namespace LocalStorage
                                      statuses.accountSummary, statuses.statustypes, users.screenname, 
                                      users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
+        private const string SQLCountFromCache =
+                        @"SELECT     COUNT(id) AS newItems
+                          FROM         statuses WHERE
+                          (timestamp > 
+                            (SELECT timestamp from statuses WHERE id=@id))";
         private const string SQLGetLastStatusID =
                         @"SELECT    statuses.id
                           FROM statuses 
@@ -28,7 +33,8 @@ namespace LocalStorage
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
         private const string SQLFetchSearches = "(statuses.statustypes & 4)";
-        private const string SQLOrder = " ORDER BY statuses.[timestamp] DESC LIMIT @count ";
+        private const string SQLOrder = " ORDER BY statuses.[timestamp] DESC ";
+        private const string SQLLimit = " LIMIT @count ";
         #endregion
 
         private static string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
@@ -55,7 +61,6 @@ namespace LocalStorage
 
             DeleteDB();
         }
-
         private static void DeleteDB()
         {
             if (System.IO.File.Exists(DBPath))
@@ -131,7 +136,6 @@ namespace LocalStorage
             }
         }
 
-
         public static List<PockeTwit.Library.status> GetList(PockeTwit.TimelineManagement.TimeLineType typeToGet, int Count)
         {
             return GetList(typeToGet, Count, null);
@@ -142,15 +146,7 @@ namespace LocalStorage
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
                 string FetchQuery = SQLFetchFromCache;
-                switch (typeToGet)
-                {
-                    case PockeTwit.TimelineManagement.TimeLineType.Friends:
-                        FetchQuery = FetchQuery + " WHERE " + SQLFetchFriends +Constraints+ SQLOrder;
-                        break;
-                    case PockeTwit.TimelineManagement.TimeLineType.Messages:
-                        FetchQuery = FetchQuery + " WHERE " + SQLFetchRepliesAndMessages + Constraints + SQLOrder;
-                        break;
-                }
+                FetchQuery = FetchQuery + " WHERE " +AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
                 
                 using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(FetchQuery, conn))
                 {
@@ -186,6 +182,36 @@ namespace LocalStorage
             }
             return cache;
         }
+
+        private static string AddTypeWhereClause(PockeTwit.TimelineManagement.TimeLineType typeToGet)
+        {
+            switch (typeToGet)
+            {
+                case PockeTwit.TimelineManagement.TimeLineType.Friends:
+                    return SQLFetchFriends;
+                    break;
+                case PockeTwit.TimelineManagement.TimeLineType.Messages:
+                    return SQLFetchRepliesAndMessages;
+                    break;
+            }
+            return null;
+        }
+        public static int GetItemsNewerThan(PockeTwit.TimelineManagement.TimeLineType typeToGet, string ID)
+        {
+            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                string FetchQuery = SQLCountFromCache;
+                FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + SQLOrder;
+                using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(FetchQuery, conn))
+                {
+                    comm.Parameters.Add(new SQLiteParameter("@id", ID));
+                    conn.Open();
+                    object o= comm.ExecuteScalar();
+                    return System.Convert.ToInt32(o);
+                }
+            }
+        }
+
 
         public static void CleanDB(int OlderThan)
         {
@@ -238,16 +264,16 @@ namespace LocalStorage
             switch (typeToGet)
             {
                 case PockeTwit.TimelineManagement.TimeLineType.Friends:
-                    FetchQuery = FetchQuery + " AND " + SQLFetchFriends + SQLOrder;
+                    FetchQuery = FetchQuery + " AND " + SQLFetchFriends + SQLOrder + SQLLimit;
                     break;
                 case PockeTwit.TimelineManagement.TimeLineType.Replies:
-                    FetchQuery = FetchQuery + " AND " + SQLFetchReplies + SQLOrder;
+                    FetchQuery = FetchQuery + " AND " + SQLFetchReplies + SQLOrder + SQLLimit;
                     break;
                 case PockeTwit.TimelineManagement.TimeLineType.Direct:
-                    FetchQuery = FetchQuery + " AND " + SQLFetchDirects + SQLOrder;
+                    FetchQuery = FetchQuery + " AND " + SQLFetchDirects + SQLOrder + SQLLimit;
                     break;
                 case PockeTwit.TimelineManagement.TimeLineType.Messages:
-                    FetchQuery = FetchQuery + " AND " + SQLFetchRepliesAndMessages + SQLOrder;
+                    FetchQuery = FetchQuery + " AND " + SQLFetchRepliesAndMessages + SQLOrder + SQLLimit;
                     break;
             }
                 

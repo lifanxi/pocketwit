@@ -34,9 +34,7 @@ namespace PockeTwit
         private bool IsLoaded = false;
         private string ShowUserID;
         private bool StartBackground = false;
-        private int displayedNewMessages;
-        private int displayedNewUpdates;
-
+        
         #region MenuItems
         #region LeftMenu
         FingerUI.SideMenuItem BackMenuItem;
@@ -461,7 +459,7 @@ namespace PockeTwit
             i.Argument = t.name;
             History.Push(i);
 
-            SwitchToList("Grouped_TimeLine");
+            SwitchToList("Grouped_TimeLine_"+t.name);
             this.statList.ClearVisible();
             AddStatusesToList(Manager.GetGroupedTimeLine(t));
             ChangeCursor(Cursors.Default);
@@ -674,38 +672,25 @@ namespace PockeTwit
         private void SetLeftMenu()
         {
             BackMenuItem.Visible = History.Count > 1;
-            /*
-            if (ClientSettings.MergeMessages)
-            {
-                LeftMenu = new List<string>(new string[] { "Back", "TimeLine", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
-            }
-            else
-            {
-                LeftMenu = new List<string>(new string[] { "Back", "Friends TimeLine", "Messages", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
-            }
-            if (History.Count <= 1)
-            {
-                LeftMenu.Remove("Back");
-            }
-            
-            statList.LeftMenu.ResetMenu(LeftMenu);
-             */
+            int newFriendsStatuses = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetLastSelected("Friends_TimeLine"));
+            int newMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Messages, LastSelectedItems.GetLastSelected("Messages_TimeLine"));
             switch (statList.CurrentList())
             {
+                    
                 case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(displayedNewUpdates);
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(newFriendsStatuses);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(newMessages);
+                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(newFriendsStatuses);
                     break;
                 case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(newFriendsStatuses);
+                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(newMessages);
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(newFriendsStatuses);
                     break;
                 default:
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(newFriendsStatuses);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(newMessages);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(newFriendsStatuses);
                     break;
             }
         }
@@ -915,10 +900,10 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetMessagesImmediately(), count);
             }
-            displayedNewMessages += count;
+            int displayedNewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Messages, LastSelectedItems.GetLastSelected("Messages_TimeLine"));
             MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
             Notifyer.NewMessages(count);
-            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
+            setCaption(newItemsText(LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetLastSelected("Friends_TimeLine"))) + " " + newItemsText(displayedNewMessages));
         }
 
         private string newItemsText(int count)
@@ -951,7 +936,8 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
-            displayedNewUpdates += count;
+            int displayedNewUpdates = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetLastSelected("Friends_TimeLine"));
+            int displayedNewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Messages, LastSelectedItems.GetLastSelected("Messages_TimeLine"));
             FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
             Notifyer.NewFriendMessages(count);
             setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
@@ -1383,21 +1369,15 @@ namespace PockeTwit
             UpdateRightMenu();
             UpdateHistoryPosition();
             int clickedNumber = statItem.Index + 1;
+            int displayedNewUpdates = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetLastSelected("Friends_TimeLine"));
+            int displayedNewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Messages, LastSelectedItems.GetLastSelected("Messages_TimeLine"));
             if (statList.CurrentList() == "Messages_TimeLine")
-            {
-                if (clickedNumber <= displayedNewMessages)
-                {
-                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - -statItem.Index);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                }
+            {                
+                MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
             }
             else if (statList.CurrentList() == "Friends_TimeLine")
             {
-                if (clickedNumber <= displayedNewUpdates)
-                {
-                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                }
+                FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
             }
             setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
             SetLeftMenu();
