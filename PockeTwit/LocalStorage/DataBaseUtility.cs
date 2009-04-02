@@ -132,8 +132,11 @@ namespace LocalStorage
         }
 
 
-
         public static List<PockeTwit.Library.status> GetList(PockeTwit.TimelineManagement.TimeLineType typeToGet, int Count)
+        {
+            return GetList(typeToGet, Count, null);
+        }
+        public static List<PockeTwit.Library.status> GetList(PockeTwit.TimelineManagement.TimeLineType typeToGet, int Count, string Constraints)
         {
             List<PockeTwit.Library.status> cache = new List<PockeTwit.Library.status>();
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
@@ -142,10 +145,10 @@ namespace LocalStorage
                 switch (typeToGet)
                 {
                     case PockeTwit.TimelineManagement.TimeLineType.Friends:
-                        FetchQuery = FetchQuery + " WHERE " + SQLFetchFriends + SQLOrder;
+                        FetchQuery = FetchQuery + " WHERE " + SQLFetchFriends +Constraints+ SQLOrder;
                         break;
                     case PockeTwit.TimelineManagement.TimeLineType.Messages:
-                        FetchQuery = FetchQuery + " WHERE " + SQLFetchRepliesAndMessages + SQLOrder;
+                        FetchQuery = FetchQuery + " WHERE " + SQLFetchRepliesAndMessages + Constraints + SQLOrder;
                         break;
                 }
                 

@@ -298,6 +298,12 @@ namespace PockeTwit
             }
             return Library.status.Deserialize(response, t.AccountInfo);
         }
+
+        public Library.status[] GetGroupedTimeLine(SpecialTimeLine t)
+        {
+            return LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets, t.GetConstraints()).ToArray();
+        }
+
         private void GetMessagesTimeLine(object o)
         {
             GetMessagesTimeLine(true);
