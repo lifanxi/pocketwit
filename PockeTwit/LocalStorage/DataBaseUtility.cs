@@ -225,6 +225,10 @@ namespace LocalStorage
         
         public static int GetItemsNewerThan(PockeTwit.TimelineManagement.TimeLineType typeToGet, string ID, string Constraints)
         {
+            if (ID == null) 
+            {
+                return 0;
+            }
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
                 string FetchQuery = SQLCountFromCache;

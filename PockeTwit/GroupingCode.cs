@@ -42,7 +42,7 @@ namespace PockeTwit
             }
             if (UserList.Count > 0)
             {
-                ret = " AND users.id IN(" + string.Join(",", UserList.ToArray()) + ") ";
+                ret = " AND statuses.userid IN(" + string.Join(",", UserList.ToArray()) + ") ";
             }
 
             return ret;
@@ -117,25 +117,27 @@ namespace PockeTwit
             */
             using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
-                lock (_Items)
+                conn.Open();
+                using (SQLiteCommand comm = new SQLiteCommand(conn))
                 {
-                    conn.Open();
-                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    comm.CommandText = "SELECT groupname, userid FROM usersInGroups";
+                    using (SQLiteDataReader r = comm.ExecuteReader())
                     {
-                        comm.CommandText = "SELECT groupname, userid FROM usersInGroups";
-                        using (SQLiteDataReader r = comm.ExecuteReader())
+                        while (r.Read())
                         {
-                            while (r.Read())
+                            string groupName = r.GetString(0);
+                            string userID = r.GetString(1);
+                            SpecialTimeLine thisLine = new SpecialTimeLine();
+                            if (_Items.ContainsKey(groupName))
                             {
-                                string groupName = r.GetString(0);
-                                string userID = r.GetString(1);
-                                SpecialTimeLine thisLine = new SpecialTimeLine();
-                                if (_Items.ContainsKey(groupName))
-                                {
-                                    thisLine = _Items[groupName];
-                                }
-                                thisLine.AddItem(userID);
+                                thisLine = _Items[groupName];
                             }
+                            else
+                            {
+                                thisLine.name = groupName;
+                                Add(thisLine);
+                            }
+                            thisLine.AddItem(userID);
                         }
                     }
                 }
