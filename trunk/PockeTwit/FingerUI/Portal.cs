@@ -55,6 +55,7 @@ namespace FingerUI
         private static List<Thread> _RenderThreads = new List<Thread>();
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
+        public event delNewImage Panic = delegate { };
 
         private volatile bool cancelMyCurrentThread = false;
         
@@ -425,6 +426,7 @@ namespace FingerUI
             GC.Collect();
             GC.WaitForPendingFinalizers();
             SetBufferSize();
+            Panic();
         }
 
         private void DrawSingleItem(int i, Graphics g)

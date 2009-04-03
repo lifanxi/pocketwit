@@ -326,6 +326,7 @@ namespace FingerUI
                         {
                             //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
                             g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);
+
                         }
                     }
                     catch(Exception ex)

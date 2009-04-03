@@ -262,7 +262,6 @@ namespace PockeTwit
                 {
                     System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(LocalFileName));
                 }
-                //ArtWriter = new System.IO.FileStream(LocalFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read);
                 ArtWriter = new System.IO.MemoryStream();
                 int count = 0;
                 byte[] buffer = new byte[8192];

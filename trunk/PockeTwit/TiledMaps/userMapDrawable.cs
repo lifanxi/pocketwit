@@ -30,7 +30,10 @@ namespace PockeTwit
                         new Point(destRect.Left + (destRect.Width/2), destRect.Bottom),
                         new Point(destRect.Left + (destRect.Width/2)-ClientSettings.Margin, destRect.Bottom-(ClientSettings.Margin*4)),
                     });
-                    graphics.DrawImage(ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url), destRect.X, destRect.Y);
+                    using (Image userbmp = ThrottledArtGrabber.GetArt(this.userToDraw.screen_name, this.userToDraw.high_profile_image_url))
+                    {
+                        graphics.DrawImage(userbmp, destRect.X, destRect.Y);
+                    }
                 }
             }
             else
