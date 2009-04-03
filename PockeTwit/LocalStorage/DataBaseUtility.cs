@@ -77,7 +77,7 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0002";
+        private const string DBVersion = "0003";
         private static void CreateDB()
         {
             if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
@@ -85,28 +85,30 @@ namespace LocalStorage
                 System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\LocalStorage");
             }
             SQLiteConnection.CreateFile(DBPath);
-            using(SQLiteConnection conn = GetConnection())
+            try
             {
-                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = GetConnection())
                 {
-                    conn.Open();
-                    SQLiteTransaction t = conn.BeginTransaction();
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        SQLiteTransaction t = conn.BeginTransaction();
 
-                    comm.CommandText =
-                        @"CREATE TABLE DBProperties (name VARCHAR(50) PRIMARY KEY,
+                        comm.CommandText =
+                            @"CREATE TABLE DBProperties (name VARCHAR(50) PRIMARY KEY,
                             value NVARCHAR(255))
                             ";
-                    comm.ExecuteNonQuery();
+                        comm.ExecuteNonQuery();
 
-                    comm.CommandText =
-                        @"INSERT INTO DBProperties (name,value) VALUES (@name,@value)";
-                    comm.Parameters.Add(new SQLiteParameter("@name", "dbversion"));
-                    comm.Parameters.Add(new SQLiteParameter("@value", DBVersion));
-                    comm.ExecuteNonQuery();
-                    comm.Parameters.Clear();
+                        comm.CommandText =
+                            @"INSERT INTO DBProperties (name,value) VALUES (@name,@value)";
+                        comm.Parameters.Add(new SQLiteParameter("@name", "dbversion"));
+                        comm.Parameters.Add(new SQLiteParameter("@value", DBVersion));
+                        comm.ExecuteNonQuery();
+                        comm.Parameters.Clear();
 
-                    comm.CommandText =
-                        @"CREATE TABLE statuses (id VARCHAR(50) PRIMARY KEY,
+                        comm.CommandText =
+                            @"CREATE TABLE statuses (id VARCHAR(50) PRIMARY KEY,
                             fulltext NVARCHAR(255),
                             userid VARCHAR(50),
                             timestamp DATETIME,
@@ -117,22 +119,37 @@ namespace LocalStorage
                             statustypes SMALLINT(2),
                             UNIQUE (id) )
                                        ";
-                    comm.ExecuteNonQuery();
-                    
-                    comm.CommandText =
-                        @"CREATE TABLE users (id VARCHAR(50) PRIMARY KEY,
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText =
+                            @"CREATE TABLE users (id VARCHAR(50) PRIMARY KEY,
                             screenname NVARCHAR(255),
                             fullname NVARCHAR(255),
                             description NVARCHAR(255),
                             avatarURL TEXT,
                             UNIQUE (id) )
                                        ";
-                    comm.ExecuteNonQuery();
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText =
+                            @"CREATE TABLE groups (id INTEGER PRIMARY KEY,
+                            groupname NVARCHAR(255))";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText =
+                            @"CREATE TABLE usersInGroups (id INTEGER PRIMARY KEY,
+                            groupid BIGINT,
+                            userid VARCHAR(50))";
+                        comm.ExecuteNonQuery();
 
 
-                    t.Commit();
-                    conn.Close();
+                        t.Commit();
+                        conn.Close();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
