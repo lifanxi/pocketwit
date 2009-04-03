@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.69</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv69.CAB</url>
-  <notes>Fix posting images in smartphone
-Fix avatars in direct messages
-Fix crash with old theme
-
-From v.68:
-Picture Services:
-   Choose between multiple hosts
-   Show pictures without a browser
-AddressBook:
-   Easily enter @reply names
-New Timelines:
-   Public timeline
-   View your favorites
-Copy tweet to email
+  <version>.70</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv70.CAB</url>
+  <notes>Several bugfixes,
+including fixing blinking avatars
 </notes>
 </LatestRelease>
