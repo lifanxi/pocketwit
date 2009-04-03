@@ -436,11 +436,7 @@ namespace PockeTwit
             {
                 SpecialTimeLine t = new SpecialTimeLine();
                 t.name = d.GroupName;
-                GroupingItem i = new GroupingItem();
-                i.GroupType = GroupingType.user;
-                i.Term = selectedItem.Tweet.user.screen_name;
-                t.Terms = new GroupingItem[] { i };
-
+                t.AddItem(selectedItem.Tweet.user.id);
                 SpecialTimeLines.Add(t);
 
                 AddGroupSelectMenuItem(t);
@@ -472,9 +468,8 @@ namespace PockeTwit
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return ; }
             if (selectedItem.Tweet.user == null) { return; }
-            GroupingItem i = new GroupingItem();
-            i.Term = selectedItem.Tweet.user.screen_name;
-            t.AddItem(i);
+            
+            t.AddItem(selectedItem.Tweet.user.id);
             SpecialTimeLines.Save();
         }
 

@@ -201,7 +201,6 @@ namespace FingerUI
             catch
             {
             }
-            
         }
 
         public void SetItemList(List<StatusItem> SetOfItems)

@@ -25,6 +25,10 @@ namespace LocalStorage
                         @"SELECT    statuses.id
                           FROM statuses 
                           WHERE statuses.accountSummary = @accountsummary";
+
+        private const string SQLIgnoreGrouped =
+            //@" INNER JOIN usersInGroups ON statuses.userid <> usersInGroups.userid ";
+                        @" AND ((SELECT COUNT(id) FROM usersInGroups WHERE usersInGroups.userid=statuses.userid ) = 0)  ";
         
         private const string SQLFetchFriends = "(statuses.statustypes == 0)";
         private const string SQLFetchReplies = "(statuses.statustypes & 1)";
@@ -77,7 +81,7 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0003";
+        private const string DBVersion = "0004";
         private static void CreateDB()
         {
             if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
@@ -132,13 +136,12 @@ namespace LocalStorage
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE groups (id INTEGER PRIMARY KEY,
-                            groupname NVARCHAR(255))";
+                            @"CREATE TABLE groups (groupname NVARCHAR(50) PRIMARY KEY ON CONFLICT IGNORE)";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE usersInGroups (id INTEGER PRIMARY KEY,
-                            groupid BIGINT,
+                            @"CREATE TABLE usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT IGNORE,
+                            groupname NVARCHAR(50),
                             userid VARCHAR(50))";
                         comm.ExecuteNonQuery();
 
@@ -155,7 +158,12 @@ namespace LocalStorage
 
         public static List<PockeTwit.Library.status> GetList(PockeTwit.TimelineManagement.TimeLineType typeToGet, int Count)
         {
-            return GetList(typeToGet, Count, null);
+            string Constraints = null;
+            if (typeToGet == PockeTwit.TimelineManagement.TimeLineType.Friends)
+            {
+                Constraints = SQLIgnoreGrouped;
+            }
+            return GetList(typeToGet, Count, Constraints);
         }
         public static List<PockeTwit.Library.status> GetList(PockeTwit.TimelineManagement.TimeLineType typeToGet, int Count, string Constraints)
         {
@@ -163,6 +171,7 @@ namespace LocalStorage
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
                 string FetchQuery = SQLFetchFromCache;
+                
                 FetchQuery = FetchQuery + " WHERE " +AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
                 
                 using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(FetchQuery, conn))

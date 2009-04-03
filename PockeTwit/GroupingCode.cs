@@ -1,52 +1,48 @@
 ﻿using System;
 
+using System.Data.SQLite;
+
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
 namespace PockeTwit
 {
-    public enum GroupingType
-    {
-        user=0,
-        searchterm=1
-    }
-    public struct GroupingItem
-    {
-        public GroupingType GroupType { get; set; }
-        public string Term;
-    }
     public class SpecialTimeLine
     {
         public string name { get; set; }
-        public GroupingItem[] Terms { get; set; }
+        public string[] Terms { get; set; }
 
-        public void AddItem(GroupingItem Term)
+        public void AddItem(string Term)
         {
-            List<GroupingItem> items = new List<GroupingItem>(Terms);
-            if (!items.Contains(Term))
+            if (Terms != null && Terms.Length > 0)
             {
-                items.Add(Term);
+                List<string> items = new List<string>(Terms);
+                if (!items.Contains(Term))
+                {
+                    items.Add(Term);
+                }
+                Terms = items.ToArray();
             }
-            Terms = items.ToArray();
+            else
+            {
+                Terms = new string[]{ Term };
+            }
+            
         }
 
         public string GetConstraints()
         {
             string ret = "";
             List<string> UserList = new List<string>();
-            foreach (GroupingItem t in Terms)
+            foreach (string t in Terms)
             {
-                switch (t.GroupType)
-                {
-                    case GroupingType.user:
-                        UserList.Add("'"+t.Term+"'");
-                        break;
-                }
+                UserList.Add("'"+t+"'");
+                
             }
             if (UserList.Count > 0)
             {
-                ret = " AND users.screenname IN(" + string.Join(",", UserList.ToArray()) + ") ";
+                ret = " AND users.id IN(" + string.Join(",", UserList.ToArray()) + ") ";
             }
 
             return ret;
@@ -56,24 +52,38 @@ namespace PockeTwit
     public static class SpecialTimeLines
     {
         private static string configPath = ClientSettings.AppPath + "\\savedTimelines.xml";
-        private static List<SpecialTimeLine> _Items = new List<SpecialTimeLine>();
+        private static Dictionary<string, SpecialTimeLine> _Items = new Dictionary<string, SpecialTimeLine>();
 
         public static SpecialTimeLine[] GetList()
         {
-            return _Items.ToArray();
+            List<SpecialTimeLine> s = new List<SpecialTimeLine>();
+            lock (_Items)
+            {
+                foreach (SpecialTimeLine item in _Items.Values)
+                {
+                    s.Add(item);
+                }
+            }
+            return s.ToArray();
         }
         public static void Add(SpecialTimeLine newLine)
         {
             lock (_Items)
             {
-                _Items.Add(newLine);
+                if (!_Items.ContainsKey(newLine.name))
+                {
+                    _Items.Add(newLine.name, newLine);
+                }
             }
         }
         public static void Remove(SpecialTimeLine oldLine)
         {
             lock (_Items)
             {
-                _Items.Remove(oldLine);
+                if(_Items.ContainsKey(oldLine.name))
+                {
+                    _Items.Remove(oldLine.name);
+                }
             }
         }
         public static void Clear()
@@ -86,6 +96,7 @@ namespace PockeTwit
 
         public static void Load()
         {
+            /*
             if(!System.IO.File.Exists(configPath)){return;}
             try
             {
@@ -103,22 +114,71 @@ namespace PockeTwit
             {
                 System.IO.File.Delete(configPath);
             }
-            
-        }
-        public static void Save()
-        {
-            try
+            */
+            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
-                XmlSerializer s = new XmlSerializer(typeof(List<SpecialTimeLine>));
                 lock (_Items)
                 {
-                    using (System.IO.StreamWriter w = new System.IO.StreamWriter(configPath))
+                    conn.Open();
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
                     {
-                        s.Serialize(w, _Items);
+                        comm.CommandText = "SELECT groupname, userid FROM usersInGroups";
+                        using (SQLiteDataReader r = comm.ExecuteReader())
+                        {
+                            while (r.Read())
+                            {
+                                string groupName = r.GetString(0);
+                                string userID = r.GetString(1);
+                                SpecialTimeLine thisLine = new SpecialTimeLine();
+                                if (_Items.ContainsKey(groupName))
+                                {
+                                    thisLine = _Items[groupName];
+                                }
+                                thisLine.AddItem(userID);
+                            }
+                        }
                     }
                 }
             }
-            catch { }
+        }
+        public static void Save()
+        {
+            
+            if (_Items.Count > 0)
+            {
+                using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+                {
+                    lock (_Items)
+                    {
+                        conn.Open();
+                        using (SQLiteTransaction t = conn.BeginTransaction())
+                        {
+                            foreach (SpecialTimeLine group in _Items.Values)
+                            {
+                                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                                {
+                                    comm.CommandText = "INSERT INTO groups (groupname) VALUES (@name);";
+                                    comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+
+                                    comm.ExecuteNonQuery();
+                                    
+                                    foreach (string userid in group.Terms)
+                                    {
+                                        comm.Parameters.Clear();
+                                        comm.CommandText = "INSERT INTO usersInGroups (id, groupname, userid) VALUES (@pairid, @name, @userid)";
+                                        comm.Parameters.Add(new SQLiteParameter("@pairid", group.name+userid));
+                                        comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+                                        comm.Parameters.Add(new SQLiteParameter("@userid", userid));
+                                        comm.ExecuteNonQuery();
+
+                                    }
+                                }
+                            }
+                            t.Commit();
+                        }
+                    }
+                }
+            }
         }
     }
 }
