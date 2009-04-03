@@ -32,6 +32,10 @@ namespace FingerUI
                 }
                 else
                 {
+                    if (avatarBox.Image != null)
+                    {
+                        avatarBox.Image.Dispose();
+                    }
                     PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded -= new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
                 }
             }

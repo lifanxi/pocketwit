@@ -142,7 +142,7 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
 
             SlidingPortal.NewImage += new Portal.delNewImage(SlidingPortal_NewImage);
-
+            SlidingPortal.Panic += new Portal.delNewImage(SlidingPortal_Panic);
             m_velocity.StoppedMoving += new Velocity.delStoppedMoving(m_velocity_StoppedMoving);
 
             fsDisplay.Visible = false;
@@ -151,6 +151,14 @@ namespace FingerUI
 
             PockeTwit.GlobalEventHandler.ShowErrorMessage += new PockeTwit.GlobalEventHandler.delshowErrorMessage(GlobalEventHandler_ShowErrorMessage);
             this.LostFocus += new EventHandler(KListControl_LostFocus);
+        }
+
+        void SlidingPortal_Panic()
+        {
+            foreach (StatusItem i in m_items.Values)
+            {
+                i.ParentGraphics = SlidingPortal._RenderedGraphics;
+            }
         }
 
         
