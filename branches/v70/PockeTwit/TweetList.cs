@@ -923,7 +923,7 @@ namespace PockeTwit
         {
             PostUpdate StatusForm = new PostUpdate(false);
 
-            if (CurrentlySelectedAccount == null)
+            if (CurrentlySelectedAccount == null || string.IsNullOrEmpty(ToUser))
             {
                 StatusForm.AccountToSet = ClientSettings.DefaultAccount;
             }
