@@ -1370,6 +1370,7 @@ namespace PockeTwit
             UpdateHistoryPosition();
             int clickedNumber = statItem.Index + 1;
             SetLeftMenu();
+            SetMenuNumbers();
         }
 
         private void UpdateHistoryPosition()
@@ -1671,6 +1672,16 @@ namespace PockeTwit
             }
             ThrottledArtGrabber.running = false;
             base.OnClosed(e);
+        }
+
+        private void SetMenuNumbers()
+        {
+            int NewFriends = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Friends_TimeLine"), null);
+            int NewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Replies, LastSelectedItems.GetNewestSelected("Messages_TimeLine"), null);
+            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+            {
+                int XMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Grouped_TimeLine_" + t.name), t.GetConstraints());
+            }
         }
 
         #endregion�Methods�
