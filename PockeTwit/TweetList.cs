@@ -34,8 +34,6 @@ namespace PockeTwit
         private bool IsLoaded = false;
         private string ShowUserID;
         private bool StartBackground = false;
-        private int displayedNewMessages;
-        private int displayedNewUpdates;
 
         #region MenuItems
         #region LeftMenu
@@ -688,19 +686,19 @@ namespace PockeTwit
             switch (statList.CurrentList())
             {
                 case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "Refresh TimeLine" + newItemsText(displayedNewUpdates);
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline";
+                    MessagesMenuItem.Text = "Messages";
+                    MergedTimeLineMenuItem.Text = "Refresh TimeLine";
                     break;
                 case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(displayedNewMessages);
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
+                    MessagesMenuItem.Text = "Refresh Messages";
+                    MergedTimeLineMenuItem.Text = "TimeLine";
                     break;
                 default:
-                    MergedTimeLineMenuItem.Text = "TimeLine" + newItemsText(displayedNewUpdates);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
+                    MergedTimeLineMenuItem.Text = "TimeLine";
+                    MessagesMenuItem.Text = "Messages";
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
                     break;
             }
         }
@@ -910,10 +908,7 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetMessagesImmediately(), count);
             }
-            displayedNewMessages += count;
-            MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
             Notifyer.NewMessages(count);
-            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
         }
 
         private string newItemsText(int count)
@@ -946,10 +941,6 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
-            displayedNewUpdates += count;
-            FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-            Notifyer.NewFriendMessages(count);
-            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
         }
 
         private void MapList()
@@ -1378,23 +1369,6 @@ namespace PockeTwit
             UpdateRightMenu();
             UpdateHistoryPosition();
             int clickedNumber = statItem.Index + 1;
-            if (statList.CurrentList() == "Messages_TimeLine")
-            {
-                if (clickedNumber <= displayedNewMessages)
-                {
-                    displayedNewMessages = displayedNewMessages - (displayedNewMessages - -statItem.Index);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(displayedNewMessages);
-                }
-            }
-            else if (statList.CurrentList() == "Friends_TimeLine")
-            {
-                if (clickedNumber <= displayedNewUpdates)
-                {
-                    displayedNewUpdates = displayedNewUpdates - (displayedNewUpdates - statItem.Index);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(displayedNewUpdates);
-                }
-            }
-            setCaption(newItemsText(displayedNewUpdates) + " " + newItemsText(displayedNewMessages));
             SetLeftMenu();
         }
 
@@ -1405,7 +1379,7 @@ namespace PockeTwit
             i.itemsOffset = statList.YOffset;
         }
 
-        
+
         void statusList_WordClicked(string TextClicked)
         {
             if (TextClicked.StartsWith("http"))

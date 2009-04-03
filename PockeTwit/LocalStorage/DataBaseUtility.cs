@@ -222,12 +222,13 @@ namespace LocalStorage
             }
             return null;
         }
-        public static int GetItemsNewerThan(PockeTwit.TimelineManagement.TimeLineType typeToGet, string ID)
+        
+        public static int GetItemsNewerThan(PockeTwit.TimelineManagement.TimeLineType typeToGet, string ID, string Constraints)
         {
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
                 string FetchQuery = SQLCountFromCache;
-                FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + SQLOrder;
+                FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder;
                 using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(FetchQuery, conn))
                 {
                     comm.Parameters.Add(new SQLiteParameter("@id", ID));

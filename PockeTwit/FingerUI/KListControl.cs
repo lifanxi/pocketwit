@@ -414,7 +414,7 @@ namespace FingerUI
                     {
                         item.Selected = true;
                         m_selectedIndex = i;
-                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet.id);
+                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet);
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     }
                     else
@@ -534,7 +534,7 @@ namespace FingerUI
             {
                 if (SelectedItem != null)
                 {
-                    PockeTwit.LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet.id);
+                    PockeTwit.LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet);
                 }
             }
             if (!ItemLists.ContainsKey(ListName))
@@ -747,7 +747,7 @@ namespace FingerUI
                     SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     StatusItem s = (StatusItem)SelectedItem;
                     RightMenu.UserName = s.Tweet.user.screen_name;
-                    PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[0].Tweet.id);
+                    PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[0].Tweet);
                     //FillBuffer();
                 }
             }
@@ -1694,7 +1694,7 @@ namespace FingerUI
                 return;
             }
             item.Selected = true;
-            PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet.id);
+            PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), item.Tweet);
             SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
             if (SelectedItemChanged != null)
             {
@@ -1742,7 +1742,7 @@ namespace FingerUI
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         m_selectedIndex = selectedIndex.Y;
                         m_items[m_selectedIndex].Selected = true;
-                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[m_selectedIndex].Tweet.id);
+                        PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[m_selectedIndex].Tweet);
                         SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                         if (SelectedItemChanged != null)
                         {

@@ -13,16 +13,28 @@ namespace PockeTwit
             LoadStoredItems();
         }
 
+        private static Dictionary<string, Library.status> NewestSelectedItemsDictionary = new Dictionary<string, Library.status>();
         private static Dictionary<string, string> LastSelectedItemsDictionary = new Dictionary<string, string>();
         private static RegistryKey StoredItemsRoot;
-        public static void SetLastSelected(string ListName, string ID)
+        public static void SetLastSelected(string ListName, Library.status selectedStatus)
         {
             if (!LastSelectedItemsDictionary.ContainsKey(ListName))
             {
                 LastSelectedItemsDictionary.Add(ListName, "");
             }
-            LastSelectedItemsDictionary[ListName] = ID;
-            StoreSelectedItem(ListName, ID);
+            LastSelectedItemsDictionary[ListName] = selectedStatus.id;
+            if (!NewestSelectedItemsDictionary.ContainsKey(ListName))
+            {
+                NewestSelectedItemsDictionary.Add(ListName, selectedStatus);
+            }
+            else
+            {
+                if (NewestSelectedItemsDictionary[ListName].createdAt < selectedStatus.createdAt)
+                {
+                    NewestSelectedItemsDictionary[ListName] = selectedStatus;
+                }
+            }
+            StoreSelectedItem(ListName, selectedStatus.id);
         }
 
         public static string GetLastSelected(string ListName)
@@ -33,7 +45,14 @@ namespace PockeTwit
             }
             else { return LastSelectedItemsDictionary[ListName]; }
         }
-
+        public static string GetNewestSelected(string ListName)
+        {
+            if (!NewestSelectedItemsDictionary.ContainsKey(ListName))
+            {
+                return null;
+            }
+            else { return NewestSelectedItemsDictionary[ListName].id; }
+        }
 
         private const string StorageRoot = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
 
