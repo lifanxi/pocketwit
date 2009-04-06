@@ -93,6 +93,7 @@ namespace PockeTwit
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             
             ClientSettings.LoadSettings();
+            LocalStorage.DataBaseUtility.CreateDB();
             Application.Run(new TweetList(bBackGround));
         }
 

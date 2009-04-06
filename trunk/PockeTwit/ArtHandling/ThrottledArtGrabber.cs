@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.IO;
 
 namespace PockeTwit
 {
@@ -32,40 +34,17 @@ namespace PockeTwit
         public static TiledMaps.WinCEImagingBitmap mapMarkerImage;
         private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
         private static List<string> BadURLs = new List<string>();
-        public static string CacheFolder;
         private static System.Threading.Thread WorkerThread;
         static ThrottledArtGrabber()
         {
-            SetupCacheDir();
+            Setup();
             mapMarkerImage = new TiledMaps.WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
             FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");            
         }
 
-        public static void ResetCacheDir()
+        private static void Setup()
         {
-            System.IO.Directory.Delete(CacheFolder, true);
-            SetupCacheDir();
-        }
-
-        private static void SetupCacheDir()
-        {
-            if (string.IsNullOrEmpty(ClientSettings.CacheDir))
-            {
-                CacheFolder = ClientSettings.AppPath + "\\ArtCache";
-            }
-            else
-            {
-                CacheFolder = ClientSettings.CacheDir + "\\ArtCache";
-            }
-
-            if (!System.IO.Directory.Exists(CacheFolder))
-            {
-                System.IO.Directory.CreateDirectory(CacheFolder);
-            }
-            if (!System.IO.Directory.Exists(CacheFolder + "\\Unknown"))
-            {
-                System.IO.Directory.CreateDirectory(CacheFolder + "\\Unknown");
-            }
+            
             UnknownArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
             DefaultArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
 
@@ -84,14 +63,6 @@ namespace PockeTwit
             }
             DiskUnknown.Dispose();
             DiskDefault.Dispose();
-
-            if (!System.IO.File.Exists(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser"))
-            {
-                UnknownArt.Save(CacheFolder + "\\Unknown" + "\\PockeTwitUnknownUser", System.Drawing.Imaging.ImageFormat.Bmp);
-            }
-
-            
-
         }
 
         public delegate void ArtIsReady(string Argument);
@@ -99,7 +70,7 @@ namespace PockeTwit
         
         public static Image GetArt(string user, string url)
         {
-            if(string.IsNullOrEmpty(url))
+            if(string.IsNullOrEmpty(url) | string.IsNullOrEmpty((url)))
             {
                 //Don't re-queue -- we won't be able to get it for now.
                 return new Bitmap(UnknownArt);
@@ -108,8 +79,6 @@ namespace PockeTwit
             {
                 return new Bitmap(DefaultArt);
             }
-            string ID = url.Replace("_bigger","").Replace("_normal","").Replace("https","").Replace("http","").ToLower() ;
-            string ArtName = DetermineCacheFileName(user, url);
             lock (BadURLs)
             {
                 if (BadURLs.Contains(url))
@@ -117,51 +86,80 @@ namespace PockeTwit
                     return new Bitmap(UnknownArt);
                 }
             }
-                        
-            if (!System.IO.File.Exists(ArtName + ".ID"))
-            {
-                //No existing ID, we'll queue a fetch
-                ArtRequest r = new ArtRequest(user, url);
-                QueueRequest(r);
 
-                //Should we write ID now to prevent multiple requests?
-                return new Bitmap(UnknownArt);
-            }
-            else
+            
+            try
             {
-                try
+                string ExistingURL = CleanURL(HasArt(user));
+                string newURL = CleanURL(url);
+                if (newURL != ExistingURL)
                 {
-                    string ID2;
-                    using (System.IO.StreamReader reader = new System.IO.StreamReader(ArtName + ".ID"))
-                    {
-                        ID2 = reader.ReadToEnd().ToLower();
-                    }
-                    if (ID != ID2)
-                    {
-                        ArtRequest r = new ArtRequest(user, url);
-                        QueueRequest(r);
-                        return new Bitmap(UnknownArt);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            using (System.IO.FileStream s = new System.IO.FileStream(ArtName, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-                            {
-                                return new Bitmap(s);
-                            }
-                        }
-                        catch
-                        {
-                            return new Bitmap(UnknownArt);
-                        }
-                    }
-                }
-                catch
-                {
+                    ArtRequest r = new ArtRequest(user, url);
+                    QueueRequest(r);
                     return new Bitmap(UnknownArt);
                 }
+                else
+                {
+                    return GetBitmapFromDB(user);
+                }
             }
+            catch
+            {
+                return new Bitmap(UnknownArt);
+            }
+        }
+
+        private static string CleanURL(string URL)
+        {
+            return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
+        }
+
+        private static Image GetBitmapFromDB(string user)
+        {
+            int bufferSize = 100;                  
+            byte[] outbyte = new byte[bufferSize];
+            long retval;                            
+            long startIndex = 0;
+            
+            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                MemoryStream s = new MemoryStream();
+                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                {
+                    comm.CommandText =
+                        "SELECT avatar FROM users INNER JOIN avatarCache ON users.id = avatarcache.userid WHERE users.id=@user;";
+                    comm.Parameters.Add(new SQLiteParameter("@user", user));
+
+                    using(SQLiteDataReader r = comm.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            
+                            BinaryWriter writer = new BinaryWriter(s);
+
+                            retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
+                            while (retval == bufferSize)
+                            {
+                                writer.Write(outbyte);
+                                writer.Flush();
+
+                                // Reposition the start index to the end of the last buffer and fill the buffer.
+                                startIndex += bufferSize;
+                                retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
+                            }
+
+                            writer.Write(outbyte, 0, (int)retval);
+                            writer.Flush();
+                            
+                        }
+                    }
+                    
+                    return new Bitmap(s);
+                }
+            }
+
+            
         }
 
         private static void QueueRequest(ArtRequest r)
@@ -181,11 +179,20 @@ namespace PockeTwit
             }
         
         }
-        public static bool HasArt(string user)
+        public static string HasArt(string user)
         {
-            string u = user.ToLower();
-            string LocalFileName = DetermineCacheFileName(user, "");
-            return System.IO.File.Exists(LocalFileName);
+            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                {
+                    comm.CommandText =
+                        "SELECT avatarURL FROM users INNER JOIN avatarCache ON users.id = avatarcache.userid WHERE users.id=@user;";
+                    comm.Parameters.Add(new SQLiteParameter("@user", user));
+
+                    return (string)comm.ExecuteScalar();       
+                }
+            }
         }
         private static void ProcessQueue()
         {
@@ -228,13 +235,12 @@ namespace PockeTwit
             {
                 return;
             }
-            string LocalFileName = DetermineCacheFileName(r.User, r.URL);
             System.Net.HttpWebResponse ArtResponse = null;
             try
             {
-                System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(r.URL);
+                System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest) System.Net.HttpWebRequest.Create(r.URL);
                 GetArt.Timeout = 20000;
-                ArtResponse = (System.Net.HttpWebResponse)GetArt.GetResponse();
+                ArtResponse = (System.Net.HttpWebResponse) GetArt.GetResponse();
             }
             catch (Exception ex)
             {
@@ -253,16 +259,11 @@ namespace PockeTwit
                 }
             }
             System.IO.Stream responseStream = null;
-            System.IO.MemoryStream ArtWriter = null;
+            System.IO.MemoryStream ArtWriter = new System.IO.MemoryStream();
             try
             {
                 responseStream = ArtResponse.GetResponseStream();
 
-                if(!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(LocalFileName)))
-                {
-                    System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(LocalFileName));
-                }
-                ArtWriter = new System.IO.MemoryStream();
                 int count = 0;
                 byte[] buffer = new byte[8192];
                 do
@@ -272,8 +273,7 @@ namespace PockeTwit
                     {
                         ArtWriter.Write(buffer, 0, count);
                     }
-                }
-                while (count != 0);
+                } while (count != 0);
                 responseStream.Close();
 
                 ArtWriter.Seek(0, System.IO.SeekOrigin.Begin);
@@ -282,60 +282,68 @@ namespace PockeTwit
                     using (Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize))
                     {
                         Graphics g = Graphics.FromImage(resized);
-                        g.DrawImage(original, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
+                        g.DrawImage(original,
+                                    new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize),
+                                    new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
                         g.Dispose();
-                        resized.Save(LocalFileName, System.Drawing.Imaging.ImageFormat.Bmp);
+
+                        byte[] blobdata = BmpToBytes_MemStream(resized);
+                        using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+                        {
+                            conn.Open();
+                            using (System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                            {
+
+                                using (System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                                {
+                                    comm.CommandText =
+                                        "INSERT INTO avatarCache (avatar, userid) VALUES (@avatar, @userid);";
+                                    comm.Parameters.Add(new SQLiteParameter("@avatar", blobdata));
+                                    comm.Parameters.Add(new SQLiteParameter("@userid", r.User));
+
+                                    comm.ExecuteNonQuery();
+                                }
+
+                                t.Commit();
+
+                            }
+
+                        }
                     }
                 }
-                WriteID(LocalFileName, r.URL.Replace("_bigger","").Replace("_normal","").Replace("https","").Replace("http","").ToLower());
-                ArtWriter.Close();
             }
-            catch(Exception ex) 
+            catch (SQLiteException ex)
             {
+            }
+            catch (Exception ex)
+            {
+
                 lock (BadURLs)
                 {
                     AddBadURL(r.URL);
-                    DeleteID(LocalFileName);
                     return;
                 }
             }
-        }
-
-        public static string DetermineCacheFileName(string User, string URL)
-        {
-            string Folder = "Unknown";
-            
-            if (!string.IsNullOrEmpty(URL))
+            finally
             {
-                Folder = URL.Substring(7, URL.IndexOf('/', 8));
-            }
-            
-            string UserFileName = User.Replace("/","").Replace("\\","").Replace("?","").Replace("!","");
-            char SubFolder = UserFileName[0];
-
-            string FileName = CacheFolder + "\\" + Folder + "\\" + "\\" + SubFolder + "\\" + UserFileName;
-            
-            return FileName;
-        }
-
-
-        private static void WriteID(string ArtPath, string ID)
-        {
-            System.IO.FileStream fs = new System.IO.FileStream(ArtPath + ".ID", System.IO.FileMode.Create, System.IO.FileAccess.Write);
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs))
-            {
-                sw.Write(ID);
-                sw.Flush();
-                sw.Close();
+                ArtWriter.Close();
             }
         }
-        private static void DeleteID(string ArtPath)
+
+
+        private static byte[] BmpToBytes_MemStream(Bitmap bmp)
         {
-            try
-            {
-                System.IO.File.Delete(ArtPath + ".ID");
-            }
-            catch { }
+            MemoryStream ms = new MemoryStream();
+            // Save to memory using the Jpeg format
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+            // read to end
+            byte[] bmpBytes = ms.GetBuffer();
+            bmp.Dispose();
+            ms.Close();
+
+            return bmpBytes;
         }
+        
     }
 }
