@@ -81,7 +81,7 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0005";
+        private const string DBVersion = "0006";
         public static void CreateDB()
         {
             if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
@@ -156,7 +156,7 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE  TABLE  IF NOT EXISTS avatarCache 
                                     (avatar BLOB NOT NULL,
-                                     userid VARCHAR(50) PRIMARY KEY  NOT NULL )";
+                                     url TEXT PRIMARY KEY  NOT NULL )";
                         comm.ExecuteNonQuery();
 
                         t.Commit();

@@ -29,7 +29,7 @@ namespace PockeTwit
             avatarBox.Width = ClientSettings.SmallArtSize;
             avatarBox.Height = ClientSettings.SmallArtSize;
 
-            avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(User.id, User.high_profile_image_url);
+            avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(User.profile_image_url);
             
             lblUserName.Text = User.screen_name;
             
@@ -86,7 +86,7 @@ namespace PockeTwit
             }
             else
             {
-                avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(_User.id, _User.high_profile_image_url);
+                avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(_User.profile_image_url);
             }
         }
 

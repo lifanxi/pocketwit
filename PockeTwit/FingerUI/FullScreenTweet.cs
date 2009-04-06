@@ -64,7 +64,7 @@ namespace FingerUI
             
             if (Status != null)
             {
-                if (Argument == Status.user.screen_name)
+                if (Argument == Status.user.profile_image_url)
                 {
                     if (InvokeRequired)
                     {
@@ -73,7 +73,7 @@ namespace FingerUI
                     }
                     else
                     {
-                        avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.id, Status.user.high_profile_image_url);
+                        avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.profile_image_url);
                     }
                 }
             }
@@ -100,7 +100,7 @@ namespace FingerUI
             if (Status != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.id, Status.user.high_profile_image_url);
+                avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.profile_image_url);
                 lblUserName.Text = Status.user.screen_name;
                 lblTime.Text = Status.TimeStamp.ToString();
                 if(string.IsNullOrEmpty(Status.source))

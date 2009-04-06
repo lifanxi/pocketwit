@@ -315,14 +315,14 @@ namespace FingerUI
                 //Get and draw the avatar area.
                 if (ClientSettings.ShowAvatars)
                 {
-                    string artURL = Tweet.user.high_profile_image_url;
+                    string artURL = Tweet.user.profile_image_url;
                     if (!ClientSettings.HighQualityAvatars)
                     {
                         artURL = Tweet.user.profile_image_url;
                     }
                     try
                     {
-                        using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.id, artURL))
+                        using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(artURL))
                         {
                             //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
                             g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);

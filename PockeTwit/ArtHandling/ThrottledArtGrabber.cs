@@ -10,18 +10,16 @@ namespace PockeTwit
 {
     class ArtRequest
     {
-        public ArtRequest(string user, string url)
+        public ArtRequest(string url)
         {
-            User = user.ToLower();
             URL = url;
         }
         public string URL;
-        public string User;
 
         public override bool Equals(object obj)
         {
             ArtRequest other = (ArtRequest)obj;
-            return (other.URL == URL && other.User == User);
+            return (other.URL == URL);
         }
     }
     static class ThrottledArtGrabber
@@ -68,7 +66,7 @@ namespace PockeTwit
         public delegate void ArtIsReady(string Argument);
         public static event ArtIsReady NewArtWasDownloaded;
         
-        public static Image GetArt(string user, string url)
+        public static Image GetArt(string url)
         {
             if(string.IsNullOrEmpty(url) | string.IsNullOrEmpty((url)))
             {
@@ -90,17 +88,15 @@ namespace PockeTwit
             
             try
             {
-                string ExistingURL = CleanURL(HasArt(user));
-                string newURL = CleanURL(url);
-                if (string.IsNullOrEmpty(ExistingURL) || newURL != ExistingURL)
+                if(!HasArt(url))
                 {
-                    ArtRequest r = new ArtRequest(user, url);
+                    ArtRequest r = new ArtRequest(url);
                     QueueRequest(r);
                     return new Bitmap(UnknownArt);
                 }
                 else
                 {
-                    return GetBitmapFromDB(user);
+                    return GetBitmapFromDB(url);
                 }
             }
             catch
@@ -118,7 +114,7 @@ namespace PockeTwit
             return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
         }
 
-        private static Image GetBitmapFromDB(string user)
+        private static Image GetBitmapFromDB(string url)
         {
             int bufferSize = 100;                  
             byte[] outbyte = new byte[bufferSize];
@@ -132,8 +128,8 @@ namespace PockeTwit
                 using (SQLiteCommand comm = new SQLiteCommand(conn))
                 {
                     comm.CommandText =
-                        "SELECT avatar FROM users INNER JOIN avatarCache ON users.id = avatarcache.userid WHERE users.id=@user;";
-                    comm.Parameters.Add(new SQLiteParameter("@user", user));
+                        "SELECT avatar FROM avatarCache WHERE url=@url;";
+                    comm.Parameters.Add(new SQLiteParameter("@url", url));
 
                     using(SQLiteDataReader r = comm.ExecuteReader())
                     {
@@ -183,7 +179,7 @@ namespace PockeTwit
             }
         
         }
-        public static string HasArt(string user)
+        public static bool HasArt(string url)
         {
             using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
@@ -191,10 +187,10 @@ namespace PockeTwit
                 using (SQLiteCommand comm = new SQLiteCommand(conn))
                 {
                     comm.CommandText =
-                        "SELECT avatarURL FROM users INNER JOIN avatarCache ON users.id = avatarcache.userid WHERE users.id=@user;";
-                    comm.Parameters.Add(new SQLiteParameter("@user", user));
+                        "SELECT url FROM avatarCache WHERE url=@url;";
+                    comm.Parameters.Add(new SQLiteParameter("@url", url));
 
-                    return (string)comm.ExecuteScalar();       
+                    return comm.ExecuteScalar()!=null;       
                 }
             }
         }
@@ -214,7 +210,7 @@ namespace PockeTwit
                 }
                 if (NewArtWasDownloaded != null)
                 {
-                    NewArtWasDownloaded.Invoke(r.User);
+                    NewArtWasDownloaded.Invoke(r.URL);
                 }
             }
             WorkerThread = null;
@@ -234,7 +230,6 @@ namespace PockeTwit
 
         private static void FetchRequest(ArtRequest r)
         {
-            System.Diagnostics.Debug.WriteLine("Processing " + r.User);
             if (string.IsNullOrEmpty(r.URL))
             {
                 return;
@@ -301,11 +296,16 @@ namespace PockeTwit
                                 using (System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
                                 {
                                     comm.CommandText =
-                                        "INSERT INTO avatarCache (avatar, userid) VALUES (@avatar, @userid);";
+                                        "INSERT INTO avatarCache (avatar, url) VALUES (@avatar, @url);";
                                     comm.Parameters.Add(new SQLiteParameter("@avatar", blobdata));
-                                    comm.Parameters.Add(new SQLiteParameter("@userid", r.User));
-
-                                    comm.ExecuteNonQuery();
+                                    comm.Parameters.Add(new SQLiteParameter("@url", r.URL));
+                                    try
+                                    {
+                                        comm.ExecuteNonQuery();
+                                    }
+                                    catch(System.Data.SQLite.SQLiteException ex)
+                                    {
+                                    }
                                 }
 
                                 t.Commit();
@@ -331,7 +331,7 @@ namespace PockeTwit
             finally
             {
                 ArtWriter.Close();
-                NewArtWasDownloaded(r.User);
+                NewArtWasDownloaded(r.URL);
             }
         }
 
