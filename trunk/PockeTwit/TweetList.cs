@@ -1675,6 +1675,7 @@ namespace PockeTwit
 
         private void SetMenuNumbers()
         {
+            return;
             int NewFriends = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Friends_TimeLine"), null);
             int NewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Replies, LastSelectedItems.GetNewestSelected("Messages_TimeLine"), null);
             foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
