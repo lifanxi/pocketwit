@@ -61,6 +61,7 @@ namespace Yedda
             serviceList.Add(TwitPic.Instance);
             serviceList.Add(MobyPicture.Instance);
             serviceList.Add(yFrog.Instance);
+            serviceList.Add(PikChur.Instance);
             
             //setup every service the same way
             foreach (IPictureService service in serviceList)
@@ -146,7 +147,10 @@ namespace Yedda
 
             foreach (IPictureService service in serviceList)
             {
-                servicesList.Add(service.ServiceName);
+                if (service.CanUpload)
+                {
+                    servicesList.Add(service.ServiceName);
+                }
             }
             return servicesList;
         }

@@ -194,12 +194,11 @@ namespace Yedda
 
         private void ProcessDownload()
         {
-            try
-            {
+            //try
+            //{
                 string pictureURL = workerPPO.Message;
                 int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
                 string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
-                
 
                 if (!useAsyncCall)
                 {
@@ -217,18 +216,19 @@ namespace Yedda
                 {
                     RetrievePictureAsync(pictureURL);
                 }
-            }
-            catch (Exception e)
-            {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture, try again later."));
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //No need to throw, postPicture throws event.        
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to download picture, try again later."));
+            //}
             workerThread = null;
         }
 
         private void ProcessUpload()
         {
-            try
-            {
+            //try
+            //{
                 string uploadResult = UploadPicture(API_UPLOAD, workerPPO);
 
                 if (!string.IsNullOrEmpty( uploadResult) )
@@ -240,11 +240,12 @@ namespace Yedda
                     OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture")); 
                     
                 }
-            }
-            catch (Exception e)
-            {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+            //}
             workerThread = null;
         }
 
@@ -378,7 +379,6 @@ namespace Yedda
             {
                 using (dataStream = response.GetResponseStream())
                 {
-                    int totalSize = 0;
                     readBuffer = new byte[PT_READ_BUFFER_SIZE];
                     pictureFileName = GetPicturePath(pictureURL);
 
@@ -406,8 +406,8 @@ namespace Yedda
         {
             AsyncStateData state = (AsyncStateData)ar.AsyncState;
 
-            try
-            {
+            //try
+            //{
                 int len = state.dataStream.EndRead(ar);
                 
                 state.bytesRead = len;
@@ -427,11 +427,12 @@ namespace Yedda
                 }
 
                 dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download"));
-            }
+            //}
+            //catch (ObjectDisposedException ex)
+            //{
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download"));
+            //}
         }
 
 

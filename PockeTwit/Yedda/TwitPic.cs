@@ -168,7 +168,7 @@ namespace Yedda
             } 
         }
 
-        public override bool  CanFetchUrl(string URL)
+        public override bool CanFetchUrl(string URL)
         {
             const string siteMarker = "twitpic";
             string url = URL.ToLower();
@@ -176,16 +176,14 @@ namespace Yedda
             return (url.IndexOf(siteMarker) >= 0);
         }
 
-        
-
         #endregion
 
         #region thread implementation
 
         private void ProcessDownload()
         {
-            try
-            {
+            //try
+            //{
                 string pictureURL = workerPPO.Message;
                 int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
                 string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
@@ -200,19 +198,19 @@ namespace Yedda
                 {
                     OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, "", pictureURL));
                 }
-            }
-            catch (Exception e)
-            {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+            //}
             workerThread = null;
         }
 
-
         private void ProcessUpload()
         {
-            try
-            {
+            //try
+            //{
                 XmlDocument uploadResult = UploadPicture(API_UPLOAD, workerPPO);
 
                 if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
@@ -225,11 +223,12 @@ namespace Yedda
                     string URL = uploadResult.SelectSingleNode("//mediaurl").InnerText;
                     OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK,URL,"",workerPPO.Filename));
                 }
-            }
-            catch (Exception e)
-            {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
-            }
+            //}
+            //catch (Exception e)
+            //{
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
+            //}
             workerThread = null;
         }
 
@@ -283,14 +282,16 @@ namespace Yedda
             return pictureFileName;
         }
 
-       
-
-        
-
+        /// <summary>
+        /// Upload the picture
+        /// </summary>
+        /// <param name="url">URL to upload picture to</param>
+        /// <param name="ppo">Postdata</param>
+        /// <returns></returns>
         private XmlDocument UploadPicture(string url, PicturePostObject ppo)
         {
-            try
-            {
+            //try
+            //{
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
                 string boundary = System.Guid.NewGuid().ToString();
@@ -341,17 +342,18 @@ namespace Yedda
                     }
                 }
                
-            }
-            catch (Exception e)
-            {
+            //}
+            //catch (Exception e)
+            //{
                 //Socket exception 10054 could occur when sending large files.
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
                 return null;
-            }
+            //}
         }
 
 #endregion
 
-      
+
     }
 }

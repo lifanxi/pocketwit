@@ -18,7 +18,11 @@ namespace Yedda
         private const string API_UPLOAD = "http://yFrog.com/api/upload";
         private const string API_UPLOAD_POST = "http://yFrog.com/api/uploadAndPost";
         private const string API_SHOW_THUMB = "http://yFrog.com/";  //The extra / for directly sticking the image-id on.
-        
+
+        private const string API_ERROR_UPLOAD = "Failed to upload picture to yFrog.";
+        private const string API_ERROR_NOTREADY = "A request is already running.";
+        private const string API_ERROR_DOWNLOAD = "Unable to download picture, try again later.";
+
         #endregion
 
         #region private objects
@@ -105,7 +109,7 @@ namespace Yedda
                         }
                         else
                         {
-                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", API_ERROR_NOTREADY));
                         }
                     }
                     else
@@ -128,7 +132,7 @@ namespace Yedda
                 }
                 catch (Exception e)
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to upload picture to yFrog."));
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
                 }
             }
         }
@@ -200,11 +204,11 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
             }
             workerThread = null;
         }
-
 
         private void ProcessUpload()
         {
@@ -225,7 +229,8 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
+                //No need to throw, postPicture throws event.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
             }
             workerThread = null;
         }
@@ -339,7 +344,8 @@ namespace Yedda
             catch (Exception e)
             {
                 //Socket exception 10054 could occur when sending large files.
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
+                //Error is thrown to event in PostPicture
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
                 return null;
             }
         }
