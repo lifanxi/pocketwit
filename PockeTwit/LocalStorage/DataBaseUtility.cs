@@ -81,14 +81,17 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0004";
-        private static void CreateDB()
+        private const string DBVersion = "0005";
+        public static void CreateDB()
         {
             if (!System.IO.Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
             {
                 System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\LocalStorage");
             }
-            SQLiteConnection.CreateFile(DBPath);
+            if(!System.IO.File.Exists(DBPath))
+            {
+                SQLiteConnection.CreateFile(DBPath);
+            }
             try
             {
                 using (SQLiteConnection conn = GetConnection())
@@ -99,20 +102,25 @@ namespace LocalStorage
                         SQLiteTransaction t = conn.BeginTransaction();
 
                         comm.CommandText =
-                            @"CREATE TABLE DBProperties (name VARCHAR(50) PRIMARY KEY,
+                            @"CREATE TABLE IF NOT EXISTS DBProperties (name VARCHAR(50) PRIMARY KEY,
                             value NVARCHAR(255))
                             ";
                         comm.ExecuteNonQuery();
 
+                        try
+                        {
+                            comm.CommandText =
+                                @"INSERT INTO DBProperties (name,value) VALUES (@name,@value)";
+                            comm.Parameters.Add(new SQLiteParameter("@name", "dbversion"));
+                            comm.Parameters.Add(new SQLiteParameter("@value", DBVersion));
+                            comm.ExecuteNonQuery();
+                            comm.Parameters.Clear();
+                        }
+                        catch(SQLiteException ex)
+                        {
+                        }
                         comm.CommandText =
-                            @"INSERT INTO DBProperties (name,value) VALUES (@name,@value)";
-                        comm.Parameters.Add(new SQLiteParameter("@name", "dbversion"));
-                        comm.Parameters.Add(new SQLiteParameter("@value", DBVersion));
-                        comm.ExecuteNonQuery();
-                        comm.Parameters.Clear();
-
-                        comm.CommandText =
-                            @"CREATE TABLE statuses (id VARCHAR(50) PRIMARY KEY,
+                            @"CREATE TABLE IF NOT EXISTS statuses (id VARCHAR(50) PRIMARY KEY,
                             fulltext NVARCHAR(255),
                             userid VARCHAR(50),
                             timestamp DATETIME,
@@ -126,7 +134,7 @@ namespace LocalStorage
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE users (id VARCHAR(50) PRIMARY KEY,
+                            @"CREATE TABLE IF NOT EXISTS users (id VARCHAR(50) PRIMARY KEY,
                             screenname NVARCHAR(255),
                             fullname NVARCHAR(255),
                             description NVARCHAR(255),
@@ -136,15 +144,20 @@ namespace LocalStorage
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE groups (groupname NVARCHAR(50) PRIMARY KEY ON CONFLICT IGNORE)";
+                            @"CREATE TABLE IF NOT EXISTS groups (groupname NVARCHAR(50) PRIMARY KEY ON CONFLICT IGNORE)";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT IGNORE,
+                            @"CREATE TABLE IF NOT EXISTS usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT IGNORE,
                             groupname NVARCHAR(50),
                             userid VARCHAR(50))";
                         comm.ExecuteNonQuery();
 
+                        comm.CommandText =
+                            @"CREATE  TABLE  IF NOT EXISTS avatarCache 
+                                    (avatar BLOB NOT NULL,
+                                     userid VARCHAR(50) PRIMARY KEY  NOT NULL )";
+                        comm.ExecuteNonQuery();
 
                         t.Commit();
                         conn.Close();

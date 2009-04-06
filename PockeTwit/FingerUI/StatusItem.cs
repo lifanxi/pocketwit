@@ -322,7 +322,7 @@ namespace FingerUI
                     }
                     try
                     {
-                        using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.screen_name, artURL))
+                        using (Image UserImage = PockeTwit.ThrottledArtGrabber.GetArt(Tweet.user.id, artURL))
                         {
                             //g.DrawImage(UserImage, ImageLocation.X, ImageLocation.Y,);
                             g.DrawImage(UserImage, new Rectangle(ImageLocation.X, ImageLocation.Y, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, UserImage.Width, UserImage.Height), GraphicsUnit.Pixel);

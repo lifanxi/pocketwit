@@ -72,8 +72,6 @@ namespace PockeTwit
                         System.IO.Directory.CreateDirectory(txtCaheDir.Text);
                     }
                     ClientSettings.CacheDir = txtCaheDir.Text;
-                    ThrottledArtGrabber.ResetCacheDir();
-
                 }
                 catch
                 {
