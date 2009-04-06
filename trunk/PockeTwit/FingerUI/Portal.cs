@@ -179,7 +179,7 @@ namespace FingerUI
                                 StatusItem s = (StatusItem)Items[i];
                                 if (s.Tweet.user != null)
                                 {
-                                    if (s.Tweet.user.screen_name.ToLower() == User)
+                                    if (s.Tweet.user.id == User)
                                     {
                                         Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
                                         s.Render(_RenderedGraphics, itemBounds);

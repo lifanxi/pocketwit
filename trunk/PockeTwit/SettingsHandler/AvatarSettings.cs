@@ -76,13 +76,7 @@ namespace PockeTwit
             Cursor.Current = Cursors.WaitCursor;
             try
             {
-                foreach (string Folder in System.IO.Directory.GetDirectories(ClientSettings.AppPath + "\\ArtCache\\"))
-                {
-                    if (!string.IsNullOrEmpty(Folder))
-                    {
-                        System.IO.Directory.Delete(Folder, true);
-                    }
-                }
+                ThrottledArtGrabber.ClearAvatars();
             }
             catch
             {
