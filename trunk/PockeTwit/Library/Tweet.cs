@@ -418,34 +418,26 @@ namespace PockeTwit.Library
 
         public string location { get; set; }
         public string description { get; set; }
-        public string profile_image_url { get; set; }
-
-        private string _high_profile_image_url;
-        public string high_profile_image_url
+        private string _profile_image_url;
+        public string profile_image_url
         {
             get
             {
-                if (string.IsNullOrEmpty(_high_profile_image_url))
+                return _profile_image_url;
+            }
+            set
+            {
+                _profile_image_url = value;
+                if(ClientSettings.HighQualityAvatars)
                 {
-                    if (!string.IsNullOrEmpty(profile_image_url))
+                    if (_profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0)
                     {
-                        if (profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0)
-                        {
-                            _high_profile_image_url = profile_image_url.Replace("_normal", "_bigger");
-                        }
-                        else
-                        {
-                            _high_profile_image_url = profile_image_url;
-                        }
-                    }
-                    else
-                    {
-                        _high_profile_image_url = "";
+                        _profile_image_url = profile_image_url.Replace("_normal", "_bigger");
                     }
                 }
-                return _high_profile_image_url;
             }
         }
+
         public string id { get; set; }
         public string name { get; set; }
         private string _screen_name;

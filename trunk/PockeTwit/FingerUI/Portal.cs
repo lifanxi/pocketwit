@@ -158,8 +158,8 @@ namespace FingerUI
             
         }
 
-        delegate void delNewArt(string User);
-        void ThrottledArtGrabber_NewArtWasDownloaded(string User)
+        delegate void delNewArt(string url);
+        void ThrottledArtGrabber_NewArtWasDownloaded(string url)
         {
             //Don't bother if it's in the middle of rendering
             if (_RenderThreads.Count > 0)
@@ -177,9 +177,9 @@ namespace FingerUI
                             for (int i = 0; i < Items.Count; i++)
                             {
                                 StatusItem s = (StatusItem)Items[i];
-                                if (s.Tweet.user != null)
+                                if (s.Tweet.user.profile_image_url != null)
                                 {
-                                    if (s.Tweet.user.id == User)
+                                    if (s.Tweet.user.profile_image_url == url)
                                     {
                                         Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
                                         s.Render(_RenderedGraphics, itemBounds);
