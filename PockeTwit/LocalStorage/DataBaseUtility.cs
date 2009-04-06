@@ -138,7 +138,7 @@ namespace LocalStorage
                             screenname NVARCHAR(255),
                             fullname NVARCHAR(255),
                             description NVARCHAR(255),
-                            avatarURL TEXT,
+                            avatarURL VARCHAR(255),
                             UNIQUE (id) )
                                        ";
                         comm.ExecuteNonQuery();
@@ -156,7 +156,7 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE  TABLE  IF NOT EXISTS avatarCache 
                                     (avatar BLOB NOT NULL,
-                                     url TEXT PRIMARY KEY  NOT NULL )";
+                                     url VARCHAR(255) PRIMARY KEY  NOT NULL )";
                         comm.ExecuteNonQuery();
 
                         t.Commit();
