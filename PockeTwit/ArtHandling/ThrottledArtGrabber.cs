@@ -92,7 +92,7 @@ namespace PockeTwit
             {
                 string ExistingURL = CleanURL(HasArt(user));
                 string newURL = CleanURL(url);
-                if (newURL != ExistingURL)
+                if (string.IsNullOrEmpty(ExistingURL) || newURL != ExistingURL)
                 {
                     ArtRequest r = new ArtRequest(user, url);
                     QueueRequest(r);
@@ -111,6 +111,10 @@ namespace PockeTwit
 
         private static string CleanURL(string URL)
         {
+            if(string.IsNullOrEmpty(URL))
+            {
+                return null;
+            }
             return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
         }
 
@@ -327,9 +331,25 @@ namespace PockeTwit
             finally
             {
                 ArtWriter.Close();
+                NewArtWasDownloaded(r.User);
             }
         }
 
+        public static void ClearAvatars()
+        {
+            using(System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                using(System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    using(System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        comm.CommandText = "DELETE FROM avatarCache";
+                        comm.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
 
         private static byte[] BmpToBytes_MemStream(Bitmap bmp)
         {
