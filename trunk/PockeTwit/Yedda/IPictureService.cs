@@ -164,6 +164,9 @@ namespace Yedda
         bool CanFetchUrl(string URL);
 
 
+       
+
+
         /// <summary>
         /// Methods for getting and setting properties
         /// </summary>
@@ -175,6 +178,7 @@ namespace Yedda
         string RootPath {  set; get; }
         int ReadBufferSize { set; get; }
         string ServiceName { get; }
+        bool CanUpload { get; }
     }
 
     /// <summary>

@@ -19,9 +19,11 @@ namespace Yedda
         protected bool PT_USE_DEFAULT_PATH = true;
         protected string PT_DEFAULT_PATH = string.Empty;
         protected string PT_ROOT_PATH = string.Empty;
+       
 
         protected string API_SAVE_TO_PATH { get; set; }
         protected string API_SERVICE_NAME = string.Empty;
+        protected bool API_CAN_UPLOAD = true;
 
         #endregion
 
@@ -41,14 +43,6 @@ namespace Yedda
         public abstract void FetchPicture(string pictureURL);
 
         #region getters and setters
-
-        public string SERVICE_NAME 
-        {
-            get
-            {
-                return API_SERVICE_NAME;
-            }
-        }
 
         /// <summary>
         /// Must be implemented to set fetching yes/no
@@ -135,9 +129,18 @@ namespace Yedda
         {
             get
             {
-                return SERVICE_NAME;
+                return API_SERVICE_NAME;
             }
         }
+
+        public bool CanUpload
+        {
+            get
+            {
+                return API_CAN_UPLOAD;
+            }
+        }
+
 
         #endregion
 
@@ -381,6 +384,41 @@ namespace Yedda
 
             return contents.ToString();
         }
+
+        protected string CreateContentPartPicture(string header, string dispositionName, string imageName)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(string.Format("Content-Disposition:form-data; name=\"{0}\";filename=\"{1}\"\r\n", dispositionName,imageName));
+            contents.Append("Content-Type: image/jpeg\r\n");
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        protected string CreateContentPartStringForm(string header, string dispositionName, string valueToSend, string contentType)
+        {
+            //header starts with --
+
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
+            contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
+            contents.Append("\r\n");
+            contents.Append(valueToSend);
+            contents.Append("\r\n");
+            contents.Append(header);
+            contents.Append("--\r\n");
+
+            return contents.ToString();
+
+        }
+
+      
 
         #endregion
     }

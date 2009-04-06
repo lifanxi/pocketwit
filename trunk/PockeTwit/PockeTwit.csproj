@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -266,6 +266,7 @@
     </Content>
     <EmbeddedResource Include="DefineGroup.resx">
       <DependentUpon>DefineGroup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EmailStatusForm.resx">
       <DependentUpon>EmailStatusForm.cs</DependentUpon>
@@ -273,6 +274,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImagePreview.resx">
       <DependentUpon>ImagePreview.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Marker.png" />
     <Content Include="default_profile_bigger.png">
@@ -475,6 +477,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="userListControl.resx">
       <DependentUpon>userListControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="PockeTwit.ico" />
     <Content Include="Themes\Original\existingimage.png">
@@ -504,6 +507,14 @@
     <Compile Include="DefineGroup.Designer.cs">
       <DependentUpon>DefineGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Blog\BlogDelegates.cs" />
+    <Compile Include="Blog\BlogObjects.cs" />
+    <Compile Include="Blog\BlogPostObject.cs" />
+    <Compile Include="Blog\BlogServiceBase.cs" />
+    <Compile Include="Blog\BlogServiceFactory.cs" />
+    <Compile Include="Blog\IBlogPostService.cs" />
+    <Compile Include="Blog\OAuth.cs" />
+    <Compile Include="Blog\TwitPic.cs" />
     <Compile Include="EmailStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -592,10 +603,10 @@
       <DependentUpon>userListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Yedda\PictureServiceBase.cs" />
+    <Compile Include="Yedda\PikChur.cs" />
     <Compile Include="Yedda\yFrog.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
-    <Compile Include="Yedda\GPSObject.cs" />
     <Compile Include="Yedda\IPictureService.cs" />
     <Compile Include="Yedda\MobyPicture.cs" />
     <Compile Include="Yedda\PicturePostObject.cs" />

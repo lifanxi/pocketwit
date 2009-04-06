@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace PockeTwit.Blog
 {
@@ -61,7 +62,7 @@ namespace PockeTwit.Blog
             serviceList.Add(TwitPic.Instance);
            
             //setup every service the same way
-            foreach (IPictureService service in serviceList)
+            foreach (IBlogPostService service in serviceList)
             {
                //Set common settings.
             }
@@ -103,7 +104,7 @@ namespace PockeTwit.Blog
         {
             ArrayList servicesList = new ArrayList();
 
-            foreach (IPictureService service in serviceList)
+            foreach (IBlogPostService service in serviceList)
             {
                 servicesList.Add(service.ServiceName);
             }

@@ -581,8 +581,8 @@ namespace PockeTwit
                 {
                     Cursor.Current = Cursors.Default;
                     pictureUsed = uploadingPicture;
-                    if (DetectDevice.DeviceType == DeviceType.Standard && !string.IsNullOrEmpty(pictureURL))
-                    {
+                    //if (DetectDevice.DeviceType == DeviceType.Standard && !string.IsNullOrEmpty(pictureURL))
+                    //{
                         if (txtStatusUpdate.Text.Length > 0)
                         {
                             txtStatusUpdate.Text = txtStatusUpdate.Text + ' ' + pictureURL;
@@ -593,7 +593,7 @@ namespace PockeTwit
                         }
                         txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
                         pictureUsed = true;
-                    }
+                    //}
 
                     uploadedPictureURL = pictureURL;
                     this.uploadingPicture = uploadingPicture;
