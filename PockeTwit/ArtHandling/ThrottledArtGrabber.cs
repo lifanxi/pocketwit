@@ -360,7 +360,7 @@ namespace PockeTwit
                             @"DELETE FROM avatarCache WHERE url NOT IN (
                                                 SELECT DISTINCT avatarURL FROM users
                                                 );";
-                        comm.ExecuteNonQuery();
+                        int total = comm.ExecuteNonQuery();
                     }
                     t.Commit();
                 }
