@@ -14,9 +14,13 @@ namespace LocalStorage
 
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
-                          FROM         statuses WHERE
-                          (timestamp > 
+                          FROM         statuses WHERE isread=0 ";
+
+        private const string SQLMarkRead =
+            @"UPDATE statuses SET isread=1 WHERE
+                          (timestamp <= 
                             (SELECT timestamp from statuses WHERE id=@id))";
+
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
 
@@ -49,7 +53,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0006";
+        private const string DBVersion = "0007";
         private static readonly string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -146,6 +150,7 @@ namespace LocalStorage
                             clientSource VARCHAR(50),
                             accountSummary VARCHAR(50),
                             statustypes SMALLINT(2),
+                            isread BIT DEFAULT 0,
                             UNIQUE (id) )
                                        ";
                         comm.ExecuteNonQuery();
@@ -254,6 +259,30 @@ namespace LocalStorage
                     return SQLFetchRepliesAndMessages;
             }
             return null;
+        }
+
+        public static void MarkAllReadOlderThan(TimelineManagement.TimeLineType typeToGet, string ID, 
+                                                string Constraints)
+        {
+            if (ID == null)
+            {
+                return;
+            }
+            using (SQLiteConnection conn = GetConnection())
+            {
+                conn.Open();
+                using (SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    string FetchQuery = SQLMarkRead;
+                    FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + Constraints;
+                    using (var comm = new SQLiteCommand(FetchQuery, conn))
+                    {
+                        comm.Parameters.Add(new SQLiteParameter("@id", ID));
+                        int total = comm.ExecuteNonQuery();
+                    }
+                    t.Commit();
+                }
+            }
         }
 
         public static int GetItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,

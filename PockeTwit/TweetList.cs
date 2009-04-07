@@ -34,6 +34,16 @@ namespace PockeTwit
         private bool IsLoaded = false;
         private string ShowUserID;
         private bool StartBackground = false;
+        private TimelineManagement.TimeLineType currentType
+        {
+            get
+            {
+                return statList.CurrentList() != "Messages_TimeLine"
+                           ? TimelineManagement.TimeLineType.Friends
+                           : TimelineManagement.TimeLineType.Messages;
+            }
+        }
+        private SpecialTimeLine currentGroup = null;
 
         #region MenuItems
         #region LeftMenu
@@ -458,6 +468,7 @@ namespace PockeTwit
             SwitchToList("Grouped_TimeLine_"+t.name);
             this.statList.ClearVisible();
             AddStatusesToList(Manager.GetGroupedTimeLine(t));
+            currentGroup = t;
             ChangeCursor(Cursors.Default);
         }
 
@@ -1369,6 +1380,12 @@ namespace PockeTwit
             UpdateHistoryPosition();
             int clickedNumber = statItem.Index + 1;
             SetLeftMenu();
+            string Constraints = null;
+            if(currentGroup!=null)
+            {
+                Constraints = currentGroup.GetConstraints();
+            }
+            LocalStorage.DataBaseUtility.MarkAllReadOlderThan(currentType, statItem.Tweet.id, Constraints);
             SetMenuNumbers();
         }
 
