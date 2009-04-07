@@ -46,9 +46,6 @@ namespace Yedda
         {
             API_SAVE_TO_PATH = "\\ArtCache\\www.PikChur.com\\";
             API_SERVICE_NAME = "PikChur";
-            //Can't upload until https fixed
-            //try using http
-            //API_CAN_UPLOAD = false;
         }
 
         /// <summary>
@@ -73,7 +70,6 @@ namespace Yedda
                 return _instance;
             }
         }
-
 
         #endregion
 
@@ -186,7 +182,8 @@ namespace Yedda
         public override bool CanFetchUrl(string URL)
         {
             //https://s3.amazonaws.com/pikchurimages/pic_r68_m.jpg
-            const string siteMarker = "pikchurimages";
+            //http://www.pikchur.com/t5o
+            const string siteMarker = "pikchur";
             string url = URL.ToLower();
 
             return (url.IndexOf(siteMarker) >= 0);
@@ -200,8 +197,8 @@ namespace Yedda
 
         private void ProcessDownload()
         {
-            //try
-            //{
+            try
+            {
                 string pictureURL = workerPPO.Message;
                 int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
                 string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
@@ -216,21 +213,19 @@ namespace Yedda
                 {
                     OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, resultFileName, "", pictureURL));
                 }
-            //}
-            //catch (Exception e)
-            //{
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
-            //}
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
             workerThread = null;
         }
 
         private void ProcessUpload()
         {
-            //try
-            //{
+            try
+            {
                 XmlDocument uploadResult = UploadPicture( workerPPO);
-
 
                 if (uploadResult.SelectSingleNode("pikchur/error") == null)
                 {
@@ -244,13 +239,11 @@ namespace Yedda
                 {
                     OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 }
-
-            //}
-            //catch (Exception e)
-            //{
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
-            //}
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
             workerThread = null;
         }
 
@@ -265,45 +258,52 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePicture(string imageId)
         {
-            string URL_FORMAT = "https://s3.amazonaws.com/pikchurimages/pic_{0}_m.jpg";
-
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(string.Format(URL_FORMAT, imageId));
-            myRequest.Method = "GET";
-            String pictureFileName = String.Empty;
-
-            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            try
             {
-                using (Stream dataStream = response.GetResponseStream())
+                string URL_FORMAT = "https://s3.amazonaws.com/pikchurimages/pic_{0}_m.jpg";
+
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(string.Format(URL_FORMAT, imageId));
+                myRequest.Method = "GET";
+                String pictureFileName = String.Empty;
+
+                using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
                 {
-                    int totalSize = 0;
-                    int totalResponseSize = (int)response.ContentLength;
-                    byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
-                    pictureFileName = GetPicturePath(imageId);
-
-                    int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                    totalSize = responseSize;
-                    OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
-                    while (responseSize > 0)
+                    using (Stream dataStream = response.GetResponseStream())
                     {
-                        SavePicture(pictureFileName, readBuffer, responseSize);
-                        try
-                        {
-                            totalSize += responseSize;
-                            responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                            OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
-                        }
-                        catch
-                        {
-                            responseSize = 0;
-                        }
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    dataStream.Close();
-                }
-                response.Close();
-            }
+                        int totalSize = 0;
+                        int totalResponseSize = (int)response.ContentLength;
+                        byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                        pictureFileName = GetPicturePath(imageId);
 
-            return pictureFileName;
+                        int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                        totalSize = responseSize;
+                        OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
+                        while (responseSize > 0)
+                        {
+                            SavePicture(pictureFileName, readBuffer, responseSize);
+                            try
+                            {
+                                totalSize += responseSize;
+                                responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                                OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
+                            }
+                            catch
+                            {
+                                responseSize = 0;
+                            }
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        dataStream.Close();
+                    }
+                    response.Close();
+                }
+
+                return pictureFileName;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -312,60 +312,71 @@ namespace Yedda
         /// <param name="ppo"></param>
         private void RequestAuthKey(PicturePostObject ppo)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_AUTH);
-
-            string boundary = System.Guid.NewGuid().ToString();
-            NetworkCredential myCred = new NetworkCredential(ppo.Username, ppo.Password);
-            CredentialCache MyCrendentialCache = new CredentialCache();
-            Uri uri = new Uri(API_AUTH);
-            MyCrendentialCache.Add(uri, "Basic", myCred);
-            request.Credentials = MyCrendentialCache;
-            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 6.0)";
-            request.Headers.Set("Pragma", "no-cache");
-            request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
-
-            //request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "POST";
-            request.Timeout = 20000;
-
-            string header = string.Format("--{0}", boundary);
-            string ender = header + "\r\n";
-
-            StringBuilder contents = new StringBuilder();
-
-            contents.Append(CreateContentPartStringForm(header, "data[api][username]", ppo.Username, "application/octet-stream"));
-            contents.Append(CreateContentPartStringForm(header, "data[api][password]", ppo.Password, "application/octet-stream"));
-            contents.Append(CreateContentPartStringForm(header, "data[api][service]", "twitter", "application/octet-stream"));
-            contents.Append(CreateContentPartStringForm(header, "data[api][key]", API_KEY, "application/octet-stream"));
-
-            //Create the form message to send in bytes
-            byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
-
-            request.ContentLength = message.Length;
-            using (Stream requestStream = request.GetRequestStream())
+            try
             {
-                requestStream.Write(message, 0, message.Length);
-                requestStream.Flush();
-                requestStream.Close();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_AUTH);
 
-                using (WebResponse response = request.GetResponse())
+                string boundary = System.Guid.NewGuid().ToString();
+                NetworkCredential myCred = new NetworkCredential(ppo.Username, ppo.Password);
+                CredentialCache MyCrendentialCache = new CredentialCache();
+                Uri uri = new Uri(API_AUTH);
+                MyCrendentialCache.Add(uri, "Basic", myCred);
+                request.Credentials = MyCrendentialCache;
+                request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 6.0)";
+                request.Headers.Set("Pragma", "no-cache");
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+
+                string header = string.Format("--{0}", boundary);
+                string ender = header + "\r\n";
+
+                StringBuilder contents = new StringBuilder();
+
+                contents.Append(CreateContentPartStringForm(header, "data[api][username]", ppo.Username, "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][password]", ppo.Password, "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][service]", "twitter", "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][key]", API_KEY, "application/octet-stream"));
+
+                //Create the form message to send in bytes
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+
+                request.ContentLength = message.Length;
+                using (Stream requestStream = request.GetRequestStream())
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
                     {
-                        XmlDocument responseXML = new XmlDocument();
-                        string responseFromService = reader.ReadToEnd();
-                        responseXML.LoadXml(responseFromService);
-                        if (responseXML.SelectSingleNode("pikchur/error") == null)
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
-                            XmlNode authKeyNode = responseXML.SelectSingleNode("pikchur/auth_key");
-                            AUTH_KEY = authKeyNode.InnerText; 
+                            XmlDocument responseXML = new XmlDocument();
+                            string responseFromService = reader.ReadToEnd();
+                            responseXML.LoadXml(responseFromService);
+                            if (responseXML.SelectSingleNode("pikchur/error") == null)
+                            {
+                                XmlNode authKeyNode = responseXML.SelectSingleNode("pikchur/auth_key");
+                                AUTH_KEY = authKeyNode.InnerText;
+                            }
                         }
                     }
                 }
             }
-
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Upload picture
+        /// </summary>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
         private XmlDocument UploadPicture(PicturePostObject ppo)
         {
             //
@@ -379,8 +390,8 @@ namespace Yedda
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
-            //try
-            //{
+            try
+            {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD);
 
                 string boundary = Guid.NewGuid().ToString();
@@ -402,7 +413,6 @@ namespace Yedda
                 contents.Append(CreateContentPartStringForm(header, "data[api][auth_key]", AUTH_KEY, "application/octet-stream"));
                 contents.Append(CreateContentPartStringForm(header, "data[api][upload_only]", "TRUE", "application/octet-stream"));
                 contents.Append(CreateContentPartStringForm(header, "data[api][origin]", API_ORIGIN_ID, "application/octet-stream"));
-
 
                 //image
                 contents.Append(CreateContentPartPicture(header,"dataAPIimage", "image.jpg"));
@@ -430,22 +440,14 @@ namespace Yedda
                         }
                     }
                 }
-
-            //}
-            //catch (Exception e)
-            //{
+            }
+            catch (Exception e)
+            {
                 //Socket exception 10054 could occur when sending large files.
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
-                return null;
-            //}
+                throw;
+            }
         }
 
-
-       
-
         #endregion
-
-
     }
 }
