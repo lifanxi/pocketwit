@@ -571,7 +571,7 @@ namespace PockeTwit
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
             GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
             GroupsMenuItem.Visible = false;
-            TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
+            //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
             foreach(SpecialTimeLine t in SpecialTimeLines.GetList())
             {
                 AddGroupSelectMenuItem(t);
@@ -594,18 +594,10 @@ namespace PockeTwit
 
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
-            
 
-            if (ClientSettings.MergeMessages)
-            {
-                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, MergedTimeLineMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, WindowMenuItem, ExitMenuItem});
-            }
-            else
-            {
-                statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, WindowMenuItem, ExitMenuItem});
-            }
+
+            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
+            AboutMenuItem, WindowMenuItem, ExitMenuItem});
             /*
             statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
                 AboutMenuItem, ExitMenuItem});
