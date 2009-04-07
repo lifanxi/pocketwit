@@ -72,7 +72,7 @@ namespace LocalStorage
                     conn.Close();
                 }
             }
-            catch(SQLiteException)
+            catch (SQLiteException)
             {
             }
 
@@ -256,7 +256,8 @@ namespace LocalStorage
             return null;
         }
 
-        public static int GetItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID, string Constraints)
+        public static int GetItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
+                                            string Constraints)
         {
             if (ID == null)
             {
@@ -296,7 +297,8 @@ namespace LocalStorage
                         int results = comm.ExecuteNonQuery();
                         comm.Parameters.Clear();
 
-                        comm.CommandText = @"DELETE FROM users WHERE id NOT IN (
+                        comm.CommandText =
+                            @"DELETE FROM users WHERE id NOT IN (
                                                 SELECT DISTINCT userid FROM statuses
                                                 )";
                         results = comm.ExecuteNonQuery();
