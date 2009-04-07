@@ -333,5 +333,16 @@ namespace LocalStorage
                 }
             }
         }
+
+        public static void VacuumDB()
+        {
+            using(SQLiteCommand comm = GetConnection().CreateCommand())
+            {
+                comm.Connection.Open();
+                comm.CommandText = "vacuum;";
+                comm.ExecuteNonQuery();
+                comm.Connection.Close();
+            }
+        }
     }
 }

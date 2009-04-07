@@ -13,22 +13,6 @@ using TiledMaps;
 
 namespace PockeTwit
 {
-    internal class ArtRequest
-    {
-        public string URL;
-
-        public ArtRequest(string url)
-        {
-            URL = url;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var other = (ArtRequest) obj;
-            return (other.URL == URL);
-        }
-    }
-
     internal static class ThrottledArtGrabber
     {
         #region Delegates
@@ -38,12 +22,11 @@ namespace PockeTwit
         #endregion
 
         private static readonly List<string> BadURLs = new List<string>();
-        private static readonly Queue<ArtRequest> Requests = new Queue<ArtRequest>();
+        private static readonly Queue<string> Requests = new Queue<string>();
 
         public static Bitmap DefaultArt;
         public static Bitmap FavoriteImage;
         public static WinCEImagingBitmap mapMarkerImage;
-        private static Regex r = new Regex("[^\\w]", RegexOptions.Compiled);
         public static bool running = true;
         public static Bitmap UnknownArt;
         private static Thread WorkerThread;
@@ -105,14 +88,10 @@ namespace PockeTwit
             {
                 if (!HasArt(url))
                 {
-                    var r = new ArtRequest(url);
-                    QueueRequest(r);
+                    QueueRequest(url);
                     return new Bitmap(UnknownArt);
                 }
-                else
-                {
-                    return GetBitmapFromDB(url);
-                }
+                return GetBitmapFromDB(url);
             }
             catch
             {
@@ -122,17 +101,12 @@ namespace PockeTwit
 
         private static string CleanURL(string URL)
         {
-            if (string.IsNullOrEmpty(URL))
-            {
-                return null;
-            }
-            return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal",
-                                                                                                              "");
+            return string.IsNullOrEmpty(URL) ? null : URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
         }
 
         private static Image GetBitmapFromDB(string url)
         {
-            int bufferSize = 100;
+            const int bufferSize = 100;
             var outbyte = new byte[bufferSize];
             long retval;
             long startIndex = 0;
@@ -145,7 +119,7 @@ namespace PockeTwit
                 {
                     comm.CommandText =
                         "SELECT avatar FROM avatarCache WHERE url=@url;";
-                    comm.Parameters.Add(new SQLiteParameter("@url", url));
+                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(url)));
 
                     using (SQLiteDataReader r = comm.ExecuteReader())
                     {
@@ -174,21 +148,18 @@ namespace PockeTwit
             }
         }
 
-        private static void QueueRequest(ArtRequest r)
+        private static void QueueRequest(string request)
         {
             lock (Requests)
             {
-                if (!Requests.Contains(r))
+                if (!Requests.Contains(request))
                 {
-                    Requests.Enqueue(r);
+                    Requests.Enqueue(request);
                 }
             }
-            if (WorkerThread == null)
-            {
-                WorkerThread = new Thread(ProcessQueue);
-                WorkerThread.Name = "AvatarFetcher";
-                WorkerThread.Start();
-            }
+            if (WorkerThread != null) return;
+            WorkerThread = new Thread(ProcessQueue) {Name = "AvatarFetcher"};
+            WorkerThread.Start();
         }
 
         public static bool HasArt(string url)
@@ -200,7 +171,7 @@ namespace PockeTwit
                 {
                     comm.CommandText =
                         "SELECT url FROM avatarCache WHERE url=@url;";
-                    comm.Parameters.Add(new SQLiteParameter("@url", url));
+                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(url)));
 
                     return comm.ExecuteScalar() != null;
                 }
@@ -211,19 +182,19 @@ namespace PockeTwit
         {
             while (Requests.Count > 0 && running)
             {
-                ArtRequest r;
+                string request;
                 lock (Requests)
                 {
-                    r = Requests.Peek();
+                    request = Requests.Peek();
                 }
-                FetchRequest(r);
+                FetchRequest(request);
                 lock (Requests)
                 {
                     Requests.Dequeue();
                 }
                 if (NewArtWasDownloaded != null)
                 {
-                    NewArtWasDownloaded.Invoke(r.URL);
+                    NewArtWasDownloaded.Invoke(request);
                 }
             }
             WorkerThread = null;
@@ -237,20 +208,20 @@ namespace PockeTwit
             }
             lock (BadURLs)
             {
-                BadURLs.Add(URL);
+                BadURLs.Add(CleanURL(URL));
             }
         }
 
-        private static void FetchRequest(ArtRequest r)
+        private static void FetchRequest(string request)
         {
-            if (string.IsNullOrEmpty(r.URL))
+            if (string.IsNullOrEmpty(request))
             {
                 return;
             }
             HttpWebResponse ArtResponse = null;
             try
             {
-                var GetArt = (HttpWebRequest) WebRequest.Create(r.URL);
+                var GetArt = (HttpWebRequest) WebRequest.Create(request);
                 GetArt.Timeout = 20000;
                 ArtResponse = (HttpWebResponse) GetArt.GetResponse();
             }
@@ -258,7 +229,7 @@ namespace PockeTwit
             {
                 lock (BadURLs)
                 {
-                    AddBadURL(r.URL);
+                    AddBadURL(request);
                     return;
                 }
             }
@@ -266,7 +237,7 @@ namespace PockeTwit
             {
                 lock (BadURLs)
                 {
-                    AddBadURL(r.URL);
+                    AddBadURL(CleanURL(request));
                     return;
                 }
             }
@@ -310,7 +281,7 @@ namespace PockeTwit
                                     comm.CommandText =
                                         "INSERT INTO avatarCache (avatar, url) VALUES (@avatar, @url);";
                                     comm.Parameters.Add(new SQLiteParameter("@avatar", blobdata));
-                                    comm.Parameters.Add(new SQLiteParameter("@url", r.URL));
+                                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(request)));
                                     try
                                     {
                                         comm.ExecuteNonQuery();
@@ -333,14 +304,14 @@ namespace PockeTwit
             {
                 lock (BadURLs)
                 {
-                    AddBadURL(r.URL);
+                    AddBadURL(request);
                     return;
                 }
             }
             finally
             {
                 ArtWriter.Close();
-                NewArtWasDownloaded(r.URL);
+                NewArtWasDownloaded(request);
             }
         }
 
@@ -358,6 +329,7 @@ namespace PockeTwit
             return bmpBytes;
         }
 
+
         public static void ClearAvatars()
         {
             using (SQLiteConnection conn = DataBaseUtility.GetConnection())
@@ -369,15 +341,12 @@ namespace PockeTwit
                     {
                         comm.CommandText = "DELETE FROM avatarCache";
                         comm.ExecuteNonQuery();
-
-                        comm.CommandText = "VACUUM";
-                        comm.ExecuteNonQuery();
                     }
                     t.Commit();
                 }
+                LocalStorage.DataBaseUtility.VacuumDB();
             }
         }
-
         public static void ClearUnlinkedAvatars()
         {
             using (SQLiteConnection conn = DataBaseUtility.GetConnection())
@@ -392,12 +361,10 @@ namespace PockeTwit
                                                 SELECT DISTINCT avatarURL FROM users
                                                 );";
                         comm.ExecuteNonQuery();
-
-                        comm.CommandText = "VACUUM";
-                        comm.ExecuteNonQuery();
                     }
                     t.Commit();
                 }
+                LocalStorage.DataBaseUtility.VacuumDB();
             }
         }
     }

@@ -77,14 +77,16 @@ namespace PockeTwit
             try
             {
                 ThrottledArtGrabber.ClearAvatars();
+                MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
             }
             catch
             {
                 MessageBox.Show("There was an error when clearing the cache. You may want to try again.", "PockeTwit");
-                return;
             }
-            Cursor.Current = Cursors.Default;
-            MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
+            finally
+            {
+                Cursor.Current = Cursors.Default;    
+            }   
         }
     }
 }
