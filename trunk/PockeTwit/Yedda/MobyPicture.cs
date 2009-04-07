@@ -144,6 +144,10 @@ namespace Yedda
             }
         }
 
+        /// <summary>
+        /// Fetch a picture.
+        /// </summary>
+        /// <param name="pictureURL"></param>
         public override void FetchPicture(string pictureURL)
         {
             #region Argument check
@@ -155,7 +159,6 @@ namespace Yedda
             }
 
             #endregion
-
 
             try
             {
@@ -177,10 +180,13 @@ namespace Yedda
             {
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to download picture from TwitPic.", ""));
             } 
-
-            
         }
 
+        /// <summary>
+        /// Check whether the service can fetch an URL
+        /// </summary>
+        /// <param name="URL"></param>
+        /// <returns></returns>
         public override bool CanFetchUrl(string URL)
         {
             const string siteMarker = "mobypicture";
@@ -253,69 +259,82 @@ namespace Yedda
 
         #region private methods
 
+        /// <summary>
+        /// Upload a picture
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
         private string UploadPicture(string url, PicturePostObject ppo)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            string boundary = System.Guid.NewGuid().ToString();
-            request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
-            request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
-            request.PreAuthenticate = true;
-            request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
-            request.Headers.Add("Action", "postMediaUrl");
-
-            //request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "POST";
-            request.Timeout = 20000;
-            string header = string.Format("--{0}", boundary);
-            string ender = "\r\n" + header + "\r\n";
-
-            StringBuilder contents = new StringBuilder();
-            
-            contents.Append(CreateContentPartString(header, "u", ppo.Username));
-            contents.Append(CreateContentPartString(header, "p", ppo.Password));
-            contents.Append(CreateContentPartString(header, "k", APPLICATION_NAME));
-            //Don't send the picture to twitter or any service just yet.
-            contents.Append(CreateContentPartString(header, "s", "none"));
-
-            if (!string.IsNullOrEmpty(ppo.Message))
+            try
             {
-                contents.Append(CreateContentPartString(header, "message", ppo.Message));
-                contents.Append(CreateContentPartString(header, "action", "postMedia"));
-            }
-            else
-            {
-                contents.Append(CreateContentPartString(header, "action", "postMediaUrl"));
-            }
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-            contents.Append(CreateContentPartMedia(header));
+                string boundary = System.Guid.NewGuid().ToString();
+                request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
+                request.PreAuthenticate = true;
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                request.Headers.Add("Action", "postMediaUrl");
 
-            //Create the form message to send in bytes
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string ender = "\r\n" + header + "\r\n";
 
-            byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
-            byte[] footer = Encoding.UTF8.GetBytes(ender);
-            request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(message, 0, message.Length);
-                requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
-                requestStream.Write(footer, 0, footer.Length);
-                requestStream.Flush();
-                requestStream.Close();
+                StringBuilder contents = new StringBuilder();
 
-                using (WebResponse response = request.GetResponse())
+                contents.Append(CreateContentPartString(header, "u", ppo.Username));
+                contents.Append(CreateContentPartString(header, "p", ppo.Password));
+                contents.Append(CreateContentPartString(header, "k", APPLICATION_NAME));
+                //Don't send the picture to twitter or any service just yet.
+                contents.Append(CreateContentPartString(header, "s", "none"));
+
+                if (!string.IsNullOrEmpty(ppo.Message))
                 {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        String receiverResponse = reader.ReadToEnd();
-                        //should be 0 with a following URL for the picture.
-
-                        return receiverResponse;
-                    }
+                    contents.Append(CreateContentPartString(header, "message", ppo.Message));
+                    contents.Append(CreateContentPartString(header, "action", "postMedia"));
+                }
+                else
+                {
+                    contents.Append(CreateContentPartString(header, "action", "postMediaUrl"));
                 }
 
+                contents.Append(CreateContentPartMedia(header));
+
+                //Create the form message to send in bytes
+
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
+                    requestStream.Write(footer, 0, footer.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            String receiverResponse = reader.ReadToEnd();
+                            //should be 0 with a following URL for the picture.
+
+                            return receiverResponse;
+                        }
+                    }
+
+                }
+                return string.Empty;
             }
-            return string.Empty;
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -325,43 +344,50 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePicture(string pictureURL)
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB + "&t="+pictureURL);
-            myRequest.Method = "GET";
-            String pictureFileName = String.Empty;
-
-            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            try
             {
-                using (dataStream = response.GetResponseStream())
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB + "&t=" + pictureURL);
+                myRequest.Method = "GET";
+                String pictureFileName = String.Empty;
+
+                using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
                 {
-                    int totalSize = 0;
-                    readBuffer = new byte[PT_READ_BUFFER_SIZE];
-                    pictureFileName = GetPicturePath(pictureURL);
-                    int totalResponseSize = (int) response.ContentLength;
-
-                    int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                    totalSize = responseSize;
-                    OnDownloadPart(new PictureServiceEventArgs(responseSize, responseSize, totalResponseSize));
-                    while (responseSize > 0)
+                    using (dataStream = response.GetResponseStream())
                     {
-                        base.SavePicture(pictureFileName, readBuffer, responseSize);
-                        try
-                        {
-                            totalSize += responseSize;
-                            responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                            OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
-                        }
-                        catch
-                        {
-                            responseSize = 0;
-                        }
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    dataStream.Close();
-                }
-                response.Close();
-            }
+                        int totalSize = 0;
+                        readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                        pictureFileName = GetPicturePath(pictureURL);
+                        int totalResponseSize = (int)response.ContentLength;
 
-            return pictureFileName;
+                        int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                        totalSize = responseSize;
+                        OnDownloadPart(new PictureServiceEventArgs(responseSize, responseSize, totalResponseSize));
+                        while (responseSize > 0)
+                        {
+                            base.SavePicture(pictureFileName, readBuffer, responseSize);
+                            try
+                            {
+                                totalSize += responseSize;
+                                responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                                OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
+                            }
+                            catch
+                            {
+                                responseSize = 0;
+                            }
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        dataStream.Close();
+                    }
+                    response.Close();
+                }
+
+                return pictureFileName;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -371,31 +397,38 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePictureAsync(string pictureURL)
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB);
-            myRequest.Method = "GET";
-            String pictureFileName = String.Empty;
-
-            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            try
             {
-                using (dataStream = response.GetResponseStream())
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_GET_THUMB);
+                myRequest.Method = "GET";
+                String pictureFileName = String.Empty;
+
+                using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
                 {
-                    readBuffer = new byte[PT_READ_BUFFER_SIZE];
-                    pictureFileName = GetPicturePath(pictureURL);
+                    using (dataStream = response.GetResponseStream())
+                    {
+                        readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                        pictureFileName = GetPicturePath(pictureURL);
 
-                    AsyncStateData state = new AsyncStateData();
-                    
-                    state.dataHolder = readBuffer;
-                    state.dataStream = dataStream;
-                    state.fileName = pictureFileName;
-                    state.totalBytesToDownload = (int) response.ContentLength;
+                        AsyncStateData state = new AsyncStateData();
 
-                    dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
+                        state.dataHolder = readBuffer;
+                        state.dataStream = dataStream;
+                        state.fileName = pictureFileName;
+                        state.totalBytesToDownload = (int)response.ContentLength;
 
+                        dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
+
+                    }
+                    response.Close();
                 }
-                response.Close();
-            }
 
-            return pictureFileName;
+                return pictureFileName;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -406,8 +439,8 @@ namespace Yedda
         {
             AsyncStateData state = (AsyncStateData)ar.AsyncState;
 
-            //try
-            //{
+            try
+            {
                 int len = state.dataStream.EndRead(ar);
                 
                 state.bytesRead = len;
@@ -427,12 +460,11 @@ namespace Yedda
                 }
 
                 dataStream.BeginRead(readBuffer, 0, PT_READ_BUFFER_SIZE, new System.AsyncCallback(DownloadPartFinished), state);
-            //}
-            //catch (ObjectDisposedException ex)
-            //{
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download"));
-            //}
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
 

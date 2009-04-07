@@ -69,7 +69,11 @@ namespace Yedda
 
         #region IPictureService Members
 
-        public override void  PostPicture(PicturePostObject postData)
+        /// <summary>
+        /// Post a picture.
+        /// </summary>
+        /// <param name="postData"></param>
+        public override void PostPicture(PicturePostObject postData)
         {
             #region Argument check
 
@@ -137,7 +141,11 @@ namespace Yedda
             }
         }
 
-        public override void  FetchPicture(string pictureURL)
+        /// <summary>
+        /// Fetch a URL.
+        /// </summary>
+        /// <param name="pictureURL"></param>
+        public override void FetchPicture(string pictureURL)
         {
             #region Argument check
 
@@ -171,6 +179,11 @@ namespace Yedda
             } 
         }
 
+        /// <summary>
+        /// Test whether the service can fetch the URL.
+        /// </summary>
+        /// <param name="URL"></param>
+        /// <returns></returns>
         public override bool CanFetchUrl(string URL)
         {
             const string siteMarker = "yfrog";
@@ -204,8 +217,7 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture, try again later."));
+                throw;
             }
             workerThread = null;
         }
@@ -229,8 +241,7 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                //No need to throw, postPicture throws event.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,"Unable to upload picture, try again later.",""));
+                throw;
             }
             workerThread = null;
         }
@@ -246,46 +257,59 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePicture(string imageId)
         {
-            //We use the "iphone" optimized images
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_SHOW_THUMB + imageId + ".th.jpg");
-            myRequest.Method = "GET";
-            String pictureFileName = String.Empty;
-
-            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            try
             {
-                using (Stream dataStream = response.GetResponseStream())
+                //We use the "iphone" optimized images
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_SHOW_THUMB + imageId + ".th.jpg");
+                myRequest.Method = "GET";
+                String pictureFileName = String.Empty;
+
+                using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
                 {
-                    int totalSize = 0;
-                    int totalResponseSize = (int)response.ContentLength;
-                    byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
-                    pictureFileName = GetPicturePath(imageId);
-
-                    int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                    totalSize = responseSize;
-                    OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
-                    while (responseSize > 0)
+                    using (Stream dataStream = response.GetResponseStream())
                     {
-                        SavePicture(pictureFileName, readBuffer, responseSize);
-                        try
-                        {
-                            totalSize += responseSize;
-                            responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
-                            OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
-                        }
-                        catch
-                        {
-                            responseSize = 0;
-                        }
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    dataStream.Close();
-                }
-                response.Close();
-            }
+                        int totalSize = 0;
+                        int totalResponseSize = (int)response.ContentLength;
+                        byte[] readBuffer = new byte[PT_READ_BUFFER_SIZE];
+                        pictureFileName = GetPicturePath(imageId);
 
-            return pictureFileName;
+                        int responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                        totalSize = responseSize;
+                        OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
+                        while (responseSize > 0)
+                        {
+                            SavePicture(pictureFileName, readBuffer, responseSize);
+                            try
+                            {
+                                totalSize += responseSize;
+                                responseSize = dataStream.Read(readBuffer, 0, PT_READ_BUFFER_SIZE);
+                                OnDownloadPart(new PictureServiceEventArgs(responseSize, totalSize, totalResponseSize));
+                            }
+                            catch
+                            {
+                                responseSize = 0;
+                            }
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        dataStream.Close();
+                    }
+                    response.Close();
+                }
+
+                return pictureFileName;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Upload a picture
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
         private XmlDocument UploadPicture(string url, PicturePostObject ppo)
         {
             try
@@ -339,18 +363,15 @@ namespace Yedda
                         }
                     }
                 }
-               
             }
             catch (Exception e)
             {
-                //Socket exception 10054 could occur when sending large files.
-                //Error is thrown to event in PostPicture
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture."));
-                return null;
+                throw;
             }
+
         }
 
-#endregion
+        #endregion
 
 
         
