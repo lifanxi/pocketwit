@@ -19,7 +19,7 @@ namespace LocalStorage
         private const string SQLMarkRead =
             @"UPDATE statuses SET isread=1 WHERE
                           (timestamp <= 
-                            (SELECT timestamp from statuses WHERE id=@id))";
+                            (SELECT timestamp from statuses WHERE id=@id)) AND isread=0 ";
 
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
