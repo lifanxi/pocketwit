@@ -156,6 +156,10 @@ namespace LocalStorage
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
+                            @"CREATE INDEX IF NOT EXISTS DateINDEX ON statuses (timestamp DESC)";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS users (id VARCHAR(50) PRIMARY KEY,
                             screenname NVARCHAR(255),
                             fullname NVARCHAR(255),
@@ -186,7 +190,7 @@ namespace LocalStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
         }
