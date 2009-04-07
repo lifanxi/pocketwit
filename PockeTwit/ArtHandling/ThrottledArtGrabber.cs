@@ -1,74 +1,89 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading;
+using LocalStorage;
+using TiledMaps;
 
 namespace PockeTwit
 {
-    class ArtRequest
+    internal class ArtRequest
     {
+        public string URL;
+
         public ArtRequest(string url)
         {
             URL = url;
         }
-        public string URL;
 
         public override bool Equals(object obj)
         {
-            ArtRequest other = (ArtRequest)obj;
+            var other = (ArtRequest) obj;
             return (other.URL == URL);
         }
     }
-    static class ThrottledArtGrabber
+
+    internal static class ThrottledArtGrabber
     {
-        public static bool running = true;
-        private static System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("[^\\w]", System.Text.RegularExpressions.RegexOptions.Compiled);
-        public static Bitmap FavoriteImage;
-        public static Bitmap UnknownArt;
+        #region Delegates
+
+        public delegate void ArtIsReady(string Argument);
+
+        #endregion
+
+        private static readonly List<string> BadURLs = new List<string>();
+        private static readonly Queue<ArtRequest> Requests = new Queue<ArtRequest>();
+
         public static Bitmap DefaultArt;
-        public static TiledMaps.WinCEImagingBitmap mapMarkerImage;
-        private static Queue<ArtRequest> Requests = new Queue<ArtRequest>();
-        private static List<string> BadURLs = new List<string>();
-        private static System.Threading.Thread WorkerThread;
+        public static Bitmap FavoriteImage;
+        public static WinCEImagingBitmap mapMarkerImage;
+        private static Regex r = new Regex("[^\\w]", RegexOptions.Compiled);
+        public static bool running = true;
+        public static Bitmap UnknownArt;
+        private static Thread WorkerThread;
+
         static ThrottledArtGrabber()
         {
             Setup();
-            mapMarkerImage = new TiledMaps.WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
-            FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");            
+            mapMarkerImage =
+                new WinCEImagingBitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("PockeTwit.Marker.png"));
+            FavoriteImage = new Bitmap(ClientSettings.AppPath + "\\asterisk_yellow.png");
         }
 
         private static void Setup()
         {
-            
             UnknownArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
             DefaultArt = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
 
 
-            
-            Bitmap DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
-            Bitmap DiskDefault = new Bitmap(ClientSettings.AppPath + "\\default_profile_bigger.png");
+            var DiskUnknown = new Bitmap(ClientSettings.AppPath + "\\unknownart-small.jpg");
+            var DiskDefault = new Bitmap(ClientSettings.AppPath + "\\default_profile_bigger.png");
             using (Graphics g = Graphics.FromImage(UnknownArt))
             {
-                g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
+                g.DrawImage(DiskUnknown, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize),
+                            new Rectangle(0, 0, DiskUnknown.Width, DiskUnknown.Height), GraphicsUnit.Pixel);
             }
 
             using (Graphics g = Graphics.FromImage(DefaultArt))
             {
-                g.DrawImage(DiskDefault, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize), new Rectangle(0, 0, DiskDefault.Width, DiskDefault.Height), GraphicsUnit.Pixel);
+                g.DrawImage(DiskDefault, new Rectangle(0, 0, ClientSettings.SmallArtSize, ClientSettings.SmallArtSize),
+                            new Rectangle(0, 0, DiskDefault.Width, DiskDefault.Height), GraphicsUnit.Pixel);
             }
             DiskUnknown.Dispose();
             DiskDefault.Dispose();
         }
 
-        public delegate void ArtIsReady(string Argument);
         public static event ArtIsReady NewArtWasDownloaded;
-        
+
         public static Image GetArt(string url)
         {
-            if(string.IsNullOrEmpty(url) | string.IsNullOrEmpty((url)))
+            if (string.IsNullOrEmpty(url) | string.IsNullOrEmpty((url)))
             {
                 //Don't re-queue -- we won't be able to get it for now.
                 return new Bitmap(UnknownArt);
@@ -85,12 +100,12 @@ namespace PockeTwit
                 }
             }
 
-            
+
             try
             {
-                if(!HasArt(url))
+                if (!HasArt(url))
                 {
-                    ArtRequest r = new ArtRequest(url);
+                    var r = new ArtRequest(url);
                     QueueRequest(r);
                     return new Bitmap(UnknownArt);
                 }
@@ -107,36 +122,36 @@ namespace PockeTwit
 
         private static string CleanURL(string URL)
         {
-            if(string.IsNullOrEmpty(URL))
+            if (string.IsNullOrEmpty(URL))
             {
                 return null;
             }
-            return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
+            return URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal",
+                                                                                                              "");
         }
 
         private static Image GetBitmapFromDB(string url)
         {
-            int bufferSize = 100;                  
-            byte[] outbyte = new byte[bufferSize];
-            long retval;                            
+            int bufferSize = 100;
+            var outbyte = new byte[bufferSize];
+            long retval;
             long startIndex = 0;
-            
-            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+
+            using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
-                MemoryStream s = new MemoryStream();
-                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                var s = new MemoryStream();
+                using (var comm = new SQLiteCommand(conn))
                 {
                     comm.CommandText =
                         "SELECT avatar FROM avatarCache WHERE url=@url;";
                     comm.Parameters.Add(new SQLiteParameter("@url", url));
 
-                    using(SQLiteDataReader r = comm.ExecuteReader())
+                    using (SQLiteDataReader r = comm.ExecuteReader())
                     {
                         while (r.Read())
                         {
-                            
-                            BinaryWriter writer = new BinaryWriter(s);
+                            var writer = new BinaryWriter(s);
 
                             retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
                             while (retval == bufferSize)
@@ -149,17 +164,14 @@ namespace PockeTwit
                                 retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
                             }
 
-                            writer.Write(outbyte, 0, (int)retval);
+                            writer.Write(outbyte, 0, (int) retval);
                             writer.Flush();
-                            
                         }
                     }
-                    
+
                     return new Bitmap(s);
                 }
             }
-
-            
         }
 
         private static void QueueRequest(ArtRequest r)
@@ -171,29 +183,30 @@ namespace PockeTwit
                     Requests.Enqueue(r);
                 }
             }
-            if (WorkerThread==null)
+            if (WorkerThread == null)
             {
-                WorkerThread = new System.Threading.Thread(new System.Threading.ThreadStart(ProcessQueue));
+                WorkerThread = new Thread(ProcessQueue);
                 WorkerThread.Name = "AvatarFetcher";
                 WorkerThread.Start();
             }
-        
         }
+
         public static bool HasArt(string url)
         {
-            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
-                using (SQLiteCommand comm = new SQLiteCommand(conn))
+                using (var comm = new SQLiteCommand(conn))
                 {
                     comm.CommandText =
                         "SELECT url FROM avatarCache WHERE url=@url;";
                     comm.Parameters.Add(new SQLiteParameter("@url", url));
 
-                    return comm.ExecuteScalar()!=null;       
+                    return comm.ExecuteScalar() != null;
                 }
             }
         }
+
         private static void ProcessQueue()
         {
             while (Requests.Count > 0 && running)
@@ -234,12 +247,12 @@ namespace PockeTwit
             {
                 return;
             }
-            System.Net.HttpWebResponse ArtResponse = null;
+            HttpWebResponse ArtResponse = null;
             try
             {
-                System.Net.HttpWebRequest GetArt = (System.Net.HttpWebRequest) System.Net.HttpWebRequest.Create(r.URL);
+                var GetArt = (HttpWebRequest) WebRequest.Create(r.URL);
                 GetArt.Timeout = 20000;
-                ArtResponse = (System.Net.HttpWebResponse) GetArt.GetResponse();
+                ArtResponse = (HttpWebResponse) GetArt.GetResponse();
             }
             catch (Exception ex)
             {
@@ -257,14 +270,14 @@ namespace PockeTwit
                     return;
                 }
             }
-            System.IO.Stream responseStream = null;
-            System.IO.MemoryStream ArtWriter = new System.IO.MemoryStream();
+            Stream responseStream = null;
+            var ArtWriter = new MemoryStream();
             try
             {
                 responseStream = ArtResponse.GetResponseStream();
 
                 int count = 0;
-                byte[] buffer = new byte[8192];
+                var buffer = new byte[8192];
                 do
                 {
                     count = responseStream.Read(buffer, 0, buffer.Length);
@@ -275,10 +288,10 @@ namespace PockeTwit
                 } while (count != 0);
                 responseStream.Close();
 
-                ArtWriter.Seek(0, System.IO.SeekOrigin.Begin);
-                using (Bitmap original = new Bitmap(ArtWriter))
+                ArtWriter.Seek(0, SeekOrigin.Begin);
+                using (var original = new Bitmap(ArtWriter))
                 {
-                    using (Bitmap resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize))
+                    using (var resized = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize))
                     {
                         Graphics g = Graphics.FromImage(resized);
                         g.DrawImage(original,
@@ -287,13 +300,12 @@ namespace PockeTwit
                         g.Dispose();
 
                         byte[] blobdata = BmpToBytes_MemStream(resized);
-                        using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+                        using (SQLiteConnection conn = DataBaseUtility.GetConnection())
                         {
                             conn.Open();
-                            using (System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                            using (SQLiteTransaction t = conn.BeginTransaction())
                             {
-
-                                using (System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                                using (var comm = new SQLiteCommand(conn))
                                 {
                                     comm.CommandText =
                                         "INSERT INTO avatarCache (avatar, url) VALUES (@avatar, @url);";
@@ -303,15 +315,13 @@ namespace PockeTwit
                                     {
                                         comm.ExecuteNonQuery();
                                     }
-                                    catch(System.Data.SQLite.SQLiteException ex)
+                                    catch (SQLiteException ex)
                                     {
                                     }
                                 }
 
                                 t.Commit();
-
                             }
-
                         }
                     }
                 }
@@ -321,7 +331,6 @@ namespace PockeTwit
             }
             catch (Exception ex)
             {
-
                 lock (BadURLs)
                 {
                     AddBadURL(r.URL);
@@ -335,14 +344,28 @@ namespace PockeTwit
             }
         }
 
+        private static byte[] BmpToBytes_MemStream(Bitmap bmp)
+        {
+            var ms = new MemoryStream();
+            // Save to memory using the Jpeg format
+            bmp.Save(ms, ImageFormat.Bmp);
+
+            // read to end
+            byte[] bmpBytes = ms.GetBuffer();
+            bmp.Dispose();
+            ms.Close();
+
+            return bmpBytes;
+        }
+
         public static void ClearAvatars()
         {
-            using(System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
-                using(System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                using (SQLiteTransaction t = conn.BeginTransaction())
                 {
-                    using(System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                    using (var comm = new SQLiteCommand(conn))
                     {
                         comm.CommandText = "DELETE FROM avatarCache";
                         comm.ExecuteNonQuery();
@@ -357,14 +380,15 @@ namespace PockeTwit
 
         public static void ClearUnlinkedAvatars()
         {
-            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
-                using (System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                using (SQLiteTransaction t = conn.BeginTransaction())
                 {
-                    using (System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                    using (var comm = new SQLiteCommand(conn))
                     {
-                        comm.CommandText = @"DELETE FROM avatarCache WHERE url NOT IN (
+                        comm.CommandText =
+                            @"DELETE FROM avatarCache WHERE url NOT IN (
                                                 SELECT DISTINCT avatarURL FROM users
                                                 );";
                         comm.ExecuteNonQuery();
@@ -376,20 +400,5 @@ namespace PockeTwit
                 }
             }
         }
-
-        private static byte[] BmpToBytes_MemStream(Bitmap bmp)
-        {
-            MemoryStream ms = new MemoryStream();
-            // Save to memory using the Jpeg format
-            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            // read to end
-            byte[] bmpBytes = ms.GetBuffer();
-            bmp.Dispose();
-            ms.Close();
-
-            return bmpBytes;
-        }
-        
     }
 }
