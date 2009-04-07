@@ -570,6 +570,7 @@ namespace PockeTwit
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
             GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
+            GroupsMenuItem.Visible = false;
             TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
             foreach(SpecialTimeLine t in SpecialTimeLines.GetList())
             {
@@ -618,7 +619,7 @@ namespace PockeTwit
                 ShowUserGroup(t);
             };
 
-
+            GroupsMenuItem.Visible = true;
             FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu);
             GroupsMenuItems.Add(item);
             GroupsMenuItem.SubMenuItems.Add(item);
@@ -693,7 +694,7 @@ namespace PockeTwit
             }
             
             statList.LeftMenu.ResetMenu(LeftMenu);
-             */
+             
             switch (statList.CurrentList())
             {
                 case "Friends_TimeLine":
@@ -712,6 +713,7 @@ namespace PockeTwit
                     FriendsTimeLineMenuItem.Text = "Friends Timeline";
                     break;
             }
+             */
         }
         private void UpdateRightMenu()
         {
@@ -913,14 +915,7 @@ namespace PockeTwit
             Application.DoEvents();
         }
 
-        void Manager_MessagesUpdated(int count)
-        {
-            if (statList.CurrentList() == "Messages_TimeLine")
-            {
-                AddStatusesToList(Manager.GetMessagesImmediately(), count);
-            }
-            Notifyer.NewMessages(count);
-        }
+        
 
         private string newItemsText(int count)
         {
@@ -952,6 +947,17 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
+            Notifyer.NewFriendMessages(count);
+            SetMenuNumbers();
+        }
+        void Manager_MessagesUpdated(int count)
+        {
+            if (statList.CurrentList() == "Messages_TimeLine")
+            {
+                AddStatusesToList(Manager.GetMessagesImmediately(), count);
+            }
+            Notifyer.NewMessages(count);
+            SetMenuNumbers();
         }
 
         private void MapList()
@@ -1692,15 +1698,30 @@ namespace PockeTwit
 
         private void SetMenuNumbers()
         {
-            return;
             int NewFriends = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Friends_TimeLine"), null);
             int NewMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Replies, LastSelectedItems.GetNewestSelected("Messages_TimeLine"), null);
+            switch (statList.CurrentList())
+            {
+                case "Friends_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(NewFriends);
+                    MessagesMenuItem.Text = "Messages" + newItemsText(NewMessages);
+                    break;
+                case "Messages_TimeLine":
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(NewFriends);
+                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(NewMessages);
+                    break;
+                default:
+                    MessagesMenuItem.Text = "Messages" + newItemsText(NewMessages);
+                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(NewFriends);
+                    break;
+            }
+            /*
             foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
             {
                 int XMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Grouped_TimeLine_" + t.name), t.GetConstraints());
             }
+             */
         }
-
         #endregion�Methods�
 
         private void TweetList_LostFocus(object sender, EventArgs e)

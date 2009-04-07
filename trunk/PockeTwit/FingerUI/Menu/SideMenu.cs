@@ -724,6 +724,7 @@ namespace FingerUI
             }
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
             int CurrentTop = TopOfSubMenu;
+            int CurrentBottom = CurrentTop + ItemHeight;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
             {
                 foreach (SideMenuItem subItem in Item.SubMenuItems)
@@ -733,18 +734,20 @@ namespace FingerUI
                     {
                         DrawSingleItem(i, m_backBuffer, OffSet, CurrentTop, subItem, ClientSettings.ForeColor);
                         i++;
+                        CurrentBottom = CurrentTop + ItemHeight;
                         CurrentTop = CurrentTop + ItemHeight;
+                        
                     }
                 }
                 using (Pen whitePen = new Pen(ClientSettings.ForeColor))
                 {
                     if (_Side == KListControl.SideShown.Left)
                     {
-                        m_backBuffer.DrawLine(whitePen, _Width - OffSet, TopOfSubMenu, _Width - OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
+                        m_backBuffer.DrawLine(whitePen, _Width - OffSet, TopOfSubMenu, _Width - OffSet, CurrentBottom);
                     }
                     else
                     {
-                        m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, (Item.SubMenuItems.Count * ItemHeight) + TopOfSubMenu);
+                        m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, CurrentBottom);
                     }
                 }
             }
