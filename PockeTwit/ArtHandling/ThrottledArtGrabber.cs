@@ -346,7 +346,33 @@ namespace PockeTwit
                     {
                         comm.CommandText = "DELETE FROM avatarCache";
                         comm.ExecuteNonQuery();
+
+                        comm.CommandText = "VACUUM";
+                        comm.ExecuteNonQuery();
                     }
+                    t.Commit();
+                }
+            }
+        }
+
+        public static void ClearUnlinkedAvatars()
+        {
+            using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                using (System.Data.SQLite.SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    using (System.Data.SQLite.SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        comm.CommandText = @"DELETE FROM avatarCache WHERE url NOT IN (
+                                                SELECT DISTINCT avatarURL FROM users
+                                                );";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "VACUUM";
+                        comm.ExecuteNonQuery();
+                    }
+                    t.Commit();
                 }
             }
         }
