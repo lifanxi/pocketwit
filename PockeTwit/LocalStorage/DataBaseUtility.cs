@@ -295,7 +295,10 @@ namespace LocalStorage
             using (SQLiteConnection conn = GetConnection())
             {
                 string FetchQuery = SQLCountFromCache;
-                FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder;
+                string midClause = AddTypeWhereClause(typeToGet) + Constraints;
+                if (!string.IsNullOrEmpty(midClause)) {
+                    midClause = " AND " + midClause; }
+                FetchQuery = FetchQuery + midClause + SQLOrder;
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
                 {
                     comm.Parameters.Add(new SQLiteParameter("@id", ID));
