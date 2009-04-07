@@ -1025,7 +1025,9 @@ namespace FingerUI
             System.Diagnostics.Debug.WriteLine("MouseDown!");
             HasMoved = false;
             //Fast scrolling on the right 10 pixels
-            if (e.X > this.Width - PointerSize - m_offset.X && e.X < this.Width - m_offset.X)
+            if (m_offset.X==0 && 
+                e.X > this.Width - PointerSize - m_offset.X && 
+                e.X < this.Width - m_offset.X)
             {
                 m_scrollBarMove = true;
                 movingItems = true;
