@@ -17,9 +17,9 @@ namespace LocalStorage
                           FROM         statuses WHERE isread=0 ";
 
         private const string SQLMarkRead =
-            @"UPDATE statuses SET isread=1 WHERE
+            @"UPDATE statuses SET isread=1 WHERE isread=0 AND 
                           (timestamp <= 
-                            (SELECT timestamp from statuses WHERE id=@id)) AND isread=0 ";
+                            (SELECT timestamp from statuses WHERE id=@id)) ";
 
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
@@ -299,7 +299,7 @@ namespace LocalStorage
             using (SQLiteConnection conn = GetConnection())
             {
                 string FetchQuery = SQLCountFromCache;
-                string midClause = AddTypeWhereClause(typeToGet) + Constraints;
+                string midClause = Constraints + AddTypeWhereClause(typeToGet);
                 if (!string.IsNullOrEmpty(midClause)) {
                     midClause = " AND " + midClause; }
                 FetchQuery = FetchQuery + midClause + SQLOrder;
