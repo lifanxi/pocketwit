@@ -1,7 +1,4 @@
-﻿using System;
-
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace FingerUI
 {
@@ -9,24 +6,37 @@ namespace FingerUI
 
     public class SideMenuItem
     {
-        private SideMenu ParentMenu;
+        #region Delegates
+
+        public delegate void delItemExpanded(SideMenuItem sender, bool Opened);
+
+        #endregion
+
+        private readonly delMenuClicked ClickedMethod;
+
+        private readonly SideMenu ParentMenu;
+        private string _TextTemplate;
+        private bool _Visible = true;
+        public bool CanHide;
         public List<SideMenuItem> SubMenuItems = new List<SideMenuItem>();
+
+        public SideMenuItem(delMenuClicked Callback, string TextTemplate, SideMenu Parent)
+        {
+            _TextTemplate = TextTemplate;
+            ClickedMethod = Callback;
+            ParentMenu = Parent;
+        }
 
         public bool HasChildren
         {
-            get
-            {
-                return SubMenuItems.Count > 0;
-            }
+            get { return SubMenuItems.Count > 0; }
         }
+
         public bool Expanded { get; set; }
-        private bool _Visible = true;
+
         public bool Visible
         {
-            get
-            {
-                return _Visible;
-            }
+            get { return _Visible; }
             set
             {
                 if (value != _Visible)
@@ -37,9 +47,38 @@ namespace FingerUI
                 }
             }
         }
-        public bool CanHide = false;
-        
-        private delMenuClicked ClickedMethod;
+
+        public string CorrespondingList { get; set; }
+
+        public string Text
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(CorrespondingList))
+                {
+                    return _TextTemplate + newItemsText(PockeTwit.LastSelectedItems.GetUnreadItems(CorrespondingList));
+                }
+                return _TextTemplate;
+            }
+            set
+            {
+                if (value != _TextTemplate)
+                {
+                    ParentMenu.IsDirty = true;
+                    _TextTemplate = value;
+
+                }
+            }
+        }
+
+        private static string newItemsText(int count)
+        {
+            if (count > 0)
+            {
+                return " (" + count + ")";
+            }
+            return "";
+        }
 
         public void ClickMe()
         {
@@ -66,29 +105,7 @@ namespace FingerUI
         }
 
         public event delMenuClicked DoneWithClick = delegate { };
-        public delegate void delItemExpanded(SideMenuItem sender, bool Opened);
+
         public event delItemExpanded MenuExpandedOrCollapsed = delegate { };
-        private string _TextTemplate;
-        public string Text
-        {
-            get
-            {
-                return _TextTemplate;
-            }
-            set
-            {
-                if (value != _TextTemplate)
-                {
-                    ParentMenu.IsDirty = true;
-                    _TextTemplate = value;
-                }
-            }
-        }
-        public SideMenuItem(delMenuClicked Callback, string TextTemplate, SideMenu Parent)
-        {
-            _TextTemplate = TextTemplate;
-            ClickedMethod = Callback;
-            ParentMenu = Parent;
-        }
     }
 }

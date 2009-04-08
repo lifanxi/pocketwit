@@ -307,8 +307,8 @@ namespace PockeTwit
                 }
                 else
                 {
-                    statList.SelectedItem = statList[0];
-                    statList.YOffset = 0;
+                    statList.SelectedItem = statList[statList.Count-1];
+                    statList.YOffset = ClientSettings.ItemHeight * (statList.Count-1);
                 }
                 if (currentItem != null)
                 {
@@ -909,14 +909,7 @@ namespace PockeTwit
 
         
 
-        private string newItemsText(int count)
-        {
-            if (count > 0)
-            {
-                return " (" + count.ToString() + ")";
-            }
-            return "";
-        }
+        
 
 
         delegate void delText(string Text);
@@ -1383,7 +1376,9 @@ namespace PockeTwit
             {
                 Constraints = currentGroup.GetConstraints();
             }
+            
             LocalStorage.DataBaseUtility.MarkAllReadOlderThan(currentType, statItem.Tweet.id, Constraints);
+            PockeTwit.LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet);
             SetMenuNumbers();
         }
 
@@ -1690,6 +1685,7 @@ namespace PockeTwit
 
         private void SetMenuNumbers()
         {
+            /*
             int NewFriends = LocalStorage.DataBaseUtility.CountItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Friends_TimeLine"), null);
             int NewMessages = LocalStorage.DataBaseUtility.CountItemsNewerThan(TimelineManagement.TimeLineType.Replies, LastSelectedItems.GetNewestSelected("Messages_TimeLine"), null);
             switch (statList.CurrentList())
@@ -1707,7 +1703,6 @@ namespace PockeTwit
                     FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(NewFriends);
                     break;
             }
-            /*
             foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
             {
                 int XMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Grouped_TimeLine_" + t.name), t.GetConstraints());
