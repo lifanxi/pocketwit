@@ -12,9 +12,9 @@ namespace FingerUI
 
         #endregion
 
-        private readonly delMenuClicked ClickedMethod;
+        private delMenuClicked ClickedMethod;
 
-        private readonly SideMenu ParentMenu;
+        private SideMenu ParentMenu;
         private string _TextTemplate;
         private bool _Visible = true;
         public bool CanHide;
@@ -22,9 +22,20 @@ namespace FingerUI
 
         public SideMenuItem(delMenuClicked Callback, string TextTemplate, SideMenu Parent)
         {
+            Initialize(TextTemplate, Callback, Parent, null);
+        }
+
+        public SideMenuItem(delMenuClicked Callback, string TextTemplate, SideMenu Parent, string List)
+        {
+            Initialize(TextTemplate, Callback, Parent, List);
+        }
+
+        private void Initialize(string TextTemplate, delMenuClicked Callback, SideMenu Parent, string List)
+        {
             _TextTemplate = TextTemplate;
             ClickedMethod = Callback;
             ParentMenu = Parent;
+            CorrespondingList = List;
         }
 
         public bool HasChildren
