@@ -14,6 +14,9 @@ namespace PockeTwit
         private static readonly Dictionary<string, status> NewestSelectedItemsDictionary =
             new Dictionary<string, status>();
 
+        private static readonly Dictionary<string, int> UnreadItemCount =
+            new Dictionary<string, int>();
+
         private static RegistryKey StoredItemsRoot;
 
         static LastSelectedItems()
@@ -22,6 +25,11 @@ namespace PockeTwit
         }
 
         public static void SetLastSelected(string ListName, status selectedStatus)
+        {
+            SetLastSelected(ListName,selectedStatus,null);
+        }
+
+        public static void SetLastSelected(string ListName, status selectedStatus, SpecialTimeLine specialTime)
         {
             if (!LastSelectedItemsDictionary.ContainsKey(ListName))
             {
@@ -37,9 +45,45 @@ namespace PockeTwit
                 if (NewestSelectedItemsDictionary[ListName].createdAt < selectedStatus.createdAt)
                 {
                     NewestSelectedItemsDictionary[ListName] = selectedStatus;
+                    SetUnreadCount(ListName, selectedStatus.id, specialTime);
                 }
             }
             StoreSelectedItem(ListName, selectedStatus.id);
+        }
+
+        public static int GetUnreadItems(string ListName)
+        {
+            if(UnreadItemCount.ContainsKey(ListName))
+            {
+                return UnreadItemCount[ListName];
+            }
+            return 0;
+        }
+
+        private static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
+        {
+            TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
+            switch (ListName)
+            {
+                case "Messages_Timeline":
+                    t = TimelineManagement.TimeLineType.Messages;
+                    break;
+            }
+
+            string Constraints = null;
+            if (specialTime != null) 
+            {
+                Constraints = specialTime.GetConstraints();
+            }
+            int updatedCount = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedStatus, Constraints);
+            if(!UnreadItemCount.ContainsKey(ListName))
+            {
+                UnreadItemCount.Add(ListName, updatedCount);
+            }
+            else
+            {
+                UnreadItemCount[ListName] = updatedCount;
+            }
         }
 
         public static string GetLastSelected(string ListName)
