@@ -53,7 +53,7 @@ namespace PockeTwit
 
         public static int GetUnreadItems(string ListName)
         {
-            if(UnreadItemCount.ContainsKey(ListName))
+            if(!UnreadItemCount.ContainsKey(ListName))
             {
                 return UnreadItemCount[ListName];
             }
