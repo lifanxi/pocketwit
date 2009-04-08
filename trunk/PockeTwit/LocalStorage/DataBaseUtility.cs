@@ -158,6 +158,10 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE INDEX IF NOT EXISTS DateINDEX ON statuses (timestamp DESC)";
                         comm.ExecuteNonQuery();
+                        
+                        comm.CommandText =
+                            @"CREATE INDEX IF NOT EXISTS StatusINDEX ON statuses (isread ASC)";
+                        comm.ExecuteNonQuery();
 
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS users (id VARCHAR(50) PRIMARY KEY,
@@ -185,7 +189,10 @@ namespace LocalStorage
                                      url VARCHAR(255) PRIMARY KEY NOT NULL )";
                         comm.ExecuteNonQuery();
 
-                        comm.CommandText = "PRAGMA journal_mode = OFF";
+                        comm.CommandText = "PRAGMA locking_mode=EXCLUSIVE; ";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "PRAGMA journal_mode = OFF; ";
                         comm.ExecuteNonQuery();
 
                         t.Commit();
