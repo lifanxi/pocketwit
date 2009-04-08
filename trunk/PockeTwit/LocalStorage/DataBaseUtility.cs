@@ -182,7 +182,10 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE  TABLE  IF NOT EXISTS avatarCache 
                                     (avatar BLOB NOT NULL,
-                                     url VARCHAR(255) PRIMARY KEY  NOT NULL )";
+                                     url VARCHAR(255) PRIMARY KEY NOT NULL )";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "PRAGMA journal_mode = OFF";
                         comm.ExecuteNonQuery();
 
                         t.Commit();
@@ -289,7 +292,7 @@ namespace LocalStorage
             }
         }
 
-        public static int GetItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
+        public static int CountItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
                                             string Constraints)
         {
             if (ID == null)
