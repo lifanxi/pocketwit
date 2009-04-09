@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using PockeTwit.TimeLines;
 
 
 namespace PockeTwit
@@ -932,8 +933,8 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
-            PockeTwit.LastSelectedItems.SetLastSelected("Friends_TimeLine", statList.SelectedItem.Tweet);
             Notifyer.NewFriendMessages(count);
+            LastSelectedItems.UpdateUnreadCounts();
             SetMenuNumbers();
         }
         void Manager_MessagesUpdated(int count)
@@ -942,8 +943,8 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetMessagesImmediately(), count);
             }
-            PockeTwit.LastSelectedItems.SetLastSelected("Messages_TimeLine", statList.SelectedItem.Tweet);
             Notifyer.NewMessages(count);
+            LastSelectedItems.UpdateUnreadCounts();
             SetMenuNumbers();
         }
 
@@ -1380,7 +1381,7 @@ namespace PockeTwit
             }
             
             LocalStorage.DataBaseUtility.MarkAllReadOlderThan(currentType, statItem.Tweet.id, Constraints);
-            PockeTwit.LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet);
+            LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet);
             SetMenuNumbers();
         }
 
