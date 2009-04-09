@@ -46,7 +46,7 @@ namespace PockeTwit
             }
             else
             {
-                if (NewestSelectedItemsDictionary[ListName].createdAt < selectedStatus.createdAt)
+                if (NewestSelectedItemsDictionary[ListName].createdAt <= selectedStatus.createdAt)
                 {
                     NewestSelectedItemsDictionary[ListName] = selectedStatus;
                     SetUnreadCount(ListName, selectedStatus.id, specialTime);
