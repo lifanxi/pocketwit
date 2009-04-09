@@ -4,6 +4,7 @@ using System.Collections;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using PockeTwit.TimeLines;
 
 namespace FingerUI
 {
@@ -534,7 +535,7 @@ namespace FingerUI
             {
                 if (SelectedItem != null)
                 {
-                    PockeTwit.LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet);
+                    LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet);
                 }
             }
             if (!ItemLists.ContainsKey(ListName))
@@ -550,7 +551,7 @@ namespace FingerUI
         {
 
 
-            string jumpID = PockeTwit.LastSelectedItems.GetLastSelected(CurrentList());
+            string jumpID = LastSelectedItems.GetLastSelected(CurrentList());
             if (!string.IsNullOrEmpty(jumpID))
             {
                 for (int i = 0; i < m_items.Count; i++)
@@ -747,7 +748,7 @@ namespace FingerUI
                     SlidingPortal.ReRenderItem(m_items[m_selectedIndex]);
                     StatusItem s = (StatusItem)SelectedItem;
                     RightMenu.UserName = s.Tweet.user.screen_name;
-                    PockeTwit.LastSelectedItems.SetLastSelected(CurrentList(), m_items[m_selectedIndex].Tweet);
+                    LastSelectedItems.SetLastSelected(CurrentList(), m_items[m_selectedIndex].Tweet);
                     //FillBuffer();
                 }
             }

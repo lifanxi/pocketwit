@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PockeTwit.TimeLines;
 
 namespace FingerUI
 {
@@ -71,11 +72,11 @@ namespace FingerUI
                 _CorrespondingList = value;
                 if(!string.IsNullOrEmpty(_CorrespondingList))
                 {
-                    PockeTwit.LastSelectedItems.UnreadCountChanged += new PockeTwit.LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
+                    LastSelectedItems.UnreadCountChanged += new LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
                 }
                 else
                 {
-                    PockeTwit.LastSelectedItems.UnreadCountChanged -= new PockeTwit.LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
+                    LastSelectedItems.UnreadCountChanged -= new LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
                 }
             }
         }
@@ -94,7 +95,7 @@ namespace FingerUI
             {
                 if(!string.IsNullOrEmpty(CorrespondingList))
                 {
-                    return _TextTemplate + newItemsText(PockeTwit.LastSelectedItems.GetUnreadItems(CorrespondingList));
+                    return _TextTemplate + newItemsText(LastSelectedItems.GetUnreadItems(CorrespondingList));
                 }
                 return _TextTemplate;
             }

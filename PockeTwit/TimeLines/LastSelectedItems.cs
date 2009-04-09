@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using PockeTwit.Library;
 
-namespace PockeTwit
+namespace PockeTwit.TimeLines
 {
     internal static class LastSelectedItems
     {
@@ -43,6 +43,7 @@ namespace PockeTwit
             if (!NewestSelectedItemsDictionary.ContainsKey(ListName))
             {
                 NewestSelectedItemsDictionary.Add(ListName, selectedStatus);
+                SetUnreadCount(ListName, selectedStatus.id, specialTime);
             }
             else
             {
@@ -52,6 +53,7 @@ namespace PockeTwit
                     SetUnreadCount(ListName, selectedStatus.id, specialTime);
                 }
             }
+            
             StoreSelectedItem(ListName, selectedStatus.id);
         }
 
@@ -62,6 +64,14 @@ namespace PockeTwit
                 return UnreadItemCount[ListName];
             }
             return 0;
+        }
+
+        public static void UpdateUnreadCounts()
+        {
+            foreach (var ListName in NewestSelectedItemsDictionary.Keys)
+            {
+                SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id,null);
+            }
         }
 
         public static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
@@ -97,10 +107,7 @@ namespace PockeTwit
             {
                 return null;
             }
-            else
-            {
-                return LastSelectedItemsDictionary[ListName];
-            }
+            return LastSelectedItemsDictionary[ListName];
         }
 
         public static string GetNewestSelected(string ListName)
@@ -109,10 +116,7 @@ namespace PockeTwit
             {
                 return null;
             }
-            else
-            {
-                return NewestSelectedItemsDictionary[ListName].id;
-            }
+            return NewestSelectedItemsDictionary[ListName].id;
         }
 
         private static void StoreSelectedItem(string ListName, string ID)
@@ -127,12 +131,15 @@ namespace PockeTwit
             if (StoredItemsRoot == null)
             {
                 RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);
-                StoredItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\LastSaved");
+                if (ParentKey != null) StoredItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\LastSaved");
             }
-            string[] StoredItems = StoredItemsRoot.GetValueNames();
-            foreach (string StoredItem in StoredItems)
+            if (StoredItemsRoot != null)
             {
-                LastSelectedItemsDictionary.Add(StoredItem, (string) StoredItemsRoot.GetValue(StoredItem));
+                string[] StoredItems = StoredItemsRoot.GetValueNames();
+                foreach (string StoredItem in StoredItems)
+                {
+                    LastSelectedItemsDictionary.Add(StoredItem, (string) StoredItemsRoot.GetValue(StoredItem));
+                }
             }
         }
     }
