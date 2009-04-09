@@ -6,6 +6,10 @@ namespace PockeTwit
 {
     internal static class LastSelectedItems
     {
+        public delegate void delUnreadCountChanged(string TimeLine, int Count);
+
+        public static event delUnreadCountChanged UnreadCountChanged = delegate { };
+
         private const string StorageRoot = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
 
         private static readonly Dictionary<string, string> LastSelectedItemsDictionary =
@@ -53,14 +57,14 @@ namespace PockeTwit
 
         public static int GetUnreadItems(string ListName)
         {
-            if(!UnreadItemCount.ContainsKey(ListName))
+            if(UnreadItemCount.ContainsKey(ListName))
             {
                 return UnreadItemCount[ListName];
             }
             return 0;
         }
 
-        private static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
+        public static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
         {
             TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
             switch (ListName)
@@ -84,6 +88,7 @@ namespace PockeTwit
             {
                 UnreadItemCount[ListName] = updatedCount;
             }
+            UnreadCountChanged(ListName, updatedCount);
         }
 
         public static string GetLastSelected(string ListName)

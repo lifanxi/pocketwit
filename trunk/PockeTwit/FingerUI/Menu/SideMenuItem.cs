@@ -59,7 +59,34 @@ namespace FingerUI
             }
         }
 
-        public string CorrespondingList { get; set; }
+        private string _CorrespondingList;
+        public string CorrespondingList
+        {
+            get
+            {
+                return _CorrespondingList;
+            }
+            set
+            {
+                _CorrespondingList = value;
+                if(!string.IsNullOrEmpty(_CorrespondingList))
+                {
+                    PockeTwit.LastSelectedItems.UnreadCountChanged += new PockeTwit.LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
+                }
+                else
+                {
+                    PockeTwit.LastSelectedItems.UnreadCountChanged -= new PockeTwit.LastSelectedItems.delUnreadCountChanged(LastSelectedItems_UnreadCountChanged);
+                }
+            }
+        }
+
+        void LastSelectedItems_UnreadCountChanged(string TimeLine, int Count)
+        {
+            if(TimeLine==_CorrespondingList)
+            {
+                this.ParentMenu.IsDirty = true;
+            }
+        }
 
         public string Text
         {

@@ -558,7 +558,7 @@ namespace PockeTwit
             BackMenuItem.CanHide = true;
 
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu, "Friends_TimeLine");
-            MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu,"Messages_TimeLine");
+            MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu, "Messages_TimeLine");
             PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
             ViewFavoritesMenuItem = new FingerUI.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
@@ -612,7 +612,7 @@ namespace PockeTwit
             };
 
             GroupsMenuItem.Visible = true;
-            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu);
+            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, "Grouped_TimeLine_"+t.name);
             GroupsMenuItems.Add(item);
             GroupsMenuItem.SubMenuItems.Add(item);
         }
@@ -932,6 +932,7 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
+            PockeTwit.LastSelectedItems.SetLastSelected("Friends_TimeLine", statList.SelectedItem.Tweet);
             Notifyer.NewFriendMessages(count);
             SetMenuNumbers();
         }
@@ -941,6 +942,7 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetMessagesImmediately(), count);
             }
+            PockeTwit.LastSelectedItems.SetLastSelected("Messages_TimeLine", statList.SelectedItem.Tweet);
             Notifyer.NewMessages(count);
             SetMenuNumbers();
         }
