@@ -40,14 +40,14 @@ namespace LocalStorage
 
         private const string SQLIgnoreGrouped =
             //@" INNER JOIN usersInGroups ON statuses.userid <> usersInGroups.userid ";
-            @" AND ((SELECT COUNT(id) FROM usersInGroups WHERE usersInGroups.userid=statuses.userid ) = 0)  ";
+            @" AND ((SELECT COUNT(id) FROM usersInGroups WHERE usersInGroups.userid=statuses.userid AND usersInGroups.exclusive=1 ) = 0)  ";
 
         private const string SQLLimit = " LIMIT @count ";
         private const string SQLOrder = " ORDER BY statuses.[timestamp] DESC ";
 
         #endregion
 
-        private const string DBVersion = "0007";
+        private const string DBVersion = "0008";
         private static readonly string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -169,7 +169,8 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT IGNORE,
                             groupname NVARCHAR(50),
-                            userid VARCHAR(50))";
+                            userid VARCHAR(50),
+                            exclusive BIT)";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
