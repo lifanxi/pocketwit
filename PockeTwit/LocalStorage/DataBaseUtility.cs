@@ -167,7 +167,7 @@ namespace LocalStorage
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT IGNORE,
+                            @"CREATE TABLE IF NOT EXISTS usersInGroups (id NVARCHAR(100) PRIMARY KEY ON CONFLICT REPLACE,
                             groupname NVARCHAR(50),
                             userid VARCHAR(50),
                             exclusive BIT)";
