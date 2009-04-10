@@ -317,6 +317,7 @@ namespace LocalStorage
                 }
                 conn.Close();
             }
+            PockeTwit.ThrottledArtGrabber.ClearUnlinkedAvatars();
         }
 
         public static void SaveItems(List<status> TempLine)

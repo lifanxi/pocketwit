@@ -69,6 +69,7 @@ namespace PockeTwit
         private FingerUI.SideMenuItem AccountsSettingsMenuItem;
         private FingerUI.SideMenuItem AdvancedSettingsMenuItem;
         private FingerUI.SideMenuItem AvatarSettingsMenuItem;
+        private FingerUI.SideMenuItem GroupSettingsMenuItem;
         private FingerUI.SideMenuItem NotificationSettingsMenuItem;
         private FingerUI.SideMenuItem OtherSettingsMenuItem;
         private FingerUI.SideMenuItem UISettingsMenuItem;
@@ -660,11 +661,13 @@ namespace PockeTwit
             AccountsSettingsMenuItem = new SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
             AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
             AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
+            GroupSettingsMenuItem = new SideMenuItem(null, "Groups", statList.LeftMenu);
             NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
             OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
             UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
             SettingsMenuItem.SubMenuItems.Add(AccountsSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(AvatarSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(GroupSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(NotificationSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(UISettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(OtherSettingsMenuItem);
@@ -1231,11 +1234,14 @@ namespace PockeTwit
 
         private void ExitApplication()
         {
+            Cursor.Current = Cursors.WaitCursor;
+            LocalStorage.DataBaseUtility.CleanDB(10);
             if (Manager != null)
             {
                 Manager.ShutDown();
             }
             ThrottledArtGrabber.running = false;
+            Cursor.Current = Cursors.Default;
             this.Close();
         }
 
