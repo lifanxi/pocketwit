@@ -373,6 +373,9 @@ namespace PockeTwit
                 MessageBox.Show("Your settings changes require that you restart the application.");
                 ExitApplication();
             }
+            this.statList.Visible = true;
+            statList.Redraw();
+            f.Close();
         }
 
         private void ChangeSettings()
@@ -655,13 +658,14 @@ namespace PockeTwit
             FingerUI.delMenuClicked showNotification = () => this.ChangeSettings(new SettingsHandler.NotificationSettings());
             FingerUI.delMenuClicked showOther = () => this.ChangeSettings(new OtherSettings());
             FingerUI.delMenuClicked showUISettings = () => this.ChangeSettings(new UISettings());
+            FingerUI.delMenuClicked showGroupSettings = () => this.ChangeSettings(new SettingsHandler.GroupManagement());
 
             //SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
             SettingsMenuItem = new FingerUI.SideMenuItem(null, "Settings...", statList.LeftMenu);
             AccountsSettingsMenuItem = new SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
             AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
             AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
-            GroupSettingsMenuItem = new SideMenuItem(null, "Groups", statList.LeftMenu);
+            GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Groups", statList.LeftMenu);
             NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
             OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
             UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
