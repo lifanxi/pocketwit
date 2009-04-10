@@ -99,11 +99,6 @@ namespace PockeTwit
             }
         }
 
-        private static string CleanURL(string URL)
-        {
-            return string.IsNullOrEmpty(URL) ? null : URL.ToLower().Replace("http://", "").Replace("https://", "").Replace("bigger", "").Replace("normal","");
-        }
-
         private static Image GetBitmapFromDB(string url)
         {
             const int bufferSize = 100;
@@ -119,7 +114,7 @@ namespace PockeTwit
                 {
                     comm.CommandText =
                         "SELECT avatar FROM avatarCache WHERE url=@url;";
-                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(url)));
+                    comm.Parameters.Add(new SQLiteParameter("@url", url));
                     
                     byte[] imageData = (byte[])comm.ExecuteScalar();
                     MemoryStream stream = new MemoryStream(imageData);
@@ -177,7 +172,7 @@ namespace PockeTwit
                 {
                     comm.CommandText =
                         "SELECT url FROM avatarCache WHERE url=@url;";
-                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(url)));
+                    comm.Parameters.Add(new SQLiteParameter("@url", url));
 
                     return comm.ExecuteScalar() != null;
                 }
@@ -214,7 +209,7 @@ namespace PockeTwit
             }
             lock (BadURLs)
             {
-                BadURLs.Add(CleanURL(URL));
+                BadURLs.Add(URL);
             }
         }
 
@@ -243,7 +238,7 @@ namespace PockeTwit
             {
                 lock (BadURLs)
                 {
-                    AddBadURL(CleanURL(request));
+                    AddBadURL(request);
                     return;
                 }
             }
@@ -287,7 +282,7 @@ namespace PockeTwit
                                     comm.CommandText =
                                         "INSERT INTO avatarCache (avatar, url) VALUES (@avatar, @url);";
                                     comm.Parameters.Add(new SQLiteParameter("@avatar", blobdata));
-                                    comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(request)));
+                                    comm.Parameters.Add(new SQLiteParameter("@url", request));
                                     try
                                     {
                                         comm.ExecuteNonQuery();
