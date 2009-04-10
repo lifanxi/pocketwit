@@ -79,7 +79,7 @@ namespace PockeTwit.TimeLines
             TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
             switch (ListName)
             {
-                case "Messages_Timeline":
+                case "Messages_TimeLine":
                     t = TimelineManagement.TimeLineType.Messages;
                     break;
             }

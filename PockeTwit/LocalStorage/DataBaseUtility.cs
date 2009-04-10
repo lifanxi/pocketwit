@@ -29,7 +29,7 @@ namespace LocalStorage
 
         private const string SQLFetchReplies = "(statuses.statustypes & 1)";
 
-        private const string SQLFetchRepliesAndMessages = " statuses.statustypes & 1 OR statuses.statustypes & 2 ";
+        private const string SQLFetchRepliesAndMessages = " (statuses.statustypes & 1 OR statuses.statustypes & 2) ";
 
         private const string SQLFetchSearches = "(statuses.statustypes & 4)";
 
