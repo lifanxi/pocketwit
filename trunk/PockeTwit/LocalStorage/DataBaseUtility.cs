@@ -14,7 +14,7 @@ namespace LocalStorage
 
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
-                          FROM         statuses WHERE ";
+                          FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) AND ";
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
 
