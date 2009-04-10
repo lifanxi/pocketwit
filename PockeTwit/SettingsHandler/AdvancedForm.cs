@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace PockeTwit.SettingsHandler
 {
-    public partial class AdvancedForm : Form
+    public partial class AdvancedForm : BaseSettingsForm
     {
         public AdvancedForm()
         {

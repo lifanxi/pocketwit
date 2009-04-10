@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class AvatarSettings : Form
+    public partial class AvatarSettings : BaseSettingsForm
     {
 
         #region Constructors (1) 

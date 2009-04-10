@@ -182,12 +182,6 @@
     <Compile Include="SettingsHandler\UISettings.Designer.cs">
       <DependentUpon>UISettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingsHandler\MainSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsHandler\MainSettings.Designer.cs">
-      <DependentUpon>MainSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Sound.cs" />
     <Compile Include="Contributors.cs" />
     <Compile Include="Themes\FormColors.cs" />
@@ -471,10 +465,6 @@
       <DependentUpon>UISettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsHandler\MainSettings.resx">
-      <DependentUpon>MainSettings.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="userListControl.resx">
       <DependentUpon>userListControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -569,6 +559,12 @@
     </Compile>
     <Compile Include="SettingsHandler\AdvancedForm.Designer.cs">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\BaseSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\BaseSettingsForm.Designer.cs">
+      <DependentUpon>BaseSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsHandler\NotificationSettings.cs">
       <SubType>Form</SubType>

@@ -10,7 +10,7 @@ using Yedda;
 
 namespace PockeTwit
 {
-    public partial class OtherSettings : Form
+    public partial class OtherSettings : BaseSettingsForm
     {
 
         #region Constructors (1) 
@@ -29,12 +29,6 @@ namespace PockeTwit
         }
 
 		#endregion Constructors 
-
-		#region Properties (1) 
-
-        public bool NeedsReset { get; set; }
-
-		#endregion Properties 
 
 		#region Methods (4) 
 
