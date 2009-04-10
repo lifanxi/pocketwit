@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class UISettings : Form
+    public partial class UISettings : BaseSettingsForm
     {
         private string OriginalTheme = ClientSettings.ThemeName;
 
@@ -29,12 +29,6 @@ namespace PockeTwit
 
 		#endregion Constructors 
 
-		#region Properties (1) 
-
-        public bool NeedsReset { get; set; }
-        public bool NeedsRerender { get; set; }
-
-		#endregion Properties 
 
 		#region Methods (4) 
 
@@ -64,8 +58,8 @@ namespace PockeTwit
                 return;
             }
             if (MaxTweets != ClientSettings.MaxTweets) { NeedsReset = true; }
-            if (chkTimestamps.Checked != ClientSettings.ShowExtra) { NeedsRerender = true; }
-            if (chkScreenName.Checked != ClientSettings.IncludeUserName) { NeedsRerender = true; }
+            if (chkTimestamps.Checked != ClientSettings.ShowExtra) { this.NeedsReRender = true; }
+            if (chkScreenName.Checked != ClientSettings.IncludeUserName) { this.NeedsReRender = true; }
             
             ClientSettings.MergeMessages = chkMerge.Checked;
             ClientSettings.MaxTweets = MaxTweets;
@@ -85,7 +79,7 @@ namespace PockeTwit
             if (selectedTheme != OriginalTheme)
             {
                 ClientSettings.ThemeName = selectedTheme;
-                NeedsRerender = true;
+                this.NeedsReRender = true;
             }
             ClientSettings.LoadColors();
 

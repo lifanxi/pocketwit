@@ -66,6 +66,13 @@ namespace PockeTwit
         FingerUI.SideMenuItem PostUpdateMenuItem;
         FingerUI.SideMenuItem MapMenuItem;
         FingerUI.SideMenuItem SettingsMenuItem;
+        private FingerUI.SideMenuItem AccountsSettingsMenuItem;
+        private FingerUI.SideMenuItem AdvancedSettingsMenuItem;
+        private FingerUI.SideMenuItem AvatarSettingsMenuItem;
+        private FingerUI.SideMenuItem NotificationSettingsMenuItem;
+        private FingerUI.SideMenuItem OtherSettingsMenuItem;
+        private FingerUI.SideMenuItem UISettingsMenuItem;
+        
         FingerUI.SideMenuItem AboutMenuItem;
 
         FingerUI.SideMenuItem WindowMenuItem;
@@ -149,6 +156,8 @@ namespace PockeTwit
 
             if (ClientSettings.AccountsList.Count == 0)
             {
+                ClearSettings();
+                /*
                 // SHow Settings page first
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
                 this.lblLoading.ForeColor = ClientSettings.ForeColor;
@@ -165,7 +174,7 @@ namespace PockeTwit
                     }
                     this.Close();
                 }
-
+                */
             }
 
             if (StartBackground) { this.Hide(); }
@@ -340,8 +349,34 @@ namespace PockeTwit
             }
         }
 
+        private void ChangeSettings(BaseSettingsForm f)
+        {
+            this.statList.Visible = false;
+            IsLoaded = false;
+            if(f.ShowDialog()==DialogResult.Cancel)
+            {
+                this.statList.Visible = true;
+                IsLoaded = true;
+                return;
+            }
+            if(f.NeedsReRender)
+            {
+                statList.BackColor = ClientSettings.BackColor;
+                statList.ForeColor = ClientSettings.ForeColor;
+                PockeTwit.Themes.FormColors.SetColors(this);
+                statList.ResetFullScreenColors();
+                statList.RerenderBySize();
+            }
+            if(f.NeedsReset)
+            {
+                MessageBox.Show("Your settings changes require that you restart the application.");
+                ExitApplication();
+            }
+        }
+
         private void ChangeSettings()
         {
+            /*
             this.statList.Visible = false;
             SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
             //SettingsForm settings = new SettingsForm();
@@ -380,7 +415,7 @@ namespace PockeTwit
             }
             statList.Redraw();
             settings.Close();
-
+            */
         }
 
         private void ToggleFavorite()
@@ -611,8 +646,30 @@ namespace PockeTwit
             
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
             
-            MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
-            SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
+            //MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
+
+            FingerUI.delMenuClicked showAccounts = () => this.ChangeSettings(new AccountsForm());
+            FingerUI.delMenuClicked showAdvanced = () => this.ChangeSettings(new SettingsHandler.AdvancedForm());
+            FingerUI.delMenuClicked showAvatar = () => this.ChangeSettings(new AvatarSettings());
+            FingerUI.delMenuClicked showNotification = () => this.ChangeSettings(new SettingsHandler.NotificationSettings());
+            FingerUI.delMenuClicked showOther = () => this.ChangeSettings(new OtherSettings());
+            FingerUI.delMenuClicked showUISettings = () => this.ChangeSettings(new UISettings());
+
+            //SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
+            SettingsMenuItem = new FingerUI.SideMenuItem(null, "Settings...", statList.LeftMenu);
+            AccountsSettingsMenuItem = new SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
+            AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
+            AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
+            NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
+            OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
+            UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
+            SettingsMenuItem.SubMenuItems.Add(AccountsSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(AvatarSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(NotificationSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(UISettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(OtherSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(AdvancedSettingsMenuItem);
+
             AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
 
 
@@ -858,15 +915,7 @@ namespace PockeTwit
             catch (Exception ex)
             {
                 MessageBox.Show("Corrupt settings-- " + ex.Message + "\r\nPlease reconfigure.");
-                System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
-                ClientSettings.AccountsList.Clear();
-                SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
-                if (settings.ShowDialog() == DialogResult.Cancel)
-                {
-                    statList.Clear();
-                    Manager.ShutDown();
-                    this.Close();
-                }
+                ClearSettings();
                 ResetDictionaries();
             }
 
@@ -878,6 +927,24 @@ namespace PockeTwit
 
             return ret;
 
+        }
+
+        private void ClearSettings()
+        {
+            /* TODO -- Start with Account Settings
+            if (System.IO.File.Exists(ClientSettings.AppPath + "\\app.config"))
+            {
+                System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
+            }
+            ClientSettings.AccountsList.Clear();
+            SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
+            if (settings.ShowDialog() == DialogResult.Cancel)
+            {
+                statList.Clear();
+                Manager.ShutDown();
+                this.Close();
+            }
+             */
         }
 
         void Notifyer_MessagesNotificationClicked()
@@ -1164,7 +1231,11 @@ namespace PockeTwit
 
         private void ExitApplication()
         {
-            statList.Clear();
+            if (Manager != null)
+            {
+                Manager.ShutDown();
+            }
+            ThrottledArtGrabber.running = false;
             this.Close();
         }
 
@@ -1544,7 +1615,7 @@ namespace PockeTwit
             statList.BringToFront();
             SwitchToList("Friends_TimeLine");
             IsLoaded = true;
-            lblLoading.Text = "Please wait... re-rendering to fit orientation.";
+            lblLoading.Text = "Please wait...";
             lblTitle.Text = "PockeTwit";
             
             StartBackground = false;

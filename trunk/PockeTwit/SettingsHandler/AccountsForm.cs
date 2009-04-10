@@ -9,9 +9,8 @@ using System.Windows.Forms;
 
 namespace PockeTwit
 {
-    public partial class AccountsForm : Form
+    public partial class AccountsForm : BaseSettingsForm
     {
-        public bool IsDirty = false;
         public bool Initialized = false;
         private List<Yedda.Twitter.Account> LocalList = new List<Yedda.Twitter.Account>();
         public AccountsForm()
@@ -68,7 +67,7 @@ namespace PockeTwit
             if (ai.ShowDialog() == DialogResult.OK)
             {
                 LocalList.Add(ai.AccountInfo);
-                IsDirty = true;
+                NeedsReset = true;
                 ListAccounts();
                 ai.Close();
                 return true;
@@ -92,7 +91,7 @@ namespace PockeTwit
                 return;
             }
             this.DialogResult = DialogResult.OK;
-            if (IsDirty)
+            if (NeedsReset)
             {
                 ClientSettings.AccountsList.Clear();
                 foreach (Yedda.Twitter.Account a in LocalList)
@@ -127,7 +126,7 @@ namespace PockeTwit
                     LocalList.Remove(toEdit);
                     LocalList.Add(ai.AccountInfo);
                     ListAccounts();
-                    IsDirty = true;
+                    NeedsReset = true;
                 }
                 ai.Close();
             }
@@ -142,7 +141,7 @@ namespace PockeTwit
                 {
                     LocalList.Remove(toRemove);
                     ListAccounts();
-                    IsDirty = true;
+                    NeedsReset = true;
                 }
             }
         }

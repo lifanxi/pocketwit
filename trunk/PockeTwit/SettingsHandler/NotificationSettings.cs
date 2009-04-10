@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace PockeTwit.SettingsHandler
 {
-    public partial class NotificationSettings : Form
+    public partial class NotificationSettings : BaseSettingsForm
     {
         private struct SoundInfo
         {
