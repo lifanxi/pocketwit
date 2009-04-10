@@ -1370,17 +1370,11 @@ namespace PockeTwit
             if (statItem == null) { return; }
             CurrentlySelectedAccount = statItem.Tweet.Account;
             SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
-            UpdateRightMenu();
+            //UpdateRightMenu(); -- THIS IS DONE IN SETCONNECTEDMENUS
             UpdateHistoryPosition();
             int clickedNumber = statItem.Index + 1;
             SetLeftMenu();
-            string Constraints = null;
-            if(currentGroup!=null)
-            {
-                Constraints = currentGroup.GetConstraints();
-            }
             
-            LocalStorage.DataBaseUtility.MarkAllReadOlderThan(currentType, statItem.Tweet.id, Constraints);
             LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet);
             SetMenuNumbers();
         }
