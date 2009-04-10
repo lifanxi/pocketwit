@@ -445,6 +445,9 @@
       <DependentUpon>AvatarSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SettingsHandler\GroupManagement.resx">
+      <DependentUpon>GroupManagement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\NotificationSettings.resx">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -565,6 +568,12 @@
     </Compile>
     <Compile Include="SettingsHandler\BaseSettingsForm.Designer.cs">
       <DependentUpon>BaseSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsHandler\GroupManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsHandler\GroupManagement.Designer.cs">
+      <DependentUpon>GroupManagement.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsHandler\NotificationSettings.cs">
       <SubType>Form</SubType>
