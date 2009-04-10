@@ -120,7 +120,12 @@ namespace PockeTwit
                     comm.CommandText =
                         "SELECT avatar FROM avatarCache WHERE url=@url;";
                     comm.Parameters.Add(new SQLiteParameter("@url", CleanURL(url)));
+                    
+                    byte[] imageData = (byte[])comm.ExecuteScalar();
+                    MemoryStream stream = new MemoryStream(imageData);
 
+                    return new Bitmap(stream);
+                    /*
                     using (SQLiteDataReader r = comm.ExecuteReader())
                     {
                         while (r.Read())
@@ -144,6 +149,7 @@ namespace PockeTwit
                     }
 
                     return new Bitmap(s);
+                     */
                 }
             }
         }
@@ -344,7 +350,7 @@ namespace PockeTwit
                     }
                     t.Commit();
                 }
-                LocalStorage.DataBaseUtility.VacuumDB();
+                DataBaseUtility.VacuumDB();
             }
         }
         public static void ClearUnlinkedAvatars()

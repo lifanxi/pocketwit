@@ -14,13 +14,7 @@ namespace LocalStorage
 
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
-                          FROM         statuses WHERE isread=0 ";
-
-        private const string SQLMarkRead =
-            @"UPDATE statuses SET isread=1 WHERE isread=0 AND 
-                          (timestamp <= 
-                            (SELECT timestamp from statuses WHERE id=@id)) ";
-
+                          FROM         statuses WHERE ";
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
 
@@ -150,7 +144,6 @@ namespace LocalStorage
                             clientSource VARCHAR(50),
                             accountSummary VARCHAR(50),
                             statustypes SMALLINT(2),
-                            isread BIT DEFAULT 0,
                             UNIQUE (id) )
                                        ";
                         comm.ExecuteNonQuery();
@@ -159,10 +152,6 @@ namespace LocalStorage
                             @"CREATE INDEX IF NOT EXISTS DateINDEX ON statuses (timestamp DESC)";
                         comm.ExecuteNonQuery();
                         
-                        comm.CommandText =
-                            @"CREATE INDEX IF NOT EXISTS StatusINDEX ON statuses (isread ASC)";
-                        comm.ExecuteNonQuery();
-
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS users (id VARCHAR(50) PRIMARY KEY,
                             screenname NVARCHAR(255),
@@ -275,30 +264,6 @@ namespace LocalStorage
             return null;
         }
 
-        public static void MarkAllReadOlderThan(TimelineManagement.TimeLineType typeToGet, string ID, 
-                                                string Constraints)
-        {
-            if (ID == null)
-            {
-                return;
-            }
-            using (SQLiteConnection conn = GetConnection())
-            {
-                conn.Open();
-                using (SQLiteTransaction t = conn.BeginTransaction())
-                {
-                    string FetchQuery = SQLMarkRead;
-                    FetchQuery = FetchQuery + " AND " + AddTypeWhereClause(typeToGet) + Constraints;
-                    using (var comm = new SQLiteCommand(FetchQuery, conn))
-                    {
-                        comm.Parameters.Add(new SQLiteParameter("@id", ID));
-                        int total = comm.ExecuteNonQuery();
-                    }
-                    t.Commit();
-                }
-            }
-        }
-
         public static int CountItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
                                             string Constraints)
         {
@@ -310,8 +275,6 @@ namespace LocalStorage
             {
                 string FetchQuery = SQLCountFromCache;
                 string midClause = Constraints + AddTypeWhereClause(typeToGet);
-                if (!string.IsNullOrEmpty(midClause)) {
-                    midClause = " AND " + midClause; }
                 FetchQuery = FetchQuery + midClause + SQLOrder;
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
                 {
