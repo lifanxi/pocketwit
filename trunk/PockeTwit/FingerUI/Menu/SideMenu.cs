@@ -723,6 +723,11 @@ namespace FingerUI
                 TopOfSubMenu = this.Height/2 - (ItemsCount * ItemHeight / 2);
             }
             if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
+            int backPedal = this.Height - (TopOfSubMenu + (Item.SubMenuItems.Count * ItemHeight));
+            if(backPedal<0)
+            {
+                TopOfSubMenu = TopOfSubMenu + backPedal;
+            }
             int CurrentTop = TopOfSubMenu;
             int CurrentBottom = CurrentTop + ItemHeight;
             using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
