@@ -96,12 +96,14 @@ namespace PockeTwit
             }
         }
 
+        
         public void ShutDown()
         {
+            DismissBubbler();
             FriendsRegistryWatcher1.Dispose();
             MessagesRegistryWatcher1.Dispose();
             FriendsRegistryWatcher2.Dispose();
-            MessagesRegistryWatcher2.Dispose();
+            MessagesRegistryWatcher2.Dispose();   
         }
 
         private void CheckRegistry()
@@ -157,13 +159,18 @@ namespace PockeTwit
 
         void MessagesBubbler_LeftSoftKeyClick(object sender, EventArgs e)
         {
-            NewMessagesCount = 0;
-            NewFriendsCount = 0;
-            MessagesBubbler.Visible = false;
+            DismissBubbler();
             if (MessagesNotificationClicked != null)
             {
                 MessagesNotificationClicked();
             }
+        }
+
+        public void DismissBubbler()
+        {
+            NewMessagesCount = 0;
+            NewFriendsCount = 0;
+            MessagesBubbler.Visible = false;
         }
 
 

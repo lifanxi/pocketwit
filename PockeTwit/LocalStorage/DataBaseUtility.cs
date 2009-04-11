@@ -15,7 +15,7 @@ namespace LocalStorage
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
                           FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) ";
-
+        
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
 
         private const string SQLFetchFriends = "(statuses.statustypes == 0)";
@@ -267,6 +267,7 @@ namespace LocalStorage
         public static int CountItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
                                             string Constraints)
         {
+            //Need to EXCLUDE items exclusive to other groups
             if (ID == null)
             {
                 return 0;
@@ -276,6 +277,11 @@ namespace LocalStorage
                 string FetchQuery = SQLCountFromCache;
                 string midClause = AddTypeWhereClause(typeToGet);
                 midClause = Constraints + " AND " + midClause;
+                if (string.IsNullOrEmpty(Constraints))
+                {
+                    midClause = midClause + SQLIgnoreGrouped;
+                }
+                
                 FetchQuery = FetchQuery + midClause + SQLOrder;
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
                 {

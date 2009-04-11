@@ -1240,6 +1240,7 @@ namespace PockeTwit
         private void ExitApplication()
         {
             Cursor.Current = Cursors.WaitCursor;
+            if (Notifyer != null) { Notifyer.ShutDown(); }
             LocalStorage.DataBaseUtility.CleanDB(10);
             if (Manager != null)
             {
@@ -1716,6 +1717,7 @@ namespace PockeTwit
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1.Enabled = false;
+                Notifyer.DismissBubbler();
             }
             if (isChangingingWindowState) { return; }
             isChangingingWindowState = true;
