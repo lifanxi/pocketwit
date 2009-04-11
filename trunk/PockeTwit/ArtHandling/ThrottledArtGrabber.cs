@@ -21,13 +21,28 @@ namespace PockeTwit
 
         #endregion
 
+        public static event ArtIsReady NewArtWasDownloaded;
+
         private static readonly List<string> BadURLs = new List<string>();
         private static readonly Queue<string> Requests = new Queue<string>();
+        private static readonly Dictionary<string, Bitmap> MemCache = new Dictionary<string, Bitmap>();
 
         public static Bitmap DefaultArt;
         public static Bitmap FavoriteImage;
         public static WinCEImagingBitmap mapMarkerImage;
-        public static bool running = true;
+        private static bool _running;
+        public static bool running
+        {
+            get { return _running; }
+            set
+            {
+                if (!value)
+                {
+                    _running = false;
+                    ClearMem();
+                }
+            }
+        }
         public static Bitmap UnknownArt;
         private static Thread WorkerThread;
 
@@ -62,7 +77,14 @@ namespace PockeTwit
             DiskDefault.Dispose();
         }
 
-        public static event ArtIsReady NewArtWasDownloaded;
+        public static void ClearMem()
+        {
+            foreach (string url in MemCache.Keys)
+            {
+                MemCache[url].Dispose();
+            }
+            MemCache.Clear();
+        }
 
         public static Image GetArt(string url)
         {
@@ -74,6 +96,10 @@ namespace PockeTwit
             if (url == "http://static.twitter.com/images/default_profile_normal.png")
             {
                 return new Bitmap(DefaultArt);
+            }
+            if (MemCache.ContainsKey(url))
+            {
+                return (Bitmap)MemCache[url].Clone();
             }
             lock (BadURLs)
             {
@@ -101,11 +127,6 @@ namespace PockeTwit
 
         private static Image GetBitmapFromDB(string url)
         {
-            const int bufferSize = 100;
-            var outbyte = new byte[bufferSize];
-            long retval;
-            long startIndex = 0;
-
             using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
@@ -118,33 +139,9 @@ namespace PockeTwit
                     
                     byte[] imageData = (byte[])comm.ExecuteScalar();
                     MemoryStream stream = new MemoryStream(imageData);
-
-                    return new Bitmap(stream);
-                    /*
-                    using (SQLiteDataReader r = comm.ExecuteReader())
-                    {
-                        while (r.Read())
-                        {
-                            var writer = new BinaryWriter(s);
-
-                            retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
-                            while (retval == bufferSize)
-                            {
-                                writer.Write(outbyte);
-                                writer.Flush();
-
-                                // Reposition the start index to the end of the last buffer and fill the buffer.
-                                startIndex += bufferSize;
-                                retval = r.GetBytes(0, startIndex, outbyte, 0, bufferSize);
-                            }
-
-                            writer.Write(outbyte, 0, (int) retval);
-                            writer.Flush();
-                        }
-                    }
-
-                    return new Bitmap(s);
-                     */
+                    Bitmap b = new Bitmap(stream);
+                    MemCache.Add(url, (Bitmap)b.Clone());
+                    return b;
                 }
             }
         }
