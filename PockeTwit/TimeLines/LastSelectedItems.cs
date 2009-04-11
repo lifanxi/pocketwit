@@ -40,9 +40,13 @@ namespace PockeTwit.TimeLines
                 LastSelectedItemsDictionary.Add(ListName, "");
             }
             LastSelectedItemsDictionary[ListName] = selectedStatus.id;
+            
             if (!NewestSelectedItemsDictionary.ContainsKey(ListName))
             {
-                NewestSelectedItemsDictionary.Add(ListName, selectedStatus);
+                lock(NewestSelectedItemsDictionary)
+                {
+                    NewestSelectedItemsDictionary.Add(ListName, selectedStatus);
+                }
                 SetUnreadCount(ListName, selectedStatus.id, specialTime);
             }
             else
@@ -68,9 +72,12 @@ namespace PockeTwit.TimeLines
 
         public static void UpdateUnreadCounts()
         {
-            foreach (var ListName in NewestSelectedItemsDictionary.Keys)
+            lock (NewestSelectedItemsDictionary)
             {
-                SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id,null);
+                foreach (var ListName in NewestSelectedItemsDictionary.Keys)
+                {
+                    SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id, null);
+                }
             }
         }
 

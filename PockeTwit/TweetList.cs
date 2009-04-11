@@ -503,6 +503,7 @@ namespace PockeTwit
         private void ShowUserGroup(SpecialTimeLine t)
         {
             UpdateHistoryPosition();
+            currentGroup = t;
             ChangeCursor(Cursors.WaitCursor);
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Search;
@@ -512,7 +513,7 @@ namespace PockeTwit
             SwitchToList("Grouped_TimeLine_"+t.name);
             this.statList.ClearVisible();
             AddStatusesToList(Manager.GetGroupedTimeLine(t));
-            currentGroup = t;
+            
             ChangeCursor(Cursors.Default);
         }
 
@@ -1309,6 +1310,7 @@ namespace PockeTwit
         }
         private void ShowFavorites()
         {
+            currentGroup = null;
             ChangeCursor(Cursors.WaitCursor);
             
             SwitchToList("Favorites_TimeLine");
@@ -1321,6 +1323,7 @@ namespace PockeTwit
         }
         private void ShowPublicTimeLine()
         {
+            currentGroup = null;
             ChangeCursor(Cursors.WaitCursor);
             
             SwitchToList("Public_TimeLine");
@@ -1334,6 +1337,7 @@ namespace PockeTwit
 
         private void ShowFriendsTimeLine()
         {
+            currentGroup = null;
             ChangeCursor(Cursors.WaitCursor);
             bool Redraw = statList.CurrentList() != "Friends_TimeLine";
             SwitchToList("Friends_TimeLine");
@@ -1370,6 +1374,7 @@ namespace PockeTwit
 
         private void ShowUserTimeLine()
         {
+            currentGroup = null;
             UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
@@ -1395,6 +1400,7 @@ namespace PockeTwit
         }
         private void GetConversation(HistoryItem history)
         {
+            currentGroup = null;
             UpdateHistoryPosition();
             HistoryItem i = new HistoryItem();
             Library.status lastStatus;
@@ -1494,7 +1500,7 @@ namespace PockeTwit
             int clickedNumber = statItem.Index + 1;
             SetLeftMenu();
             
-            LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet);
+            LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet, currentGroup);
             SetMenuNumbers();
         }
 
