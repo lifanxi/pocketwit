@@ -14,7 +14,7 @@ namespace LocalStorage
 
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
-                          FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) AND ";
+                          FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) ";
 
         private const string SQLFetchDirects = "(statuses.statustypes & 2)";
 
@@ -211,7 +211,6 @@ namespace LocalStorage
             using (SQLiteConnection conn = GetConnection())
             {
                 string FetchQuery = SQLFetchFromCache;
-
                 FetchQuery = FetchQuery + " WHERE " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
 
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
@@ -275,7 +274,8 @@ namespace LocalStorage
             using (SQLiteConnection conn = GetConnection())
             {
                 string FetchQuery = SQLCountFromCache;
-                string midClause = Constraints + AddTypeWhereClause(typeToGet);
+                string midClause = AddTypeWhereClause(typeToGet);
+                midClause = Constraints + " AND " + midClause;
                 FetchQuery = FetchQuery + midClause + SQLOrder;
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
                 {

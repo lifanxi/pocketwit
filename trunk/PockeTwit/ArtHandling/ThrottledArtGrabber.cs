@@ -30,7 +30,7 @@ namespace PockeTwit
         public static Bitmap DefaultArt;
         public static Bitmap FavoriteImage;
         public static WinCEImagingBitmap mapMarkerImage;
-        private static bool _running;
+        private static bool _running = true;
         public static bool running
         {
             get { return _running; }

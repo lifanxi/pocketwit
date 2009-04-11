@@ -84,8 +84,6 @@ namespace FingerUI
         private int maxWidth = 0;
         public Portal()
         {
-          
-            
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
             pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -109,6 +107,8 @@ namespace FingerUI
             }
             catch (OutOfMemoryException ex)
             {
+                ClientSettings.UseDIB = true;
+                ClientSettings.SaveSettings();
                 if (TestMap != null)
                 {
                     TestMap.Dispose();
