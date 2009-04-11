@@ -1717,7 +1717,10 @@ namespace PockeTwit
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1.Enabled = false;
-                Notifyer.DismissBubbler();
+                if (Notifyer != null)
+                {
+                    Notifyer.DismissBubbler();
+                }
             }
             if (isChangingingWindowState) { return; }
             isChangingingWindowState = true;
