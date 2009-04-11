@@ -51,7 +51,7 @@ namespace FingerUI
         }
         #endregion
 
-        private bool useDDB = true;
+        private bool useDDB = !ClientSettings.UseDIB;
         private static List<Thread> _RenderThreads = new List<Thread>();
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };

@@ -161,6 +161,8 @@ public static class ClientSettings
         }
     }
 
+    public static bool UseDIB { get; set; }
+
     public static string CacheDir { get; set; }
     public static string MediaService { get; set; }
     public static Queue<string> SearchItems { get; set; }
@@ -228,6 +230,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseDIB"]))
+            {
+                UseDIB = Boolean.Parse(ConfigurationSettings.AppSettings["UseDIB"]);
+            }
+            else
+            {
+                UseDIB = false;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["ZoomPreview"]))
             {
                 ZoomPreview = Boolean.Parse(ConfigurationSettings.AppSettings["ZoomPreview"]);
@@ -447,6 +457,7 @@ public static class ClientSettings
 
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["UseDIB"] = UseDIB.ToString();
         ConfigurationSettings.AppSettings["ZoomPreview"] = ZoomPreview.ToString();
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
         ConfigurationSettings.AppSettings["MediaService"] = MediaService;

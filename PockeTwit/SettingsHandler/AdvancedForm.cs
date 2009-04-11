@@ -19,6 +19,21 @@ namespace PockeTwit.SettingsHandler
             {
                 this.WindowState = FormWindowState.Maximized;
             }
+            SetRenderingMethod();
+        }
+
+        private void SetRenderingMethod()
+        {
+            if (ClientSettings.UseDIB)
+            {
+                lblRenderingMethod.Text = "Using DIB";
+                chkDIB.Checked = true;
+            }
+            else
+            {
+                chkDIB.Checked = false;
+                lblRenderingMethod.Text = "Using DDB";
+            }
         }
         
         private void lnkClearCaches_Click(object sender, EventArgs e)
@@ -41,6 +56,14 @@ namespace PockeTwit.SettingsHandler
         private void menuItem1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void chkDIB_CheckStateChanged(object sender, EventArgs e)
+        {
+            ClientSettings.UseDIB = chkDIB.Checked;
+            ClientSettings.SaveSettings();
+            this.NeedsReset = true;
+            SetRenderingMethod();
         }
 
     }
