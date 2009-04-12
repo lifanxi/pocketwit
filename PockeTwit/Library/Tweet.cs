@@ -34,6 +34,20 @@ namespace PockeTwit.Library
         [XmlIgnore]
         public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
 
+        [XmlIgnore]
+        public string Serialized
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
+                {
+                    statusSerializer.Serialize(w, this);
+                }
+                return sb.ToString();
+            }
+        }
+
         public StatusTypes type
         {
             get;

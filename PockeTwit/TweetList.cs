@@ -1241,7 +1241,6 @@ namespace PockeTwit
         {
             Cursor.Current = Cursors.WaitCursor;
             if (Notifyer != null) { Notifyer.ShutDown(); }
-            LocalStorage.DataBaseUtility.CleanDB(10);
             if (Manager != null)
             {
                 Manager.ShutDown();
