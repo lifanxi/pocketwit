@@ -109,6 +109,23 @@ namespace PockeTwit
                     _Items.Remove(oldLine.name);
                 }
             }
+            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                using (SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname;";
+                        comm.Parameters.Add(new SQLiteParameter("@groupname", oldLine.name));
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "DELETE FROM groups WHERE groupname=@groupname;";
+                        comm.ExecuteNonQuery();
+                    }
+                    t.Commit();
+                }
+            }
         }
         public static void Clear()
         {
@@ -116,6 +133,23 @@ namespace PockeTwit
             {
                 _Items.Clear();
             }
+            using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
+            {
+                conn.Open();
+                using (SQLiteTransaction t = conn.BeginTransaction())
+                {
+                    using (SQLiteCommand comm = new SQLiteCommand(conn))
+                    {
+                        comm.CommandText = "DELETE FROM usersInGroups;";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "DELETE FROM groups;";
+                        comm.ExecuteNonQuery();
+                    }
+                    t.Commit();
+                }
+            }
+
         }
 
         public static void Load()

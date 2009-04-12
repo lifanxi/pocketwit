@@ -447,9 +447,22 @@ namespace FingerUI
             }
             lock (ItemsToUse)
             {
-                if (ItemsToUse.Count >= Number)
+                int realNum = 0;
+                if (ItemsToUse[0].Visible)
                 {
-                    _SelectedItem = ItemsToUse[Number];
+                    realNum = -1;
+                }
+                for (int i = 0; i < ItemsToUse.Count; i++)
+                {
+                    if (ItemsToUse[i].Visible)
+                    {
+                        realNum++;
+                    }
+                    if (realNum == Number)
+                    {
+                        _SelectedItem = ItemsToUse[i];
+                        break;
+                    }
                 }
             }
             IsDirty = true;
@@ -577,6 +590,7 @@ namespace FingerUI
         {
             int LeftPos = 0;
             string DisplayItem = Item.Text;
+            
             if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
             {
                 DisplayItem = i.ToString() + ". " + DisplayItem;
