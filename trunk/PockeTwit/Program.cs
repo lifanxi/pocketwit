@@ -94,6 +94,7 @@ namespace PockeTwit
             
             ClientSettings.LoadSettings();
             Application.Run(new TweetList(bBackGround));
+            LocalStorage.DataBaseUtility.CleanDB(10);
         }
 
 

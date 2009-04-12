@@ -10,7 +10,8 @@ namespace PockeTwit.TimeLines
 
         public static event delUnreadCountChanged UnreadCountChanged = delegate { };
 
-        private const string StorageRoot = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
+        private const string LastSavedStoragePath = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
+        private const string NewestSavedStoragePath = @"\Software\Apps\JustForFun PockeTwit\NewestSaved\";
 
         private static readonly Dictionary<string, string> LastSelectedItemsDictionary =
             new Dictionary<string, string>();
@@ -21,8 +22,9 @@ namespace PockeTwit.TimeLines
         private static readonly Dictionary<string, int> UnreadItemCount =
             new Dictionary<string, int>();
 
-        private static RegistryKey StoredItemsRoot;
-
+        private static RegistryKey LastSavedItemsRoot;
+        private static RegistryKey NewestSavedItemsRoot;
+        
         static LastSelectedItems()
         {
             LoadStoredItems();
@@ -46,6 +48,7 @@ namespace PockeTwit.TimeLines
                 lock(NewestSelectedItemsDictionary)
                 {
                     NewestSelectedItemsDictionary.Add(ListName, selectedStatus);
+                    StoreStatusInRegistry(ListName, selectedStatus);
                 }
                 SetUnreadCount(ListName, selectedStatus.id, specialTime);
             }
@@ -54,6 +57,7 @@ namespace PockeTwit.TimeLines
                 if (NewestSelectedItemsDictionary[ListName].createdAt <= selectedStatus.createdAt)
                 {
                     NewestSelectedItemsDictionary[ListName] = selectedStatus;
+                    StoreStatusInRegistry(ListName, selectedStatus);
                     SetUnreadCount(ListName, selectedStatus.id, specialTime);
                 }
             }
@@ -128,24 +132,47 @@ namespace PockeTwit.TimeLines
 
         private static void StoreSelectedItem(string ListName, string ID)
         {
-            StoredItemsRoot.SetValue(ListName, ID, RegistryValueKind.String);
+            LastSavedItemsRoot.SetValue(ListName, ID, RegistryValueKind.String);
+        }
+        private static void StoreStatusInRegistry(string ListName, status Item)
+        {
+            NewestSavedItemsRoot.SetValue(ListName, Item.Serialized);
         }
 
 
         private static void LoadStoredItems()
         {
-            StoredItemsRoot = Registry.CurrentUser.OpenSubKey(StorageRoot, true);
-            if (StoredItemsRoot == null)
+            LastSavedItemsRoot = Registry.LocalMachine.OpenSubKey(LastSavedStoragePath, true);
+            NewestSavedItemsRoot = Registry.LocalMachine.OpenSubKey(NewestSavedStoragePath, true);
+            
+            
+            if (LastSavedItemsRoot == null)
             {
                 RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);
-                if (ParentKey != null) StoredItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\LastSaved");
+                if (ParentKey != null) LastSavedItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\LastSaved");
             }
-            if (StoredItemsRoot != null)
+            if (LastSavedItemsRoot != null)
             {
-                string[] StoredItems = StoredItemsRoot.GetValueNames();
+                string[] StoredItems = LastSavedItemsRoot.GetValueNames();
                 foreach (string StoredItem in StoredItems)
                 {
-                    LastSelectedItemsDictionary.Add(StoredItem, (string) StoredItemsRoot.GetValue(StoredItem));
+                    LastSelectedItemsDictionary.Add(StoredItem, (string) LastSavedItemsRoot.GetValue(StoredItem));
+                }
+            }
+
+            if (NewestSavedItemsRoot == null)
+            {
+                RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);
+                if (ParentKey != null) NewestSavedItemsRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\NewestSaved");
+            }
+            if (NewestSavedItemsRoot != null)
+            {
+                string[] StoredItems = NewestSavedItemsRoot.GetValueNames();
+                foreach (string StoredItem in StoredItems)
+                {
+                    string SerializedItem = (string)NewestSavedItemsRoot.GetValue(StoredItem);
+                    status Deserialized = status.DeserializeSingle(SerializedItem, null);
+                    NewestSelectedItemsDictionary.Add(StoredItem, Deserialized);
                 }
             }
         }
