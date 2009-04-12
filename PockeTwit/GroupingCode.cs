@@ -35,7 +35,24 @@ namespace PockeTwit
             {
                 Terms = new groupTerm[] { newTerm };
             }
-            
+        }
+        public void RemoveItem(string Term)
+        {
+            List<groupTerm> items = new List<groupTerm>(Terms);
+            groupTerm toRemove = new groupTerm();
+            foreach (groupTerm t in items)
+            {
+                if (t.Term == Term)
+                {
+                    toRemove = t;
+                }
+            }
+            if (items.Contains(toRemove))
+            {
+                items.Remove(toRemove);
+            }
+            Terms = items.ToArray();
+            SpecialTimeLines.Save();
         }
 
         public string GetConstraints()
