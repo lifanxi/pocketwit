@@ -32,7 +32,12 @@ namespace PockeTwit.TimeLines
 
         public static void SetLastSelected(string ListName, status selectedStatus)
         {
-            SetLastSelected(ListName,selectedStatus,null);
+            SpecialTimeLine t = null;
+            if (ListName.StartsWith("Grouped_TimeLine_"))
+            {
+                t = SpecialTimeLines.GetFromName(ListName);
+            }
+            SetLastSelected(ListName,selectedStatus,t);
         }
 
         public static void SetLastSelected(string ListName, status selectedStatus, SpecialTimeLine specialTime)
@@ -78,9 +83,22 @@ namespace PockeTwit.TimeLines
         {
             lock (NewestSelectedItemsDictionary)
             {
-                foreach (var ListName in NewestSelectedItemsDictionary.Keys)
+                if (NewestSelectedItemsDictionary.ContainsKey("Friends_TimeLine"))
                 {
-                    SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id, null);
+                    SetUnreadCount("Friends_TimeLine", NewestSelectedItemsDictionary["Friends_TimeLine"].id, null);
+                }
+                if (NewestSelectedItemsDictionary.ContainsKey("Messages_TimeLine"))
+                {
+                    SetUnreadCount("Messages_TimeLine", NewestSelectedItemsDictionary["Messages_TimeLine"].id, null);
+                }
+
+                foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+                {
+                    string ListName = "Grouped_TimeLine_" + t.name;
+                    if (NewestSelectedItemsDictionary.ContainsKey(ListName))
+                    {
+                        SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id, t);
+                    }
                 }
             }
         }
@@ -175,6 +193,7 @@ namespace PockeTwit.TimeLines
                     NewestSelectedItemsDictionary.Add(StoredItem, Deserialized);
                 }
             }
+            UpdateUnreadCounts();
         }
     }
 }

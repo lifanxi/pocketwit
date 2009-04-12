@@ -173,5 +173,18 @@ namespace PockeTwit
                 }
             }
         }
+
+        internal static SpecialTimeLine GetFromName(string ListName)
+        {
+            SpecialTimeLine ret = null;
+            foreach (SpecialTimeLine t in GetList())
+            {
+                if ("Grouped_TimeLine_" + t.name == ListName)
+                {
+                    ret = t;
+                }
+            }
+            return ret;
+        }
     }
 }
