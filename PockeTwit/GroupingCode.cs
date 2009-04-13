@@ -13,12 +13,14 @@ namespace PockeTwit
         public struct groupTerm
         {
             public string Term;
+            public string Name;
             public bool Exclusive;
         }
         
         public string name { get; set; }
         public groupTerm[] Terms { get; set; }
 
+        
         public void AddItem(string Term, bool Exclusive)
         {
             groupTerm newTerm = new groupTerm() { Term = Term, Exclusive = Exclusive };

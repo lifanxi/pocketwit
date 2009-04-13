@@ -52,6 +52,13 @@ namespace PockeTwit.SettingsHandler
                 nameLabel.Top = topOflabel;
                 nameLabel.Height = ClientSettings.TextSize + 5;
                 pnlUsers.Controls.Add(nameLabel);
+                
+                CheckBox chkExclusive = new CheckBox();
+                chkExclusive.Left = nameLabel.Right + 5;
+                chkExclusive.Top = nameLabel.Top;
+                chkExclusive.Checked = gt.Exclusive;
+                pnlUsers.Controls.Add(chkExclusive);
+
                 topOflabel = nameLabel.Bottom + 5;
             }
         }
