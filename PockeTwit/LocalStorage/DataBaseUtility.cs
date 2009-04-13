@@ -12,6 +12,7 @@ namespace LocalStorage
     {
         #region SQL Constants
 
+        private const string SQLGetUserName = "SELECT screenname FROM users where id=@id;";
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
                           FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) ";
@@ -193,6 +194,21 @@ namespace LocalStorage
             catch (Exception ex)
             {
             }
+        }
+
+        public static string GetUserNameForID(string ID)
+        {
+            string id = "";
+            using(SQLiteConnection conn = GetConnection())
+            {
+                using (SQLiteCommand comm = new SQLiteCommand(SQLGetUserName, conn))
+                {
+                    conn.Open();
+                    comm.Parameters.Add(new SQLiteParameter("@id", ID));
+                    id = (string)comm.ExecuteScalar();
+                }
+            }
+            return id;
         }
 
         public static List<status> GetList(TimelineManagement.TimeLineType typeToGet, int Count)

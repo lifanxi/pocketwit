@@ -10,7 +10,7 @@ namespace PockeTwit
 {
     public class SpecialTimeLine
     {
-        public struct groupTerm
+        public class groupTerm
         {
             public string Term;
             public string Name;
@@ -21,9 +21,9 @@ namespace PockeTwit
         public groupTerm[] Terms { get; set; }
 
         
-        public void AddItem(string Term, bool Exclusive)
+        public void AddItem(string Term, string ScreenName, bool Exclusive)
         {
-            groupTerm newTerm = new groupTerm() { Term = Term, Exclusive = Exclusive };
+            groupTerm newTerm = new groupTerm() { Term = Term, Name = ScreenName, Exclusive = Exclusive };
             if (Terms != null && Terms.Length > 0)
             {
                 List<groupTerm> items = new List<groupTerm>(Terms);
@@ -56,6 +56,7 @@ namespace PockeTwit
             Terms = items.ToArray();
             SpecialTimeLines.Save();
         }
+        
 
         public string GetConstraints()
         {
@@ -169,7 +170,7 @@ namespace PockeTwit
                 conn.Open();
                 using (SQLiteCommand comm = new SQLiteCommand(conn))
                 {
-                    comm.CommandText = "SELECT groupname, userid, exclusive FROM usersInGroups";
+                    comm.CommandText = "SELECT groupname, userid, exclusive, users.screenname FROM usersInGroups INNER JOIN users ON usersInGroups.userid = users.id";
                     using (SQLiteDataReader r = comm.ExecuteReader())
                     {
                         while (r.Read())
@@ -177,6 +178,7 @@ namespace PockeTwit
                             string groupName = r.GetString(0);
                             string userID = r.GetString(1);
                             bool exclusive = r.GetBoolean(2);
+                            string screenName = r.GetString(3);
                             SpecialTimeLine thisLine = new SpecialTimeLine();
                             if (_Items.ContainsKey(groupName))
                             {
@@ -187,7 +189,7 @@ namespace PockeTwit
                                 thisLine.name = groupName;
                                 Add(thisLine);
                             }
-                            thisLine.AddItem(userID,exclusive);
+                            thisLine.AddItem(userID,screenName, exclusive);
                         }
                     }
                 }
@@ -213,7 +215,12 @@ namespace PockeTwit
                                     comm.Parameters.Add(new SQLiteParameter("@name", group.name));
 
                                     comm.ExecuteNonQuery();
-                                    
+
+                                    comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname";
+                                    comm.Parameters.Add(new SQLiteParameter("@groupname", group.name));
+                                    comm.ExecuteNonQuery();
+                                    comm.Parameters.Clear();
+
                                     foreach (SpecialTimeLine.groupTerm groupItem in group.Terms)
                                     {
                                         comm.Parameters.Clear();
