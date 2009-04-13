@@ -460,19 +460,7 @@ namespace PockeTwit
                         }
                         TempLine.Sort();
                     }
-                    /*
-                    if (ClientSettings.MergeMessages)
-                    {
-                        TempLine = new List<PockeTwit.Library.status>();
-                        GetMessagesList(TempLine);
-                        NewItems = NewItems + TimeLines[TimeLineType.Friends].MergeIn(TempLine);
-                        int TossNumber = TimeLines[TimeLineType.Messages].MergeIn(TempLine);
-                        SaveStatuses(TimeLines[TimeLineType.Messages].ToArray(), "Messages");
-                        TempLine.Clear();
-                        TempLine.TrimExcess();
-                        
-                    }
-                     */
+                    //TODO -- NewItems in raised event don't take into account filters
                     if (FriendsUpdated != null && NewItems > 0)
                     {
                         if (Notify)

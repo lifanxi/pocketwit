@@ -362,7 +362,7 @@ namespace PockeTwit
                     }
                     t.Commit();
                 }
-                LocalStorage.DataBaseUtility.VacuumDB();
+                //LocalStorage.DataBaseUtility.VacuumDB();
             }
         }
     }
