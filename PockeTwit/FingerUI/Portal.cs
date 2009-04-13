@@ -56,6 +56,8 @@ namespace FingerUI
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
         public event delNewImage Panic = delegate { };
+        public delegate void delProgress(int itemnumber, int totalnumber);
+        public event delProgress Progress = delegate{ };
 
         private volatile bool cancelMyCurrentThread = false;
         
@@ -358,6 +360,7 @@ namespace FingerUI
                         {
                             try
                             {
+                                int itemsDrawn = 1;
                                 int StartItem = Math.Max(WindowOffset / ClientSettings.ItemHeight, 0);
                                 int EndItem = StartItem + 4;
                                 if (EndItem > Items.Count)
@@ -372,6 +375,7 @@ namespace FingerUI
                                     if (!cancelMyCurrentThread)
                                     {
                                         DrawSingleItem(i, g);
+                                        itemsDrawn = reportProgress(itemsDrawn);
                                     }
                                 }
                                 for (int i = 0; i < StartItem; i++)
@@ -379,6 +383,7 @@ namespace FingerUI
                                     if (!cancelMyCurrentThread)
                                     {
                                         DrawSingleItem(i, g);
+                                        itemsDrawn = reportProgress(itemsDrawn);
                                     }
                                 }
                                 for (int i = EndItem; i < Items.Count; i++)
@@ -386,6 +391,7 @@ namespace FingerUI
                                     if (!cancelMyCurrentThread)
                                     {
                                         DrawSingleItem(i, g);
+                                        itemsDrawn = reportProgress(itemsDrawn);
                                     }
                                 }
 
@@ -416,6 +422,13 @@ namespace FingerUI
                 Rerender();
                 //throw new LowMemoryException();
             }
+        }
+
+        private int reportProgress(int itemsDrawn)
+        {
+            Progress(itemsDrawn, Items.Count);
+            itemsDrawn++;
+            return itemsDrawn;
         }
 
         private void PanicMode()

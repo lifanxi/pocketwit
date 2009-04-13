@@ -9,7 +9,6 @@ namespace PockeTwit
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Label lblLoading;
         private System.Windows.Forms.Label lblTitle;
         private FingerUI.KListControl statList;
         
@@ -46,11 +45,11 @@ namespace PockeTwit
         private void InitializeComponent()
         {
             this.lblTitle = new System.Windows.Forms.Label();
-            this.lblLoading = new System.Windows.Forms.Label();
-            this.statList = new FingerUI.KListControl();
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.globalMenu = new System.Windows.Forms.MenuItem();
             this.specificMenu = new System.Windows.Forms.MenuItem();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.statList = new FingerUI.KListControl();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -63,29 +62,7 @@ namespace PockeTwit
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(240, 31);
             this.lblTitle.Text = "Launching PockeTwit";
-            // 
-            // lblLoading
-            // 
-            this.lblLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblLoading.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular);
-            this.lblLoading.ForeColor = System.Drawing.Color.LightGray;
-            this.lblLoading.Location = new System.Drawing.Point(0, 31);
-            this.lblLoading.Name = "lblLoading";
-            this.lblLoading.Size = new System.Drawing.Size(240, 237);
-            this.lblLoading.Text = "Loading. . .";
-            // 
-            // statList
-            // 
-            this.statList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.statList.Location = new System.Drawing.Point(0, 0);
-            this.statList.Name = "statList";
-            this.statList.Size = new System.Drawing.Size(240, 268);
-            this.statList.TabIndex = 0;
-            this.statList.Visible = false;
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // mainMenu1
             // 
@@ -102,14 +79,33 @@ namespace PockeTwit
             this.specificMenu.Text = "Specific";
             this.specificMenu.Click += new System.EventHandler(this.specificMenu_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(23, 34);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(193, 15);
+            // 
+            // statList
+            // 
+            this.statList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.statList.Location = new System.Drawing.Point(0, 0);
+            this.statList.Name = "statList";
+            this.statList.Size = new System.Drawing.Size(240, 268);
+            this.statList.TabIndex = 0;
+            this.statList.Visible = false;
+            // 
             // TweetList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblLoading);
             this.Controls.Add(this.statList);
             this.Name = "TweetList";
             this.Text = "PockeTwit";
@@ -124,6 +120,7 @@ namespace PockeTwit
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem globalMenu;
         private System.Windows.Forms.MenuItem specificMenu;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
