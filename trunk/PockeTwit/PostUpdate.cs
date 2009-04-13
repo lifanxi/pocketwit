@@ -780,8 +780,6 @@ namespace PockeTwit
                 }
             }
             
-            Program.LastStatus = this.StatusText;
-
             bool Success = PostTheUpdate();
             Cursor.Current = Cursors.Default;
             if (Success)
