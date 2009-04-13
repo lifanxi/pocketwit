@@ -117,13 +117,13 @@ namespace LocalStorage
                         conn.Open();
                         SQLiteTransaction t = conn.BeginTransaction();
 
-                        comm.CommandText = "PRAGMA auto-vacuum=2;";
+                        comm.CommandText = "PRAGMA auto_vacuum=2;";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText = "PRAGMA locking_mode=EXCLUSIVE; ";
                         comm.ExecuteNonQuery();
 
-                        comm.CommandText = "PRAGMA journal_mode = OFF; ";
+                        comm.CommandText = "PRAGMA journal_mode=OFF; ";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText =

@@ -196,6 +196,7 @@ namespace PockeTwit
                 progressBar1.Visible = false;
                 return;
             }
+            lblProgress.Visible = false;
             lblTitle.Visible = true;
             progressBar1.Visible = true;
             progressBar1.Maximum = totalnumber;
@@ -1048,6 +1049,9 @@ namespace PockeTwit
 
         void Manager_Progress(int percentage, string Status)
         {
+            lblProgress.Visible = true;
+            lblProgress.Text = Status;
+            progressBar1.Visible = false;
             Application.DoEvents();
         }
 

@@ -73,21 +73,20 @@ namespace PockeTwit
 
         public void Startup(List<Yedda.Twitter> TwitterConnectionsToFollow)
         {
-            Progress(0, "Starting");
+            
             TwitterConnections = TwitterConnectionsToFollow;
-            Progress(0, "Loading Cache");
-
+            
             if (LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets).Count > 0)
             {
                 CompleteLoaded();
             }
             else
             {
-                Progress(0, "Fetching Friends TimeLine");
+                Progress(0, "The first run takes a while.");
                 GetFriendsTimeLine();
                 if (!ClientSettings.MergeMessages)
                 {
-                    Progress(0, "Fetching Messages TimeLine");
+                    Progress(0, "Just a bit longer.");
                     GetMessagesTimeLine();
                 }
                 CompleteLoaded();

@@ -50,6 +50,7 @@ namespace PockeTwit
             this.specificMenu = new System.Windows.Forms.MenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.statList = new FingerUI.KListControl();
+            this.lblProgress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -98,12 +99,20 @@ namespace PockeTwit
             this.statList.TabIndex = 0;
             this.statList.Visible = false;
             // 
+            // lblProgress
+            // 
+            this.lblProgress.Location = new System.Drawing.Point(4, 35);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(233, 20);
+            this.lblProgress.Visible = false;
+            // 
             // TweetList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.statList);
@@ -121,6 +130,7 @@ namespace PockeTwit
         private System.Windows.Forms.MenuItem globalMenu;
         private System.Windows.Forms.MenuItem specificMenu;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblProgress;
     }
 }
 
