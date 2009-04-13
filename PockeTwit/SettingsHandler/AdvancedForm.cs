@@ -66,5 +66,15 @@ namespace PockeTwit.SettingsHandler
             SetRenderingMethod();
         }
 
+        private void lblCompact_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Compacting the database may take a few minutes.\n\nProcees?", "Compact Database", MessageBoxButtons.YesNo,MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                LocalStorage.DataBaseUtility.VacuumDB();
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
     }
 }
