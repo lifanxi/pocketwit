@@ -443,9 +443,13 @@ namespace PockeTwit
                     int NewItems = 0;
                     if (TempLine.Count > 0)
                     {
-                        //NewItems = TimeLines[TimeLineType.Friends].MergeIn(TempLine);
                         
                         NewItems = TempLine.Count;
+                        //Don't count items that were excluded from main friends timeline.
+                        foreach (Library.status s in TempLine)
+                        {
+                            if (SpecialTimeLines.UserIsExcluded(s.user.id)) { NewItems--; }
+                        }
                         int ItemsFromCache = ClientSettings.MaxTweets - NewItems;
 
                         if (ItemsFromCache > 0)
@@ -459,8 +463,8 @@ namespace PockeTwit
                             LocalStorage.DataBaseUtility.SaveItems(TempLine);
                         }
                         TempLine.Sort();
+                       
                     }
-                    //TODO -- NewItems in raised event don't take into account filters
                     if (FriendsUpdated != null && NewItems > 0)
                     {
                         if (Notify)

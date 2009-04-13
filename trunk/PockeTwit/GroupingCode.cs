@@ -232,6 +232,24 @@ namespace PockeTwit
             }
         }
 
+        public static bool UserIsExcluded(string term)
+        {
+            lock (_Items)
+            {
+                foreach (SpecialTimeLine t in _Items.Values)
+                {
+                    foreach (SpecialTimeLine.groupTerm groupterm in t.Terms)
+                    {
+                        if (groupterm.Term == term && groupterm.Exclusive)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         internal static SpecialTimeLine GetFromName(string ListName)
         {
             SpecialTimeLine ret = null;
