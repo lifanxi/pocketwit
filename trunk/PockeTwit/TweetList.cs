@@ -153,6 +153,7 @@ namespace PockeTwit
 
             PockeTwit.Themes.FormColors.SetColors(this);
             Application.DoEvents();
+            statList.Progress += new KListControl.delProgress(statList_Progress);
             SpecialTimeLines.Load();
 
             if (ClientSettings.AccountsList.Count == 0)
@@ -161,7 +162,6 @@ namespace PockeTwit
                 /*
                 // SHow Settings page first
                 SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
-                this.lblLoading.ForeColor = ClientSettings.ForeColor;
                 this.BackColor = ClientSettings.BackColor;
                 this.ForeColor = ClientSettings.ForeColor;
 
@@ -189,6 +189,13 @@ namespace PockeTwit
                 return;
             }
             SwitchToDone();
+        }
+
+        void statList_Progress(int itemnumber, int totalnumber)
+        {
+            progressBar1.Maximum = totalnumber;
+            progressBar1.Minimum = 0;
+            progressBar1.Value = itemnumber;
         }
 
         private void AddMainMenuItems()
@@ -999,7 +1006,6 @@ namespace PockeTwit
             }
             else
             {
-                lblLoading.Text = "Preparing UI";
                 Application.DoEvents();
                 statList.SwitchTolist("Friends_TimeLine");
 
@@ -1017,7 +1023,6 @@ namespace PockeTwit
 
         void Manager_Progress(int percentage, string Status)
         {
-            lblLoading.Text = Status;
             Application.DoEvents();
         }
 
@@ -1619,7 +1624,6 @@ namespace PockeTwit
         private void SwitchToDone()
         {
 
-            //lblLoading.Visible = false;
             //lblTitle.Visible = false;
 
             GlobalEventHandler.setPid();
@@ -1631,7 +1635,6 @@ namespace PockeTwit
             statList.BringToFront();
             SwitchToList("Friends_TimeLine");
             IsLoaded = true;
-            lblLoading.Text = "Please wait...";
             lblTitle.Text = "PockeTwit";
             
             StartBackground = false;

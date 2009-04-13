@@ -13,6 +13,9 @@ namespace FingerUI
         private FullScreenTweet fsDisplay = new FullScreenTweet();
         private System.Threading.Timer animationTimer;
         private System.Threading.Timer errorTimer;
+        public delegate void delProgress(int itemnumber, int totalnumber);
+
+        public event delProgress Progress = delegate { };
 
         private delegate void delPaint();
 
@@ -143,6 +146,7 @@ namespace FingerUI
             PockeTwit.GlobalEventHandler.TimeLineFetching += new PockeTwit.GlobalEventHandler.delTimelineIsFetching(GlobalEventHandler_TimeLineFetching);
 
             SlidingPortal.NewImage += new Portal.delNewImage(SlidingPortal_NewImage);
+            SlidingPortal.Progress += new Portal.delProgress(SlidingPortal_Progress);
             SlidingPortal.Panic += new Portal.delNewImage(SlidingPortal_Panic);
             m_velocity.StoppedMoving += new Velocity.delStoppedMoving(m_velocity_StoppedMoving);
 
@@ -152,6 +156,11 @@ namespace FingerUI
 
             PockeTwit.GlobalEventHandler.ShowErrorMessage += new PockeTwit.GlobalEventHandler.delshowErrorMessage(GlobalEventHandler_ShowErrorMessage);
             this.LostFocus += new EventHandler(KListControl_LostFocus);
+        }
+
+        void SlidingPortal_Progress(int itemnumber, int totalnumber)
+        {
+            Progress(itemnumber, totalnumber);
         }
 
         void SlidingPortal_Panic()
@@ -271,7 +280,7 @@ namespace FingerUI
 		#region Properties (19) 
         
         private Point OldSize;
-
+        private bool _FirstView = true;
         private bool _Visible;
         public new bool Visible
         {
@@ -285,10 +294,14 @@ namespace FingerUI
                 {
                     fsDisplay.Visible = false;
                 }
-
+                
                 if (value && !_Visible)
                 {
-                    if (OldSize != new Point(this.Width, this.Height))
+                    if (_FirstView)
+                    {
+                        _FirstView = false;
+                    }
+                    else if (OldSize != new Point(this.Width, this.Height))
                     {
                         Application.DoEvents();
                         RerenderBySize();
