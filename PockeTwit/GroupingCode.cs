@@ -15,7 +15,7 @@ namespace PockeTwit
             public string Term;
             public bool Exclusive;
         }
-
+        
         public string name { get; set; }
         public groupTerm[] Terms { get; set; }
 
@@ -71,6 +71,13 @@ namespace PockeTwit
 
             return ret;
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+
     }
 
     public static class SpecialTimeLines
