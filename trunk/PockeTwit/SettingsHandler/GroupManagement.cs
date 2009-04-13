@@ -61,15 +61,17 @@ namespace PockeTwit.SettingsHandler
             int topOflabel = lblName.Bottom+5;
             foreach (SpecialTimeLine.groupTerm gt in t.Terms)
             {
+                SpecialTimeLine.groupTerm gt1 = gt;
                 LinkLabel nameLabel = new LinkLabel();
-                nameLabel.Click += ((o,e1) => DeleteItem(t, gt));
+                nameLabel.Click += ((o,e1) => DeleteItem(t, gt1));
                 nameLabel.Text = gt.Name;
                 nameLabel.Top = topOflabel;
                 nameLabel.Height = ClientSettings.TextSize + 5;
                 pnlUsers.Controls.Add(nameLabel);
                 
                 CheckBox chkExclusive = new CheckBox();
-                chkExclusive.Click += ((o, e1) => ToggleExclusive(t, gt, chkExclusive));
+                
+                chkExclusive.Click += ((o, e1) => ToggleExclusive(t, gt1, chkExclusive));
                 chkExclusive.Left = nameLabel.Right + 5;
                 chkExclusive.Top = nameLabel.Top;
                 chkExclusive.Checked = gt.Exclusive;
