@@ -48,7 +48,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0008";
+        private const string DBVersion = "0009";
         private static readonly string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -117,6 +117,15 @@ namespace LocalStorage
                         conn.Open();
                         SQLiteTransaction t = conn.BeginTransaction();
 
+                        comm.CommandText = "PRAGMA auto-vacuum=2;";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "PRAGMA locking_mode=EXCLUSIVE; ";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText = "PRAGMA journal_mode = OFF; ";
+                        comm.ExecuteNonQuery();
+
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS DBProperties (name VARCHAR(50) PRIMARY KEY,
                             value NVARCHAR(255))
@@ -180,11 +189,7 @@ namespace LocalStorage
                                      url VARCHAR(255) PRIMARY KEY NOT NULL )";
                         comm.ExecuteNonQuery();
 
-                        comm.CommandText = "PRAGMA locking_mode=EXCLUSIVE; ";
-                        comm.ExecuteNonQuery();
-
-                        comm.CommandText = "PRAGMA journal_mode = OFF; ";
-                        comm.ExecuteNonQuery();
+                        
 
                         t.Commit();
                         conn.Close();
