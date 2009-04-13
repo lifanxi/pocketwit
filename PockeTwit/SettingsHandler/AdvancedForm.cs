@@ -68,7 +68,7 @@ namespace PockeTwit.SettingsHandler
 
         private void lblCompact_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Compacting the database may take a few minutes.\n\nProcees?", "Compact Database", MessageBoxButtons.YesNo,MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            if (MessageBox.Show("Compacting the database may take a few minutes.\n\nProceed?", "Compact Database", MessageBoxButtons.YesNo,MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 LocalStorage.DataBaseUtility.VacuumDB();
