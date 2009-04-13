@@ -59,8 +59,7 @@ namespace PockeTwit
         FingerUI.SideMenuItem ViewFavoritesMenuItem;
         FingerUI.SideMenuItem MergedTimeLineMenuItem;
         FingerUI.SideMenuItem GroupsMenuItem;
-        List<FingerUI.SideMenuItem> GroupsMenuItems = new List<FingerUI.SideMenuItem>();
-
+        
         FingerUI.SideMenuItem TimeLinesMenuItem;
 
         FingerUI.SideMenuItem PostUpdateMenuItem;
@@ -99,7 +98,6 @@ namespace PockeTwit
         FingerUI.SideMenuItem CopyToGroupMenuItem;
         private FingerUI.SideMenuItem CopyNewGroupMenuItem;
         private FingerUI.SideMenuItem MoveNewGroupMenuItem;
-        List<FingerUI.SideMenuItem> AddGroupsMenuItems = new List<FingerUI.SideMenuItem>();
         #endregion
         #endregion MenuItems
 
@@ -192,6 +190,12 @@ namespace PockeTwit
 
         void statList_Progress(int itemnumber, int totalnumber)
         {
+            if (itemnumber >= totalnumber)
+            {
+                lblTitle.Visible = false;
+                progressBar1.Visible = false;
+                return;
+            }
             lblTitle.Visible = true;
             progressBar1.Visible = true;
             progressBar1.Maximum = totalnumber;
@@ -372,7 +376,10 @@ namespace PockeTwit
             {
                 statList.BackColor = ClientSettings.BackColor;
                 statList.ForeColor = ClientSettings.ForeColor;
+                CreateRightMenu();
+                CreateLeftMenu();
                 PockeTwit.Themes.FormColors.SetColors(this);
+                ReloadTimeLine();
                 statList.ResetFullScreenColors();
                 statList.RerenderBySize();
             }
@@ -549,15 +556,31 @@ namespace PockeTwit
             }
             if (MessageBox.Show(Message, "Group " + selectedItem.Tweet.user.screen_name, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                t.AddItem(selectedItem.Tweet.user.id, Exclusive);
+                t.AddItem(selectedItem.Tweet.user.id, selectedItem.Tweet.user.screen_name, Exclusive);
                 SpecialTimeLines.Save();
             }
             if(Exclusive)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                AddStatusesToList(Manager.GetFriendsImmediately());
+                ReloadTimeLine();
                 Cursor.Current = Cursors.Default;
             }
+        }
+
+        private void ReloadTimeLine()
+        {
+            if(statList.CurrentList()=="Friends_TimeLine")
+            {
+                AddStatusesToList(Manager.GetFriendsImmediately());
+            }
+            else
+            {
+                if(statList.CurrentList().StartsWith("Grouped"))
+                {
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup));
+                }
+            }
+            
         }
 
         private void ToggleFollow()
@@ -650,11 +673,7 @@ namespace PockeTwit
             GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
             GroupsMenuItem.Visible = false;
             //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
-            foreach(SpecialTimeLine t in SpecialTimeLines.GetList())
-            {
-                AddGroupSelectMenuItem(t);
-            }
-
+            
             
             
             PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
@@ -675,6 +694,7 @@ namespace PockeTwit
             AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
             AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
             GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Groups", statList.LeftMenu);
+            GroupSettingsMenuItem.Visible = false;
             NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
             OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
             UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
@@ -698,13 +718,14 @@ namespace PockeTwit
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
 
+            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+            {
+                AddGroupSelectMenuItem(t);
+            }
+
 
             statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
             AboutMenuItem, WindowMenuItem, ExitMenuItem});
-            /*
-            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SearchMenuItem, MapMenuItem, SettingsMenuItem,
-                AboutMenuItem, ExitMenuItem});
-             */
         }
 
         private void AddGroupSelectMenuItem(SpecialTimeLine t)
@@ -715,8 +736,8 @@ namespace PockeTwit
             };
 
             GroupsMenuItem.Visible = true;
+            GroupSettingsMenuItem.Visible = true;
             FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, "Grouped_TimeLine_"+t.name);
-            GroupsMenuItems.Add(item);
             GroupsMenuItem.SubMenuItems.Add(item);
         }
 
