@@ -35,6 +35,7 @@
             this.lnkClearSettings = new System.Windows.Forms.LinkLabel();
             this.chkDIB = new System.Windows.Forms.CheckBox();
             this.lblRenderingMethod = new System.Windows.Forms.Label();
+            this.lblCompact = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -66,7 +67,7 @@
             // 
             // chkDIB
             // 
-            this.chkDIB.Location = new System.Drawing.Point(0, 67);
+            this.chkDIB.Location = new System.Drawing.Point(-1, 96);
             this.chkDIB.Name = "chkDIB";
             this.chkDIB.Size = new System.Drawing.Size(161, 20);
             this.chkDIB.TabIndex = 3;
@@ -75,10 +76,19 @@
             // 
             // lblRenderingMethod
             // 
-            this.lblRenderingMethod.Location = new System.Drawing.Point(4, 44);
+            this.lblRenderingMethod.Location = new System.Drawing.Point(3, 73);
             this.lblRenderingMethod.Name = "lblRenderingMethod";
             this.lblRenderingMethod.Size = new System.Drawing.Size(100, 20);
             this.lblRenderingMethod.Text = "lblDI";
+            // 
+            // lblCompact
+            // 
+            this.lblCompact.Location = new System.Drawing.Point(3, 40);
+            this.lblCompact.Name = "lblCompact";
+            this.lblCompact.Size = new System.Drawing.Size(233, 20);
+            this.lblCompact.TabIndex = 4;
+            this.lblCompact.Text = "Compact Database";
+            this.lblCompact.Click += new System.EventHandler(this.lblCompact_Click);
             // 
             // AdvancedForm
             // 
@@ -86,6 +96,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblCompact);
             this.Controls.Add(this.lblRenderingMethod);
             this.Controls.Add(this.chkDIB);
             this.Controls.Add(this.lnkClearSettings);
@@ -104,5 +115,6 @@
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.CheckBox chkDIB;
         private System.Windows.Forms.Label lblRenderingMethod;
+        private System.Windows.Forms.LinkLabel lblCompact;
     }
 }
