@@ -111,7 +111,6 @@ namespace PockeTwit
             //throw new Exception("Bam!");
             StartBackground = InBackGround;
             Microsoft.WindowsCE.Forms.MobileDevice.Hibernate += new EventHandler(MobileDevice_Hibernate);
-            Program.StartUp = DateTime.Now;
             if (InBackGround)
             {
                 this.Hide();
@@ -193,6 +192,8 @@ namespace PockeTwit
 
         void statList_Progress(int itemnumber, int totalnumber)
         {
+            lblTitle.Visible = true;
+            progressBar1.Visible = true;
             progressBar1.Maximum = totalnumber;
             progressBar1.Minimum = 0;
             progressBar1.Value = itemnumber;
@@ -1016,8 +1017,11 @@ namespace PockeTwit
                     statList.Visible = true;
                 }
                 //statList.SetSelectedIndexToZero();
-                Program.Ready = DateTime.Now;
+                progressBar1.Visible = false;
+                lblTitle.Visible = false;
                 Application.DoEvents();
+                statList.Repaint();
+                
             }
         }
 

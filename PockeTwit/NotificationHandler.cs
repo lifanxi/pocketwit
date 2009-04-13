@@ -106,19 +106,6 @@ namespace PockeTwit
             MessagesRegistryWatcher2.Dispose();   
         }
 
-        private void CheckRegistry()
-        {
-            if (FriendsKey.GetValue("Wave") == null)
-            {
-            }
-
-            /*
-            if (FriendsKey != null)
-            {
-                Friends.Sound = (string)FriendsKey.GetValue("Wave");
-                if (FriendsKey.GetValue("Options") != null)
-             */
-        }
 
         void RegistryWatcher_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
         {

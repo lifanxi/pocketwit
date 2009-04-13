@@ -7,10 +7,7 @@ namespace PockeTwit
 {
     static class Program
     {
-        public static string LastStatus;
-        public static DateTime StartUp;
-        public static DateTime Ready;
-
+        
         public static bool IgnoreDisposed = false;
 		#region Methods (2) 
 
