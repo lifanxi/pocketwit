@@ -13,6 +13,8 @@ namespace Yedda
         private string _password = string.Empty;
         private string _filename = string.Empty;
         private string _message = string.Empty;
+        private string _lat = string.Empty;
+        private string _lon = string.Empty;
         private byte[] _pictureData = null;
         private bool _useAsync = true;
 
@@ -161,6 +163,43 @@ namespace Yedda
             }
         }
 
+        public string Lat
+        {
+            get
+            {
+                return _lat;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _lat = string.Empty;
+                }
+                else
+                {
+                    _lat = value;
+                }
+            }
+        }
+
+        public string Lon
+        {
+            get
+            {
+                return _lon;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    _lon = string.Empty;
+                }
+                else
+                {
+                    _lon = value;
+                }
+            }
+        }
 
         #endregion
 

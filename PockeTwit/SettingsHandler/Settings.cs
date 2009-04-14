@@ -169,6 +169,7 @@ public static class ClientSettings
 
     public static string CacheDir { get; set; }
     public static string MediaService { get; set; }
+    public static bool SendMessageToMediaService { get; set; }
     public static Queue<string> SearchItems { get; set; }
     public static bool AutoTranslate { get; set; }
     public static string TranslationLanguage { get; set; }
@@ -274,6 +275,15 @@ public static class ClientSettings
             else
             {
                 MediaService = "TwitPic";
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["SendMessageToMediaService"]))
+            {
+                SendMessageToMediaService = bool.Parse(ConfigurationSettings.AppSettings["SendMessageToMediaService"]);
+            }
+            else
+            {
+                SendMessageToMediaService = true;
             }
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["FontSize"]))

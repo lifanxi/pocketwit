@@ -24,6 +24,9 @@ namespace Yedda
         protected string API_SAVE_TO_PATH { get; set; }
         protected string API_SERVICE_NAME = string.Empty;
         protected bool API_CAN_UPLOAD = true;
+        protected bool API_CAN_UPLOAD_MESSAGE = false;
+        protected bool API_CAN_UPLOAD_GPS = false;
+        protected int API_URLLENGTH = 0;
 
         #endregion
 
@@ -41,6 +44,14 @@ namespace Yedda
         /// </summary>
         /// <param name="pictureURL">URL to fetch</param>
         public abstract void FetchPicture(string pictureURL);
+
+        /// <summary>
+        /// Send a picture to a twitter picture framework without the use of the finish event
+        /// </summary>
+        /// <param name="postData">Postdata</param>
+        /// <returns>Returned URL from server</returns>
+        public abstract bool PostPictureMessage(PicturePostObject postData);
+
 
         #region getters and setters
 
@@ -141,8 +152,39 @@ namespace Yedda
             }
         }
 
+        /// <summary>
+        /// Whether the service can upload a message
+        /// </summary>
+        public bool CanUploadMessage
+        {
+            get
+            {
+                return API_CAN_UPLOAD_MESSAGE;
+            }
+        }
+
+        /// <summary>
+        /// Whether the service can upload a gps position.
+        /// </summary>
+        public bool CanUploadGPS
+        {
+            get
+            {
+                return API_CAN_UPLOAD_GPS;
+            }
+        }
+
+        public int UrlLength
+        {
+            get
+            {
+                return API_URLLENGTH;
+            }
+        }
 
         #endregion
+
+
 
         #endregion
 

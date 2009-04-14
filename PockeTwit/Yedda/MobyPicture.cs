@@ -44,6 +44,8 @@ namespace Yedda
             
             API_SAVE_TO_PATH = "\\ArtCache\\www.mobypicture.com\\";
             API_SERVICE_NAME = "MobyPicture";
+            API_CAN_UPLOAD_GPS = true;
+            API_CAN_UPLOAD_MESSAGE = true;
         }
 
         /// <summary>
@@ -180,6 +182,54 @@ namespace Yedda
             {
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to download picture from TwitPic.", ""));
             } 
+        }
+
+        public override bool PostPictureMessage(PicturePostObject postData)
+        {
+            #region Argument check
+
+            //Check for empty path
+            if (string.IsNullOrEmpty(postData.Filename))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to MobyPicture.", ""));
+                return false;
+            }
+
+            //Check for empty credentials
+            if (string.IsNullOrEmpty(postData.Username) ||
+                string.IsNullOrEmpty(postData.Password))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to MobyPicture.", ""));
+                return false;
+            }
+
+            #endregion
+
+            using (System.IO.FileStream file = new FileStream(postData.Filename, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    //Load the picture data
+                    byte[] incoming = new byte[file.Length];
+                    file.Read(incoming, 0, incoming.Length);
+
+                    postData.PictureData = incoming;
+                    string uploadResult = UploadPictureMessage(API_UPLOAD_POST, postData);
+
+                    if (string.IsNullOrEmpty(uploadResult))
+                    {
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Unable to upload picture"));
+                        return false;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to TwitPic.", ""));
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -336,6 +386,81 @@ namespace Yedda
                 throw;
             }
         }
+
+        /// <summary>
+        /// Upload a picture
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
+        private string UploadPictureMessage(string url, PicturePostObject ppo)
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+                string boundary = System.Guid.NewGuid().ToString();
+                request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
+                request.PreAuthenticate = true;
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                request.Headers.Add("action", "postMedia");
+
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string ender = "\r\n" + header + "\r\n";
+
+                StringBuilder contents = new StringBuilder();
+
+                contents.Append(CreateContentPartString(header, "u", ppo.Username));
+                contents.Append(CreateContentPartString(header, "p", ppo.Password));
+                contents.Append(CreateContentPartString(header, "k", APPLICATION_NAME));
+                contents.Append(CreateContentPartString(header, "t", ppo.Message));
+                contents.Append(CreateContentPartString(header, "d", ppo.Message));
+                contents.Append(CreateContentPartString(header, "action", "postMedia"));
+
+                if (!string.IsNullOrEmpty(ppo.Lat) && !string.IsNullOrEmpty(ppo.Lon))
+                {
+                    contents.Append(CreateContentPartString(header, "latlong ", string.Format("{0},{1}",ppo.Lat,ppo.Lon) ));
+                }
+
+                contents.Append(CreateContentPartMedia(header));
+
+                //Create the form message to send in bytes
+
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
+                    requestStream.Write(footer, 0, footer.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            String receiverResponse = reader.ReadToEnd();
+                            //should be 0 with a following URL for the picture.
+
+                            return receiverResponse;
+                        }
+                    }
+
+                }
+                return string.Empty;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
 
         /// <summary>
         /// Use a imageId to retrieve and save a thumbnail to the device.

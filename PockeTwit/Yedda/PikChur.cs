@@ -46,6 +46,8 @@ namespace Yedda
         {
             API_SAVE_TO_PATH = "\\ArtCache\\www.PikChur.com\\";
             API_SERVICE_NAME = "PikChur";
+            API_CAN_UPLOAD_MESSAGE = true;
+            API_CAN_UPLOAD_GPS = true;
         }
 
         /// <summary>
@@ -122,7 +124,15 @@ namespace Yedda
                     {
                         //use sync.
                         postData.PictureData = incoming;
-                        XmlDocument uploadResult = UploadPicture(postData);
+                        XmlDocument uploadResult;
+                        if (string.IsNullOrEmpty(postData.Message))
+                        {
+                            uploadResult = UploadPicture(postData);
+                        }
+                        else
+                        {
+                            uploadResult = UploadPictureAndPost(postData);
+                        }
 
                         if (uploadResult.SelectSingleNode("pikchur/error") == null)
                         {
@@ -189,6 +199,63 @@ namespace Yedda
             return (url.IndexOf(siteMarker) >= 0);
         }
 
+        /// <summary>
+        /// Send a picture to a twitter picture framework without the use of the finish event
+        /// </summary>
+        /// <param name="postData">Postdata</param>
+        /// <returns>Returned URL from server</returns>
+        public override bool PostPictureMessage(PicturePostObject postData)
+        {
+            #region Argument check
+
+            //Check for empty path
+            if (string.IsNullOrEmpty(postData.Filename))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                return false;
+            }
+
+            //Check for empty credentials
+            if (string.IsNullOrEmpty(postData.Username) ||
+                string.IsNullOrEmpty(postData.Password))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                return false;
+            }
+
+            #endregion
+
+            using (FileStream file = new FileStream(postData.Filename, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    //Load the picture data
+                    byte[] incoming = new byte[file.Length];
+                    file.Read(incoming, 0, incoming.Length);
+
+                    //use sync.
+                    postData.PictureData = incoming;
+                    XmlDocument uploadResult = UploadPictureAndPost(postData);
+
+                    if (uploadResult.SelectSingleNode("pikchur/error") == null)
+                    {
+                        XmlNode UrlKeyNode = uploadResult.SelectSingleNode("pikchur/post/url");
+                        string URL = UrlKeyNode.InnerText;
+                        URL = URL.Replace("\n", "");
+                    }
+                    else
+                    {
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                    }
+                }
+                catch (Exception e)
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                    return false;
+                }
+            }
+            return true;
+        }
 
 
         #endregion
@@ -225,7 +292,15 @@ namespace Yedda
         {
             try
             {
-                XmlDocument uploadResult = UploadPicture( workerPPO);
+                XmlDocument uploadResult;
+                if (string.IsNullOrEmpty(workerPPO.Message))
+                {
+                    uploadResult = UploadPicture(workerPPO);
+                }
+                else
+                {
+                    uploadResult = UploadPictureAndPost(workerPPO);
+                }
 
                 if (uploadResult.SelectSingleNode("pikchur/error") == null)
                 {
@@ -387,7 +462,7 @@ namespace Yedda
             if ( string.IsNullOrEmpty( AUTH_KEY ))
             {
                 //Authorisation has failed.
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
             try
@@ -447,6 +522,88 @@ namespace Yedda
                 throw;
             }
         }
+
+        /// <summary>
+        /// Upload picture
+        /// </summary>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
+        private XmlDocument UploadPictureAndPost(PicturePostObject ppo)
+        {
+            //
+            if (string.IsNullOrEmpty(AUTH_KEY))
+            {
+                RequestAuthKey(ppo);
+            }
+            if (string.IsNullOrEmpty(AUTH_KEY))
+            {
+                //Authorisation has failed.
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                return null;
+            }
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD);
+
+                string boundary = Guid.NewGuid().ToString();
+                request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
+                request.PreAuthenticate = true;
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string ender = "\r\n" + header + "\r\n";
+
+                StringBuilder contents = new StringBuilder();
+
+                contents.Append(CreateContentPartStringForm(header, "data[api][key]", API_KEY, "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][status]", ppo.Message, "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][auth_key]", AUTH_KEY, "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][upload_only]", "FALSE", "application/octet-stream"));
+                contents.Append(CreateContentPartStringForm(header, "data[api][origin]", API_ORIGIN_ID, "application/octet-stream"));
+
+                if (!string.IsNullOrEmpty(ppo.Lat) && !string.IsNullOrEmpty(ppo.Lon))
+                {
+                    contents.Append(CreateContentPartStringForm(header, "data[api][geo][lat]", ppo.Lat, "application/octet-stream"));
+                    contents.Append(CreateContentPartStringForm(header, "data[api][geo][lon]", ppo.Lon, "application/octet-stream"));
+                }
+                //image
+                contents.Append(CreateContentPartPicture(header, "dataAPIimage", "image.jpg"));
+
+                //Create the form message to send in bytes
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
+                    requestStream.Write(footer, 0, footer.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            XmlDocument responseXML = new XmlDocument();
+                            string responseFromService = reader.ReadToEnd();
+                            responseXML.LoadXml(responseFromService);
+                            return responseXML;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //Socket exception 10054 could occur when sending large files.
+                throw;
+            }
+        }
+
 
         #endregion
     }

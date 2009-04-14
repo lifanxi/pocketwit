@@ -150,6 +150,13 @@ namespace Yedda
         void PostPicture(PicturePostObject postData);
 
         /// <summary>
+        /// Send a picture to a twitter picture framework without the use of the finish event
+        /// </summary>
+        /// <param name="postData">Postdata</param>
+        /// <returns>Returned URL from server</returns>
+        bool PostPictureMessage(PicturePostObject postData);
+
+        /// <summary>
         /// Retrieve a picture from a picture service. 
         /// </summary>
         /// <param name="pictureURL">pictureURL</param>
@@ -164,8 +171,6 @@ namespace Yedda
         bool CanFetchUrl(string URL);
 
 
-       
-
 
         /// <summary>
         /// Methods for getting and setting properties
@@ -179,6 +184,9 @@ namespace Yedda
         int ReadBufferSize { set; get; }
         string ServiceName { get; }
         bool CanUpload { get; }
+        bool CanUploadMessage { get; }
+        bool CanUploadGPS { get; }
+        int UrlLength { get;  }
     }
 
     /// <summary>
