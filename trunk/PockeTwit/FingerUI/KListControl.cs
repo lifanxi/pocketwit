@@ -1571,7 +1571,7 @@ namespace FingerUI
                 Percentage = (float)YOffset / MaxYOffset;
             }
             int Position = (int)Math.Round(Height * Percentage);
-            using (SolidBrush SBrush = new SolidBrush(ClientSettings.ForeColor))
+            using (SolidBrush SBrush = new SolidBrush(ClientSettings.PointerColor))
             {
                 Point a = new Point(x - PointerSize, Position);
                 Point b = new Point(x, Position - PointerHalf);

@@ -445,7 +445,7 @@ namespace FingerUI
         {
             StatusItem Item = Items[i];
             Rectangle ItemBounds = new Rectangle(0, i * ClientSettings.ItemHeight, Item.Bounds.Width, ClientSettings.ItemHeight);
-            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+            using (Pen whitePen = new Pen(ClientSettings.LineColor))
             {
                 g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
                 g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
@@ -463,7 +463,7 @@ namespace FingerUI
             //Draw the first item.
             StatusItem Item = Items[0];
             Rectangle ItemBounds = new Rectangle(0, 0, Item.Bounds.Width, Item.Bounds.Height);
-            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+            using (Pen whitePen = new Pen(ClientSettings.LineColor))
             {
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
@@ -480,7 +480,7 @@ namespace FingerUI
             //Draw the last item.
             StatusItem Item = Items[Items.Count - 1];
             Rectangle ItemBounds = new Rectangle(0, (MaxItems - 1) * ClientSettings.ItemHeight, Item.Bounds.Width, Item.Bounds.Height);
-            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+            using (Pen whitePen = new Pen(ClientSettings.LineColor))
             {
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
                 _RenderedGraphics.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);

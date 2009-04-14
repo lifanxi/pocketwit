@@ -426,21 +426,24 @@ namespace FingerUI
         //lineOffset is how many lines we've already drawn in these bounds
         private void MakeClickable(Graphics g, Rectangle textBounds)
         {
-            
-            using (Pen lPen = new Pen(ClientSettings.LinkColor))
+            Pen lPen = new Pen(ClientSettings.LinkColor);
+            Pen hPen = new Pen(ClientSettings.HashLinkColor);
+
+            if(this.Selected)
             {
-                using (Pen hPen = new Pen(ClientSettings.HashLinkColor))
-                {
-                    foreach (Clickable c in Tweet.Clickables)
-                    {
-                        Pen uPen = lPen;
-                        if (c.Text.StartsWith("#")) { uPen = hPen; }
-                        g.DrawLine(uPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
-                            (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
-                    }
-                }
-                
+                lPen.Color = ClientSettings.SelectedLinkColor;
+                hPen.Color = ClientSettings.SelectedHashLinkColor;
             }
+            foreach (Clickable c in Tweet.Clickables)
+            {
+                Pen uPen = lPen;
+                if (c.Text.StartsWith("#")) { uPen = hPen; }
+                g.DrawLine(uPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
+                    (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+            }
+            lPen.Dispose();
+            hPen.Dispose();
+
         }
 
 
