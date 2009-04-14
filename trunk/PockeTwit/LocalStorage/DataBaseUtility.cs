@@ -329,9 +329,19 @@ namespace LocalStorage
                 {
                     using (var comm = new SQLiteCommand(conn))
                     {
-                        comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay";
+                        comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay AND " + SQLFetchFriends;
+                        SQLiteParameter dParm = new SQLiteParameter(System.Data.DbType.DateTime);
                         comm.Parameters.Add(new SQLiteParameter("@SinceDay", SinceDate));
                         int results = comm.ExecuteNonQuery();
+
+                        comm.CommandText = "SELECT COUNT(id) FROM statuses WHERE timestamp<@SinceDay AND " +
+                                           SQLFetchRepliesAndMessages;
+                        results = comm.ExecuteNonQuery();
+                        if (results > ClientSettings.MaxTweets)
+                        {
+                            comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay AND " + SQLFetchRepliesAndMessages;
+                            results = comm.ExecuteNonQuery();
+                        }
                         comm.Parameters.Clear();
 
                         comm.CommandText =
