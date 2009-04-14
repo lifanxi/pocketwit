@@ -28,6 +28,7 @@ namespace PockeTwit
         private bool uploadingPicture = false;
         private bool pictureUsed = true;
         private bool localPictureEventsSet = false;
+        private string picturePath = string.Empty;
 
         public delegate void delAddPicture(string ImageFile, PictureBox BoxToUpdate);
         public delegate void delUpdatePictureData(string pictureUrl, bool uploadingPicture);
@@ -383,19 +384,30 @@ namespace PockeTwit
                             {
                                 this.pictureFromStorage.Visible = false;
                             }
-                            AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
-
                             uploadedPictureOrigin = "camera";
-                            uploadingPicture = true;
+                           
+                            
                             pictureService = GetMediaService();
-                            using (PicturePostObject ppo = new PicturePostObject())
+                            if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
                             {
-                                ppo.Filename = c.FileName;
-                                ppo.Username = AccountToSet.UserName;
-                                ppo.Password = AccountToSet.Password;
-                                ppo.UseAsync = false;
-                                Cursor.Current = Cursors.WaitCursor;
-                                pictureService.PostPicture(ppo); 
+                                AddPictureToForm(c.FileName, pictureFromCamers);
+                                picturePath = c.FileName;
+                                //Reduce length of message 140-pictureService.UrlLength
+                                pictureUsed = true;
+                            }
+                            else
+                            {
+                                AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
+                                uploadingPicture = true;
+                                using (PicturePostObject ppo = new PicturePostObject())
+                                {
+                                    ppo.Filename = c.FileName;
+                                    ppo.Username = AccountToSet.UserName;
+                                    ppo.Password = AccountToSet.Password;
+                                    ppo.UseAsync = false;
+                                    Cursor.Current = Cursors.WaitCursor;
+                                    pictureService.PostPicture(ppo);
+                                }
                             }
                         }
                     }
@@ -425,22 +437,29 @@ namespace PockeTwit
                     {
                         this.pictureFromCamers.Visible = false;
                     }
-                    AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
-
                     uploadedPictureOrigin = "file";
-                    uploadingPicture = true;
+                    
                     pictureService = GetMediaService();
-                    using (PicturePostObject ppo = new PicturePostObject())
+                    if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
                     {
-                        ppo.Filename = s.FileName;
-                        ppo.Username = AccountToSet.UserName;
-                        ppo.Password = AccountToSet.Password;
-                        if (DetectDevice.DeviceType == DeviceType.Standard)
+                        AddPictureToForm(s.FileName, pictureFromCamers);
+                        picturePath = s.FileName;
+                        //Reduce length of message 140-pictureService.UrlLength
+                        pictureUsed = true;
+                    }
+                    else
+                    {
+                        uploadingPicture = true;
+                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
+                        using (PicturePostObject ppo = new PicturePostObject())
                         {
+                            ppo.Filename = s.FileName;
+                            ppo.Username = AccountToSet.UserName;
+                            ppo.Password = AccountToSet.Password;
                             ppo.UseAsync = false;
                             Cursor.Current = Cursors.WaitCursor;
+                            pictureService.PostPicture(ppo);
                         }
-                        pictureService.PostPicture(ppo);
                     }
                 }
             }
@@ -459,14 +478,22 @@ namespace PockeTwit
         {
             if (!localPictureEventsSet && addEvents)
             {
-                pictureService.UploadFinish += new UploadFinishEventHandler(pictureService_UploadFinish);
+                //No need to set finish upload event when posting to it
+                if (!pictureService.CanUploadMessage || !ClientSettings.SendMessageToMediaService)
+                {
+                    pictureService.UploadFinish += new UploadFinishEventHandler(pictureService_UploadFinish);
+                }
                 pictureService.MessageReady += new MessageReadyEventHandler(pictureService_MessageReady);
                 pictureService.ErrorOccured += new ErrorOccuredEventHandler(pictureService_ErrorOccured);
                 localPictureEventsSet = true;
             }
             else if (localPictureEventsSet && !addEvents)
             {
-                pictureService.UploadFinish -= new UploadFinishEventHandler(pictureService_UploadFinish);
+                //No need to remove finish upload event when posting to it 
+                if (!pictureService.CanUploadMessage || !ClientSettings.SendMessageToMediaService)
+                {
+                    pictureService.UploadFinish -= new UploadFinishEventHandler(pictureService_UploadFinish);
+                }   
                 pictureService.MessageReady -= new MessageReadyEventHandler(pictureService_MessageReady);
                 pictureService.ErrorOccured -= new ErrorOccuredEventHandler(pictureService_ErrorOccured);
                 localPictureEventsSet = false;
@@ -530,7 +557,7 @@ namespace PockeTwit
             
             service = PictureServiceFactory.Instance.GetServiceByName(ClientSettings.MediaService);
 
-            SetPictureEventHandlers(service,true);
+            SetPictureEventHandlers(service, true);
 
             return service;
         }
@@ -565,8 +592,6 @@ namespace PockeTwit
                 }
             }
         }
-
-       
 
         private void UpdatePictureData(string pictureURL, bool uploadingPicture)
         {
@@ -604,7 +629,6 @@ namespace PockeTwit
             }
         }
 
-
         private string TrimTo140(string Original)
         {
             if (Original.Length > 140)
@@ -636,41 +660,67 @@ namespace PockeTwit
                     MessageBox.Show("There was an error shortening the text. Please shorten the message or try again later.");
                     return false;
                 }
-                Yedda.Twitter TwitterConn = new Yedda.Twitter();
-                TwitterConn.AccountInfo = this.AccountToSet;
 
-                try
+
+                if (!string.IsNullOrEmpty(picturePath) && pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService )
                 {
-                    if (this.GPSLocation != null)
+                    PicturePostObject ppo = new PicturePostObject();
+                    ppo.Filename = picturePath;
+                    ppo.Username = AccountToSet.UserName;
+                    ppo.Password = AccountToSet.Password;
+                    ppo.Message = StatusText;
+
+                    if (pictureService.CanUploadGPS && this.GPSLocation != null)
                     {
-                        TwitterConn.SetLocation(this.GPSLocation);
+                        try
+                        {
+                            ppo.Lat = GPSLocation.Split(',')[0];
+                            ppo.Lon = GPSLocation.Split(',')[1];
+                        }
+                        catch { }
                     }
-                }
-                catch { }
-                
-                
-                string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
 
-                uploadedPictureURL = string.Empty;
-                uploadingPicture = false;
+                    return pictureService.PostPictureMessage(ppo);
+                }
+                else
+                {
 
-                if (string.IsNullOrEmpty(retValue))
-                {
-                    MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
-                    return false;
+
+                    Yedda.Twitter TwitterConn = new Yedda.Twitter();
+                    TwitterConn.AccountInfo = this.AccountToSet;
+
+                    try
+                    {
+                        if (this.GPSLocation != null)
+                        {
+                            TwitterConn.SetLocation(this.GPSLocation);
+                        }
+                    }
+                    catch { }
+
+
+                    string retValue = TwitterConn.Update(UpdateText, in_reply_to_status_id, Yedda.Twitter.OutputFormatType.XML);
+
+                    uploadedPictureURL = string.Empty;
+                    uploadingPicture = false;
+
+                    if (string.IsNullOrEmpty(retValue))
+                    {
+                        MessageBox.Show("Error posting status -- empty response.  You may want to try again later.");
+                        return false;
+                    }
+                    try
+                    {
+                        Library.status.DeserializeSingle(retValue, AccountToSet);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
+                        return false;
+                    }
+
+                    return true;
                 }
-                try
-                {
-                    Library.status.DeserializeSingle(retValue, AccountToSet);
-                }
-                catch
-                {
-                    MessageBox.Show("Error posting status -- bad response.  You may want to try again later.");
-                    return false;
-                }
-                
-                return true;
-                
             }
             return true;
         }
@@ -779,8 +829,8 @@ namespace PockeTwit
                     return;
                 }
             }
-            
             bool Success = PostTheUpdate();
+
             Cursor.Current = Cursors.Default;
             if (Success)
             {

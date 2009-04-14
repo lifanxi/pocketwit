@@ -40,6 +40,8 @@ namespace Yedda
         {
             API_SAVE_TO_PATH = "\\ArtCache\\www.yFrog.com\\";
             API_SERVICE_NAME = "yFrog";
+            API_CAN_UPLOAD_GPS = false;
+            API_CAN_UPLOAD_MESSAGE = true;
         }
 
         /// <summary>
@@ -177,6 +179,55 @@ namespace Yedda
             {
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download picture from yFrog."));
             } 
+        }
+
+        public override bool PostPictureMessage(PicturePostObject postData)
+        {
+            #region Argument check
+
+            //Check for empty path
+            if (string.IsNullOrEmpty(postData.Filename))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to yFrog.", ""));
+                return false;
+            }
+
+            //Check for empty credentials
+            if (string.IsNullOrEmpty(postData.Username) ||
+                string.IsNullOrEmpty(postData.Password))
+            {
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "Failed to upload picture to yFrog.", ""));
+                return false;
+            }
+
+            #endregion
+
+            using (System.IO.FileStream file = new FileStream(postData.Filename, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    //Load the picture data
+                    byte[] incoming = new byte[file.Length];
+                    file.Read(incoming, 0, incoming.Length);
+
+                    postData.PictureData = incoming;
+                    XmlDocument uploadResult = UploadPictureMessage(API_UPLOAD_POST, postData);
+
+                    if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
+                    {
+                        string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
+                        OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, ErrorText, ""));
+                        return false;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -332,6 +383,75 @@ namespace Yedda
 
                 contents.Append(CreateContentPartString(header, "username", ppo.Username));
                 contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "source", "pocketwit"));
+
+                if (!string.IsNullOrEmpty(ppo.Message))
+                {
+                    contents.Append(CreateContentPartString(header, "message", ppo.Message));
+                }
+
+                contents.Append(CreateContentPartPicture(header));
+
+                //Create the form message to send in bytes
+                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(message, 0, message.Length);
+                    requestStream.Write(ppo.PictureData, 0, ppo.PictureData.Length);
+                    requestStream.Write(footer, 0, footer.Length);
+                    requestStream.Flush();
+                    requestStream.Close();
+
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            XmlDocument responseXML = new XmlDocument();
+                            responseXML.LoadXml(reader.ReadToEnd());
+                            return responseXML;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+        }
+
+
+        /// <summary>
+        /// Upload a picture
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="ppo"></param>
+        /// <returns></returns>
+        private XmlDocument UploadPictureMessage(string url, PicturePostObject ppo)
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+                string boundary = System.Guid.NewGuid().ToString();
+                request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
+                request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
+                request.PreAuthenticate = true;
+                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+
+                //request.ContentType = "application/x-www-form-urlencoded";
+                request.Method = "POST";
+                request.Timeout = 20000;
+                string header = string.Format("--{0}", boundary);
+                string ender = "\r\n" + header + "\r\n";
+
+                StringBuilder contents = new StringBuilder();
+
+                contents.Append(CreateContentPartString(header, "username", ppo.Username));
+                contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "message", ppo.Message));
                 contents.Append(CreateContentPartString(header, "source", "pocketwit"));
 
                 if (!string.IsNullOrEmpty(ppo.Message))
