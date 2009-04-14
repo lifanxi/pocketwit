@@ -560,7 +560,7 @@ namespace FingerUI
                     {
                         DrawSubMenu(ExpandedItem, ExpandedRect);
                     }
-                    using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                    using (Pen whitePen = new Pen(ClientSettings.LineColor))
                     {
                         if (_Side == FingerUI.KListControl.SideShown.Right)
                         {
@@ -758,7 +758,7 @@ namespace FingerUI
                         
                     }
                 }
-                using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+                using (Pen whitePen = new Pen(ClientSettings.LineColor))
                 {
                     if (_Side == KListControl.SideShown.Left)
                     {

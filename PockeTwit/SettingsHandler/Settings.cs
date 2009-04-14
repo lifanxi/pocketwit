@@ -13,6 +13,7 @@ public static class ClientSettings
     public static System.Drawing.Color BackGradColor = System.Drawing.Color.Black;
     public static System.Drawing.Color ErrorColor = System.Drawing.Color.Red;
     public static System.Drawing.Color ForeColor = System.Drawing.Color.LightGray;
+    public static System.Drawing.Color LineColor = ForeColor;
     public static System.Drawing.Color SmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedSmallTextColor = System.Drawing.Color.Gray;
     public static System.Drawing.Color SelectedBackColor = System.Drawing.Color.Gray;
@@ -23,6 +24,9 @@ public static class ClientSettings
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color HashLinkColor = System.Drawing.Color.Sienna;
     public static System.Drawing.Color DimmedColor = Color.FromArgb(75,75,75);
+    public static System.Drawing.Color SelectedLinkColor = LinkColor;
+    public static System.Drawing.Color SelectedHashLinkColor = HashLinkColor;
+    public static System.Drawing.Color PointerColor = ForeColor;
     #endregion
 
     #region Fields (13)
