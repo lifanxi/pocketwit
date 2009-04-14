@@ -33,6 +33,10 @@ namespace PockeTwit.SettingsHandler
         {
             InitializeComponent();
             PockeTwit.Themes.FormColors.SetColors(this);
+            if (DetectDevice.DeviceType == DeviceType.Professional)
+            {
+                chkNotification.Visible = true;
+            }
             NotificationHandler.LoadSettings();
             ListSounds();
         }
@@ -77,6 +81,7 @@ namespace PockeTwit.SettingsHandler
             this.chkPlaySound.Checked = (currentInfo.Options & NotificationHandler.Options.Sound) == NotificationHandler.Options.Sound;
             this.cmbSound.Enabled = (currentInfo.Options & NotificationHandler.Options.Sound) == NotificationHandler.Options.Sound;
             this.chkVibrate.Checked = (currentInfo.Options & NotificationHandler.Options.Vibrate) == NotificationHandler.Options.Vibrate;
+            this.chkNotification.Checked = (currentInfo.Options & NotificationHandler.Options.Message) == NotificationHandler.Options.Message;
             if (!string.IsNullOrEmpty(currentInfo.Sound))
             {
                 SoundInfo s = new SoundInfo();
@@ -107,11 +112,7 @@ namespace PockeTwit.SettingsHandler
             currentInfo.Sound = selectedSound.Path;
         }
 
-        private void chkVibrate_CheckStateChanged(object sender, EventArgs e)
-        {
-            
-        }
-
+        
         private void chkPlaySound_Click(object sender, EventArgs e)
         {
             if (chkPlaySound.Checked)
@@ -141,6 +142,19 @@ namespace PockeTwit.SettingsHandler
         private void mnuDone_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void chkNotification_Click(object sender, EventArgs e)
+        {
+            if(chkNotification.Checked)
+            {
+                currentInfo.Options = currentInfo.Options | NotificationHandler.Options.Message;
+            }
+            else
+            {
+                currentInfo.Options &= ~NotificationHandler.Options.Message;
+            }
+            NotificationHandler.SaveSettings(currentInfo);
         }
     }
 }

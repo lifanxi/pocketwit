@@ -37,6 +37,7 @@
             this.cmbSound = new System.Windows.Forms.ComboBox();
             this.lblSound = new System.Windows.Forms.Label();
             this.chkVibrate = new System.Windows.Forms.CheckBox();
+            this.chkNotification = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -109,8 +110,19 @@
             this.chkVibrate.Size = new System.Drawing.Size(236, 20);
             this.chkVibrate.TabIndex = 5;
             this.chkVibrate.Text = "Vibrate";
-            this.chkVibrate.CheckStateChanged += new System.EventHandler(this.chkVibrate_CheckStateChanged);
             this.chkVibrate.Click += new System.EventHandler(this.chkVibrate_Click);
+            // 
+            // chkNotification
+            // 
+            this.chkNotification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkNotification.Location = new System.Drawing.Point(0, 180);
+            this.chkNotification.Name = "chkNotification";
+            this.chkNotification.Size = new System.Drawing.Size(236, 20);
+            this.chkNotification.TabIndex = 8;
+            this.chkNotification.Text = "Show Notification";
+            this.chkNotification.Visible = false;
+            this.chkNotification.Click += new System.EventHandler(this.chkNotification_Click);
             // 
             // NotificationSettings
             // 
@@ -118,6 +130,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkNotification);
             this.Controls.Add(this.chkVibrate);
             this.Controls.Add(this.lblSound);
             this.Controls.Add(this.cmbSound);
@@ -140,5 +153,6 @@
         private System.Windows.Forms.Label lblSound;
         private System.Windows.Forms.CheckBox chkVibrate;
         private System.Windows.Forms.MenuItem mnuDone;
+        private System.Windows.Forms.CheckBox chkNotification;
     }
 }
