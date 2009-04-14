@@ -880,10 +880,14 @@ namespace PockeTwit
                     if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
                     {
                         FollowMenuItem.Text = "Stop Following";
+                        MoveNewGroupMenuItem.Visible = false;
+                        CopyNewGroupMenuItem.Visible = false;
                     }
                     else
                     {
                         FollowMenuItem.Text = "Follow";
+                        MoveNewGroupMenuItem.Visible = true;
+                        CopyNewGroupMenuItem.Visible = true;
                     }
                 }
             }
