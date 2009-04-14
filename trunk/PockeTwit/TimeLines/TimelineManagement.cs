@@ -321,10 +321,6 @@ namespace PockeTwit
 
         private void GetMessagesList(List<Library.status> TempLine)
         {
-#if TESTMESSAGES
-            TempLine = new List<PockeTwit.Library.status>(TestCode.TestStatusMaker.GenerateTestStatuses(50));
-            return;
-#endif
             lock (TwitterConnections)
             {
                 foreach (Yedda.Twitter t in TwitterConnections)
@@ -340,8 +336,12 @@ namespace PockeTwit
                                 foreach (Library.status s in NewStats)
                                 {
                                     s.TypeofMessage = PockeTwit.Library.StatusTypes.Reply;
+                                    if(DateTime.Now.Subtract(s.createdAt)<new TimeSpan(10,0,0,0,0))
+                                    {
+                                        TempLine.Add(s);
+                                    }
                                 }
-                                TempLine.AddRange(NewStats);
+                                //TempLine.AddRange(NewStats);
                                 ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                             }
                             catch
@@ -368,8 +368,12 @@ namespace PockeTwit
                                     foreach (Library.status s in NewStats)
                                     {
                                         s.TypeofMessage = PockeTwit.Library.StatusTypes.Direct;
+                                        if (DateTime.Now.Subtract(s.createdAt) < new TimeSpan(10))
+                                        {
+                                            TempLine.Add(s);
+                                        }
                                     }
-                                    TempLine.AddRange(NewStats);
+                                    //TempLine.AddRange(NewStats);
                                     ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                                 }
                                 catch
