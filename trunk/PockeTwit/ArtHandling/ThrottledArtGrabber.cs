@@ -140,6 +140,10 @@ namespace PockeTwit
                     byte[] imageData = (byte[])comm.ExecuteScalar();
                     MemoryStream stream = new MemoryStream(imageData);
                     Bitmap b = new Bitmap(stream);
+                    if (MemCache.Keys.Count > 40)
+                    {
+                        ClearMem();
+                    }
                     MemCache.Add(url, (Bitmap)b.Clone());
                     return b;
                 }
