@@ -880,14 +880,15 @@ namespace PockeTwit
                     if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
                     {
                         FollowMenuItem.Text = "Stop Following";
-                        MoveNewGroupMenuItem.Visible = false;
-                        CopyNewGroupMenuItem.Visible = false;
+                        MoveToGroupMenuItem.Visible = true;
+                        CopyToGroupMenuItem.Visible = true;
                     }
                     else
                     {
                         FollowMenuItem.Text = "Follow";
-                        MoveNewGroupMenuItem.Visible = true;
-                        CopyNewGroupMenuItem.Visible = true;
+                        
+                        MoveToGroupMenuItem.Visible = false;
+                        CopyToGroupMenuItem.Visible = false;
                     }
                 }
             }
@@ -1762,12 +1763,12 @@ namespace PockeTwit
             
             
             GlobalEventHandler.setPid();
-            if (!IsLoaded)
+            /*if (!IsLoaded)
             {
                 isChangingingWindowState = false;
                 return;
             }
-
+            */
 
 
             if (ClientSettings.IsMaximized)

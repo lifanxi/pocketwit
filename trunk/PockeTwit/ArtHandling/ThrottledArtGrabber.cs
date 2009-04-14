@@ -321,7 +321,7 @@ namespace PockeTwit
         {
             var ms = new MemoryStream();
             // Save to memory using the Jpeg format
-            bmp.Save(ms, ImageFormat.Bmp);
+            bmp.Save(ms, ImageFormat.Jpeg);
 
             // read to end
             byte[] bmpBytes = ms.GetBuffer();
