@@ -67,8 +67,9 @@ namespace PockeTwit
         {
             //Create or oppen registry notification keys
             FriendsKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
+            FriendsKey.SetValue("", "PockeTwit: Friends Update");
             MessageKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
-
+            MessageKey.SetValue("", "PockeTwit: Messages");
             LoadSettings();
             
             FriendsRegistryWatcher1 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + FriendsTweets, "Options", true);

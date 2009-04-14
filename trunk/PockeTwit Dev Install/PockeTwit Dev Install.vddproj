@@ -21,6 +21,12 @@
         "Entry"
         {
         "MsmKey" = "8:_185AB4A5462EAAA66A0FA87AFF17A8D8"
+        "OwnerKey" = "8:_EF716CADE35A87C757AF07CFB5206EB6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_185AB4A5462EAAA66A0FA87AFF17A8D8"
         "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -62,6 +68,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_324D863B1AA21738148ED3BD5481A4B7"
+        "OwnerKey" = "8:_EF716CADE35A87C757AF07CFB5206EB6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
         "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
@@ -70,6 +82,18 @@
         {
         "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
         "OwnerKey" = "8:_B234899FC5AC47ABBB3FC7EE8320AD95"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_AFCEC6D2470AF0388C59FC630776634F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B76AAC387257875B43B1F8CE66F7D32"
+        "OwnerKey" = "8:_EF716CADE35A87C757AF07CFB5206EB6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -135,6 +159,12 @@
         "Entry"
         {
         "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "OwnerKey" = "8:_AFCEC6D2470AF0388C59FC630776634F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
         "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -148,6 +178,18 @@
         {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_6A774A77F9F30763AF4283887B2187EB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_AFCEC6D2470AF0388C59FC630776634F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
+        "OwnerKey" = "8:_EF716CADE35A87C757AF07CFB5206EB6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -182,7 +224,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AC1488DC0E3471CE0CB30A075DC9832B"
+        "MsmKey" = "8:_AFCEC6D2470AF0388C59FC630776634F"
         "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -214,6 +256,12 @@
         {
         "MsmKey" = "8:_EA0262DE4D37968ABA63504CC90711AA"
         "OwnerKey" = "8:_F888508587E6A59D7E134D7DBD507C7D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EF716CADE35A87C757AF07CFB5206EB6"
+        "OwnerKey" = "8:_CCAD80857091443DBD4217B0BFDADB7C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -536,19 +584,19 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_AC1488DC0E3471CE0CB30A075DC9832B"
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_AFCEC6D2470AF0388C59FC630776634F"
             {
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:slockimp, Version=1.0.2721.30528, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84"
                 "ScatterAssemblies"
                 {
-                    "_AC1488DC0E3471CE0CB30A075DC9832B"
+                    "_AFCEC6D2470AF0388C59FC630776634F"
                     {
-                    "Name" = "8:slockimp.dll"
+                    "Name" = "8:System.Data.SQLite.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:slockimp.dll"
+            "SourcePath" = "8:System.Data.SQLite.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -560,7 +608,7 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -589,6 +637,34 @@
             "SharedLegacy" = "11:FALSE"
             "Register" = "3:0"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{E4F2F62A-3940-4BF5-A031-F7FA98CAAFFA}:_EF716CADE35A87C757AF07CFB5206EB6"
+            {
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Windows.Forms.DataGrid, Version=2.0.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac"
+                "ScatterAssemblies"
+                {
+                    "_EF716CADE35A87C757AF07CFB5206EB6"
+                    {
+                    "Name" = "8:System.Windows.Forms.DataGrid.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Windows.Forms.DataGrid.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -778,124 +854,12 @@
             {
                 "Keys"
                 {
-                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_6067AF52C7754C08AD75BE765CEB2F09"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                        "Keys"
-                        {
-                            "{B1EBC968-6B66-4532-A885-748B79AF4477}:_A9754C18DE93424FBDED947BBFF5B116"
-                            {
-                            "Name" = "8:Apps"
-                            "Condition" = "8:"
-                                "Keys"
-                                {
-                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_9EBA51BBDA5B4A26BCB56EEC7DA4DB59"
-                                    {
-                                    "Name" = "8:Just4Fun PockeTwit"
-                                    "Condition" = "8:"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_64FA29604C0D4D75B703283F73240366"
-                                            {
-                                            "Name" = "8:FirstRun"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:4"
-                                            "Value" = "8:01"
-                                            }
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCU"
             {
                 "Keys"
                 {
-                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_93536B31117547B2892959767914C783"
-                    {
-                    "Name" = "8:ControlPanel"
-                    "Condition" = "8:"
-                        "Keys"
-                        {
-                            "{B1EBC968-6B66-4532-A885-748B79AF4477}:_BBA44BDCE9FD4A488A116E3C19A34BA0"
-                            {
-                            "Name" = "8:Notifications"
-                            "Condition" = "8:"
-                                "Keys"
-                                {
-                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_769AB2EAC46641A5A67F1B2989975E71"
-                                    {
-                                    "Name" = "8:{DF293090-5095-49ce-A626-AE6D6629437F}"
-                                    "Condition" = "8:"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_8F9A226FE3AD44EC93DAF73A4178F346"
-                                            {
-                                            "Name" = "8:AvailableOptions"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:3"
-                                            "Value" = "3:11"
-                                            }
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD5DB34743E740BCB9B0AF6690F7570E"
-                                            {
-                                            "Name" = "8:Default"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:1"
-                                            "Value" = "8:PockeTwit: Friends Updates"
-                                            }
-                                        }
-                                    }
-                                    "{B1EBC968-6B66-4532-A885-748B79AF4477}:_96173830BB09439EA9CBE9BBC686525B"
-                                    {
-                                    "Name" = "8:{B4D35E62-A83F-4add-B421-F7FC28E14310}"
-                                    "Condition" = "8:"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DD695DDA461B4C8C97CF3B89A8D19E2B"
-                                            {
-                                            "Name" = "8:AvailableOptions"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:3"
-                                            "Value" = "3:11"
-                                            }
-                                            "{C3684F64-58E2-4092-8E3C-D7483080DE5A}:_DFB9B7253D354E61A4E1608BAEF2A7AB"
-                                            {
-                                            "Name" = "8:Default"
-                                            "Condition" = "8:"
-                                            "ValueTypes" = "3:1"
-                                            "Value" = "8:PockeTwit: Messages"
-                                            }
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCR"

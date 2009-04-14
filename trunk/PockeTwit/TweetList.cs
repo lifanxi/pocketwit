@@ -965,7 +965,6 @@ namespace PockeTwit
             CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
             Notifyer = new NotificationHandler();
-            NotificationHandler.LoadSettings();
             Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
 
             return ret;
