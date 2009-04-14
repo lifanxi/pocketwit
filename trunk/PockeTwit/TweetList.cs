@@ -126,6 +126,7 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
@@ -134,9 +135,7 @@ namespace PockeTwit
             {
                 this.lblTitle.Text = "Launching PockeTwit Dev";
             }
-
-            LocalStorage.DataBaseUtility.CheckDBSchema();
-
+            
             SizeF currentScreen = this.CurrentAutoScaleDimensions;
             if (currentScreen.Height == 192)
             {
@@ -149,7 +148,10 @@ namespace PockeTwit
             ClientSettings.TextHeight = currentScreen.Height;
 
             PockeTwit.Themes.FormColors.SetColors(this);
+            this.Visible = !InBackGround;
             Application.DoEvents();
+            LocalStorage.DataBaseUtility.CheckDBSchema();
+
             statList.Progress += new KListControl.delProgress(statList_Progress);
             SpecialTimeLines.Load();
 

@@ -13,9 +13,45 @@ namespace PockeTwit
 
 		// Private Methods (2) 
 
+        
+        [MTAThread]
+        static void Main(string[] Args)
+        {
+            bool bBackGround = false;
+            if (Args.Length > 0)
+            {
+                string Arg = Args[0];
+
+                if (Arg == "/BackGround")
+                {
+                    bBackGround = true;
+                }
+
+                if (Arg == "/QuickPost")
+                {
+                    ClientSettings.LoadSettings();
+                    if (ClientSettings.AccountsList.Count == 0)
+                    {
+                        MessageBox.Show("You must configure PockeTwit before using QuickPost.", "PockeTwit QuickPost");
+                        return;
+                    }
+                    PostUpdate PostForm = new PostUpdate(true);
+                    PostForm.AccountToSet = ClientSettings.DefaultAccount;
+                    Application.Run(PostForm);
+                    PostForm.Close();
+                    return;
+                }
+            }
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            
+            ClientSettings.LoadSettings();
+            Application.Run(new TweetList(bBackGround));
+            LocalStorage.DataBaseUtility.CleanDB(10);
+        }
+
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            
+
             string ErrorPath = ClientSettings.AppPath;
             Exception ex = (Exception)e.ExceptionObject;
             if (ex is ObjectDisposedException && IgnoreDisposed)
@@ -54,47 +90,11 @@ namespace PockeTwit
                 w.Write(b.ToString());
             }
             MessageBox.Show("An unexpected error has occured and PockeTwit must shut down.\r\n\r\nYou will have an opportunity to submit a crash report to the developer on the next run.", "PockeTwit");
-            
+
         }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [MTAThread]
-        static void Main(string[] Args)
-        {
-            bool bBackGround = false;
-            if (Args.Length > 0)
-            {
-                string Arg = Args[0];
-
-                if (Arg == "/BackGround")
-                {
-                    bBackGround = true;
-                }
-
-                if (Arg == "/QuickPost")
-                {
-                    ClientSettings.LoadSettings();
-                    if (ClientSettings.AccountsList.Count == 0)
-                    {
-                        MessageBox.Show("You must configure PockeTwit before using QuickPost.", "PockeTwit QuickPost");
-                        return;
-                    }
-                    PostUpdate PostForm = new PostUpdate(true);
-                    PostForm.AccountToSet = ClientSettings.DefaultAccount;
-                    Application.Run(PostForm);
-                    PostForm.Close();
-                    return;
-                }
-            }
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
-            ClientSettings.LoadSettings();
-            Application.Run(new TweetList(bBackGround));
-            LocalStorage.DataBaseUtility.CleanDB(10);
-        }
-
-
 		#endregion Methods 
 
         }
