@@ -48,7 +48,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0009";
+        
         private static readonly string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -97,7 +97,7 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-
+        private const string DBVersion = "0010";
         public static void CreateDB()
         {
             if (!Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
@@ -117,7 +117,7 @@ namespace LocalStorage
                         conn.Open();
                         SQLiteTransaction t = conn.BeginTransaction();
 
-                        comm.CommandText = "PRAGMA auto_vacuum=2;";
+                        comm.CommandText = "PRAGMA auto_vacuum=1;";
                         comm.ExecuteNonQuery();
 
                         comm.CommandText = "PRAGMA locking_mode=EXCLUSIVE; ";
