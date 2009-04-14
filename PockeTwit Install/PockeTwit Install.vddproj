@@ -86,6 +86,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_47D1F07DBAA548958E1F36C71E760EF5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_503BCEB661496D8C1BE69DC8459AE531"
         "OwnerKey" = "8:_40E71D37BA55489FBE0B2DC740587735"
         "MsmSig" = "8:_UNDEFINED"
@@ -765,7 +771,7 @@
         "OSVersionMax" = "8:6.99"
         "NoUninstall" = "11:FALSE"
         "Compress" = "11:TRUE"
-        "CESetupDLL" = "8:"
+        "CESetupDLL" = "8:_47D1F07DBAA548958E1F36C71E760EF5"
         }
         "ProjectOutput"
         {
@@ -816,6 +822,32 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{293BAAE4-E497-44C9-8EAD-81DD4064C588}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_47D1F07DBAA548958E1F36C71E760EF5"
+            {
+            "SourcePath" = "8:..\\AutoRunInstall\\Pocket PC 2003 (ARMV4)\\Debug\\AutoRunInstall.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
+            "Condition" = "8:"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "Register" = "3:0"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:0"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{5609CDB4-0327-4AF3-AF28-D8642F9F9547}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
