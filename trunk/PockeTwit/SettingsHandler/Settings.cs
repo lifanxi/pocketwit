@@ -536,8 +536,33 @@ public static class ClientSettings
     {
         return (AppPath + "\\Themes\\" + ThemeName + "\\");
     }
+    private static void ResetColors()
+    {
+        BackColor = System.Drawing.Color.Black;
+        BackGradColor = System.Drawing.Color.Black;
+        ErrorColor = System.Drawing.Color.Red;
+        ForeColor = System.Drawing.Color.LightGray;
+        LineColor = ForeColor;
+        SmallTextColor = System.Drawing.Color.Gray;
+        SelectedSmallTextColor = System.Drawing.Color.Gray;
+        SelectedBackColor = System.Drawing.Color.Gray;
+        SelectedBackGradColor = System.Drawing.Color.Black;
+        SelectedForeColor = System.Drawing.Color.White;
+        FieldBackColor = System.Drawing.Color.White;
+        FieldForeColor = System.Drawing.Color.Black;
+        LinkColor = System.Drawing.Color.LightBlue;
+        HashLinkColor = System.Drawing.Color.Sienna;
+        DimmedColor = Color.FromArgb(75,75,75);
+        DimmedLineColor = Color.FromArgb(75, 75, 75);
+        SelectedLinkColor = LinkColor;
+        SelectedHashLinkColor = HashLinkColor;
+        PointerColor = ForeColor;
+        MenuTextColor = ForeColor;
+        MenuSelectedTextColor = ForeColor;
+    }
     public static void LoadColors()
     {
+        ResetColors();
         if (System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
         {
             using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
