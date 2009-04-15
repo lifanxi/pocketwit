@@ -1086,6 +1086,13 @@ namespace PockeTwit
             {
                 AddStatusesToList(Manager.GetFriendsImmediately(), count);
             }
+            else
+            {
+                if(currentGroup!=null)
+                {
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup));
+                }
+            }
             Notifyer.NewFriendMessages(count);
             LastSelectedItems.UpdateUnreadCounts();
             SetMenuNumbers();

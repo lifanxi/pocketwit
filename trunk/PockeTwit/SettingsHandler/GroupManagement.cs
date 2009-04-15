@@ -14,6 +14,7 @@ namespace PockeTwit.SettingsHandler
         public GroupManagement()
         {
             InitializeComponent();
+            
             PockeTwit.Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
@@ -33,6 +34,7 @@ namespace PockeTwit.SettingsHandler
                 cmbChooseGroup.Items.Add(t);
             }
             cmbChooseGroup.SelectedIndex = 0;
+            
         }
 
         private void menuItem1_Click(object sender, EventArgs e)
@@ -47,15 +49,21 @@ namespace PockeTwit.SettingsHandler
 
         private void ResetGroupItems()
         {
+            int width = pnlUsers.Width - (ClientSettings.TextSize+10);
+            
             pnlUsers.Controls.Clear();
 
             Label lblName = new Label();
             Label lblExclusive = new Label();
             lblName.Text = "User";
+            lblName.Width = width;
+            lblName.Height = ClientSettings.TextSize + 5;
             lblExclusive.Text = "Exclusive";
-            lblExclusive.Left = lblName.Right + 5;
-            pnlUsers.Controls.Add(lblName);
+            lblExclusive.Left = pnlUsers.Width - ((ClientSettings.TextSize*4) + 10);
+            lblExclusive.Height = lblName.Height;
             pnlUsers.Controls.Add(lblExclusive);
+            pnlUsers.Controls.Add(lblName);
+            
 
             SpecialTimeLine t = (SpecialTimeLine)cmbChooseGroup.SelectedItem;
             int topOflabel = lblName.Bottom+5;
@@ -63,20 +71,24 @@ namespace PockeTwit.SettingsHandler
             {
                 SpecialTimeLine.groupTerm gt1 = gt;
                 LinkLabel nameLabel = new LinkLabel();
+                nameLabel.Width = lblName.Width;
+
                 nameLabel.Click += ((o,e1) => DeleteItem(t, gt1));
                 nameLabel.Text = gt.Name;
                 nameLabel.Top = topOflabel;
-                nameLabel.Height = ClientSettings.TextSize + 5;
-                pnlUsers.Controls.Add(nameLabel);
+                nameLabel.Height = (int)ClientSettings.TextSize + 5;
+                
                 
                 CheckBox chkExclusive = new CheckBox();
                 
                 chkExclusive.Click += ((o, e1) => ToggleExclusive(t, gt1, chkExclusive));
-                chkExclusive.Left = nameLabel.Right + 5;
+                chkExclusive.Left = nameLabel.Right - ClientSettings.TextSize;
                 chkExclusive.Top = nameLabel.Top;
+                chkExclusive.Width = ClientSettings.TextSize + 10;
+                chkExclusive.Height = nameLabel.Height;
                 chkExclusive.Checked = gt.Exclusive;
                 pnlUsers.Controls.Add(chkExclusive);
-
+                pnlUsers.Controls.Add(nameLabel);
                 topOflabel = nameLabel.Bottom + 5;
             }
         }
