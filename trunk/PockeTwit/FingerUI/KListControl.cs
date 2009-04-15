@@ -1808,6 +1808,10 @@ namespace FingerUI
             }
             if (s == null) { return; }
             ClickablesControl.Items = s.Tweet.Clickables;
+            ClickablesControl.Top = this.Top + 20;
+            ClickablesControl.Left = this.Left + 20;
+            ClickablesControl.Width = this.Width - 40;
+            ClickablesControl.Height = this.Height - 40;
             ClickablesControl.Visible = true;
         }
 

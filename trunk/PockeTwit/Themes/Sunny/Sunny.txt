@@ -1,6 +1,6 @@
 ﻿BackColor:0:0:0
 BackGradColor:0:0:0
-ForeColor:255:183:81
+ForeColor:240:240:200
 LinkColor:255:180:150
 HashLinkColor:160:82:45
 SelectedBackColor:235:174:21
@@ -17,5 +17,5 @@ PointerColor:255:100:100
 LineColor:235:123:21
 DimmedLineColor:175:75:75
 DimmedColor:175:75:75
-MenuTextColor:255:183:81
+MenuTextColor:240:240:200
 MenuSelectedTextColor:255:255:255
