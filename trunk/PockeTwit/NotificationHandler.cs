@@ -27,6 +27,7 @@ namespace PockeTwit
         }
         public struct NotificationInfo
         {
+            public string Name;
             public string GUID;
             public Options Options;
             public string Sound;
@@ -55,8 +56,8 @@ namespace PockeTwit
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
         public const string MessageTweets = "{B4D35E62-A83F-4add-B421-F7FC28E14310}";
 
-        public static NotificationInfo Friends = new NotificationInfo();
-        public static NotificationInfo Messages = new NotificationInfo();
+        public static NotificationInfo Friends = new NotificationInfo(Name = "PockeTwit: Friends Update");
+        public static NotificationInfo Messages = new NotificationInfo(Name = "PockeTwit: Messages");
 
         private static Microsoft.WindowsMobile.Status.RegistryState FriendsRegistryWatcher1;
         private static Microsoft.WindowsMobile.Status.RegistryState MessagesRegistryWatcher1;
@@ -67,9 +68,9 @@ namespace PockeTwit
         {
             //Create or oppen registry notification keys
             FriendsKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + FriendsTweets);
-            FriendsKey.SetValue("", "PockeTwit: Friends Update");
+            FriendsKey.SetValue("", Friends.Name);
             MessageKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + MessageTweets);
-            MessageKey.SetValue("", "PockeTwit: Messages");
+            MessageKey.SetValue("", Messages.Name);
             LoadSettings();
             
             FriendsRegistryWatcher1 = new Microsoft.WindowsMobile.Status.RegistryState("HKEY_CURRENT_USER\\ControlPanel\\Notifications\\" + FriendsTweets, "Options", true);
