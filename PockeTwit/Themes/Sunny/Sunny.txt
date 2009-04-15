@@ -1,7 +1,7 @@
 ﻿BackColor:0:0:0
 BackGradColor:0:0:0
-ForeColor:211:211:211
-LinkColor:150:150:255
+ForeColor:255:183:81
+LinkColor:255:180:150
 HashLinkColor:160:82:45
 SelectedBackColor:235:174:21
 SelectedBackGradColor:235:123:21
@@ -11,8 +11,11 @@ SmallTextColor:128:128:128
 ErrorColor:255:0:0
 FieldBackColor:255:255:255
 FieldForeColor:0:0:0
-DimmedColor:75:75:75
-SelectedLinkColor:25:25:130
-SelectedHashLinkColor:120:40:05
+SelectedLinkColor:255:200:160
+SelectedHashLinkColor:255:200:100
 PointerColor:255:100:100
 LineColor:235:123:21
+DimmedLineColor:175:75:75
+DimmedColor:175:75:75
+MenuTextColor:255:183:81
+MenuSelectedTextColor:255:255:255

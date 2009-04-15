@@ -20,7 +20,7 @@ namespace PockeTwit.Themes
         {
             foreach (Control c in f.Controls)
             {
-                if (c is TextBox || c is ListBox || c is ListView || c is ComboBox || c is Panel)
+                if (c is TextBox || c is ListBox || c is ListView || c is ComboBox || c is Panel || c is ProgressBar)
                 {
                     c.ForeColor = ClientSettings.FieldForeColor;
                     c.BackColor = ClientSettings.FieldBackColor;

@@ -105,6 +105,20 @@ namespace PockeTwit.TimeLines
 
         public static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
         {
+            int updatedCount = GetUpdatedCount(ListName, specialTime, selectedStatus);
+            if(!UnreadItemCount.ContainsKey(ListName))
+            {
+                UnreadItemCount.Add(ListName, updatedCount);
+            }
+            else
+            {
+                UnreadItemCount[ListName] = updatedCount;
+            }
+            UnreadCountChanged(ListName, updatedCount);
+        }
+
+        public static int GetUpdatedCount(string ListName, SpecialTimeLine specialTime, string selectedStatus)
+        {
             TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
             switch (ListName)
             {
@@ -118,16 +132,7 @@ namespace PockeTwit.TimeLines
             {
                 Constraints = specialTime.GetConstraints();
             }
-            int updatedCount = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedStatus, Constraints);
-            if(!UnreadItemCount.ContainsKey(ListName))
-            {
-                UnreadItemCount.Add(ListName, updatedCount);
-            }
-            else
-            {
-                UnreadItemCount[ListName] = updatedCount;
-            }
-            UnreadCountChanged(ListName, updatedCount);
+            return LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedStatus, Constraints);
         }
 
         public static string GetLastSelected(string ListName)

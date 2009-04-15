@@ -24,9 +24,12 @@ public static class ClientSettings
     public static System.Drawing.Color LinkColor = System.Drawing.Color.LightBlue;
     public static System.Drawing.Color HashLinkColor = System.Drawing.Color.Sienna;
     public static System.Drawing.Color DimmedColor = Color.FromArgb(75,75,75);
+    public static System.Drawing.Color DimmedLineColor = Color.FromArgb(75, 75, 75);
     public static System.Drawing.Color SelectedLinkColor = LinkColor;
     public static System.Drawing.Color SelectedHashLinkColor = HashLinkColor;
     public static System.Drawing.Color PointerColor = ForeColor;
+    public static System.Drawing.Color MenuTextColor = ForeColor;
+    public static System.Drawing.Color MenuSelectedTextColor = ForeColor;
     #endregion
 
     #region Fields (13)
