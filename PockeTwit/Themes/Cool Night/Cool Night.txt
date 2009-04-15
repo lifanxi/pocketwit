@@ -14,8 +14,8 @@ FieldForeColor:0:0:0
 SelectedLinkColor:170:170:255
 SelectedHashLinkColor:100:100:255
 PointerColor:170:170:255
-LineColor:150:150:200
-DimmedLineColor:75:75:105
+LineColor:100:100:200
+DimmedLineColor:50:50:100
 DimmedColor:75:75:105
 MenuTextColor:200:200:255
 MenuSelectedTextColor:255:255:255

@@ -722,13 +722,24 @@ namespace FingerUI
                 if (_animationStep > 0)
                 {
                     Color newColor;
-                    if (isFading)
+                    try
                     {
-                        newColor = Color.FromArgb(_animationLineColor.R + rLineColorDelta, _animationLineColor.G + gLineColorDelta, _animationLineColor.B + bLineColorDelta);
+                        if (isFading)
+                        {
+                            newColor = Color.FromArgb(_animationLineColor.R + rLineColorDelta,
+                                                      _animationLineColor.G + gLineColorDelta,
+                                                      _animationLineColor.B + bLineColorDelta);
+                        }
+                        else
+                        {
+                            newColor = Color.FromArgb(_animationLineColor.R - rLineColorDelta,
+                                                      _animationLineColor.G - gLineColorDelta,
+                                                      _animationLineColor.B - bLineColorDelta);
+                        }
                     }
-                    else
+                    catch
                     {
-                        newColor = Color.FromArgb(_animationLineColor.R - rLineColorDelta, _animationLineColor.G - gLineColorDelta, _animationLineColor.B - bLineColorDelta);
+                        newColor = ClientSettings.LineColor;
                     }
                     _animationLineColor = newColor;
                     return newColor;
@@ -747,13 +758,24 @@ namespace FingerUI
                 if (_animationStep > 0)
                 {
                     Color newColor;
-                    if (isFading)
+                    try
                     {
-                        newColor = Color.FromArgb(_animationTextColor.R + rTextColorDelta, _animationTextColor.G + gTextColorDelta, _animationTextColor.B + bTextColorDelta);
+                        if (isFading)
+                        {
+                            newColor = Color.FromArgb(_animationTextColor.R + rTextColorDelta,
+                                                      _animationTextColor.G + gTextColorDelta,
+                                                      _animationTextColor.B + bTextColorDelta);
+                        }
+                        else
+                        {
+                            newColor = Color.FromArgb(_animationTextColor.R - rTextColorDelta,
+                                                      _animationTextColor.G - gTextColorDelta,
+                                                      _animationTextColor.B - bTextColorDelta);
+                        }
                     }
-                    else
+                    catch
                     {
-                        newColor = Color.FromArgb(_animationTextColor.R - rTextColorDelta, _animationTextColor.G - gTextColorDelta, _animationTextColor.B - bTextColorDelta);
+                        newColor = ClientSettings.MenuTextColor;
                     }
                     _animationTextColor = newColor;
                     return newColor;
