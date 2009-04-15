@@ -40,7 +40,8 @@ namespace FingerUI
                         IsDirty = true;
                         NeedRedraw();
 
-                        _animationColor = ClientSettings.DimmedColor;
+                        _animationTextColor = ClientSettings.DimmedColor;
+                        _animationLineColor = ClientSettings.DimmedLineColor;
                         isFading = false;
                         _animationStep = 6;
                         AnimateMe();
@@ -59,7 +60,8 @@ namespace FingerUI
                     SelectedItem = value.SubMenuItems[0];
                     _animationStep = 6;
                     isFading = true;
-                    _animationColor = ClientSettings.ForeColor;
+                    _animationTextColor = ClientSettings.MenuTextColor;
+                    _animationLineColor = ClientSettings.LineColor;
                     AnimateMe();
                 }
                 _ExpandedItem = value;
@@ -524,7 +526,8 @@ namespace FingerUI
             Rectangle ExpandedRect = new Rectangle();
             lock (Items)
             {
-                System.Drawing.Color MenuColor = animationColor;
+                System.Drawing.Color MenuTextColor = animationTextColor;
+                System.Drawing.Color MenuLineColor = animationLineColor;
                 
                 int i = 1;
                 if (this.Items[0].CanHide && this.Items[0].Visible)
@@ -545,7 +548,7 @@ namespace FingerUI
                     {
                         if (Item.Visible)
                         {
-                            DrawSingleItem(i, m_backBuffer, 0, CurrentTop, Item, MenuColor);
+                            DrawSingleItem(i, m_backBuffer, 0, CurrentTop, Item, MenuLineColor, MenuTextColor);
 
                             i++;
 
@@ -586,7 +589,7 @@ namespace FingerUI
 
         }
 
-        private void DrawSingleItem(int i, Graphics m_backBuffer, int Offset, int CurrentTop, SideMenuItem Item, System.Drawing.Color MenuColor)
+        private void DrawSingleItem(int i, Graphics m_backBuffer, int Offset, int CurrentTop, SideMenuItem Item, Color MenuLineColor, Color MenuTextColor)
         {
             int LeftPos = 0;
             string DisplayItem = Item.Text;
@@ -605,7 +608,7 @@ namespace FingerUI
             {
                 LeftPos = LeftPos + ClientSettings.Margin + 5 + Offset;
             }
-            using (Pen whitePen = new Pen(MenuColor))
+            using (Pen whitePen = new Pen(MenuLineColor))
             {
                 Rectangle menuRect;
                 if (_Side == KListControl.SideShown.Left)
@@ -618,20 +621,19 @@ namespace FingerUI
                 }
 
                 Color BackColor;
-                Color MenuTextColor;
                 Color GradColor;
-
+                Color TextColor;
                 if (Item == SelectedItem)
                 {
                     BackColor = ClientSettings.SelectedBackColor;
                     GradColor = ClientSettings.SelectedBackGradColor;
-                    MenuTextColor = ClientSettings.SelectedForeColor;
+                    TextColor = ClientSettings.MenuSelectedTextColor;
                 }
                 else
                 {
                     BackColor = ClientSettings.BackColor;
                     GradColor = ClientSettings.BackGradColor;
-                    MenuTextColor = MenuColor;
+                    TextColor = MenuTextColor;
                 }
                 try
                 {
@@ -645,7 +647,7 @@ namespace FingerUI
                     }
                 }
                 m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
-                using (Brush sBrush = new SolidBrush(MenuTextColor))
+                using (Brush sBrush = new SolidBrush(TextColor))
                 {
                     StringFormat sFormat = new StringFormat();
                     sFormat.LineAlignment = StringAlignment.Center;
@@ -667,30 +669,53 @@ namespace FingerUI
                 return ClientSettings.TextSize / 3;
             }
         }
-        private int rColorDelta
+        private int rTextColorDelta
         {
             get
             {
-                return (ClientSettings.DimmedColor.R - ClientSettings.ForeColor.R) / 3;
+                return (ClientSettings.DimmedColor.R - ClientSettings.MenuTextColor.R) / 3;
             }
         }
-        private int gColorDelta
+        private int gTextColorDelta
         {
             get
             {
-                return (ClientSettings.DimmedColor.G - ClientSettings.ForeColor.G) / 3;
+                return (ClientSettings.DimmedColor.G - ClientSettings.MenuTextColor.G) / 3;
             }
         }
-        private int bColorDelta
+        private int bTextColorDelta
         {
             get
             {
-                return (ClientSettings.DimmedColor.B - ClientSettings.ForeColor.B) / 3;
+                return (ClientSettings.DimmedColor.B - ClientSettings.MenuTextColor.B) / 3;
             }
         }
+
+        private int rLineColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedLineColor.R - ClientSettings.LineColor.R) / 3;
+            }
+        }
+        private int gLineColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedLineColor.G - ClientSettings.LineColor.G) / 3;
+            }
+        }
+        private int bLineColorDelta
+        {
+            get
+            {
+                return (ClientSettings.DimmedLineColor.B - ClientSettings.LineColor.B) / 3;
+            }
+        }
+
         private bool isFading = true;
-        private Color _animationColor = ClientSettings.ForeColor;
-        private Color animationColor
+        private Color _animationLineColor = ClientSettings.LineColor;
+        private Color animationLineColor
         {
             get
             {
@@ -699,18 +724,43 @@ namespace FingerUI
                     Color newColor;
                     if (isFading)
                     {
-                        newColor = Color.FromArgb(_animationColor.R + rColorDelta, _animationColor.G + gColorDelta, _animationColor.B + bColorDelta);
+                        newColor = Color.FromArgb(_animationLineColor.R + rLineColorDelta, _animationLineColor.G + gLineColorDelta, _animationLineColor.B + bLineColorDelta);
                     }
                     else
                     {
-                        newColor = Color.FromArgb(_animationColor.R - rColorDelta, _animationColor.G - gColorDelta, _animationColor.B - bColorDelta);
+                        newColor = Color.FromArgb(_animationLineColor.R - rLineColorDelta, _animationLineColor.G - gLineColorDelta, _animationLineColor.B - bLineColorDelta);
                     }
-                    _animationColor = newColor;
+                    _animationLineColor = newColor;
                     return newColor;
                 }
                 else
                 {
-                    return _animationColor;
+                    return _animationLineColor;
+                }
+            }
+        }
+        private Color _animationTextColor = ClientSettings.MenuTextColor;
+        private Color animationTextColor
+        {
+            get
+            {
+                if (_animationStep > 0)
+                {
+                    Color newColor;
+                    if (isFading)
+                    {
+                        newColor = Color.FromArgb(_animationTextColor.R + rTextColorDelta, _animationTextColor.G + gTextColorDelta, _animationTextColor.B + bTextColorDelta);
+                    }
+                    else
+                    {
+                        newColor = Color.FromArgb(_animationTextColor.R - rTextColorDelta, _animationTextColor.G - gTextColorDelta, _animationTextColor.B - bTextColorDelta);
+                    }
+                    _animationTextColor = newColor;
+                    return newColor;
+                }
+                else
+                {
+                    return _animationTextColor;
                 }
             }
         }
@@ -751,7 +801,7 @@ namespace FingerUI
                     
                     if (subItem.Visible)
                     {
-                        DrawSingleItem(i, m_backBuffer, OffSet, CurrentTop, subItem, ClientSettings.ForeColor);
+                        DrawSingleItem(i, m_backBuffer, OffSet, CurrentTop, subItem, ClientSettings.LineColor, ClientSettings.MenuTextColor);
                         i++;
                         CurrentBottom = CurrentTop + ItemHeight;
                         CurrentTop = CurrentTop + ItemHeight;

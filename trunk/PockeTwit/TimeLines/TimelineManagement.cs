@@ -341,6 +341,7 @@ namespace PockeTwit
                                         TempLine.Add(s);
                                     }
                                 }
+                                //TempLine.AddRange(NewStats);
                                 ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Replies);
                             }
                             catch
@@ -372,6 +373,7 @@ namespace PockeTwit
                                             TempLine.Add(s);
                                         }
                                     }
+                                    //TempLine.AddRange(NewStats);
                                     ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Direct_Messages);
                                 }
                                 catch
