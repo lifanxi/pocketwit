@@ -105,9 +105,9 @@ namespace FingerUI
                 Width = Width - (ClientSettings.Margin * 2);
                 
                 int Left = ClientSettings.Margin;
-                using (Brush ForeBrush = new SolidBrush(ClientSettings.ForeColor))
+                using (Brush ForeBrush = new SolidBrush(ClientSettings.MenuTextColor))
                 {
-                    using (Pen p = new Pen(ClientSettings.ForeColor))
+                    using (Pen p = new Pen(ClientSettings.LineColor))
                     {
                         Rectangle boxPos;
                         Rectangle textPos;

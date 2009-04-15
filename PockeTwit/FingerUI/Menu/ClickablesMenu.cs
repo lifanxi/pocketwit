@@ -174,17 +174,17 @@ namespace FingerUI
             g.Clip = new Region(DrawingArea);
 
             int i = 0;
-            using (Pen whitePen = new Pen(ClientSettings.ForeColor))
+            using (Pen whitePen = new Pen(ClientSettings.LineColor))
             {
                 foreach (string Item in TextItems)
                 {
                     Rectangle r = new Rectangle(this.Left, TopOfItem, this.Width, ItemHeight);
                     int TextTop = ((r.Bottom - r.Top) / 2) + r.Top;
-                    Color TextColor = ClientSettings.ForeColor;
+                    Color TextColor = ClientSettings.MenuTextColor;
                     if (i == _CurrentlyFocused)
                     {
                         Gradient.GradientFill.Fill(g, r, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                        TextColor = ClientSettings.SelectedForeColor;
+                        TextColor = ClientSettings.MenuSelectedTextColor;
                     }
                     else
                     {
