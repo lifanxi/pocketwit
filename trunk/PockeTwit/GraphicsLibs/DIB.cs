@@ -178,7 +178,8 @@ namespace GraphicsLibs
         {
 
             //Set up a BitmapHeader
-            BITMAPINFOHEADER bmpInfo = new BITMAPINFOHEADER(8, x, y);
+            Int32 Depth = DetermineColorDepth.getdepth();
+            BITMAPINFOHEADER bmpInfo = new BITMAPINFOHEADER((short) Depth, x, y);
             BITMAPFILEHEADER bmpFile = new BITMAPFILEHEADER(bmpInfo);
 
 

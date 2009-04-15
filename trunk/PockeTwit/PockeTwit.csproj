@@ -572,6 +572,7 @@
     <Compile Include="FingerUI\Portal.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GraphicsLibs\DetermineColorDepth.cs" />
     <Compile Include="GraphicsLibs\DIB.cs" />
     <Compile Include="GroupingCode.cs" />
     <Compile Include="ImagePreview.cs">
