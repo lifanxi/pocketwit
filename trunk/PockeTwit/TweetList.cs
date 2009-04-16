@@ -226,7 +226,7 @@ namespace PockeTwit
 
         //�Delegates�(2)�
         private delegate void delSetWindowState(FormWindowState state);
-        private delegate void delAddStatuses(Library.status[] arrayOfStats, int Count);
+        private delegate void delAddStatuses(Library.status[] arrayOfStats, bool KeepPosition);
         private delegate void delChangeCursor(Cursor CursorToset);
         private delegate void delNotify(int Count);
         private delegate bool delBool();
@@ -280,26 +280,42 @@ namespace PockeTwit
 
         private void AddStatusesToList(Library.status[] mergedstatuses)
         {
-            AddStatusesToList(mergedstatuses, 0);
+            AddStatusesToList(mergedstatuses, false);
         }
-
-        private void AddStatusesToList(Library.status[] mergedstatuses, int newItems)
+        private void AddStatusesToList(Library.status[] mergedstatuses, bool KeepPosition)
         {
-            if (mergedstatuses == null) { return; }
-            if (mergedstatuses.Length == 0) { return; }
             if (InvokeRequired)
             {
                 delAddStatuses d = new delAddStatuses(AddStatusesToList);
-                this.Invoke(d, new object[] { mergedstatuses, newItems });
+                this.Invoke(d, new object[] { mergedstatuses, KeepPosition });
             }
             else
             {
+                int newItems = 0;
+                if(KeepPosition)
+                {
+                    FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+                    TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
+                    if(statList.CurrentList()=="Messages_TimeLine")
+                    {
+                        t = TimelineManagement.TimeLineType.Messages;
+                    }
+                    string Constraints = "";
+                    if(currentGroup!=null){
+                        Constraints = currentGroup.GetConstraints();}
+                    newItems = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedItem.Tweet.id, Constraints);
+                }
+                
+                if (mergedstatuses == null) { return; }
+                if (mergedstatuses.Length == 0) { return; }
+            
                 int OldOffset = 0;
                 int oldIndex = 0;
 
                 
-                OldOffset = statList.YOffset;
+                
                 oldIndex = statList.SelectedIndex;
+                OldOffset = statList.YOffset - (ClientSettings.ItemHeight * oldIndex);
 
                 int oldCount = statList.Count;
                 statList.Clear();
@@ -315,11 +331,11 @@ namespace PockeTwit
                 FingerUI.StatusItem currentItem = null;
                 if (!ClientSettings.AutoScrollToTop)
                 {
-                    if (oldIndex >= 0 && newItems < oldCount)
+                    if (oldIndex >= 0 && KeepPosition && newItems < ClientSettings.MaxTweets)
                     {
                         try
                         {
-                            statList.SelectedItem = statList[oldIndex + newItems];
+                            statList.SelectedItem = statList[newItems];
                             currentItem = (FingerUI.StatusItem)statList.SelectedItem;
                             statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);
                         }
@@ -1084,13 +1100,13 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Friends_TimeLine")
             {
-                AddStatusesToList(Manager.GetFriendsImmediately(), count);
+                AddStatusesToList(Manager.GetFriendsImmediately(), true);
             }
             else
             {
                 if(currentGroup!=null)
                 {
-                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup));
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
                 }
             }
             Notifyer.NewFriendMessages(count);
@@ -1101,7 +1117,7 @@ namespace PockeTwit
         {
             if (statList.CurrentList() == "Messages_TimeLine")
             {
-                AddStatusesToList(Manager.GetMessagesImmediately(), count);
+                AddStatusesToList(Manager.GetMessagesImmediately(), true);
             }
             Notifyer.NewMessages(count);
             LastSelectedItems.UpdateUnreadCounts();
