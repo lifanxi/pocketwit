@@ -56,8 +56,8 @@ namespace PockeTwit
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
         public const string MessageTweets = "{B4D35E62-A83F-4add-B421-F7FC28E14310}";
 
-        public static NotificationInfo Friends = new NotificationInfo(Name = "PockeTwit: Friends Update");
-        public static NotificationInfo Messages = new NotificationInfo(Name = "PockeTwit: Messages");
+        public static NotificationInfo Friends = new NotificationInfo { Name = "PockeTwit: Friends Update" };
+        public static NotificationInfo Messages = new NotificationInfo{ Name = "PockeTwit: Messages" };
 
         private static Microsoft.WindowsMobile.Status.RegistryState FriendsRegistryWatcher1;
         private static Microsoft.WindowsMobile.Status.RegistryState MessagesRegistryWatcher1;
