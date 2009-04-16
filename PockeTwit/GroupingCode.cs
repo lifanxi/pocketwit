@@ -17,6 +17,14 @@ namespace PockeTwit
             public bool Exclusive;
         }
         
+        public string ListName
+        {
+            get
+            {
+                return "Grouped_TimeLine_" + name;
+            }
+        }
+
         public string name { get; set; }
         public groupTerm[] Terms { get; set; }
 
@@ -264,7 +272,7 @@ namespace PockeTwit
             SpecialTimeLine ret = null;
             foreach (SpecialTimeLine t in GetList())
             {
-                if ("Grouped_TimeLine_" + t.name == ListName)
+                if (t.ListName == ListName)
                 {
                     ret = t;
                 }

@@ -94,10 +94,9 @@ namespace PockeTwit.TimeLines
 
                 foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
                 {
-                    string ListName = "Grouped_TimeLine_" + t.name;
-                    if (NewestSelectedItemsDictionary.ContainsKey(ListName))
+                    if (NewestSelectedItemsDictionary.ContainsKey(t.ListName))
                     {
-                        SetUnreadCount(ListName, NewestSelectedItemsDictionary[ListName].id, t);
+                        SetUnreadCount(t.ListName, NewestSelectedItemsDictionary[t.ListName].id, t);
                     }
                 }
             }

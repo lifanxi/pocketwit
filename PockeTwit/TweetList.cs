@@ -544,7 +544,7 @@ namespace PockeTwit
             i.Argument = t.name;
             History.Push(i);
 
-            SwitchToList("Grouped_TimeLine_"+t.name);
+            SwitchToList(t.ListName);
             this.statList.ClearVisible();
             AddStatusesToList(Manager.GetGroupedTimeLine(t));
             
@@ -756,7 +756,7 @@ namespace PockeTwit
 
             GroupsMenuItem.Visible = true;
             GroupSettingsMenuItem.Visible = true;
-            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, "Grouped_TimeLine_"+t.name);
+            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, t.ListName);
             GroupsMenuItem.SubMenuItems.Add(item);
         }
 
@@ -1096,7 +1096,7 @@ namespace PockeTwit
             }
         }
 
-        void Manager_FriendsUpdated(int count)
+        void Manager_FriendsUpdated()
         {
             if (statList.CurrentList() == "Friends_TimeLine")
             {
@@ -1109,17 +1109,18 @@ namespace PockeTwit
                     AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
                 }
             }
-            Notifyer.NewFriendMessages(count);
             LastSelectedItems.UpdateUnreadCounts();
+            Notifyer.NewItems();
             SetMenuNumbers();
         }
-        void Manager_MessagesUpdated(int count)
+        void Manager_MessagesUpdated()
         {
             if (statList.CurrentList() == "Messages_TimeLine")
             {
                 AddStatusesToList(Manager.GetMessagesImmediately(), true);
             }
-            Notifyer.NewMessages(count);
+            Notifyer.NewItems();
+            //Notifyer.NewMessages();
             LastSelectedItems.UpdateUnreadCounts();
             SetMenuNumbers();
         }
@@ -1241,7 +1242,6 @@ namespace PockeTwit
         private void SetUpListControl()
         {
             statList.IsMaximized = ClientSettings.IsMaximized;
-            //statList.MenuItemSelected += new FingerUI.KListControl.delMenuItemSelected(statusList_MenuItemSelected);
             statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
             statList.HookKey();
