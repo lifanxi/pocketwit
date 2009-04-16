@@ -105,7 +105,7 @@ namespace FingerUI
                 Width = Width - (ClientSettings.Margin * 2);
                 
                 int Left = ClientSettings.Margin;
-                using (Brush ForeBrush = new SolidBrush(ClientSettings.MenuTextColor))
+                using (Brush ForeBrush = new SolidBrush(ClientSettings.PopUpTextColor))
                 {
                     using (Pen p = new Pen(ClientSettings.LineColor))
                     {
@@ -123,7 +123,7 @@ namespace FingerUI
                         }
                         //Gradients are expensive -- will this make it run smoother?
                         //Gradient.GradientFill.Fill(g, boxPos, ClientSettings.SelectedBackColor, ClientSettings.SelectedBackGradColor, Gradient.GradientFill.FillDirection.TopToBottom);
-                        using (Brush backBrush = new SolidBrush(ClientSettings.BackColor))
+                        using (Brush backBrush = new SolidBrush(ClientSettings.PopUpBackgroundColor))
                         {
                             g.FillRectangle(backBrush, boxPos);
                         }

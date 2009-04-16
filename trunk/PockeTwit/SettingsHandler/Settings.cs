@@ -30,6 +30,8 @@ public static class ClientSettings
     public static System.Drawing.Color PointerColor = ForeColor;
     public static System.Drawing.Color MenuTextColor = ForeColor;
     public static System.Drawing.Color MenuSelectedTextColor = ForeColor;
+    public static System.Drawing.Color PopUpBackgroundColor = BackColor;
+    public static System.Drawing.Color PopUpTextColor = ForeColor;
     #endregion
 
     #region Fields (13)
