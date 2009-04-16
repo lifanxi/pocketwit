@@ -9,9 +9,8 @@ namespace PockeTwit
     public class TimelineManagement
     {
         #region Events
-        public delegate void delFriendsUpdated(int count);
-        public delegate void delMessagesUpdated(int count);
-        public delegate void delBothUpdated(int Messagecount, int FreindsCount);
+        public delegate void delFriendsUpdated();
+        public delegate void delMessagesUpdated();
         public delegate void delProgress(int percentage, string Status);
         public delegate void delComplete();
         public delegate void delNullReturnedByAccount(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
@@ -295,7 +294,7 @@ namespace PockeTwit
                     {
                         if (Notify)
                         {
-                            MessagesUpdated(TempLine.Count);
+                            MessagesUpdated();
                         }
                         else
                         {
@@ -472,7 +471,7 @@ namespace PockeTwit
                     {
                         if (Notify)
                         {
-                            FriendsUpdated(NewItems);
+                            FriendsUpdated();
                         }
                         else
                         {

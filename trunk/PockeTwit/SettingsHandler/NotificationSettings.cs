@@ -27,17 +27,20 @@ namespace PockeTwit.SettingsHandler
             }
         }
 
-        private NotificationHandler.NotificationInfo currentInfo;
+        private NotificationHandler.NotificationInfoClass currentInfo;
 
         public NotificationSettings()
         {
             InitializeComponent();
+            foreach (var infoClass in NotificationHandler.GetList())
+            {
+                this.cmbNotificationType.Items.Add(infoClass);
+            }
             PockeTwit.Themes.FormColors.SetColors(this);
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 chkNotification.Visible = true;
             }
-            NotificationHandler.LoadSettings();
             ListSounds();
         }
 
@@ -68,16 +71,7 @@ namespace PockeTwit.SettingsHandler
         {
             //Friends Update
             //New Messages
-
-            switch (cmbNotificationType.Text)
-            {
-                case "Friends Update":
-                    currentInfo = NotificationHandler.Friends;
-                    break;
-                case "New Messages":
-                    currentInfo = NotificationHandler.Messages;
-                    break;
-            }
+            currentInfo = (NotificationHandler.NotificationInfoClass)cmbNotificationType.SelectedItem;
             this.chkPlaySound.Checked = (currentInfo.Options & NotificationHandler.Options.Sound) == NotificationHandler.Options.Sound;
             this.cmbSound.Enabled = (currentInfo.Options & NotificationHandler.Options.Sound) == NotificationHandler.Options.Sound;
             this.chkVibrate.Checked = (currentInfo.Options & NotificationHandler.Options.Vibrate) == NotificationHandler.Options.Vibrate;

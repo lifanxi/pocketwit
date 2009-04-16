@@ -62,8 +62,6 @@
             // 
             this.cmbNotificationType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbNotificationType.Items.Add("Friends Update");
-            this.cmbNotificationType.Items.Add("New Messages");
             this.cmbNotificationType.Location = new System.Drawing.Point(4, 28);
             this.cmbNotificationType.Name = "cmbNotificationType";
             this.cmbNotificationType.Size = new System.Drawing.Size(233, 22);
