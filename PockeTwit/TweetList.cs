@@ -155,26 +155,10 @@ namespace PockeTwit
             statList.Progress += new KListControl.delProgress(statList_Progress);
             SpecialTimeLines.Load();
 
+            //First run means no settings exist
             if (ClientSettings.AccountsList.Count == 0)
             {
-                ClearSettings();
-                /*
-                // SHow Settings page first
-                SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
-                this.BackColor = ClientSettings.BackColor;
-                this.ForeColor = ClientSettings.ForeColor;
-
-                //SettingsForm settings = new SettingsForm();
-                if (settings.ShowDialog() == DialogResult.Cancel)
-                {
-                    statList.Clear();
-                    if (Manager != null)
-                    {
-                        Manager.ShutDown();
-                    }
-                    this.Close();
-                }
-                */
+                ClearSettings(); 
             }
 
             if (StartBackground) { this.Hide(); }
@@ -991,20 +975,21 @@ namespace PockeTwit
 
         private void ClearSettings()
         {
-            /* TODO -- Start with Account Settings
             if (System.IO.File.Exists(ClientSettings.AppPath + "\\app.config"))
             {
                 System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
             }
             ClientSettings.AccountsList.Clear();
-            SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
-            if (settings.ShowDialog() == DialogResult.Cancel)
+            AccountsForm f = new AccountsForm();
+            f.ShowDialog();
+            if(ClientSettings.AccountsList.Count==0)
             {
-                statList.Clear();
-                Manager.ShutDown();
+                if (Manager != null)
+                {
+                    Manager.ShutDown();
+                }
                 this.Close();
             }
-             */
         }
 
         void Notifyer_MessagesNotificationClicked()
