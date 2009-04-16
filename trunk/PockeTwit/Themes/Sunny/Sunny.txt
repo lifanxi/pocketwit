@@ -19,3 +19,5 @@ DimmedLineColor:175:75:75
 DimmedColor:175:75:75
 MenuTextColor:240:240:200
 MenuSelectedTextColor:255:255:255
+PopUpBackgroundColor:235:174:21
+PopUpTextColor:255:255:255
