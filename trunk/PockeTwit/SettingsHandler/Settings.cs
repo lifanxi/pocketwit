@@ -347,7 +347,7 @@ public static class ClientSettings
             }
             else
             {
-                ThemeName = "Original";
+                ThemeName = "Sunny";
             }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["HighQualityAvatars"]))
             {
