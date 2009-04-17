@@ -3,13 +3,16 @@
 using System.Data.SQLite;
 
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
 namespace PockeTwit
 {
+    [Serializable]
     public class SpecialTimeLine
     {
+        [Serializable]
         public class groupTerm
         {
             public string Term;
@@ -91,6 +94,7 @@ namespace PockeTwit
 
     }
 
+    [Serializable]
     public static class SpecialTimeLines
     {
         private static string configPath = ClientSettings.AppPath + "\\savedTimelines.xml";
@@ -278,6 +282,48 @@ namespace PockeTwit
                 }
             }
             return ret;
+        }
+
+
+        public static void Export(string FileName)
+        {
+            
+            lock (_Items)
+            {
+                List<SpecialTimeLine> l = new List<SpecialTimeLine>();
+                foreach (var item in _Items.Values)
+                {
+                    l.Add(item);
+                }
+                System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof(SpecialTimeLine[]));
+                StringBuilder b = new StringBuilder();
+                using (System.IO.StreamWriter w = new StreamWriter(FileName))
+                {
+                    s.Serialize(w, l.ToArray());
+                }
+            }
+        }
+
+        public static void Import(string FileName)
+        {
+            if (!System.IO.File.Exists(FileName)) return;
+            SpecialTimeLine[] Input;
+            System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof (SpecialTimeLine[]));
+
+            using (System.IO.StreamReader r = new StreamReader(FileName))
+            {
+                Input = (SpecialTimeLine[]) s.Deserialize(r);
+            }
+
+            lock (_Items)
+            {
+                _Items.Clear();
+                foreach (var line in Input)
+                {
+                    _Items.Add(line.name, line);
+                }
+            }
+            Save();
         }
     }
 }

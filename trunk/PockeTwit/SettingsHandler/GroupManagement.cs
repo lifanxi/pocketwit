@@ -128,5 +128,21 @@ namespace PockeTwit.SettingsHandler
                 this.DialogResult = DialogResult.OK;
             }
         }
+
+        private void menuExport_Click(object sender, EventArgs e)
+        {
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SpecialTimeLines.Export(saveFileDialog1.FileName);
+            }
+        }
+
+        private void menuImport_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog()== DialogResult.OK)
+            {
+                SpecialTimeLines.Import(openFileDialog1.FileName);
+            }
+        }
     }
 }
