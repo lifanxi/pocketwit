@@ -13,8 +13,8 @@ FieldBackColor:255:255:255
 FieldForeColor:0:0:0
 SelectedLinkColor:50:75:50
 SelectedHashLinkColor:50:75:50
-PointerColor:100:255:100
-LineColor:21:235:123
+PointerColor:150:255:150
+LineColor:21:185:103
 DimmedLineColor:55:95:55
 DimmedColor:75:105:75
 MenuTextColor:200:240:200
