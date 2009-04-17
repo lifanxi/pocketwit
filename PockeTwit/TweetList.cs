@@ -128,7 +128,9 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-            
+            progressBar1.Visible = false;
+            lblProgress.Visible = true;
+            lblProgress.Text = "Initializaing";
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
@@ -190,6 +192,7 @@ namespace PockeTwit
             progressBar1.Maximum = totalnumber;
             progressBar1.Minimum = 0;
             progressBar1.Value = itemnumber;
+            this.Refresh();
         }
 
         private void AddMainMenuItems()
