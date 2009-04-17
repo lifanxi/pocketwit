@@ -51,7 +51,9 @@ namespace PockeTwit
             else            
             {                
                 ClientSettings.MediaService = cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString();           
-            }            
+            }
+            ClientSettings.SendMessageToMediaService = !cbPreUpload.Checked;
+
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
@@ -95,7 +97,7 @@ namespace PockeTwit
             chkTranslate.Checked = ClientSettings.AutoTranslate;
             txtCaheDir.Text = ClientSettings.CacheDir;
             setMediaService(ClientSettings.MediaService);
-            
+            cbPreUpload.Checked = !ClientSettings.SendMessageToMediaService;
             chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;
             this.DialogResult = DialogResult.Cancel;
         }

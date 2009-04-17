@@ -59,6 +59,7 @@ namespace PockeTwit
             this.txtCaheDir = new System.Windows.Forms.TextBox();
             this.lblPhotoService = new System.Windows.Forms.Label();
             this.cmbMediaService = new System.Windows.Forms.ComboBox();
+            this.cbPreUpload = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -175,6 +176,15 @@ namespace PockeTwit
             this.cmbMediaService.Size = new System.Drawing.Size(138, 22);
             this.cmbMediaService.TabIndex = 6;
             // 
+            // cbPreUpload
+            // 
+            this.cbPreUpload.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.cbPreUpload.Location = new System.Drawing.Point(4, 221);
+            this.cbPreUpload.Name = "cbPreUpload";
+            this.cbPreUpload.Size = new System.Drawing.Size(219, 20);
+            this.cbPreUpload.TabIndex = 11;
+            this.cbPreUpload.Text = "Pre upload pictures";
+            // 
             // OtherSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -182,6 +192,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.cbPreUpload);
             this.Controls.Add(this.cmbMediaService);
             this.Controls.Add(this.lblPhotoService);
             this.Controls.Add(this.txtCaheDir);
@@ -212,5 +223,6 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCaheDir; private System.Windows.Forms.Label lblPhotoService; private System.Windows.Forms.ComboBox cmbMediaService;
+        private System.Windows.Forms.CheckBox cbPreUpload;
     }
 }
