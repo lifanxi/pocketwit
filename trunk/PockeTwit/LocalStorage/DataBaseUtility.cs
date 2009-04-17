@@ -200,6 +200,17 @@ namespace LocalStorage
                                      url VARCHAR(255) PRIMARY KEY NOT NULL )";
                         comm.ExecuteNonQuery();
 
+                        comm.CommandText =
+                            @"CREATE TABLE IF NOT EXISTS savedSearches
+                                    (searchName NVARCHAR(50) PRIMARY KEY NOT NULL,
+                                     searchTerms NVARCHAR(255))";
+                        comm.ExecuteNonQuery();
+
+                        comm.CommandText =
+                            @"CREATE TABLE IF NOT EXISTS statusesInSearch
+                                    {searchName NVARCHAR(50),
+                                    statusID VARCHAR(50))";
+                        comm.ExecuteNonQuery();
                         
 
                         t.Commit();
