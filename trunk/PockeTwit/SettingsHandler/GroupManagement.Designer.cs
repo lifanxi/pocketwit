@@ -38,12 +38,8 @@
             this.cmbChooseGroup = new System.Windows.Forms.ComboBox();
             this.lnkDeleteGroup = new System.Windows.Forms.LinkLabel();
             this.pnlUsers = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.pnlUsers.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -104,38 +100,13 @@
             // 
             // pnlUsers
             // 
+            this.pnlUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlUsers.AutoScroll = true;
-            this.pnlUsers.Controls.Add(this.checkBox1);
-            this.pnlUsers.Controls.Add(this.label3);
-            this.pnlUsers.Controls.Add(this.label2);
             this.pnlUsers.Location = new System.Drawing.Point(4, 32);
             this.pnlUsers.Name = "pnlUsers";
             this.pnlUsers.Size = new System.Drawing.Size(233, 233);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Location = new System.Drawing.Point(168, 33);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(22, 20);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "checkBox1";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(168, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 20);
-            this.label3.Text = "Exclusive";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(3, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(159, 20);
-            this.label2.Text = "Username";
             // 
             // saveFileDialog1
             // 
@@ -159,7 +130,6 @@
             this.Menu = this.mainMenu1;
             this.Name = "GroupManagement";
             this.Text = "Group Management";
-            this.pnlUsers.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -171,9 +141,6 @@
         private System.Windows.Forms.ComboBox cmbChooseGroup;
         private System.Windows.Forms.LinkLabel lnkDeleteGroup;
         private System.Windows.Forms.Panel pnlUsers;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MenuItem menuImportExport;
         private System.Windows.Forms.MenuItem menuExport;
         private System.Windows.Forms.MenuItem menuImport;
