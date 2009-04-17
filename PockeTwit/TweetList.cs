@@ -52,7 +52,9 @@ namespace PockeTwit
         FingerUI.SideMenuItem BackMenuItem;
 
         FingerUI.SideMenuItem FriendsTimeLineMenuItem;
+        private FingerUI.SideMenuItem RefreshFriendsTimeLineMenuItem;
         FingerUI.SideMenuItem MessagesMenuItem;
+        private FingerUI.SideMenuItem RefreshMessagesMenuItem;
         
         FingerUI.SideMenuItem PublicMenuItem;
         FingerUI.SideMenuItem SearchMenuItem;
@@ -662,7 +664,9 @@ namespace PockeTwit
             BackMenuItem.CanHide = true;
 
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu, "Friends_TimeLine");
+            RefreshFriendsTimeLineMenuItem = new SideMenuItem(this.RefreshFriendsTimeLine, "Refresh Friends TimeLine", statList.LeftMenu, "Friends_TimeLine");
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu, "Messages_TimeLine");
+            RefreshMessagesMenuItem = new SideMenuItem(this.RefreshMessagesTimeLine, "Refresh Messages", statList.LeftMenu, "Messages_TimeLine");
             PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
             ViewFavoritesMenuItem = new FingerUI.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
@@ -727,7 +731,7 @@ namespace PockeTwit
             }
 
 
-            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, MessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
+            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, RefreshFriendsTimeLineMenuItem, MessagesMenuItem, RefreshMessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
             AboutMenuItem, WindowMenuItem, ExitMenuItem});
         }
 
@@ -807,41 +811,11 @@ namespace PockeTwit
         private void SetLeftMenu()
         {
             BackMenuItem.Visible = History.Count > 1;
-            /*
-            if (ClientSettings.MergeMessages)
-            {
-                LeftMenu = new List<string>(new string[] { "Back", "TimeLine", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
-            }
-            else
-            {
-                LeftMenu = new List<string>(new string[] { "Back", "Friends TimeLine", "Messages", "Post Update", "Search/Local", "Map These", "Settings", "About/Feedback", "Exit" });
-            }
-            if (History.Count <= 1)
-            {
-                LeftMenu.Remove("Back");
-            }
-            
-            statList.LeftMenu.ResetMenu(LeftMenu);
-             
-            switch (statList.CurrentList())
-            {
-                case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline";
-                    MessagesMenuItem.Text = "Messages";
-                    MergedTimeLineMenuItem.Text = "Refresh TimeLine";
-                    break;
-                case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
-                    MessagesMenuItem.Text = "Refresh Messages";
-                    MergedTimeLineMenuItem.Text = "TimeLine";
-                    break;
-                default:
-                    MergedTimeLineMenuItem.Text = "TimeLine";
-                    MessagesMenuItem.Text = "Messages";
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline";
-                    break;
-            }
-             */
+            FriendsTimeLineMenuItem.Visible = statList.CurrentList() != "Friends_TimeLine";
+            RefreshFriendsTimeLineMenuItem.Visible = statList.CurrentList() == "Friends_TimeLine";
+
+            MessagesMenuItem.Visible = statList.CurrentList() != "Messages_TimeLine";
+            RefreshMessagesMenuItem.Visible = statList.CurrentList() == "Messages_TimeLine";
         }
         private void UpdateRightMenu()
         {
@@ -905,18 +879,6 @@ namespace PockeTwit
         }
         private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
         {
-            /*
-            RightMenu = new List<string>(new string[] { "Show Conversation", "Reply @User", "Direct @User", "Quote", "Make Favorite", "@User TimeLine", "Profile Page", "Stop Following", "Minimize" });
-            if (!t.FavoritesWork) { RightMenu.Remove("Make Favorite"); }
-            if (!t.DirectMessagesWork) { RightMenu.Remove("Direct @User"); }
-            
-            if (item == null || string.IsNullOrEmpty(item.Tweet.in_reply_to_status_id))
-            {
-                RightMenu.Remove("Show Conversation");
-            }
-            statList.RightMenu.ResetMenu(RightMenu);
-            SetLeftMenu();
-             */
             SetLeftMenu();
             UpdateRightMenu();
         }
@@ -1383,6 +1345,11 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
+        private void RefreshFriendsTimeLine()
+        {
+            Manager.RefreshFriendsTimeLine();
+        }
+
         private void ShowFriendsTimeLine()
         {
             currentGroup = null;
@@ -1393,30 +1360,26 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(i);
-            if (Redraw)
-            {
-                statList.SetSelectedMenu(FriendsTimeLineMenuItem);
-                AddStatusesToList(Manager.GetFriendsImmediately());
-            }
-            Manager.RefreshFriendsTimeLine();
+            statList.SetSelectedMenu(FriendsTimeLineMenuItem);
+            AddStatusesToList(Manager.GetFriendsImmediately());
             ChangeCursor(Cursors.Default);
+        }
+
+        private void RefreshMessagesTimeLine()
+        {
+            Manager.RefreshMessagesTimeLine();
         }
 
         private void ShowMessagesTimeLine()
         {
             ChangeCursor(Cursors.WaitCursor);
-            bool Redraw = statList.CurrentList() != "Messages_TimeLine";
             SwitchToList("Messages_TimeLine");
             History.Clear();
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            //if (Redraw)
-            //{
             statList.SetSelectedMenu(MessagesMenuItem);
             AddStatusesToList(Manager.GetMessagesImmediately());
-            //}
-            Manager.RefreshMessagesTimeLine();
             ChangeCursor(Cursors.Default);
         }
 
