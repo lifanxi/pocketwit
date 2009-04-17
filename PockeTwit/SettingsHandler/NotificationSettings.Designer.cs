@@ -125,6 +125,7 @@
             // 
             // lnkPlay
             // 
+            this.lnkPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkPlay.Location = new System.Drawing.Point(207, 126);
             this.lnkPlay.Name = "lnkPlay";
             this.lnkPlay.Size = new System.Drawing.Size(29, 20);
