@@ -186,13 +186,17 @@ namespace PockeTwit
                 progressBar1.Visible = false;
                 return;
             }
-            lblProgress.Visible = false;
             lblTitle.Visible = true;
             progressBar1.Visible = true;
             progressBar1.Maximum = totalnumber;
             progressBar1.Minimum = 0;
             progressBar1.Value = itemnumber;
-            this.Refresh();
+            if (lblProgress.Visible)
+            {
+                lblProgress.Visible = false;
+                this.Refresh();
+            }
+            
         }
 
         private void AddMainMenuItems()
@@ -1645,7 +1649,8 @@ namespace PockeTwit
             SwitchToList("Friends_TimeLine");
             IsLoaded = true;
             lblTitle.Text = "PockeTwit";
-            
+            lblProgress.Visible = false;
+            this.Refresh();
             StartBackground = false;
         }
 
