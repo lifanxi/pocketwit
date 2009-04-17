@@ -172,7 +172,26 @@ public static class ClientSettings
 
     public static bool UseDIB { get; set; }
 
-    public static string CacheDir { get; set; }
+    private static string _CacheDir;
+    public static string CacheDir
+    {
+        get
+        {
+            return _CacheDir;
+        }
+        set
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                value = AppPath;
+            }
+            if(!string.IsNullOrEmpty(_CacheDir) && value!=_CacheDir)
+            {
+                LocalStorage.DataBaseUtility.MoveDB(value);
+            }
+            _CacheDir = value;
+        }
+    }
     public static string MediaService { get; set; }
     public static bool SendMessageToMediaService { get; set; }
     public static Queue<string> SearchItems { get; set; }
@@ -270,7 +289,7 @@ public static class ClientSettings
             }
             else
             {
-                CacheDir = "";
+                CacheDir = AppPath;
             }
 
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MediaService"]))

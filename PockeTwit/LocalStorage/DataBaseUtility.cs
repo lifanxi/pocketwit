@@ -49,7 +49,7 @@ namespace LocalStorage
         #endregion
 
         
-        private static readonly string DBPath = ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db";
+        private static string DBPath = ClientSettings.CacheDir + "\\LocalCache.db";
 
         public static void CheckDBSchema()
         {
@@ -86,13 +86,22 @@ namespace LocalStorage
             }
         }
 
+        public static void MoveDB(string NewPath)
+        {
+            if (System.IO.File.Exists(DBPath))
+            {
+                System.IO.File.Move(DBPath, NewPath + "\\LocalCache.db");
+                DBPath = NewPath + "\\LocalCache.db";
+            }
+        }
+
         public static SQLiteConnection GetConnection()
         {
             if (!File.Exists(DBPath))
             {
                 CreateDB();
             }
-            return new SQLiteConnection("Data Source=" + ClientSettings.AppPath + "\\LocalStorage\\LocalCache.db");
+            return new SQLiteConnection("Data Source=" + DBPath);
         }
 
         //Update this number if you change the schema of the database -- it'll

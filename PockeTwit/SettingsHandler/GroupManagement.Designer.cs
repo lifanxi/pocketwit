@@ -30,25 +30,47 @@
         private void InitializeComponent()
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuDone = new System.Windows.Forms.MenuItem();
+            this.menuImportExport = new System.Windows.Forms.MenuItem();
+            this.menuExport = new System.Windows.Forms.MenuItem();
+            this.menuImport = new System.Windows.Forms.MenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbChooseGroup = new System.Windows.Forms.ComboBox();
             this.lnkDeleteGroup = new System.Windows.Forms.LinkLabel();
             this.pnlUsers = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pnlUsers.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
             // 
-            this.mainMenu1.MenuItems.Add(this.menuItem1);
+            this.mainMenu1.MenuItems.Add(this.menuDone);
+            this.mainMenu1.MenuItems.Add(this.menuImportExport);
             // 
-            // menuItem1
+            // menuDone
             // 
-            this.menuItem1.Text = "Done";
-            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+            this.menuDone.Text = "Done";
+            this.menuDone.Click += new System.EventHandler(this.menuItem1_Click);
+            // 
+            // menuImportExport
+            // 
+            this.menuImportExport.MenuItems.Add(this.menuExport);
+            this.menuImportExport.MenuItems.Add(this.menuImport);
+            this.menuImportExport.Text = "Backup";
+            // 
+            // menuExport
+            // 
+            this.menuExport.Text = "Export...";
+            this.menuExport.Click += new System.EventHandler(this.menuExport_Click);
+            // 
+            // menuImport
+            // 
+            this.menuImport.Text = "Import...";
+            this.menuImport.Click += new System.EventHandler(this.menuImport_Click);
             // 
             // label1
             // 
@@ -90,14 +112,13 @@
             this.pnlUsers.Name = "pnlUsers";
             this.pnlUsers.Size = new System.Drawing.Size(233, 233);
             // 
-            // label2
+            // checkBox1
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(3, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(159, 20);
-            this.label2.Text = "Username";
+            this.checkBox1.Location = new System.Drawing.Point(168, 33);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(22, 20);
+            this.checkBox1.TabIndex = 3;
+            this.checkBox1.Text = "checkBox1";
             // 
             // label3
             // 
@@ -107,13 +128,23 @@
             this.label3.Size = new System.Drawing.Size(62, 20);
             this.label3.Text = "Exclusive";
             // 
-            // checkBox1
+            // label2
             // 
-            this.checkBox1.Location = new System.Drawing.Point(168, 33);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(22, 20);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "checkBox1";
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(3, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(159, 20);
+            this.label2.Text = "Username";
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "XML Files (*.xml)|*.xml";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "XML Files (*.xml)|*.xml";
             // 
             // GroupManagement
             // 
@@ -136,12 +167,17 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuDone;
         private System.Windows.Forms.ComboBox cmbChooseGroup;
         private System.Windows.Forms.LinkLabel lnkDeleteGroup;
         private System.Windows.Forms.Panel pnlUsers;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.MenuItem menuImportExport;
+        private System.Windows.Forms.MenuItem menuExport;
+        private System.Windows.Forms.MenuItem menuImport;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
