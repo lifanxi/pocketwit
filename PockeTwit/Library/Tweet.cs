@@ -444,7 +444,7 @@ namespace PockeTwit.Library
                 _profile_image_url = value;
                 if(ClientSettings.HighQualityAvatars)
                 {
-                    if (_profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0)
+                    if (_profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0 && _profile_image_url.IndexOf("_bigger")==-1)
                     {
                         _profile_image_url = profile_image_url.Replace("_normal", "_bigger");
                     }

@@ -109,9 +109,9 @@ namespace LocalStorage
         private const string DBVersion = "0010";
         public static void CreateDB()
         {
-            if (!Directory.Exists(ClientSettings.AppPath + "\\LocalStorage"))
+            if (!Directory.Exists(System.IO.Path.GetDirectoryName(DBPath)))
             {
-                Directory.CreateDirectory(ClientSettings.AppPath + "\\LocalStorage");
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(DBPath));
             }
             if (!File.Exists(DBPath))
             {
