@@ -21,6 +21,8 @@ namespace LocalStorage
 
         private const string SQLFetchFriends = "(statuses.statustypes == 0)";
 
+        private const string SQLFetchNewest = @"SELECT id FROM statuses";
+
         private const string SQLFetchFromCache =
             @"SELECT     statuses.id, statuses.fulltext, statuses.userid, statuses.[timestamp], 
                                      statuses.in_reply_to_id, statuses.favorited, statuses.clientSource, 
@@ -233,6 +235,27 @@ namespace LocalStorage
                 Constraints = SQLIgnoreGrouped;
             }
             return GetList(typeToGet, Count, Constraints);
+        }
+
+        public static string GetNewestItem(TimelineManagement.TimeLineType typeToGet,string Constraints)
+        {
+            using (SQLiteConnection conn = GetConnection())
+            {
+                string FetchQuery = SQLFetchNewest;
+                FetchQuery = FetchQuery + " WHERE " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
+
+                using (var comm = new SQLiteCommand(FetchQuery, conn))
+                {
+                    comm.Parameters.Add(new SQLiteParameter("@count", 1));
+                    conn.Open();
+                    using (SQLiteDataReader r = comm.ExecuteReader())
+                    {
+                        r.Read();
+                        string latestID = r.GetString(0);
+                        return latestID;
+                    }
+                }
+            }
         }
 
         public static List<status> GetList(TimelineManagement.TimeLineType typeToGet, int Count, string Constraints)

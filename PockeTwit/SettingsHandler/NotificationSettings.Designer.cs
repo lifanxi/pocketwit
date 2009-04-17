@@ -38,6 +38,7 @@
             this.lblSound = new System.Windows.Forms.Label();
             this.chkVibrate = new System.Windows.Forms.CheckBox();
             this.chkNotification = new System.Windows.Forms.CheckBox();
+            this.lnkPlay = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -86,7 +87,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSound.Location = new System.Drawing.Point(4, 126);
             this.cmbSound.Name = "cmbSound";
-            this.cmbSound.Size = new System.Drawing.Size(233, 22);
+            this.cmbSound.Size = new System.Drawing.Size(197, 22);
             this.cmbSound.TabIndex = 3;
             this.cmbSound.SelectedIndexChanged += new System.EventHandler(this.cmbSound_SelectedIndexChanged);
             // 
@@ -122,12 +123,22 @@
             this.chkNotification.Visible = false;
             this.chkNotification.Click += new System.EventHandler(this.chkNotification_Click);
             // 
+            // lnkPlay
+            // 
+            this.lnkPlay.Location = new System.Drawing.Point(207, 126);
+            this.lnkPlay.Name = "lnkPlay";
+            this.lnkPlay.Size = new System.Drawing.Size(29, 20);
+            this.lnkPlay.TabIndex = 11;
+            this.lnkPlay.Text = "Play";
+            this.lnkPlay.Click += new System.EventHandler(this.lnkPlay_Click);
+            // 
             // NotificationSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lnkPlay);
             this.Controls.Add(this.chkNotification);
             this.Controls.Add(this.chkVibrate);
             this.Controls.Add(this.lblSound);
@@ -152,5 +163,6 @@
         private System.Windows.Forms.CheckBox chkVibrate;
         private System.Windows.Forms.MenuItem mnuDone;
         private System.Windows.Forms.CheckBox chkNotification;
+        private System.Windows.Forms.LinkLabel lnkPlay;
     }
 }

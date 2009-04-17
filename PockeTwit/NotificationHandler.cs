@@ -29,6 +29,7 @@ namespace PockeTwit
             public string Sound;
             public TimelineManagement.TimeLineType Type;
             public SpecialTimeLine Group;
+            public string LastSeenID;
 
             public string  ListName
             {
@@ -207,29 +208,35 @@ namespace PockeTwit
             {
                 if(TimeLines.LastSelectedItems.GetUnreadItems(infoClass.ListName)>0)
                 {
-                    if ((infoClass.Options & Options.Vibrate) == Options.Vibrate)
+                    string Constraints ="";
+                    if (infoClass.Group != null) { Constraints = infoClass.Group.GetConstraints(); }
+                    if (infoClass.LastSeenID != LocalStorage.DataBaseUtility.GetNewestItem(infoClass.Type, Constraints))
                     {
-                        VibrateStart();
-                        if ((infoClass.Options & Options.Sound) == Options.Sound)
+                        if ((infoClass.Options & Options.Vibrate) == Options.Vibrate)
+                        {
+                            VibrateStart();
+                            if ((infoClass.Options & Options.Sound) == Options.Sound)
+                            {
+                                Sound s = new Sound(infoClass.Sound);
+                                s.Play();
+                            }
+                            else
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                            }
+                            VibrateStop();
+                        }
+                        else if ((infoClass.Options & Options.Sound) == Options.Sound)
                         {
                             Sound s = new Sound(infoClass.Sound);
                             s.Play();
                         }
-                        else
-                        {
-                            System.Threading.Thread.Sleep(1000);
-                        }
-                        VibrateStop();
-                    }
-                    else if ((infoClass.Options & Options.Sound) == Options.Sound)
-                    {
-                        Sound s = new Sound(infoClass.Sound);
-                        s.Play();
-                    }
 
-                    if ((infoClass.Options & Options.Message) == Options.Message)
-                    {
-                        ShowNotifications();
+                        if ((infoClass.Options & Options.Message) == Options.Message)
+                        {
+                            ShowNotifications();
+                        }
+                        infoClass.LastSeenID = LocalStorage.DataBaseUtility.GetNewestItem(infoClass.Type, Constraints);
                     }
                 }
             }
