@@ -9,6 +9,7 @@ namespace PockeTwit
     public class TimelineManagement
     {
         #region Events
+
         public delegate void delFriendsUpdated();
         public delegate void delMessagesUpdated();
         public delegate void delProgress(int percentage, string Status);

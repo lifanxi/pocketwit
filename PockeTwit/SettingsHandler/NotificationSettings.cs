@@ -42,6 +42,8 @@ namespace PockeTwit.SettingsHandler
                 chkNotification.Visible = true;
             }
             ListSounds();
+            cmbNotificationType.SelectedIndex = 0;
+            
         }
 
         private void ListSounds()
