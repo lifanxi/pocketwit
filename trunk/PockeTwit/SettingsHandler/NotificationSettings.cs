@@ -150,5 +150,14 @@ namespace PockeTwit.SettingsHandler
             }
             NotificationHandler.SaveSettings(currentInfo);
         }
+
+        private Sound s;
+        private void lnkPlay_Click(object sender, EventArgs e)
+        {
+            SoundInfo selectedSound = (SoundInfo)cmbSound.SelectedItem;
+            
+            s = new Sound(selectedSound.Path);
+            s.Play();
+        }
     }
 }
