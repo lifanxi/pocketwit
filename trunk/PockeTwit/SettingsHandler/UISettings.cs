@@ -67,8 +67,9 @@ namespace PockeTwit
             ClientSettings.ShowExtra = chkTimestamps.Checked;
             ClientSettings.IncludeUserName = chkScreenName.Checked;
             ClientSettings.AutoScrollToTop = chkAutoScrroll.Checked;
-            
-            if(ClientSettings.FontSize != int.Parse(this.txtFontSize.Text))
+
+            int newSize = int.Parse(this.txtFontSize.Text);
+            if(ClientSettings.FontSize != newSize && newSize < 13 && newSize > 6)
             {
                 ClientSettings.FontSize = int.Parse(txtFontSize.Text);
                 NeedsReset = true;
