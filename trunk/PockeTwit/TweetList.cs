@@ -1355,6 +1355,7 @@ namespace PockeTwit
         private void RefreshFriendsTimeLine()
         {
             Manager.RefreshFriendsTimeLine();
+            statList.SetSelectedMenu(RefreshFriendsTimeLineMenuItem);
         }
 
         private void ShowFriendsTimeLine()
@@ -1367,7 +1368,7 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Friends_Timeline;
             History.Push(i);
-            statList.SetSelectedMenu(FriendsTimeLineMenuItem);
+            statList.SetSelectedMenu(RefreshFriendsTimeLineMenuItem);
             AddStatusesToList(Manager.GetFriendsImmediately());
             ChangeCursor(Cursors.Default);
         }
@@ -1375,6 +1376,7 @@ namespace PockeTwit
         private void RefreshMessagesTimeLine()
         {
             Manager.RefreshMessagesTimeLine();
+            statList.SetSelectedMenu(RefreshMessagesMenuItem);
         }
 
         private void ShowMessagesTimeLine()
@@ -1385,7 +1387,7 @@ namespace PockeTwit
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Replies;
             History.Push(i);
-            statList.SetSelectedMenu(MessagesMenuItem);
+            statList.SetSelectedMenu(RefreshMessagesMenuItem);
             AddStatusesToList(Manager.GetMessagesImmediately());
             ChangeCursor(Cursors.Default);
         }
