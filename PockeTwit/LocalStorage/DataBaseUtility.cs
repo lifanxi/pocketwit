@@ -208,7 +208,7 @@ namespace LocalStorage
 
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS statusesInSearch
-                                    {searchName NVARCHAR(50),
+                                    (searchName NVARCHAR(50),
                                     statusID VARCHAR(50))";
                         comm.ExecuteNonQuery();
                         
