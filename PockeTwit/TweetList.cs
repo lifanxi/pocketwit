@@ -1014,14 +1014,13 @@ namespace PockeTwit
             }
             else
             {
-                if(currentGroup!=null)
+                if(currentGroup!=null && statList.CurrentList().StartsWith("Grouped_TimeLine_"))
                 {
                     AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
                 }
             }
             LastSelectedItems.UpdateUnreadCounts();
             Notifyer.NewItems();
-            SetMenuNumbers();
         }
         void Manager_MessagesUpdated()
         {
@@ -1030,9 +1029,7 @@ namespace PockeTwit
                 AddStatusesToList(Manager.GetMessagesImmediately(), true);
             }
             Notifyer.NewItems();
-            //Notifyer.NewMessages();
             LastSelectedItems.UpdateUnreadCounts();
-            SetMenuNumbers();
         }
 
         private void MapList()
@@ -1477,7 +1474,6 @@ namespace PockeTwit
             SetLeftMenu();
             
             LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet, currentGroup);
-            SetMenuNumbers();
         }
 
         private void UpdateHistoryPosition()
@@ -1784,32 +1780,6 @@ namespace PockeTwit
             base.OnClosed(e);
         }
 
-        private void SetMenuNumbers()
-        {
-            /*
-            int NewFriends = LocalStorage.DataBaseUtility.CountItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Friends_TimeLine"), null);
-            int NewMessages = LocalStorage.DataBaseUtility.CountItemsNewerThan(TimelineManagement.TimeLineType.Replies, LastSelectedItems.GetNewestSelected("Messages_TimeLine"), null);
-            switch (statList.CurrentList())
-            {
-                case "Friends_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Refresh Friends Timeline" + newItemsText(NewFriends);
-                    MessagesMenuItem.Text = "Messages" + newItemsText(NewMessages);
-                    break;
-                case "Messages_TimeLine":
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(NewFriends);
-                    MessagesMenuItem.Text = "Refresh Messages" + newItemsText(NewMessages);
-                    break;
-                default:
-                    MessagesMenuItem.Text = "Messages" + newItemsText(NewMessages);
-                    FriendsTimeLineMenuItem.Text = "Friends Timeline" + newItemsText(NewFriends);
-                    break;
-            }
-            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
-            {
-                int XMessages = LocalStorage.DataBaseUtility.GetItemsNewerThan(TimelineManagement.TimeLineType.Friends, LastSelectedItems.GetNewestSelected("Grouped_TimeLine_" + t.name), t.GetConstraints());
-            }
-             */
-        }
         #endregion�Methods�
 
         private void TweetList_LostFocus(object sender, EventArgs e)
