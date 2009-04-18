@@ -62,7 +62,9 @@ namespace Yedda
             serviceList.Add(MobyPicture.Instance);
             serviceList.Add(yFrog.Instance);
             serviceList.Add(PikChur.Instance);
-            
+            //serviceList.Add(PixIm.Instance);
+            serviceList.Add(TwitGoo.Instance);
+
             //setup every service the same way
             foreach (IPictureService service in serviceList)
             {

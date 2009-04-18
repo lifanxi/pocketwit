@@ -30,6 +30,8 @@ namespace PockeTwit
         private bool localPictureEventsSet = false;
         private string picturePath = string.Empty;
 
+        private int availableChars = 140; //should retrieve this from a blogservice.
+
         public delegate void delAddPicture(string ImageFile, PictureBox BoxToUpdate);
         public delegate void delUpdatePictureData(string pictureUrl, bool uploadingPicture);
 
@@ -393,6 +395,7 @@ namespace PockeTwit
                                 AddPictureToForm(c.FileName, pictureFromCamers);
                                 picturePath = c.FileName;
                                 //Reduce length of message 140-pictureService.UrlLength
+                                
                                 pictureUsed = true;
                             }
                             else
