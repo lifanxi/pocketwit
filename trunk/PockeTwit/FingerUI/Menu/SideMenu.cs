@@ -191,6 +191,9 @@ namespace FingerUI
         public void ForceRerender()
         {
             IsDirty = true;
+            _animationTextColor = ClientSettings.MenuTextColor;
+            _animationLineColor = ClientSettings.LineColor;
+            _animationStep = 0;
         }
 
         public void SetMenuHeight()

@@ -405,50 +405,6 @@ namespace PockeTwit
             f.Close();
         }
 
-        private void ChangeSettings()
-        {
-            /*
-            this.statList.Visible = false;
-            SettingsHandler.MainSettings settings = new PockeTwit.SettingsHandler.MainSettings();
-            //SettingsForm settings = new SettingsForm();
-            IsLoaded = false;
-            if (settings.ShowDialog() == DialogResult.Cancel)
-            {
-                this.statList.Visible = true;
-                IsLoaded = true;
-                return;
-            }
-            statList.BackColor = ClientSettings.BackColor;
-            statList.ForeColor = ClientSettings.ForeColor;
-            IsLoaded = true;
-            this.statList.Visible = true;
-
-            if (ClientSettings.CheckVersion)
-            {
-                Checker.CheckForUpgrade();
-            }
-            if (settings.NeedsReset)
-            {
-                MessageBox.Show("Your settings changes require that you restart the application.");
-                statList.Clear();
-                if (Manager != null)
-                {
-                    Manager.ShutDown();
-                }
-                ThrottledArtGrabber.running = false;
-                this.Close();
-            }
-            if (settings.NeedsRerender)
-            {
-                PockeTwit.Themes.FormColors.SetColors(this);
-                statList.ResetFullScreenColors();
-                statList.RerenderBySize();
-            }
-            statList.Redraw();
-            settings.Close();
-            */
-        }
-
         private void ToggleFavorite()
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
