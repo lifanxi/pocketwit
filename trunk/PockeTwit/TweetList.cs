@@ -59,7 +59,6 @@ namespace PockeTwit
         FingerUI.SideMenuItem PublicMenuItem;
         FingerUI.SideMenuItem SearchMenuItem;
         FingerUI.SideMenuItem ViewFavoritesMenuItem;
-        FingerUI.SideMenuItem MergedTimeLineMenuItem;
         FingerUI.SideMenuItem GroupsMenuItem;
         
         FingerUI.SideMenuItem TimeLinesMenuItem;
@@ -634,8 +633,6 @@ namespace PockeTwit
             SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
             ViewFavoritesMenuItem = new FingerUI.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
 
-            MergedTimeLineMenuItem = new FingerUI.SideMenuItem(ShowFriendsTimeLine, "Timeline", statList.LeftMenu);
-            
             TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "Other TimeLines ...", statList.LeftMenu);
             TimeLinesMenuItem.SubMenuItems.Add(SearchMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
@@ -1242,17 +1239,10 @@ namespace PockeTwit
                         break;
                     case Yedda.Twitter.ActionType.Friends_Timeline:
                         ShowFriendsTimeLine();
-                        if (ClientSettings.MergeMessages)
-                        {
-                            statList.SetSelectedMenu(TimeLinesMenuItem);
-                        }
-                        else
-                        {
-                            statList.SetSelectedMenu(FriendsTimeLineMenuItem);
-                        }
+                        statList.SetSelectedMenu(RefreshFriendsTimeLineMenuItem);
                         break;
                     case Yedda.Twitter.ActionType.Replies:
-                        statList.SetSelectedMenu(MessagesMenuItem);
+                        statList.SetSelectedMenu(RefreshMessagesMenuItem);
                         ShowMessagesTimeLine();
                         break;
                     case Yedda.Twitter.ActionType.Search:
