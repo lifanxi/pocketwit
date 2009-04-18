@@ -110,6 +110,7 @@ namespace PockeTwit
                     s.Add(item);
                 }
             }
+
             return s.ToArray();
         }
         public static void Add(SpecialTimeLine newLine)
@@ -119,6 +120,7 @@ namespace PockeTwit
                 if (!_Items.ContainsKey(newLine.name))
                 {
                     _Items.Add(newLine.name, newLine);
+                    NotificationHandler.AddSpecialTimeLineNotifications(newLine);
                 }
             }
         }
@@ -129,6 +131,7 @@ namespace PockeTwit
                 if(_Items.ContainsKey(oldLine.name))
                 {
                     _Items.Remove(oldLine.name);
+                    NotificationHandler.RemoveSpecialTimeLineNotifications(oldLine);
                 }
             }
             using (SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())

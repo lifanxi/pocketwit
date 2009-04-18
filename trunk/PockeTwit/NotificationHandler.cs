@@ -102,21 +102,41 @@ namespace PockeTwit
 
             foreach (var line in SpecialTimeLines.GetList())
             {
-                NotificationInfoClass c = new NotificationInfoClass
-                {
-                    Name = "PockeTwit: " + line.name,
-                    Group = line,
-                    GUID = line.name,
-                    Type = TimelineManagement.TimeLineType.Friends
-                };
-                Notifications.Add(c.GUID, c);
+                AddSpecialTimeLineNotifications(line);
             }
 
+            LoadAllRegistries();
+        }
+
+        private static void LoadAllRegistries()
+        {
             foreach (var info in Notifications.Values)
             {
                 RegistryKey infoKey = Registry.CurrentUser.CreateSubKey("\\ControlPanel\\Notifications\\" + info.GUID);
                 LoadSettings(info, infoKey);
             }
+        }
+
+        public static void RemoveSpecialTimeLineNotifications(SpecialTimeLine line)
+        {
+            if (Notifications.ContainsKey(line.name))
+            {
+                Notifications.Remove(line.name);
+            }
+            Registry.CurrentUser.DeleteSubKey("\\ControlPanel\\Notifications\\" + line.name);
+            LoadAllRegistries();
+        }
+        public static void AddSpecialTimeLineNotifications(SpecialTimeLine line)
+        {
+            NotificationInfoClass c = new NotificationInfoClass
+            {
+                Name = "PockeTwit: " + line.name,
+                Group = line,
+                GUID = line.name,
+                Type = TimelineManagement.TimeLineType.Friends
+            };
+            Notifications.Add(c.GUID, c);
+            LoadAllRegistries();
         }
 
         public void ShutDown()
