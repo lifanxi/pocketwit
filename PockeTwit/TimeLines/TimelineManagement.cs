@@ -84,11 +84,8 @@ namespace PockeTwit
             {
                 Progress(0, "The first run takes a while.");
                 GetFriendsTimeLine();
-                if (!ClientSettings.MergeMessages)
-                {
-                    Progress(0, "Just a bit longer.");
-                    GetMessagesTimeLine();
-                }
+                Progress(0, "Just a bit longer.");
+                GetMessagesTimeLine();
                 CompleteLoaded();
             } 
             if (ClientSettings.UpdateMinutes > 0)
@@ -281,7 +278,6 @@ namespace PockeTwit
         }
         private void GetMessagesTimeLine(bool Notify)
         {
-            if (ClientSettings.MergeMessages) { return; }
             if (!GlobalEventHandler.MessagesUpdating)
             {
                 try

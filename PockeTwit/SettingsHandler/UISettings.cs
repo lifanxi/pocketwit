@@ -61,7 +61,6 @@ namespace PockeTwit
             if (chkTimestamps.Checked != ClientSettings.ShowExtra) { this.NeedsReRender = true; }
             if (chkScreenName.Checked != ClientSettings.IncludeUserName) { this.NeedsReRender = true; }
             
-            ClientSettings.MergeMessages = chkMerge.Checked;
             ClientSettings.MaxTweets = MaxTweets;
             ClientSettings.UseClickables = chkClickables.Checked;
             ClientSettings.ShowExtra = chkTimestamps.Checked;
@@ -102,7 +101,6 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
-            chkMerge.Checked = ClientSettings.MergeMessages;
             txtMaxTweets.Text = ClientSettings.MaxTweets.ToString();
             chkTimestamps.Checked = ClientSettings.ShowExtra;
             chkClickables.Checked = ClientSettings.UseClickables;
@@ -150,17 +148,7 @@ namespace PockeTwit
             cmbTheme_SelectedIndexChanged(null, new EventArgs());
         }
 
-        private void chkMerge_CheckStateChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void chkMerge_Click(object sender, EventArgs e)
-        {
-            this.NeedsReset = true;
-            chkMerge.Checked = !chkMerge.Checked;
-        }
-
+        
 
         private void txtFontSize_KeyPress(object sender, KeyPressEventArgs e)
         {

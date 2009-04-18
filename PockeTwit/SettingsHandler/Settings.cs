@@ -217,8 +217,6 @@ public static class ClientSettings
 
     public static string DistancePreference { get; set; }
 
-    public static bool MergeMessages { get; set; }
-
     public static bool _ShowExtra = true;
     public static bool ShowExtra
     {
@@ -319,14 +317,6 @@ public static class ClientSettings
                 FontSize = 9;
             }
 
-            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["MergeMessages"]))
-            {
-                MergeMessages = bool.Parse(ConfigurationSettings.AppSettings["MergeMessages"]);
-            }
-            else
-            {
-                MergeMessages = false;
-            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["SearchItems"]))
             {
                 SearchItems = new Queue<string>(ConfigurationSettings.AppSettings["SearchItems"].Split('|'));
@@ -500,7 +490,6 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
         ConfigurationSettings.AppSettings["MediaService"] = MediaService;
         ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
-        ConfigurationSettings.AppSettings["MergeMessages"] = MergeMessages.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());
         ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
         ConfigurationSettings.AppSettings["ThemeName"] = ThemeName;

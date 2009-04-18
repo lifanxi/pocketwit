@@ -60,7 +60,6 @@ namespace PockeTwit
             this.cmbTheme = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.chkMerge = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFontSize = new System.Windows.Forms.TextBox();
             this.chkAutoScrroll = new System.Windows.Forms.CheckBox();
@@ -142,7 +141,7 @@ namespace PockeTwit
             // 
             this.cmbTheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTheme.Location = new System.Drawing.Point(81, 160);
+            this.cmbTheme.Location = new System.Drawing.Point(81, 134);
             this.cmbTheme.Name = "cmbTheme";
             this.cmbTheme.Size = new System.Drawing.Size(102, 22);
             this.cmbTheme.TabIndex = 6;
@@ -152,7 +151,7 @@ namespace PockeTwit
             // 
             this.label1.BackColor = System.Drawing.Color.Black;
             this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(4, 162);
+            this.label1.Location = new System.Drawing.Point(4, 136);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 20);
             this.label1.Text = "Theme:";
@@ -160,28 +159,17 @@ namespace PockeTwit
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.Location = new System.Drawing.Point(189, 162);
+            this.linkLabel1.Location = new System.Drawing.Point(189, 136);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(36, 20);
             this.linkLabel1.TabIndex = 7;
             this.linkLabel1.Text = "Edit";
             this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
             // 
-            // chkMerge
-            // 
-            this.chkMerge.ForeColor = System.Drawing.Color.LightGray;
-            this.chkMerge.Location = new System.Drawing.Point(2, 108);
-            this.chkMerge.Name = "chkMerge";
-            this.chkMerge.Size = new System.Drawing.Size(216, 20);
-            this.chkMerge.TabIndex = 4;
-            this.chkMerge.Text = "Merge all Timelines";
-            this.chkMerge.CheckStateChanged += new System.EventHandler(this.chkMerge_CheckStateChanged);
-            this.chkMerge.Click += new System.EventHandler(this.chkMerge_Click);
-            // 
             // label2
             // 
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 190);
+            this.label2.Location = new System.Drawing.Point(4, 164);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 20);
             this.label2.Text = "Font Size:";
@@ -190,7 +178,7 @@ namespace PockeTwit
             // 
             this.txtFontSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFontSize.Location = new System.Drawing.Point(81, 189);
+            this.txtFontSize.Location = new System.Drawing.Point(81, 163);
             this.txtFontSize.Name = "txtFontSize";
             this.txtFontSize.Size = new System.Drawing.Size(102, 21);
             this.txtFontSize.TabIndex = 8;
@@ -199,7 +187,7 @@ namespace PockeTwit
             // chkAutoScrroll
             // 
             this.chkAutoScrroll.ForeColor = System.Drawing.Color.LightGray;
-            this.chkAutoScrroll.Location = new System.Drawing.Point(2, 134);
+            this.chkAutoScrroll.Location = new System.Drawing.Point(2, 108);
             this.chkAutoScrroll.Name = "chkAutoScrroll";
             this.chkAutoScrroll.Size = new System.Drawing.Size(216, 20);
             this.chkAutoScrroll.TabIndex = 5;
@@ -215,7 +203,6 @@ namespace PockeTwit
             this.Controls.Add(this.chkAutoScrroll);
             this.Controls.Add(this.txtFontSize);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.chkMerge);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbTheme);
@@ -240,7 +227,6 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbTheme;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.CheckBox chkMerge;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtFontSize;
         private System.Windows.Forms.CheckBox chkAutoScrroll;
