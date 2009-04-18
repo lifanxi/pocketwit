@@ -48,6 +48,7 @@ namespace Yedda
             API_SERVICE_NAME = "PikChur";
             API_CAN_UPLOAD_MESSAGE = true;
             API_CAN_UPLOAD_GPS = true;
+            API_URLLENGTH = 23;
         }
 
         /// <summary>
@@ -84,14 +85,14 @@ namespace Yedda
             //Check for empty path
             if (string.IsNullOrEmpty(postData.Filename))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,string.Empty , API_ERROR_UPLOAD));
             }
 
             //Check for empty credentials
             if (string.IsNullOrEmpty(postData.Username) ||
                 string.IsNullOrEmpty(postData.Password))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
 
             #endregion
@@ -117,7 +118,7 @@ namespace Yedda
                         }
                         else
                         {
-                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", API_ERROR_NOTREADY));
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, string.Empty, API_ERROR_NOTREADY));
                         }
                     }
                     else
@@ -140,7 +141,7 @@ namespace Yedda
                             string URL = UrlKeyNode.InnerText;
                             URL = URL.Replace("\n","");
 
-                            OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, "", postData.Filename));
+                            OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, string.Empty, postData.Filename));
                         }
                         else
                         {
@@ -150,7 +151,7 @@ namespace Yedda
                 }
                 catch (Exception e)
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 }
             }
         }
@@ -162,7 +163,7 @@ namespace Yedda
             //Need a url to read from.
             if (string.IsNullOrEmpty(pictureURL))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
 
             #endregion
@@ -180,12 +181,12 @@ namespace Yedda
                 }
                 else
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", API_ERROR_NOTREADY));
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, string.Empty, API_ERROR_NOTREADY));
                 }
             }
             catch (Exception e)
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
         }
 
@@ -211,7 +212,7 @@ namespace Yedda
             //Check for empty path
             if (string.IsNullOrEmpty(postData.Filename))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty , API_ERROR_UPLOAD));
                 return false;
             }
 
@@ -219,7 +220,7 @@ namespace Yedda
             if (string.IsNullOrEmpty(postData.Username) ||
                 string.IsNullOrEmpty(postData.Password))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, API_ERROR_UPLOAD, ""));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed,string.Empty , API_ERROR_UPLOAD));
                 return false;
             }
 
@@ -250,7 +251,7 @@ namespace Yedda
                 }
                 catch (Exception e)
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                     return false;
                 }
             }
@@ -272,18 +273,14 @@ namespace Yedda
 
                 string resultFileName = RetrievePicture(imageID);
 
-                if (string.IsNullOrEmpty(resultFileName))
+                if (!string.IsNullOrEmpty(resultFileName))
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
-                }
-                else
-                {
-                    OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, resultFileName, "", pictureURL));
+                    OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, resultFileName, string.Empty, pictureURL));
                 }
             }
             catch (Exception e)
             {
-                throw;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
             }
             workerThread = null;
         }
@@ -292,14 +289,12 @@ namespace Yedda
         {
             try
             {
-                XmlDocument uploadResult;
-                if (string.IsNullOrEmpty(workerPPO.Message))
+                XmlDocument uploadResult = UploadPicture(workerPPO);
+
+                if (uploadResult == null)
                 {
-                    uploadResult = UploadPicture(workerPPO);
-                }
-                else
-                {
-                    uploadResult = UploadPictureAndPost(workerPPO);
+                    workerThread = null;
+                    return;
                 }
 
                 if (uploadResult.SelectSingleNode("pikchur/error") == null)
@@ -308,7 +303,7 @@ namespace Yedda
                     string URL = UrlKeyNode.InnerText;
                     URL = URL.Replace("\n", "");
 
-                    OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, "", workerPPO.Filename));
+                    OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, string.Empty, workerPPO.Filename));
                 }
                 else
                 {
@@ -317,7 +312,7 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                throw;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
             workerThread = null;
         }
@@ -377,7 +372,8 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                throw;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
+                return string.Empty;
             }
         }
 
@@ -443,7 +439,7 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                throw;
+                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
             }
         }
 
@@ -454,7 +450,6 @@ namespace Yedda
         /// <returns></returns>
         private XmlDocument UploadPicture(PicturePostObject ppo)
         {
-            //
             if (string.IsNullOrEmpty(AUTH_KEY))
             {
                 RequestAuthKey(ppo);
@@ -462,7 +457,7 @@ namespace Yedda
             if ( string.IsNullOrEmpty( AUTH_KEY ))
             {
                 //Authorisation has failed.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
             try
@@ -519,7 +514,8 @@ namespace Yedda
             catch (Exception e)
             {
                 //Socket exception 10054 could occur when sending large files.
-                throw;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                return null;
             }
         }
 
@@ -530,7 +526,6 @@ namespace Yedda
         /// <returns></returns>
         private XmlDocument UploadPictureAndPost(PicturePostObject ppo)
         {
-            //
             if (string.IsNullOrEmpty(AUTH_KEY))
             {
                 RequestAuthKey(ppo);
@@ -538,7 +533,7 @@ namespace Yedda
             if (string.IsNullOrEmpty(AUTH_KEY))
             {
                 //Authorisation has failed.
-                //OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
             try
@@ -600,7 +595,8 @@ namespace Yedda
             catch (Exception e)
             {
                 //Socket exception 10054 could occur when sending large files.
-                throw;
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
+                return null;
             }
         }
 

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{293BAAE4-E497-44C9-8EAD-81DD4064C588}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -373,6 +373,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\GroupManagement.resx">
       <DependentUpon>GroupManagement.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsHandler\NotificationSettings.resx">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
@@ -535,6 +536,8 @@
     </Compile>
     <Compile Include="Yedda\PictureServiceBase.cs" />
     <Compile Include="Yedda\PikChur.cs" />
+    <Compile Include="Yedda\PixIm.cs" />
+    <Compile Include="Yedda\TwitGoo.cs" />
     <Compile Include="Yedda\yFrog.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
