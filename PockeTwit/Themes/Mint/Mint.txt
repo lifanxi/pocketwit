@@ -20,4 +20,4 @@ DimmedColor:75:105:75
 MenuTextColor:200:240:200
 MenuSelectedTextColor:255:255:255
 PopUpBackgroundColor:21:235:175
-PopUpTextColor:255:255:255
+PopUpTextColor:0:0:0
