@@ -345,8 +345,8 @@ namespace PockeTwit
                 }
                 else
                 {
-                    statList.SelectedItem = statList[statList.Count-1];
-                    statList.YOffset = ClientSettings.ItemHeight * (statList.Count-1);
+                    statList.SelectedItem = statList[0];
+                    statList.YOffset = 0;
                 }
                 if (currentItem != null)
                 {
@@ -671,7 +671,7 @@ namespace PockeTwit
             BackMenuItem.CanHide = true;
 
             FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu, "Friends_TimeLine");
-            RefreshFriendsTimeLineMenuItem = new SideMenuItem(this.RefreshFriendsTimeLine, "Refresh Friends TimeLine", statList.LeftMenu, "Friends_TimeLine");
+            RefreshFriendsTimeLineMenuItem = new SideMenuItem(this.RefreshFriendsTimeLine, "Refresh Friends", statList.LeftMenu, "Friends_TimeLine");
             MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu, "Messages_TimeLine");
             RefreshMessagesMenuItem = new SideMenuItem(this.RefreshMessagesTimeLine, "Refresh Messages", statList.LeftMenu, "Messages_TimeLine");
             PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
