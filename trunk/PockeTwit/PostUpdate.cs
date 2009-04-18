@@ -442,7 +442,7 @@ namespace PockeTwit
                     pictureService = GetMediaService();
                     if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
                     {
-                        AddPictureToForm(s.FileName, pictureFromCamers);
+                        AddPictureToForm(s.FileName, pictureFromStorage);
                         picturePath = s.FileName;
                         //Reduce length of message 140-pictureService.UrlLength
                         pictureUsed = true;
