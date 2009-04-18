@@ -122,9 +122,9 @@ namespace PockeTwit
             if (Notifications.ContainsKey(line.name))
             {
                 Notifications.Remove(line.name);
+                Registry.CurrentUser.DeleteSubKeyTree("\\ControlPanel\\Notifications\\" + line.name);
+                LoadAllRegistries();
             }
-            Registry.CurrentUser.DeleteSubKey("\\ControlPanel\\Notifications\\" + line.name);
-            LoadAllRegistries();
         }
         public static void AddSpecialTimeLineNotifications(SpecialTimeLine line)
         {
