@@ -53,7 +53,7 @@ namespace PockeTwit
             }
         }
 
-        private static Dictionary<string,NotificationInfoClass> Notifications;
+        private static Dictionary<string, NotificationInfoClass> Notifications = new Dictionary<string, NotificationInfoClass>();
 
        
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
@@ -128,15 +128,18 @@ namespace PockeTwit
         }
         public static void AddSpecialTimeLineNotifications(SpecialTimeLine line)
         {
-            NotificationInfoClass c = new NotificationInfoClass
+            if (!Notifications.ContainsKey(line.name))
             {
-                Name = "PockeTwit: " + line.name,
-                Group = line,
-                GUID = line.name,
-                Type = TimelineManagement.TimeLineType.Friends
-            };
-            Notifications.Add(c.GUID, c);
-            LoadAllRegistries();
+                NotificationInfoClass c = new NotificationInfoClass
+                {
+                    Name = "PockeTwit: " + line.name,
+                    Group = line,
+                    GUID = line.name,
+                    Type = TimelineManagement.TimeLineType.Friends
+                };
+                Notifications.Add(c.GUID, c);
+                LoadAllRegistries();
+            }
         }
 
         public void ShutDown()
