@@ -1334,6 +1334,7 @@ namespace PockeTwit
 
         private void ShowMessagesTimeLine()
         {
+            currentGroup = null;
             ChangeCursor(Cursors.WaitCursor);
             SwitchToList("Messages_TimeLine");
             History.Clear();
