@@ -206,20 +206,22 @@ namespace PockeTwit
 
         private string CloneTheme(string filename)
         {
-            SettingsHandler.ThemeCreator.NewThemeName n = new PockeTwit.SettingsHandler.ThemeCreator.NewThemeName();
-            if (n.ShowDialog() == DialogResult.OK)
+            using (SettingsHandler.ThemeCreator.NewThemeName n = new PockeTwit.SettingsHandler.ThemeCreator.NewThemeName())
             {
-                string newName = n.ThemeName;
-                string newFolder = ClientSettings.AppPath + "\\Themes\\" + newName;
-                System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Themes\\" + newName);
-                foreach (string oldItem in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\" + ThemeName))
+                if (n.ShowDialog() == DialogResult.OK)
                 {
-                    if (System.IO.Path.GetExtension(oldItem) != ".txt")
+                    string newName = n.ThemeName;
+                    string newFolder = ClientSettings.AppPath + "\\Themes\\" + newName;
+                    System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Themes\\" + newName);
+                    foreach (string oldItem in System.IO.Directory.GetFiles(ClientSettings.AppPath + "\\Themes\\" + ThemeName))
                     {
-                        System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                        if (System.IO.Path.GetExtension(oldItem) != ".txt")
+                        {
+                            System.IO.File.Copy(oldItem, newFolder + "\\" + System.IO.Path.GetFileName(oldItem));
+                        }
                     }
+                    return newFolder + "\\" + newName + ".txt";
                 }
-                return newFolder + "\\" + newName + ".txt";
             }
             return filename;
         }

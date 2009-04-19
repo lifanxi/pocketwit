@@ -62,22 +62,23 @@ namespace PockeTwit
 
         private bool AddAccount()
         {
-            AccountInfoForm ai = new AccountInfoForm();
-            ai.Hide();
-            if (ai.ShowDialog() == DialogResult.OK)
+            using (AccountInfoForm ai = new AccountInfoForm())
             {
-                LocalList.Add(ai.AccountInfo);
-                NeedsReset = true;
-                ListAccounts();
-                ai.Close();
-                return true;
+                ai.Hide();
+                if (ai.ShowDialog() == DialogResult.OK)
+                {
+                    LocalList.Add(ai.AccountInfo);
+                    NeedsReset = true;
+                    ListAccounts();
+                    ai.Close();
+                    return true;
+                }
+                else
+                {
+                    ai.Close();
+                    return false;
+                }
             }
-            else
-            {
-                ai.Close();
-                return false;
-            }
-            
         }
 
         
@@ -120,15 +121,17 @@ namespace PockeTwit
             if (cmbAccounts.SelectedItem != null)
             {
                 Yedda.Twitter.Account toEdit = (Yedda.Twitter.Account)cmbAccounts.SelectedItem;
-                AccountInfoForm ai = new AccountInfoForm(toEdit);
-                if (ai.ShowDialog() == DialogResult.OK)
+                using (AccountInfoForm ai = new AccountInfoForm(toEdit))
                 {
-                    LocalList.Remove(toEdit);
-                    LocalList.Add(ai.AccountInfo);
-                    ListAccounts();
-                    NeedsReset = true;
+                    if (ai.ShowDialog() == DialogResult.OK)
+                    {
+                        LocalList.Remove(toEdit);
+                        LocalList.Add(ai.AccountInfo);
+                        ListAccounts();
+                        NeedsReset = true;
+                    }
+                    ai.Close();
                 }
-                ai.Close();
             }
         }
 

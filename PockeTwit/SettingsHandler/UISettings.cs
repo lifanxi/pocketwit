@@ -142,8 +142,10 @@ namespace PockeTwit
         private void linkLabel1_Click(object sender, EventArgs e)
         {
             string selectedTheme = (string)cmbTheme.SelectedItem;
-            ColorPick c = new ColorPick(selectedTheme);
-            c.ShowDialog();
+            using (ColorPick c = new ColorPick(selectedTheme))
+            {
+                c.ShowDialog();
+            }
             ListThemes();
             cmbTheme_SelectedIndexChanged(null, new EventArgs());
         }

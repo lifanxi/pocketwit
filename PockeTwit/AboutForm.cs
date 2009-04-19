@@ -124,28 +124,32 @@ namespace PockeTwit
 
         void Checker_UpdateFound(UpgradeChecker.UpgradeInfo Info)
         {
-            UpgradeForm uf = new UpgradeForm();
-            uf.NewVersion = Info;
-            uf.ShowDialog();
+            using (UpgradeForm uf = new UpgradeForm())
+            {
+                uf.NewVersion = Info;
+                uf.ShowDialog();
+            }
         }
 
         private void linkLabel1_Click(object sender, EventArgs e)
         {
             Yedda.Twitter Twitter = new Yedda.Twitter();
-            PostUpdate s = new PostUpdate(false);
-            s.StatusText = "@PockeTwitDev ";
-            s.ShowDialog();
-            s.Hide();
-            string UpdateText = s.StatusText;
-            if (s.DialogResult == DialogResult.OK)
+            using (PostUpdate s = new PostUpdate(false))
             {
-                Cursor.Current = Cursors.WaitCursor;
-                Twitter.AccountInfo = s.AccountToSet;
-                Twitter.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
-                Cursor.Current = Cursors.Default;
+                s.StatusText = "@PockeTwitDev ";
+                s.ShowDialog();
+                s.Hide();
+                string UpdateText = s.StatusText;
+                if (s.DialogResult == DialogResult.OK)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    Twitter.AccountInfo = s.AccountToSet;
+                    Twitter.Update(UpdateText, Yedda.Twitter.OutputFormatType.XML);
+                    Cursor.Current = Cursors.Default;
+                }
+                this.Show();
+                s.Close();
             }
-            this.Show();
-            s.Close();
         }
 
         private void menuClose_Click(object sender, EventArgs e)
@@ -157,8 +161,10 @@ namespace PockeTwit
         {
             if (UpgradeChecker.devBuild)
             {
-                UpgradeForm f = new UpgradeForm();
-                f.ShowDialog();
+                using (UpgradeForm f = new UpgradeForm())
+                {
+                    f.ShowDialog();
+                }
             }
             else
             {
