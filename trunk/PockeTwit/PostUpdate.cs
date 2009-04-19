@@ -360,13 +360,15 @@ namespace PockeTwit
         #region Methods
         private void InsertURL()
         {
-            URLForm f = new URLForm();
-            if (f.ShowDialog() == DialogResult.OK)
+            using (URLForm f = new URLForm())
             {
-                txtStatusUpdate.Text = txtStatusUpdate.Text + " " + f.URL;
+                if (f.ShowDialog() == DialogResult.OK)
+                {
+                    txtStatusUpdate.Text = txtStatusUpdate.Text + " " + f.URL;
+                }
+                this.Show();
+                f.Close();
             }
-            this.Show();
-            f.Close();
         }
 
         private void InsertPictureFromCamera()
@@ -431,37 +433,39 @@ namespace PockeTwit
             if (!uploadingPicture)
             {
                 String pictureUrl = string.Empty;
-                Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog();
-                if (s.ShowDialog() == DialogResult.OK)
+                using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
                 {
-                    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                    this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
-                    if (DetectDevice.DeviceType == DeviceType.Standard)
+                    if (s.ShowDialog() == DialogResult.OK)
                     {
-                        this.pictureFromCamers.Visible = false;
-                    }
-                    uploadedPictureOrigin = "file";
-                    
-                    pictureService = GetMediaService();
-                    if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
-                    {
-                        AddPictureToForm(s.FileName, pictureFromStorage);
-                        picturePath = s.FileName;
-                        //Reduce length of message 140-pictureService.UrlLength
-                        pictureUsed = true;
-                    }
-                    else
-                    {
-                        uploadingPicture = true;
-                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
-                        using (PicturePostObject ppo = new PicturePostObject())
+                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
+                        this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
+                        if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
-                            ppo.Filename = s.FileName;
-                            ppo.Username = AccountToSet.UserName;
-                            ppo.Password = AccountToSet.Password;
-                            ppo.UseAsync = false;
-                            Cursor.Current = Cursors.WaitCursor;
-                            pictureService.PostPicture(ppo);
+                            this.pictureFromCamers.Visible = false;
+                        }
+                        uploadedPictureOrigin = "file";
+
+                        pictureService = GetMediaService();
+                        if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
+                        {
+                            AddPictureToForm(s.FileName, pictureFromStorage);
+                            picturePath = s.FileName;
+                            //Reduce length of message 140-pictureService.UrlLength
+                            pictureUsed = true;
+                        }
+                        else
+                        {
+                            uploadingPicture = true;
+                            AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
+                            using (PicturePostObject ppo = new PicturePostObject())
+                            {
+                                ppo.Filename = s.FileName;
+                                ppo.Username = AccountToSet.UserName;
+                                ppo.Password = AccountToSet.Password;
+                                ppo.UseAsync = false;
+                                Cursor.Current = Cursors.WaitCursor;
+                                pictureService.PostPicture(ppo);
+                            }
                         }
                     }
                 }

@@ -98,9 +98,11 @@ namespace PockeTwit
 
         private void lblPosition_Click(object sender, EventArgs e)
         {
-            ProfileMap m = new ProfileMap();
-            m.Users = new List<PockeTwit.Library.User>(new Library.User[]{_User});
-            m.ShowDialog();
+            using (ProfileMap m = new ProfileMap())
+            {
+                m.Users = new List<PockeTwit.Library.User>(new Library.User[] { _User });
+                m.ShowDialog();
+            }
         }
     }
 }

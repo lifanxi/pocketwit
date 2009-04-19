@@ -403,6 +403,7 @@ namespace PockeTwit
             this.statList.Visible = true;
             statList.Redraw();
             f.Close();
+            f.Dispose();
         }
 
         private void ToggleFavorite()
@@ -465,19 +466,21 @@ namespace PockeTwit
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
 
-            DefineGroup d = new DefineGroup();
-            if (d.ShowDialog() == DialogResult.OK)
+            using (DefineGroup d = new DefineGroup())
             {
-                SpecialTimeLine t = new SpecialTimeLine();
-                t.name = d.GroupName;
-                
-                SpecialTimeLines.Add(t);
+                if (d.ShowDialog() == DialogResult.OK)
+                {
+                    SpecialTimeLine t = new SpecialTimeLine();
+                    t.name = d.GroupName;
 
-                AddGroupSelectMenuItem(t);
+                    SpecialTimeLines.Add(t);
 
-                AddAddUserToGroupMenuItem(t);
+                    AddGroupSelectMenuItem(t);
 
-                AddUserToGroup(t,Exclusive);
+                    AddAddUserToGroupMenuItem(t);
+
+                    AddUserToGroup(t, Exclusive);
+                }
             }
         }
 
@@ -847,8 +850,10 @@ namespace PockeTwit
             History.Push(firstItem);
             if (System.IO.File.Exists(ClientSettings.AppPath + "\\crash.txt"))
             {
-                CrashReport errorForm = new CrashReport();
-                errorForm.ShowDialog();
+                using (CrashReport errorForm = new CrashReport())
+                {
+                    errorForm.ShowDialog();
+                }
             }
             if (!StartBackground)
             {
@@ -899,15 +904,17 @@ namespace PockeTwit
                 System.IO.File.Delete(ClientSettings.AppPath + "\\app.config");
             }
             ClientSettings.AccountsList.Clear();
-            AccountsForm f = new AccountsForm();
-            f.ShowDialog();
-            if(ClientSettings.AccountsList.Count==0)
+            using (AccountsForm f = new AccountsForm())
             {
-                if (Manager != null)
+                f.ShowDialog();
+                if (ClientSettings.AccountsList.Count == 0)
                 {
-                    Manager.ShutDown();
+                    if (Manager != null)
+                    {
+                        Manager.ShutDown();
+                    }
+                    this.Close();
                 }
-                this.Close();
             }
         }
 
@@ -1030,53 +1037,55 @@ namespace PockeTwit
         {
             Cursor.Current = Cursors.WaitCursor;
             Application.DoEvents();
-            ProfileMap m = new ProfileMap();
-            List<Library.User> users = new List<Library.User>();
-            for (int i = 0; i < statList.m_items.Count; i++)
+            using (ProfileMap m = new ProfileMap())
             {
-                Library.User thisUser = statList.m_items[i].Tweet.user;
-                if (thisUser.needsFetching)
+                List<Library.User> users = new List<Library.User>();
+                for (int i = 0; i < statList.m_items.Count; i++)
                 {
-                    thisUser = Library.User.FromId(thisUser.screen_name, statList.m_items[i].Tweet.Account);
-                    thisUser.needsFetching = false;
+                    Library.User thisUser = statList.m_items[i].Tweet.user;
+                    if (thisUser.needsFetching)
+                    {
+                        thisUser = Library.User.FromId(thisUser.screen_name, statList.m_items[i].Tweet.Account);
+                        thisUser.needsFetching = false;
+                    }
+                    users.Add(thisUser);
                 }
-                users.Add(thisUser);
-            }
-            m.Users = users;
-            m.ShowDialog();
-            if (m.Range > 0)
-            {
-
-                SearchForm f = new SearchForm();
-                f.providedDistnce = m.Range.ToString();
-                string secondLoc = Yedda.GoogleGeocoder.Geocode.GetAddress(m.CenterLocation.ToString());
-                if (string.IsNullOrEmpty(secondLoc))
+                m.Users = users;
+                m.ShowDialog();
+                if (m.Range > 0)
                 {
-                    secondLoc = m.CenterLocation.ToString();
-                }
 
-                f.providedLocation = secondLoc;
+                    SearchForm f = new SearchForm();
+                    f.providedDistnce = m.Range.ToString();
+                    string secondLoc = Yedda.GoogleGeocoder.Geocode.GetAddress(m.CenterLocation.ToString());
+                    if (string.IsNullOrEmpty(secondLoc))
+                    {
+                        secondLoc = m.CenterLocation.ToString();
+                    }
 
-                this.statList.Visible = false;
-                IsLoaded = false;
-                if (f.ShowDialog() == DialogResult.Cancel)
-                {
+                    f.providedLocation = secondLoc;
+
+                    this.statList.Visible = false;
+                    IsLoaded = false;
+                    if (f.ShowDialog() == DialogResult.Cancel)
+                    {
+                        IsLoaded = true;
+                        this.statList.Visible = true;
+                        f.Close();
+                        return;
+                    }
+
                     IsLoaded = true;
                     this.statList.Visible = true;
+                    f.Hide();
+                    string SearchString = f.SearchText;
                     f.Close();
-                    return;
+                    this.statList.Visible = true;
+
+                    ShowSearchResults(SearchString);
                 }
-
-                IsLoaded = true;
-                this.statList.Visible = true;
-                f.Hide();
-                string SearchString = f.SearchText;
-                f.Close();
-                this.statList.Visible = true;
-
-                ShowSearchResults(SearchString);
+                m.Close();
             }
-            m.Close();
         }
 
         private void ToggleFullScreen()
@@ -1102,42 +1111,44 @@ namespace PockeTwit
 
         private void SetStatus(string ToUser, string in_reply_to_status_id)
         {
-            PostUpdate StatusForm = new PostUpdate(false);
-            if (CurrentlySelectedAccount == null || string.IsNullOrEmpty(ToUser))
+            using (PostUpdate StatusForm = new PostUpdate(false))
             {
-                StatusForm.AccountToSet = ClientSettings.DefaultAccount;
-            }
-            else
-            {
-                StatusForm.AccountToSet = CurrentlySelectedAccount;
-            }
-            this.statList.Visible = false;
-            if (!string.IsNullOrEmpty(ToUser))
-            {
-                StatusForm.StatusText = ToUser + " ";
-            }
-            IsLoaded = false;
-            StatusForm.in_reply_to_status_id = in_reply_to_status_id;
-            Manager.Pause();
-            if (StatusForm.ShowDialog() == DialogResult.OK)
-            {
-                this.statList.Visible = true;
-                StatusForm.Hide();
+                if (CurrentlySelectedAccount == null || string.IsNullOrEmpty(ToUser))
+                {
+                    StatusForm.AccountToSet = ClientSettings.DefaultAccount;
+                }
+                else
+                {
+                    StatusForm.AccountToSet = CurrentlySelectedAccount;
+                }
+                this.statList.Visible = false;
+                if (!string.IsNullOrEmpty(ToUser))
+                {
+                    StatusForm.StatusText = ToUser + " ";
+                }
                 IsLoaded = false;
-                Manager.RefreshFriendsTimeLine();
-            }
-            else
-            {
+                StatusForm.in_reply_to_status_id = in_reply_to_status_id;
+                Manager.Pause();
+                if (StatusForm.ShowDialog() == DialogResult.OK)
+                {
+                    this.statList.Visible = true;
+                    StatusForm.Hide();
+                    IsLoaded = false;
+                    Manager.RefreshFriendsTimeLine();
+                }
+                else
+                {
+                    this.statList.Visible = true;
+                    StatusForm.Hide();
+                    IsLoaded = false;
+                }
+                Manager.Start();
+                this.Visible = true;
+                IsLoaded = true;
+                this.statList.Redraw();
                 this.statList.Visible = true;
-                StatusForm.Hide();
-                IsLoaded = false;
+                StatusForm.Close();
             }
-            Manager.Start();
-            this.Visible = true;
-            IsLoaded = true;
-            this.statList.Redraw();
-            this.statList.Visible = true;
-            StatusForm.Close();
         }
 
         private void SetUpListControl()
@@ -1150,22 +1161,24 @@ namespace PockeTwit
 
         private void ShowAbout()
         {
-            AboutForm a = new AboutForm();
-            IsLoaded = false;
-            statList.Visible = false;
-            a.ShowDialog();
-
-            this.Visible = true;
-            
-            statList.Visible = true;
-            IsLoaded = true;
-            string ReqedUser = a.AskedToSeeUser;
-            a.Close();
-            
-            if (!string.IsNullOrEmpty(ReqedUser))
+            using (AboutForm a = new AboutForm())
             {
-                statList.IgnoreMouse = true;
-                SwitchToUserTimeLine(a.AskedToSeeUser);
+                IsLoaded = false;
+                statList.Visible = false;
+                a.ShowDialog();
+
+                this.Visible = true;
+
+                statList.Visible = true;
+                IsLoaded = true;
+                string ReqedUser = a.AskedToSeeUser;
+                a.Close();
+
+                if (!string.IsNullOrEmpty(ReqedUser))
+                {
+                    statList.IgnoreMouse = true;
+                    SwitchToUserTimeLine(a.AskedToSeeUser);
+                }
             }
         }
         private void EmailThisItem()
@@ -1182,9 +1195,11 @@ namespace PockeTwit
             }
             else if (accounts.Count>1)
             {
-                EmailStatusForm f = new EmailStatusForm(selectedItem.Tweet.text);
-                f.ShowDialog();
-                f.Close();
+                using (EmailStatusForm f = new EmailStatusForm(selectedItem.Tweet.text))
+                {
+                    f.ShowDialog();
+                    f.Close();
+                }
                 return;
             }
 
@@ -1197,8 +1212,10 @@ namespace PockeTwit
             if (statList.SelectedItem == null) { return; }
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
 
-            ProfileView v = new ProfileView(selectedItem.Tweet.user);
-            v.ShowDialog();
+            using (ProfileView v = new ProfileView(selectedItem.Tweet.user))
+            {
+                v.ShowDialog();
+            }
         }
 
         private void ExitApplication()
@@ -1551,8 +1568,10 @@ namespace PockeTwit
 
                 Cursor.Current = Cursors.Default;
 
-                ImagePreview ip = new ImagePreview(eventArgs.ReturnMessage, eventArgs.PictureFileName);
-                ip.ShowDialog();
+                using (ImagePreview ip = new ImagePreview(eventArgs.ReturnMessage, eventArgs.PictureFileName))
+                {
+                    ip.ShowDialog();
+                }
             }
         }
 
@@ -1609,25 +1628,28 @@ namespace PockeTwit
         private void TwitterSearch()
         {
 
-            SearchForm f = new SearchForm();
-            this.statList.Visible = false;
-            IsLoaded = false;
-            if (f.ShowDialog() == DialogResult.Cancel)
+            using (SearchForm f = new SearchForm())
             {
+                this.statList.Visible = false;
+                IsLoaded = false;
+                if (f.ShowDialog() == DialogResult.Cancel)
+                {
+                    IsLoaded = true;
+                    this.statList.Visible = true;
+                    f.Close();
+                    return;
+                }
+
                 IsLoaded = true;
                 this.statList.Visible = true;
+                f.Hide();
+                string SearchString = f.SearchText;
                 f.Close();
-                return;
+
+                this.statList.Visible = true;
+
+                ShowSearchResults(SearchString);
             }
-
-            IsLoaded = true;
-            this.statList.Visible = true;
-            f.Hide();
-            string SearchString = f.SearchText;
-            f.Close();
-            this.statList.Visible = true;
-
-            ShowSearchResults(SearchString);
         }
 
         private void ShowSearchResults(string SearchString)
@@ -1649,11 +1671,12 @@ namespace PockeTwit
 
         void UpdateChecker_UpdateFound(UpgradeChecker.UpgradeInfo Info)
         {
-            UpgradeForm uf = new UpgradeForm();
-            uf.NewVersion = Info;
-            uf.ShowDialog();
+            using (UpgradeForm uf = new UpgradeForm())
+            {
+                uf.NewVersion = Info;
+                uf.ShowDialog();
+            }
         }
-
 
         private void SetWindowState(FormWindowState State)
         {
