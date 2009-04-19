@@ -573,6 +573,10 @@ public static class ClientSettings
     public static void LoadColors()
     {
         ResetColors();
+        if (!System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
+        {
+            ThemeName = "Original";
+        }
         if (System.IO.File.Exists(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
         {
             using (System.IO.StreamReader r = new System.IO.StreamReader(AppPath + "\\Themes\\" + ThemeName + "\\" + ThemeName + ".txt"))
@@ -586,7 +590,11 @@ public static class ClientSettings
                     System.Drawing.Color ColorChosen = System.Drawing.Color.FromArgb(int.Parse(ColorPair[1]), int.Parse(ColorPair[2]), int.Parse(ColorPair[3]));
 
                     FieldInfo fi = typeof(ClientSettings).GetField(ColorType);
-                    fi.SetValue(null, ColorChosen);
+                    try
+                    {
+                        fi.SetValue(null, ColorChosen);
+                    }
+                    catch { }
                 }
             }
 
