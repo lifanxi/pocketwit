@@ -127,7 +127,8 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-            PockeTwit.Themes.FormColors.SetColors(this);
+            
+
             progressBar1.Visible = false;
             lblProgress.Visible = true;
             lblProgress.Text = "Initializaing";
@@ -153,6 +154,10 @@ namespace PockeTwit
 
             
             this.Visible = !InBackGround;
+            statList.Visible = false;
+            PockeTwit.Themes.FormColors.SetColors(this);
+            this.Refresh();
+            
             Application.DoEvents();
             LocalStorage.DataBaseUtility.CheckDBSchema();
 
