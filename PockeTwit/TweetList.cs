@@ -127,6 +127,7 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
+            PockeTwit.Themes.FormColors.SetColors(this);
             progressBar1.Visible = false;
             lblProgress.Visible = true;
             lblProgress.Text = "Initializaing";
@@ -150,7 +151,7 @@ namespace PockeTwit
             }
             ClientSettings.TextHeight = currentScreen.Height;
 
-            PockeTwit.Themes.FormColors.SetColors(this);
+            
             this.Visible = !InBackGround;
             Application.DoEvents();
             LocalStorage.DataBaseUtility.CheckDBSchema();
@@ -806,26 +807,22 @@ namespace PockeTwit
                     }
                 }
 
-                if (string.IsNullOrEmpty(selectedItem.Tweet.user.id))
+
+                
+                
+                FollowMenuItem.Visible = true;
+                if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
                 {
-                    FollowMenuItem.Visible = false;
+                    FollowMenuItem.Text = "Stop Following";
+                    MoveToGroupMenuItem.Visible = true;
+                    CopyToGroupMenuItem.Visible = true;
                 }
                 else
                 {
-                    FollowMenuItem.Visible = true;
-                    if (FollowingDictionary[conn].IsFollowing(selectedItem.Tweet.user))
-                    {
-                        FollowMenuItem.Text = "Stop Following";
-                        MoveToGroupMenuItem.Visible = true;
-                        CopyToGroupMenuItem.Visible = true;
-                    }
-                    else
-                    {
-                        FollowMenuItem.Text = "Follow";
-                        
-                        MoveToGroupMenuItem.Visible = false;
-                        CopyToGroupMenuItem.Visible = false;
-                    }
+                    FollowMenuItem.Text = "Follow";
+                    
+                    MoveToGroupMenuItem.Visible = false;
+                    CopyToGroupMenuItem.Visible = false;
                 }
             }
         }
