@@ -169,16 +169,22 @@ namespace PockeTwit
         }
         private void checkText(object sender, KeyPressEventArgs e)
         {
+            
             if ((e.KeyChar >= 'a' && e.KeyChar <= 'z') || (e.KeyChar >= 'A' && e.KeyChar <= 'Z'))
             {
-                if (_hookedBox.SelectionStart >= 1)
+                int selectPos = _hookedBox.SelectionStart;
+                string xText = _hookedBox.Text;
+                if (selectPos >= 1)
                 {
-                    if (_hookedBox.Text.Substring(_hookedBox.SelectionStart - 1, 1) == "@")
+                    if (_hookedBox.Text.Substring(selectPos - 1, 1) == "@")
                     {
-                        //Don't if this isn't the first char OR if the char before is not a space
-                        this.inputText = e.KeyChar.ToString();
-                        this.Visible = true;
-                        e.Handled = true;
+                        if ((selectPos > 2 && xText.Substring(selectPos - 2, 1) == " ") | selectPos==1)
+                        {
+                            //Don't if this isn't the first char OR if the char before is not a space
+                            this.inputText = e.KeyChar.ToString();
+                            this.Visible = true;
+                            e.Handled = true;
+                        }
                     }
                 }
                 if (_hookedBox.SelectionStart >= 2)
