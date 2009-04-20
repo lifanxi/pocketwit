@@ -16,7 +16,7 @@ namespace PockeTwit.Themes
             
             return new System.Drawing.Bitmap(ClientSettings.IconsFolder() + iconName);
         }
-        public static void SetColors(UserControl f)
+        public static void SetColors(Control f)
         {
             foreach (Control c in f.Controls)
             {

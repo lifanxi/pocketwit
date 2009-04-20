@@ -44,16 +44,7 @@ namespace PockeTwit
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
-            if (string.IsNullOrEmpty(cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString()))            
-            { 
-                ClientSettings.MediaService = "TwitPic";            
-            }            
-            else            
-            {                
-                ClientSettings.MediaService = cmbMediaService.Items[cmbMediaService.SelectedIndex].ToString();           
-            }
-            ClientSettings.SendMessageToMediaService = !cbPreUpload.Checked;
-
+            
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
                 MessageBox.Show("You will need to restart PockeTwit for the update interval to change.", "PockeTwit");
@@ -96,30 +87,10 @@ namespace PockeTwit
             txtUpdate.Text = ClientSettings.UpdateMinutes.ToString();
             chkTranslate.Checked = ClientSettings.AutoTranslate;
             txtCaheDir.Text = ClientSettings.CacheDir;
-            setMediaService(ClientSettings.MediaService);
-            cbPreUpload.Checked = !ClientSettings.SendMessageToMediaService;
             chkTranslate.Text = "Auto-translate to " + ClientSettings.TranslationLanguage;
             this.DialogResult = DialogResult.Cancel;
         }
 
-        private void setMediaService(string value)
-        {
-            foreach (string serviceName in PictureServiceFactory.Instance.GetServiceNames())
-            {
-                cmbMediaService.Items.Add(serviceName);
-            }
-            
-            
-            
-            foreach (string comboValue in cmbMediaService.Items)
-            {
-                if (comboValue == value)
-                {
-                    cmbMediaService.SelectedItem = value;
-                    return;
-                }
-            }
-        }
 
 		#endregion Methods 
 
