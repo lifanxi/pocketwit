@@ -71,6 +71,7 @@ namespace PockeTwit
         private FingerUI.SideMenuItem AvatarSettingsMenuItem;
         private FingerUI.SideMenuItem GroupSettingsMenuItem;
         private FingerUI.SideMenuItem NotificationSettingsMenuItem;
+        private FingerUI.SideMenuItem MediaServiceSettingsMenuItem;
         private FingerUI.SideMenuItem OtherSettingsMenuItem;
         private FingerUI.SideMenuItem UISettingsMenuItem;
         
@@ -663,6 +664,7 @@ namespace PockeTwit
             FingerUI.delMenuClicked showOther = () => this.ChangeSettings(new OtherSettings());
             FingerUI.delMenuClicked showUISettings = () => this.ChangeSettings(new UISettings());
             FingerUI.delMenuClicked showGroupSettings = () => this.ChangeSettings(new SettingsHandler.GroupManagement());
+            FingerUI.delMenuClicked showMediaServiceSettings = () => this.ChangeSettings(new MediaService());
 
             //SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
             SettingsMenuItem = new FingerUI.SideMenuItem(null, "Settings...", statList.LeftMenu);
@@ -670,6 +672,7 @@ namespace PockeTwit
             AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
             AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
             GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Groups", statList.LeftMenu);
+            MediaServiceSettingsMenuItem = new SideMenuItem(showMediaServiceSettings, "Media Service", statList.LeftMenu);
             GroupSettingsMenuItem.Visible = false;
             NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
             OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
@@ -677,6 +680,7 @@ namespace PockeTwit
             SettingsMenuItem.SubMenuItems.Add(AccountsSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(AvatarSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(GroupSettingsMenuItem);
+            SettingsMenuItem.SubMenuItems.Add(MediaServiceSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(NotificationSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(UISettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(OtherSettingsMenuItem);
