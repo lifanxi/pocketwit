@@ -166,7 +166,10 @@ namespace PockeTwit
 
         public void DismissBubbler()
         {
-            MessagesBubbler.Visible = false;
+            if (MessagesBubbler != null)
+            {
+                MessagesBubbler.Visible = false;
+            }
         }
 
 
@@ -225,6 +228,8 @@ namespace PockeTwit
             }
         }
 
+
+        //This gets called every time a fetch finds new items.
         public void NewItems()
         {
             foreach (var infoClass in Notifications.Values)
@@ -265,10 +270,13 @@ namespace PockeTwit
             }
         }
         
+
+
         private string GetMessagesText(int item)
         {
             return null;
         }
+
 
         private string GetMessagesText()
         {

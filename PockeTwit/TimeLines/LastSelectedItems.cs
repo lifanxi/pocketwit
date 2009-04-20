@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Win32;
 using PockeTwit.Library;
 
@@ -123,6 +124,7 @@ namespace PockeTwit.TimeLines
         {
             string DisplayName = ListName.Replace('_', ' ').Replace("Grouped TimeLine ", "");
             UnreadCountRoot.SetValue(DisplayName, updatedCount);
+            UnreadCountRoot.SetValue("UnreadCountChanged", System.DateTime.Now.Ticks);
         }
 
         public static int GetUpdatedCount(string ListName, SpecialTimeLine specialTime, string selectedStatus)
