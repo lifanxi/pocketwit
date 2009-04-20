@@ -13,7 +13,7 @@ namespace PockeTwit
             List<string> ret = new List<string>();
             using (System.Data.SQLite.SQLiteConnection conn = LocalStorage.DataBaseUtility.GetConnection())
             {
-                string SQL = "SELECT screenname FROM users WHERE screenname LIKE @startswith";
+                string SQL = "SELECT DISTINCT screenname FROM users WHERE screenname LIKE @startswith";
                 using (System.Data.SQLite.SQLiteCommand comm = new System.Data.SQLite.SQLiteCommand(SQL, conn))
                 {
                     comm.Parameters.Add(new System.Data.SQLite.SQLiteParameter("@startswith", startsWith + '%'));
