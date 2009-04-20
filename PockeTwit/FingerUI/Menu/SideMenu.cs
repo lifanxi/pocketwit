@@ -46,7 +46,7 @@ namespace FingerUI
                         _animationStep = 6;
                         AnimateMe();
                     }
-                    SelectedItem = _ExpandedItem;
+                    //SelectedItem = _ExpandedItem;
                 }
                 else
                 {
