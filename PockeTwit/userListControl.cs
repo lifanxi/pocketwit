@@ -154,5 +154,47 @@ namespace PockeTwit
         {
             txtInput.Focus();
         }
+
+        private TextBox _hookedBox = null;
+
+        public void HookTextBoxKeyPress(TextBox BoxToHook)
+        {
+            _hookedBox = BoxToHook;
+            _hookedBox.KeyPress += new KeyPressEventHandler(checkText);
+        }
+
+        public void UnHookTextBoxKeyPress()
+        {
+            _hookedBox.KeyPress -= new KeyPressEventHandler(checkText);
+        }
+        private void checkText(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar >= 'a' && e.KeyChar <= 'z') || (e.KeyChar >= 'A' && e.KeyChar <= 'Z'))
+            {
+                if (_hookedBox.SelectionStart >= 1)
+                {
+                    if (_hookedBox.Text.Substring(_hookedBox.SelectionStart - 1, 1) == "@")
+                    {
+                        //Don't if this isn't the first char OR if the char before is not a space
+                        this.inputText = e.KeyChar.ToString();
+                        this.Visible = true;
+                        e.Handled = true;
+                    }
+                }
+                if (_hookedBox.SelectionStart >= 2)
+                {
+                    if (_hookedBox.Text.Substring(_hookedBox.SelectionStart - 2, 2) == "d ")
+                    {
+                        if (_hookedBox.Text.Length == 2 ||
+                            _hookedBox.Text.Substring(_hookedBox.SelectionStart - 3, 1) == " ")
+                        {
+                            this.inputText = e.KeyChar.ToString();
+                            this.Visible = true;
+                            e.Handled = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

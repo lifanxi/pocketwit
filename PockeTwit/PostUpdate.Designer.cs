@@ -106,7 +106,6 @@ namespace PockeTwit
             this.txtStatusUpdate.TabIndex = 7;
             this.txtStatusUpdate.TextChanged += new System.EventHandler(this.txtStatusUpdate_TextChanged);
             this.txtStatusUpdate.GotFocus += new System.EventHandler(this.txtStatusUpdate_GotFocus);
-            this.txtStatusUpdate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtStatusUpdate_KeyPress);
             // 
             // lblCharsLeft
             // 
