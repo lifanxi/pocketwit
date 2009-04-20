@@ -12,6 +12,7 @@ namespace PockeTwit.TimeLines
 
         private const string LastSavedStoragePath = @"\Software\Apps\JustForFun PockeTwit\LastSaved\";
         private const string NewestSavedStoragePath = @"\Software\Apps\JustForFun PockeTwit\NewestSaved\";
+        private const string UnreadCountRegistryPath = @"\Software\Apps\JustForFun PockeTwit\UnreadCount\";
 
         private static readonly Dictionary<string, string> LastSelectedItemsDictionary =
             new Dictionary<string, string>();
@@ -24,6 +25,7 @@ namespace PockeTwit.TimeLines
 
         private static RegistryKey LastSavedItemsRoot;
         private static RegistryKey NewestSavedItemsRoot;
+        private static RegistryKey UnreadCountRoot;
         
         static LastSelectedItems()
         {
@@ -113,7 +115,14 @@ namespace PockeTwit.TimeLines
             {
                 UnreadItemCount[ListName] = updatedCount;
             }
+            SetUnreadInRegistry(ListName, updatedCount);
             UnreadCountChanged(ListName, updatedCount);
+        }
+
+        private static void SetUnreadInRegistry(string ListName, int updatedCount)
+        {
+            string DisplayName = ListName.Replace('_', ' ').Replace("Grouped TimeLine ", "");
+            UnreadCountRoot.SetValue(DisplayName, updatedCount);
         }
 
         public static int GetUpdatedCount(string ListName, SpecialTimeLine specialTime, string selectedStatus)
@@ -166,8 +175,14 @@ namespace PockeTwit.TimeLines
         {
             LastSavedItemsRoot = Registry.LocalMachine.OpenSubKey(LastSavedStoragePath, true);
             NewestSavedItemsRoot = Registry.LocalMachine.OpenSubKey(NewestSavedStoragePath, true);
-            
-            
+            UnreadCountRoot = Registry.LocalMachine.OpenSubKey(UnreadCountRegistryPath, true);
+
+            if (UnreadCountRoot == null)
+            {
+                RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);
+                if (ParentKey != null) UnreadCountRoot = ParentKey.CreateSubKey("JustForFun PockeTwit\\UnreadCount");
+            }
+
             if (LastSavedItemsRoot == null)
             {
                 RegistryKey ParentKey = Registry.LocalMachine.OpenSubKey(@"\Software\Apps\", true);

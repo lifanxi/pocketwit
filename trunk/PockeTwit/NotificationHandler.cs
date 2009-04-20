@@ -265,7 +265,11 @@ namespace PockeTwit
             }
         }
         
-        
+        private string GetMessagesText(int item)
+        {
+            return null;
+        }
+
         private string GetMessagesText()
         {
             System.Text.StringBuilder HTMLString = new StringBuilder();
