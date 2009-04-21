@@ -858,10 +858,6 @@ namespace PockeTwit
 
         #endregion
 
-        private void txtStatusUpdate_GotFocus(object sender, EventArgs e)
-        {
-            DisableCompletion.SIPHelper.EnableCompletion();
-        }
 
 
         protected override void OnClosed(EventArgs e)
