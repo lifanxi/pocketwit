@@ -24,7 +24,7 @@ namespace PockeTwit
             }
 
             setMediaService(ClientSettings.MediaService);
-            cbPreUpload.Checked = ClientSettings.SendMessageToMediaService;
+            cbPreUpload.Checked = !ClientSettings.SendMessageToMediaService;
         }
 
         private void menuAccept_Click(object sender, EventArgs e)
