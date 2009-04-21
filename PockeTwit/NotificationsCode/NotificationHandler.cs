@@ -9,7 +9,6 @@ namespace PockeTwit
 {
     class NotificationHandler
     {
-        private int CurrentSpinner = 0;
         public delegate void delNotificationClicked();
         public event delNotificationClicked MessagesNotificationClicked;
         private christec.windowsce.forms.NotificationWithSoftKeys MessagesBubbler;
@@ -54,14 +53,11 @@ namespace PockeTwit
         }
 
         private static Dictionary<string, NotificationInfoClass> Notifications = new Dictionary<string, NotificationInfoClass>();
-
+        private static NotificationTexts messagesTexts = new NotificationTexts();
        
         public const string FriendsTweets = "{DF293090-5095-49ce-A626-AE6D6629437F}";
         public const string MessageTweets = "{B4D35E62-A83F-4add-B421-F7FC28E14310}";
 
-        
-        private static Microsoft.WindowsMobile.Status.RegistryState FriendsRegistryWatcher1;
-        
         public NotificationHandler()
         {
             if (DetectDevice.DeviceType == DeviceType.Professional)
@@ -72,9 +68,24 @@ namespace PockeTwit
                 MessagesBubbler.RightSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.Dismiss, "Dismiss");
                 MessagesBubbler.LeftSoftKey = new christec.windowsce.forms.NotificationSoftKey(christec.windowsce.forms.SoftKeyType.StayOpen, "Show");
                 MessagesBubbler.LeftSoftKeyClick += new EventHandler(MessagesBubbler_LeftSoftKeyClick);
-                MessagesBubbler.Silent = true;   
+                MessagesBubbler.Silent = true;
+                MessagesBubbler.SpinnerClick += new christec.windowsce.forms.SpinnerClickEventHandler(MessagesBubbler_SpinnerClick);
             }
             LoadAll();
+        }
+
+        void MessagesBubbler_SpinnerClick(object sender, christec.windowsce.forms.SpinnerClickEventArgs e)
+        {
+            if(e.Forward)
+            {
+                messagesTexts.NextMessage();
+            }
+            else
+            {
+                messagesTexts.PrevMessage();
+            }
+            MessagesBubbler.Text = messagesTexts.GetMessage();
+            MessagesBubbler.Caption = messagesTexts.GetCaption();
         }
 
         public static NotificationInfoClass[] GetList()
@@ -218,12 +229,11 @@ namespace PockeTwit
         {
             if (MessagesBubbler == null) { return; }
             if (GlobalEventHandler.isInForeground()) { return; }
-            MessagesBubbler.Visible = false;
-            
+            MessagesBubbler.Spinners = messagesTexts.MultipleMessages();
             if (!MessagesBubbler.Visible)
             {
-                MessagesBubbler.Text = GetMessagesText();
-                CurrentSpinner = 0;
+                MessagesBubbler.Text = messagesTexts.GetMessage();
+                MessagesBubbler.Caption = messagesTexts.GetCaption();
                 MessagesBubbler.Visible = true;
             }
         }

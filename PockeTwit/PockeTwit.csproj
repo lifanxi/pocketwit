@@ -113,14 +113,14 @@
     <Compile Include="GPS\Utils.cs" />
     <Compile Include="LED.cs" />
     <Compile Include="LocationManager.cs" />
-    <Compile Include="NotificationHandler.cs" />
-    <Compile Include="NotificationSoftKeys\NotificationMessageWindow.cs" />
-    <Compile Include="NotificationSoftKeys\NotificationSoftKey.cs" />
-    <Compile Include="NotificationSoftKeys\NotificationWithSoftKeys.cs">
+    <Compile Include="NotificationsCode\NotificationHandler.cs" />
+    <Compile Include="NotificationsCode\NotificationSoftKeys\NotificationMessageWindow.cs" />
+    <Compile Include="NotificationsCode\NotificationSoftKeys\NotificationSoftKey.cs" />
+    <Compile Include="NotificationsCode\NotificationSoftKeys\NotificationWithSoftKeys.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="NotificationSoftKeys\SHNOTIFICATIONDATA.cs" />
-    <Compile Include="NotificationSoftKeys\SpinnerClickEventHandler.cs" />
+    <Compile Include="NotificationsCode\NotificationSoftKeys\SHNOTIFICATIONDATA.cs" />
+    <Compile Include="NotificationsCode\NotificationSoftKeys\SpinnerClickEventHandler.cs" />
     <Compile Include="OpenNetCF\EventWaitHandle.cs" />
     <Compile Include="OpenNetCF\LargeIntervalTimer.cs" />
     <Compile Include="OpenNetCF\NativeMethods.cs" />
@@ -317,15 +317,6 @@
     <Content Include="Themes\Light\url.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Themes\HighlightBlue\HighlightBlue.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Themes\HighlightRed\HighlightRed.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Themes\HighlightGreen\HighlightGreen.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Themes\Original\address.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -466,6 +457,7 @@
       <DependentUpon>ImagePreview.cs</DependentUpon>
     </Compile>
     <Compile Include="LocalStorage\DataBaseUtility.cs" />
+    <Compile Include="NotificationsCode\NotificationTexts.cs" />
     <Compile Include="OpenNetCF\LED.cs" />
     <Compile Include="OpenNetCF\Notify.cs" />
     <Compile Include="OpenNetCF\SYSTEMTIME.cs" />
