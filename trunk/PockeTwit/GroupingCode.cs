@@ -71,6 +71,10 @@ namespace PockeTwit
 
         public string GetConstraints()
         {
+            if (Terms == null) 
+            {
+                SpecialTimeLines.Load();
+            }
             string ret = "";
             List<string> UserList = new List<string>();
             foreach (groupTerm t in Terms)
