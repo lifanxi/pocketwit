@@ -124,7 +124,6 @@
     <Compile Include="OpenNetCF\EventWaitHandle.cs" />
     <Compile Include="OpenNetCF\LargeIntervalTimer.cs" />
     <Compile Include="OpenNetCF\NativeMethods.cs" />
-    <Compile Include="SafeDictionary.cs" />
     <Compile Include="SettingsHandler\AccountInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -513,7 +512,6 @@
     <Compile Include="SettingsHandler\NotificationSettings.Designer.cs">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="SipHelper.cs" />
     <Compile Include="TestCode\TestStatusMaker.cs" />
     <Compile Include="TiledMaps\CompositeTiledMapSession.cs" />
     <Compile Include="TiledMaps\Directions.cs" />
