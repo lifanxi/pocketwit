@@ -39,6 +39,7 @@
             this.lblMediaLabel = new System.Windows.Forms.Label();
             this.chkGPS = new System.Windows.Forms.CheckBox();
             this.chkMessage = new System.Windows.Forms.CheckBox();
+            this.lblPreLoadText = new System.Windows.Forms.Label();
             this.pnlCapabilites.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,12 +127,23 @@
             this.chkMessage.TabIndex = 18;
             this.chkMessage.Text = "include message";
             // 
+            // lblPreLoadText
+            // 
+            this.lblPreLoadText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPreLoadText.Location = new System.Drawing.Point(24, 136);
+            this.lblPreLoadText.Name = "lblPreLoadText";
+            this.lblPreLoadText.Size = new System.Drawing.Size(195, 114);
+            this.lblPreLoadText.Text = "Turning this ON will upload pictures instantly to the service without a message. " +
+                "An URL to the picture is placed in the message field.";
+            // 
             // MediaService
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.lblPreLoadText);
             this.Controls.Add(this.pnlCapabilites);
             this.Controls.Add(this.cbPreUpload);
             this.Controls.Add(this.cmbMediaService);
@@ -155,5 +167,6 @@
         private System.Windows.Forms.CheckBox chkGPS;
         private System.Windows.Forms.CheckBox chkMessage;
         private System.Windows.Forms.Label lblMediaLabel;
+        private System.Windows.Forms.Label lblPreLoadText;
     }
 }
