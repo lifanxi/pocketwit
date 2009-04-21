@@ -548,7 +548,10 @@ namespace FingerUI
             {
                 if (SelectedItem != null)
                 {
-                    LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet);
+                    if (ListName != "Conversation" && ListName != "Search_TimeLine")
+                    {
+                        LastSelectedItems.SetLastSelected(thisList, SelectedItem.Tweet);
+                    }
                 }
                 if (ListName != thisList)
                 {
