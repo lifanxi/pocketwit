@@ -489,6 +489,7 @@ public static class ClientSettings
         ConfigurationSettings.AppSettings["ZoomPreview"] = ZoomPreview.ToString();
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
         ConfigurationSettings.AppSettings["MediaService"] = MediaService;
+        ConfigurationSettings.AppSettings["SendMessageToMediaService"] = SendMessageToMediaService.ToString();
         ConfigurationSettings.AppSettings["FontSize"] = FontSize.ToString();
         ConfigurationSettings.AppSettings["SearchItems"] = string.Join("|", SearchItems.ToArray());
         ConfigurationSettings.AppSettings["AutoTranslate"] = AutoTranslate.ToString();
