@@ -797,8 +797,15 @@ namespace FingerUI
 
         protected override void Dispose(bool disposing)
         {
-            m_timer.Enabled = false;
-            base.Dispose(disposing);
+            try
+            {
+                if (m_timer != null)
+                {
+                    m_timer.Enabled = false;
+                }
+                base.Dispose(disposing);
+            }
+            catch(ObjectDisposedException ex){}
         }
 
         protected override void OnGotFocus(EventArgs e)
