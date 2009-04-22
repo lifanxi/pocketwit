@@ -38,6 +38,7 @@ namespace FingerUI
                     {
                         ExpandedItem.Expanded = false;
                         IsDirty = true;
+                        SelectedItem = ExpandedItem;
                         NeedRedraw();
 
                         _animationTextColor = ClientSettings.DimmedColor;
