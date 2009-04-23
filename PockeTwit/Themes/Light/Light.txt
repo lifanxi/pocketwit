@@ -16,3 +16,9 @@ LineColor:0:0:0
 DimmedLineColor:200:200:200
 MenuTextColor:75:75:75
 MenuSelectedTextColor:0:0:0
+LineColor:30:30:30
+SelectedLinkColor:100:100:205
+SelectedHashLinkColor:160:82:45
+PointerColor:30:30:30
+MenuTextColor:30:30:30
+MenuSelectedTextColor:30:30:30
