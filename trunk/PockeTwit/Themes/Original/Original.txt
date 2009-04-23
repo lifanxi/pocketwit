@@ -12,3 +12,9 @@ ErrorColor:255:0:0
 FieldBackColor:255:255:255
 FieldForeColor:0:0:0
 DimmedColor:75:75:75
+SelectedLikeColor:150:150:255
+SelectedHashLinkColor:160:82:45
+PointerColor:211:211:211
+MenuTextColor:211:211:211
+MenuSelectedTextColor:211:211:211
+LineColor:211:211:211
