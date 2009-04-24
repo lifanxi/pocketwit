@@ -49,6 +49,8 @@
             // 
             // lnkClearCaches
             // 
+            this.lnkClearCaches.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkClearCaches.Location = new System.Drawing.Point(3, 0);
             this.lnkClearCaches.Name = "lnkClearCaches";
             this.lnkClearCaches.Size = new System.Drawing.Size(233, 20);
@@ -58,6 +60,8 @@
             // 
             // lnkClearSettings
             // 
+            this.lnkClearSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkClearSettings.Location = new System.Drawing.Point(3, 20);
             this.lnkClearSettings.Name = "lnkClearSettings";
             this.lnkClearSettings.Size = new System.Drawing.Size(233, 20);
@@ -67,6 +71,8 @@
             // 
             // chkDIB
             // 
+            this.chkDIB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.chkDIB.Location = new System.Drawing.Point(-1, 96);
             this.chkDIB.Name = "chkDIB";
             this.chkDIB.Size = new System.Drawing.Size(161, 20);
@@ -83,6 +89,8 @@
             // 
             // lblCompact
             // 
+            this.lblCompact.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCompact.Location = new System.Drawing.Point(3, 40);
             this.lblCompact.Name = "lblCompact";
             this.lblCompact.Size = new System.Drawing.Size(233, 20);
