@@ -132,7 +132,7 @@ namespace PockeTwit
 
             progressBar1.Visible = false;
             lblProgress.Visible = true;
-            lblProgress.Text = "Initializaing";
+            lblProgress.Text = "Initializing";
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 inputPanel1 = new Microsoft.WindowsCE.Forms.InputPanel();
