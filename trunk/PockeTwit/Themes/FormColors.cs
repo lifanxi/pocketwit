@@ -9,12 +9,19 @@ namespace PockeTwit.Themes
     {
         public static System.Drawing.Bitmap GetThemeIcon(string iconName)
         {
-            if (!System.IO.File.Exists(ClientSettings.IconsFolder() + iconName))
+            try
             {
-                System.IO.File.Copy(ClientSettings.AppPath + "\\Themes\\Original\\" + iconName, ClientSettings.IconsFolder() + iconName);
+                if (!System.IO.File.Exists(ClientSettings.IconsFolder() + iconName))
+                {
+                    System.IO.File.Copy(ClientSettings.AppPath + "\\Themes\\Original\\" + iconName, ClientSettings.IconsFolder() + iconName);
+                }
+
+                return new System.Drawing.Bitmap(ClientSettings.IconsFolder() + iconName);
             }
-            
-            return new System.Drawing.Bitmap(ClientSettings.IconsFolder() + iconName);
+            catch (System.IO.IOException ex)
+            {
+                return new System.Drawing.Bitmap(1,1);
+            }
         }
         public static void SetColors(Control f)
         {

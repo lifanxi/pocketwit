@@ -45,7 +45,7 @@ namespace PockeTwit.TimeLines
 
         public static void SetLastSelected(string ListName, status selectedStatus, SpecialTimeLine specialTime)
         {
-            if (ListName == "Conversation" || ListName == "Search_TimeLine") { return; }
+            if (ListName == "Conversation" || ListName == "Search_TimeLine" || ListName=="@User_TimeLine") { return; }
             if (!LastSelectedItemsDictionary.ContainsKey(ListName))
             {
                 LastSelectedItemsDictionary.Add(ListName, "");
