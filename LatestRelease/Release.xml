@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.70</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv70.CAB</url>
-  <notes>Several bugfixes,
-including fixing blinking avatars
+  <version>.71</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv71.CAB</url>
+  <notes>User grouping
+Twitgoo and Pikchur support
+Today screen plugin
 </notes>
 </LatestRelease>
