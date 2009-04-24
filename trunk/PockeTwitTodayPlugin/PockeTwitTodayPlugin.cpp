@@ -92,38 +92,49 @@ void Plugin_OnPaint(HWND hwnd, HDC hdc)
     TODAYDRAWWATERMARKINFO dwi = {0};
     COLORREF crText, crHighlightedText, crOld;
     int nBkMode;
+	LOGFONT lf;
+    HFONT hSysFont;
+    HFONT hFont;
+	HFONT hFontOld;
+	HDC hdcScreenBuffer;
+	HBITMAP memBM;
+	HGDIOBJ oldMem;
 
     ASSERT(NULL != hdc);
-
+	
     GetClientRect(hwnd, &rcDraw);
 	GetClientRect(hwnd, &rcText);
     
+	hdcScreenBuffer = CreateCompatibleDC(hdc);
+	memBM = CreateCompatibleBitmap( hdc, rcDraw.right, rcDraw.bottom );
+	oldMem = SelectObject(hdcScreenBuffer, memBM);
+
     dwi.rc = rcDraw;
     dwi.hwnd = hwnd;
-    dwi.hdc = hdc;
-
+    dwi.hdc = hdcScreenBuffer;
+	
     if (IsItemState(hwnd, PLUGIN_SELECTED))
     {
         COLORREF crHighlight;
 
         crHighlight = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHT, 0);
         
-        nBkMode = SetBkMode(hdc, OPAQUE);
-        FillRectClr(hdc, &rcDraw, crHighlight);
-        SetBkMode(hdc, nBkMode);
+        nBkMode = SetBkMode(hdcScreenBuffer, OPAQUE);
+        FillRectClr(hdcScreenBuffer, &rcDraw, crHighlight);
+        SetBkMode(hdcScreenBuffer, nBkMode);
     }
     else
     {
         if (!SendMessage(hwndParent, TODAYM_DRAWWATERMARK, 0, (LPARAM) &dwi))
         {
-            FillRectClr(hdc, &rcDraw, GetSysColor(COLOR_WINDOW));
+            FillRectClr(hdcScreenBuffer, &rcDraw, GetSysColor(COLOR_WINDOW));
         }
     }
     
 	if (VGA)
-		rcText.left = rcText.left + 22 + 32;
+		rcText.left = rcText.left + 24 + 32;
 	else
-		rcText.left = rcText.left + 11 + 16;
+		rcText.left = rcText.left + 12 + 16;
 
     rcText.right -= TEXT_RIGHT_MARGIN;
 	rcText.bottom = g_cyDefaultItemHeight;
@@ -131,10 +142,23 @@ void Plugin_OnPaint(HWND hwnd, HDC hdc)
     crHighlightedText = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHTEDTEXT, 0);
     crText = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_TEXT, 0);
 
-    nBkMode = SetBkMode(hdc, TRANSPARENT);
-    crOld = SetTextColor(hdc, IsItemState(hwnd, PLUGIN_SELECTED) ? crHighlightedText : crText);
+    nBkMode = SetBkMode(hdcScreenBuffer, TRANSPARENT);
+    crOld = SetTextColor(hdcScreenBuffer, IsItemState(hwnd, PLUGIN_SELECTED) ? crHighlightedText : crText);
 
-	DrawIcon(hdc, TEXT_LEFT_MARGIN, SCALEY(2), g_hIcon);
+	DrawIcon(hdcScreenBuffer, TEXT_LEFT_MARGIN, SCALEY(2), g_hIcon);
+   
+    hSysFont = (HFONT) GetStockObject(SYSTEM_FONT);
+    GetObject(hSysFont, sizeof(LOGFONT), &lf);
+    
+    lf.lfWeight = FW_NORMAL;
+    // Calculate the font size, making sure to round the result to the nearest integer
+    lf.lfHeight = (long) -((8.0 * (double)GetDeviceCaps(hdcScreenBuffer, LOGPIXELSY) / 72.0)+.5);
+    
+    // create the font
+    hFont = CreateFontIndirect(&lf);
+    
+    // Select the system font into the device context
+    hFontOld = (HFONT) SelectObject(hdcScreenBuffer, hFont);
 
 	if (hasUnreadGroups)
 	{
@@ -143,16 +167,30 @@ void Plugin_OnPaint(HWND hwnd, HDC hdc)
 		wcscat(msgbuf, _T(" ("));
 		wcscat(msgbuf, unreadCountPointer[unreadGroupsCurrent].swUnread);
 		wcscat(msgbuf, _T(")"));
-		DrawText(hdc, msgbuf, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
+		DrawText(hdcScreenBuffer, msgbuf, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
 	}
 	else
 	{
 		LPCTSTR pszText = (LPCTSTR) LoadString(g_hinstDLL, IDS_PLUGIN_TEXT, NULL, 0);
-		DrawText(hdc, pszText, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
+		DrawText(hdcScreenBuffer, pszText, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
 	}
 
-	crText = SetTextColor(hdc, crOld);
-    SetBkMode(hdc, nBkMode);
+	// Select the previous font back into the device context
+    SelectObject(hdcScreenBuffer, hFontOld);
+    
+    DeleteObject(hFont);
+
+	crText = SetTextColor(hdcScreenBuffer, crOld);
+    SetBkMode(hdcScreenBuffer, nBkMode);
+
+	SelectObject(hdcScreenBuffer, memBM); 
+	BitBlt(hdc, 0, 0, rcDraw.right, rcDraw.bottom, hdcScreenBuffer, 0, 0, SRCCOPY) ; 
+
+	SelectObject(hdcScreenBuffer, oldMem);
+
+	DeleteObject(memBM);
+	DeleteObject(oldMem);
+	DeleteDC(hdcScreenBuffer) ;
 
     return;
 }
