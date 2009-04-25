@@ -301,14 +301,16 @@ namespace PockeTwit.Library
                 newStat.text = entry.SelectSingleNode("text").InnerText;
                 newStat.id = entry.SelectSingleNode("id").InnerText;
                 newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
-                string userName = entry.SelectSingleNode("sender/screen_name").InnerText;
-                
                 newStat.user = new User();
-                newStat.user.screen_name = userName;
+                newStat.user.screen_name = entry.SelectSingleNode("sender/screen_name").InnerText;
+                newStat.user.id = entry.SelectSingleNode("sender/id").InnerText;
                 newStat.user.profile_image_url = entry.SelectSingleNode("sender/profile_image_url").InnerText;
                 newStat.user.location = entry.SelectSingleNode("sender/location").InnerText;
+                newStat.user.name = entry.SelectSingleNode("sender/name").InnerText;
                 newStat.user.description = entry.SelectSingleNode("sender/description").InnerText;
-
+                newStat.favorited = "false";
+                newStat.source = "";
+                newStat.in_reply_to_status_id = "";
                 resultList.Add(newStat);
 
             }

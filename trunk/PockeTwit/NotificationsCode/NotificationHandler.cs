@@ -133,7 +133,11 @@ namespace PockeTwit
             if (Notifications.ContainsKey(line.name))
             {
                 Notifications.Remove(line.name);
-                Registry.CurrentUser.DeleteSubKeyTree("\\ControlPanel\\Notifications\\" + line.name);
+                try
+                {
+                    Registry.CurrentUser.DeleteSubKeyTree("\\ControlPanel\\Notifications\\" + line.name);
+                }
+                catch{}
                 LoadAllRegistries();
             }
         }
