@@ -75,6 +75,10 @@ namespace PockeTwit
             {
                 SpecialTimeLines.Load();
             }
+            if (Terms == null) 
+            {
+                return "";
+            }
             string ret = "";
             List<string> UserList = new List<string>();
             foreach (groupTerm t in Terms)
