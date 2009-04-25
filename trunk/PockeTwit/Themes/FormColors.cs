@@ -13,6 +13,8 @@ namespace PockeTwit.Themes
             {
                 if (!System.IO.File.Exists(ClientSettings.IconsFolder() + iconName))
                 {
+                    if (!System.IO.Directory.Exists(ClientSettings.IconsFolder())) {
+                        System.IO.Directory.CreateDirectory(ClientSettings.IconsFolder()); }
                     System.IO.File.Copy(ClientSettings.AppPath + "\\Themes\\Original\\" + iconName, ClientSettings.IconsFolder() + iconName);
                 }
 
