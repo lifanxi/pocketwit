@@ -364,7 +364,7 @@ namespace PockeTwit
                                     foreach (Library.status s in NewStats)
                                     {
                                         s.TypeofMessage = PockeTwit.Library.StatusTypes.Direct;
-                                        if (DateTime.Now.Subtract(s.createdAt) < new TimeSpan(10))
+                                        if (DateTime.Now.Subtract(s.createdAt) < new TimeSpan(10,0,0,0,0))
                                         {
                                             TempLine.Add(s);
                                         }
