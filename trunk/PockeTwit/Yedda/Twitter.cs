@@ -551,7 +551,13 @@ namespace Yedda
                                     PockeTwit.GlobalEventHandler.CallShowErrorMessage("Timeout until " + NewTime.ToString());
                                     throw new Exception("Timeout until " + NewTime.ToString());
                                 }
-
+                                else
+                                {
+                                    Exception TwitterError = new Exception(doc.SelectSingleNode("//error").InnerText);
+                                    PockeTwit.GlobalEventHandler.LogCommError(TwitterError);
+                                    PockeTwit.GlobalEventHandler.CallShowErrorMessage(TwitterError.Message);
+                                    throw TwitterError;
+                                }
                             }
                         }
                     }
