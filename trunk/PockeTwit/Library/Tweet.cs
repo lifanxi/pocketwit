@@ -11,10 +11,10 @@ namespace PockeTwit.Library
     [Flags]
     public enum StatusTypes
     {
-        Normal = 0x0,
-        Reply = 0x1,
-        Direct = 0x2,
-        SearchResult = 0x4
+        Normal = 0x1,
+        Reply = 0x2,
+        Direct = 0x4,
+        SearchResult = 0x8
     }
 
     [Serializable]

@@ -17,9 +17,9 @@ namespace LocalStorage
             @"SELECT     COUNT(id) AS newItems
                           FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) ";
         
-        private const string SQLFetchDirects = "(statuses.statustypes & 2)";
+        private const string SQLFetchDirects = "(statuses.statustypes & 4)";
 
-        private const string SQLFetchFriends = "(statuses.statustypes == 0)";
+        private const string SQLFetchFriends = "(statuses.statustypes & 1)";
 
         private const string SQLFetchNewest = @"SELECT id FROM statuses";
 
@@ -30,11 +30,11 @@ namespace LocalStorage
                                      users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
 
-        private const string SQLFetchReplies = "(statuses.statustypes & 1)";
+        private const string SQLFetchReplies = "(statuses.statustypes & 2)";
 
-        private const string SQLFetchRepliesAndMessages = " (statuses.statustypes & 1 OR statuses.statustypes & 2) ";
+        private const string SQLFetchRepliesAndMessages = " (statuses.statustypes & 2 OR statuses.statustypes & 4) ";
 
-        private const string SQLFetchSearches = "(statuses.statustypes & 4)";
+        private const string SQLFetchSearches = "(statuses.statustypes & 8)";
 
         private const string SQLGetLastStatusID =
             @"SELECT    statuses.id
