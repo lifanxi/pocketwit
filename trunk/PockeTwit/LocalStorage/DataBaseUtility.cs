@@ -108,7 +108,7 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0010";
+        private const string DBVersion = "0011";
         public static void CreateDB()
         {
             if (!Directory.Exists(System.IO.Path.GetDirectoryName(DBPath)))
