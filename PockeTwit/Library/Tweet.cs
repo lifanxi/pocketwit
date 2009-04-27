@@ -366,6 +366,7 @@ namespace PockeTwit.Library
                                           VALUES
                                         (@id, @fulltext, @userid, @timestamp, @in_reply_to_id, @favorited, @clientSource, @accountSummary, @statustypes);";
         private const string SQLCheck = @"SELECT COUNT(id) from statuses WHERE id=@id;";
+        private const string SQLUpdateTypes = @"UPDATE statuses SET statustypes=@type WHERE id=@id";
         public void Save(SQLiteConnection conn)
         {
             using (SQLiteCommand comm = new SQLiteCommand(SQLCheck, conn))
@@ -375,6 +376,18 @@ namespace PockeTwit.Library
                 object ret = comm.ExecuteScalar();
                 if (ret != null && (long)ret != 0)
                 {
+                    if (this.TypeofMessage == StatusTypes.Reply)
+                    {
+                        //Already exists in the DB as a Friends update -- we need to make it an @mention too
+                        this.TypeofMessage = StatusTypes.Normal | StatusTypes.Reply;
+                        using (SQLiteTransaction t = conn.BeginTransaction())
+                        {
+                            comm.CommandText = SQLUpdateTypes;
+                            comm.Parameters.Add(new SQLiteParameter("@type", this.TypeofMessage));
+                            comm.ExecuteNonQuery();
+                            t.Commit();
+                        }
+                    }
                     return;
                 }
             }
