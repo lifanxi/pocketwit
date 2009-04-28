@@ -376,10 +376,11 @@ namespace PockeTwit
         {
             if (!uploadingPicture)
             {
-                using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
+                String pictureUrl = string.Empty;
+                String filename = string.Empty;
+                try
                 {
-                    String pictureUrl = string.Empty;
-                    try
+                    using (Microsoft.WindowsMobile.Forms.CameraCaptureDialog c = new Microsoft.WindowsMobile.Forms.CameraCaptureDialog())
                     {
                         if (c.ShowDialog() == DialogResult.OK)
                         {
@@ -390,37 +391,47 @@ namespace PockeTwit
                                 this.pictureFromStorage.Visible = false;
                             }
                             uploadedPictureOrigin = "camera";
-                           
-                            
-                            pictureService = GetMediaService();
-                            if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
-                            {
-                                AddPictureToForm(c.FileName, pictureFromCamers);
-                                picturePath = c.FileName;
-                                //Reduce length of message 140-pictureService.UrlLength
-                                
-                                pictureUsed = true;
-                            }
-                            else
-                            {
-                                AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
-                                uploadingPicture = true;
-                                using (PicturePostObject ppo = new PicturePostObject())
-                                {
-                                    ppo.Filename = c.FileName;
-                                    ppo.Username = AccountToSet.UserName;
-                                    ppo.Password = AccountToSet.Password;
-                                    ppo.UseAsync = false;
-                                    Cursor.Current = Cursors.WaitCursor;
-                                    pictureService.PostPicture(ppo);
-                                }
-                            }
+                            filename = c.FileName;                            
                         }
                     }
-                    catch
+                }
+                catch
+                {
+                    MessageBox.Show("The camera is not available.", "PockeTwit");
+                    return;
+                }
+                if (string.IsNullOrEmpty(filename))
+                {
+                    return; //no file selected, so don't upload
+                }
+                try
+                {
+                    pictureService = GetMediaService();
+                    if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
                     {
-                        MessageBox.Show("The camera is not available.", "PockeTwit");
+                        AddPictureToForm(filename, pictureFromCamers);
+                        picturePath = filename;
+                        //Reduce length of message 140-pictureService.UrlLength
+                        pictureUsed = true;
                     }
+                    else
+                    {
+                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
+                        uploadingPicture = true;
+                        using (PicturePostObject ppo = new PicturePostObject())
+                        {
+                            ppo.Filename = filename;
+                            ppo.Username = AccountToSet.UserName;
+                            ppo.Password = AccountToSet.Password;
+                            ppo.UseAsync = false;
+                            Cursor.Current = Cursors.WaitCursor;
+                            pictureService.PostPicture(ppo);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to upload picture.", "PockeTwit");
                 }
             }
             else
@@ -434,42 +445,62 @@ namespace PockeTwit
             if (!uploadingPicture)
             {
                 String pictureUrl = string.Empty;
-                using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
+                String filename = string.Empty;
+                //using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
+                try
                 {
-                    if (s.ShowDialog() == DialogResult.OK)
+                    pictureService = GetMediaService();
+                    using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
                     {
-                        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                        this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
-                        if (DetectDevice.DeviceType == DeviceType.Standard)
+                        //s.Filter = pictureService.FileFilter;
+                        if (s.ShowDialog() == DialogResult.OK)
                         {
-                            this.pictureFromCamers.Visible = false;
-                        }
-                        uploadedPictureOrigin = "file";
-
-                        pictureService = GetMediaService();
-                        if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
-                        {
-                            AddPictureToForm(s.FileName, pictureFromStorage);
-                            picturePath = s.FileName;
-                            //Reduce length of message 140-pictureService.UrlLength
-                            pictureUsed = true;
-                        }
-                        else
-                        {
-                            uploadingPicture = true;
-                            AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
-                            using (PicturePostObject ppo = new PicturePostObject())
+                            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
+                            this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
+                            if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
-                                ppo.Filename = s.FileName;
-                                ppo.Username = AccountToSet.UserName;
-                                ppo.Password = AccountToSet.Password;
-                                ppo.UseAsync = false;
-                                Cursor.Current = Cursors.WaitCursor;
-                                pictureService.PostPicture(ppo);
+                                this.pictureFromCamers.Visible = false;
                             }
+                            uploadedPictureOrigin = "file";
                         }
                     }
                 }
+                catch
+                {
+                    MessageBox.Show("Unable to select picture.", "PockeTwit");
+                }
+                if  (string.IsNullOrEmpty(filename))
+                {
+                    return;
+                }
+                try
+                {
+                    if (pictureService.CanUploadMessage && ClientSettings.SendMessageToMediaService)
+                    {
+                        AddPictureToForm(filename, pictureFromStorage);
+                        picturePath = filename;
+                        //Reduce length of message 140-pictureService.UrlLength
+                        pictureUsed = true;
+                    }
+                    else
+                    {
+                        uploadingPicture = true;
+                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
+                        using (PicturePostObject ppo = new PicturePostObject())
+                        {
+                            ppo.Filename = filename;
+                            ppo.Username = AccountToSet.UserName;
+                            ppo.Password = AccountToSet.Password;
+                            ppo.UseAsync = false;
+                            Cursor.Current = Cursors.WaitCursor;
+                            pictureService.PostPicture(ppo);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to upload picture.", "PockeTwit");
+                } 
             }
             else
             {
