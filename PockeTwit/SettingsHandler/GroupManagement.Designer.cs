@@ -34,12 +34,12 @@
             this.menuImportExport = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem();
             this.menuImport = new System.Windows.Forms.MenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.cmbChooseGroup = new System.Windows.Forms.ComboBox();
             this.lnkDeleteGroup = new System.Windows.Forms.LinkLabel();
             this.pnlUsers = new System.Windows.Forms.Panel();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.lblNoGroups = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -67,16 +67,6 @@
             // 
             this.menuImport.Text = "Import...";
             this.menuImport.Click += new System.EventHandler(this.menuImport_Click);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(240, 268);
-            this.label1.Text = "No groups defined";
             // 
             // cmbChooseGroup
             // 
@@ -117,6 +107,16 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "XML Files (*.xml)|*.xml";
             // 
+            // lblNoGroups
+            // 
+            this.lblNoGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNoGroups.Location = new System.Drawing.Point(4, 5);
+            this.lblNoGroups.Name = "lblNoGroups";
+            this.lblNoGroups.Size = new System.Drawing.Size(233, 20);
+            this.lblNoGroups.Text = "There are no groups defined";
+            this.lblNoGroups.Visible = false;
+            // 
             // GroupManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -126,7 +126,7 @@
             this.Controls.Add(this.pnlUsers);
             this.Controls.Add(this.lnkDeleteGroup);
             this.Controls.Add(this.cmbChooseGroup);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblNoGroups);
             this.Menu = this.mainMenu1;
             this.Name = "GroupManagement";
             this.Text = "Group Management";
@@ -136,7 +136,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.MenuItem menuDone;
         private System.Windows.Forms.ComboBox cmbChooseGroup;
         private System.Windows.Forms.LinkLabel lnkDeleteGroup;
@@ -146,5 +145,6 @@
         private System.Windows.Forms.MenuItem menuImport;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label lblNoGroups;
     }
 }
