@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.71</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv71a.CAB</url>
-  <notes>User grouping
-Twitgoo and Pikchur support
-Today screen plugin
+  <version>.72</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv72.CAB</url>
+  <notes>Fixes for DMs and @mentions
+Other bugfixes
 </notes>
 </LatestRelease>
