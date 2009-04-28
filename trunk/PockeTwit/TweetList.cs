@@ -548,13 +548,13 @@ namespace PockeTwit
         {
             if(statList.CurrentList()=="Friends_TimeLine")
             {
-                AddStatusesToList(Manager.GetFriendsImmediately());
+                AddStatusesToList(Manager.GetFriendsImmediately(), true);
             }
             else
             {
                 if(statList.CurrentList().StartsWith("Grouped"))
                 {
-                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup));
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
                 }
             }
             
