@@ -75,7 +75,7 @@ namespace FingerUI
 
         private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
-        public int MaxItems = 20;
+        public int MaxItems = 10;
         private const int PauseBeforeRerender = 50;
         private int _BitmapHeight = 0;
         public int BitmapHeight
