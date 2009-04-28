@@ -65,6 +65,10 @@ namespace PockeTwit
                 items.Remove(toRemove);
             }
             Terms = items.ToArray();
+            if(Terms.Length==0)
+            {
+                SpecialTimeLines.Remove(this);
+            }
             SpecialTimeLines.Save();
         }
         
