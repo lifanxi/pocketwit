@@ -37,7 +37,10 @@ namespace PockeTwit
 
         private void menuItem1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            if (!string.IsNullOrEmpty(GroupName))
+            {
+                this.DialogResult = DialogResult.OK;
+            }
         }
     }
 }
