@@ -16,25 +16,42 @@ namespace PockeTwit.SettingsHandler
             InitializeComponent();
             
             PockeTwit.Themes.FormColors.SetColors(this);
-            if (ClientSettings.IsMaximized)
-            {
-                this.WindowState = FormWindowState.Maximized;
-            }
+            
+            ResetDisplay();
+        }
 
+        private void ResetDisplay()
+        {
             SpecialTimeLine[] Times = SpecialTimeLines.GetList();
             if (Times.Length == 0)
             {
-                cmbChooseGroup.Visible = false;
-                pnlUsers.Visible = false;
+                HideGroups();
                 return;
             }
-            label1.Visible = false;
+            else
+            {
+                ShowGroups();
+            }
             foreach (SpecialTimeLine t in Times)
             {
                 cmbChooseGroup.Items.Add(t);
             }
             cmbChooseGroup.SelectedIndex = 0;
-            
+        }
+
+        private void ShowGroups()
+        {
+            cmbChooseGroup.Visible = true;
+            pnlUsers.Visible = true;
+            lnkDeleteGroup.Visible = true;
+            lblNoGroups.Visible = false;
+        }
+        private void HideGroups()
+        {
+            cmbChooseGroup.Visible = false;
+            pnlUsers.Visible = false;
+            lnkDeleteGroup.Visible = false;
+            lblNoGroups.Visible = true;
         }
 
         private void menuItem1_Click(object sender, EventArgs e)
@@ -125,7 +142,7 @@ namespace PockeTwit.SettingsHandler
             }
             else
             {
-                this.DialogResult = DialogResult.OK;
+                HideGroups();
             }
         }
 
@@ -141,7 +158,10 @@ namespace PockeTwit.SettingsHandler
         {
             if(openFileDialog1.ShowDialog()== DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 SpecialTimeLines.Import(openFileDialog1.FileName);
+                ResetDisplay();
+                Cursor.Current = Cursors.Default;
             }
         }
     }

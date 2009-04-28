@@ -671,9 +671,8 @@ namespace PockeTwit
             AccountsSettingsMenuItem = new SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
             AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
             AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
-            GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Groups", statList.LeftMenu);
+            GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Manage Groups", statList.LeftMenu);
             MediaServiceSettingsMenuItem = new SideMenuItem(showMediaServiceSettings, "Media Service", statList.LeftMenu);
-            GroupSettingsMenuItem.Visible = false;
             NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
             OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
             UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
@@ -716,7 +715,6 @@ namespace PockeTwit
             };
 
             GroupsMenuItem.Visible = true;
-            GroupSettingsMenuItem.Visible = true;
             FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, t.ListName);
             GroupsMenuItem.SubMenuItems.Add(item);
         }
