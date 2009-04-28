@@ -479,13 +479,21 @@ namespace PockeTwit
                     SpecialTimeLine t = new SpecialTimeLine();
                     t.name = d.GroupName;
 
-                    SpecialTimeLines.Add(t);
+                    if(AddUserToGroup(t, Exclusive, false))
+                    {
+                        SpecialTimeLines.Add(t);
 
-                    AddGroupSelectMenuItem(t);
+                        AddGroupSelectMenuItem(t);
 
-                    AddAddUserToGroupMenuItem(t);
-
-                    AddUserToGroup(t, Exclusive);
+                        AddAddUserToGroupMenuItem(t);
+                        SpecialTimeLines.Save();
+                        if(Exclusive)
+                        {
+                            Cursor.Current = Cursors.WaitCursor;
+                            ReloadTimeLine();
+                            Cursor.Current = Cursors.Default;
+                        }
+                    }
                 }
             }
         }
@@ -509,11 +517,15 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        private void AddUserToGroup(SpecialTimeLine t, bool Exclusive)
+        private bool AddUserToGroup(SpecialTimeLine t, bool Exclusive)
+        {
+            return AddUserToGroup(t, Exclusive, true);
+        }
+        private bool AddUserToGroup(SpecialTimeLine t, bool Exclusive, bool ReloadImmediately)
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-            if (selectedItem == null) { return ; }
-            if (selectedItem.Tweet.user == null) { return; }
+            if (selectedItem == null) { return false; }
+            if (selectedItem.Tweet.user == null) { return false; }
 
             string Message = "";
             switch (Exclusive)
@@ -536,12 +548,17 @@ namespace PockeTwit
                 t.AddItem(selectedItem.Tweet.user.id, selectedItem.Tweet.user.screen_name, Exclusive);
                 SpecialTimeLines.Save();
             }
-            if(Exclusive)
+            else
+            {
+                return false;
+            }
+            if(Exclusive && ReloadImmediately)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 ReloadTimeLine();
                 Cursor.Current = Cursors.Default;
             }
+            return true;
         }
 
         private void ReloadTimeLine()
