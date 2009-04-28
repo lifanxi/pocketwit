@@ -14,8 +14,8 @@ namespace PockeTwit
 
 		#region Fields (4) 
 
-        public static double currentVersion = .71;
-        public static bool devBuild = true;
+        public static double currentVersion = .72;
+        public static bool devBuild = false;
 
         private string UpgradeURL = "http://pocketwit.googlecode.com/svn/LatestRelease/Release.xml";
         private UpgradeInfo WebVersion;
