@@ -37,8 +37,6 @@
             this.cmbChooseGroup = new System.Windows.Forms.ComboBox();
             this.lnkDeleteGroup = new System.Windows.Forms.LinkLabel();
             this.pnlUsers = new System.Windows.Forms.Panel();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblNoGroups = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -98,15 +96,6 @@
             this.pnlUsers.Name = "pnlUsers";
             this.pnlUsers.Size = new System.Drawing.Size(233, 233);
             // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.Filter = "XML Files (*.xml)|*.xml";
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "XML Files (*.xml)|*.xml";
-            // 
             // lblNoGroups
             // 
             this.lblNoGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -143,8 +132,6 @@
         private System.Windows.Forms.MenuItem menuImportExport;
         private System.Windows.Forms.MenuItem menuExport;
         private System.Windows.Forms.MenuItem menuImport;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label lblNoGroups;
     }
 }

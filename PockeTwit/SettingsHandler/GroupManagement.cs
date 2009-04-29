@@ -20,6 +20,7 @@ namespace PockeTwit.SettingsHandler
             ResetDisplay();
         }
 
+
         private void ResetDisplay()
         {
             SpecialTimeLine[] Times = SpecialTimeLines.GetList();
@@ -148,21 +149,15 @@ namespace PockeTwit.SettingsHandler
 
         private void menuExport_Click(object sender, EventArgs e)
         {
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                SpecialTimeLines.Export(saveFileDialog1.FileName);
-            }
+            SpecialTimeLines.Export();
         }
 
         private void menuImport_Click(object sender, EventArgs e)
         {
-            if(openFileDialog1.ShowDialog()== DialogResult.OK)
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                SpecialTimeLines.Import(openFileDialog1.FileName);
-                ResetDisplay();
-                Cursor.Current = Cursors.Default;
-            }
+            Cursor.Current = Cursors.WaitCursor;
+            SpecialTimeLines.Import();
+            ResetDisplay();
+            Cursor.Current = Cursors.Default;
         }
     }
 }
