@@ -300,9 +300,9 @@ namespace PockeTwit
         }
 
 
-        public static void Export(string FileName)
+        public static void Export()
         {
-            
+            string FileName = ClientSettings.CacheDir + "\\GroupBackup.xml";
             lock (_Items)
             {
                 List<SpecialTimeLine> l = new List<SpecialTimeLine>();
@@ -319,8 +319,9 @@ namespace PockeTwit
             }
         }
 
-        public static void Import(string FileName)
+        public static void Import()
         {
+            string FileName = ClientSettings.CacheDir + "\\GroupBackup.xml";
             if (!System.IO.File.Exists(FileName)) return;
             SpecialTimeLine[] Input;
             System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof (SpecialTimeLine[]));
