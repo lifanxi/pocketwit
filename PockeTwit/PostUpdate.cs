@@ -452,7 +452,7 @@ namespace PockeTwit
                     pictureService = GetMediaService();
                     using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
                     {
-                        //s.Filter = pictureService.FileFilter;
+                        s.Filter = string.Empty; //all files //pictureService.FileFilter;
                         if (s.ShowDialog() == DialogResult.OK)
                         {
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
@@ -805,13 +805,14 @@ namespace PockeTwit
 
         void pictureFromStorage_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(uploadedPictureURL))
+            if (String.IsNullOrEmpty(uploadedPictureURL) || ClientSettings.SendMessageToMediaService)
             {
                 pictureUsed = false;
                 InsertPictureFromFile();
             }
             else
             {
+                //Pre loading logic
                 if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     txtStatusUpdate.Text += uploadedPictureURL;
@@ -833,13 +834,15 @@ namespace PockeTwit
         }
         void pictureFromCamers_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(uploadedPictureURL))
+            if (String.IsNullOrEmpty(uploadedPictureURL) || ClientSettings.SendMessageToMediaService)
             {
+                //When not pre loading just select another picture.
                 pictureUsed = false;
                 InsertPictureFromCamera();
             }
             else
             {
+                //Pre loading picture logic.
                 if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     txtStatusUpdate.Text += uploadedPictureURL;
@@ -861,8 +864,9 @@ namespace PockeTwit
         
         private void menuSubmit_Click(object sender, EventArgs e)
         {
-            if (!pictureUsed)
+            if (!pictureUsed && !ClientSettings.SendMessageToMediaService)
             {
+                //Only show message when pre-loading pictures is enabled.
                 if (MessageBox.Show("Uploaded picture not used, are you sure?", "PockeTwit", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
                 {
                     return;
