@@ -210,8 +210,16 @@ namespace FingerUI
                 {
                     try
                     {
+                        int screenHeight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+                        //int screenHeight = this.Height;
+                        if (!ClientSettings.IsMaximized)
+                        {
+                            //subtract once the menu height. The working area allready subtracted it once.
+                            screenHeight = screenHeight - (System.Windows.Forms.SystemInformation.MenuHeight);
+                        }
+
                         int multiplyer = 4;
-                        if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+                        if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard )
                         {
                             multiplyer = 3;
                         }
@@ -223,8 +231,8 @@ namespace FingerUI
                                 Count++;
                             }
                         }
-                        _ItemHeight = (this.Height - (ClientSettings.TextSize * multiplyer)) / Count;
-                        _TopOfMenu = ((this.Height / 2) - ((Count * ItemHeight) / 2));
+                        _ItemHeight = (screenHeight - (ClientSettings.TextSize * multiplyer)) / (Count-1);
+                        _TopOfMenu = ((screenHeight / 2) - ((Count * ItemHeight) / 2));
                     }
                     catch (ObjectDisposedException) { }
                 }
