@@ -233,6 +233,10 @@ namespace FingerUI
                         }
                         _ItemHeight = (screenHeight - (ClientSettings.TextSize * multiplyer)) / (Count-1);
                         _TopOfMenu = ((screenHeight / 2) - ((Count * ItemHeight) / 2));
+                        if (ClientSettings.IsMaximized)
+                        {
+                            _TopOfMenu = _TopOfMenu + (_ItemHeight/2);
+                        }
                     }
                     catch (ObjectDisposedException) { }
                 }
