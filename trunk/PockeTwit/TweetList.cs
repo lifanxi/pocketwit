@@ -1460,6 +1460,7 @@ namespace PockeTwit
             statList.ClearVisible();
             AddStatusesToList(Conversation.ToArray());
             ChangeCursor(Cursors.Default);
+            this.SetLeftMenu();
         }
 
         private List<PockeTwit.Library.status> GetConversationFROMTHEFUTURE(PockeTwit.Library.status lastStatus)
@@ -1507,9 +1508,12 @@ namespace PockeTwit
 
         private void UpdateHistoryPosition()
         {
-            HistoryItem i = History.Peek();
-            i.SelectedItemIndex = statList.SelectedIndex;
-            i.itemsOffset = statList.YOffset;
+            if (History.Count > 0)
+            {
+                HistoryItem i = History.Peek();
+                i.SelectedItemIndex = statList.SelectedIndex;
+                i.itemsOffset = statList.YOffset;
+            }
         }
 
 
