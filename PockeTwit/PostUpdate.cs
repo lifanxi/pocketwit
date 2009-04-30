@@ -672,8 +672,15 @@ namespace PockeTwit
         {
             if (Original.Length > 140)
             {
+                string URL = null;
                 //Truncate the text to the last available space, the add the URL.
-                string URL = Yedda.ShortText.shorten(Original);
+                try
+                {
+                    URL = Yedda.ShortText.shorten(Original);
+                }
+                catch
+                {
+                }
                 if (string.IsNullOrEmpty(URL))
                 {
                     return null;
