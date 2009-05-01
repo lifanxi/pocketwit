@@ -52,14 +52,12 @@ namespace FingerUI
         #endregion
 
         private bool useDDB = !ClientSettings.UseDIB;
-        private static List<Thread> _RenderThreads = new List<Thread>();
         public delegate void delNewImage();
         public event delNewImage NewImage = delegate { };
         public event delNewImage Panic = delegate { };
         public delegate void delProgress(int itemnumber, int totalnumber);
         public event delProgress Progress = delegate{ };
 
-        private volatile bool cancelMyCurrentThread = false;
         
         public int WindowOffset;
         private Bitmap temp;
@@ -73,7 +71,6 @@ namespace FingerUI
             }
         }
 
-        private System.Threading.Timer pauseBeforeStarting;
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = 11;
         private const int PauseBeforeRerender = 50;
@@ -88,7 +85,6 @@ namespace FingerUI
         {
             SetBufferSize();
             PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
-            pauseBeforeStarting = new System.Threading.Timer(RenderBackgroundLowPriority, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         private void SetBufferSize()
@@ -164,38 +160,31 @@ namespace FingerUI
         void ThrottledArtGrabber_NewArtWasDownloaded(string url)
         {
             //Don't bother if it's in the middle of rendering
-            if (_RenderThreads.Count > 0)
-            {
-                return;
-            }
             try
             {
                 lock (Items)
                 {
-                    lock (_RenderThreads)
+                    try
                     {
-                        try
+                        for (int i = 0; i < Items.Count; i++)
                         {
-                            for (int i = 0; i < Items.Count; i++)
+                            StatusItem s = (StatusItem)Items[i];
+                            if (s.Tweet.user.profile_image_url != null)
                             {
-                                StatusItem s = (StatusItem)Items[i];
-                                if (s.Tweet.user.profile_image_url != null)
+                                if (s.Tweet.user.profile_image_url == url)
                                 {
-                                    if (s.Tweet.user.profile_image_url == url)
-                                    {
-                                        Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
-                                        s.Render(_RenderedGraphics, itemBounds);
-                                    }
+                                    Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, s.Bounds.Width, ClientSettings.ItemHeight);
+                                    s.Render(_RenderedGraphics, itemBounds);
                                 }
                             }
-                            NewImage();
                         }
-                        
-                        catch (Exception ex)
-                        {
-                            //What happened here?
-                            //System.Windows.Forms.MessageBox.Show(ex.Message);
-                        }
+                        NewImage();
+                    }
+                    
+                    catch (Exception ex)
+                    {
+                        //What happened here?
+                        //System.Windows.Forms.MessageBox.Show(ex.Message);
                     }
                     
                 }
@@ -296,37 +285,26 @@ namespace FingerUI
 
         public void ReRenderItem(StatusItem Item)
         {
-            lock (_RenderThreads)
+            try
             {
-                try
+                if (Items.Contains(Item))
                 {
-                    if (Items.Contains(Item))
-                    {
-                        int i = Items.IndexOf(Item);
-                        Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, Item.Bounds.Width, ClientSettings.ItemHeight);
-                        Item.Render(_RenderedGraphics, itemBounds);
-                    }
+                    int i = Items.IndexOf(Item);
+                    Rectangle itemBounds = new Rectangle(0, ClientSettings.ItemHeight * i, Item.Bounds.Width, ClientSettings.ItemHeight);
+                    Item.Render(_RenderedGraphics, itemBounds);
                 }
-                catch (Exception ex)
-                {
-                    //System.Windows.Forms.MessageBox.Show(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                //System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
 
         public void Rerender()
         {
-            //Tell the portal to rerender in 3 seconds (unless it's interrupted again)
-            //pauseBeforeStarting.Change(PauseBeforeRerender, System.Threading.Timeout.Infinite);
             RenderBackgroundHighPriority(null);
         }
         
-        private delegate void delRender();
-        private void RenderBackgroundLowPriority(object state)
-        {
-            System.Diagnostics.Debug.WriteLine("RenderBackground called");
-            Render(System.Threading.ThreadPriority.AboveNormal);
-        }
         private void RenderBackgroundHighPriority(object state)
         {
             System.Diagnostics.Debug.WriteLine("RenderBackground called");
@@ -335,24 +313,9 @@ namespace FingerUI
         
         private void Render(System.Threading.ThreadPriority p)
         {
-
-            while (_RenderThreads.Count > 0)
-            {
-                Thread t = _RenderThreads[0];
-                cancelMyCurrentThread = true;
-                t.Join();
-                _RenderThreads.Remove(t);
-            }
-            cancelMyCurrentThread = false;
-            if (System.Threading.Thread.CurrentThread.IsBackground)
-            {
-                System.Threading.Thread.CurrentThread.Name = "Renderer";
-                System.Threading.Thread.CurrentThread.Priority = p;
-                _RenderThreads.Add(System.Threading.Thread.CurrentThread);
-            }
             try
             {
-                using (temp = new Bitmap(maxWidth, ClientSettings.ItemHeight * MaxItems))
+                using (temp = new Bitmap(maxWidth, ClientSettings.ItemHeight*MaxItems))
                 {
                     using (Graphics g = Graphics.FromImage(temp))
                     {
@@ -361,7 +324,7 @@ namespace FingerUI
                             try
                             {
                                 int itemsDrawn = 1;
-                                int StartItem = Math.Max(WindowOffset / ClientSettings.ItemHeight, 0);
+                                int StartItem = Math.Max(WindowOffset/ClientSettings.ItemHeight, 0);
                                 int EndItem = StartItem + 4;
                                 if (EndItem > Items.Count)
                                 {
@@ -370,41 +333,27 @@ namespace FingerUI
                                 }
                                 System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
                                 // Onscreen items first
-                                for (int i = StartItem; i < EndItem; i++)
+                                for (int item = StartItem; item < EndItem; item++)
                                 {
-                                    if (!cancelMyCurrentThread)
+                                    DrawSingleItem(item, g);
+                                    itemsDrawn = reportProgress(itemsDrawn);
+
+                                    for (int i = 0; i < StartItem; i++)
                                     {
                                         DrawSingleItem(i, g);
                                         itemsDrawn = reportProgress(itemsDrawn);
                                     }
-                                }
-                                for (int i = 0; i < StartItem; i++)
-                                {
-                                    if (!cancelMyCurrentThread)
+                                    for (int i = EndItem; i < Items.Count; i++)
                                     {
                                         DrawSingleItem(i, g);
                                         itemsDrawn = reportProgress(itemsDrawn);
                                     }
-                                }
-                                for (int i = EndItem; i < Items.Count; i++)
-                                {
-                                    if (!cancelMyCurrentThread)
-                                    {
-                                        DrawSingleItem(i, g);
-                                        itemsDrawn = reportProgress(itemsDrawn);
-                                    }
-                                }
 
 
-                                if (cancelMyCurrentThread)
-                                {
-                                    _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
-                                    return;
+                                    System.Diagnostics.Debug.WriteLine("Done rendering background");
+                                    _RenderedGraphics.DrawImage(temp, 0, 0);
+                                    NewImage();
                                 }
-                                System.Diagnostics.Debug.WriteLine("Done rendering background");
-                                _RenderedGraphics.DrawImage(temp, 0, 0);
-                                NewImage();
-                                _RenderThreads.Remove(System.Threading.Thread.CurrentThread);
                             }
                             catch (Exception ex)
                             {
@@ -416,7 +365,7 @@ namespace FingerUI
                     }
                 }
             }
-            catch (OutOfMemoryException)
+            catch(OutOfMemoryException)
             {
                 PanicMode();
                 Rerender();
