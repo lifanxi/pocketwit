@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using PockeTwit.Themes;
 using Yedda;
 
 namespace PockeTwit
@@ -416,7 +417,7 @@ namespace PockeTwit
                     }
                     else
                     {
-                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromCamers);
+                        AddPictureToForm(FormColors.GetThemeIconPath("wait.png"), pictureFromCamers);
                         uploadingPicture = true;
                         using (PicturePostObject ppo = new PicturePostObject())
                         {
@@ -485,7 +486,7 @@ namespace PockeTwit
                     else
                     {
                         uploadingPicture = true;
-                        AddPictureToForm(ClientSettings.IconsFolder() + "wait.png", pictureFromStorage);
+                        AddPictureToForm(FormColors.GetThemeIconPath("wait.png"), pictureFromStorage);
                         using (PicturePostObject ppo = new PicturePostObject())
                         {
                             ppo.Filename = filename;
@@ -546,11 +547,11 @@ namespace PockeTwit
             
             if (uploadedPictureOrigin == "file")
             {
-                AddPictureToForm(ClientSettings.IconsFolder() + "existingimage.png", pictureFromStorage);
+                AddPictureToForm(FormColors.GetThemeIconPath("existingimage.png"), pictureFromStorage);
             }
             else //camera
             {
-                AddPictureToForm(ClientSettings.IconsFolder() + "takepicture.png", pictureFromCamers);
+                AddPictureToForm(FormColors.GetThemeIconPath("takepicture.png"), pictureFromCamers);
             }
             MessageBox.Show(eventArgs.ErrorMessage);
         }
@@ -562,11 +563,11 @@ namespace PockeTwit
 
             if (uploadedPictureOrigin == "file")
             {
-                AddPictureToForm(ClientSettings.IconsFolder() + "existingimage.png", pictureFromStorage);
+                AddPictureToForm(FormColors.GetThemeIconPath("existingimage.png"), pictureFromStorage);
             }
             else //camera
             {
-                AddPictureToForm(ClientSettings.IconsFolder() + "takepicture.png", pictureFromCamers);
+                AddPictureToForm(FormColors.GetThemeIconPath("takepicture.png"), pictureFromCamers);
             }
             UpdatePictureData(string.Empty, false);
 

@@ -25,6 +25,26 @@ namespace PockeTwit.Themes
                 return new System.Drawing.Bitmap(1,1);
             }
         }
+        public static string GetThemeIconPath(string iconName)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(ClientSettings.IconsFolder() + iconName))
+                {
+                    if (!System.IO.Directory.Exists(ClientSettings.IconsFolder()))
+                    {
+                        System.IO.Directory.CreateDirectory(ClientSettings.IconsFolder());
+                    }
+                    System.IO.File.Copy(ClientSettings.AppPath + "\\Themes\\Original\\" + iconName, ClientSettings.IconsFolder() + iconName);
+                }
+
+                return ClientSettings.IconsFolder() + iconName;
+            }
+            catch (System.IO.IOException ex)
+            {
+                return ClientSettings.AppPath + "\\Themes\\Original\\" + iconName;
+            }
+        }
         public static void SetColors(Control f)
         {
             foreach (Control c in f.Controls)
