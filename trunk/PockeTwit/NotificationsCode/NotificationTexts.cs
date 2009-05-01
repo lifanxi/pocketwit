@@ -62,7 +62,7 @@ namespace PockeTwit
         }
         public string GetMessage()
         {
-            if (_Messages.Count > 0)
+            if (_Messages.Count > 0 && _Position<=_Messages.Count)
             {
                 return _Messages[_Position];
             }

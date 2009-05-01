@@ -79,11 +79,14 @@ namespace PockeTwit
 
         public static void ClearMem()
         {
-            foreach (string url in MemCache.Keys)
+            lock (MemCache)
             {
-                MemCache[url].Dispose();
+                foreach (string url in MemCache.Keys)
+                {
+                    MemCache[url].Dispose();
+                }
+                MemCache.Clear();
             }
-            MemCache.Clear();
         }
 
         public static Image GetArt(string url)
