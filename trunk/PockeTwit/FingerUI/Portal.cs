@@ -57,7 +57,7 @@ namespace FingerUI
         public event delNewImage Panic = delegate { };
         public delegate void delProgress(int itemnumber, int totalnumber);
         public event delProgress Progress = delegate{ };
-
+        private object synLock = new object();
         
         public int WindowOffset;
         private Bitmap temp;
@@ -73,7 +73,6 @@ namespace FingerUI
 
         private List<StatusItem> Items = new List<StatusItem>();
         public int MaxItems = 11;
-        private const int PauseBeforeRerender = 50;
         private int _BitmapHeight = 0;
         public int BitmapHeight
         {
@@ -328,7 +327,7 @@ namespace FingerUI
                                 int EndItem = StartItem + 4;
                                 if (EndItem > Items.Count)
                                 {
-                                    EndItem = Items.Count;
+                                    EndItem = Items.Count-1;
                                     StartItem = Math.Max(EndItem - 4, 0);
                                 }
                                 System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
@@ -392,15 +391,19 @@ namespace FingerUI
 
         private void DrawSingleItem(int i, Graphics g)
         {
-            StatusItem Item = Items[i];
-            Rectangle ItemBounds = new Rectangle(0, i * ClientSettings.ItemHeight, Item.Bounds.Width, ClientSettings.ItemHeight);
-            using (Pen whitePen = new Pen(ClientSettings.LineColor))
+            lock (synLock)
             {
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
-                g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
-                g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                StatusItem Item = Items[i];
+                Rectangle ItemBounds = new Rectangle(0, i*ClientSettings.ItemHeight, Item.Bounds.Width,
+                                                     ClientSettings.ItemHeight);
+                using (Pen whitePen = new Pen(ClientSettings.LineColor))
+                {
+                    g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Top, ItemBounds.Right, ItemBounds.Top);
+                    g.DrawLine(whitePen, ItemBounds.Left, ItemBounds.Bottom, ItemBounds.Right, ItemBounds.Bottom);
+                    g.DrawLine(whitePen, ItemBounds.Right, ItemBounds.Top, ItemBounds.Right, ItemBounds.Bottom);
+                }
+                Item.Render(g, ItemBounds);
             }
-            Item.Render(g, ItemBounds);
         }
         private void RenderNewItemAtStart()
         {
