@@ -73,20 +73,24 @@ namespace PockeTwit
 
         private static void ClearCache()
         {
-            Cursor.Current = Cursors.WaitCursor;
-            try
+            if (MessageBox.Show("This may take several minutes.  Proceed?", "Clear Cache", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
             {
-                ThrottledArtGrabber.ClearAvatars();
-                MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
+                Cursor.Current = Cursors.WaitCursor;
+                try
+                {
+                    ThrottledArtGrabber.ClearAvatars();
+                    MessageBox.Show("The avatar cache was cleared.", "PockeTwit");
+                }
+                catch
+                {
+                    MessageBox.Show("There was an error when clearing the cache. You may want to try again.",
+                                    "PockeTwit");
+                }
+                finally
+                {
+                    Cursor.Current = Cursors.Default;
+                }
             }
-            catch
-            {
-                MessageBox.Show("There was an error when clearing the cache. You may want to try again.", "PockeTwit");
-            }
-            finally
-            {
-                Cursor.Current = Cursors.Default;    
-            }   
         }
     }
 }

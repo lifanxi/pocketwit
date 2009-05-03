@@ -17,10 +17,13 @@ namespace PockeTwit
         public delegate void delTimelineIsFetching(TimelineManagement.TimeLineType TType);
         public delegate void delTimelineIsDone(TimelineManagement.TimeLineType TType);
         public delegate void delshowErrorMessage(string Message);
+        public delegate void delEmpty();
 
 
         // Events (1) 
 
+        public static event delEmpty PauseConnections;
+        public static event delEmpty ResumeConnections;
         public static event delTimelineIsFetching TimeLineFetching;
         public static event delTimelineIsDone TimeLineDone;
         public static event delshowErrorMessage ShowErrorMessage = delegate { };
@@ -107,5 +110,13 @@ namespace PockeTwit
             }
         }
         
+        public static void PauseFetches()
+        {
+            PauseConnections();
+        }
+        public static void ResumeFetches()
+        {
+            ResumeConnections();
+        }
     }
 }

@@ -45,6 +45,18 @@ namespace PockeTwit
         {
             //Not working out so well on my device.  Will investigate more later.
             //PowerState.Changed += new Microsoft.WindowsMobile.Status.ChangeEventHandler(s_Changed);    
+            GlobalEventHandler.PauseConnections += new GlobalEventHandler.delEmpty(GlobalEventHandler_PauseConnections);
+            GlobalEventHandler.ResumeConnections += new GlobalEventHandler.delEmpty(GlobalEventHandler_ResumeConnections);
+        }
+
+        void GlobalEventHandler_ResumeConnections()
+        {
+            updateTimer.Enabled = true;
+        }
+
+        void GlobalEventHandler_PauseConnections()
+        {
+            updateTimer.Enabled = false;
         }
 
         void s_Changed(object sender, Microsoft.WindowsMobile.Status.ChangeEventArgs args)
