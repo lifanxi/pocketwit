@@ -337,6 +337,7 @@ namespace PockeTwit
 
         public static void ClearAvatars()
         {
+            GlobalEventHandler.PauseFetches();
             using (SQLiteConnection conn = DataBaseUtility.GetConnection())
             {
                 conn.Open();
@@ -351,6 +352,7 @@ namespace PockeTwit
                 }
                 DataBaseUtility.VacuumDB();
             }
+            GlobalEventHandler.ResumeFetches();
         }
         public static void ClearUnlinkedAvatars()
         {
