@@ -380,13 +380,9 @@ namespace PockeTwit.Library
                     {
                         //Already exists in the DB as a Friends update -- we need to make it an @mention too
                         this.TypeofMessage = StatusTypes.Normal | StatusTypes.Reply;
-                        using (SQLiteTransaction t = conn.BeginTransaction())
-                        {
-                            comm.CommandText = SQLUpdateTypes;
-                            comm.Parameters.Add(new SQLiteParameter("@type", this.TypeofMessage));
-                            comm.ExecuteNonQuery();
-                            t.Commit();
-                        }
+                        comm.CommandText = SQLUpdateTypes;
+                        comm.Parameters.Add(new SQLiteParameter("@type", this.TypeofMessage));
+                        comm.ExecuteNonQuery();
                     }
                     return;
                 }
