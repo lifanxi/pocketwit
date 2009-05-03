@@ -93,14 +93,12 @@ namespace FingerUI
 
             //Try to create temporary bitmaps for everything we'll need so we can try it out.
             Bitmap TestMap = null;
-            Bitmap SecondMap = null;
-
+            
             Bitmap ScreenMap = new Bitmap(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
             Bitmap AvatarMap = new Bitmap(ClientSettings.SmallArtSize, ClientSettings.SmallArtSize);
             try
             {
                 TestMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                SecondMap = new Bitmap(maxWidth, MaxItems * ClientSettings.ItemHeight);
             }
             catch (OutOfMemoryException ex)
             {
@@ -110,15 +108,10 @@ namespace FingerUI
                 {
                     TestMap.Dispose();
                 }
-                if (SecondMap != null)
-                {
-                    SecondMap.Dispose();
-                }
                 useDDB = false;
                 try
                 {
                     TestMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
-                    SecondMap = GraphicsLibs.DIB.CreateDIB(maxWidth, MaxItems * ClientSettings.ItemHeight);
                 }
                 catch(OutOfMemoryException)
                 {
@@ -130,10 +123,6 @@ namespace FingerUI
                 if (TestMap != null)
                 {
                     TestMap.Dispose();
-                }
-                if (SecondMap != null)
-                {
-                    SecondMap.Dispose();
                 }
             }
             ScreenMap.Dispose();
@@ -314,53 +303,44 @@ namespace FingerUI
         {
             try
             {
-                using (temp = new Bitmap(maxWidth, ClientSettings.ItemHeight*MaxItems))
+                lock (Items)
                 {
-                    using (Graphics g = Graphics.FromImage(temp))
+                    try
                     {
-                        lock (Items)
+                        int itemsDrawn = 1;
+                        int StartItem = Math.Max(WindowOffset/ClientSettings.ItemHeight, 0);
+                        int EndItem = StartItem + 4;
+                        if (EndItem > Items.Count)
                         {
-                            try
-                            {
-                                int itemsDrawn = 1;
-                                int StartItem = Math.Max(WindowOffset/ClientSettings.ItemHeight, 0);
-                                int EndItem = StartItem + 4;
-                                if (EndItem > Items.Count)
-                                {
-                                    EndItem = Items.Count-1;
-                                    StartItem = Math.Max(EndItem - 4, 0);
-                                }
-                                System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
-                                // Onscreen items first
-                                for (int item = StartItem; item < EndItem; item++)
-                                {
-                                    DrawSingleItem(item, g);
-                                    itemsDrawn = reportProgress(itemsDrawn);
-
-                                    for (int i = 0; i < StartItem; i++)
-                                    {
-                                        DrawSingleItem(i, g);
-                                        itemsDrawn = reportProgress(itemsDrawn);
-                                    }
-                                    for (int i = EndItem; i < Items.Count; i++)
-                                    {
-                                        DrawSingleItem(i, g);
-                                        itemsDrawn = reportProgress(itemsDrawn);
-                                    }
-
-
-                                    System.Diagnostics.Debug.WriteLine("Done rendering background");
-                                    _RenderedGraphics.DrawImage(temp, 0, 0);
-                                    NewImage();
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                //JeepNaked's error here?
-                                //Specified argument was out of range of valid values. Parameter name: index
-                                //System.Windows.Forms.MessageBox.Show(ex.Message);
-                            }
+                            EndItem = Items.Count-1;
+                            StartItem = Math.Max(EndItem - 4, 0);
                         }
+                        System.Diagnostics.Debug.WriteLine("Prioritize items " + StartItem + " to " + EndItem);
+                        // Onscreen items first
+                        for (int item = StartItem; item < EndItem; item++)
+                        {
+                            DrawSingleItem(item, _RenderedGraphics);
+                            itemsDrawn = reportProgress(itemsDrawn);
+
+                            for (int i = 0; i < StartItem; i++)
+                            {
+                                DrawSingleItem(i, _RenderedGraphics);
+                                itemsDrawn = reportProgress(itemsDrawn);
+                            }
+                            for (int i = EndItem; i < Items.Count; i++)
+                            {
+                                DrawSingleItem(i, _RenderedGraphics);
+                                itemsDrawn = reportProgress(itemsDrawn);
+                            }
+
+                            NewImage();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //JeepNaked's error here?
+                        //Specified argument was out of range of valid values. Parameter name: index
+                        //System.Windows.Forms.MessageBox.Show(ex.Message);
                     }
                 }
             }
