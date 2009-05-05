@@ -394,6 +394,10 @@ namespace PockeTwit
                             uploadedPictureOrigin = "camera";
                             filename = c.FileName;                            
                         }
+                        else //cancelled
+                        {
+                            pictureUsed = true;
+                        }
                     }
                 }
                 catch
@@ -453,7 +457,8 @@ namespace PockeTwit
                     pictureService = GetMediaService();
                     using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
                     {
-                        s.Filter = string.Empty; //all files //pictureService.FileFilter;
+                        //s.Filter = string.Empty; //all files //pictureService.FileFilter;
+                        s.Filter = pictureService.FileFilter;
                         
                         if (s.ShowDialog() == DialogResult.OK)
                         {
@@ -465,6 +470,11 @@ namespace PockeTwit
                                 this.pictureFromCamers.Visible = false;
                             }
                             uploadedPictureOrigin = "file";
+                            filename = s.FileName;
+                        }
+                        else //cancelled
+                        {
+                            pictureUsed = true;
                         }
                     }
                 }
