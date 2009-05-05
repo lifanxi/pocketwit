@@ -16,7 +16,9 @@ namespace Yedda
         private static object syncRoot = new Object();
 
         private const string API_UPLOAD = "http://pix.im/api/pictures.xml";
-
+        private const string API_UPLOAD2 = "http://pix.im/api/uploads.xml";  
+        
+                        
         private const string API_SHOW_THUMB = "http://pix.im/";  //The extra / for directly sticking the image-id on.
 
         private const string API_ERROR_UPLOAD = "Failed to upload picture to PixIm.";
@@ -43,6 +45,11 @@ namespace Yedda
             API_CAN_UPLOAD_MESSAGE = true;
             API_CAN_UPLOAD_GPS = false;
             API_URLLENGTH = 20;
+
+            API_FILETYPES.Add("jpg");
+            API_FILETYPES.Add("jpeg");
+            API_FILETYPES.Add("gif");
+            API_FILETYPES.Add("png");
             
         }
 
@@ -129,7 +136,7 @@ namespace Yedda
 
                         if (uploadResult.SelectSingleNode("rsp").Attributes["status"].Value != "fail")
                         {
-                            XmlNode UrlKeyNode = uploadResult.SelectSingleNode("rsp/picture_url");
+                            XmlNode UrlKeyNode = uploadResult.SelectSingleNode("rsp/mediaurl");
                             string URL = UrlKeyNode.InnerText;
                             URL = URL.Replace("\n","");
 
@@ -297,7 +304,7 @@ namespace Yedda
 
                 if (uploadResult.SelectSingleNode("rsp").Attributes["status"].Value != "fail")
                 {
-                    XmlNode UrlKeyNode = uploadResult.SelectSingleNode("rsp/picture_url");
+                    XmlNode UrlKeyNode = uploadResult.SelectSingleNode("rsp/mediaurl");
                     string URL = UrlKeyNode.InnerText;
                     URL = URL.Replace("\n", "");
 
@@ -386,13 +393,15 @@ namespace Yedda
            
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD2);
 
                 string boundary = Guid.NewGuid().ToString();
+                request.AllowWriteStreamBuffering = true;
                 request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
                 request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
                 request.PreAuthenticate = true;
                 request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                request.Headers.Add("Action", "upload");
 
                 //request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
@@ -404,12 +413,15 @@ namespace Yedda
 
                 contents.Append(CreateContentPartStringForm(header, "username", ppo.Username, "text/plain"));
                 contents.Append(CreateContentPartStringForm(header, "password", ppo.Password, "text/plain"));
+                contents.Append(CreateContentPartStringForm(header, "action", "upload", "text/plain"));
                 //image
                 contents.Append(CreateContentPartPicture(header, "picture ", "image.jpg"));
 
                 //Create the form message to send in bytes
-                byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
-                byte[] footer = Encoding.UTF8.GetBytes(ender);
+                //byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
+                //byte[] footer = Encoding.UTF8.GetBytes(ender);
+                byte[] message = Encoding.UTF7.GetBytes(contents.ToString());
+                byte[] footer = Encoding.UTF7.GetBytes(ender);
                 request.ContentLength = message.Length + ppo.PictureData.Length + footer.Length;
                 using (Stream requestStream = request.GetRequestStream())
                 {
@@ -446,16 +458,17 @@ namespace Yedda
         /// <returns></returns>
         private XmlDocument UploadPictureAndPost(PicturePostObject ppo)
         {
-           
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(API_UPLOAD2);
 
                 string boundary = Guid.NewGuid().ToString();
+                request.AllowWriteStreamBuffering = true;
                 request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
                 request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
                 request.PreAuthenticate = true;
                 request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                request.Headers.Add("Action", "uploadAndPost");
 
                 //request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
@@ -468,12 +481,12 @@ namespace Yedda
                 contents.Append(CreateContentPartStringForm(header, "username", ppo.Username, "text/plain" ));
                 contents.Append(CreateContentPartStringForm(header, "password", ppo.Password, "text/plain"));
                 contents.Append(CreateContentPartStringForm(header, "message", ppo.Message, "text/plain"));
+                contents.Append(CreateContentPartStringForm(header, "action", "uploadAndPost", "text/plain"));
+                
                 
                 //image
                 contents.Append(CreateContentPartPicture(header, "picture ", "image.jpg"));
                 
-                //image
-
                 //Create the form message to send in bytes
                 byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
                 byte[] footer = Encoding.UTF8.GetBytes(ender);
@@ -498,7 +511,7 @@ namespace Yedda
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 //Socket exception 10054 could occur when sending large files.
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));

@@ -64,6 +64,7 @@ namespace Yedda
             serviceList.Add(PikChur.Instance);
             //serviceList.Add(PixIm.Instance);
             serviceList.Add(TwitGoo.Instance);
+            //serviceList.Add(Posterous.Instance);
 
             //setup every service the same way
             foreach (IPictureService service in serviceList)

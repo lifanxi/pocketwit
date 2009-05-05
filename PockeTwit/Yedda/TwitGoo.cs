@@ -46,6 +46,11 @@ namespace Yedda
             API_CAN_UPLOAD_GPS = false;
             API_CAN_UPLOAD_MESSAGE = true;
             API_URLLENGTH = 30;
+
+            API_FILETYPES.Add("jpg");
+            API_FILETYPES.Add("jpeg");
+            API_FILETYPES.Add("gif");
+            API_FILETYPES.Add("png");
         }
 
         /// <summary>

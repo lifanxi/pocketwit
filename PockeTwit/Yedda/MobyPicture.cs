@@ -50,6 +50,32 @@ namespace Yedda
             API_CAN_UPLOAD_GPS = true;
             API_CAN_UPLOAD_MESSAGE = true;
             API_URLLENGTH = 31;
+
+            API_FILETYPES.Add("jpg");
+            API_FILETYPES.Add("jpeg");
+            API_FILETYPES.Add("png");
+            API_FILETYPES.Add("bmp");
+            API_FILETYPES.Add("gif");
+            API_FILETYPES.Add("flv");
+            API_FILETYPES.Add("mpeg");
+            API_FILETYPES.Add("mkv");
+            API_FILETYPES.Add("wmv");
+            API_FILETYPES.Add("mov");
+            API_FILETYPES.Add("3gp");
+            API_FILETYPES.Add("mp4");
+            API_FILETYPES.Add("avi");
+            API_FILETYPES.Add("mp3");
+            API_FILETYPES.Add("wma");
+            API_FILETYPES.Add("aac");
+            API_FILETYPES.Add("aif");
+            API_FILETYPES.Add("au");
+            API_FILETYPES.Add("flac");
+            API_FILETYPES.Add("ra");
+            API_FILETYPES.Add("wav");
+            API_FILETYPES.Add("ogg");
+            API_FILETYPES.Add("3gp");
+
+
         }
 
         /// <summary>
