@@ -454,8 +454,10 @@ namespace PockeTwit
                     using (Microsoft.WindowsMobile.Forms.SelectPictureDialog s = new Microsoft.WindowsMobile.Forms.SelectPictureDialog())
                     {
                         s.Filter = string.Empty; //all files //pictureService.FileFilter;
+                        
                         if (s.ShowDialog() == DialogResult.OK)
                         {
+                            filename = s.FileName;
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
                             this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
