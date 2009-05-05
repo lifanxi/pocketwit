@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -20,13 +20,14 @@ namespace Yedda
         protected string PT_DEFAULT_PATH = string.Empty;
         protected string PT_ROOT_PATH = string.Empty;
        
-
         protected string API_SAVE_TO_PATH { get; set; }
         protected string API_SERVICE_NAME = string.Empty;
         protected bool API_CAN_UPLOAD = true;
         protected bool API_CAN_UPLOAD_MESSAGE = false;
         protected bool API_CAN_UPLOAD_GPS = false;
         protected int API_URLLENGTH = 0;
+
+        protected List<string> API_FILETYPES = new List<string>();
 
         #endregion
 
@@ -179,6 +180,39 @@ namespace Yedda
             get
             {
                 return API_URLLENGTH;
+            }
+        }
+
+        public string FileFilter
+        {
+            get
+            {
+                bool first = true;
+                string filterFormat = "{0} files (*.{0})|*.{0}";
+                StringBuilder sb = new StringBuilder();
+                foreach (string type in API_FILETYPES)
+                {
+                    if (first)
+                    {
+                       
+                        first = false;
+                    }
+                    else
+                    {
+                        sb.Append("|");
+                    }
+                    sb.Append(string.Format(filterFormat, type));
+
+                }
+                return sb.ToString();
+            }
+        }
+
+        public List<string> FileTypes 
+        {
+            get
+            {
+                return API_FILETYPES;
             }
         }
 
@@ -416,11 +450,16 @@ namespace Yedda
 
         protected string CreateContentPartPicture(string header)
         {
+            return CreateContentPartPicture(header,"image.jpg");
+        }
+
+        protected string CreateContentPartPicture(string header, string filename)
+        {
             StringBuilder contents = new StringBuilder();
 
             contents.Append(header);
             contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"image.jpg\"\r\n"));
+            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
             contents.Append("Content-Type: image/jpeg\r\n");
             contents.Append("\r\n");
 
@@ -448,7 +487,7 @@ namespace Yedda
 
             contents.Append(header);
             contents.Append("\r\n");
-            contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
+            contents.Append(String.Format("Content-Disposition: form-data; name=\"{0}\"\r\n", dispositionName));
             contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
             contents.Append("\r\n");
             contents.Append(valueToSend);
@@ -464,4 +503,6 @@ namespace Yedda
 
         #endregion
     }
+
+
 }

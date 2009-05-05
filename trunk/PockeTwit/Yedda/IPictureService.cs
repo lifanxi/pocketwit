@@ -5,6 +5,7 @@ using System.Xml;
 using System.Web;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 namespace Yedda
 {
@@ -130,7 +131,6 @@ namespace Yedda
     public delegate void DownloadPartEventHandler(object sender, PictureServiceEventArgs eventArgs);
     #endregion
 
-
     /// <summary>
     /// Interface for multiple picture services
     /// </summary>
@@ -187,6 +187,11 @@ namespace Yedda
         bool CanUploadMessage { get; }
         bool CanUploadGPS { get; }
         int UrlLength { get;  }
+
+
+        string FileFilter { get; }
+        List<string> FileTypes { get;  }
+
     }
 
     /// <summary>
@@ -203,4 +208,5 @@ namespace Yedda
         internal Stream dataStream;
         internal WebResponse response;
     }
+
 }
