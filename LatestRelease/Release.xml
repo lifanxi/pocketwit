@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.73</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv73.CAB</url>
-  <notes>Fix issues saving changes to Media services
-Fix some memory issues
-Fix notification spinner
+  <version>.74</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv74.CAB</url>
+  <notes>Fix existing image post
+Fix 3 common crash reports
 </notes>
 </LatestRelease>
