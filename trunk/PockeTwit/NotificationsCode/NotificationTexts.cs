@@ -57,14 +57,17 @@ namespace PockeTwit
             _Position--;
             if(_Position<0)
             {
-                _Position = _Messages.Count;
+                _Position = _Messages.Count-1;
             }
         }
         public string GetMessage()
         {
-            if (_Messages.Count > 0 && _Position<=_Messages.Count)
+            lock (_Messages)
             {
-                return _Messages[_Position];
+                if (_Messages.Count > 0 && _Position <= _Messages.Count)
+                {
+                    return _Messages[_Position];
+                }
             }
             return null;
         }
