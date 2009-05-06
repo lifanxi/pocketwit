@@ -33,14 +33,14 @@ namespace PockeTwit
         public UpgradeForm()
         {
             InitializeComponent();
-            PockeTwit.Themes.FormColors.SetColors(this);
+            Themes.FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
-                this.WindowState = FormWindowState.Maximized;
+                WindowState = FormWindowState.Maximized;
             }
             if (UpgradeChecker.devBuild)
             {
-                this._NewVersion.DownloadURL = @"http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB";
+                _NewVersion.DownloadURL = @"http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB";
                 PerformUpdate();
             }
         }
@@ -81,8 +81,8 @@ namespace PockeTwit
         {
             if (InvokeRequired)
             {
-                delToggleState d = new delToggleState(EnableMenu);
-                this.Invoke(d, state);
+                delToggleState d = EnableMenu;
+                Invoke(d, state);
             }
             else
             {
@@ -91,20 +91,28 @@ namespace PockeTwit
             }
         }
 
-
+        private delegate void delNothing();
         private void PerformUpdate()
         {
-            System.IO.Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
-            request = (HttpWebRequest)HttpWebRequest.Create(_NewVersion.DownloadURL);
-            request.BeginGetResponse(new AsyncCallback(ResponseReceived), null);
-            EnableMenu(false);
+            if (InvokeRequired)
+            {
+                delNothing d = PerformUpdate;
+                Invoke(d);
+            }
+            else
+            {
+                Directory.CreateDirectory(ClientSettings.AppPath + "\\Update");
+                request = (HttpWebRequest) HttpWebRequest.Create(_NewVersion.DownloadURL);
+                request.BeginGetResponse((ResponseReceived), null);
+                EnableMenu(false);
 
-            lblDownloading.Visible = true;
-            progressDownload.Visible = true;
-            lblInfo.Visible = false;
-            lblVersion.Visible = false;
-            label1.Visible = false;
-            label2.Visible = false;
+                lblDownloading.Visible = true;
+                progressDownload.Visible = true;
+                lblInfo.Visible = false;
+                lblVersion.Visible = false;
+                label1.Visible = false;
+                label2.Visible = false;
+            }
 
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -145,7 +153,7 @@ namespace PockeTwit
                 else
                 {
                     MessageBox.Show("You can download the upgrade manually from http://code.google.com/p/pocketwit/");
-                    this.Close();
+                    Close();
                 }
             }
         }
