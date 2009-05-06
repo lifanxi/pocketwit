@@ -283,9 +283,11 @@ namespace PockeTwit
         }
         private void AddStatusesToList(Library.status[] mergedstatuses, bool KeepPosition)
         {
+            if(mergedstatuses==null){return;} //Why would this turn up null? Comm error?
+            if (mergedstatuses.Length == 0) { return; }
             if (InvokeRequired)
             {
-                delAddStatuses d = new delAddStatuses(AddStatusesToList);
+                delAddStatuses d = AddStatusesToList;
                 this.Invoke(d, new object[] { mergedstatuses, KeepPosition });
             }
             else
@@ -293,41 +295,37 @@ namespace PockeTwit
                 int newItems = 0;
                 if(KeepPosition)
                 {
-                    FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
-                    TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
-                    if(statList.CurrentList()=="Messages_TimeLine")
+                    StatusItem selectedItem = statList.SelectedItem;
+                    if (selectedItem != null)
                     {
-                        t = TimelineManagement.TimeLineType.Messages;
+                        TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
+                        if (statList.CurrentList() == "Messages_TimeLine")
+                        {
+                            t = TimelineManagement.TimeLineType.Messages;
+                        }
+                        string constraints = "";
+                        if (currentGroup != null)
+                        {
+                            constraints = currentGroup.GetConstraints();
+                        }
+                        newItems = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedItem.Tweet.id, constraints);
                     }
-                    string Constraints = "";
-                    if(currentGroup!=null){
-                        Constraints = currentGroup.GetConstraints();}
-                    newItems = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedItem.Tweet.id, Constraints);
                 }
-                
-                if (mergedstatuses == null) { return; }
-                if (mergedstatuses.Length == 0) { return; }
             
-                int OldOffset = 0;
+                int oldOffset = 0;
                 int oldIndex = 0;
-
-                
                 
                 oldIndex = statList.SelectedIndex;
-                OldOffset = statList.YOffset - (ClientSettings.ItemHeight * oldIndex);
+                oldOffset = statList.YOffset - (ClientSettings.ItemHeight * oldIndex);
 
-                int oldCount = statList.Count;
                 statList.Clear();
                 foreach (Library.status stat in mergedstatuses)
                 {
-                    if (stat != null && stat.user != null && stat.user.screen_name != null)
-                    {
-                        FingerUI.StatusItem item = new FingerUI.StatusItem();
-                        item.Tweet = stat;
-                        statList.AddItem(item);
-                    }
+                    if (stat == null || stat.user == null || stat.user.screen_name == null) continue;
+                    StatusItem item = new StatusItem {Tweet = stat};
+                    statList.AddItem(item);
                 }
-                FingerUI.StatusItem currentItem = null;
+                StatusItem currentItem = null;
                 if (!ClientSettings.AutoScrollToTop)
                 {
                     if (oldIndex >= 0 && KeepPosition && newItems < ClientSettings.MaxTweets)
@@ -335,8 +333,8 @@ namespace PockeTwit
                         try
                         {
                             statList.SelectedItem = statList[newItems];
-                            currentItem = (FingerUI.StatusItem)statList.SelectedItem;
-                            statList.YOffset = OldOffset + (newItems * ClientSettings.ItemHeight);
+                            currentItem = statList.SelectedItem;
+                            statList.YOffset = oldOffset + (newItems * ClientSettings.ItemHeight);
                         }
                         catch (KeyNotFoundException)
                         {
@@ -346,7 +344,7 @@ namespace PockeTwit
                     else
                     {
                         statList.JumpToLastSelected();
-                        currentItem = (FingerUI.StatusItem)statList[0];
+                        currentItem = statList[0];
                     }
                 }
                 else
@@ -362,8 +360,6 @@ namespace PockeTwit
                 statList.Redraw();
                 statList.RerenderPortal();
                 statList.Repaint();
-                
-                
             }
         }
 
