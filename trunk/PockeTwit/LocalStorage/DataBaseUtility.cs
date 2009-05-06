@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using PockeTwit;
@@ -12,16 +13,13 @@ namespace LocalStorage
     {
         #region SQL Constants
 
-        private const string SQLGetUserName = "SELECT screenname FROM users where id=@id;";
         private const string SQLCountFromCache =
             @"SELECT     COUNT(id) AS newItems
                           FROM         statuses WHERE timestamp>(SELECT timestamp FROM statuses WHERE id=@id) ";
-        
+
         private const string SQLFetchDirects = "(statuses.statustypes & 4)";
 
         private const string SQLFetchFriends = "(statuses.statustypes & 1)";
-
-        private const string SQLFetchNewest = @"SELECT id FROM statuses";
 
         private const string SQLFetchFromCache =
             @"SELECT     statuses.id, statuses.fulltext, statuses.userid, statuses.[timestamp], 
@@ -29,6 +27,8 @@ namespace LocalStorage
                                      statuses.accountSummary, statuses.statustypes, users.screenname, 
                                      users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
+
+        private const string SQLFetchNewest = @"SELECT id FROM statuses";
 
         private const string SQLFetchReplies = "(statuses.statustypes & 2)";
 
@@ -41,6 +41,8 @@ namespace LocalStorage
                           FROM statuses 
                           WHERE statuses.accountSummary = @accountsummary";
 
+        private const string SQLGetUserName = "SELECT screenname FROM users where id=@id;";
+
         private const string SQLIgnoreGrouped =
             //@" INNER JOIN usersInGroups ON statuses.userid <> usersInGroups.userid ";
             @" AND ((SELECT COUNT(id) FROM usersInGroups WHERE usersInGroups.userid=statuses.userid AND usersInGroups.exclusive=1 ) = 0)  ";
@@ -50,7 +52,7 @@ namespace LocalStorage
 
         #endregion
 
-        
+        private const string DBVersion = "0011";
         private static string DBPath = ClientSettings.CacheDir + "\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -94,9 +96,9 @@ namespace LocalStorage
 
         public static void MoveDB(string NewPath)
         {
-            if (System.IO.File.Exists(DBPath))
+            if (File.Exists(DBPath))
             {
-                System.IO.File.Move(DBPath, NewPath + "\\LocalCache.db");
+                File.Move(DBPath, NewPath + "\\LocalCache.db");
                 DBPath = NewPath + "\\LocalCache.db";
             }
         }
@@ -112,12 +114,12 @@ namespace LocalStorage
 
         //Update this number if you change the schema of the database -- it'll
         // force the client to recreate it.
-        private const string DBVersion = "0011";
+
         public static void CreateDB()
         {
-            if (!Directory.Exists(System.IO.Path.GetDirectoryName(DBPath)))
+            if (!Directory.Exists(Path.GetDirectoryName(DBPath)))
             {
-                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(DBPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(DBPath));
             }
             if (!File.Exists(DBPath))
             {
@@ -176,7 +178,7 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE INDEX IF NOT EXISTS DateINDEX ON statuses (timestamp DESC)";
                         comm.ExecuteNonQuery();
-                        
+
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS users (id VARCHAR(50) PRIMARY KEY ON CONFLICT REPLACE,
                             screenname NVARCHAR(255),
@@ -215,7 +217,7 @@ namespace LocalStorage
                                     (searchName NVARCHAR(50),
                                     statusID VARCHAR(50))";
                         comm.ExecuteNonQuery();
-                        
+
 
                         t.Commit();
                         conn.Close();
@@ -230,13 +232,13 @@ namespace LocalStorage
         public static string GetUserNameForID(string ID)
         {
             string id = "";
-            using(SQLiteConnection conn = GetConnection())
+            using (SQLiteConnection conn = GetConnection())
             {
-                using (SQLiteCommand comm = new SQLiteCommand(SQLGetUserName, conn))
+                using (var comm = new SQLiteCommand(SQLGetUserName, conn))
                 {
                     conn.Open();
                     comm.Parameters.Add(new SQLiteParameter("@id", ID));
-                    id = (string)comm.ExecuteScalar();
+                    id = (string) comm.ExecuteScalar();
                 }
             }
             return id;
@@ -252,25 +254,28 @@ namespace LocalStorage
             return GetList(typeToGet, Count, Constraints);
         }
 
-        public static string GetNewestItem(TimelineManagement.TimeLineType typeToGet,string Constraints)
+        public static string GetNewestItem(TimelineManagement.TimeLineType typeToGet, string Constraints)
         {
             using (SQLiteConnection conn = GetConnection())
             {
-                string FetchQuery = SQLFetchNewest;
-                FetchQuery = FetchQuery + " WHERE " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
+                string fetchQuery = SQLFetchNewest;
+                fetchQuery = fetchQuery + " WHERE " + AddTypeWhereClause(typeToGet) + Constraints + SQLOrder + SQLLimit;
 
-                using (var comm = new SQLiteCommand(FetchQuery, conn))
+                using (var comm = new SQLiteCommand(fetchQuery, conn))
                 {
                     comm.Parameters.Add(new SQLiteParameter("@count", 1));
                     conn.Open();
                     using (SQLiteDataReader r = comm.ExecuteReader())
                     {
-                        r.Read();
-                        string latestID = r.GetString(0);
-                        return latestID;
+                        while (r.Read())
+                        {
+                            string latestID = r.GetString(0);
+                            return latestID;
+                        }
                     }
                 }
             }
+            return "";
         }
 
         public static List<status> GetList(TimelineManagement.TimeLineType typeToGet, int Count, string Constraints)
@@ -333,7 +338,7 @@ namespace LocalStorage
         }
 
         public static int CountItemsNewerThan(TimelineManagement.TimeLineType typeToGet, string ID,
-                                            string Constraints)
+                                              string Constraints)
         {
             //Need to EXCLUDE items exclusive to other groups
             if (ID == null)
@@ -349,7 +354,7 @@ namespace LocalStorage
                 {
                     midClause = midClause + SQLIgnoreGrouped;
                 }
-                
+
                 FetchQuery = FetchQuery + midClause + SQLOrder;
                 using (var comm = new SQLiteCommand(FetchQuery, conn))
                 {
@@ -377,7 +382,7 @@ namespace LocalStorage
                     using (var comm = new SQLiteCommand(conn))
                     {
                         comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay AND " + SQLFetchFriends;
-                        SQLiteParameter dParm = new SQLiteParameter(System.Data.DbType.DateTime);
+                        var dParm = new SQLiteParameter(DbType.DateTime);
                         comm.Parameters.Add(new SQLiteParameter("@SinceDay", SinceDate));
                         int results = comm.ExecuteNonQuery();
 
@@ -386,7 +391,8 @@ namespace LocalStorage
                         results = comm.ExecuteNonQuery();
                         if (results > ClientSettings.MaxTweets)
                         {
-                            comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay AND " + SQLFetchRepliesAndMessages;
+                            comm.CommandText = "DELETE FROM statuses WHERE timestamp<@SinceDay AND " +
+                                               SQLFetchRepliesAndMessages;
                             results = comm.ExecuteNonQuery();
                         }
                         comm.Parameters.Clear();
@@ -401,7 +407,7 @@ namespace LocalStorage
                 }
                 conn.Close();
             }
-            PockeTwit.ThrottledArtGrabber.ClearUnlinkedAvatars();
+            ThrottledArtGrabber.ClearUnlinkedAvatars();
         }
 
         public static void SaveItems(List<status> TempLine)
