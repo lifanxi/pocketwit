@@ -463,14 +463,13 @@ namespace PockeTwit
                         if (s.ShowDialog() == DialogResult.OK)
                         {
                             filename = s.FileName;
-                            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                            this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
+                            ComponentResourceManager resources = new ComponentResourceManager(typeof(PostUpdate));
+                            this.pictureFromCamers.Image = FormColors.GetThemeIcon("takepicture.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
                                 this.pictureFromCamers.Visible = false;
                             }
                             uploadedPictureOrigin = "file";
-                            filename = s.FileName;
                         }
                         else //cancelled
                         {
