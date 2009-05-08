@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using PockeTwit.SpecialTimelines;
 
-namespace PockeTwit
+namespace PockeTwit.SpecialTimelines
 {
     [Serializable]
     public class UserGroupTimeLine : ISpecialTimeLine
     {
         [Serializable]
-        public class groupTerm
+        public class GroupTerm
         {
             public string Term;
             public string Name;
@@ -24,15 +23,15 @@ namespace PockeTwit
         }
 
         public string name { get; set; }
-        public groupTerm[] Terms { get; set; }
+        public GroupTerm[] Terms { get; set; }
 
         
-        public void AddItem(string Term, string ScreenName, bool Exclusive)
+        public void AddItem(string term, string screenName, bool exclusive)
         {
-            groupTerm newTerm = new groupTerm() { Term = Term, Name = ScreenName, Exclusive = Exclusive };
+            var newTerm = new GroupTerm { Term = term, Name = screenName, Exclusive = exclusive };
             if (Terms != null && Terms.Length > 0)
             {
-                List<groupTerm> items = new List<groupTerm>(Terms);
+                var items = new List<GroupTerm>(Terms);
                 if (!items.Contains(newTerm))
                 {
                     items.Add(newTerm);
@@ -41,16 +40,16 @@ namespace PockeTwit
             }
             else
             {
-                Terms = new groupTerm[] { newTerm };
+                Terms = new[] { newTerm };
             }
         }
-        public void RemoveItem(string Term)
+        public void RemoveItem(string term)
         {
-            List<groupTerm> items = new List<groupTerm>(Terms);
-            groupTerm toRemove = new groupTerm();
-            foreach (groupTerm t in items)
+            var items = new List<GroupTerm>(Terms);
+            var toRemove = new GroupTerm();
+            foreach (var t in items)
             {
-                if (t.Term == Term)
+                if (t.Term == term)
                 {
                     toRemove = t;
                 }
@@ -78,16 +77,16 @@ namespace PockeTwit
             {
                 return "";
             }
-            string ret = "";
-            List<string> UserList = new List<string>();
-            foreach (groupTerm t in Terms)
+            var ret = "";
+            var userList = new List<string>();
+            foreach (var t in Terms)
             {
-                UserList.Add("'"+t.Term+"'");
+                userList.Add("'"+t.Term+"'");
                 
             }
-            if (UserList.Count > 0)
+            if (userList.Count > 0)
             {
-                ret = " AND statuses.userid IN(" + string.Join(",", UserList.ToArray()) + ") ";
+                ret = " AND statuses.userid IN(" + string.Join(",", userList.ToArray()) + ") ";
             }
 
             return ret;
