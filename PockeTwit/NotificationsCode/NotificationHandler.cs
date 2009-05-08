@@ -111,7 +111,7 @@ namespace PockeTwit
             Notifications.Add(FriendsTweets, Friends);
             Notifications.Add(MessageTweets, Messages);
 
-            foreach (var line in SpecialTimeLines.GetList())
+            foreach (var line in SpecialTimeLinesRepository.GetList())
             {
                 AddSpecialTimeLineNotifications(line);
             }

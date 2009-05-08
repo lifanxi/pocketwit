@@ -23,7 +23,7 @@ namespace PockeTwit.SettingsHandler
 
         private void ResetDisplay()
         {
-            SpecialTimeLine[] Times = SpecialTimeLines.GetList();
+            SpecialTimeLine[] Times = SpecialTimeLinesRepository.GetList();
             if (Times.Length == 0)
             {
                 HideGroups();
@@ -126,14 +126,14 @@ namespace PockeTwit.SettingsHandler
         {
             gt.Exclusive = sender.Checked;
             this.NeedsReRender = true;
-            SpecialTimeLines.Save();
+            SpecialTimeLinesRepository.Save();
         }
 
         private void lnkDeleteGroup_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("This will move all users from the " + cmbChooseGroup.SelectedItem + " group and delete the group.  The users will all appear in your friends timeline.\n\nProceed?", "Delete " + cmbChooseGroup.SelectedItem + " Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                SpecialTimeLines.Remove((SpecialTimeLine)cmbChooseGroup.SelectedItem);
+                SpecialTimeLinesRepository.Remove((SpecialTimeLine)cmbChooseGroup.SelectedItem);
                 cmbChooseGroup.Items.Remove(cmbChooseGroup.SelectedItem);
                 this.NeedsReRender = true;
             }
@@ -149,13 +149,13 @@ namespace PockeTwit.SettingsHandler
 
         private void menuExport_Click(object sender, EventArgs e)
         {
-            SpecialTimeLines.Export();
+            SpecialTimeLinesRepository.Export();
         }
 
         private void menuImport_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            SpecialTimeLines.Import();
+            SpecialTimeLinesRepository.Import();
             ResetDisplay();
             Cursor.Current = Cursors.Default;
         }

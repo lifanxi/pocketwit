@@ -163,7 +163,7 @@ namespace PockeTwit
             LocalStorage.DataBaseUtility.CheckDBSchema();
 
             statList.Progress += new KListControl.delProgress(statList_Progress);
-            SpecialTimeLines.Load();
+            SpecialTimeLinesRepository.Load();
 
             //First run means no settings exist
             if (ClientSettings.AccountsList.Count == 0)
@@ -477,12 +477,12 @@ namespace PockeTwit
 
                     if(AddUserToGroup(t, Exclusive, false))
                     {
-                        SpecialTimeLines.Add(t);
+                        SpecialTimeLinesRepository.Add(t);
 
                         AddGroupSelectMenuItem(t);
 
                         AddAddUserToGroupMenuItem(t);
-                        SpecialTimeLines.Save();
+                        SpecialTimeLinesRepository.Save();
                         if(Exclusive)
                         {
                             Cursor.Current = Cursors.WaitCursor;
@@ -542,7 +542,7 @@ namespace PockeTwit
             if (MessageBox.Show(Message, "Group " + selectedItem.Tweet.user.screen_name, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 t.AddItem(selectedItem.Tweet.user.id, selectedItem.Tweet.user.screen_name, Exclusive);
-                SpecialTimeLines.Save();
+                SpecialTimeLinesRepository.Save();
             }
             else
             {
@@ -710,7 +710,7 @@ namespace PockeTwit
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
 
-            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+            foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
             {
                 AddGroupSelectMenuItem(t);
             }
@@ -769,7 +769,7 @@ namespace PockeTwit
             MoveNewGroupMenuItem = new FingerUI.SideMenuItem(moveItemClicked, "New Group", statList.RightMenu);
             MoveToGroupMenuItem.SubMenuItems.Add(MoveNewGroupMenuItem);
             CopyToGroupMenuItem.SubMenuItems.Add(CopyNewGroupMenuItem);
-            foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+            foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
             {
                 AddAddUserToGroupMenuItem(t);
             }
