@@ -459,7 +459,7 @@ namespace PockeTwit
                         //Don't count items that were excluded from main friends timeline.
                         foreach (Library.status s in TempLine)
                         {
-                            if (SpecialTimeLines.UserIsExcluded(s.user.id)) { NewItems--; }
+                            if (SpecialTimeLinesRepository.UserIsExcluded(s.user.id)) { NewItems--; }
                         }
                         int ItemsFromCache = ClientSettings.MaxTweets - NewItems;
 

@@ -78,12 +78,12 @@ namespace LocalStorage
             catch (SQLiteException)
             {
             }
-            SpecialTimeLines.Load();
-            SpecialTimeLines.Export();
+            SpecialTimeLinesRepository.Load();
+            SpecialTimeLinesRepository.Export();
             DeleteDB();
             CreateDB();
-            SpecialTimeLines.Import();
-            SpecialTimeLines.Save();
+            SpecialTimeLinesRepository.Import();
+            SpecialTimeLinesRepository.Save();
         }
 
         private static void DeleteDB()

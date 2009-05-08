@@ -38,7 +38,7 @@ namespace PockeTwit.TimeLines
             SpecialTimeLine t = null;
             if (ListName.StartsWith("Grouped_TimeLine_"))
             {
-                t = SpecialTimeLines.GetFromName(ListName);
+                t = SpecialTimeLinesRepository.GetFromName(ListName);
             }
             SetLastSelected(ListName,selectedStatus,t);
         }
@@ -96,7 +96,7 @@ namespace PockeTwit.TimeLines
                     SetUnreadCount("Messages_TimeLine", NewestSelectedItemsDictionary["Messages_TimeLine"].id, null);
                 }
 
-                foreach (SpecialTimeLine t in SpecialTimeLines.GetList())
+                foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
                 {
                     if (NewestSelectedItemsDictionary.ContainsKey(t.ListName))
                     {
