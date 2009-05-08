@@ -98,6 +98,9 @@ namespace PockeTwit
             return name;
         }
 
-
+        public SpecialTimeLinesRepository.TimeLineType Timelinetype
+        {
+            get { return SpecialTimeLinesRepository.TimeLineType.UserGroup; }
+        }
     }
 }

@@ -12,6 +12,11 @@ namespace PockeTwit.SpecialTimelines
     [Serializable]
     public static class SpecialTimeLinesRepository
     {
+        public enum TimeLineType
+        {
+            UserGroup
+        }
+
         private static Dictionary<string, UserGroupTimeLine> _Items = new Dictionary<string, UserGroupTimeLine>();
 
         public static UserGroupTimeLine[] GetList()
