@@ -276,7 +276,7 @@ namespace PockeTwit
             return Library.status.Deserialize(response, t.AccountInfo);
         }
 
-        public Library.status[] GetGroupedTimeLine(SpecialTimeLine t)
+        public Library.status[] GetGroupedTimeLine(UserGroupTimeLine t)
         {
             return LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets, t.GetConstraints()).ToArray();
         }

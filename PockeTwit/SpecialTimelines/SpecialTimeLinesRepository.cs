@@ -12,14 +12,14 @@ namespace PockeTwit.SpecialTimelines
     [Serializable]
     public static class SpecialTimeLinesRepository
     {
-        private static Dictionary<string, SpecialTimeLine> _Items = new Dictionary<string, SpecialTimeLine>();
+        private static Dictionary<string, UserGroupTimeLine> _Items = new Dictionary<string, UserGroupTimeLine>();
 
-        public static SpecialTimeLine[] GetList()
+        public static UserGroupTimeLine[] GetList()
         {
-            List<SpecialTimeLine> s = new List<SpecialTimeLine>();
+            List<UserGroupTimeLine> s = new List<UserGroupTimeLine>();
             lock (_Items)
             {
-                foreach (SpecialTimeLine item in _Items.Values)
+                foreach (UserGroupTimeLine item in _Items.Values)
                 {
                     s.Add(item);
                 }
@@ -27,7 +27,7 @@ namespace PockeTwit.SpecialTimelines
 
             return s.ToArray();
         }
-        public static void Add(SpecialTimeLine newLine)
+        public static void Add(UserGroupTimeLine newLine)
         {
             lock (_Items)
             {
@@ -38,7 +38,7 @@ namespace PockeTwit.SpecialTimelines
                 }
             }
         }
-        public static void Remove(SpecialTimeLine oldLine)
+        public static void Remove(UserGroupTimeLine oldLine)
         {
             lock (_Items)
             {
@@ -108,7 +108,7 @@ namespace PockeTwit.SpecialTimelines
                             string userID = r.GetString(1);
                             bool exclusive = r.GetBoolean(2);
                             string screenName = r.GetString(3);
-                            SpecialTimeLine thisLine = new SpecialTimeLine();
+                            UserGroupTimeLine thisLine = new UserGroupTimeLine();
                             if (_Items.ContainsKey(groupName))
                             {
                                 thisLine = _Items[groupName];
@@ -136,7 +136,7 @@ namespace PockeTwit.SpecialTimelines
                         conn.Open();
                         using (SQLiteTransaction t = conn.BeginTransaction())
                         {
-                            foreach (SpecialTimeLine group in _Items.Values)
+                            foreach (UserGroupTimeLine group in _Items.Values)
                             {
                                 using (SQLiteCommand comm = new SQLiteCommand(conn))
                                 {
@@ -150,7 +150,7 @@ namespace PockeTwit.SpecialTimelines
                                     comm.ExecuteNonQuery();
                                     comm.Parameters.Clear();
 
-                                    foreach (SpecialTimeLine.groupTerm groupItem in group.Terms)
+                                    foreach (UserGroupTimeLine.groupTerm groupItem in group.Terms)
                                     {
                                         comm.Parameters.Clear();
                                         comm.CommandText = "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
@@ -174,9 +174,9 @@ namespace PockeTwit.SpecialTimelines
         {
             lock (_Items)
             {
-                foreach (SpecialTimeLine t in _Items.Values)
+                foreach (UserGroupTimeLine t in _Items.Values)
                 {
-                    foreach (SpecialTimeLine.groupTerm groupterm in t.Terms)
+                    foreach (UserGroupTimeLine.groupTerm groupterm in t.Terms)
                     {
                         if (groupterm.Term == term && groupterm.Exclusive)
                         {
@@ -188,10 +188,10 @@ namespace PockeTwit.SpecialTimelines
             return false;
         }
 
-        internal static SpecialTimeLine GetFromName(string ListName)
+        internal static UserGroupTimeLine GetFromName(string ListName)
         {
-            SpecialTimeLine ret = null;
-            foreach (SpecialTimeLine t in GetList())
+            UserGroupTimeLine ret = null;
+            foreach (UserGroupTimeLine t in GetList())
             {
                 if (t.ListName == ListName)
                 {
@@ -207,12 +207,12 @@ namespace PockeTwit.SpecialTimelines
             string FileName = ClientSettings.CacheDir + "\\GroupBackup.xml";
             lock (_Items)
             {
-                List<SpecialTimeLine> l = new List<SpecialTimeLine>();
+                List<UserGroupTimeLine> l = new List<UserGroupTimeLine>();
                 foreach (var item in _Items.Values)
                 {
                     l.Add(item);
                 }
-                System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof(SpecialTimeLine[]));
+                System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof(UserGroupTimeLine[]));
                 StringBuilder b = new StringBuilder();
                 using (System.IO.StreamWriter w = new StreamWriter(FileName))
                 {
@@ -225,12 +225,12 @@ namespace PockeTwit.SpecialTimelines
         {
             string FileName = ClientSettings.CacheDir + "\\GroupBackup.xml";
             if (!System.IO.File.Exists(FileName)) return;
-            SpecialTimeLine[] Input;
-            System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof (SpecialTimeLine[]));
+            UserGroupTimeLine[] Input;
+            System.Xml.Serialization.XmlSerializer s = new XmlSerializer(typeof (UserGroupTimeLine[]));
 
             using (System.IO.StreamReader r = new StreamReader(FileName))
             {
-                Input = (SpecialTimeLine[]) s.Deserialize(r);
+                Input = (UserGroupTimeLine[]) s.Deserialize(r);
             }
 
             lock (_Items)

@@ -28,7 +28,7 @@ namespace PockeTwit
             public Options Options;
             public string Sound;
             public TimelineManagement.TimeLineType Type;
-            public SpecialTimeLine Group;
+            public UserGroupTimeLine Group;
             public string LastSeenID;
 
             public string  ListName
@@ -129,7 +129,7 @@ namespace PockeTwit
             }
         }
 
-        public static void RemoveSpecialTimeLineNotifications(SpecialTimeLine line)
+        public static void RemoveSpecialTimeLineNotifications(UserGroupTimeLine line)
         {
             if (Notifications.ContainsKey(line.name))
             {
@@ -142,7 +142,7 @@ namespace PockeTwit
                 LoadAllRegistries();
             }
         }
-        public static void AddSpecialTimeLineNotifications(SpecialTimeLine line)
+        public static void AddSpecialTimeLineNotifications(UserGroupTimeLine line)
         {
             if (!Notifications.ContainsKey(line.name))
             {

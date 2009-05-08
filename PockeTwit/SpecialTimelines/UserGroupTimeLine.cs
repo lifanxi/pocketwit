@@ -5,7 +5,7 @@ using PockeTwit.SpecialTimelines;
 namespace PockeTwit
 {
     [Serializable]
-    public class SpecialTimeLine
+    public class UserGroupTimeLine : ISpecialTimeLine
     {
         [Serializable]
         public class groupTerm
