@@ -1,11 +1,15 @@
 using System;
-
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using FingerUI;
+using Yedda;
 
-using System.Data.SQLite;
 namespace PockeTwit.Library
 {
     [Flags]
@@ -20,27 +24,29 @@ namespace PockeTwit.Library
     [Serializable]
     public class status : IComparable
     {
-        private static IFormatProvider format = new System.Globalization.CultureInfo(1033);
-        private static XmlSerializer statusSerializer = new XmlSerializer(typeof(Library.status[]));
-        private static XmlSerializer singleSerializer = new XmlSerializer(typeof(Library.status));
+        private static readonly IFormatProvider format = new CultureInfo(1033);
+        private static XmlSerializer statusSerializer = new XmlSerializer(typeof (status[]));
+        private static XmlSerializer singleSerializer = new XmlSerializer(typeof (status));
 
         public StatusTypes TypeofMessage = StatusTypes.Normal;
 
-		#region Properties (7) 
-        [XmlIgnore]
-        public bool Clipped = false;
+        #region Properties (7) 
+
+        [XmlIgnore] public bool Clipped = false;
+
         [XmlIgnore]
         public List<string> SplitLines { get; set; }
+
         [XmlIgnore]
-        public List<FingerUI.StatusItem.Clickable> Clickables { get; set; }
+        public List<StatusItem.Clickable> Clickables { get; set; }
 
         [XmlIgnore]
         public string Serialized
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
-                using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
+                var sb = new StringBuilder();
+                using (var w = new StringWriter(sb))
                 {
                     statusSerializer.Serialize(w, this);
                 }
@@ -48,15 +54,12 @@ namespace PockeTwit.Library
             }
         }
 
-        public StatusTypes type
-        {
-            get;
-            set;
-        }
+        public StatusTypes type { get; set; }
 
         public string in_reply_to_status_id { get; set; }
 
         public string favorited { get; set; }
+
         [XmlIgnore]
         public string TimeStamp
         {
@@ -68,24 +71,40 @@ namespace PockeTwit.Library
                 if (Difference.TotalDays > 1)
                 {
                     Diff = Math.Round(Difference.TotalDays);
-                    if (Diff > 1) { Span = "days"; } else { Span = "day"; }
+                    if (Diff > 1)
+                    {
+                        Span = "days";
+                    }
+                    else
+                    {
+                        Span = "day";
+                    }
                 }
                 else if (Difference.TotalHours > 1)
                 {
                     Diff = Math.Round(Difference.TotalHours);
-                    if (Diff > 1) { Span = "hours"; } else { Span = "hour"; }
+                    if (Diff > 1)
+                    {
+                        Span = "hours";
+                    }
+                    else
+                    {
+                        Span = "hour";
+                    }
                 }
                 else
                 {
                     Diff = Math.Round(Difference.TotalMinutes);
                     Span = "min";
                 }
-                return "about " + Diff.ToString() + " " + Span +  " ago.";
+                return "about " + Diff.ToString() + " " + Span + " ago.";
             }
         }
+
         public DateTime createdAt;
         private string _created_at;
-        public string created_at 
+
+        public string created_at
         {
             get { return _created_at; }
             set
@@ -93,14 +112,15 @@ namespace PockeTwit.Library
                 _created_at = value;
                 try
                 {
-                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format, System.Globalization.DateTimeStyles.AssumeUniversal);
+                    createdAt = DateTime.ParseExact(created_at, "ddd MMM dd H:mm:ss K yyyy", format,
+                                                    DateTimeStyles.AssumeUniversal);
                 }
                 catch
                 {
                     //Search results come in a different format :(
                     try
                     {
-                        createdAt = DateTime.Parse(created_at, format, System.Globalization.DateTimeStyles.AssumeUniversal);
+                        createdAt = DateTime.Parse(created_at, format, DateTimeStyles.AssumeUniversal);
                     }
                     catch
                     {
@@ -109,6 +129,7 @@ namespace PockeTwit.Library
                 }
             }
         }
+
         public string id { get; set; }
 
         public string source { get; set; }
@@ -118,7 +139,8 @@ namespace PockeTwit.Library
         public bool isDirect { get; set; }
 
         public string location { get; set; }
-        public string text { get;set;}
+        public string text { get; set; }
+
         [XmlIgnore]
         public string DisplayText
         {
@@ -126,7 +148,7 @@ namespace PockeTwit.Library
             {
                 if (ClientSettings.IncludeUserName)
                 {
-                    return this.user.screen_name + ": " + text;
+                    return user.screen_name + ": " + text;
                 }
                 else
                 {
@@ -137,7 +159,7 @@ namespace PockeTwit.Library
 
         public User user { get; set; }
 
-        
+
         public string AccountSummary
         {
             get
@@ -148,16 +170,14 @@ namespace PockeTwit.Library
                 }
                 return ClientSettings.DefaultAccount.Summary;
             }
-            set
-            {
-                _Account = Yedda.Twitter.Account.fromSummary(value);
-            }
+            set { _Account = Twitter.Account.fromSummary(value); }
         }
 
+        [XmlIgnore] private Twitter.Account _Account;
+
         [XmlIgnore]
-        private Yedda.Twitter.Account _Account;
-        [XmlIgnore]
-        public Yedda.Twitter.Account Account {
+        public Twitter.Account Account
+        {
             get
             {
                 if (_Account == null)
@@ -166,39 +186,39 @@ namespace PockeTwit.Library
                 }
                 return _Account;
             }
-            set
-            {
-                _Account = value;
-            }
+            set { _Account = value; }
         }
 
-		#endregion Properties 
+        #endregion Properties 
 
-		#region Methods (3) 
+        #region Methods (3) 
 
-
-		// Public Methods (3) 
+        // Public Methods (3) 
 
         public static status[] Deserialize(string response)
         {
             return Deserialize(response, null, StatusTypes.Normal);
         }
-        public static status[] Deserialize(string response, Yedda.Twitter.Account Account)
+
+        public static status[] Deserialize(string response, Twitter.Account Account)
         {
             return Deserialize(response, Account, StatusTypes.Normal);
         }
-        public static status DeserializeSingle(string response, Yedda.Twitter.Account Account)
+
+        public static status DeserializeSingle(string response, Twitter.Account Account)
         {
             status s = null;
             if (string.IsNullOrEmpty(response))
             {
                 return new status();
             }
-            if (Account == null || (Account.ServerURL.ServerType != Yedda.Twitter.TwitterServer.brightkite && Account.ServerURL.ServerType!= Yedda.Twitter.TwitterServer.pingfm))
+            if (Account == null ||
+                (Account.ServerURL.ServerType != Twitter.TwitterServer.brightkite &&
+                 Account.ServerURL.ServerType != Twitter.TwitterServer.pingfm))
             {
-                using (System.IO.StringReader r = new System.IO.StringReader(response))
+                using (var r = new StringReader(response))
                 {
-                    s = (Library.status)singleSerializer.Deserialize(r);
+                    s = (status) singleSerializer.Deserialize(r);
                 }
                 if (s.text == null)
                 {
@@ -207,33 +227,33 @@ namespace PockeTwit.Library
             }
             return s;
         }
-        public static status[] Deserialize(string response, Yedda.Twitter.Account Account, StatusTypes TypeOfMessage)
+
+        public static status[] Deserialize(string response, Twitter.Account Account, StatusTypes TypeOfMessage)
         {
-            Library.status[] statuses = null;
-            
-            
-            
+            status[] statuses = null;
+
+
             if (string.IsNullOrEmpty(response))
             {
                 statuses = new status[0];
             }
             else
             {
-                if (Account == null || Account.ServerURL.ServerType != Yedda.Twitter.TwitterServer.brightkite)
+                if (Account == null || Account.ServerURL.ServerType != Twitter.TwitterServer.brightkite)
                 {
-                    using (System.IO.StringReader r = new System.IO.StringReader(response))
+                    using (var r = new StringReader(response))
                     {
-                        statuses = (Library.status[])statusSerializer.Deserialize(r);
+                        statuses = (status[]) statusSerializer.Deserialize(r);
                     }
                 }
-                else if (Account.ServerURL.ServerType == Yedda.Twitter.TwitterServer.brightkite)
+                else if (Account.ServerURL.ServerType == Twitter.TwitterServer.brightkite)
                 {
                     statuses = FromBrightKite(response);
                 }
             }
             if (Account != null)
             {
-                foreach (Library.status stat in statuses)
+                foreach (status stat in statuses)
                 {
                     stat.Account = Account;
                     stat.TypeofMessage = TypeOfMessage;
@@ -247,38 +267,42 @@ namespace PockeTwit.Library
         {
             return DeserializeFromAtom(response, null);
         }
-        public static status[] DeserializeFromAtom(string response, Yedda.Twitter.Account Account)
+
+        public static status[] DeserializeFromAtom(string response, Twitter.Account Account)
         {
-            List<status> resultList = new List<status>();
-            
-            XmlDocument results = new XmlDocument();
-            
+            var resultList = new List<status>();
+
+            var results = new XmlDocument();
+
             results.LoadXml(response);
-            XmlNamespaceManager nm = new XmlNamespaceManager(results.NameTable);
+            var nm = new XmlNamespaceManager(results.NameTable);
             nm.AddNamespace("google", "http://base.google.com/ns/1.0");
             nm.AddNamespace("openSearch", "http://a9.com/-/spec/opensearch/1.1/");
             nm.AddNamespace("s", "http://www.w3.org/2005/Atom");
             XmlNodeList entries = results.SelectNodes("//s:entry", nm);
-            System.Diagnostics.Debug.WriteLine(entries.Count);
+            Debug.WriteLine(entries.Count);
             try
             {
                 foreach (XmlNode entry in entries)
                 {
-                    status newStat = new status();
+                    var newStat = new status();
                     newStat.text = entry.SelectSingleNode("s:title", nm).InnerText;
                     newStat.id = entry.SelectSingleNode("s:id", nm).InnerText;
                     newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
                     string userName = entry.SelectSingleNode("s:author/s:name", nm).InnerText;
                     newStat.created_at = entry.SelectSingleNode("s:published", nm).InnerText;
-                    string userscreenName = userName.Split(new char[] { ' ' })[0];
+                    string userscreenName = userName.Split(new char[] {' '})[0];
                     newStat.user = new User();
                     newStat.user.screen_name = userscreenName;
-                    newStat.user.profile_image_url = entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
+                    newStat.user.profile_image_url =
+                        entry.SelectSingleNode("s:link[@type=\"image/png\"]", nm).Attributes["href"].Value;
                     newStat.user.needsFetching = true;
                     resultList.Add(newStat);
                 }
             }
-            catch { }
+            catch
+            {
+            }
             foreach (status stat in resultList)
             {
                 stat.TypeofMessage = StatusTypes.SearchResult;
@@ -287,17 +311,17 @@ namespace PockeTwit.Library
             return resultList.ToArray();
         }
 
-        public static status[] FromDirectReplies(string response, Yedda.Twitter.Account Account)
+        public static status[] FromDirectReplies(string response, Twitter.Account Account)
         {
-            List<status> resultList = new List<status>();
+            var resultList = new List<status>();
 
-            XmlDocument results = new XmlDocument();
+            var results = new XmlDocument();
 
             results.LoadXml(response);
             XmlNodeList entries = results.SelectNodes("//direct_message");
             foreach (XmlNode entry in entries)
             {
-                status newStat = new status();
+                var newStat = new status();
                 newStat.text = entry.SelectSingleNode("text").InnerText;
                 newStat.id = entry.SelectSingleNode("id").InnerText;
                 newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
@@ -312,7 +336,6 @@ namespace PockeTwit.Library
                 newStat.source = "";
                 newStat.in_reply_to_status_id = "";
                 resultList.Add(newStat);
-
             }
             foreach (status stat in resultList)
             {
@@ -324,15 +347,15 @@ namespace PockeTwit.Library
 
         public static status[] FromBrightKite(string response)
         {
-            List<status> resultList = new List<status>();
+            var resultList = new List<status>();
 
-            XmlDocument results = new XmlDocument();
+            var results = new XmlDocument();
 
             results.LoadXml(response);
             XmlNodeList entries = results.SelectNodes("//note");
             foreach (XmlNode entry in entries)
             {
-                status newStat = new status();
+                var newStat = new status();
                 newStat.text = entry.SelectSingleNode("body").InnerText;
                 newStat.id = entry.SelectSingleNode("id").InnerText;
                 newStat.created_at = entry.SelectSingleNode("created_at").InnerText;
@@ -343,119 +366,122 @@ namespace PockeTwit.Library
                 newStat.user.screen_name = userName;
                 newStat.user.profile_image_url = "http://brightkite.com/" + avURL;
                 resultList.Add(newStat);
-
             }
             return resultList.ToArray();
         }
 
         public static string Serialize(status[] List)
         {
-            if (List.Length == 0) { return null; }
-            StringBuilder sb = new StringBuilder();
-            using (System.IO.StringWriter w = new System.IO.StringWriter(sb))
+            if (List.Length == 0)
+            {
+                return null;
+            }
+            var sb = new StringBuilder();
+            using (var w = new StringWriter(sb))
             {
                 statusSerializer.Serialize(w, List);
             }
             return sb.ToString();
         }
 
+        #endregion Methods 
 
-		#endregion Methods 
-
-        private const string SQLSave = @"INSERT INTO statuses (id, fulltext, userid, timestamp, in_reply_to_id, favorited, clientSource, accountSummary, statustypes)
+        private const string SQLSave =
+            @"INSERT INTO statuses (id, fulltext, userid, timestamp, in_reply_to_id, favorited, clientSource, accountSummary, statustypes)
                                           VALUES
                                         (@id, @fulltext, @userid, @timestamp, @in_reply_to_id, @favorited, @clientSource, @accountSummary, @statustypes);";
+
         private const string SQLCheck = @"SELECT COUNT(id) from statuses WHERE id=@id;";
         private const string SQLUpdateTypes = @"UPDATE statuses SET statustypes=@type WHERE id=@id";
+
         public void Save(SQLiteConnection conn)
         {
-            using (SQLiteCommand comm = new SQLiteCommand(SQLCheck, conn))
+            using (var comm = new SQLiteCommand(SQLCheck, conn))
             {
-                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
+                comm.Parameters.Add(new SQLiteParameter("@id", id));
 
                 object ret = comm.ExecuteScalar();
-                if (ret != null && (long)ret != 0)
+                if (ret != null && (long) ret != 0)
                 {
-                    if (this.TypeofMessage == StatusTypes.Reply)
+                    if (TypeofMessage == StatusTypes.Reply)
                     {
                         //Already exists in the DB as a Friends update -- we need to make it an @mention too
-                        this.TypeofMessage = StatusTypes.Normal | StatusTypes.Reply;
+                        TypeofMessage = StatusTypes.Normal | StatusTypes.Reply;
                         comm.CommandText = SQLUpdateTypes;
-                        comm.Parameters.Add(new SQLiteParameter("@type", this.TypeofMessage));
+                        comm.Parameters.Add(new SQLiteParameter("@type", TypeofMessage));
                         comm.ExecuteNonQuery();
                     }
                     return;
                 }
             }
-            using (SQLiteCommand comm = new SQLiteCommand(SQLSave, conn))
+            using (var comm = new SQLiteCommand(SQLSave, conn))
             {
-                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
-                comm.Parameters.Add(new SQLiteParameter("@fulltext", this.text));
-                comm.Parameters.Add(new SQLiteParameter("@userid", this.user.id));
-                comm.Parameters.Add(new SQLiteParameter("@timestamp", this.createdAt));
-                comm.Parameters.Add(new SQLiteParameter("@in_reply_to_id", this.in_reply_to_status_id));
-                comm.Parameters.Add(new SQLiteParameter("@favorited", this.favorited));
-                comm.Parameters.Add(new SQLiteParameter("@clientSource", this.source));
-                comm.Parameters.Add(new SQLiteParameter("@accountSummary", this.AccountSummary));
-                comm.Parameters.Add(new SQLiteParameter("@statustypes", this.TypeofMessage));
+                comm.Parameters.Add(new SQLiteParameter("@id", id));
+                comm.Parameters.Add(new SQLiteParameter("@fulltext", text));
+                comm.Parameters.Add(new SQLiteParameter("@userid", user.id));
+                comm.Parameters.Add(new SQLiteParameter("@timestamp", createdAt));
+                comm.Parameters.Add(new SQLiteParameter("@in_reply_to_id", in_reply_to_status_id));
+                comm.Parameters.Add(new SQLiteParameter("@favorited", favorited));
+                comm.Parameters.Add(new SQLiteParameter("@clientSource", source));
+                comm.Parameters.Add(new SQLiteParameter("@accountSummary", AccountSummary));
+                comm.Parameters.Add(new SQLiteParameter("@statustypes", TypeofMessage));
 
                 try
                 {
                     comm.ExecuteNonQuery();
-
                 }
                 catch (Exception ex)
                 {
                 }
             }
-            this.user.Save(conn);
+            user.Save(conn);
         }
 
         public override bool Equals(object obj)
         {
             try
             {
-                status otherStat = (status)obj;
-                return (otherStat.id.Equals(this.id) && otherStat.Account.Equals(this.Account));
+                var otherStat = (status) obj;
+                return (otherStat.id.Equals(id) && otherStat.Account.Equals(Account));
             }
             catch
             {
                 return false;
             }
         }
-    
+
         #region IComparable Members
 
         public int CompareTo(object obj)
         {
-            status otherStat = (status)obj;
-            return otherStat.createdAt.CompareTo(this.createdAt);
+            var otherStat = (status) obj;
+            return otherStat.createdAt.CompareTo(createdAt);
         }
 
         #endregion
     }
 
     [Serializable]
-    public class User 
+    public class User
     {
         #region Properties
+
         public bool needsFetching { get; set; }
 
         public string location { get; set; }
         public string description { get; set; }
         private string _profile_image_url;
+
         public string profile_image_url
         {
-            get
-            {
-                return _profile_image_url;
-            }
+            get { return _profile_image_url; }
             set
             {
                 _profile_image_url = value;
-                if(ClientSettings.HighQualityAvatars)
+                if (ClientSettings.HighQualityAvatars)
                 {
-                    if (_profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0 && _profile_image_url.IndexOf("_bigger")==-1)
+                    if (_profile_image_url.IndexOf("s3.amazonaws.com/twitter_production") > 0 &&
+                        _profile_image_url.IndexOf("_bigger") == -1)
                     {
                         _profile_image_url = profile_image_url.Replace("_normal", "_bigger");
                     }
@@ -466,44 +492,35 @@ namespace PockeTwit.Library
         public string id { get; set; }
         public string name { get; set; }
         private string _screen_name;
-        public string screen_name 
-        { 
-            get
-            {
-                return _screen_name;
-            }
-            set
-            {
-                _screen_name = value;
-            }
-        }
-        public string followers_count { get; set; }
-		#endregion Properties 
 
-		#region Methods (1) 
-        private const string SQLSave = @"INSERT INTO users (screenname, fullname, description, avatarURL, id)
+        public string screen_name
+        {
+            get { return _screen_name; }
+            set { _screen_name = value; }
+        }
+
+        public string followers_count { get; set; }
+
+        #endregion Properties 
+
+        #region Methods (1) 
+
+        private const string SQLSave =
+            @"INSERT INTO users (screenname, fullname, description, avatarURL, id)
                                           VALUES
                                         (@screenname, @fullname, @description, @avatarURL, @id);";
+
         private const string SQLCheck = @"SELECT COUNT(id) from users WHERE id=@id;";
+
         public void Save(SQLiteConnection conn)
         {
-            using (SQLiteCommand comm = new SQLiteCommand(SQLCheck, conn))
+            using (var comm = new SQLiteCommand(SQLSave, conn))
             {
-                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
-
-                object ret = comm.ExecuteScalar();
-                if (ret != null && (long)ret!=0)
-                {
-                    return;
-                }
-            }
-            using (SQLiteCommand comm = new SQLiteCommand(SQLSave, conn))
-            {
-                comm.Parameters.Add(new SQLiteParameter("@screenname", this.screen_name));
-                comm.Parameters.Add(new SQLiteParameter("@fullname", this.name));
-                comm.Parameters.Add(new SQLiteParameter("@description", this.description));
-                comm.Parameters.Add(new SQLiteParameter("@avatarURL", this.profile_image_url));
-                comm.Parameters.Add(new SQLiteParameter("@id", this.id));
+                comm.Parameters.Add(new SQLiteParameter("@screenname", screen_name));
+                comm.Parameters.Add(new SQLiteParameter("@fullname", name));
+                comm.Parameters.Add(new SQLiteParameter("@description", description));
+                comm.Parameters.Add(new SQLiteParameter("@avatarURL", profile_image_url));
+                comm.Parameters.Add(new SQLiteParameter("@id", id));
 
                 try
                 {
@@ -514,46 +531,41 @@ namespace PockeTwit.Library
                 }
             }
         }
-        
-        public static User FromId(string ID, Yedda.Twitter.Account Account)
+
+        public static User FromId(string ID, Twitter.Account Account)
         {
-            Yedda.Twitter t = new Yedda.Twitter();
-            t.AccountInfo = Account;
-            string Response = null;
+            var t = new Twitter {AccountInfo = Account};
+            string response = null;
             try
             {
-                Response = t.Show(ID, Yedda.Twitter.OutputFormatType.XML);
+                response = t.Show(ID, Twitter.OutputFormatType.XML);
             }
             catch
             {
-                User toReturn = new User();
-                toReturn.screen_name = "PockeTwitUnknownUser";
+                var toReturn = new User {screen_name = "PockeTwitUnknownUser"};
                 return toReturn;
             }
 
             try
             {
-                XmlSerializer s = new XmlSerializer(typeof(User));
-                if (string.IsNullOrEmpty(Response))
+                var s = new XmlSerializer(typeof (User));
+                if (string.IsNullOrEmpty(response))
                 {
-                    User toReturn = new User();
-                    toReturn.screen_name = "PockeTwitUnknownUser";
+                    var toReturn = new User {screen_name = "PockeTwitUnknownUser"};
                     return toReturn;
                 }
-                using (System.IO.StringReader r = new System.IO.StringReader(Response))
+                using (var r = new StringReader(response))
                 {
-                    return (User)s.Deserialize(r);
+                    return (User) s.Deserialize(r);
                 }
             }
             catch
             {
-                User toReturn = new User();
-                toReturn.screen_name = "PockeTwitUnknownUser";
+                var toReturn = new User {screen_name = "PockeTwitUnknownUser"};
                 return toReturn;
             }
         }
-		#endregion Methods 
 
+        #endregion Methods 
     }
-
 }
