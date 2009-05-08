@@ -448,7 +448,7 @@
     </Compile>
     <Compile Include="GraphicsLibs\DetermineColorDepth.cs" />
     <Compile Include="GraphicsLibs\DIB.cs" />
-    <Compile Include="SpecialTimelines\GroupingCode.cs" />
+    <Compile Include="SpecialTimelines\SpecialTimeLinesRepository.cs" />
     <Compile Include="ImagePreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -512,6 +512,7 @@
     <Compile Include="SettingsHandler\NotificationSettings.Designer.cs">
       <DependentUpon>NotificationSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="SpecialTimelines\SpecialTimeLine.cs" />
     <Compile Include="TestCode\TestStatusMaker.cs" />
     <Compile Include="TiledMaps\CompositeTiledMapSession.cs" />
     <Compile Include="TiledMaps\Directions.cs" />

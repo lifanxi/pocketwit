@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.WindowsMobile.Status;
+using PockeTwit.SpecialTimelines;
 
 namespace PockeTwit
 {

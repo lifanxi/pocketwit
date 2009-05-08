@@ -4,6 +4,7 @@ using Microsoft.WindowsCE.Forms;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
+using PockeTwit.SpecialTimelines;
 
 namespace PockeTwit
 {
