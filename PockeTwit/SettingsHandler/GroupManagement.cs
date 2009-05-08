@@ -86,9 +86,9 @@ namespace PockeTwit.SettingsHandler
 
             UserGroupTimeLine t = (UserGroupTimeLine)cmbChooseGroup.SelectedItem;
             int topOflabel = lblName.Bottom+5;
-            foreach (UserGroupTimeLine.groupTerm gt in t.Terms)
+            foreach (UserGroupTimeLine.GroupTerm gt in t.Terms)
             {
-                UserGroupTimeLine.groupTerm gt1 = gt;
+                UserGroupTimeLine.GroupTerm gt1 = gt;
                 LinkLabel nameLabel = new LinkLabel();
                 nameLabel.Width = lblName.Width;
 
@@ -112,7 +112,7 @@ namespace PockeTwit.SettingsHandler
             }
         }
 
-        private  void DeleteItem(UserGroupTimeLine t, UserGroupTimeLine.groupTerm gt)
+        private  void DeleteItem(UserGroupTimeLine t, UserGroupTimeLine.GroupTerm gt)
         {
             if(MessageBox.Show("Are you sure you want to remove " + gt.Name + " from this group?", "Remove "+ gt.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)==DialogResult.Yes)
             {
@@ -123,7 +123,7 @@ namespace PockeTwit.SettingsHandler
 
         }
 
-        private void ToggleExclusive(UserGroupTimeLine t, UserGroupTimeLine.groupTerm gt, CheckBox sender)
+        private void ToggleExclusive(UserGroupTimeLine t, UserGroupTimeLine.GroupTerm gt, CheckBox sender)
         {
             gt.Exclusive = sender.Checked;
             this.NeedsReRender = true;

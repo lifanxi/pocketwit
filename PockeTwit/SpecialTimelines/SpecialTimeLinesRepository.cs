@@ -14,7 +14,8 @@ namespace PockeTwit.SpecialTimelines
     {
         public enum TimeLineType
         {
-            UserGroup
+            UserGroup,
+            SavedSearch
         }
 
         private static Dictionary<string, UserGroupTimeLine> _Items = new Dictionary<string, UserGroupTimeLine>();
@@ -155,7 +156,7 @@ namespace PockeTwit.SpecialTimelines
                                     comm.ExecuteNonQuery();
                                     comm.Parameters.Clear();
 
-                                    foreach (UserGroupTimeLine.groupTerm groupItem in group.Terms)
+                                    foreach (UserGroupTimeLine.GroupTerm groupItem in group.Terms)
                                     {
                                         comm.Parameters.Clear();
                                         comm.CommandText = "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
@@ -181,7 +182,7 @@ namespace PockeTwit.SpecialTimelines
             {
                 foreach (UserGroupTimeLine t in _Items.Values)
                 {
-                    foreach (UserGroupTimeLine.groupTerm groupterm in t.Terms)
+                    foreach (UserGroupTimeLine.GroupTerm groupterm in t.Terms)
                     {
                         if (groupterm.Term == term && groupterm.Exclusive)
                         {
