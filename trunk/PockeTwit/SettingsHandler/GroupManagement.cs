@@ -24,7 +24,7 @@ namespace PockeTwit.SettingsHandler
 
         private void ResetDisplay()
         {
-            SpecialTimeLine[] Times = SpecialTimeLinesRepository.GetList();
+            UserGroupTimeLine[] Times = SpecialTimeLinesRepository.GetList();
             if (Times.Length == 0)
             {
                 HideGroups();
@@ -34,7 +34,7 @@ namespace PockeTwit.SettingsHandler
             {
                 ShowGroups();
             }
-            foreach (SpecialTimeLine t in Times)
+            foreach (UserGroupTimeLine t in Times)
             {
                 cmbChooseGroup.Items.Add(t);
             }
@@ -84,11 +84,11 @@ namespace PockeTwit.SettingsHandler
             pnlUsers.Controls.Add(lblName);
             
 
-            SpecialTimeLine t = (SpecialTimeLine)cmbChooseGroup.SelectedItem;
+            UserGroupTimeLine t = (UserGroupTimeLine)cmbChooseGroup.SelectedItem;
             int topOflabel = lblName.Bottom+5;
-            foreach (SpecialTimeLine.groupTerm gt in t.Terms)
+            foreach (UserGroupTimeLine.groupTerm gt in t.Terms)
             {
-                SpecialTimeLine.groupTerm gt1 = gt;
+                UserGroupTimeLine.groupTerm gt1 = gt;
                 LinkLabel nameLabel = new LinkLabel();
                 nameLabel.Width = lblName.Width;
 
@@ -112,7 +112,7 @@ namespace PockeTwit.SettingsHandler
             }
         }
 
-        private  void DeleteItem(SpecialTimeLine t, SpecialTimeLine.groupTerm gt)
+        private  void DeleteItem(UserGroupTimeLine t, UserGroupTimeLine.groupTerm gt)
         {
             if(MessageBox.Show("Are you sure you want to remove " + gt.Name + " from this group?", "Remove "+ gt.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)==DialogResult.Yes)
             {
@@ -123,7 +123,7 @@ namespace PockeTwit.SettingsHandler
 
         }
 
-        private void ToggleExclusive(SpecialTimeLine t, SpecialTimeLine.groupTerm gt, CheckBox sender)
+        private void ToggleExclusive(UserGroupTimeLine t, UserGroupTimeLine.groupTerm gt, CheckBox sender)
         {
             gt.Exclusive = sender.Checked;
             this.NeedsReRender = true;
@@ -134,7 +134,7 @@ namespace PockeTwit.SettingsHandler
         {
             if (MessageBox.Show("This will move all users from the " + cmbChooseGroup.SelectedItem + " group and delete the group.  The users will all appear in your friends timeline.\n\nProceed?", "Delete " + cmbChooseGroup.SelectedItem + " Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                SpecialTimeLinesRepository.Remove((SpecialTimeLine)cmbChooseGroup.SelectedItem);
+                SpecialTimeLinesRepository.Remove((UserGroupTimeLine)cmbChooseGroup.SelectedItem);
                 cmbChooseGroup.Items.Remove(cmbChooseGroup.SelectedItem);
                 this.NeedsReRender = true;
             }

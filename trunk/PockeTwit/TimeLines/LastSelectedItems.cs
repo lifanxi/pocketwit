@@ -36,7 +36,7 @@ namespace PockeTwit.TimeLines
 
         public static void SetLastSelected(string ListName, status selectedStatus)
         {
-            SpecialTimeLine t = null;
+            UserGroupTimeLine t = null;
             if (ListName.StartsWith("Grouped_TimeLine_"))
             {
                 t = SpecialTimeLinesRepository.GetFromName(ListName);
@@ -44,7 +44,7 @@ namespace PockeTwit.TimeLines
             SetLastSelected(ListName,selectedStatus,t);
         }
 
-        public static void SetLastSelected(string ListName, status selectedStatus, SpecialTimeLine specialTime)
+        public static void SetLastSelected(string ListName, status selectedStatus, UserGroupTimeLine specialTime)
         {
             if (ListName == "Conversation" || ListName == "Search_TimeLine" || ListName=="@User_TimeLine") { return; }
             if (!LastSelectedItemsDictionary.ContainsKey(ListName))
@@ -97,7 +97,7 @@ namespace PockeTwit.TimeLines
                     SetUnreadCount("Messages_TimeLine", NewestSelectedItemsDictionary["Messages_TimeLine"].id, null);
                 }
 
-                foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
+                foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList())
                 {
                     if (NewestSelectedItemsDictionary.ContainsKey(t.ListName))
                     {
@@ -107,7 +107,7 @@ namespace PockeTwit.TimeLines
             }
         }
 
-        public static void SetUnreadCount(string ListName, string selectedStatus, SpecialTimeLine specialTime)
+        public static void SetUnreadCount(string ListName, string selectedStatus, UserGroupTimeLine specialTime)
         {
             int updatedCount = GetUpdatedCount(ListName, specialTime, selectedStatus);
             if(!UnreadItemCount.ContainsKey(ListName))
@@ -129,7 +129,7 @@ namespace PockeTwit.TimeLines
             UnreadCountRoot.SetValue("UnreadCountChanged", System.DateTime.Now.Ticks);
         }
 
-        public static int GetUpdatedCount(string ListName, SpecialTimeLine specialTime, string selectedStatus)
+        public static int GetUpdatedCount(string ListName, UserGroupTimeLine specialTime, string selectedStatus)
         {
             TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
             switch (ListName)

@@ -46,7 +46,7 @@ namespace PockeTwit
                            : TimelineManagement.TimeLineType.Messages;
             }
         }
-        private SpecialTimeLine currentGroup = null;
+        private UserGroupTimeLine currentGroup = null;
 
         #region MenuItems
         #region LeftMenu
@@ -473,7 +473,7 @@ namespace PockeTwit
             {
                 if (d.ShowDialog() == DialogResult.OK)
                 {
-                    SpecialTimeLine t = new SpecialTimeLine();
+                    UserGroupTimeLine t = new UserGroupTimeLine();
                     t.name = d.GroupName;
 
                     if(AddUserToGroup(t, Exclusive, false))
@@ -497,7 +497,7 @@ namespace PockeTwit
 
 
         
-        private void ShowUserGroup(SpecialTimeLine t)
+        private void ShowUserGroup(UserGroupTimeLine t)
         {
             UpdateHistoryPosition();
             currentGroup = t;
@@ -514,11 +514,11 @@ namespace PockeTwit
             ChangeCursor(Cursors.Default);
         }
 
-        private bool AddUserToGroup(SpecialTimeLine t, bool Exclusive)
+        private bool AddUserToGroup(UserGroupTimeLine t, bool Exclusive)
         {
             return AddUserToGroup(t, Exclusive, true);
         }
-        private bool AddUserToGroup(SpecialTimeLine t, bool Exclusive, bool ReloadImmediately)
+        private bool AddUserToGroup(UserGroupTimeLine t, bool Exclusive, bool ReloadImmediately)
         {
             FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return false; }
@@ -711,7 +711,7 @@ namespace PockeTwit
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
 
-            foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
+            foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList())
             {
                 AddGroupSelectMenuItem(t);
             }
@@ -721,7 +721,7 @@ namespace PockeTwit
             AboutMenuItem, WindowMenuItem, ExitMenuItem});
         }
 
-        private void AddGroupSelectMenuItem(SpecialTimeLine t)
+        private void AddGroupSelectMenuItem(UserGroupTimeLine t)
         {
             FingerUI.delMenuClicked showItemClicked = delegate()
             {
@@ -770,7 +770,7 @@ namespace PockeTwit
             MoveNewGroupMenuItem = new FingerUI.SideMenuItem(moveItemClicked, "New Group", statList.RightMenu);
             MoveToGroupMenuItem.SubMenuItems.Add(MoveNewGroupMenuItem);
             CopyToGroupMenuItem.SubMenuItems.Add(CopyNewGroupMenuItem);
-            foreach (SpecialTimeLine t in SpecialTimeLinesRepository.GetList())
+            foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList())
             {
                 AddAddUserToGroupMenuItem(t);
             }
@@ -779,7 +779,7 @@ namespace PockeTwit
                 UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem, MoveToGroupMenuItem, CopyToGroupMenuItem});
         }
 
-        private void AddAddUserToGroupMenuItem(SpecialTimeLine t)
+        private void AddAddUserToGroupMenuItem(UserGroupTimeLine t)
         {
             FingerUI.delMenuClicked copyItemClicked = () => AddUserToGroup(t, false);
 
