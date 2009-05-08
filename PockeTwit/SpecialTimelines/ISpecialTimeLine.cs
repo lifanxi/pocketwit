@@ -6,5 +6,6 @@ namespace PockeTwit
         string name { get; set; }
         string GetConstraints();
         string ToString();
+        SpecialTimelines.SpecialTimeLinesRepository.TimeLineType Timelinetype { get; }
     }
 }
