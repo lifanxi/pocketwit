@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.IO;
 using PockeTwit;
 using PockeTwit.Library;
+using PockeTwit.SpecialTimelines;
 using Yedda;
 
 namespace LocalStorage

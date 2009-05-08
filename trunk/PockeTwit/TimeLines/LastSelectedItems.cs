@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Win32;
 using PockeTwit.Library;
+using PockeTwit.SpecialTimelines;
 
 namespace PockeTwit.TimeLines
 {

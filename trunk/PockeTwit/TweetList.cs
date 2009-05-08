@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using FingerUI;
+using PockeTwit.SpecialTimelines;
 using PockeTwit.TimeLines;
 
 
