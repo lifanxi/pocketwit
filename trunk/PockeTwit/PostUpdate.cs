@@ -914,7 +914,10 @@ namespace PockeTwit
 
         protected override void OnClosed(EventArgs e)
         {
-            userListControl1.UnHookTextBoxKeyPress();
+            if (ClientSettings.AutoCompleteAddressBook)
+            {
+                userListControl1.UnHookTextBoxKeyPress();
+            }
             base.OnClosed(e);
         }
     }
