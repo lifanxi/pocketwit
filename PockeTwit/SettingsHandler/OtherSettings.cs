@@ -44,6 +44,7 @@ namespace PockeTwit
             ClientSettings.CheckVersion = chkVersion.Checked;
             ClientSettings.AutoTranslate = chkTranslate.Checked;
             ClientSettings.UseSkweezer = chkSkweezer.Checked;
+            ClientSettings.AutoCompleteAddressBook = chkAutoComplete.Checked;
             
             if (ClientSettings.UpdateMinutes != int.Parse(txtUpdate.Text, format))
             {
@@ -80,7 +81,7 @@ namespace PockeTwit
 
         private void PopulateForm()
         {
-
+            chkAutoComplete.Checked = ClientSettings.AutoCompleteAddressBook;
             chkSkweezer.Checked = ClientSettings.UseSkweezer;
             chkVersion.Checked = ClientSettings.CheckVersion;
             chkGPS.Checked = ClientSettings.UseGPS;
