@@ -41,7 +41,7 @@ namespace Yedda
             API_SERVICE_NAME = "Posterous";
             API_CAN_UPLOAD_GPS = false;
             API_CAN_UPLOAD_MESSAGE = true;
-            
+            API_CAN_UPLOAD = true;
             API_URLLENGTH = 28;
 
             API_FILETYPES.Add("jpg");
@@ -235,7 +235,7 @@ namespace Yedda
                         return false;
                     }
 
-                    if (uploadResult.SelectSingleNode("rsp").Attributes["status"].Value == "fail")
+                    if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
                     {
                         string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
                         OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, ErrorText));
@@ -258,7 +258,7 @@ namespace Yedda
         /// <returns></returns>
         public override bool CanFetchUrl(string URL)
         {
-            const string siteMarker = "twitpic";
+            const string siteMarker = "posterous";
             string url = URL.ToLower();
 
             return (url.IndexOf(siteMarker) >= 0);
@@ -458,7 +458,7 @@ namespace Yedda
                 request.Credentials = new NetworkCredential(ppo.Username, ppo.Password);
                 request.Headers.Add("Accept-Language", "cs,en-us;q=0.7,en;q=0.3");
                 request.PreAuthenticate = true;
-                request.ContentType = string.Format("multipart/form-data;boundary={0}", boundary);
+                request.ContentType = string.Format("multipart/form-data; boundary={0}", boundary);
 
                 //request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
@@ -468,12 +468,12 @@ namespace Yedda
 
                 StringBuilder contents = new StringBuilder();
 
-                contents.Append(CreateContentPartStringForm(header, "username", ppo.Username, "application/octet-stream"));
-                contents.Append(CreateContentPartStringForm(header, "password", ppo.Password, "application/octet-stream"));
-                contents.Append(CreateContentPartStringForm(header, "source", "PockeTwit", "application/octet-stream"));
-                contents.Append(CreateContentPartStringForm(header, "sourceLink", "http://code.google.com/p/pocketwit/", "application/octet-stream"));
+                contents.Append(CreateContentPartString(header, "username", ppo.Username));
+                contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "source", "PockeTwit"));
+                contents.Append(CreateContentPartString(header, "sourceLink", "http://code.google.com/p/pocketwit/"));
 
-                contents.Append(CreateContentPartStringForm(header, "message", ppo.Message, "application/octet-stream"));
+                contents.Append(CreateContentPartString(header, "message", ppo.Message));
 
                 int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
                 string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
@@ -514,6 +514,35 @@ namespace Yedda
         }
         #endregion
 
+        #region helper methods
 
+        private string CreateContentPartString(string header, string dispositionName, string valueToSend)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(String.Format("content-disposition:form-data; name=\"{0}\"\r\n", dispositionName));
+            contents.Append("\r\n");
+            contents.Append(valueToSend);
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        private string CreateContentPartPicture(string header, string filename)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(string.Format("content-disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
+            contents.Append("Content-Type: image/jpeg\r\n");
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        #endregion
     }
 }

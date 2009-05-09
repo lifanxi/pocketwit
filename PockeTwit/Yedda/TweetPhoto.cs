@@ -1,30 +1,26 @@
 ﻿using System;
-
-using System.Collections.Generic;
-using System.Text;
-using Yedda;
-using System.Xml;
 using System.IO;
 using System.Net;
+using System.Xml;
+using System.Web;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Yedda
 {
-
-    public class TwitGoo : PictureServiceBase
+    public class TweetPhoto : PictureServiceBase
     {
         #region private properties
 
-        private static volatile TwitGoo _instance;
+        private static volatile TweetPhoto _instance;
         private static object syncRoot = new Object();
-        
-        private const string API_UPLOAD = "http://twitgoo.com/api/upload";
-        private const string API_UPLOAD_POST = "http://twitgoo.com/api/uploadAndPost";
-        private const string API_SHOW_THUMB = "http://twitgoo.com/api/message/info/";  //The extra / for directly sticking the image-id on.
 
+        private const string API_UPLOAD = "http://www.tweetphoto.com/uploadapi.php";
+        private const string API_UPLOAD_POST = "http://www.tweetphoto.com/uploadandpostapi.php";
+        private const string API_SHOW_FORMAT = "http://www.tweetphoto.com/show/medium/{0}";  //The extra / for directly sticking the image-id on.
 
-        private const string API_ERROR_UPLOAD = "Failed to upload picture to TwitGoo.";
-        private const string API_ERROR_NOTREADY = "A request is already running.";
-        private const string API_ERROR_DOWNLOAD = "Unable to download picture, try again later.";
+        private const string API_ERROR_UPLOAD = "Unable to upload to TweetPhoto";
+        private const string API_ERROR_DOWNLOAD = "Unable to download from TweetPhoto";
 
         #endregion
 
@@ -39,16 +35,17 @@ namespace Yedda
         /// <summary>
         /// Private constructor for usage in singleton.
         /// </summary>
-        private TwitGoo()
+        private TweetPhoto()
         {
-            API_SAVE_TO_PATH = "\\ArtCache\\www.twitgoo.com\\";
-            API_SERVICE_NAME = "TwitGoo";
+            API_SAVE_TO_PATH = "\\ArtCache\\www.tweetphoto.com\\";
+            API_SERVICE_NAME = "TweetPhoto";
             API_CAN_UPLOAD_GPS = false;
             API_CAN_UPLOAD_MESSAGE = true;
-            API_URLLENGTH = 30;
+            API_CAN_UPLOAD = true;
+
+            API_URLLENGTH = 28;
 
             API_FILETYPES.Add("jpg");
-            API_FILETYPES.Add("jpeg");
             API_FILETYPES.Add("gif");
             API_FILETYPES.Add("png");
         }
@@ -57,31 +54,32 @@ namespace Yedda
         /// Singleton constructor
         /// </summary>
         /// <returns></returns>
-        public static TwitGoo Instance
+        public static TweetPhoto Instance
         {
-           get
-           {
-               if (_instance == null)
-               {
-                   lock (syncRoot)
-                   {
-                       if (_instance == null)
-                       {
-                           _instance = new TwitGoo();
-                           _instance.HasEventHandlersSet = false;
-                       }
-                   }
-               }
-               return _instance;
-           }
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new TweetPhoto();
+                            _instance.HasEventHandlersSet = false;
+                        }
+                    }
+                }
+                return _instance;
+            }
         }
+
 
         #endregion
 
         #region IPictureService Members
 
         /// <summary>
-        /// Post a picture.
+        /// Post a picture
         /// </summary>
         /// <param name="postData"></param>
         public override void PostPicture(PicturePostObject postData)
@@ -91,14 +89,14 @@ namespace Yedda
             //Check for empty path
             if (string.IsNullOrEmpty(postData.Filename))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "",API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
 
             //Check for empty credentials
             if (string.IsNullOrEmpty(postData.Username) ||
-                string.IsNullOrEmpty(postData.Password) )
+                string.IsNullOrEmpty(postData.Password))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
 
             #endregion
@@ -113,7 +111,7 @@ namespace Yedda
 
                     if (postData.UseAsync)
                     {
-                        workerPPO = (PicturePostObject) postData.Clone();
+                        workerPPO = (PicturePostObject)postData.Clone();
                         workerPPO.PictureData = incoming;
 
                         if (workerThread == null)
@@ -124,7 +122,7 @@ namespace Yedda
                         }
                         else
                         {
-                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", API_ERROR_NOTREADY));
+                            OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, string.Empty, "A request is already running."));
                         }
                     }
                     else
@@ -138,7 +136,7 @@ namespace Yedda
                             return;
                         }
 
-                        if (uploadResult.SelectSingleNode("rsp").Attributes["status"].Value == "fail")
+                        if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
                         {
                             string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
                             OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, ErrorText));
@@ -150,7 +148,7 @@ namespace Yedda
                         }
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 }
@@ -158,7 +156,7 @@ namespace Yedda
         }
 
         /// <summary>
-        /// Fetch a URL.
+        /// Fetch a picture
         /// </summary>
         /// <param name="pictureURL"></param>
         public override void FetchPicture(string pictureURL)
@@ -168,7 +166,7 @@ namespace Yedda
             //Need a url to read from.
             if (string.IsNullOrEmpty(pictureURL))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
             }
 
             #endregion
@@ -186,15 +184,20 @@ namespace Yedda
                 }
                 else
                 {
-                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, string.Empty, "A request is already running."));
+                    OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.NotReady, "", "A request is already running."));
                 }
             }
-            catch (Exception e)
+            catch
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
-            } 
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
+            }
         }
 
+        /// <summary>
+        /// Post a picture including a message to the media service.
+        /// </summary>
+        /// <param name="postData"></param>
+        /// <returns></returns>
         public override bool PostPictureMessage(PicturePostObject postData)
         {
             #region Argument check
@@ -229,7 +232,7 @@ namespace Yedda
 
                     if (uploadResult == null)
                     {
-                        //event allready thrown in upload
+                        //event allready thrown in upload.
                         return false;
                     }
 
@@ -239,9 +242,8 @@ namespace Yedda
                         OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, ErrorText));
                         return false;
                     }
-
                 }
-                catch (Exception e)
+                catch
                 {
                     OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                     return false;
@@ -251,15 +253,13 @@ namespace Yedda
         }
 
         /// <summary>
-        /// Test whether the service can fetch the URL.
+        /// Test whether this service can fetch a picture.
         /// </summary>
         /// <param name="URL"></param>
         /// <returns></returns>
         public override bool CanFetchUrl(string URL)
         {
-            //need to build a request for it to get the correct url, the www part of the urls changes between pics.
-            
-            const string siteMarker = "twitgoo";
+            const string siteMarker = "tweetphoto";
             string url = URL.ToLower();
 
             return (url.IndexOf(siteMarker) >= 0);
@@ -284,7 +284,7 @@ namespace Yedda
                     OnDownloadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, resultFileName, string.Empty, pictureURL));
                 }
             }
-            catch (Exception e)
+            catch
             {
                 OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
             }
@@ -297,13 +297,7 @@ namespace Yedda
             {
                 XmlDocument uploadResult = UploadPicture(API_UPLOAD, workerPPO);
 
-                if (uploadResult == null)
-                {
-                    workerThread = null;
-                    return;
-                }
-
-                if (uploadResult.SelectSingleNode("rsp").Attributes["status"].Value == "fail")
+                if (uploadResult.SelectSingleNode("rsp").Attributes["stat"].Value == "fail")
                 {
                     string ErrorText = uploadResult.SelectSingleNode("//err").Attributes["msg"].Value;
                     OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, ErrorText));
@@ -314,9 +308,9 @@ namespace Yedda
                     OnUploadFinish(new PictureServiceEventArgs(PictureServiceErrorLevel.OK, URL, string.Empty, workerPPO.Filename));
                 }
             }
-            catch (Exception e)
+            catch
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
             }
             workerThread = null;
         }
@@ -332,42 +326,9 @@ namespace Yedda
         /// <returns></returns>
         private string RetrievePicture(string imageId)
         {
-            string responseString = string.Empty;
             try
             {
-                //We use the "iphone" optimized images
-                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(API_SHOW_THUMB + imageId);
-                myRequest.Method = "GET";
-                
-
-                using (WebResponse responseA = myRequest.GetResponse())
-                {
-                    using (StreamReader reader = new StreamReader(responseA.GetResponseStream()))
-                    {
-                        XmlDocument responseXML = new XmlDocument();
-                        string resp = reader.ReadToEnd();
-                        responseXML.LoadXml(resp);
-
-                        if (responseXML == null)
-                        {
-                            return string.Empty;
-                        }
-                        //imageurl for a bigger picture
-                        responseString = responseXML.SelectSingleNode("rsp//thumburl").InnerText;
-                        if (string.IsNullOrEmpty(responseString))
-                        {
-                            return string.Empty;
-                        }
-
-                        reader.Close();
-                    }
-                    responseA.Close();
-                }
-
-                
-
-                //We use the "iphone" optimized images
-                myRequest = (HttpWebRequest)WebRequest.Create(responseString);
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(string.Format(API_SHOW_FORMAT, imageId));
                 myRequest.Method = "GET";
                 String pictureFileName = String.Empty;
 
@@ -405,18 +366,18 @@ namespace Yedda
 
                 return pictureFileName;
             }
-            catch (Exception e)
+            catch
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_DOWNLOAD));
                 return string.Empty;
             }
         }
 
         /// <summary>
-        /// Upload a picture
+        /// Upload the picture
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="ppo"></param>
+        /// <param name="url">URL to upload picture to</param>
+        /// <param name="ppo">Postdata</param>
         /// <returns></returns>
         private XmlDocument UploadPicture(string url, PicturePostObject ppo)
         {
@@ -441,7 +402,9 @@ namespace Yedda
                 contents.Append(CreateContentPartString(header, "username", ppo.Username));
                 contents.Append(CreateContentPartString(header, "password", ppo.Password));
 
-                contents.Append(CreateContentPartPicture(header));
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartPicture(header, filename));
 
                 //Create the form message to send in bytes
                 byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
@@ -460,27 +423,29 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            string resp = reader.ReadToEnd();
-                            responseXML.LoadXml(resp);
+                            string rsp = reader.ReadToEnd();
+                            responseXML.LoadXml(rsp);
                             return responseXML;
                         }
                     }
                 }
+
             }
-            catch (Exception e)
+            catch
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                //Socket exception 10054 could occur when sending large files.
+
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
-
         }
 
 
         /// <summary>
-        /// Upload a picture
+        /// Upload the picture
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="ppo"></param>
+        /// <param name="url">URL to upload picture to</param>
+        /// <param name="ppo">Postdata</param>
         /// <returns></returns>
         private XmlDocument UploadPictureMessage(string url, PicturePostObject ppo)
         {
@@ -506,7 +471,9 @@ namespace Yedda
                 contents.Append(CreateContentPartString(header, "password", ppo.Password));
                 contents.Append(CreateContentPartString(header, "message", ppo.Message));
 
-                contents.Append(CreateContentPartPicture(header));
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartPicture(header, filename));
 
                 //Create the form message to send in bytes
                 byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
@@ -525,26 +492,28 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            string resp = reader.ReadToEnd();
-                            responseXML.LoadXml(resp);
+                            string rsp = reader.ReadToEnd();
+                            responseXML.LoadXml(rsp);
                             return responseXML;
                         }
                     }
                 }
+
             }
             catch (Exception e)
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_UPLOAD));
+                //Socket exception 10054 could occur when sending large files.
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, string.Empty, API_ERROR_UPLOAD));
                 return null;
             }
 
         }
-
+        
         #endregion
 
-        #region helper functions
+        #region helper mehtods
 
-        protected string CreateContentPartString(string header, string dispositionName, string valueToSend)
+        private string CreateContentPartString(string header, string dispositionName, string valueToSend)
         {
             StringBuilder contents = new StringBuilder();
 
@@ -558,25 +527,20 @@ namespace Yedda
             return contents.ToString();
         }
 
-        protected string CreateContentPartPicture(string header)
-        {
-            return CreateContentPartPicture(header, "image.jpg");
-        }
-
-        protected string CreateContentPartPicture(string header, string filename)
+        private string CreateContentPartPicture(string header, string filename)
         {
             StringBuilder contents = new StringBuilder();
 
             contents.Append(header);
             contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
+            contents.Append(string.Format("content-disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
             contents.Append("Content-Type: image/jpeg\r\n");
             contents.Append("\r\n");
 
             return contents.ToString();
         }
 
-        #endregion
 
+        #endregion
     }
 }
