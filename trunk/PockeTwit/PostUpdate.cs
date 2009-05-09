@@ -1,10 +1,7 @@
 ﻿using System;
 
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using PockeTwit.Themes;
@@ -72,7 +69,7 @@ namespace PockeTwit
             set
             {
                 txtStatusUpdate.Text = value;
-                this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
             }
         }
 
@@ -86,11 +83,14 @@ namespace PockeTwit
             _StandAlone = Standalone;
             InitializeComponent();
             SetImages();
-            userListControl1.HookTextBoxKeyPress(txtStatusUpdate);
-            PockeTwit.Themes.FormColors.SetColors(this);
+            if (ClientSettings.AutoCompleteAddressBook)
+            {
+                userListControl1.HookTextBoxKeyPress(txtStatusUpdate);
+            }
+            FormColors.SetColors(this);
             if (ClientSettings.IsMaximized)
             {
-                this.WindowState = FormWindowState.Maximized;
+                WindowState = FormWindowState.Maximized;
             }
 
             lblCharsLeft.Text = "140";
@@ -103,38 +103,36 @@ namespace PockeTwit
             {
                 SetupTouchScreen();
             }
-            this.mainMenu1.MenuItems.Add(this.menuCancel);
-            SizeF currentScreen = this.CurrentAutoScaleDimensions;
-            
-            this.ResumeLayout(false);
+            mainMenu1.MenuItems.Add(menuCancel);
+            ResumeLayout(false);
 
             LocationFinder.LocationReady += new LocationManager.delLocationReady(l_LocationReady);
 
-            this.txtStatusUpdate.Focus();
+            txtStatusUpdate.Focus();
             userListControl1.ItemChosen += new userListControl.delItemChose(userListControl1_ItemChosen);
         }
 
         private void SetupTouchScreen()
         {
-            this.mainMenu1.MenuItems.Add(this.menuSubmit);
-            this.pictureFromCamers.Click += new EventHandler(pictureFromCamers_Click);
-            this.pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
-            this.pictureURL.Click += new EventHandler(pictureURL_Click);
-            this.pictureLocation.Click += new EventHandler(pictureLocation_Click);
+            mainMenu1.MenuItems.Add(menuSubmit);
+            pictureFromCamers.Click += new EventHandler(pictureFromCamers_Click);
+            pictureFromStorage.Click += new EventHandler(pictureFromStorage_Click);
+            pictureURL.Click += new EventHandler(pictureURL_Click);
+            pictureLocation.Click += new EventHandler(pictureLocation_Click);
 
-            this.picAddressBook.Click += new EventHandler(picAddressBook_Click);
+            picAddressBook.Click += new EventHandler(picAddressBook_Click);
 
-            this.copyPasteMenu = new System.Windows.Forms.ContextMenu();
+            copyPasteMenu = new System.Windows.Forms.ContextMenu();
 
-            this.PasteItem = new System.Windows.Forms.MenuItem();
+            PasteItem = new System.Windows.Forms.MenuItem();
             PasteItem.Text = "Paste";
 
-            this.CopyItem = new MenuItem();
+            CopyItem = new MenuItem();
             CopyItem.Text = "Copy";
 
             copyPasteMenu.MenuItems.Add(CopyItem);
             copyPasteMenu.MenuItems.Add(PasteItem);
-            this.txtStatusUpdate.ContextMenu = copyPasteMenu;
+            txtStatusUpdate.ContextMenu = copyPasteMenu;
 
             CopyItem.Click += new EventHandler(CopyItem_Click);
             PasteItem.Click += new EventHandler(PasteItem_Click);
@@ -160,12 +158,12 @@ namespace PockeTwit
             IDataObject iData = Clipboard.GetDataObject();
             if (iData.GetDataPresent(DataFormats.Text))
             {
-                this.txtStatusUpdate.SelectedText = (string)iData.GetData(DataFormats.Text);
+                txtStatusUpdate.SelectedText = (string)iData.GetData(DataFormats.Text);
             }
         }
         void CopyItem_Click(object sender, EventArgs e)
         {
-            string selText = this.txtStatusUpdate.SelectedText;
+            string selText = txtStatusUpdate.SelectedText;
             if (!string.IsNullOrEmpty(selText))
             {
                 Clipboard.SetDataObject(selText);
@@ -180,14 +178,14 @@ namespace PockeTwit
                 if (InvokeRequired)
                 {
                     delUpdateText d = new delUpdateText(l_LocationReady);
-                    this.BeginInvoke(d, Location);
+                    BeginInvoke(d, Location);
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(Location))
                     {
                         LocationFinder.StopGPS();
-                        this.GPSLocation = Location;
+                        GPSLocation = Location;
                         lblGPS.Text = "Location Found";
                         if (DetectDevice.DeviceType == DeviceType.Standard)
                         {
@@ -209,7 +207,7 @@ namespace PockeTwit
                             llGPS.Height = lblGPS.Height;
                             llGPS.Width = lblGPS.Width;
                             llGPS.Click += new EventHandler(llGPS_Click);
-                            this.Controls.Add(llGPS);
+                            Controls.Add(llGPS);
                         }
                     }
                 }
@@ -249,48 +247,48 @@ namespace PockeTwit
             pictureLocation.Visible = false;
             pictureURL.Visible = false;
             picAddressBook.Visible = false;
-            this.menuExist = new MenuItem();
+            menuExist = new MenuItem();
             menuExist.Text = "Existing Picture";
             menuExist.Click += new EventHandler(menuExist_Click);
 
-            this.menuCamera = new MenuItem();
+            menuCamera = new MenuItem();
             menuCamera.Text = "Take Picture";
             menuCamera.Click += new EventHandler(menuCamera_Click);
             
-            this.menuURL = new MenuItem();
+            menuURL = new MenuItem();
             menuURL.Text = "URL...";
             menuURL.Click += new EventHandler(menuURL_Click);
 
-            this.menuGPS = new MenuItem();
+            menuGPS = new MenuItem();
             menuGPS.Text = "Update Location";
             menuGPS.Click += new EventHandler(menuGPS_Click);
 
-            this.menuGPSInsert = new MenuItem();
+            menuGPSInsert = new MenuItem();
             menuGPSInsert.Text = "Insert GPS Location";
             menuGPSInsert.Click += new EventHandler(menuGPSInsert_Click);
             menuGPSInsert.Enabled = false;
 
-            this.menuAddressBook = new MenuItem();
+            menuAddressBook = new MenuItem();
             menuAddressBook.Text = "Address Book";
             menuAddressBook.Click += new EventHandler(menuAddressBook_Click);
             menuAddressBook.Enabled = true;
 
-            this.PasteItem = new MenuItem();
-            this.PasteItem.Text = "Paste";
+            PasteItem = new MenuItem();
+            PasteItem.Text = "Paste";
             PasteItem.Click += new EventHandler(PasteItem_Click);
 
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem1.Text = "Action";
+            menuItem1 = new System.Windows.Forms.MenuItem();
+            menuItem1.Text = "Action";
 
-            this.menuItem1.MenuItems.Add(this.menuSubmit);
-            this.menuItem1.MenuItems.Add(menuAddressBook);
-            this.menuItem1.MenuItems.Add(PasteItem);
-            this.menuItem1.MenuItems.Add(menuURL);
-            this.menuItem1.MenuItems.Add(menuExist);
-            this.menuItem1.MenuItems.Add(menuCamera);
-            this.menuItem1.MenuItems.Add(menuGPS);
-            this.menuItem1.MenuItems.Add(menuGPSInsert);
-            this.mainMenu1.MenuItems.Add(menuItem1);
+            menuItem1.MenuItems.Add(menuSubmit);
+            menuItem1.MenuItems.Add(menuAddressBook);
+            menuItem1.MenuItems.Add(PasteItem);
+            menuItem1.MenuItems.Add(menuURL);
+            menuItem1.MenuItems.Add(menuExist);
+            menuItem1.MenuItems.Add(menuCamera);
+            menuItem1.MenuItems.Add(menuGPS);
+            menuItem1.MenuItems.Add(menuGPSInsert);
+            mainMenu1.MenuItems.Add(menuItem1);
         }
 
         void menuAddressBook_Click(object sender, EventArgs e)
@@ -310,7 +308,7 @@ namespace PockeTwit
             // google maps url format
             // http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=41.4043197631836,-1.28760504722595
             Cursor.Current = Cursors.WaitCursor;
-            string sUrl = string.Format(@"http://maps.google.com/maps?q={0}", this.GPSLocation);
+            string sUrl = string.Format(@"http://maps.google.com/maps?q={0}", GPSLocation);
             string gpsUrl = isgd.ShortenURL(sUrl);
             if (string.IsNullOrEmpty(gpsUrl))
             {
@@ -344,11 +342,11 @@ namespace PockeTwit
 
         private void SetImages()
         {
-            this.pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
-            this.pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
-            this.pictureURL.Image = PockeTwit.Themes.FormColors.GetThemeIcon("url.png");
-            this.pictureLocation.Image = PockeTwit.Themes.FormColors.GetThemeIcon("map.png");
-            this.picAddressBook.Image = PockeTwit.Themes.FormColors.GetThemeIcon("address.png");
+            pictureFromCamers.Image = PockeTwit.Themes.FormColors.GetThemeIcon("takepicture.png");
+            pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
+            pictureURL.Image = PockeTwit.Themes.FormColors.GetThemeIcon("url.png");
+            pictureLocation.Image = PockeTwit.Themes.FormColors.GetThemeIcon("map.png");
+            picAddressBook.Image = PockeTwit.Themes.FormColors.GetThemeIcon("address.png");
         }
 
         private void PopulateAccountList()
@@ -368,7 +366,7 @@ namespace PockeTwit
                 {
                     txtStatusUpdate.Text = txtStatusUpdate.Text + " " + f.URL;
                 }
-                this.Show();
+                Show();
                 f.Close();
             }
         }
@@ -386,10 +384,10 @@ namespace PockeTwit
                         if (c.ShowDialog() == DialogResult.OK)
                         {
                             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostUpdate));
-                            this.pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
+                            pictureFromStorage.Image = PockeTwit.Themes.FormColors.GetThemeIcon("existingimage.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
-                                this.pictureFromStorage.Visible = false;
+                                pictureFromStorage.Visible = false;
                             }
                             uploadedPictureOrigin = "camera";
                             filename = c.FileName;                            
@@ -464,10 +462,10 @@ namespace PockeTwit
                         {
                             filename = s.FileName;
                             ComponentResourceManager resources = new ComponentResourceManager(typeof(PostUpdate));
-                            this.pictureFromCamers.Image = FormColors.GetThemeIcon("takepicture.png");
+                            pictureFromCamers.Image = FormColors.GetThemeIcon("takepicture.png");
                             if (DetectDevice.DeviceType == DeviceType.Standard)
                             {
-                                this.pictureFromCamers.Visible = false;
+                                pictureFromCamers.Visible = false;
                             }
                             uploadedPictureOrigin = "file";
                         }
@@ -623,7 +621,7 @@ namespace PockeTwit
             if (InvokeRequired)
             {
                 delAddPicture d = new delAddPicture(AddPictureToForm);
-                this.BeginInvoke(d, ImageFile, BoxToUpdate);
+                BeginInvoke(d, ImageFile, BoxToUpdate);
             }
             else
             {
@@ -649,7 +647,7 @@ namespace PockeTwit
             if (InvokeRequired)
             {
                 delUpdatePictureData d = new delUpdatePictureData(UpdatePictureData);
-                this.BeginInvoke(d, pictureURL, uploadingPicture);
+                BeginInvoke(d, pictureURL, uploadingPicture);
             }
             else
             {
@@ -672,7 +670,7 @@ namespace PockeTwit
                     //}
 
                     uploadedPictureURL = pictureURL;
-                    this.uploadingPicture = uploadingPicture;
+                    uploadingPicture = uploadingPicture;
                 }
                 catch (OutOfMemoryException)
                 {
@@ -728,7 +726,7 @@ namespace PockeTwit
                     ppo.Password = AccountToSet.Password;
                     ppo.Message = StatusText;
 
-                    if (pictureService.CanUploadGPS && this.GPSLocation != null)
+                    if (pictureService.CanUploadGPS && GPSLocation != null)
                     {
                         try
                         {
@@ -745,13 +743,13 @@ namespace PockeTwit
 
 
                     Yedda.Twitter TwitterConn = new Yedda.Twitter();
-                    TwitterConn.AccountInfo = this.AccountToSet;
+                    TwitterConn.AccountInfo = AccountToSet;
 
                     try
                     {
-                        if (this.GPSLocation != null)
+                        if (GPSLocation != null)
                         {
-                            TwitterConn.SetLocation(this.GPSLocation);
+                            TwitterConn.SetLocation(GPSLocation);
                         }
                     }
                     catch { }
@@ -796,7 +794,7 @@ namespace PockeTwit
         }
         private void menuCancel_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.txtStatusUpdate.Text))
+            if (!string.IsNullOrEmpty(txtStatusUpdate.Text))
             {
                 if (MessageBox.Show("Are you sure you want to cancel the update?", "Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
                 {
@@ -809,9 +807,9 @@ namespace PockeTwit
 
             if (_StandAlone)
             {
-                this.Close();
+                Close();
             }
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
         void pictureLocation_Click(object sender, EventArgs e)
         {
@@ -835,7 +833,7 @@ namespace PockeTwit
                 if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     txtStatusUpdate.Text += uploadedPictureURL;
-                    this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                    txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
                     pictureUsed = true;
                 }
                 else
@@ -865,7 +863,7 @@ namespace PockeTwit
                 if (MessageBox.Show("Paste URL in message?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     txtStatusUpdate.Text += uploadedPictureURL;
-                    this.txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
+                    txtStatusUpdate.SelectionStart = txtStatusUpdate.Text.Length;
                     pictureUsed = true;
                 }
                 else
@@ -900,14 +898,14 @@ namespace PockeTwit
                 SetPictureEventHandlers(pictureService, false);
                 if (_StandAlone)
                 {
-                    this.Close();
+                    Close();
                 }
-                this.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
         }
         private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
+            AccountToSet = (Yedda.Twitter.Account)cmbAccount.SelectedItem;
         }
 
         #endregion

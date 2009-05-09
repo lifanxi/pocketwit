@@ -57,6 +57,7 @@ namespace PockeTwit
             this.chkSkweezer = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCaheDir = new System.Windows.Forms.TextBox();
+            this.chkAutoComplete = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -142,7 +143,7 @@ namespace PockeTwit
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(4, 145);
+            this.label2.Location = new System.Drawing.Point(4, 171);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 20);
             this.label2.Text = "Cache Directory:";
@@ -151,10 +152,19 @@ namespace PockeTwit
             // 
             this.txtCaheDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCaheDir.Location = new System.Drawing.Point(4, 168);
+            this.txtCaheDir.Location = new System.Drawing.Point(4, 194);
             this.txtCaheDir.Name = "txtCaheDir";
             this.txtCaheDir.Size = new System.Drawing.Size(233, 21);
-            this.txtCaheDir.TabIndex = 5;
+            this.txtCaheDir.TabIndex = 6;
+            // 
+            // chkAutoComplete
+            // 
+            this.chkAutoComplete.ForeColor = System.Drawing.Color.LightGray;
+            this.chkAutoComplete.Location = new System.Drawing.Point(3, 148);
+            this.chkAutoComplete.Name = "chkAutoComplete";
+            this.chkAutoComplete.Size = new System.Drawing.Size(235, 20);
+            this.chkAutoComplete.TabIndex = 5;
+            this.chkAutoComplete.Text = "Autocomplete addressbook";
             // 
             // OtherSettings
             // 
@@ -163,6 +173,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkAutoComplete);
             this.Controls.Add(this.txtCaheDir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkSkweezer);
@@ -191,5 +202,6 @@ namespace PockeTwit
         private System.Windows.Forms.CheckBox chkSkweezer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCaheDir;
+        private System.Windows.Forms.CheckBox chkAutoComplete;
     }
 }

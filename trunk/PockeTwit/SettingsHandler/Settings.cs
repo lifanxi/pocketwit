@@ -122,7 +122,6 @@ public static class ClientSettings
 
     #region Properties (7) 
     public static bool AutoScrollToTop { get; set; }
-    
     public static bool RunOnStartUp
     {
         get
@@ -155,7 +154,6 @@ public static class ClientSettings
             }
         }
     }
-
     private static int _FontSize = 9;
     public static int FontSize
     {
@@ -169,9 +167,7 @@ public static class ClientSettings
             GetTextSizes();
         }
     }
-
     public static bool UseDIB { get; set; }
-
     private static string _CacheDir;
     public static string CacheDir
     {
@@ -204,19 +200,12 @@ public static class ClientSettings
     public static bool IncludeUserName { get; set; }
     public static bool HighQualityAvatars { get; set; }
     public static bool UseClickables { get; set; }
-
     public static bool UseSkweezer { get; set; }
-
     public static bool ShowAvatars { get; set; }
-
     public static bool UseGPS { get; set; }
-
     public static bool IsMaximized { get; set; }
-
     public static bool CheckVersion { get; set; }
-
     public static string DistancePreference { get; set; }
-
     public static bool _ShowExtra = true;
     public static bool ShowExtra
     {
@@ -242,9 +231,8 @@ public static class ClientSettings
             _ItemHeight = -1;
         }
     }
-
     public static bool ZoomPreview { get; set; }
-    
+    public static bool AutoCompleteAddressBook { get; set; }
     public static List<Yedda.Twitter.Account> AccountsList { get; set; }
 	#endregion Properties 
 
@@ -257,6 +245,14 @@ public static class ClientSettings
         Yedda.Twitter.Account LegacySettingsAccount = new Yedda.Twitter.Account();
         try
         {
+            if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["AutoCompleteAddressBook"]))
+            {
+                AutoCompleteAddressBook = Boolean.Parse(ConfigurationSettings.AppSettings["AutoCompleteAddressBook"]);
+            }
+            else
+            {
+                AutoCompleteAddressBook = true;
+            }
             if (!string.IsNullOrEmpty(ConfigurationSettings.AppSettings["UseDIB"]))
             {
                 UseDIB = Boolean.Parse(ConfigurationSettings.AppSettings["UseDIB"]);
@@ -482,9 +478,9 @@ public static class ClientSettings
         }
         
     }
-
     public static void SaveSettings()
     {
+        ConfigurationSettings.AppSettings["AutoCompleteAddressBook"] = AutoCompleteAddressBook.ToString();
         ConfigurationSettings.AppSettings["UseDIB"] = UseDIB.ToString();
         ConfigurationSettings.AppSettings["ZoomPreview"] = ZoomPreview.ToString();
         ConfigurationSettings.AppSettings["CacheDir"] = CacheDir;
