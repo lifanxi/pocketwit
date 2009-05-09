@@ -421,83 +421,83 @@ namespace Yedda
 
         #region helper methods
 
-        protected string CreateContentPartString(string header, string dispositionName, string valueToSend)
-        {
-            StringBuilder contents = new StringBuilder();
+        //protected string CreateContentPartString(string header, string dispositionName, string valueToSend)
+        //{
+        //    StringBuilder contents = new StringBuilder();
 
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
-            contents.Append("\r\n");
-            contents.Append(valueToSend);
-            contents.Append("\r\n");
+        //    contents.Append(header);
+        //    contents.Append("\r\n");
+        //    contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
+        //    contents.Append("\r\n");
+        //    contents.Append(valueToSend);
+        //    contents.Append("\r\n");
 
-            return contents.ToString();
-        }
+        //    return contents.ToString();
+        //}
 
-        protected string CreateContentPartMedia(string header)
-        {
-            StringBuilder contents = new StringBuilder();
+        //protected string CreateContentPartMedia(string header)
+        //{
+        //    StringBuilder contents = new StringBuilder();
 
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"i\";filename=\"image.jpg\"\r\n"));
-            contents.Append("Content-Type: image/jpeg\r\n");
-            contents.Append("\r\n");
+        //    contents.Append(header);
+        //    contents.Append("\r\n");
+        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"i\";filename=\"image.jpg\"\r\n"));
+        //    contents.Append("Content-Type: image/jpeg\r\n");
+        //    contents.Append("\r\n");
 
-            return contents.ToString();
-        }
+        //    return contents.ToString();
+        //}
 
-        protected string CreateContentPartPicture(string header)
-        {
-            return CreateContentPartPicture(header,"image.jpg");
-        }
+        //protected string CreateContentPartPicture(string header)
+        //{
+        //    return CreateContentPartPicture(header,"image.jpg");
+        //}
 
-        protected string CreateContentPartPicture(string header, string filename)
-        {
-            StringBuilder contents = new StringBuilder();
+        //protected string CreateContentPartPicture(string header, string filename)
+        //{
+        //    StringBuilder contents = new StringBuilder();
 
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
-            contents.Append("Content-Type: image/jpeg\r\n");
-            contents.Append("\r\n");
+        //    contents.Append(header);
+        //    contents.Append("\r\n");
+        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
+        //    contents.Append("Content-Type: image/jpeg\r\n");
+        //    contents.Append("\r\n");
 
-            return contents.ToString();
-        }
+        //    return contents.ToString();
+        //}
 
-        protected string CreateContentPartPicture(string header, string dispositionName, string imageName)
-        {
-            StringBuilder contents = new StringBuilder();
+        //protected string CreateContentPartPicture(string header, string dispositionName, string imageName)
+        //{
+        //    StringBuilder contents = new StringBuilder();
 
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"{0}\";filename=\"{1}\"\r\n", dispositionName,imageName));
-            contents.Append("Content-Type: image/jpeg\r\n");
-            contents.Append("\r\n");
+        //    contents.Append(header);
+        //    contents.Append("\r\n");
+        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"{0}\";filename=\"{1}\"\r\n", dispositionName,imageName));
+        //    contents.Append("Content-Type: image/jpeg\r\n");
+        //    contents.Append("\r\n");
 
-            return contents.ToString();
-        }
+        //    return contents.ToString();
+        //}
 
-        protected string CreateContentPartStringForm(string header, string dispositionName, string valueToSend, string contentType)
-        {
-            //header starts with --
+        //protected string CreateContentPartStringForm(string header, string dispositionName, string valueToSend, string contentType)
+        //{
+        //    //header starts with --
 
-            StringBuilder contents = new StringBuilder();
+        //    StringBuilder contents = new StringBuilder();
 
-            contents.Append(header);
-            contents.Append("\r\n");
-            contents.Append(String.Format("Content-Disposition: form-data; name=\"{0}\"\r\n", dispositionName));
-            contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
-            contents.Append("\r\n");
-            contents.Append(valueToSend);
-            contents.Append("\r\n");
-            contents.Append(header);
-            contents.Append("--\r\n");
+        //    contents.Append(header);
+        //    contents.Append("\r\n");
+        //    contents.Append(String.Format("Content-Disposition: form-data; name=\"{0}\"\r\n", dispositionName));
+        //    contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
+        //    contents.Append("\r\n");
+        //    contents.Append(valueToSend);
+        //    contents.Append("\r\n");
+        //    contents.Append(header);
+        //    contents.Append("--\r\n");
 
-            return contents.ToString();
+        //    return contents.ToString();
 
-        }
+        //}
 
       
 

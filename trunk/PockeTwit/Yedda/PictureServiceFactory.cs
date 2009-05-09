@@ -62,9 +62,11 @@ namespace Yedda
             serviceList.Add(MobyPicture.Instance);
             serviceList.Add(yFrog.Instance);
             serviceList.Add(PikChur.Instance);
+            //Apparantly it still doesn't work...
             //serviceList.Add(PixIm.Instance);
             serviceList.Add(TwitGoo.Instance);
-            //serviceList.Add(Posterous.Instance);
+            serviceList.Add(Posterous.Instance);
+            serviceList.Add(TweetPhoto.Instance);
 
             //setup every service the same way
             foreach (IPictureService service in serviceList)

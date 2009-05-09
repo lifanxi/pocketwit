@@ -406,7 +406,9 @@ namespace Yedda
                     contents.Append(CreateContentPartString(header, "message", ppo.Message));
                 }
 
-                contents.Append(CreateContentPartPicture(header));
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartPicture(header, filename));
 
                 //Create the form message to send in bytes
                 byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
@@ -512,6 +514,35 @@ namespace Yedda
         }
         #endregion
 
+        #region helper functions
+        
+        private string CreateContentPartString(string header, string dispositionName, string valueToSend)
+        {
+            StringBuilder contents = new StringBuilder();
 
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
+            contents.Append("\r\n");
+            contents.Append(valueToSend);
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        private string CreateContentPartPicture(string header, string filename)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
+            contents.Append("Content-Type: image/jpeg\r\n");
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        #endregion
     }
 }

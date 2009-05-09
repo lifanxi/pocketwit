@@ -607,5 +607,43 @@ namespace Yedda
 
 
         #endregion
+
+        #region helper functions
+
+        protected string CreateContentPartStringForm(string header, string dispositionName, string valueToSend, string contentType)
+        {
+            //header starts with --
+
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(String.Format("Content-Disposition: form-data; name=\"{0}\"\r\n", dispositionName));
+            contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
+            contents.Append("\r\n");
+            contents.Append(valueToSend);
+            contents.Append("\r\n");
+            contents.Append(header);
+            contents.Append("--\r\n");
+
+            return contents.ToString();
+
+        }
+
+        protected string CreateContentPartPicture(string header, string dispositionName, string imageName)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(string.Format("Content-Disposition:form-data; name=\"{0}\";filename=\"{1}\"\r\n", dispositionName, imageName));
+            contents.Append("Content-Type: image/jpeg\r\n");
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+
+        #endregion
     }
 }

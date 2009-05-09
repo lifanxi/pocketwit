@@ -44,6 +44,7 @@ namespace Yedda
             API_SERVICE_NAME = "PixIm";
             API_CAN_UPLOAD_MESSAGE = true;
             API_CAN_UPLOAD_GPS = false;
+            API_CAN_UPLOAD = true;
             API_URLLENGTH = 20;
 
             API_FILETYPES.Add("jpg");
@@ -411,11 +412,13 @@ namespace Yedda
 
                 StringBuilder contents = new StringBuilder();
 
-                contents.Append(CreateContentPartStringForm(header, "username", ppo.Username, "text/plain"));
-                contents.Append(CreateContentPartStringForm(header, "password", ppo.Password, "text/plain"));
-                contents.Append(CreateContentPartStringForm(header, "action", "upload", "text/plain"));
+                contents.Append(CreateContentPartString(header, "username", ppo.Username));
+                contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "action", "upload"));
                 //image
-                contents.Append(CreateContentPartPicture(header, "picture ", "image.jpg"));
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartPicture(header, filename));
 
                 //Create the form message to send in bytes
                 //byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
@@ -474,18 +477,19 @@ namespace Yedda
                 request.Method = "POST";
                 request.Timeout = 20000;
                 string header = string.Format("--{0}", boundary);
-                string ender = "\r\n" + header + "\r\n";
+                string ender = "\r\n" + header + "--\r\n";
 
                 StringBuilder contents = new StringBuilder();
 
-                contents.Append(CreateContentPartStringForm(header, "username", ppo.Username, "text/plain" ));
-                contents.Append(CreateContentPartStringForm(header, "password", ppo.Password, "text/plain"));
-                contents.Append(CreateContentPartStringForm(header, "message", ppo.Message, "text/plain"));
-                contents.Append(CreateContentPartStringForm(header, "action", "uploadAndPost", "text/plain"));
-                
-                
-                //image
-                contents.Append(CreateContentPartPicture(header, "picture ", "image.jpg"));
+                contents.Append(CreateContentPartString(header, "username", ppo.Username));
+                contents.Append(CreateContentPartString(header, "password", ppo.Password));
+                contents.Append(CreateContentPartString(header, "message", ppo.Message));
+                contents.Append(CreateContentPartString(header, "action", "uploadAndPost"));
+
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartPicture(header, filename));
+
                 
                 //Create the form message to send in bytes
                 byte[] message = Encoding.UTF8.GetBytes(contents.ToString());
@@ -521,5 +525,41 @@ namespace Yedda
 
 
         #endregion
+
+         #region helper methods
+
+        private string CreateContentPartString(string header, string dispositionName, string valueToSend)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(String.Format("content-disposition: form-data; name=\"{0}\"\r\n", dispositionName));
+            contents.Append("\r\n");
+            contents.Append(valueToSend);
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        private string CreateContentPartPicture(string header, string filename)
+        {
+            StringBuilder contents = new StringBuilder();
+
+            contents.Append(header);
+            contents.Append("\r\n");
+            contents.Append(string.Format("content-disposition: form-data; name=\"picture\";filename=\"{0}\"\r\n", filename));
+            contents.Append("content-type: image/jpeg\r\n");
+            contents.Append("\r\n");
+
+            return contents.ToString();
+        }
+
+        
+
+        #endregion
+
+
+        
     }
 }

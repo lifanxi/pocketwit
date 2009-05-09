@@ -805,6 +805,9 @@ namespace PockeTwit
             SetPictureEventHandlers(pictureService, false);
             UpdatePictureData(string.Empty, false);
 
+            //Making sure gps is stopped when a location is not found yet.
+            LocationFinder.StopGPS();
+
             if (_StandAlone)
             {
                 Close();
@@ -900,6 +903,8 @@ namespace PockeTwit
                 {
                     Close();
                 }
+                //Making sure gps is stopped when a location is not found yet.
+                LocationFinder.StopGPS();
                 DialogResult = DialogResult.OK;
             }
         }
