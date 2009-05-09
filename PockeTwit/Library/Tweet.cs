@@ -232,33 +232,36 @@ namespace PockeTwit.Library
         {
             status[] statuses = null;
 
-
-            if (string.IsNullOrEmpty(response))
+            try
             {
-                statuses = new status[0];
-            }
-            else
-            {
-                if (Account == null || Account.ServerURL.ServerType != Twitter.TwitterServer.brightkite)
+                if (string.IsNullOrEmpty(response))
                 {
-                    using (var r = new StringReader(response))
+                    statuses = new status[0];
+                }
+                else
+                {
+                    if (Account == null || Account.ServerURL.ServerType != Twitter.TwitterServer.brightkite)
                     {
-                        statuses = (status[]) statusSerializer.Deserialize(r);
+                        using (var r = new StringReader(response))
+                        {
+                            statuses = (status[]) statusSerializer.Deserialize(r);
+                        }
+                    }
+                    else if (Account.ServerURL.ServerType == Twitter.TwitterServer.brightkite)
+                    {
+                        statuses = FromBrightKite(response);
                     }
                 }
-                else if (Account.ServerURL.ServerType == Twitter.TwitterServer.brightkite)
+                if (Account != null)
                 {
-                    statuses = FromBrightKite(response);
+                    foreach (status stat in statuses)
+                    {
+                        stat.Account = Account;
+                        stat.TypeofMessage = TypeOfMessage;
+                    }
                 }
             }
-            if (Account != null)
-            {
-                foreach (status stat in statuses)
-                {
-                    stat.Account = Account;
-                    stat.TypeofMessage = TypeOfMessage;
-                }
-            }
+            catch{}
             return statuses;
         }
 
