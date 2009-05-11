@@ -259,10 +259,21 @@ namespace Yedda
         /// <returns></returns>
         public override bool CanFetchUrl(string URL)
         {
-            const string siteMarker = "tweetphoto";
-            string url = URL.ToLower();
-
-            return (url.IndexOf(siteMarker) >= 0);
+            
+            if(IsTweetPhoto(URL))
+            {
+                return true;
+            }
+            if (IsRedirect(URL))
+            {
+                string url = GetRedirectUrl(URL);
+                if (!string.IsNullOrEmpty(url))
+                {
+                    //If string is not null, and imageId is found.
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
@@ -274,8 +285,16 @@ namespace Yedda
             try
             {
                 string pictureURL = workerPPO.Message;
-                int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
-                string imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
+                string imageID = string.Empty;
+                if (IsRedirect(pictureURL))
+                {
+                    imageID = GetRedirectUrl(pictureURL);
+                }
+                else
+                {
+                    int imageIdStartIndex = pictureURL.LastIndexOf('/') + 1;
+                    imageID = pictureURL.Substring(imageIdStartIndex, pictureURL.Length - imageIdStartIndex);
+                }
 
                 string resultFileName = RetrievePicture(imageID);
 
@@ -318,6 +337,46 @@ namespace Yedda
         #endregion
 
         #region private methods
+
+        /// <summary>
+        /// because tweetphoto uses a shortener service (their own)
+        /// look into that too.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private bool IsRedirect(string toCheckUrl)
+        {
+            const string siteMarker = "pic.gd";
+            string url = toCheckUrl.ToLower();
+
+            return (url.IndexOf(siteMarker) >= 0);
+        }
+
+        private bool IsTweetPhoto(string toCheckUrl)
+        {
+            const string siteMarker = "tweetphoto";
+            string url = toCheckUrl.ToLower();
+
+            return (url.IndexOf(siteMarker) >= 0);
+        }
+
+        private string GetRedirectUrl(string url)
+        {
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+            string responseUri = string.Empty;
+            using (HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse())
+            {
+                responseUri = response.ResponseUri.ToString();
+                response.Close();
+            }
+            string imageID = string.Empty;
+            if (IsTweetPhoto(responseUri))
+            {
+                int imageIdStartIndex = responseUri.LastIndexOf('/') + 1;
+                imageID = responseUri.Substring(imageIdStartIndex, responseUri.Length - imageIdStartIndex);
+            }
+            return imageID;
+        }
 
         /// <summary>
         /// Use a imageId to retrieve and save a thumbnail to the device.
