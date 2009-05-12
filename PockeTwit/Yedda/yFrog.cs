@@ -437,7 +437,8 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            responseXML.LoadXml(reader.ReadToEnd());
+                            string resp = reader.ReadToEnd();
+                            responseXML.LoadXml(resp);
                             return responseXML;
                         }
                     }
@@ -485,7 +486,7 @@ namespace Yedda
                 if (!string.IsNullOrEmpty(ppo.Lat) && !string.IsNullOrEmpty(ppo.Lon))
                 {
                     //string geotag = string.Format("geotagged,geo:lat={0},geo:lon={1}", ppo.Lat, ppo.Lon);
-                    string geotag = string.Format("geo:lat={0},geo:lon={1}", ppo.Lat, ppo.Lon);
+                    string geotag = string.Format("geotagged,geo:lat={0},geo:lon={1}", ppo.Lat, ppo.Lon);
                     contents.Append(CreateContentPartString(header, "tags", geotag));
                 }
 
@@ -513,7 +514,8 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            responseXML.LoadXml(reader.ReadToEnd());
+                            string resp = reader.ReadToEnd();
+                            responseXML.LoadXml(resp);
                             return responseXML;
                         }
                     }

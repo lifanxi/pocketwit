@@ -164,7 +164,7 @@ namespace Yedda
             //Need a url to read from.
             if (string.IsNullOrEmpty(pictureURL))
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download picture from TwitPic."));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
             }
 
             #endregion
@@ -187,7 +187,7 @@ namespace Yedda
             }
             catch (Exception e)
             {
-                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", "Failed to download picture from TwitPic."));
+                OnErrorOccured(new PictureServiceEventArgs(PictureServiceErrorLevel.Failed, "", API_ERROR_DOWNLOAD));
             } 
         }
 
@@ -427,7 +427,8 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            responseXML.LoadXml(reader.ReadToEnd());
+                            string resp = reader.ReadToEnd();
+                            responseXML.LoadXml(resp);
                             return responseXML;
                         }
                     }
@@ -497,7 +498,8 @@ namespace Yedda
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             XmlDocument responseXML = new XmlDocument();
-                            responseXML.LoadXml(reader.ReadToEnd());
+                            string resp = reader.ReadToEnd();
+                            responseXML.LoadXml(resp);
                             return responseXML;
                         }
                     }
