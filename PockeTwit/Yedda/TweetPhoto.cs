@@ -22,6 +22,9 @@ namespace Yedda
         private const string API_ERROR_UPLOAD = "Unable to upload to TweetPhoto";
         private const string API_ERROR_DOWNLOAD = "Unable to download from TweetPhoto";
 
+        private string requestedUrl = string.Empty;
+        private bool redirectedUrlIsPictureUrl = false;
+
         #endregion
 
         #region private objects
@@ -266,12 +269,17 @@ namespace Yedda
             }
             if (IsRedirect(URL))
             {
-                string url = GetRedirectUrl(URL);
-                if (!string.IsNullOrEmpty(url))
+                if (requestedUrl != URL)
                 {
-                    //If string is not null, and imageId is found.
-                    return true;
+                    requestedUrl = URL;
+                    string redirectedUrl = GetRedirectUrl(URL);
+                    if (!string.IsNullOrEmpty(redirectedUrl))
+                    {
+                        //If string is not null, and imageId is found.
+                        redirectedUrlIsPictureUrl = true;
+                    }
                 }
+                return redirectedUrlIsPictureUrl;
             }
             return false;
         }
@@ -370,7 +378,7 @@ namespace Yedda
                 response.Close();
             }
             string imageID = string.Empty;
-            if (IsTweetPhoto(responseUri))
+            if (!string.IsNullOrEmpty(responseUri) && IsTweetPhoto(responseUri))
             {
                 int imageIdStartIndex = responseUri.LastIndexOf('/') + 1;
                 imageID = responseUri.Substring(imageIdStartIndex, responseUri.Length - imageIdStartIndex);
