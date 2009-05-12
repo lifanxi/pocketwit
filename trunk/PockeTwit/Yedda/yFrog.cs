@@ -40,7 +40,7 @@ namespace Yedda
         {
             API_SAVE_TO_PATH = "\\ArtCache\\www.yFrog.com\\";
             API_SERVICE_NAME = "yFrog";
-            API_CAN_UPLOAD_GPS = false;
+            API_CAN_UPLOAD_GPS = true;
             API_CAN_UPLOAD_MESSAGE = true;
             API_URLLENGTH = 29;
 
@@ -480,7 +480,14 @@ namespace Yedda
                 contents.Append(CreateContentPartString(header, "username", ppo.Username));
                 contents.Append(CreateContentPartString(header, "password", ppo.Password));
                 contents.Append(CreateContentPartString(header, "message", ppo.Message));
-                contents.Append(CreateContentPartString(header, "source", "pocketwit"));
+                //contents.Append(CreateContentPartString(header, "source", "pocketwit"));
+
+                if (!string.IsNullOrEmpty(ppo.Lat) && !string.IsNullOrEmpty(ppo.Lon))
+                {
+                    //string geotag = string.Format("geotagged,geo:lat={0},geo:lon={1}", ppo.Lat, ppo.Lon);
+                    string geotag = string.Format("geo:lat={0},geo:lon={1}", ppo.Lat, ppo.Lon);
+                    contents.Append(CreateContentPartString(header, "tags", geotag));
+                }
 
                 if (!string.IsNullOrEmpty(ppo.Message))
                 {
