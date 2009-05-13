@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.WindowsMobile.Status;
 using PockeTwit.SpecialTimelines;
+using Yedda;
 
 namespace PockeTwit
 {
@@ -32,7 +33,8 @@ namespace PockeTwit
             Friends=0,
             Replies=1,
             Direct=2,
-            Messages=3
+            Messages=3,
+            Searches=4
         }
         private LargeIntervalTimer updateTimer = new LargeIntervalTimer();
         private List<Yedda.Twitter> TwitterConnections;
@@ -99,6 +101,7 @@ namespace PockeTwit
                 GetFriendsTimeLine();
                 Progress(0, "Just a bit longer.");
                 GetMessagesTimeLine();
+                GetSavedSearches();
                 CompleteLoaded();
             } 
             if (ClientSettings.UpdateMinutes > 0)
@@ -148,6 +151,7 @@ namespace PockeTwit
         {
             GetFriendsTimeLine(true);
             GetMessagesTimeLine(true);
+            GetSavedSearches();
         }
 
         private void BackgroundMessagesUpdate(object o)
@@ -421,9 +425,6 @@ namespace PockeTwit
                     }
                     GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Friends);
                     List<Library.status> TempLine = new List<PockeTwit.Library.status>();
-#if TESTMESSAGES
-                    TempLine = new List<PockeTwit.Library.status>(TestCode.TestStatusMaker.GenerateTestStatuses(50));
-#else
                     foreach (Yedda.Twitter t in TwitterConnections)
                     {
                         if (t.AccountInfo.Enabled && t.AccountInfo.ServerURL.ServerType != Yedda.Twitter.TwitterServer.pingfm)
@@ -451,7 +452,6 @@ namespace PockeTwit
                             }
                         }
                     }
-#endif
                     int NewItems = 0;
                     if (TempLine.Count > 0)
                     {
@@ -511,9 +511,44 @@ namespace PockeTwit
             }
         }
 
+        private void GetSavedSearches()
+        {
+            //return if no saved searches defined
+            SavedSearchTimeLine[] specialTimeLines = (SavedSearchTimeLine[])
+                SpecialTimeLinesRepository.GetList(SpecialTimeLinesRepository.TimeLineType.SavedSearch);
+            if(specialTimeLines.Length==0){ return; }
+            if (GlobalEventHandler.SearchesUpdating) { return; }
+
+            var TwitterConn = new Twitter
+                                  {
+                                      AccountInfo =
+                                          {
+                                              ServerURL = ClientSettings.DefaultAccount.ServerURL,
+                                              UserName = ClientSettings.DefaultAccount.UserName,
+                                              Password = ClientSettings.DefaultAccount.Password,
+                                              Enabled = ClientSettings.DefaultAccount.Enabled
+                                          }
+                                  };
+
+            updateTimer.Enabled = false;
+            GlobalEventHandler.NotifyTimeLineFetching(TimeLineType.Searches);
+            var tempLine = new List<Library.status>();
+
+            foreach (var specialTimeLine in specialTimeLines)
+            {
+                //Need a way to specify "since_id" here too.
+                tempLine.AddRange(SearchTwitter(TwitterConn, specialTimeLine.SearchPhrase));
+            }
+
+            if (tempLine.Count > 0)
+            {
+                LocalStorage.DataBaseUtility.SaveItems(tempLine);
+            }
+            tempLine.Clear();
+            tempLine.TrimExcess();
+        }
 
 
-        
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)
         {
             return FetchSpecificFromTwitter(t, TimelineType, null);

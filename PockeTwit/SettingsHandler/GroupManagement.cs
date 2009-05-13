@@ -24,7 +24,7 @@ namespace PockeTwit.SettingsHandler
 
         private void ResetDisplay()
         {
-            UserGroupTimeLine[] Times = SpecialTimeLinesRepository.GetList();
+            var Times = SpecialTimeLinesRepository.GetList();
             if (Times.Length == 0)
             {
                 HideGroups();

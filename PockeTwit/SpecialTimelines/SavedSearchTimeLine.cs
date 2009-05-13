@@ -14,7 +14,8 @@ namespace PockeTwit.SpecialTimelines
         }
 
         public string name { get; set; }
-        
+
+        public string SearchPhrase { get; set; }
 
         public string GetConstraints()
         {

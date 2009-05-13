@@ -1,12 +1,8 @@
 ﻿using System;
 
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using FingerUI;
 using PockeTwit.SpecialTimelines;
 using PockeTwit.TimeLines;
@@ -37,16 +33,7 @@ namespace PockeTwit
         private bool IsLoaded = false;
         private string ShowUserID;
         private bool StartBackground = false;
-        private TimelineManagement.TimeLineType currentType
-        {
-            get
-            {
-                return statList.CurrentList() != "Messages_TimeLine"
-                           ? TimelineManagement.TimeLineType.Friends
-                           : TimelineManagement.TimeLineType.Messages;
-            }
-        }
-        private UserGroupTimeLine currentGroup = null;
+        private ISpecialTimeLine currentSpecialTimeLine = null;
 
         #region MenuItems
         #region LeftMenu
@@ -305,9 +292,9 @@ namespace PockeTwit
                             t = TimelineManagement.TimeLineType.Messages;
                         }
                         string constraints = "";
-                        if (currentGroup != null)
+                        if (currentSpecialTimeLine != null)
                         {
-                            constraints = currentGroup.GetConstraints();
+                            constraints = currentSpecialTimeLine.GetConstraints();
                         }
                         newItems = LocalStorage.DataBaseUtility.CountItemsNewerThan(t, selectedItem.Tweet.id, constraints);
                     }
@@ -497,10 +484,10 @@ namespace PockeTwit
 
 
         
-        private void ShowUserGroup(UserGroupTimeLine t)
+        private void ShowSpecialTimeLine(ISpecialTimeLine t)
         {
             UpdateHistoryPosition();
-            currentGroup = t;
+            currentSpecialTimeLine = t;
             ChangeCursor(Cursors.WaitCursor);
             HistoryItem i = new HistoryItem();
             i.Action = Yedda.Twitter.ActionType.Search;
@@ -508,7 +495,7 @@ namespace PockeTwit
             History.Push(i);
 
             SwitchToList(t.ListName);
-            this.statList.ClearVisible();
+            statList.ClearVisible();
             AddStatusesToList(Manager.GetGroupedTimeLine(t));
             
             ChangeCursor(Cursors.Default);
@@ -568,7 +555,7 @@ namespace PockeTwit
             {
                 if(statList.CurrentList().StartsWith("Grouped"))
                 {
-                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentSpecialTimeLine), true);
                 }
             }
             
@@ -711,7 +698,7 @@ namespace PockeTwit
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
 
-            foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList())
+            foreach (ISpecialTimeLine t in SpecialTimeLinesRepository.GetList())
             {
                 AddGroupSelectMenuItem(t);
             }
@@ -721,11 +708,11 @@ namespace PockeTwit
             AboutMenuItem, WindowMenuItem, ExitMenuItem});
         }
 
-        private void AddGroupSelectMenuItem(UserGroupTimeLine t)
+        private void AddGroupSelectMenuItem(ISpecialTimeLine t)
         {
             FingerUI.delMenuClicked showItemClicked = delegate()
             {
-                ShowUserGroup(t);
+                ShowSpecialTimeLine(t);
             };
 
             GroupsMenuItem.Visible = true;
@@ -770,7 +757,7 @@ namespace PockeTwit
             MoveNewGroupMenuItem = new FingerUI.SideMenuItem(moveItemClicked, "New Group", statList.RightMenu);
             MoveToGroupMenuItem.SubMenuItems.Add(MoveNewGroupMenuItem);
             CopyToGroupMenuItem.SubMenuItems.Add(CopyNewGroupMenuItem);
-            foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList())
+            foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList(SpecialTimeLinesRepository.TimeLineType.UserGroup))
             {
                 AddAddUserToGroupMenuItem(t);
             }
@@ -1036,9 +1023,9 @@ namespace PockeTwit
             }
             else
             {
-                if(currentGroup!=null && statList.CurrentList().StartsWith("Grouped_TimeLine_"))
+                if(currentSpecialTimeLine!=null && statList.CurrentList().StartsWith("Grouped_TimeLine_"))
                 {
-                    AddStatusesToList(Manager.GetGroupedTimeLine(currentGroup), true);
+                    AddStatusesToList(Manager.GetGroupedTimeLine(currentSpecialTimeLine), true);
                 }
             }
             LastSelectedItems.UpdateUnreadCounts();
@@ -1305,7 +1292,7 @@ namespace PockeTwit
         }
         private void ShowFavorites()
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             ChangeCursor(Cursors.WaitCursor);
             
             SwitchToList("Favorites_TimeLine");
@@ -1318,7 +1305,7 @@ namespace PockeTwit
         }
         private void ShowPublicTimeLine()
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             ChangeCursor(Cursors.WaitCursor);
             
             SwitchToList("Public_TimeLine");
@@ -1338,7 +1325,7 @@ namespace PockeTwit
 
         private void ShowFriendsTimeLine()
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             ChangeCursor(Cursors.WaitCursor);
             bool Redraw = statList.CurrentList() != "Friends_TimeLine";
             SwitchToList("Friends_TimeLine");
@@ -1359,7 +1346,7 @@ namespace PockeTwit
 
         private void ShowMessagesTimeLine()
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             ChangeCursor(Cursors.WaitCursor);
             SwitchToList("Messages_TimeLine");
             History.Clear();
@@ -1373,7 +1360,7 @@ namespace PockeTwit
 
         private void ShowUserTimeLine()
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
             FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
@@ -1399,7 +1386,7 @@ namespace PockeTwit
         }
         private void GetConversation(HistoryItem history)
         {
-            currentGroup = null;
+            currentSpecialTimeLine = null;
             UpdateHistoryPosition();
             HistoryItem i = new HistoryItem();
             Library.status lastStatus;
@@ -1500,7 +1487,7 @@ namespace PockeTwit
             int clickedNumber = statItem.Index + 1;
             SetLeftMenu();
             
-            LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet, currentGroup);
+            LastSelectedItems.SetLastSelected(statList.CurrentList(), statItem.Tweet, currentSpecialTimeLine);
         }
 
         private void UpdateHistoryPosition()
