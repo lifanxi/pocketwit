@@ -5,10 +5,12 @@
 
 HREGNOTIFY RegisterUnreadCountChangedCallback();
 void UnreadCountChangedCallback(HREGNOTIFY hNotify, DWORD dwUserData, const PBYTE pData, const UINT cbData);
+void UpdateData();
 void GetDataFromRegistry();
 void StartPockeTwit();
 void SelectNextUnreadGroup();
 void ShowError();
+void ToggleMode(BOOL Compact);
 
 struct UnreadCount
 { TCHAR GroupName[64];
