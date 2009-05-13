@@ -1,11 +1,16 @@
-﻿using System;
+using System;
 
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using FingerUI;
 using PockeTwit.SpecialTimelines;
 using PockeTwit.TimeLines;
+using Microsoft.WindowsCE.Forms;
 
 
 namespace PockeTwit
@@ -22,7 +27,10 @@ namespace PockeTwit
         }
 
         private Stack<HistoryItem> History = new Stack<HistoryItem>();
+
         #region�Fields�(12)�
+        private MsgWindow MsgWin;
+
         private UpgradeChecker Checker;
 
         private Yedda.Twitter.Account CurrentlySelectedAccount;
@@ -94,7 +102,7 @@ namespace PockeTwit
         #endregion�Fields�
 
         #region�Constructors�(1)�
-        public TweetList(bool InBackGround)
+        public TweetList(bool InBackGround, string[] args)
         {
             //throw new Exception("Bam!");
             StartBackground = InBackGround;
@@ -116,7 +124,8 @@ namespace PockeTwit
                 }
             }
             InitializeComponent();
-            
+
+            this.MsgWin = new MsgWindow(this);
 
             progressBar1.Visible = false;
             lblProgress.Visible = true;
@@ -170,6 +179,8 @@ namespace PockeTwit
                 return;
             }
             SwitchToDone();
+
+            ProcessArgs(args);
         }
 
         void statList_Progress(int itemnumber, int totalnumber)
@@ -1823,5 +1834,23 @@ namespace PockeTwit
             statList.OpenRightMenu();
         }
 
+        public void ProcessArgs(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                string Arg = args[0];
+
+                if (Arg == "/QuickPost")
+                {
+                    SetStatus();
+                }
+
+                // the today plugin passes /Group=XXXXX as argument
+
+
+            }
+
+
+        }
     }
 }
