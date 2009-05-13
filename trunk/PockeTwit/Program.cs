@@ -2,25 +2,26 @@ using System;
 
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using Microsoft.WindowsCE.Forms;
 
 namespace PockeTwit
 {
     static class Program
     {
-        
         public static bool IgnoreDisposed = false;
+
 		#region Methods (2) 
 
 		// Private Methods (2) 
-
-        
+       
         [MTAThread]
         static void Main(string[] Args)
-        {
+        {            
             bool bBackGround = false;
             if (Args.Length > 0)
             {
-                string Arg = Args[0];
+                string Arg =  Args[0];
 
                 if (Arg == "/BackGround")
                 {
@@ -43,10 +44,11 @@ namespace PockeTwit
                 }
             }
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
+
             ClientSettings.LoadSettings();
-            Application.Run(new TweetList(bBackGround));
+            Application.Run(new TweetList(bBackGround, Args));
             LocalStorage.DataBaseUtility.CleanDB(10);
+
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
