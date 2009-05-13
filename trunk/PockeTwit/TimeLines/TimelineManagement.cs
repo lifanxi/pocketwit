@@ -511,11 +511,10 @@ namespace PockeTwit
             }
         }
 
-        private void GetSavedSearches()
+        public void GetSavedSearches()
         {
             //return if no saved searches defined
-            SavedSearchTimeLine[] specialTimeLines = (SavedSearchTimeLine[])
-                SpecialTimeLinesRepository.GetList(SpecialTimeLinesRepository.TimeLineType.SavedSearch);
+            ISpecialTimeLine[] specialTimeLines = SpecialTimeLinesRepository.GetList(SpecialTimeLinesRepository.TimeLineType.SavedSearch);
             if(specialTimeLines.Length==0){ return; }
             if (GlobalEventHandler.SearchesUpdating) { return; }
 
@@ -536,8 +535,9 @@ namespace PockeTwit
 
             foreach (var specialTimeLine in specialTimeLines)
             {
+                SavedSearchTimeLine searchLine = (SavedSearchTimeLine) specialTimeLine;
                 //Need a way to specify "since_id" here too.
-                tempLine.AddRange(SearchTwitter(TwitterConn, specialTimeLine.SearchPhrase));
+                tempLine.AddRange(SearchTwitter(TwitterConn, searchLine.SearchPhrase));
             }
 
             if (tempLine.Count > 0)
