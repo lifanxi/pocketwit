@@ -20,12 +20,40 @@ namespace PockeTwit.SpecialTimelines
 
         #endregion
 
-        private static readonly Dictionary<string, UserGroupTimeLine> Items =
-            new Dictionary<string, UserGroupTimeLine>();
-
-        public static UserGroupTimeLine[] GetList()
+        static SpecialTimeLinesRepository()
         {
-            var s = new List<UserGroupTimeLine>();
+            /* TODO -- DELETE THIS TEST CODE WHEN YOU'VE GOT A WAY TO 
+             * DEFINE SAVED SEARCHES
+           SavedSearchTimeLine t = new SavedSearchTimeLine();
+            t.name = "PockeTwit";
+            t.SearchPhrase = "pocketwit OR pockettwit";
+            Items.Add(t.name, t);
+             */
+        }
+
+        private static readonly Dictionary<string, ISpecialTimeLine> Items =
+            new Dictionary<string, ISpecialTimeLine>();
+
+        public static ISpecialTimeLine[] GetList(TimeLineType timeLineType)
+        {
+            var s = new List<ISpecialTimeLine>();
+            lock (Items)
+            {
+                foreach (var item in Items.Values)
+                {
+                    if (item.Timelinetype == timeLineType)
+                    {
+                        s.Add(item);
+                    }
+                }
+            }
+
+            return s.ToArray();
+        }
+
+        public static ISpecialTimeLine[] GetList()
+        {
+            var s = new List<ISpecialTimeLine>();
             lock (Items)
             {
                 foreach (var item in Items.Values)
@@ -122,7 +150,7 @@ namespace PockeTwit.SpecialTimelines
                             var thisLine = new UserGroupTimeLine();
                             if (Items.ContainsKey(groupName))
                             {
-                                thisLine = Items[groupName];
+                                thisLine = (UserGroupTimeLine)Items[groupName];
                             }
                             else
                             {
@@ -146,31 +174,35 @@ namespace PockeTwit.SpecialTimelines
                     conn.Open();
                     using (var t = conn.BeginTransaction())
                     {
-                        foreach (var group in Items.Values)
+                        foreach (var item in Items.Values)
                         {
                             using (var comm = new SQLiteCommand(conn))
                             {
                                 comm.CommandText = "INSERT INTO groups (groupname) VALUES (@name);";
-                                comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+                                comm.Parameters.Add(new SQLiteParameter("@name", item.name));
 
                                 comm.ExecuteNonQuery();
 
                                 comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname";
-                                comm.Parameters.Add(new SQLiteParameter("@groupname", group.name));
+                                comm.Parameters.Add(new SQLiteParameter("@groupname", item.name));
                                 comm.ExecuteNonQuery();
                                 comm.Parameters.Clear();
-
-                                foreach (var groupItem in group.Terms)
+                                if (item.Timelinetype == TimeLineType.UserGroup)
                                 {
-                                    comm.Parameters.Clear();
-                                    comm.CommandText =
-                                        "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
-                                    comm.Parameters.Add(new SQLiteParameter("@pairid", group.name + groupItem.Term));
-                                    comm.Parameters.Add(new SQLiteParameter("@name", group.name));
-                                    comm.Parameters.Add(new SQLiteParameter("@userid", groupItem.Term));
-                                    comm.Parameters.Add(new SQLiteParameter("@exclusive", groupItem.Exclusive));
-                                    comm.ExecuteNonQuery();
+                                    UserGroupTimeLine group = (UserGroupTimeLine) item;
+                                    foreach (var groupItem in group.Terms)
+                                    {
+                                        comm.Parameters.Clear();
+                                        comm.CommandText =
+                                            "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
+                                        comm.Parameters.Add(new SQLiteParameter("@pairid", group.name + groupItem.Term));
+                                        comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+                                        comm.Parameters.Add(new SQLiteParameter("@userid", groupItem.Term));
+                                        comm.Parameters.Add(new SQLiteParameter("@exclusive", groupItem.Exclusive));
+                                        comm.ExecuteNonQuery();
+                                    }
                                 }
+                                //TODO ELSE SAVE SEARCH TERM
                             }
                         }
                         t.Commit();
@@ -183,7 +215,8 @@ namespace PockeTwit.SpecialTimelines
         {
             lock (Items)
             {
-                foreach (var t in Items.Values)
+                var list = GetList(TimeLineType.UserGroup);
+                foreach (UserGroupTimeLine t in list)
                 {
                     foreach (var groupterm in t.Terms)
                     {
@@ -197,9 +230,9 @@ namespace PockeTwit.SpecialTimelines
             return false;
         }
 
-        internal static UserGroupTimeLine GetFromName(string listName)
+        internal static ISpecialTimeLine GetFromName(string listName)
         {
-            UserGroupTimeLine ret = null;
+            ISpecialTimeLine ret = null;
             foreach (var t in GetList())
             {
                 if (t.ListName == listName)
@@ -216,12 +249,12 @@ namespace PockeTwit.SpecialTimelines
             var fileName = ClientSettings.CacheDir + "\\GroupBackup.xml";
             lock (Items)
             {
-                var l = new List<UserGroupTimeLine>();
+                var l = new List<ISpecialTimeLine>();
                 foreach (var item in Items.Values)
                 {
                     l.Add(item);
                 }
-                var s = new XmlSerializer(typeof (UserGroupTimeLine[]));
+                var s = new XmlSerializer(typeof (ISpecialTimeLine[]));
                 using (var w = new StreamWriter(fileName))
                 {
                     s.Serialize(w, l.ToArray());

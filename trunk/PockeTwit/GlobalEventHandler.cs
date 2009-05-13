@@ -11,7 +11,7 @@ namespace PockeTwit
         // Fields
         public static bool FriendsUpdating = false;
         public static bool MessagesUpdating = false;
-
+        public static bool SearchesUpdating = false;
         // Delegates (1) 
         public delegate void delNoData(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
         public delegate void delTimelineIsFetching(TimelineManagement.TimeLineType TType);
@@ -95,6 +95,7 @@ namespace PockeTwit
         {
             if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = true; }
             if (TType == TimelineManagement.TimeLineType.Messages) { MessagesUpdating = true; }
+            if (TType== TimelineManagement.TimeLineType.Searches){ SearchesUpdating = true; }
             if (TimeLineFetching != null)
             {
                 TimeLineFetching(TType);
@@ -104,6 +105,7 @@ namespace PockeTwit
         {
             if (TType == TimelineManagement.TimeLineType.Friends) { FriendsUpdating = false; }
             if (TType == TimelineManagement.TimeLineType.Messages) {MessagesUpdating = false; }
+            if (TType == TimelineManagement.TimeLineType.Searches) { SearchesUpdating = false; }
             if (TimeLineDone != null)
             {
                 TimeLineDone(TType);
