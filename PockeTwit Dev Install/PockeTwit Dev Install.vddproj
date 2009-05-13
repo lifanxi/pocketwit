@@ -164,12 +164,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7FEFE1D73E204D85AB5C7BEC6C7A983F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_75F1D1DE16889E577ED8520FAD7B5384"
         "MsmSig" = "8:_UNDEFINED"
@@ -208,6 +202,12 @@
         {
         "MsmKey" = "8:_A5BEC62F022195F9327047851A24F816"
         "OwnerKey" = "8:_324D863B1AA21738148ED3BD5481A4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A698680B3D6B4139959B45F9DA26D379"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -792,9 +792,9 @@
                 {
                 }
             }
-            "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_7FEFE1D73E204D85AB5C7BEC6C7A983F"
+            "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_A698680B3D6B4139959B45F9DA26D379"
             {
-            "SourcePath" = "8:..\\QuickPost\\Windows Mobile 6 Professional SDK (ARMV4I)\\Debug\\QuickPost.exe"
+            "SourcePath" = "8:..\\QuickPost\\Windows Mobile 5.0 Pocket PC SDK (ARMV4I)\\Debug\\SendArgs.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_46852C240825406AB2BCFC1C54C85714"
@@ -1036,13 +1036,13 @@
         }
         "Shortcut"
         {
-            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_17939C9CDC334A1D8A1B58AE02CBE754"
+            "{971D45E9-E38C-49AC-B36E-4C5BEA533350}:_7FEFF695F3DB4D7FBC062B00A5AE9F12"
             {
-            "Name" = "8:QuickPost Dev"
+            "Name" = "8:PockeTwit Dev QuickPost"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
-            "Target" = "8:_7FEFE1D73E204D85AB5C7BEC6C7A983F"
+            "Target" = "8:_A698680B3D6B4139959B45F9DA26D379"
             "Folder" = "8:_486AC490580C45378FC3ADA14D0B6083"
             "WorkingFolder" = "8:_46852C240825406AB2BCFC1C54C85714"
             }
