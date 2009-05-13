@@ -18,6 +18,7 @@ HINSTANCE g_hinstDLL;
 
 #define TEXT_LEFT_MARGIN  SCALEY(2)
 #define TEXT_RIGHT_MARGIN  SCALEY(2)
+#define TEXT_GROUP_MARGIN  SCALEY(5)
 
 HWND hwnd;
 
@@ -28,13 +29,13 @@ uint g_uMetricChangeMsg2;
 DWORD g_cyDefaultItemHeight;
 
 BOOL VGA = FALSE;
-
+BOOL compact = FALSE;
 HICON g_hIcon =  NULL;
 
 HREGNOTIFY hrUnreadCountChanged = NULL;
 
 UnreadCount *unreadCountPointer;
-DWORD unreadGroupsCount;
+DWORD totalGroupsCount,unreadGroupsCount,g_nSelectedGroup;
 DWORD unreadGroupsCurrent = 0;
 BOOL hasUnreadGroups;
 
@@ -85,7 +86,7 @@ void FillRectClr(HDC hdc, LPRECT prc, COLORREF clr)
     SetBkColor(hdc, clrSave);
 }
 
-void Plugin_OnPaint(HWND hwnd, HDC hdc)
+void Plugin_OnPaintCompact(HWND hwnd, HDC hdc)
 {
     HWND    hwndParent = GetParent(hwnd);
     RECT    rcDraw, rcText;
@@ -150,7 +151,14 @@ void Plugin_OnPaint(HWND hwnd, HDC hdc)
     hSysFont = (HFONT) GetStockObject(SYSTEM_FONT);
     GetObject(hSysFont, sizeof(LOGFONT), &lf);
     
-    lf.lfWeight = FW_NORMAL;
+    if (hasUnreadGroups)
+	{
+		lf.lfWeight = FW_BOLD;
+	}
+	else
+	{
+		lf.lfWeight = FW_NORMAL;
+	}
     // Calculate the font size, making sure to round the result to the nearest integer
     lf.lfHeight = (long) -((8.0 * (double)GetDeviceCaps(hdcScreenBuffer, LOGPIXELSY) / 72.0)+.5);
     
@@ -195,6 +203,164 @@ void Plugin_OnPaint(HWND hwnd, HDC hdc)
     return;
 }
 
+
+void Plugin_OnPaintFull(HWND hwnd, HDC hdc)
+{
+    HWND    hwndParent = GetParent(hwnd);
+    RECT    rcDraw, rcText;
+    TODAYDRAWWATERMARKINFO dwi = {0};
+    COLORREF crText, crHighlightedText, crOld;
+    int nBkMode;
+	LOGFONT lf;
+    HFONT hSysFont;
+    HFONT hFont;
+	HFONT hFontOld;
+	HDC hdcScreenBuffer;
+	HBITMAP memBM;
+	HGDIOBJ oldMem;
+
+    ASSERT(NULL != hdc);
+	
+    GetClientRect(hwnd, &rcDraw);
+	GetClientRect(hwnd, &rcText);
+    
+	hdcScreenBuffer = CreateCompatibleDC(hdc);
+	memBM = CreateCompatibleBitmap( hdc, rcDraw.right, rcDraw.bottom );
+	oldMem = SelectObject(hdcScreenBuffer, memBM);
+
+    dwi.rc = rcDraw;
+    dwi.hwnd = hwnd;
+    dwi.hdc = hdcScreenBuffer;
+	
+    if (!SendMessage(hwndParent, TODAYM_DRAWWATERMARK, 0, (LPARAM) &dwi))
+    {
+        FillRectClr(hdcScreenBuffer, &rcDraw, GetSysColor(COLOR_WINDOW));
+    }
+    
+	if (VGA)
+		rcText.left = rcText.left + 24 + 32;
+	else
+		rcText.left = rcText.left + 12 + 16;
+
+    rcText.right -= TEXT_RIGHT_MARGIN;
+	rcText.bottom = g_cyDefaultItemHeight;
+	
+    crHighlightedText = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHTEDTEXT, 0);
+    crText = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_TEXT, 0);
+
+    nBkMode = SetBkMode(hdcScreenBuffer, TRANSPARENT);
+    crOld = SetTextColor(hdcScreenBuffer, IsItemState(hwnd, PLUGIN_SELECTED) ? crHighlightedText : crText);
+   
+    hSysFont = (HFONT) GetStockObject(SYSTEM_FONT);
+    GetObject(hSysFont, sizeof(LOGFONT), &lf);
+    
+	if (hasUnreadGroups)
+	{
+		lf.lfWeight = FW_BOLD;
+	}
+	else
+	{
+		lf.lfWeight = FW_NORMAL;
+	}
+
+    // Calculate the font size, making sure to round the result to the nearest integer
+    lf.lfHeight = (long) -((8.0 * (double)GetDeviceCaps(hdcScreenBuffer, LOGPIXELSY) / 72.0)+.5);
+    
+    // create the font
+    hFont = CreateFontIndirect(&lf);
+    
+    // Select the system font into the device context
+    hFontOld = (HFONT) SelectObject(hdcScreenBuffer, hFont);
+
+	if (hasUnreadGroups)
+	{
+		DWORD i,j;
+		j=0;
+		for (i = 0; i < totalGroupsCount; i++)
+		{
+			if (unreadCountPointer[i].dwUnread != 0)
+			{
+				if (unreadGroupsCount > 1)
+				{
+					rcText.top = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * j;
+					j++;
+					rcText.bottom = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * j;
+
+					if (IsItemState(hwnd, PLUGIN_SELECTED) && ((j-1) == g_nSelectedGroup))
+					{
+						COLORREF crHighlight;
+
+						crHighlight = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHT, 0);
+				        
+						nBkMode = SetBkMode(hdcScreenBuffer, OPAQUE);
+						FillRectClr(hdcScreenBuffer, &rcText, crHighlight);
+						SetBkMode(hdcScreenBuffer, nBkMode);
+					}
+				}
+				else
+				{
+					if (IsItemState(hwnd, PLUGIN_SELECTED))
+					{
+						COLORREF crHighlight;
+
+						crHighlight = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHT, 0);
+				        
+						nBkMode = SetBkMode(hdcScreenBuffer, OPAQUE);
+						FillRectClr(hdcScreenBuffer, &rcDraw, crHighlight);
+						SetBkMode(hdcScreenBuffer, nBkMode);
+					}
+				}
+				
+				WCHAR msgbuf[128] = _T("");
+				wcscat(msgbuf, unreadCountPointer[i].GroupName);
+				wcscat(msgbuf, _T(" ("));
+				wcscat(msgbuf, unreadCountPointer[i].swUnread);
+				wcscat(msgbuf, _T(")"));
+				DrawText(hdcScreenBuffer, msgbuf, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
+
+			}
+		}
+	}
+	else
+	{
+		if (IsItemState(hwnd, PLUGIN_SELECTED))
+		{
+			COLORREF crHighlight;
+
+			crHighlight = SendMessage(hwndParent, TODAYM_GETCOLOR, TODAYCOLOR_HIGHLIGHT, 0);
+	        
+			nBkMode = SetBkMode(hdcScreenBuffer, OPAQUE);
+			FillRectClr(hdcScreenBuffer, &rcDraw, crHighlight);
+			SetBkMode(hdcScreenBuffer, nBkMode);
+		}
+
+		LPCTSTR pszText = (LPCTSTR) LoadString(g_hinstDLL, IDS_PLUGIN_TEXT, NULL, 0);
+		DrawText(hdcScreenBuffer, pszText, -1, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_NOPREFIX );
+	}
+
+	DrawIcon(hdcScreenBuffer, TEXT_LEFT_MARGIN, SCALEY(2), g_hIcon);
+
+	// Select the previous font back into the device context
+    SelectObject(hdcScreenBuffer, hFontOld);
+    
+    DeleteObject(hFont);
+
+	crText = SetTextColor(hdcScreenBuffer, crOld);
+    SetBkMode(hdcScreenBuffer, nBkMode);
+
+	SelectObject(hdcScreenBuffer, memBM); 
+	BitBlt(hdc, 0, 0, rcDraw.right, rcDraw.bottom, hdcScreenBuffer, 0, 0, SRCCOPY) ; 
+
+	SelectObject(hdcScreenBuffer, oldMem);
+
+	DeleteObject(memBM);
+	DeleteObject(oldMem);
+	DeleteDC(hdcScreenBuffer) ;
+
+    return;
+}
+
+
 BOOL Plugin_OnQueryRefreshCache(HWND hwnd, TODAYLISTITEM* ptli)
 {
     // Hmm.... no ptli, that means we are probably refreshing ourselves, and don't
@@ -215,7 +381,7 @@ BOOL Plugin_OnQueryRefreshCache(HWND hwnd, TODAYLISTITEM* ptli)
     }
     else if (IsItemState(hwnd, PLUGIN_TEXTRESIZE))
     {
-        if (ptli->cyp > g_cyInitItemHeight)
+        /*if (ptli->cyp > g_cyInitItemHeight)
         {
             OutputDebugString(TEXT("***shrinking...***"));
             g_cyItemHeight = g_cyInitItemHeight;
@@ -226,7 +392,7 @@ BOOL Plugin_OnQueryRefreshCache(HWND hwnd, TODAYLISTITEM* ptli)
             OutputDebugString(TEXT("***growing...***"));
             g_cyItemHeight = g_cyInitItemHeight + g_cyDefaultItemHeight;
             ptli->cyp = g_cyItemHeight;
-        }
+        }*/
 
         SetItemState(hwnd, PLUGIN_TEXTRESIZE, FALSE);
         InvalidateRect(hwnd, NULL, FALSE);
@@ -241,11 +407,16 @@ BOOL Plugin_OnQueryRefreshCache(HWND hwnd, TODAYLISTITEM* ptli)
 BOOL Plugin_OnReceivedSelection(HWND hwnd, UINT vKey)
 {
     BOOL fRet = FALSE;
-
+	
     switch(vKey)
     {
         case VK_UP:
+			g_nSelectedGroup = unreadGroupsCount - 1;
+			SetItemState(hwnd, PLUGIN_SELECTED, TRUE);
+            fRet = TRUE;
+            break;
         case VK_DOWN:
+			g_nSelectedGroup = 0;
             SetItemState(hwnd, PLUGIN_SELECTED, TRUE);
             fRet = TRUE;
             break;
@@ -268,9 +439,13 @@ void Plugin_OnLostSelection(HWND hwnd)
 LRESULT PluginWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet = 0;
+	
+	WCHAR msgbuf[128] = _T("PluginWndProc - %d\n");
+	wprintf(msgbuf, uMsg);
 
     switch(uMsg)
     {
+
         case WM_CREATE:
         {
             SetWindowLong(hwnd, GWL_USERDATA, 0);
@@ -282,7 +457,14 @@ LRESULT PluginWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hDC = BeginPaint(hwnd, &ps);
-            Plugin_OnPaint(hwnd, hDC);
+			if (compact)
+			{
+				Plugin_OnPaintCompact(hwnd, hDC);
+			}
+			else
+			{
+				Plugin_OnPaintFull(hwnd, hDC);
+			}
             EndPaint(hwnd, &ps);
             break;            
         }
@@ -290,9 +472,47 @@ LRESULT PluginWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_LBUTTONDOWN:
             PostMessage(GetParent(hwnd), TODAYM_TOOKSELECTION, (WPARAM)hwnd, 0);
             SetItemState(hwnd, PLUGIN_SELECTED, TRUE);
+			if (compact == FALSE)
+			{
+				if (unreadGroupsCount > 1)
+				{
+					POINT point;
+					point.x = LOWORD(lParam);
+					point.y = HIWORD(lParam);
+
+					g_nSelectedGroup = point.y / ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN );
+				}
+				else
+				{
+					g_nSelectedGroup = 0;
+				}
+			}
 			InvalidateRect(hwnd, NULL, FALSE);
             break;
 		
+		case WM_TODAYCUSTOM_USERNAVIGATION:
+			if (compact == FALSE)
+			{
+				InvalidateRect(hwnd, NULL, FALSE);
+
+				if (wParam == VK_UP)   g_nSelectedGroup--;
+				if (wParam == VK_DOWN) g_nSelectedGroup++;
+
+				if (g_nSelectedGroup < 0 || g_nSelectedGroup >= unreadGroupsCount)
+				{
+					lRet = FALSE; // go to the next plug-in
+				}
+				else
+				{
+					lRet = TRUE;  // stay in this plug-in
+				}
+			}
+			else
+			{
+				lRet = DefWindowProc(hwnd, uMsg, wParam, lParam);
+			}
+			break;
+
 		case WM_TODAYCUSTOM_ACTION:
 		case WM_LBUTTONUP:
 			StartPockeTwit();
@@ -304,7 +524,7 @@ LRESULT PluginWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				case IDT_TIMER_NEXT_GROUP:
 
 					unreadGroupsCurrent++;
-					if (unreadGroupsCurrent >= unreadGroupsCount)
+					if (unreadGroupsCurrent >= totalGroupsCount)
 					{
 						unreadGroupsCurrent = 0;
 					}
@@ -334,7 +554,6 @@ LRESULT PluginWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
             
         case WM_TODAYCUSTOM_CLEARCACHE:
-        case WM_TODAYCUSTOM_USERNAVIGATION:
         default:
             if (uMsg == g_uMetricChangeMsg2)
             {
@@ -382,17 +601,91 @@ HWND InitializeCustomItem(TODAYLISTITEM * ptli, HWND hwndParent)
 
 	hrUnreadCountChanged = RegisterUnreadCountChangedCallback();
 
+	DWORD useCompact; 
+    
+	RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("UseCompactTodayPlugin"), &useCompact);
+		
+	compact = useCompact;
+
 	GetDataFromRegistry();
+
+	if (compact == FALSE)
+	{
+		RECT rc;
+		GetClientRect(hwnd, &rc);
+
+		g_cyItemHeight = g_cyDefaultItemHeight;
+
+		if (unreadGroupsCount > 1)
+		{
+			g_cyItemHeight = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * unreadGroupsCount;
+		}
+
+		SetRect(&rc, rc.left, rc.top, rc.right, g_cyItemHeight);
+		MoveWindow(hwnd, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, FALSE);
+	}
 
     //display the window
     if(ptli->fEnabled)
     {
         ShowWindow (hwnd, SW_SHOW);
-		SetTimer(hwnd,IDT_TIMER_NEXT_GROUP, 5000 ,NULL);
+		
+		if (compact)
+			SetTimer(hwnd,IDT_TIMER_NEXT_GROUP, 5000 ,NULL);
     }
 
     return hwnd;
 
+}
+
+
+BOOL APIENTRY CustomItemOptionsDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+{
+	SHINITDLGINFO shidi;
+	HWND hCurrentRadioButton;
+
+	switch (message) 
+	{
+		case WM_INITDIALOG:
+
+		// Create a Done button and size it. 
+		shidi.dwMask = SHIDIM_FLAGS;
+		shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN | SHIDIF_SIZEDLGFULLSCREEN;
+		shidi.hDlg = hDlg;
+		SHInitDialog(&shidi);
+		if (compact == TRUE)
+		{
+			CheckRadioButton(hDlg,IDC_RADIO_COMPACT,IDC_RADIO_FULL,IDC_RADIO_COMPACT);
+		}
+		else
+		{
+			CheckRadioButton(hDlg,IDC_RADIO_COMPACT,IDC_RADIO_FULL,IDC_RADIO_FULL);
+		}
+		return TRUE; 
+
+		case WM_COMMAND:
+			if (LOWORD(wParam) == IDOK) 
+			{
+				hCurrentRadioButton = GetDlgItem(hDlg, IDC_RADIO_COMPACT);
+				if(BST_CHECKED == SendMessage(hCurrentRadioButton, BM_GETCHECK, NULL, NULL))
+				{
+					ToggleMode(TRUE);
+				}
+				else
+				{
+					ToggleMode(FALSE);
+				}
+
+				EndDialog(hDlg, LOWORD(wParam));
+				return TRUE;
+			}
+		break;
+		//case WM_CTLCOLORSTATIC:
+		//      break;
+		default:
+		  return DefWindowProc(hDlg, message, wParam, lParam);
+	}
+	return 0;
 }
 
 EXTERN_C
@@ -451,14 +744,38 @@ HREGNOTIFY RegisterUnreadCountChangedCallback()
 // This is the callback function.
 void UnreadCountChangedCallback(HREGNOTIFY hNotify, DWORD dwUserData, const PBYTE pData, const UINT cbData)
 {
+	UpdateData();
+}
+
+void UpdateData()
+{
 	KillTimer(hwnd, IDT_TIMER_NEXT_GROUP);
 	
 	GetDataFromRegistry();
 	
-	SelectNextUnreadGroup();
+	g_nSelectedGroup = 0;
+
+	if (compact)
+	{
+		SelectNextUnreadGroup();
 	
-	SetTimer(hwnd,IDT_TIMER_NEXT_GROUP, 5000 ,NULL);
-	
+		SetTimer(hwnd,IDT_TIMER_NEXT_GROUP, 5000 ,NULL);
+	}
+	else
+	{
+		RECT rc;
+		GetClientRect(hwnd, &rc);
+
+		g_cyItemHeight = g_cyDefaultItemHeight;
+
+		if (unreadGroupsCount > 1)
+		{
+			g_cyItemHeight = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * unreadGroupsCount;
+		}
+
+		SetRect(&rc, rc.left, rc.top, rc.right, g_cyItemHeight);
+		MoveWindow(hwnd, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, FALSE);
+	}
 	InvalidateRect(hwnd, NULL, FALSE);
 }
 
@@ -483,11 +800,12 @@ void GetDataFromRegistry()
 	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,_T("Software\\Apps\\JustForFun PockeTwit\\UnreadCount"),0,0,&key) == ERROR_SUCCESS)
 	{
 
-		if (RegQueryInfoKey(key, NULL, NULL, NULL, NULL, &max_sub_key_len, NULL, &unreadGroupsCount, &max_val_name_len, &max_val_size, NULL, NULL )== ERROR_SUCCESS)
+		if (RegQueryInfoKey(key, NULL, NULL, NULL, NULL, &max_sub_key_len, NULL, &totalGroupsCount, &max_val_name_len, &max_val_size, NULL, NULL )== ERROR_SUCCESS)
 		{
-			unreadGroupsCount--;
+			totalGroupsCount--;
+			unreadGroupsCount = 0;
 
-			unreadCountPointer = new UnreadCount[unreadGroupsCount];
+			unreadCountPointer = new UnreadCount[totalGroupsCount];
 			hasUnreadGroups = FALSE;
 
 			while( RegEnumValue(key, dwValueIndex, szBuffer, &dwNameLength, NULL, &dwType, pData, &dwDataLength) == ERROR_SUCCESS )
@@ -506,7 +824,10 @@ void GetDataFromRegistry()
 							wcscpy(unreadCountPointer[unreadIndex].swUnread, _ultow(dwValue,sValue,10));
 
 							if (dwValue > 0)
+							{
 								hasUnreadGroups = TRUE;
+								unreadGroupsCount++;
+							}
 
 							unreadIndex++;
 
@@ -528,6 +849,7 @@ void GetDataFromRegistry()
 
 				dwValueIndex++;
 			}
+
 		}
 
 		RegCloseKey(key);
@@ -537,40 +859,88 @@ void GetDataFromRegistry()
 
 void StartPockeTwit()
 {
-	HKEY key;
-	TCHAR szInstallDir[256] = {0};
-	TCHAR fullAppPath[256] = {0};
-	DWORD lpcbData = sizeof(szInstallDir);
-
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,_T("Software\\Apps\\JustForFun PockeTwit"),0,0,&key) == ERROR_SUCCESS)
+	TCHAR args[64] = {0};
+	if (hasUnreadGroups)
 	{
-		if (RegQueryValueEx(key,_T("InstallDir"),0,0,(LPBYTE)&szInstallDir, &lpcbData) == ERROR_SUCCESS)
+
+		wcscat(args, L"/Group=");
+
+		if (compact)
 		{
+			wcscat(args, unreadCountPointer[unreadGroupsCurrent].GroupName);
+		}
+		else
+		{
+			DWORD i,j;
+			j=0;
+			for (i = 0; i < totalGroupsCount; i++)
+			{
+				if (unreadCountPointer[i].dwUnread != 0)
+				{
+					if (j == g_nSelectedGroup)
+					{
+						wcscat(args, unreadCountPointer[i].GroupName);
+						break;
+					}
 
-			wcscat(fullAppPath,szInstallDir);
-			wcscat(fullAppPath, L"\\PockeTwit.exe");
-
-			SHELLEXECUTEINFO ShExecInfo;
-			memset( &ShExecInfo, 0, sizeof( SHELLEXECUTEINFO ) );
-			ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-			ShExecInfo.fMask = SEE_MASK_FLAG_NO_UI;
-			ShExecInfo.hwnd = NULL;
-			ShExecInfo.lpVerb = L"Open";
-			ShExecInfo.lpFile = fullAppPath;        
-			ShExecInfo.lpParameters = NULL;  
-			ShExecInfo.lpDirectory = szInstallDir;
-			ShExecInfo.nShow = SW_SHOWNORMAL;
-			ShExecInfo.hInstApp = NULL; 
-			ShellExecuteEx(&ShExecInfo);
+					j++;
+				}
+			}
 		}
 	}
+	else
+	{
+		wcscat(args,  L"");
+	}
 
+	HWND hWnd = FindWindow(NULL, L"PockeTwitWndProc");
+
+	if (hWnd)
+	{
+		COPYDATASTRUCT data;
+		ZeroMemory(&data, sizeof(COPYDATASTRUCT));
+		data.dwData = 7;
+		data.lpData = (PVOID)args;
+		data.cbData = (wcslen(args) + 1) * sizeof(TCHAR);
+
+		SendMessage(hWnd, WM_COPYDATA, NULL, (LPARAM)&data);
+	}
+	else
+	{
+		HKEY key;
+		TCHAR szInstallDir[256] = {0};
+		TCHAR fullAppPath[256] = {0};
+		DWORD lpcbData = sizeof(szInstallDir);
+
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,_T("Software\\Apps\\JustForFun PockeTwit"),0,0,&key) == ERROR_SUCCESS)
+		{
+			if (RegQueryValueEx(key,_T("InstallDir"),0,0,(LPBYTE)&szInstallDir, &lpcbData) == ERROR_SUCCESS)
+			{
+
+				wcscat(fullAppPath,szInstallDir);
+				wcscat(fullAppPath, L"\\PockeTwit.exe");
+
+				SHELLEXECUTEINFO ShExecInfo;
+				memset( &ShExecInfo, 0, sizeof( SHELLEXECUTEINFO ) );
+				ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+				ShExecInfo.fMask = SEE_MASK_FLAG_NO_UI;
+				ShExecInfo.hwnd = NULL;
+				ShExecInfo.lpVerb = L"Open";
+				ShExecInfo.lpFile = fullAppPath;        
+				ShExecInfo.lpParameters = args;  
+				ShExecInfo.lpDirectory = szInstallDir;
+				ShExecInfo.nShow = SW_SHOWNORMAL;
+				ShExecInfo.hInstApp = NULL; 
+				ShellExecuteEx(&ShExecInfo);
+			}
+		}
+	}
 }
 
 void SelectNextUnreadGroup()
 {
 	DWORD i;
-	for (i = unreadGroupsCurrent; i < unreadGroupsCount; i++)
+	for (i = unreadGroupsCurrent; i < totalGroupsCount; i++)
 	{
 		if (unreadCountPointer[i].dwUnread != 0)
 		{
@@ -580,10 +950,10 @@ void SelectNextUnreadGroup()
 	}
 
 	// HACK
-	if (i >= unreadGroupsCount)
+	if (i >= totalGroupsCount)
 	{
 		unreadGroupsCurrent = 0;
-		for (i = unreadGroupsCurrent; i < unreadGroupsCount; i++)
+		for (i = unreadGroupsCurrent; i < totalGroupsCount; i++)
 		{
 			if (unreadCountPointer[i].dwUnread != 0)
 			{
@@ -592,6 +962,14 @@ void SelectNextUnreadGroup()
 			}
 		}
 	}
+}
+
+void ToggleMode(BOOL Compact)
+{
+	compact = Compact;
+	RegistrySetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("UseCompactTodayPlugin"), compact);
+	if (g_hinstDLL != NULL)
+		UpdateData();
 }
 
 void ShowError()
