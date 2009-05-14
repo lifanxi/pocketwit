@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.WindowsMobile.Status;
+using PockeTwit.Library;
 using PockeTwit.SpecialTimelines;
 using Yedda;
 
@@ -537,11 +538,20 @@ namespace PockeTwit
             {
                 SavedSearchTimeLine searchLine = (SavedSearchTimeLine) specialTimeLine;
                 //Need a way to specify "since_id" here too.
-                tempLine.AddRange(SearchTwitter(TwitterConn, searchLine.SearchPhrase));
+                status[] Items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
+                if (Items.Length > 0)
+                {
+                    foreach (status item in Items)
+                    {
+                        item.SearchTerms = searchLine.SearchPhrase;
+                    }
+                    tempLine.AddRange(Items);
+                }
             }
 
             if (tempLine.Count > 0)
             {
+                
                 LocalStorage.DataBaseUtility.SaveItems(tempLine);
             }
             tempLine.Clear();
