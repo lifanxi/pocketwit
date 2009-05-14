@@ -376,26 +376,14 @@ BOOL Plugin_OnQueryRefreshCache(HWND hwnd, TODAYLISTITEM* ptli)
         // height has changed.
         OutputDebugString(TEXT("***first time...***"));
         ptli->cyp = g_cyItemHeight;
-        InvalidateRect(hwnd, NULL, FALSE);
+        //InvalidateRect(hwnd, NULL, FALSE);
         return TRUE;
     }
     else if (IsItemState(hwnd, PLUGIN_TEXTRESIZE))
     {
-        /*if (ptli->cyp > g_cyInitItemHeight)
-        {
-            OutputDebugString(TEXT("***shrinking...***"));
-            g_cyItemHeight = g_cyInitItemHeight;
-            ptli->cyp = g_cyItemHeight;
-        }
-        else
-        {
-            OutputDebugString(TEXT("***growing...***"));
-            g_cyItemHeight = g_cyInitItemHeight + g_cyDefaultItemHeight;
-            ptli->cyp = g_cyItemHeight;
-        }*/
-
+		ptli->cyp = g_cyItemHeight;
         SetItemState(hwnd, PLUGIN_TEXTRESIZE, FALSE);
-        InvalidateRect(hwnd, NULL, FALSE);
+        //InvalidateRect(hwnd, NULL, FALSE);
         return TRUE;        
     }
     else
@@ -596,7 +584,7 @@ HWND InitializeCustomItem(TODAYLISTITEM * ptli, HWND hwndParent)
                           g_szPluginClass, 
                           g_szPluginClass,
                           WS_CHILD,   
-                          0,0,0,0,
+                          CW_USEDEFAULT,CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                           hwndParent, NULL, g_hinstDLL, NULL);
 
 	hrUnreadCountChanged = RegisterUnreadCountChangedCallback();
@@ -621,9 +609,11 @@ HWND InitializeCustomItem(TODAYLISTITEM * ptli, HWND hwndParent)
 			g_cyItemHeight = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * unreadGroupsCount;
 		}
 
-		SetRect(&rc, rc.left, rc.top, rc.right, g_cyItemHeight);
-		MoveWindow(hwnd, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, FALSE);
+		//SetRect(&rc, rc.left, rc.top, rc.right, g_cyItemHeight);
+		//MoveWindow(hwnd, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, FALSE);
 	}
+
+	ptli->cyp = g_cyItemHeight;
 
     //display the window
     if(ptli->fEnabled)
@@ -772,9 +762,6 @@ void UpdateData()
 		{
 			g_cyItemHeight = ((long)((8.0 * (double)DRA::GetScreenCaps(LOGPIXELSY) / 72.0)+.5) + TEXT_GROUP_MARGIN ) * unreadGroupsCount;
 		}
-
-		SetRect(&rc, rc.left, rc.top, rc.right, g_cyItemHeight);
-		MoveWindow(hwnd, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, FALSE);
 	}
 	InvalidateRect(hwnd, NULL, FALSE);
 }
