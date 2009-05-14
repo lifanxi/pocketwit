@@ -25,7 +25,7 @@ namespace LocalStorage
         private const string SQLFetchFromCache =
             @"SELECT     statuses.id, statuses.fulltext, statuses.userid, statuses.[timestamp], 
                                      statuses.in_reply_to_id, statuses.favorited, statuses.clientSource, 
-                                     statuses.accountSummary, statuses.statustypes, users.screenname, 
+                                     statuses.accountSummary, statuses.statustypes, statuses.SearchTerm,  users.screenname, 
                                      users.fullname, users.description, users.avatarURL, statuses.statustypes
                           FROM       statuses INNER JOIN users ON statuses.userid = users.id";
 
@@ -53,7 +53,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0011";
+        private const string DBVersion = "0012";
         private static string DBPath = ClientSettings.CacheDir + "\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -170,6 +170,7 @@ namespace LocalStorage
                             in_reply_to_id VARCHAR(50),
                             favorited BIT,
                             clientSource VARCHAR(50),
+                            SearchTerms NVARCHAR(255),
                             accountSummary VARCHAR(50),
                             statustypes SMALLINT(2),
                             UNIQUE (id) )
@@ -212,13 +213,6 @@ namespace LocalStorage
                                     (searchName NVARCHAR(50) PRIMARY KEY NOT NULL,
                                      searchTerms NVARCHAR(255))";
                         comm.ExecuteNonQuery();
-
-                        comm.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS statusesInSearch
-                                    (searchName NVARCHAR(50),
-                                    statusID VARCHAR(50))";
-                        comm.ExecuteNonQuery();
-
 
                         t.Commit();
                         conn.Close();
@@ -299,21 +293,22 @@ namespace LocalStorage
                                               {
                                                   id = r.GetString(0),
                                                   text = r.GetString(1),
-                                                  TypeofMessage = ((StatusTypes) r.GetInt32(13)),
+                                                  TypeofMessage = ((StatusTypes) r.GetInt32(14)),
                                                   createdAt = r.GetDateTime(3),
                                                   in_reply_to_status_id = r.GetString(4),
                                                   favorited = r.GetString(5),
                                                   source = r.GetString(6),
-                                                  AccountSummary = r.GetString(7)
+                                                  AccountSummary = r.GetString(7),
+                                                  SearchTerms = r.GetString(10)
                                               };
 
                             var u = new User
                                         {
                                             id = r.GetString(2),
                                             screen_name = r.GetString(9),
-                                            name = r.GetString(10),
-                                            description = r.GetString(11),
-                                            profile_image_url = r.GetString(12)
+                                            name = r.GetString(11),
+                                            description = r.GetString(12),
+                                            profile_image_url = r.GetString(13)
                                         };
 
                             newStat.user = u;

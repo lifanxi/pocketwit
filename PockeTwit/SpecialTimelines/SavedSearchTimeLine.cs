@@ -19,7 +19,7 @@ namespace PockeTwit.SpecialTimelines
 
         public string GetConstraints()
         {
-            return "";
+            return " AND status.SearchTerm='" + SearchPhrase + "' ";
         }
 
         public override string ToString()

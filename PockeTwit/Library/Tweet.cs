@@ -61,6 +61,9 @@ namespace PockeTwit.Library
         public string favorited { get; set; }
 
         [XmlIgnore]
+        public string SearchTerms { get; set; }
+
+        [XmlIgnore]
         public string TimeStamp
         {
             get
@@ -390,9 +393,9 @@ namespace PockeTwit.Library
         #endregion Methods 
 
         private const string SQLSave =
-            @"INSERT INTO statuses (id, fulltext, userid, timestamp, in_reply_to_id, favorited, clientSource, accountSummary, statustypes)
+            @"INSERT INTO statuses (id, fulltext, userid, timestamp, in_reply_to_id, favorited, clientSource, accountSummary, statustypes, SearchTerms)
                                           VALUES
-                                        (@id, @fulltext, @userid, @timestamp, @in_reply_to_id, @favorited, @clientSource, @accountSummary, @statustypes);";
+                                        (@id, @fulltext, @userid, @timestamp, @in_reply_to_id, @favorited, @clientSource, @accountSummary, @statustypes, @searchTerms);";
 
         private const string SQLCheck = @"SELECT COUNT(id) from statuses WHERE id=@id;";
         private const string SQLUpdateTypes = @"UPDATE statuses SET statustypes=@type WHERE id=@id";
@@ -427,6 +430,7 @@ namespace PockeTwit.Library
                 comm.Parameters.Add(new SQLiteParameter("@favorited", favorited));
                 comm.Parameters.Add(new SQLiteParameter("@clientSource", source));
                 comm.Parameters.Add(new SQLiteParameter("@accountSummary", AccountSummary));
+                comm.Parameters.Add(new SQLiteParameter("@SearchTerms", SearchTerms));
                 comm.Parameters.Add(new SQLiteParameter("@statustypes", TypeofMessage));
 
                 try
