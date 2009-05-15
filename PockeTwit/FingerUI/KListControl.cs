@@ -14,7 +14,7 @@ namespace FingerUI
         private System.Threading.Timer animationTimer;
         private System.Threading.Timer errorTimer;
         public delegate void delProgress(int itemnumber, int totalnumber);
-
+        private bool _disposed = false;
         public event delProgress Progress = delegate { };
 
         private delegate void delPaint();
@@ -301,6 +301,8 @@ namespace FingerUI
                     {
                         _FirstView = false;
                     }
+                    //after saving new account this is being disposed.
+                    //should make a check and do something else than rerender.
                     else if (OldSize != new Point(this.Width, this.Height))
                     {
                         Application.DoEvents();
@@ -795,6 +797,14 @@ namespace FingerUI
 
 		// Protected Methods (11) 
 
+        protected bool Disposed
+        {
+            get
+            {
+                return _disposed;
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -806,6 +816,7 @@ namespace FingerUI
                 base.Dispose(disposing);
             }
             catch(ObjectDisposedException ex){}
+            _disposed = true;
         }
 
         protected override void OnGotFocus(EventArgs e)
