@@ -359,6 +359,12 @@ namespace Yedda
                 //Don't send the picture to twitter or any service just yet.
                 contents.Append(CreateContentPartString(header, "s", "none"));
 
+                string hashTags = FindHashTags(ppo.Message,",",32);
+                if (!string.IsNullOrEmpty(hashTags)) 
+                {
+                    contents.Append(CreateContentPartString(header, "ht", hashTags));
+                }
+
                 if (!string.IsNullOrEmpty(ppo.Message))
                 {
                     contents.Append(CreateContentPartString(header, "message", ppo.Message));
@@ -369,7 +375,11 @@ namespace Yedda
                     contents.Append(CreateContentPartString(header, "action", "postMediaUrl"));
                 }
 
-                contents.Append(CreateContentPartMedia(header));
+
+
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartMedia(header, filename));
 
                 //Create the form message to send in bytes
 
@@ -443,7 +453,9 @@ namespace Yedda
                     contents.Append(CreateContentPartString(header, "latlong", string.Format("{0},{1}",ppo.Lat,ppo.Lon) ));
                 }
 
-                contents.Append(CreateContentPartMedia(header));
+                int imageIdStartIndex = ppo.Filename.LastIndexOf('\\') + 1;
+                string filename = ppo.Filename.Substring(imageIdStartIndex, ppo.Filename.Length - imageIdStartIndex);
+                contents.Append(CreateContentPartMedia(header, filename));
 
                 //Create the form message to send in bytes
 
@@ -618,13 +630,13 @@ namespace Yedda
 
         #region helper functions
 
-        private string CreateContentPartMedia(string header)
+        private string CreateContentPartMedia(string header, string filename)
         {
             StringBuilder contents = new StringBuilder();
 
             contents.Append(header);
             contents.Append("\r\n");
-            contents.Append(string.Format("Content-Disposition:form-data; name=\"i\";filename=\"image.jpg\"\r\n"));
+            contents.Append(string.Format("Content-Disposition:form-data; name=\"i\";filename=\"{0}\"\r\n",filename));
             contents.Append("Content-Type: image/jpeg\r\n");
             contents.Append("\r\n");
 

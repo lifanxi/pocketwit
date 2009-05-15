@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Yedda
 {
@@ -421,83 +422,53 @@ namespace Yedda
 
         #region helper methods
 
-        //protected string CreateContentPartString(string header, string dispositionName, string valueToSend)
-        //{
-        //    StringBuilder contents = new StringBuilder();
+        /// <summary>
+        /// Find all hashtags in a message and return them in a tagstring.
+        /// </summary>
+        /// <param name="message">Full message</param>
+        /// <param name="seperator">Seperator between tags</param>
+        /// <returns>String filled with tags seperated by seperator.</returns>
+        protected string FindHashTags(string message, string seperator, int maxLength)
+        {
+            Regex hashTags = new Regex(@"([#][\w_]+)");
+            MatchCollection hashTagsFound = hashTags.Matches(message);
+            string result = string.Empty;
+            bool first = true;
 
-        //    contents.Append(header);
-        //    contents.Append("\r\n");
-        //    contents.Append(String.Format("Content-Disposition: form-data;name=\"{0}\"\r\n", dispositionName));
-        //    contents.Append("\r\n");
-        //    contents.Append(valueToSend);
-        //    contents.Append("\r\n");
+            foreach (Match match in hashTagsFound)
+            {
+                if (first)
+                {
+                    result = match.ToString();
+                    first = false;
+                }
+                else
+                {
+                    if ((result.Length + seperator.Length + match.Length) > maxLength)
+                    {
+                        return result;
+                    }
+                    result += seperator;
+                    result += match.ToString();
+                }
+            }
+            return result;
+        }
 
-        //    return contents.ToString();
-        //}
+        protected bool CanUploadFileType(string filename)
+        {
+            int extensionStartIndex = filename.LastIndexOf('.') + 1;
+            string fileExtension = filename.Substring(extensionStartIndex, filename.Length - extensionStartIndex);
 
-        //protected string CreateContentPartMedia(string header)
-        //{
-        //    StringBuilder contents = new StringBuilder();
-
-        //    contents.Append(header);
-        //    contents.Append("\r\n");
-        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"i\";filename=\"image.jpg\"\r\n"));
-        //    contents.Append("Content-Type: image/jpeg\r\n");
-        //    contents.Append("\r\n");
-
-        //    return contents.ToString();
-        //}
-
-        //protected string CreateContentPartPicture(string header)
-        //{
-        //    return CreateContentPartPicture(header,"image.jpg");
-        //}
-
-        //protected string CreateContentPartPicture(string header, string filename)
-        //{
-        //    StringBuilder contents = new StringBuilder();
-
-        //    contents.Append(header);
-        //    contents.Append("\r\n");
-        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"media\";filename=\"{0}\"\r\n", filename));
-        //    contents.Append("Content-Type: image/jpeg\r\n");
-        //    contents.Append("\r\n");
-
-        //    return contents.ToString();
-        //}
-
-        //protected string CreateContentPartPicture(string header, string dispositionName, string imageName)
-        //{
-        //    StringBuilder contents = new StringBuilder();
-
-        //    contents.Append(header);
-        //    contents.Append("\r\n");
-        //    contents.Append(string.Format("Content-Disposition:form-data; name=\"{0}\";filename=\"{1}\"\r\n", dispositionName,imageName));
-        //    contents.Append("Content-Type: image/jpeg\r\n");
-        //    contents.Append("\r\n");
-
-        //    return contents.ToString();
-        //}
-
-        //protected string CreateContentPartStringForm(string header, string dispositionName, string valueToSend, string contentType)
-        //{
-        //    //header starts with --
-
-        //    StringBuilder contents = new StringBuilder();
-
-        //    contents.Append(header);
-        //    contents.Append("\r\n");
-        //    contents.Append(String.Format("Content-Disposition: form-data; name=\"{0}\"\r\n", dispositionName));
-        //    contents.Append(String.Format("Content-Type: {0}\r\n", contentType)); //application/octet-stream
-        //    contents.Append("\r\n");
-        //    contents.Append(valueToSend);
-        //    contents.Append("\r\n");
-        //    contents.Append(header);
-        //    contents.Append("--\r\n");
-
-        //    return contents.ToString();
-
-        //}
+            foreach (string extension in API_FILETYPES)
+            {
+                if (fileExtension.ToUpper().CompareTo(extension.ToUpper()) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
       
 
