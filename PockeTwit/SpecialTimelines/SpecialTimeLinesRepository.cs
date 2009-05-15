@@ -24,11 +24,12 @@ namespace PockeTwit.SpecialTimelines
         {
             /* TODO -- DELETE THIS TEST CODE WHEN YOU'VE GOT A WAY TO 
              * DEFINE SAVED SEARCHES
+             */
            SavedSearchTimeLine t = new SavedSearchTimeLine();
             t.name = "PockeTwit";
-            t.SearchPhrase = "pocketwit OR pockettwit";
+            t.SearchPhrase = "q=pocketwit+OR+pockettwit";
             Items.Add(t.name, t);
-             */
+             
         }
 
         private static readonly Dictionary<string, ISpecialTimeLine> Items =
@@ -190,16 +191,20 @@ namespace PockeTwit.SpecialTimelines
                                 if (item.Timelinetype == TimeLineType.UserGroup)
                                 {
                                     UserGroupTimeLine group = (UserGroupTimeLine) item;
-                                    foreach (var groupItem in group.Terms)
+                                    if (group.Terms != null)
                                     {
-                                        comm.Parameters.Clear();
-                                        comm.CommandText =
-                                            "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
-                                        comm.Parameters.Add(new SQLiteParameter("@pairid", group.name + groupItem.Term));
-                                        comm.Parameters.Add(new SQLiteParameter("@name", group.name));
-                                        comm.Parameters.Add(new SQLiteParameter("@userid", groupItem.Term));
-                                        comm.Parameters.Add(new SQLiteParameter("@exclusive", groupItem.Exclusive));
-                                        comm.ExecuteNonQuery();
+                                        foreach (var groupItem in group.Terms)
+                                        {
+                                            comm.Parameters.Clear();
+                                            comm.CommandText =
+                                                "INSERT INTO usersInGroups (id, groupname, userid, exclusive) VALUES (@pairid, @name, @userid, @exclusive)";
+                                            comm.Parameters.Add(new SQLiteParameter("@pairid",
+                                                                                    group.name + groupItem.Term));
+                                            comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+                                            comm.Parameters.Add(new SQLiteParameter("@userid", groupItem.Term));
+                                            comm.Parameters.Add(new SQLiteParameter("@exclusive", groupItem.Exclusive));
+                                            comm.ExecuteNonQuery();
+                                        }
                                     }
                                 }
                                 //TODO ELSE SAVE SEARCH TERM

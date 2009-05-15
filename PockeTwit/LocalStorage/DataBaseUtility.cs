@@ -53,7 +53,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0012";
+        private const string DBVersion = "0013";
         private static string DBPath = ClientSettings.CacheDir + "\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -170,7 +170,7 @@ namespace LocalStorage
                             in_reply_to_id VARCHAR(50),
                             favorited BIT,
                             clientSource VARCHAR(50),
-                            SearchTerms NVARCHAR(255),
+                            SearchTerm NVARCHAR(255),
                             accountSummary VARCHAR(50),
                             statustypes SMALLINT(2),
                             UNIQUE (id) )
@@ -211,7 +211,7 @@ namespace LocalStorage
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS savedSearches
                                     (searchName NVARCHAR(50) PRIMARY KEY NOT NULL,
-                                     searchTerms NVARCHAR(255))";
+                                     searchTerm NVARCHAR(255))";
                         comm.ExecuteNonQuery();
 
                         t.Commit();
@@ -299,18 +299,17 @@ namespace LocalStorage
                                                   favorited = r.GetString(5),
                                                   source = r.GetString(6),
                                                   AccountSummary = r.GetString(7),
-                                                  SearchTerms = r.GetString(10)
+                                                  SearchTerm = r.GetString(10)
                                               };
 
                             var u = new User
                                         {
                                             id = r.GetString(2),
-                                            screen_name = r.GetString(9),
+                                            screen_name = r.GetString(10),
                                             name = r.GetString(11),
                                             description = r.GetString(12),
                                             profile_image_url = r.GetString(13)
                                         };
-
                             newStat.user = u;
                             cache.Add(newStat);
                         }

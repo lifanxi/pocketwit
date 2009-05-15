@@ -543,7 +543,7 @@ namespace PockeTwit
                 {
                     foreach (status item in Items)
                     {
-                        item.SearchTerms = searchLine.SearchPhrase;
+                        item.SearchTerm = searchLine.SearchPhrase;
                     }
                     tempLine.AddRange(Items);
                 }
