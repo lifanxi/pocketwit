@@ -237,7 +237,7 @@ namespace PockeTwit.SpecialTimelines
             return false;
         }
 
-        internal static ISpecialTimeLine GetFromName(string listName)
+        internal static ISpecialTimeLine GetFromListName(string listName)
         {
             ISpecialTimeLine ret = null;
             foreach (var t in GetList())
@@ -250,6 +250,18 @@ namespace PockeTwit.SpecialTimelines
             return ret;
         }
 
+        internal static ISpecialTimeLine GetFromReadableName(string Name)
+        {
+            ISpecialTimeLine ret = null;
+            foreach (var t in GetList())
+            {
+                if (t.name == Name)
+                {
+                    ret = t;
+                }
+            }
+            return ret;
+        }
 
         public static void Export()
         {
