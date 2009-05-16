@@ -25,11 +25,13 @@ namespace PockeTwit.SpecialTimelines
             /* TODO -- DELETE THIS TEST CODE WHEN YOU'VE GOT A WAY TO 
              * DEFINE SAVED SEARCHES
              */
+
+            /*
            SavedSearchTimeLine t = new SavedSearchTimeLine();
             t.name = "PockeTwit";
             t.SearchPhrase = "q=pocketwit+OR+pockettwit";
             Items.Add(t.name, t);
-             
+             */
         }
 
         private static readonly Dictionary<string, ISpecialTimeLine> Items =

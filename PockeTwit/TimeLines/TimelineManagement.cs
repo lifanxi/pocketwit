@@ -283,7 +283,12 @@ namespace PockeTwit
 
         public Library.status[] GetGroupedTimeLine(ISpecialTimeLine t)
         {
-            return LocalStorage.DataBaseUtility.GetList(TimeLineType.Friends, ClientSettings.MaxTweets, t.GetConstraints()).ToArray();
+            TimeLineType timeLineType = TimeLineType.Friends;
+            if(t is SavedSearchTimeLine)
+            {
+                timeLineType = TimeLineType.Searches;
+            }
+            return LocalStorage.DataBaseUtility.GetList(timeLineType, ClientSettings.MaxTweets, t.GetConstraints()).ToArray();
         }
 
         private void GetMessagesTimeLine(object o)

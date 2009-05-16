@@ -328,6 +328,8 @@ namespace LocalStorage
                     return SQLFetchFriends;
                 case TimelineManagement.TimeLineType.Messages:
                     return SQLFetchRepliesAndMessages;
+                case TimelineManagement.TimeLineType.Searches:
+                    return SQLFetchSearches;
             }
             return null;
         }
