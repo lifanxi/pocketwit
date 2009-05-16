@@ -1857,8 +1857,8 @@ namespace PockeTwit
                         ShowSpecialTimeLine(t);
                     }
                 }
-                
 
+                MessageBox.Show(Arg);
 
             }
 
