@@ -39,7 +39,7 @@ namespace PockeTwit.TimeLines
             ISpecialTimeLine t = null;
             if (ListName.StartsWith("Grouped_TimeLine_"))
             {
-                t = SpecialTimeLinesRepository.GetFromName(ListName);
+                t = SpecialTimeLinesRepository.GetFromListName(ListName);
             }
             SetLastSelected(ListName,selectedStatus,t);
         }

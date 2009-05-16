@@ -1834,10 +1834,12 @@ namespace PockeTwit
             statList.OpenRightMenu();
         }
 
+        //handle requests from outside the UI -- either CLI args or custom messages
         public void ProcessArgs(string[] args)
         {
             if (args.Length > 0)
             {
+                // QuickPost called
                 string Arg = args[0];
 
                 if (Arg == "/QuickPost")
@@ -1846,6 +1848,16 @@ namespace PockeTwit
                 }
 
                 // the today plugin passes /Group=XXXXX as argument
+                if(Arg.StartsWith("/Group="))
+                {
+                    string GroupName = Arg.Substring(Arg.IndexOf('=') + 1);
+                    ISpecialTimeLine t = SpecialTimeLinesRepository.GetFromReadableName(GroupName);
+                    if (t != null)
+                    {
+                        ShowSpecialTimeLine(t);
+                    }
+                }
+                
 
 
             }
