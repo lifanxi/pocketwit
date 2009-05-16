@@ -1834,6 +1834,7 @@ namespace FingerUI
             ClickablesControl.Width = this.Width - 40;
             ClickablesControl.Height = this.Height - 40;
             ClickablesControl.Visible = true;
+            Invalidate();
         }
 
         private void UnselectCurrentItem()
