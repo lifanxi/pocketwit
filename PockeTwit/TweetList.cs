@@ -1850,25 +1850,23 @@ namespace PockeTwit
                 // the today plugin passes /Group=XXXXX as argument
                 if (Arg.StartsWith("/Group="))
                 {
+                    BringToFront();
                     string GroupName = Arg.Substring(Arg.IndexOf('=') + 1);
                     ISpecialTimeLine t = SpecialTimeLinesRepository.GetFromReadableName(GroupName);
                     if (t != null)
                     {
                         ShowSpecialTimeLine(t);
-                        return;
                     }
                     if (GroupName == "Friends TimeLine")
                     {
                         ShowFriendsTimeLine();
-                        return;
                     }
                     if (GroupName == "Messages TimeLine")
                     {
                         ShowMessagesTimeLine();
-                        return;
                     }
-
-                    MessageBox.Show(Arg);
+                    
+                    
                 }
             }
 
