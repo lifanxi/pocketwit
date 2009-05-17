@@ -277,12 +277,12 @@ namespace PockeTwit.Library
             foreach (var result in results)
             {
                 var resultHash = (System.Collections.Hashtable) result;
-                ret.Add(DeserializeSingleJSONStatus(resultHash));   
+                ret.Add(DeserializeSingleJSONStatus(resultHash, TypeOfMessage));   
             }
             return ret.ToArray();
             
         }
-        private static status DeserializeSingleJSONStatus(System.Collections.Hashtable jsonTable)
+        private static status DeserializeSingleJSONStatus(System.Collections.Hashtable jsonTable, StatusTypes TypeOfMessage)
         {
             
             var u = new User
@@ -290,7 +290,10 @@ namespace PockeTwit.Library
                             id = jsonTable["from_user_id"].ToString(),
                             needsFetching = true,
                             screen_name = (string) jsonTable["from_user"],
-                            profile_image_url = (string) jsonTable["profile_image_url"]
+                            profile_image_url = (string) jsonTable["profile_image_url"],
+                            //Search results don't contain this info!
+                            name = "",
+                            description = ""
                         };
 
             var ret = new status
@@ -299,8 +302,13 @@ namespace PockeTwit.Library
                               text = (string) jsonTable["text"],
                               id = jsonTable["id"].ToString(),
                               created_at = (string) jsonTable["created_at"],
-                              source = (string) jsonTable["source"]
+                              source = (string) jsonTable["source"],
+                              TypeofMessage = TypeOfMessage,
+                              //Search results don't contain this info!
+                              in_reply_to_status_id = "",
+                              favorited = ""
                           };
+            
             return ret;
         }
 
