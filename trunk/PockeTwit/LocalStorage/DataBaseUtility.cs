@@ -300,7 +300,7 @@ namespace LocalStorage
                                                   source = r.GetString(6),
                                                   AccountSummary = r.GetString(7),
                                                   SearchTerm = r.GetString(10)
-                                              };
+                                              };    
 
                             var u = new User
                                         {
