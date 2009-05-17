@@ -545,6 +545,7 @@
       <DependentUpon>userListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Yedda\ImgLy.cs" />
+    <Compile Include="Yedda\JSON.cs" />
     <Compile Include="Yedda\PictureServiceBase.cs" />
     <Compile Include="Yedda\PikChur.cs" />
     <Compile Include="Yedda\PixIm.cs" />

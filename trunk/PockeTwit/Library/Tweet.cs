@@ -268,6 +268,41 @@ namespace PockeTwit.Library
             return statuses;
         }
 
+        public static status[] DeserializeArrayFromJSON(string response, Twitter.Account Accournt, StatusTypes TypeOfMessage)
+        {
+            var ret = new List<status>();
+            var List = (System.Collections.Hashtable)JSON.JsonDecode(response);
+            if (List == null) { return null; }
+            var results = (System.Collections.ArrayList)List["results"];
+            foreach (var result in results)
+            {
+                var resultHash = (System.Collections.Hashtable) result;
+                ret.Add(DeserializeSingleJSONStatus(resultHash));   
+            }
+            return ret.ToArray();
+            
+        }
+        private static status DeserializeSingleJSONStatus(System.Collections.Hashtable jsonTable)
+        {
+            
+            var u = new User
+                        {
+                            id = jsonTable["from_user_id"].ToString(),
+                            needsFetching = true,
+                            screen_name = (string) jsonTable["from_user"],
+                            profile_image_url = (string) jsonTable["profile_image_url"]
+                        };
+
+            var ret = new status
+                          {
+                              user = u,
+                              text = (string) jsonTable["text"],
+                              id = jsonTable["id"].ToString(),
+                              created_at = (string) jsonTable["created_at"],
+                              source = (string) jsonTable["source"]
+                          };
+            return ret;
+        }
 
         public static status[] DeserializeFromAtom(string response)
         {

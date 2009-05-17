@@ -206,7 +206,7 @@ namespace PockeTwit
             {
                 ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Search);
             }
-            return Library.status.DeserializeFromAtom(response, t.AccountInfo);
+            return Library.status.DeserializeArrayFromJSON(response, t.AccountInfo, StatusTypes.SearchResult);
         }
 
         public PockeTwit.Library.status[] GetFavorites()
