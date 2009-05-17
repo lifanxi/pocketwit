@@ -1,10 +1,5 @@
 ﻿using System;
-
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
@@ -12,31 +7,31 @@ namespace FingerUI
 {
     public partial class FullScreenTweet : UserControl
     {
-        const string HTML_TAG_PATTERN = "<.*?>";
+        const string HTMLTagPattern = "<.*?>";
 
         public PockeTwit.Library.status Status;
-        private bool _Visible = false;
+        private bool _visible;
         public new bool Visible
         {
             get
             {
-                return _Visible;
+                return _visible;
             }
             set
             {
-                _Visible = value;
+                _visible = value;
                 base.Visible = value;
-                if (_Visible)
+                if (_visible)
                 {
-                    PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
+                    PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded += ThrottledArtGrabberNewArtWasDownloaded;
                 }
                 else
                 {
+                    PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded -= ThrottledArtGrabberNewArtWasDownloaded;
                     if (avatarBox.Image != null)
                     {
                         avatarBox.Image.Dispose();
                     }
-                    PockeTwit.ThrottledArtGrabber.NewArtWasDownloaded -= new PockeTwit.ThrottledArtGrabber.ArtIsReady(ThrottledArtGrabber_NewArtWasDownloaded);
                 }
             }
         }
@@ -47,7 +42,7 @@ namespace FingerUI
             {
                 lnkDismiss.Visible = false;
             }
-            _FontSize = lblText.Font.Size;
+            _fontSize = lblText.Font.Size;
             PockeTwit.Themes.FormColors.SetColors(this);
             avatarBox.Width = ClientSettings.SmallArtSize;
             avatarBox.Height = ClientSettings.SmallArtSize;
@@ -58,39 +53,43 @@ namespace FingerUI
             PockeTwit.Themes.FormColors.SetColors(this);
         }
 
-        private delegate void delUpdateArt(string Argument);
-        void ThrottledArtGrabber_NewArtWasDownloaded(string Argument)
+        private delegate void DelUpdateArt(string argument);
+        void ThrottledArtGrabberNewArtWasDownloaded(string argument)
         {
             
             if (Status != null)
             {
-                if (Argument == Status.user.profile_image_url)
+                if (argument == Status.user.profile_image_url)
                 {
                     if (InvokeRequired)
                     {
-                        delUpdateArt d = new delUpdateArt(ThrottledArtGrabber_NewArtWasDownloaded);
-                        this.Invoke(d, Argument);
+                        var d = new DelUpdateArt(ThrottledArtGrabberNewArtWasDownloaded);
+                        Invoke(d, argument);
                     }
                     else
                     {
-                        avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.profile_image_url);
+                        try
+                        {
+                            avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.profile_image_url);
+                        }
+                        catch(ObjectDisposedException){}
                     }
                 }
             }
         }
 
-        private float _FontSize;
+        private float _fontSize;
         public float FontSize
         {
-            get { return _FontSize; }
+            get { return _fontSize; }
             set
             {
                 if (value > 5)
                 {
-                    _FontSize = value;
-                    using (Font TextFont = new Font(FontFamily.GenericSansSerif, value, FontStyle.Regular))
+                    _fontSize = value;
+                    using (var textFont = new Font(FontFamily.GenericSansSerif, value, FontStyle.Regular))
                     {
-                        lblText.Font = TextFont;
+                        lblText.Font = textFont;
                     }
                 }
             }
@@ -102,7 +101,7 @@ namespace FingerUI
                 Cursor.Current = Cursors.WaitCursor;
                 avatarBox.Image = PockeTwit.ThrottledArtGrabber.GetArt(Status.user.profile_image_url);
                 lblUserName.Text = Status.user.screen_name;
-                lblTime.Text = Status.TimeStamp.ToString();
+                lblTime.Text = Status.TimeStamp;
                 if(string.IsNullOrEmpty(Status.source))
                 {
                     lblSource.Text = "";
@@ -115,7 +114,7 @@ namespace FingerUI
                 string fullText;
                 if (Yedda.ShortText.isShortTextURL(Status.text))
                 {
-                    string[] splitup = Status.text.Split(new char[] { ' ' });
+                    string[] splitup = Status.text.Split(new[] { ' ' });
                     fullText = Yedda.ShortText.getFullText(splitup[splitup.Length - 1]);
                 }
                 else
@@ -133,13 +132,13 @@ namespace FingerUI
 
         private void lnkDismiss_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
+            Visible = false;
         }
         static string StripHTML(string inputString)
         {
             if (string.IsNullOrEmpty(inputString)) { return null; }
             return Regex.Replace
-              (inputString, HTML_TAG_PATTERN, string.Empty);
+              (inputString, HTMLTagPattern, string.Empty);
         }
     }
 }
