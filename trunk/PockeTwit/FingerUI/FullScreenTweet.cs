@@ -108,8 +108,8 @@ namespace FingerUI
                 }
                 else
                 {
-                    
-                    lblSource.Text = "from "+StripHTML(Status.source);
+
+                    lblSource.Text = "from " + StripHTML(System.Web.HttpUtility.HtmlDecode(Status.source));
                 }
                 string fullText;
                 if (Yedda.ShortText.isShortTextURL(Status.text))
