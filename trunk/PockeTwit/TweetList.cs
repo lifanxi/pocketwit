@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using FingerUI;
+using PockeTwit.Library;
 using PockeTwit.SpecialTimelines;
 using PockeTwit.TimeLines;
 using Microsoft.WindowsCE.Forms;
@@ -1655,6 +1656,7 @@ namespace PockeTwit
             {
                 this.statList.Visible = false;
                 IsLoaded = false;
+                SavedSearchTimeLine SavedSearch;
                 if (f.ShowDialog() == DialogResult.Cancel)
                 {
                     IsLoaded = true;
@@ -1667,15 +1669,24 @@ namespace PockeTwit
                 this.statList.Visible = true;
                 f.Hide();
                 string SearchString = f.SearchText;
+                SavedSearch = f.SavedSearch;
+                if(SavedSearch!=null)
+                {
+                    AddGroupSelectMenuItem(SavedSearch);
+                }
                 f.Close();
 
-                this.statList.Visible = true;
+                statList.Visible = true;
 
-                ShowSearchResults(SearchString);
+                ShowSearchResults(SearchString, SavedSearch!=null);
             }
         }
 
         private void ShowSearchResults(string SearchString)
+        {
+            ShowSearchResults(SearchString,false);
+        }
+        private void ShowSearchResults(string SearchString, bool saveThem)
         {
             UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
@@ -1687,8 +1698,13 @@ namespace PockeTwit
 
             Yedda.Twitter Conn = GetMatchingConnection(CurrentlySelectedAccount);
             SwitchToList("Search_TimeLine");
-            this.statList.ClearVisible();
-            AddStatusesToList(Manager.SearchTwitter(Conn, SearchString));
+            statList.ClearVisible();
+            List<Library.status> searchResults = new List<status>(Manager.SearchTwitter(Conn, SearchString));
+            if (saveThem)
+            {
+                LocalStorage.DataBaseUtility.SaveItems(searchResults);
+            }
+            AddStatusesToList(searchResults.ToArray());
             ChangeCursor(Cursors.Default);
         }
 

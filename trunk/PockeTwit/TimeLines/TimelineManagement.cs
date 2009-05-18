@@ -206,7 +206,15 @@ namespace PockeTwit
             {
                 ErrorCleared(t.AccountInfo, Yedda.Twitter.ActionType.Search);
             }
-            return Library.status.DeserializeArrayFromJSON(response, t.AccountInfo, StatusTypes.SearchResult);
+            var Items = Library.status.DeserializeArrayFromJSON(response, t.AccountInfo, StatusTypes.SearchResult);
+            if (Items.Length > 0)
+            {
+                foreach (status item in Items)
+                {
+                    item.SearchTerm = SearchString;
+                }
+            }
+            return Items;
         }
 
         public PockeTwit.Library.status[] GetFavorites()
@@ -544,14 +552,7 @@ namespace PockeTwit
                 SavedSearchTimeLine searchLine = (SavedSearchTimeLine) specialTimeLine;
                 //Need a way to specify "since_id" here too.
                 status[] Items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
-                if (Items.Length > 0)
-                {
-                    foreach (status item in Items)
-                    {
-                        item.SearchTerm = searchLine.SearchPhrase;
-                    }
-                    tempLine.AddRange(Items);
-                }
+                tempLine.AddRange(Items);
             }
 
             if (tempLine.Count > 0)

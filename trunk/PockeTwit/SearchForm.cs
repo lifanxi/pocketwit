@@ -6,12 +6,15 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using PockeTwit.SpecialTimelines;
 
 namespace PockeTwit
 {
     public partial class SearchForm : Form
     {
         private delegate void delEnableDistance();
+
+        public SpecialTimelines.SavedSearchTimeLine SavedSearch;
 
         public string GPSLocation = null;
         private LocationManager Locator = new LocationManager();
@@ -135,6 +138,7 @@ namespace PockeTwit
 
         private void menuSearch_Click(object sender, EventArgs e)
         {
+            
             if (DetectDevice.DeviceType == DeviceType.Professional)
             {
                 if (!string.IsNullOrEmpty(txtSearch.Text) && !ClientSettings.SearchItems.Contains(txtSearch.Text))
@@ -186,7 +190,31 @@ namespace PockeTwit
             }
             this.SearchText = b.ToString();
             
+            if(chkSaveSearch.Checked && !string.IsNullOrEmpty(txtGroupName.Text))
+            {
+                if(SureTheyWantToSave())
+                {
+                    SavedSearch = new SavedSearchTimeLine();
+                    SavedSearch.name = txtGroupName.Text;
+                    SavedSearch.SearchPhrase = this.SearchText;
+                    SpecialTimeLinesRepository.Add(SavedSearch);
+                }
+                else
+                {
+                    chkSaveSearch.Checked = false;
+                    return;
+                }
+                
+            }
+
             this.DialogResult = DialogResult.OK;
+        }
+
+        private bool SureTheyWantToSave()
+        {
+            return MessageBox.Show("Saved searches can affect battery life. Are you sure you want to add this?",
+                                   "Saved Search", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                                   MessageBoxDefaultButton.Button2) == DialogResult.Yes;
         }
 
 
@@ -242,6 +270,11 @@ namespace PockeTwit
             this.Controls.Add(this.txtSearch);
             this.ResumeLayout(false);
 
+        }
+
+        private void chkSaveSearch_Click(object sender, EventArgs e)
+        {
+            txtGroupName.Enabled = chkSaveSearch.Checked;
         }
     }
 }
