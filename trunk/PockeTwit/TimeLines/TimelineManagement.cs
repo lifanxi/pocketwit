@@ -143,7 +143,7 @@ namespace PockeTwit
             }
         }
 
-        private void updateTimer_Tick(object sender, EventArgs e)
+        public void updateTimer_Tick(object sender, EventArgs e)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(BackgroundUpdateBoth));   
         }
