@@ -68,7 +68,7 @@ namespace PockeTwit.SpecialTimelines
             return s.ToArray();
         }
 
-        public static void Add(UserGroupTimeLine newLine)
+        public static void Add(ISpecialTimeLine newLine)
         {
             lock (Items)
             {
