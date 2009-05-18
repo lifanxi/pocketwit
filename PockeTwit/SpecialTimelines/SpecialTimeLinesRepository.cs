@@ -20,20 +20,6 @@ namespace PockeTwit.SpecialTimelines
 
         #endregion
 
-        static SpecialTimeLinesRepository()
-        {
-            /* TODO -- DELETE THIS TEST CODE WHEN YOU'VE GOT A WAY TO 
-             * DEFINE SAVED SEARCHES
-             */
-
-            /*
-           SavedSearchTimeLine t = new SavedSearchTimeLine();
-            t.name = "PockeTwit";
-            t.SearchPhrase = "q=pocketwit+OR+pockettwit";
-            Items.Add(t.name, t);
-             */
-        }
-
         private static readonly Dictionary<string, ISpecialTimeLine> Items =
             new Dictionary<string, ISpecialTimeLine>();
 
@@ -80,7 +66,7 @@ namespace PockeTwit.SpecialTimelines
             }
         }
 
-        public static void Remove(UserGroupTimeLine oldLine)
+        public static void Remove(ISpecialTimeLine oldLine)
         {
             lock (Items)
             {
@@ -97,12 +83,23 @@ namespace PockeTwit.SpecialTimelines
                 {
                     using (var comm = new SQLiteCommand(conn))
                     {
-                        comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname;";
-                        comm.Parameters.Add(new SQLiteParameter("@groupname", oldLine.name));
-                        comm.ExecuteNonQuery();
+                        if (oldLine is UserGroupTimeLine)
+                        {
+                            var line = (UserGroupTimeLine) oldLine;
+                            comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname;";
+                            comm.Parameters.Add(new SQLiteParameter("@groupname", line.name));
+                            comm.ExecuteNonQuery();
 
-                        comm.CommandText = "DELETE FROM groups WHERE groupname=@groupname;";
-                        comm.ExecuteNonQuery();
+                            comm.CommandText = "DELETE FROM groups WHERE groupname=@groupname;";
+                            comm.ExecuteNonQuery();
+                        }
+                        else
+                        {
+                            var line = (SavedSearchTimeLine) oldLine;
+                            comm.CommandText = "DELETE FROM savedSearches WHERE searchName=@searchName;";
+                            comm.Parameters.Add(new SQLiteParameter("@searcnName", line.name));
+                            comm.ExecuteNonQuery();
+                        }
                     }
                     t.Commit();
                 }
@@ -163,6 +160,20 @@ namespace PockeTwit.SpecialTimelines
                             thisLine.AddItem(userID, screenName, exclusive);
                         }
                     }
+
+                    comm.CommandText =
+                        "SELECT searchName, searchTerm from savedSearches;";
+                    using(var r = comm.ExecuteReader())
+                    {
+                        while(r.Read())
+                        {
+                            var searchName = r.GetString(0);
+                            var searchTerm = r.GetString(1);
+
+                            var savedLine = new SavedSearchTimeLine() {name = searchName, SearchPhrase = searchTerm};
+                            Add(savedLine);
+                        }
+                    }
                 }
             }
         }
@@ -179,20 +190,24 @@ namespace PockeTwit.SpecialTimelines
                     {
                         foreach (var item in Items.Values)
                         {
+                            
                             using (var comm = new SQLiteCommand(conn))
                             {
-                                comm.CommandText = "INSERT INTO groups (groupname) VALUES (@name);";
-                                comm.Parameters.Add(new SQLiteParameter("@name", item.name));
-
-                                comm.ExecuteNonQuery();
-
-                                comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname";
-                                comm.Parameters.Add(new SQLiteParameter("@groupname", item.name));
-                                comm.ExecuteNonQuery();
-                                comm.Parameters.Clear();
+                                //UserGroup
                                 if (item.Timelinetype == TimeLineType.UserGroup)
                                 {
-                                    UserGroupTimeLine group = (UserGroupTimeLine) item;
+                                    var group = (UserGroupTimeLine)item;
+
+                                    comm.CommandText = "INSERT INTO groups (groupname) VALUES (@name);";
+                                    comm.Parameters.Add(new SQLiteParameter("@name", group.name));
+
+                                    comm.ExecuteNonQuery();
+
+                                    comm.CommandText = "DELETE FROM usersInGroups WHERE groupname=@groupname";
+                                    comm.Parameters.Add(new SQLiteParameter("@groupname", group.name));
+                                    comm.ExecuteNonQuery();
+                                    comm.Parameters.Clear();
+
                                     if (group.Terms != null)
                                     {
                                         foreach (var groupItem in group.Terms)
@@ -204,12 +219,24 @@ namespace PockeTwit.SpecialTimelines
                                                                                     group.name + groupItem.Term));
                                             comm.Parameters.Add(new SQLiteParameter("@name", group.name));
                                             comm.Parameters.Add(new SQLiteParameter("@userid", groupItem.Term));
-                                            comm.Parameters.Add(new SQLiteParameter("@exclusive", groupItem.Exclusive));
+                                            comm.Parameters.Add(new SQLiteParameter("@exclusive",
+                                                                                    groupItem.Exclusive));
                                             comm.ExecuteNonQuery();
+                                            
                                         }
                                     }
                                 }
-                                //TODO ELSE SAVE SEARCH TERM
+                                //SavedSearch
+                                else
+                                {
+                                    var searchLine = (SavedSearchTimeLine) item;
+                                    comm.CommandText =
+                                        "INSERT INTO savedSearches (searchName, searchTerm) VALUES (@searchName, @searchTerm);";
+                                    comm.Parameters.Clear();
+                                    comm.Parameters.Add(new SQLiteParameter("@searchName", searchLine.name));
+                                    comm.Parameters.Add(new SQLiteParameter("@searchTerm", searchLine.SearchPhrase));
+                                    comm.ExecuteNonQuery();
+                                }
                             }
                         }
                         t.Commit();

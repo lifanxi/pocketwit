@@ -198,6 +198,7 @@ namespace PockeTwit
                     SavedSearch.name = txtGroupName.Text;
                     SavedSearch.SearchPhrase = this.SearchText;
                     SpecialTimeLinesRepository.Add(SavedSearch);
+                    SpecialTimeLinesRepository.Save();
                 }
                 else
                 {
