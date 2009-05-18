@@ -11,6 +11,7 @@ void StartPockeTwit();
 void SelectNextUnreadGroup();
 void ShowError();
 void ToggleMode(BOOL Compact);
+void ToggleStartDebugBuild(BOOL enabled);
 
 struct UnreadCount
 { TCHAR GroupName[64];

@@ -32,6 +32,8 @@ BOOL VGA = FALSE;
 BOOL compact = FALSE;
 HICON g_hIcon =  NULL;
 
+BOOL startDebugBuild = FALSE;
+
 HREGNOTIFY hrUnreadCountChanged = NULL;
 
 UnreadCount *unreadCountPointer;
@@ -589,11 +591,13 @@ HWND InitializeCustomItem(TODAYLISTITEM * ptli, HWND hwndParent)
 
 	hrUnreadCountChanged = RegisterUnreadCountChangedCallback();
 
-	DWORD useCompact; 
+	DWORD useCompact, useDebug; 
     
 	RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("UseCompactTodayPlugin"), &useCompact);
-		
 	compact = useCompact;
+
+	RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("StartDebugBuild"), &useDebug);
+	startDebugBuild = useDebug;
 
 	GetDataFromRegistry();
 
@@ -632,38 +636,53 @@ HWND InitializeCustomItem(TODAYLISTITEM * ptli, HWND hwndParent)
 BOOL APIENTRY CustomItemOptionsDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 {
 	SHINITDLGINFO shidi;
-	HWND hCurrentRadioButton;
+	HWND hDlgItem;
 
 	switch (message) 
 	{
 		case WM_INITDIALOG:
 
-		// Create a Done button and size it. 
+		DWORD useCompact, useDebug; 
+    
+		RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("UseCompactTodayPlugin"), &useCompact);
+		compact = useCompact;
+
+		RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("StartDebugBuild"), &useDebug);
+		startDebugBuild = useDebug;
+	
 		shidi.dwMask = SHIDIM_FLAGS;
 		shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN | SHIDIF_SIZEDLGFULLSCREEN;
 		shidi.hDlg = hDlg;
 		SHInitDialog(&shidi);
-		if (compact == TRUE)
-		{
-			CheckRadioButton(hDlg,IDC_RADIO_COMPACT,IDC_RADIO_FULL,IDC_RADIO_COMPACT);
-		}
-		else
-		{
-			CheckRadioButton(hDlg,IDC_RADIO_COMPACT,IDC_RADIO_FULL,IDC_RADIO_FULL);
-		}
+
+		CheckRadioButton(hDlg,IDC_RADIO_COMPACT,IDC_RADIO_FULL, (compact == TRUE) ? IDC_RADIO_COMPACT : IDC_RADIO_FULL );
+
+		hDlgItem = GetDlgItem(hDlg, IDC_CHECK_DEBUGBUILD);
+		SendMessage(hDlgItem, BM_SETCHECK, (startDebugBuild == TRUE) ? BST_CHECKED : BST_UNCHECKED, 0);
+		
 		return TRUE; 
 
 		case WM_COMMAND:
 			if (LOWORD(wParam) == IDOK) 
 			{
-				hCurrentRadioButton = GetDlgItem(hDlg, IDC_RADIO_COMPACT);
-				if(BST_CHECKED == SendMessage(hCurrentRadioButton, BM_GETCHECK, NULL, NULL))
+				hDlgItem = GetDlgItem(hDlg, IDC_RADIO_COMPACT);
+				if(BST_CHECKED == SendMessage(hDlgItem, BM_GETCHECK, NULL, NULL))
 				{
 					ToggleMode(TRUE);
 				}
 				else
 				{
 					ToggleMode(FALSE);
+				}
+
+				hDlgItem = GetDlgItem(hDlg, IDC_CHECK_DEBUGBUILD);
+				if(BST_CHECKED == SendMessage(hDlgItem, BM_GETCHECK, NULL, NULL))
+				{
+					ToggleStartDebugBuild(TRUE);
+				}
+				else
+				{
+					ToggleStartDebugBuild(FALSE);
 				}
 
 				EndDialog(hDlg, LOWORD(wParam));
@@ -898,8 +917,18 @@ void StartPockeTwit()
 		TCHAR szInstallDir[256] = {0};
 		TCHAR fullAppPath[256] = {0};
 		DWORD lpcbData = sizeof(szInstallDir);
+		LPCWSTR path;
 
-		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,_T("Software\\Apps\\JustForFun PockeTwit"),0,0,&key) == ERROR_SUCCESS)
+		if (startDebugBuild == TRUE)
+		{
+			path = _T("Software\\Apps\\JustForFun PockeTwit Dev Build");
+		}
+		else
+		{
+			path = _T("Software\\Apps\\JustForFun PockeTwit");
+		}
+
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,path,0,0,&key) == ERROR_SUCCESS)
 		{
 			if (RegQueryValueEx(key,_T("InstallDir"),0,0,(LPBYTE)&szInstallDir, &lpcbData) == ERROR_SUCCESS)
 			{
@@ -957,6 +986,28 @@ void ToggleMode(BOOL Compact)
 	RegistrySetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("UseCompactTodayPlugin"), compact);
 	if (g_hinstDLL != NULL)
 		UpdateData();
+}
+
+void ToggleStartDebugBuild(BOOL enabled)
+{
+	if (enabled == TRUE)
+	{
+		DWORD useDebug;
+		if (ERROR_SUCCESS == RegistryGetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Apps\\JustForFun PockeTwit Dev Build"), TEXT("Instl"), &useDebug))
+		{
+			startDebugBuild = TRUE;
+		}
+		else
+		{
+			startDebugBuild = FALSE;
+		}
+	}
+	else
+	{
+		startDebugBuild = FALSE;
+	}
+
+	RegistrySetDWORD(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Today\\Items\\PockeTwit"), TEXT("StartDebugBuild"), startDebugBuild);
 }
 
 void ShowError()

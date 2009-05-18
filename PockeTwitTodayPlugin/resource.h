@@ -7,6 +7,7 @@
 #define IDI_ICON16                      102
 #define IDD_TODAY_CUSTOM                500
 #define IDC_RADIO_COMPACT               1000
+#define IDC_CHECK_DEBUGBUILD            1001
 #define IDC_RADIO_FULL                  1002
 
 // Next default values for new objects
@@ -15,7 +16,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
