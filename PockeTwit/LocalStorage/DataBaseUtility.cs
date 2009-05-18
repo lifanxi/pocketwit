@@ -210,7 +210,7 @@ namespace LocalStorage
 
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS savedSearches
-                                    (searchName NVARCHAR(50) PRIMARY KEY NOT NULL,
+                                    (searchName NVARCHAR(50) PRIMARY KEY NOT NULL ON CONFLICT IGNORE,
                                      searchTerm NVARCHAR(255))";
                         comm.ExecuteNonQuery();
 

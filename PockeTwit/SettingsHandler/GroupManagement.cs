@@ -34,7 +34,7 @@ namespace PockeTwit.SettingsHandler
             {
                 ShowGroups();
             }
-            foreach (UserGroupTimeLine t in Times)
+            foreach (ISpecialTimeLine t in Times)
             {
                 cmbChooseGroup.Items.Add(t);
             }
@@ -68,39 +68,68 @@ namespace PockeTwit.SettingsHandler
 
         private void ResetGroupItems()
         {
-            int width = pnlUsers.Width - (ClientSettings.TextSize+10);
+            
             
             pnlUsers.Controls.Clear();
 
+            ISpecialTimeLine t = (ISpecialTimeLine)cmbChooseGroup.SelectedItem;
+            
+            //User Group Display
+            if (t is UserGroupTimeLine)
+            {
+                DisplayUserGroupInfo(t);
+            }
+            else
+            {
+                DisplaySearchInfo(t);
+            }
+        }
+
+        private void DisplaySearchInfo(ISpecialTimeLine t)
+        {
+            var searchLine = (SavedSearchTimeLine) t;
+            Label SearchText = new Label();
+            SearchText.Width = pnlUsers.Width - (ClientSettings.TextSize + 10);
+            SearchText.Text = searchLine.SearchPhrase;
+            SearchText.Height =  ClientSettings.TextSize + 5;
+            pnlUsers.Controls.Add(SearchText);
+        }
+
+        private void DisplayUserGroupInfo(ISpecialTimeLine t)
+        {
+            UserGroupTimeLine ut = (UserGroupTimeLine)t;
+
+            int width = pnlUsers.Width - (ClientSettings.TextSize + 10);
             Label lblName = new Label();
             Label lblExclusive = new Label();
             lblName.Text = "User";
             lblName.Width = width;
             lblName.Height = ClientSettings.TextSize + 5;
             lblExclusive.Text = "Exclusive";
-            lblExclusive.Left = pnlUsers.Width - ((ClientSettings.TextSize*4) + 10);
+            lblExclusive.Left = pnlUsers.Width - ((ClientSettings.TextSize * 4) + 10);
             lblExclusive.Height = lblName.Height;
             pnlUsers.Controls.Add(lblExclusive);
             pnlUsers.Controls.Add(lblName);
-            
 
-            UserGroupTimeLine t = (UserGroupTimeLine)cmbChooseGroup.SelectedItem;
-            int topOflabel = lblName.Bottom+5;
-            foreach (UserGroupTimeLine.GroupTerm gt in t.Terms)
+
+
+            int topOflabel = lblName.Bottom + 5;
+
+            foreach (UserGroupTimeLine.GroupTerm gt in ut.Terms)
             {
                 UserGroupTimeLine.GroupTerm gt1 = gt;
                 LinkLabel nameLabel = new LinkLabel();
                 nameLabel.Width = lblName.Width;
 
-                nameLabel.Click += ((o,e1) => DeleteItem(t, gt1));
+                nameLabel.Click += ((o, e1) => DeleteItem(ut, gt1));
                 nameLabel.Text = gt.Name;
                 nameLabel.Top = topOflabel;
-                nameLabel.Height = (int)ClientSettings.TextSize + 5;
-                
-                
+                nameLabel.Height = (int) ClientSettings.TextSize + 5;
+
+
                 CheckBox chkExclusive = new CheckBox();
-                
-                chkExclusive.Click += ((o, e1) => ToggleExclusive(t, gt1, chkExclusive));
+
+                chkExclusive.Click += ((o, e1) => ToggleExclusive(ut, gt1, chkExclusive));
                 chkExclusive.Left = nameLabel.Right - ClientSettings.TextSize;
                 chkExclusive.Top = nameLabel.Top;
                 chkExclusive.Width = ClientSettings.TextSize + 10;
@@ -132,9 +161,17 @@ namespace PockeTwit.SettingsHandler
 
         private void lnkDeleteGroup_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("This will move all users from the " + cmbChooseGroup.SelectedItem + " group and delete the group.  The users will all appear in your friends timeline.\n\nProceed?", "Delete " + cmbChooseGroup.SelectedItem + " Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            ISpecialTimeLine selectedLine = (ISpecialTimeLine) cmbChooseGroup.SelectedItem;
+            string Message = "This will move all users from the " + cmbChooseGroup.SelectedItem +
+                             " group and delete the group.  The users will all appear in your friends timeline.\n\nProceed?";
+
+            if(selectedLine is SavedSearchTimeLine)
             {
-                SpecialTimeLinesRepository.Remove((UserGroupTimeLine)cmbChooseGroup.SelectedItem);
+                Message = "This will remove the " + cmbChooseGroup.SelectedItem + "group.\n\nProceed?";
+            }
+            if (MessageBox.Show(Message, "Delete " + cmbChooseGroup.SelectedItem + " Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                SpecialTimeLinesRepository.Remove((ISpecialTimeLine)cmbChooseGroup.SelectedItem);
                 cmbChooseGroup.Items.Remove(cmbChooseGroup.SelectedItem);
                 this.NeedsReRender = true;
             }

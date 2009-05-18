@@ -97,7 +97,7 @@ namespace PockeTwit.SpecialTimelines
                         {
                             var line = (SavedSearchTimeLine) oldLine;
                             comm.CommandText = "DELETE FROM savedSearches WHERE searchName=@searchName;";
-                            comm.Parameters.Add(new SQLiteParameter("@searcnName", line.name));
+                            comm.Parameters.Add(new SQLiteParameter("@searchName", line.name));
                             comm.ExecuteNonQuery();
                         }
                     }
