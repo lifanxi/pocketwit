@@ -562,6 +562,7 @@ namespace PockeTwit
             }
             tempLine.Clear();
             tempLine.TrimExcess();
+            updateTimer.Enabled = true;
         }
 
 

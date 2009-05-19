@@ -9,7 +9,7 @@ namespace PockeTwit.SpecialTimelines
         {
             get
             {
-                return "Search_TimeLine_" + name;
+                return "SavedSearch_TimeLine_" + name;
             }
         }
 

@@ -565,7 +565,7 @@ namespace PockeTwit
             }
             else
             {
-                if(statList.CurrentList().StartsWith("Grouped"))
+                if (statList.CurrentList().StartsWith("Grouped") || statList.CurrentList().StartsWith("SavedSearch_TimeLine_"))
                 {
                     AddStatusesToList(Manager.GetGroupedTimeLine(currentSpecialTimeLine), true);
                 }
