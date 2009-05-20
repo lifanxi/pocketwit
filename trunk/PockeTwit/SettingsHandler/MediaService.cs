@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Yedda;
+using PockeTwit.MediaServices;
 
 namespace PockeTwit
 {

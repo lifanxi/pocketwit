@@ -1524,13 +1524,13 @@ namespace PockeTwit
         {
             if (TextClicked.StartsWith("http"))
             {
-                if (Yedda.PictureServiceFactory.Instance.FetchServiceAvailable(TextClicked))
+                if (PockeTwit.MediaServices.PictureServiceFactory.Instance.FetchServiceAvailable(TextClicked))
                 {
                     Cursor.Current = Cursors.WaitCursor;
-                    Yedda.IPictureService p = Yedda.PictureServiceFactory.Instance.LocateFetchService(TextClicked);
+                    PockeTwit.MediaServices.IPictureService p = PockeTwit.MediaServices.PictureServiceFactory.Instance.LocateFetchService(TextClicked);
                     p.FetchPicture(TextClicked);
-                    p.DownloadFinish += new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
-                    p.ErrorOccured += new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+                    p.DownloadFinish += new PockeTwit.MediaServices.DownloadFinishEventHandler(p_DownloadFinish);
+                    p.ErrorOccured += new PockeTwit.MediaServices.ErrorOccuredEventHandler(p_ErrorOccured);
                     return;
                 }
                 
@@ -1564,7 +1564,7 @@ namespace PockeTwit
             }
         }
 
-        void p_ErrorOccured(object sender, Yedda.PictureServiceEventArgs eventArgs)
+        void p_ErrorOccured(object sender, PockeTwit.MediaServices.PictureServiceEventArgs eventArgs)
         {
             if (InvokeRequired)
             {
@@ -1573,16 +1573,16 @@ namespace PockeTwit
             }
             else
             {
-                Yedda.IPictureService p = (Yedda.IPictureService)sender;
-                p.DownloadFinish -= new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
-                p.ErrorOccured -= new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+                PockeTwit.MediaServices.IPictureService p = (PockeTwit.MediaServices.IPictureService)sender;
+                p.DownloadFinish -= new PockeTwit.MediaServices.DownloadFinishEventHandler(p_DownloadFinish);
+                p.ErrorOccured -= new PockeTwit.MediaServices.ErrorOccuredEventHandler(p_ErrorOccured);
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show("Unable to fetch picture.  You may want to try again.");
             }
         }
 
-        delegate void delPictureDone(object sender, Yedda.PictureServiceEventArgs eventArgs);
-        void p_DownloadFinish(object sender, Yedda.PictureServiceEventArgs eventArgs)
+        delegate void delPictureDone(object sender, PockeTwit.MediaServices.PictureServiceEventArgs eventArgs);
+        void p_DownloadFinish(object sender, PockeTwit.MediaServices.PictureServiceEventArgs eventArgs)
         {
             if (InvokeRequired)
             {
@@ -1593,9 +1593,9 @@ namespace PockeTwit
             {
 
 
-                Yedda.IPictureService p = (Yedda.IPictureService)sender;
-                p.DownloadFinish -= new Yedda.DownloadFinishEventHandler(p_DownloadFinish);
-                p.ErrorOccured -= new Yedda.ErrorOccuredEventHandler(p_ErrorOccured);
+                PockeTwit.MediaServices.IPictureService p = (PockeTwit.MediaServices.IPictureService)sender;
+                p.DownloadFinish -= new PockeTwit.MediaServices.DownloadFinishEventHandler(p_DownloadFinish);
+                p.ErrorOccured -= new PockeTwit.MediaServices.ErrorOccuredEventHandler(p_ErrorOccured);
 
                 Cursor.Current = Cursors.Default;
 

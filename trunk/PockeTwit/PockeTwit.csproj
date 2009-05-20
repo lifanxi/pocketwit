@@ -254,7 +254,7 @@
     <Compile Include="Yedda\HttpUtility.cs" />
     <Compile Include="Yedda\ShortText.cs" />
     <Compile Include="Yedda\Skweezer.cs" />
-    <Compile Include="Yedda\TwitPic.cs" />
+    <Compile Include="MediaServices\TwitPic.cs" />
     <Compile Include="Yedda\Twitter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -544,21 +544,21 @@
     <Compile Include="userListControl.Designer.cs">
       <DependentUpon>userListControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Yedda\ImgLy.cs" />
+    <Compile Include="MediaServices\ImgLy.cs" />
     <Compile Include="Yedda\JSON.cs" />
-    <Compile Include="Yedda\PictureServiceBase.cs" />
-    <Compile Include="Yedda\PikChur.cs" />
-    <Compile Include="Yedda\PixIm.cs" />
-    <Compile Include="Yedda\Posterous.cs" />
-    <Compile Include="Yedda\TweetPhoto.cs" />
-    <Compile Include="Yedda\TwitGoo.cs" />
-    <Compile Include="Yedda\yFrog.cs" />
+    <Compile Include="MediaServices\PictureServiceBase.cs" />
+    <Compile Include="MediaServices\PikChur.cs" />
+    <Compile Include="MediaServices\PixIm.cs" />
+    <Compile Include="MediaServices\Posterous.cs" />
+    <Compile Include="MediaServices\TweetPhoto.cs" />
+    <Compile Include="MediaServices\TwitGoo.cs" />
+    <Compile Include="MediaServices\yFrog.cs" />
     <Compile Include="Yedda\GoogleMaps.cs" />
     <Compile Include="Yedda\GoogleTranslate.cs" />
-    <Compile Include="Yedda\IPictureService.cs" />
-    <Compile Include="Yedda\MobyPicture.cs" />
-    <Compile Include="Yedda\PicturePostObject.cs" />
-    <Compile Include="Yedda\PictureServiceFactory.cs" />
+    <Compile Include="MediaServices\IPictureService.cs" />
+    <Compile Include="MediaServices\MobyPicture.cs" />
+    <Compile Include="MediaServices\PicturePostObject.cs" />
+    <Compile Include="MediaServices\PictureServiceFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
