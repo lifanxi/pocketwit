@@ -131,14 +131,8 @@ namespace PockeTwit.TimeLines
 
         public static int GetUpdatedCount(string ListName, ISpecialTimeLine specialTime, string selectedStatus)
         {
-            TimelineManagement.TimeLineType t = TimelineManagement.TimeLineType.Friends;
-            switch (ListName)
-            {
-                case "Messages_TimeLine":
-                    t = TimelineManagement.TimeLineType.Messages;
-                    break;
-            }
-
+            TimelineManagement.TimeLineType t = SpecialTimeLinesRepository.GetTimelineTypeFromSpecialType(specialTime);
+            
             string Constraints = null;
             if (specialTime != null) 
             {

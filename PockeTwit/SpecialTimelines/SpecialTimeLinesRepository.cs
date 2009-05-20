@@ -11,14 +11,28 @@ namespace PockeTwit.SpecialTimelines
     public static class SpecialTimeLinesRepository
     {
         #region TimeLineType enum
-
         public enum TimeLineType
         {
             UserGroup,
             SavedSearch
         }
-
         #endregion
+
+        public static TimelineManagement.TimeLineType GetTimelineTypeFromSpecialType(ISpecialTimeLine t)
+        {
+            if (t != null)
+            {
+                if (t.ListName == "Messages_TimeLine")
+                {
+                    return TimelineManagement.TimeLineType.Messages;
+                }
+                if (t.ListName.StartsWith("Saved"))
+                {
+                    return TimelineManagement.TimeLineType.Searches;
+                }
+            }
+            return TimelineManagement.TimeLineType.Friends;
+        }
 
         private static readonly Dictionary<string, ISpecialTimeLine> Items =
             new Dictionary<string, ISpecialTimeLine>();

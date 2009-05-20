@@ -960,16 +960,27 @@ namespace PockeTwit
             }
             SetConnectedMenus();
             Manager = new TimelineManagement();
-            Manager.Progress += new TimelineManagement.delProgress(Manager_Progress);
-            Manager.CompleteLoaded += new TimelineManagement.delComplete(Manager_CompleteLoaded);
+            Manager.Progress += Manager_Progress;
+            Manager.CompleteLoaded += Manager_CompleteLoaded;
             Manager.Startup(TwitterConnections);
-            Manager.FriendsUpdated += new TimelineManagement.delFriendsUpdated(Manager_FriendsUpdated);
-            Manager.MessagesUpdated += new TimelineManagement.delMessagesUpdated(Manager_MessagesUpdated);
+            Manager.FriendsUpdated += Manager_FriendsUpdated;
+            Manager.MessagesUpdated += Manager_MessagesUpdated;
+            Manager.SearchesUpdated += Manager_SearchesUpdated;
 
             foreach (Following f in FollowingDictionary.Values)
             {
                 f.LoadFromTwitter();
             }
+        }
+
+        void Manager_SearchesUpdated()
+        {
+            if (currentSpecialTimeLine != null && statList.CurrentList()== currentSpecialTimeLine.ListName)
+            {
+                AddStatusesToList(Manager.GetGroupedTimeLine(currentSpecialTimeLine), true);
+            }
+            LastSelectedItems.UpdateUnreadCounts();
+            Notifyer.NewItems();
         }
 
 
@@ -1009,10 +1020,6 @@ namespace PockeTwit
         }
 
         
-
-        
-
-
         delegate void delText(string Text);
         private void setCaption(string text)
         {
@@ -1035,7 +1042,7 @@ namespace PockeTwit
             }
             else
             {
-                if(currentSpecialTimeLine!=null && statList.CurrentList().StartsWith("Grouped_TimeLine_"))
+                if(currentSpecialTimeLine!=null && statList.CurrentList() == currentSpecialTimeLine.ListName)
                 {
                     AddStatusesToList(Manager.GetGroupedTimeLine(currentSpecialTimeLine), true);
                 }

@@ -13,13 +13,13 @@ namespace PockeTwit
     {
         #region Events
 
-        public delegate void delFriendsUpdated();
-        public delegate void delMessagesUpdated();
+        public delegate void delUpdated();
         public delegate void delProgress(int percentage, string Status);
         public delegate void delComplete();
         public delegate void delNullReturnedByAccount(Yedda.Twitter.Account t, Yedda.Twitter.ActionType Action);
-        public event delFriendsUpdated FriendsUpdated;
-        public event delMessagesUpdated MessagesUpdated;
+        public event delUpdated FriendsUpdated;
+        public event delUpdated MessagesUpdated;
+        public event delUpdated SearchesUpdated;
         public event delProgress Progress;
         public event delComplete CompleteLoaded;
         public event delNullReturnedByAccount NoData = delegate{};
@@ -557,8 +557,8 @@ namespace PockeTwit
 
             if (tempLine.Count > 0)
             {
-                
                 LocalStorage.DataBaseUtility.SaveItems(tempLine);
+                SearchesUpdated();
             }
             tempLine.Clear();
             tempLine.TrimExcess();
