@@ -1257,7 +1257,15 @@ namespace Yedda
         #region Search
         public string SearchFor(string textToSearch)
         {
+            return SearchFor(textToSearch, null);
+        }
+        public string SearchFor(string textToSearch, string sinceID)
+        {
             string url = string.Format(TwitterSearchUrlFormat, textToSearch);
+            if(!string.IsNullOrEmpty(sinceID))
+            {
+                url = url + "&since_id=" + sinceID;
+            }
             return ExecuteGetCommand(url);
         }
         #endregion
