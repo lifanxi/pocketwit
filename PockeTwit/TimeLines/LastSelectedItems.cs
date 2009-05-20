@@ -131,7 +131,7 @@ namespace PockeTwit.TimeLines
 
         public static int GetUpdatedCount(string ListName, ISpecialTimeLine specialTime, string selectedStatus)
         {
-            TimelineManagement.TimeLineType t = SpecialTimeLinesRepository.GetTimelineTypeFromSpecialType(specialTime);
+            TimelineManagement.TimeLineType t = SpecialTimeLinesRepository.GetTimelineTypeFromSpecialType(ListName);
             
             string Constraints = null;
             if (specialTime != null) 

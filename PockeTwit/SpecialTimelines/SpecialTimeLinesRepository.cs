@@ -18,18 +18,15 @@ namespace PockeTwit.SpecialTimelines
         }
         #endregion
 
-        public static TimelineManagement.TimeLineType GetTimelineTypeFromSpecialType(ISpecialTimeLine t)
+        public static TimelineManagement.TimeLineType GetTimelineTypeFromSpecialType(string TimeLineName)
         {
-            if (t != null)
+            if (TimeLineName.StartsWith("Saved"))
             {
-                if (t.ListName == "Messages_TimeLine")
-                {
-                    return TimelineManagement.TimeLineType.Messages;
-                }
-                if (t.ListName.StartsWith("Saved"))
-                {
-                    return TimelineManagement.TimeLineType.Searches;
-                }
+                return TimelineManagement.TimeLineType.Searches;
+            }
+            if (TimeLineName == "Messages_TimeLine")
+            {
+                return TimelineManagement.TimeLineType.Messages;
             }
             return TimelineManagement.TimeLineType.Friends;
         }
