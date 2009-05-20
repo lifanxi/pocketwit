@@ -1860,6 +1860,7 @@ namespace PockeTwit
         //handle requests from outside the UI -- either CLI args or custom messages
         public void ProcessArgs(string[] args)
         {
+            BringToFront();
             if (args.Length > 0)
             {
                 // QuickPost called
@@ -1873,12 +1874,12 @@ namespace PockeTwit
                 // the today plugin passes /Group=XXXXX as argument
                 if (Arg.StartsWith("/Group="))
                 {
-                    BringToFront();
                     string GroupName = Arg.Substring(Arg.IndexOf('=') + 1);
                     ISpecialTimeLine t = SpecialTimeLinesRepository.GetFromReadableName(GroupName);
                     if (t != null)
                     {
                         ShowSpecialTimeLine(t);
+                        
                     }
                     if (GroupName == "Friends TimeLine")
                     {
