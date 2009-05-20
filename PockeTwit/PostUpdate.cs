@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 using PockeTwit.Themes;
 using Yedda;
+using PockeTwit.MediaServices;
 
 namespace PockeTwit
 {
