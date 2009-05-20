@@ -552,7 +552,10 @@ namespace PockeTwit
                 SavedSearchTimeLine searchLine = (SavedSearchTimeLine) specialTimeLine;
                 //Need a way to specify "since_id" here too.
                 status[] Items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
-                tempLine.AddRange(Items);
+                if (Items != null)
+                {
+                    tempLine.AddRange(Items);
+                }
             }
 
             if (tempLine.Count > 0)
@@ -560,6 +563,7 @@ namespace PockeTwit
                 LocalStorage.DataBaseUtility.SaveItems(tempLine);
                 SearchesUpdated();
             }
+            GlobalEventHandler.NotifyTimeLineDone(TimeLineType.Searches);
             tempLine.Clear();
             tempLine.TrimExcess();
             updateTimer.Enabled = true;
