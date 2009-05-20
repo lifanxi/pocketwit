@@ -642,7 +642,13 @@ else
                         response = t.GetFavorites();
                         break;
                     case Yedda.Twitter.ActionType.Search:
-                        response = t.SearchFor(AdditionalParameter);
+                        string LastSearchID = LocalStorage.DataBaseUtility.GetLatestItem(t.AccountInfo,
+                                                                                         TimeLineType.Searches, " statuses.SearchTerm='" + AdditionalParameter + "' AND ");
+                        if (string.IsNullOrEmpty(LastSearchID))
+                        {
+                            return t.SearchFor(AdditionalParameter);
+                        }
+                        return t.SearchFor(AdditionalParameter, LastSearchID);
                         break;
                 }
             }

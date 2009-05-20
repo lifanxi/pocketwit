@@ -424,6 +424,10 @@ namespace LocalStorage
 
         public static string GetLatestItem(Twitter.Account account, TimelineManagement.TimeLineType typeToGet)
         {
+            return GetLatestItem(account, typeToGet, "");
+        }
+        public static string GetLatestItem(Twitter.Account account, TimelineManagement.TimeLineType typeToGet, string ExtraArguments)
+        {
             string FetchQuery = SQLGetLastStatusID;
             switch (typeToGet)
             {
@@ -438,6 +442,9 @@ namespace LocalStorage
                     break;
                 case TimelineManagement.TimeLineType.Messages:
                     FetchQuery = FetchQuery + " AND " + SQLFetchRepliesAndMessages + SQLOrder + SQLLimit;
+                    break;
+                case TimelineManagement.TimeLineType.Searches:
+                    FetchQuery = FetchQuery + " AND " + ExtraArguments + SQLFetchSearches + SQLOrder + SQLLimit;
                     break;
             }
 
