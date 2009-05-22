@@ -124,7 +124,7 @@ namespace PockeTwit.TimeLines
 
         private static void SetUnreadInRegistry(string ListName, int updatedCount)
         {
-            string DisplayName = ListName.Replace('_', ' ').Replace("Grouped TimeLine ", "");
+            string DisplayName = ListName.Replace('_', ' ').Replace("Grouped TimeLine ", "").Replace("SavedSearch TimeLine","");
             UnreadCountRoot.SetValue(DisplayName, updatedCount);
             UnreadCountRoot.SetValue("UnreadCountChanged", System.DateTime.Now.Ticks);
         }
