@@ -272,7 +272,7 @@ namespace PockeTwit.NotificationsCode
                             }
                             VibrateStop();
                         }
-                        else if ((infoClass.Options & Options.Sound) == Options.Sound || SoundProfileCheck.VolumeOn())
+                        else if ((infoClass.Options & Options.Sound) == Options.Sound && SoundProfileCheck.VolumeOn())
                         {
                             var s = new Sound(infoClass.Sound);
                             s.Play();
