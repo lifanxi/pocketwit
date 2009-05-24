@@ -18,13 +18,13 @@ namespace PockeTwit.SpecialTimelines
         }
         #endregion
 
-        public static TimelineManagement.TimeLineType GetTimelineTypeFromSpecialType(string TimeLineName)
+        public static TimelineManagement.TimeLineType GetTimelineTypeFromSpecialType(string timeLineName)
         {
-            if (TimeLineName.StartsWith("Saved"))
+            if (timeLineName.StartsWith("Saved"))
             {
                 return TimelineManagement.TimeLineType.Searches;
             }
-            if (TimeLineName == "Messages_TimeLine")
+            if (timeLineName == "Messages_TimeLine")
             {
                 return TimelineManagement.TimeLineType.Messages;
             }
@@ -181,7 +181,7 @@ namespace PockeTwit.SpecialTimelines
                             var searchName = r.GetString(0);
                             var searchTerm = r.GetString(1);
 
-                            var savedLine = new SavedSearchTimeLine() {name = searchName, SearchPhrase = searchTerm};
+                            var savedLine = new SavedSearchTimeLine {name = searchName, SearchPhrase = searchTerm};
                             Add(savedLine);
                         }
                     }
@@ -288,12 +288,12 @@ namespace PockeTwit.SpecialTimelines
             return ret;
         }
 
-        internal static ISpecialTimeLine GetFromReadableName(string Name)
+        internal static ISpecialTimeLine GetFromReadableName(string name)
         {
             ISpecialTimeLine ret = null;
             foreach (var t in GetList())
             {
-                if (t.name == Name)
+                if (t.name == name)
                 {
                     ret = t;
                 }
