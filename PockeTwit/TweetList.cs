@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using FingerUI;
 using PockeTwit.Library;
+using PockeTwit.NotificationsCode;
 using PockeTwit.SpecialTimelines;
 using PockeTwit.TimeLines;
 using Microsoft.WindowsCE.Forms;
@@ -911,7 +912,7 @@ namespace PockeTwit
             CurrentlySelectedAccount = ClientSettings.DefaultAccount;
 
             Notifyer = new NotificationHandler();
-            Notifyer.MessagesNotificationClicked += new NotificationHandler.delNotificationClicked(Notifyer_MessagesNotificationClicked);
+            Notifyer.MessagesNotificationClicked += new NotificationHandler.DelNotificationClicked(Notifyer_MessagesNotificationClicked);
 
             return ret;
 
