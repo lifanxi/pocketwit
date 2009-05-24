@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Xml.Serialization;
 using LocalStorage;
+using PockeTwit.NotificationsCode;
 
 namespace PockeTwit.SpecialTimelines
 {
