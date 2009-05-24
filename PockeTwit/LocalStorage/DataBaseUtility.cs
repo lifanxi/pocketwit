@@ -53,7 +53,7 @@ namespace LocalStorage
 
         #endregion
 
-        private const string DBVersion = "0013";
+        private const string DBVersion = "0014";
         private static string DBPath = ClientSettings.CacheDir + "\\LocalCache.db";
 
         public static void CheckDBSchema()
@@ -210,7 +210,7 @@ namespace LocalStorage
 
                         comm.CommandText =
                             @"CREATE TABLE IF NOT EXISTS savedSearches
-                                    (searchName NVARCHAR(50) PRIMARY KEY NOT NULL ON CONFLICT IGNORE,
+                                    (searchName NVARCHAR(50) PRIMARY KEY ON CONFLICT IGNORE NOT NULL,
                                      searchTerm NVARCHAR(255))";
                         comm.ExecuteNonQuery();
 
