@@ -7,7 +7,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using FingerUI;
+using PockeTwit.FingerUI;
+using PockeTwit.FingerUI.Menu;
 using PockeTwit.Library;
 using PockeTwit.NotificationsCode;
 using PockeTwit.SpecialTimelines;
@@ -47,57 +48,57 @@ namespace PockeTwit
 
         #region MenuItems
         #region LeftMenu
-        FingerUI.SideMenuItem BackMenuItem;
+        FingerUI.Menu.SideMenuItem BackMenuItem;
 
-        FingerUI.SideMenuItem FriendsTimeLineMenuItem;
-        private FingerUI.SideMenuItem RefreshFriendsTimeLineMenuItem;
-        FingerUI.SideMenuItem MessagesMenuItem;
-        private FingerUI.SideMenuItem RefreshMessagesMenuItem;
+        FingerUI.Menu.SideMenuItem FriendsTimeLineMenuItem;
+        FingerUI.Menu.SideMenuItem RefreshFriendsTimeLineMenuItem;
+        FingerUI.Menu.SideMenuItem MessagesMenuItem;
+        FingerUI.Menu.SideMenuItem RefreshMessagesMenuItem;
         
-        FingerUI.SideMenuItem PublicMenuItem;
-        FingerUI.SideMenuItem SearchMenuItem;
-        FingerUI.SideMenuItem ViewFavoritesMenuItem;
-        FingerUI.SideMenuItem GroupsMenuItem;
+        FingerUI.Menu.SideMenuItem PublicMenuItem;
+        FingerUI.Menu.SideMenuItem SearchMenuItem;
+        FingerUI.Menu.SideMenuItem ViewFavoritesMenuItem;
+        FingerUI.Menu.SideMenuItem GroupsMenuItem;
         
-        FingerUI.SideMenuItem TimeLinesMenuItem;
+        FingerUI.Menu.SideMenuItem TimeLinesMenuItem;
 
-        FingerUI.SideMenuItem PostUpdateMenuItem;
-        FingerUI.SideMenuItem MapMenuItem;
-        FingerUI.SideMenuItem SettingsMenuItem;
-        private FingerUI.SideMenuItem AccountsSettingsMenuItem;
-        private FingerUI.SideMenuItem AdvancedSettingsMenuItem;
-        private FingerUI.SideMenuItem AvatarSettingsMenuItem;
-        private FingerUI.SideMenuItem GroupSettingsMenuItem;
-        private FingerUI.SideMenuItem NotificationSettingsMenuItem;
-        private FingerUI.SideMenuItem MediaServiceSettingsMenuItem;
-        private FingerUI.SideMenuItem OtherSettingsMenuItem;
-        private FingerUI.SideMenuItem UISettingsMenuItem;
+        FingerUI.Menu.SideMenuItem PostUpdateMenuItem;
+        FingerUI.Menu.SideMenuItem MapMenuItem;
+        FingerUI.Menu.SideMenuItem SettingsMenuItem;
+        FingerUI.Menu.SideMenuItem AccountsSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem AdvancedSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem AvatarSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem GroupSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem NotificationSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem MediaServiceSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem OtherSettingsMenuItem;
+        FingerUI.Menu.SideMenuItem UISettingsMenuItem;
         
-        FingerUI.SideMenuItem AboutMenuItem;
+        FingerUI.Menu.SideMenuItem AboutMenuItem;
 
-        FingerUI.SideMenuItem WindowMenuItem;
-        FingerUI.SideMenuItem FullScreenMenuItem;
-        FingerUI.SideMenuItem MinimizeMenuItem;
-        FingerUI.SideMenuItem ExitMenuItem;
+        FingerUI.Menu.SideMenuItem WindowMenuItem;
+        FingerUI.Menu.SideMenuItem FullScreenMenuItem;
+        FingerUI.Menu.SideMenuItem MinimizeMenuItem;
+        FingerUI.Menu.SideMenuItem ExitMenuItem;
         #endregion
         #region RightMenu
-        FingerUI.SideMenuItem ConversationMenuItem;
+        FingerUI.Menu.SideMenuItem ConversationMenuItem;
         
-        FingerUI.SideMenuItem ReponsesMenuItem;
+        FingerUI.Menu.SideMenuItem ReponsesMenuItem;
 
-        FingerUI.SideMenuItem ReplyMenuItem;
-        FingerUI.SideMenuItem DirectMenuItem;
+        FingerUI.Menu.SideMenuItem ReplyMenuItem;
+        FingerUI.Menu.SideMenuItem DirectMenuItem;
 
-        FingerUI.SideMenuItem EmailMenuItem;
-        FingerUI.SideMenuItem QuoteMenuItem;
-        FingerUI.SideMenuItem ToggleFavoriteMenuItem;
-        FingerUI.SideMenuItem UserTimelineMenuItem;
-        FingerUI.SideMenuItem ProfilePageMenuItem;
-        FingerUI.SideMenuItem FollowMenuItem;
-        FingerUI.SideMenuItem MoveToGroupMenuItem;
-        FingerUI.SideMenuItem CopyToGroupMenuItem;
-        private FingerUI.SideMenuItem CopyNewGroupMenuItem;
-        private FingerUI.SideMenuItem MoveNewGroupMenuItem;
+        FingerUI.Menu.SideMenuItem EmailMenuItem;
+        FingerUI.Menu.SideMenuItem QuoteMenuItem;
+        FingerUI.Menu.SideMenuItem ToggleFavoriteMenuItem;
+        FingerUI.Menu.SideMenuItem UserTimelineMenuItem;
+        FingerUI.Menu.SideMenuItem ProfilePageMenuItem;
+        FingerUI.Menu.SideMenuItem FollowMenuItem;
+        FingerUI.Menu.SideMenuItem MoveToGroupMenuItem;
+        FingerUI.Menu.SideMenuItem CopyToGroupMenuItem;
+        private FingerUI.Menu.SideMenuItem CopyNewGroupMenuItem;
+        private FingerUI.Menu.SideMenuItem MoveNewGroupMenuItem;
         #endregion
         #endregion MenuItems
 
@@ -411,7 +412,7 @@ namespace PockeTwit
 
         private void ToggleFavorite()
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             if (selectedItem.isFavorite)
             {
@@ -437,7 +438,7 @@ namespace PockeTwit
 
         private void CreateFavoriteAsync()
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter.Account ChosenAccount = selectedItem.Tweet.Account;
 
@@ -454,7 +455,7 @@ namespace PockeTwit
         private void DestroyFavorite()
         {
             ChangeCursor(Cursors.WaitCursor);
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             string ID = selectedItem.Tweet.id;
             GetMatchingConnection(selectedItem.Tweet.Account).DestroyFavorite(ID);
             selectedItem.isFavorite = false;
@@ -465,7 +466,7 @@ namespace PockeTwit
 
         private void CreateNewGroup(bool Exclusive)
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
 
@@ -520,7 +521,7 @@ namespace PockeTwit
         }
         private bool AddUserToGroup(UserGroupTimeLine t, bool Exclusive, bool ReloadImmediately)
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return false; }
             if (selectedItem.Tweet.user == null) { return false; }
 
@@ -576,7 +577,7 @@ namespace PockeTwit
 
         private void ToggleFollow()
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
             Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
@@ -593,7 +594,7 @@ namespace PockeTwit
         }
         private void FollowUser()
         {
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             if (selectedItem.Tweet.user == null) { return; }
             ChangeCursor(Cursors.WaitCursor);
@@ -606,7 +607,7 @@ namespace PockeTwit
         private void StopFollowingUser()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             Yedda.Twitter Conn = GetMatchingConnection(selectedItem.Tweet.Account);
             if (MessageBox.Show("Are you sure you want to stop following " + selectedItem.Tweet.user.screen_name + "?", "Stop Following", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
@@ -623,7 +624,7 @@ namespace PockeTwit
         private void SendDirectMessage()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
             SetStatus("d " + User, selectedItem.Tweet.id);
         }
@@ -631,7 +632,7 @@ namespace PockeTwit
         private void SendReply()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             string User = selectedItem.Tweet.user.screen_name;
             if (selectedItem.Tweet.isDirect)
             {
@@ -646,50 +647,50 @@ namespace PockeTwit
 
         private void CreateLeftMenu()
         {
-            BackMenuItem = new FingerUI.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
+            BackMenuItem = new FingerUI.Menu.SideMenuItem(this.GoBackInHistory, "Back", statList.LeftMenu);
             BackMenuItem.CanHide = true;
 
-            FriendsTimeLineMenuItem = new FingerUI.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu, "Friends_TimeLine");
-            RefreshFriendsTimeLineMenuItem = new SideMenuItem(this.RefreshFriendsTimeLine, "Refresh Friends", statList.LeftMenu, "Friends_TimeLine");
-            MessagesMenuItem = new FingerUI.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu, "Messages_TimeLine");
-            RefreshMessagesMenuItem = new SideMenuItem(this.RefreshMessagesTimeLine, "Refresh Messages", statList.LeftMenu, "Messages_TimeLine");
-            PublicMenuItem = new FingerUI.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
-            SearchMenuItem = new FingerUI.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
-            ViewFavoritesMenuItem = new FingerUI.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
+            FriendsTimeLineMenuItem = new FingerUI.Menu.SideMenuItem(this.ShowFriendsTimeLine, "Friends Timeline", statList.LeftMenu, "Friends_TimeLine");
+            RefreshFriendsTimeLineMenuItem = new FingerUI.Menu.SideMenuItem(this.RefreshFriendsTimeLine, "Refresh Friends", statList.LeftMenu, "Friends_TimeLine");
+            MessagesMenuItem = new FingerUI.Menu.SideMenuItem(this.ShowMessagesTimeLine, "Messages", statList.LeftMenu, "Messages_TimeLine");
+            RefreshMessagesMenuItem = new FingerUI.Menu.SideMenuItem(this.RefreshMessagesTimeLine, "Refresh Messages", statList.LeftMenu, "Messages_TimeLine");
+            PublicMenuItem = new FingerUI.Menu.SideMenuItem(this.ShowPublicTimeLine, "Public Timeline", statList.LeftMenu);
+            SearchMenuItem = new FingerUI.Menu.SideMenuItem(this.TwitterSearch, "Search/Local", statList.LeftMenu);
+            ViewFavoritesMenuItem = new FingerUI.Menu.SideMenuItem(this.ShowFavorites, "View Favorites", statList.LeftMenu);
 
-            TimeLinesMenuItem = new FingerUI.SideMenuItem(null, "Other TimeLines ...", statList.LeftMenu);
+            TimeLinesMenuItem = new FingerUI.Menu.SideMenuItem(null, "Other TimeLines ...", statList.LeftMenu);
             TimeLinesMenuItem.SubMenuItems.Add(SearchMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(PublicMenuItem);
             TimeLinesMenuItem.SubMenuItems.Add(ViewFavoritesMenuItem);
-            GroupsMenuItem = new FingerUI.SideMenuItem(null, "Groups ...", statList.LeftMenu);
+            GroupsMenuItem = new FingerUI.Menu.SideMenuItem(null, "Groups ...", statList.LeftMenu);
             GroupsMenuItem.Visible = false;
             //TimeLinesMenuItem.SubMenuItems.Add(GroupsMenuItem);
             
             
             
-            PostUpdateMenuItem = new FingerUI.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
+            PostUpdateMenuItem = new FingerUI.Menu.SideMenuItem(this.SetStatus, "Post Update", statList.LeftMenu);
             
-            //MapMenuItem = new FingerUI.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
+            //MapMenuItem = new FingerUI.Menu.SideMenuItem(this.MapList, "Map These", statList.LeftMenu);
 
-            FingerUI.delMenuClicked showAccounts = () => this.ChangeSettings(new AccountsForm());
-            FingerUI.delMenuClicked showAdvanced = () => this.ChangeSettings(new SettingsHandler.AdvancedForm());
-            FingerUI.delMenuClicked showAvatar = () => this.ChangeSettings(new AvatarSettings());
-            FingerUI.delMenuClicked showNotification = () => this.ChangeSettings(new SettingsHandler.NotificationSettings());
-            FingerUI.delMenuClicked showOther = () => this.ChangeSettings(new OtherSettings());
-            FingerUI.delMenuClicked showUISettings = () => this.ChangeSettings(new UISettings());
-            FingerUI.delMenuClicked showGroupSettings = () => this.ChangeSettings(new SettingsHandler.GroupManagement());
-            FingerUI.delMenuClicked showMediaServiceSettings = () => this.ChangeSettings(new MediaService());
+            delMenuClicked showAccounts = () => this.ChangeSettings(new AccountsForm());
+            delMenuClicked showAdvanced = () => this.ChangeSettings(new SettingsHandler.AdvancedForm());
+            delMenuClicked showAvatar = () => this.ChangeSettings(new AvatarSettings());
+            delMenuClicked showNotification = () => this.ChangeSettings(new SettingsHandler.NotificationSettings());
+            delMenuClicked showOther = () => this.ChangeSettings(new OtherSettings());
+            delMenuClicked showUISettings = () => this.ChangeSettings(new UISettings());
+            delMenuClicked showGroupSettings = () => this.ChangeSettings(new SettingsHandler.GroupManagement());
+            delMenuClicked showMediaServiceSettings = () => this.ChangeSettings(new MediaService());
 
-            //SettingsMenuItem = new FingerUI.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
-            SettingsMenuItem = new FingerUI.SideMenuItem(null, "Settings...", statList.LeftMenu);
-            AccountsSettingsMenuItem = new SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
-            AdvancedSettingsMenuItem = new SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
-            AvatarSettingsMenuItem = new SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
-            GroupSettingsMenuItem = new SideMenuItem(showGroupSettings, "Manage Groups", statList.LeftMenu);
-            MediaServiceSettingsMenuItem = new SideMenuItem(showMediaServiceSettings, "Media Service", statList.LeftMenu);
-            NotificationSettingsMenuItem = new SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
-            OtherSettingsMenuItem = new SideMenuItem(showOther, "Other", statList.LeftMenu);
-            UISettingsMenuItem = new SideMenuItem(showUISettings, "UI", statList.LeftMenu);
+            //SettingsMenuItem = new FingerUI.Menu.SideMenuItem(this.ChangeSettings, "Settings", statList.LeftMenu);
+            SettingsMenuItem = new FingerUI.Menu.SideMenuItem(null, "Settings...", statList.LeftMenu);
+            AccountsSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showAccounts, "Accounts", statList.LeftMenu);
+            AdvancedSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showAdvanced, "Advanced", statList.LeftMenu);
+            AvatarSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showAvatar, "Avatar", statList.LeftMenu);
+            GroupSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showGroupSettings, "Manage Groups", statList.LeftMenu);
+            MediaServiceSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showMediaServiceSettings, "Media Service", statList.LeftMenu);
+            NotificationSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showNotification, "Notifications", statList.LeftMenu);
+            OtherSettingsMenuItem = new FingerUI.Menu.SideMenuItem(showOther, "Other", statList.LeftMenu);
+            UISettingsMenuItem = new FingerUI.Menu.SideMenuItem(showUISettings, "UI", statList.LeftMenu);
             SettingsMenuItem.SubMenuItems.Add(AccountsSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(AvatarSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(GroupSettingsMenuItem);
@@ -699,14 +700,14 @@ namespace PockeTwit
             SettingsMenuItem.SubMenuItems.Add(OtherSettingsMenuItem);
             SettingsMenuItem.SubMenuItems.Add(AdvancedSettingsMenuItem);
 
-            AboutMenuItem = new FingerUI.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
+            AboutMenuItem = new FingerUI.Menu.SideMenuItem(this.ShowAbout, "About/Feedback", statList.LeftMenu);
 
 
-            WindowMenuItem = new FingerUI.SideMenuItem(null, "Window ...", statList.LeftMenu);
+            WindowMenuItem = new FingerUI.Menu.SideMenuItem(null, "Window ...", statList.LeftMenu);
 
-            FullScreenMenuItem = new FingerUI.SideMenuItem(ToggleFullScreen, "Toggle FullScreen", statList.LeftMenu);
-            MinimizeMenuItem = new FingerUI.SideMenuItem(this.Minimize, "Minimize", statList.LeftMenu);
-            ExitMenuItem = new FingerUI.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
+            FullScreenMenuItem = new FingerUI.Menu.SideMenuItem(ToggleFullScreen, "Toggle FullScreen", statList.LeftMenu);
+            MinimizeMenuItem = new FingerUI.Menu.SideMenuItem(this.Minimize, "Minimize", statList.LeftMenu);
+            ExitMenuItem = new FingerUI.Menu.SideMenuItem(this.ExitApplication, "Exit", statList.LeftMenu);
 
             WindowMenuItem.SubMenuItems.Add(FullScreenMenuItem);
             WindowMenuItem.SubMenuItems.Add(MinimizeMenuItem);
@@ -717,19 +718,19 @@ namespace PockeTwit
             }
 
 
-            statList.LeftMenu.ResetMenu(new FingerUI.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, RefreshFriendsTimeLineMenuItem, MessagesMenuItem, RefreshMessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
+            statList.LeftMenu.ResetMenu(new FingerUI.Menu.SideMenuItem[]{BackMenuItem, FriendsTimeLineMenuItem, RefreshFriendsTimeLineMenuItem, MessagesMenuItem, RefreshMessagesMenuItem, GroupsMenuItem, TimeLinesMenuItem, PostUpdateMenuItem, SettingsMenuItem,
             AboutMenuItem, WindowMenuItem, ExitMenuItem});
         }
 
         private void AddGroupSelectMenuItem(ISpecialTimeLine t)
         {
-            FingerUI.delMenuClicked showItemClicked = delegate()
+            delMenuClicked showItemClicked = delegate()
             {
                 ShowSpecialTimeLine(t);
             };
 
             GroupsMenuItem.Visible = true;
-            FingerUI.SideMenuItem item = new FingerUI.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, t.ListName);
+            FingerUI.Menu.SideMenuItem item = new FingerUI.Menu.SideMenuItem(showItemClicked, t.name, statList.LeftMenu, t.ListName);
             GroupsMenuItem.SubMenuItems.Add(item);
         }
 
@@ -741,33 +742,33 @@ namespace PockeTwit
             // "Minimize" 
 
 
-            ConversationMenuItem = new FingerUI.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
+            ConversationMenuItem = new FingerUI.Menu.SideMenuItem(GetConversation, "Show Conversation", statList.RightMenu);
             ConversationMenuItem.CanHide = true;
 
-            ReponsesMenuItem = new FingerUI.SideMenuItem(null, "Respond to @User...", statList.RightMenu);
+            ReponsesMenuItem = new FingerUI.Menu.SideMenuItem(null, "Respond to @User...", statList.RightMenu);
 
-            ReplyMenuItem = new FingerUI.SideMenuItem(SendReply, "Reply @User", statList.RightMenu);
-            DirectMenuItem = new FingerUI.SideMenuItem(SendDirectMessage, "Direct @User", statList.RightMenu);
+            ReplyMenuItem = new FingerUI.Menu.SideMenuItem(SendReply, "Reply @User", statList.RightMenu);
+            DirectMenuItem = new FingerUI.Menu.SideMenuItem(SendDirectMessage, "Direct @User", statList.RightMenu);
 
             ReponsesMenuItem.SubMenuItems.Add(ReplyMenuItem);
             ReponsesMenuItem.SubMenuItems.Add(DirectMenuItem);
 
-            EmailMenuItem = new FingerUI.SideMenuItem(EmailThisItem, "Email Status", statList.RightMenu);
-            QuoteMenuItem = new FingerUI.SideMenuItem(this.Quote, "Quote", statList.RightMenu);
-            ToggleFavoriteMenuItem = new FingerUI.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
-            UserTimelineMenuItem = new FingerUI.SideMenuItem(ShowUserTimeLine, "@User Timeline", statList.RightMenu);
-            ProfilePageMenuItem = new FingerUI.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
-            FollowMenuItem = new FingerUI.SideMenuItem(ToggleFollow, "Follow @User", statList.RightMenu);
+            EmailMenuItem = new FingerUI.Menu.SideMenuItem(EmailThisItem, "Email Status", statList.RightMenu);
+            QuoteMenuItem = new FingerUI.Menu.SideMenuItem(this.Quote, "Quote", statList.RightMenu);
+            ToggleFavoriteMenuItem = new FingerUI.Menu.SideMenuItem(ToggleFavorite, "Make Favorite", statList.RightMenu);
+            UserTimelineMenuItem = new FingerUI.Menu.SideMenuItem(ShowUserTimeLine, "@User Timeline", statList.RightMenu);
+            ProfilePageMenuItem = new FingerUI.Menu.SideMenuItem(ShowProfile, "@User Profile", statList.RightMenu);
+            FollowMenuItem = new FingerUI.Menu.SideMenuItem(ToggleFollow, "Follow @User", statList.RightMenu);
 
-            MoveToGroupMenuItem = new FingerUI.SideMenuItem(null, "Move to Group...", statList.RightMenu);
-            CopyToGroupMenuItem = new FingerUI.SideMenuItem(null, "Copy to Group...", statList.RightMenu);
+            MoveToGroupMenuItem = new FingerUI.Menu.SideMenuItem(null, "Move to Group...", statList.RightMenu);
+            CopyToGroupMenuItem = new FingerUI.Menu.SideMenuItem(null, "Copy to Group...", statList.RightMenu);
 
-            FingerUI.delMenuClicked copyItemClicked = () => CreateNewGroup(false);
+            delMenuClicked copyItemClicked = () => CreateNewGroup(false);
 
-            FingerUI.delMenuClicked moveItemClicked = () => CreateNewGroup(true);
+            delMenuClicked moveItemClicked = () => CreateNewGroup(true);
 
-            CopyNewGroupMenuItem = new FingerUI.SideMenuItem(copyItemClicked, "New Group", statList.RightMenu);
-            MoveNewGroupMenuItem = new FingerUI.SideMenuItem(moveItemClicked, "New Group", statList.RightMenu);
+            CopyNewGroupMenuItem = new FingerUI.Menu.SideMenuItem(copyItemClicked, "New Group", statList.RightMenu);
+            MoveNewGroupMenuItem = new FingerUI.Menu.SideMenuItem(moveItemClicked, "New Group", statList.RightMenu);
             MoveToGroupMenuItem.SubMenuItems.Add(MoveNewGroupMenuItem);
             CopyToGroupMenuItem.SubMenuItems.Add(CopyNewGroupMenuItem);
             foreach (UserGroupTimeLine t in SpecialTimeLinesRepository.GetList(SpecialTimeLinesRepository.TimeLineType.UserGroup))
@@ -775,18 +776,18 @@ namespace PockeTwit
                 AddAddUserToGroupMenuItem(t);
             }
 
-            statList.RightMenu.ResetMenu(new FingerUI.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, ToggleFavoriteMenuItem, 
+            statList.RightMenu.ResetMenu(new FingerUI.Menu.SideMenuItem[]{ConversationMenuItem, ReponsesMenuItem, QuoteMenuItem, EmailMenuItem, ToggleFavoriteMenuItem, 
                 UserTimelineMenuItem, ProfilePageMenuItem, FollowMenuItem, MoveToGroupMenuItem, CopyToGroupMenuItem});
         }
 
         private void AddAddUserToGroupMenuItem(UserGroupTimeLine t)
         {
-            FingerUI.delMenuClicked copyItemClicked = () => AddUserToGroup(t, false);
+            delMenuClicked copyItemClicked = () => AddUserToGroup(t, false);
 
-            FingerUI.delMenuClicked moveItemClicked = () => AddUserToGroup(t, true);
+            delMenuClicked moveItemClicked = () => AddUserToGroup(t, true);
 
-            FingerUI.SideMenuItem copyitem = new FingerUI.SideMenuItem(copyItemClicked, t.name, statList.RightMenu);
-            FingerUI.SideMenuItem moveitem = new FingerUI.SideMenuItem(moveItemClicked, t.name, statList.RightMenu);
+            FingerUI.Menu.SideMenuItem copyitem = new FingerUI.Menu.SideMenuItem(copyItemClicked, t.name, statList.RightMenu);
+            FingerUI.Menu.SideMenuItem moveitem = new FingerUI.Menu.SideMenuItem(moveItemClicked, t.name, statList.RightMenu);
             MoveToGroupMenuItem.SubMenuItems.Add(moveitem);
             CopyToGroupMenuItem.SubMenuItems.Add(copyitem);
 
@@ -805,7 +806,7 @@ namespace PockeTwit
         private void UpdateRightMenu()
         {
 
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             if (selectedItem == null) { return; }
             Yedda.Twitter conn = GetMatchingConnection(selectedItem.Tweet.Account);
             if (selectedItem != null)
@@ -858,7 +859,7 @@ namespace PockeTwit
                 SetConnectedMenus(TwitterConnections[0], null);
             }
         }
-        private void SetConnectedMenus(Yedda.Twitter t, FingerUI.StatusItem item)
+        private void SetConnectedMenus(Yedda.Twitter t, StatusItem item)
         {
             SetLeftMenu();
             UpdateRightMenu();
@@ -1182,7 +1183,7 @@ namespace PockeTwit
         private void SetUpListControl()
         {
             statList.IsMaximized = ClientSettings.IsMaximized;
-            statList.WordClicked += new FingerUI.StatusItem.ClickedWordDelegate(statusList_WordClicked);
+            statList.WordClicked += new StatusItem.ClickedWordDelegate(statusList_WordClicked);
             statList.SelectedItemChanged += new EventHandler(statusList_SelectedItemChanged);
             statList.HookKey();
         }
@@ -1212,7 +1213,7 @@ namespace PockeTwit
         private void EmailThisItem()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = statList.SelectedItem;
+            StatusItem selectedItem = statList.SelectedItem;
             Microsoft.WindowsMobile.PocketOutlook.OutlookSession sess = new Microsoft.WindowsMobile.PocketOutlook.OutlookSession();
             Microsoft.WindowsMobile.PocketOutlook.EmailAccountCollection accounts = sess.EmailAccounts;
 
@@ -1238,7 +1239,7 @@ namespace PockeTwit
         private void ShowProfile()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
 
             using (ProfileView v = new ProfileView(selectedItem.Tweet.user))
             {
@@ -1383,7 +1384,7 @@ namespace PockeTwit
             currentSpecialTimeLine = null;
             UpdateHistoryPosition();
             ChangeCursor(Cursors.WaitCursor);
-            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem statItem = (StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
             ShowUserID = statItem.Tweet.user.screen_name;
             CurrentlySelectedAccount = statItem.Tweet.Account;
@@ -1415,7 +1416,7 @@ namespace PockeTwit
             if (history == null)
             {
                 if (statList.SelectedItem == null) { return; }
-                FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+                StatusItem selectedItem = (StatusItem)statList.SelectedItem;
                 if (string.IsNullOrEmpty(selectedItem.Tweet.in_reply_to_status_id)) { return; }
                 Conn = GetMatchingConnection(selectedItem.Tweet.Account);
                 lastStatus = selectedItem.Tweet;
@@ -1491,14 +1492,14 @@ namespace PockeTwit
         private void Quote()
         {
             if (statList.SelectedItem == null) { return; }
-            FingerUI.StatusItem selectedItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem selectedItem = (StatusItem)statList.SelectedItem;
             string quote = "RT @" + selectedItem.Tweet.user.screen_name + ": \"" + selectedItem.Tweet.text + "\"";
             SetStatus(quote, selectedItem.Tweet.id);
         }
 
         void statusList_SelectedItemChanged(object sender, EventArgs e)
         {
-            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem statItem = (StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
             CurrentlySelectedAccount = statItem.Tweet.Account;
             SetConnectedMenus(GetMatchingConnection(CurrentlySelectedAccount), statItem);
@@ -1611,7 +1612,7 @@ namespace PockeTwit
         {
             UpdateHistoryPosition();
             ShowUserID = TextClicked.Replace("@", "");
-            FingerUI.StatusItem statItem = (FingerUI.StatusItem)statList.SelectedItem;
+            StatusItem statItem = (StatusItem)statList.SelectedItem;
             if (statItem == null) { return; }
             ChangeCursor(Cursors.WaitCursor);
             HistoryItem i = new HistoryItem();

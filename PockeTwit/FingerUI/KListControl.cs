@@ -4,9 +4,11 @@ using System.Collections;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using FingerUI;
+using PockeTwit.FingerUI.Menu;
 using PockeTwit.TimeLines;
 
-namespace FingerUI
+namespace PockeTwit.FingerUI
 {
     public class KListControl : UserControl
     {
@@ -60,7 +62,7 @@ namespace FingerUI
 
         }
         
-		#region Fields (23) 
+        #region Fields (23) 
         private bool menuwasClicked = false;
         private Portal SlidingPortal = new Portal();
         private Popup NotificationArea = new Popup();
@@ -90,9 +92,9 @@ namespace FingerUI
         
         public SideMenu LeftMenu = new SideMenu(SideShown.Left);
         public SideMenu RightMenu = new SideMenu(SideShown.Right);
-		#endregion Fields 
+        #endregion Fields 
 
-		#region Enums (2) 
+        #region Enums (2) 
 
         enum XDirection
         {
@@ -105,21 +107,21 @@ namespace FingerUI
             Right
         }
 
-		#endregion Enums 
+        #endregion Enums 
 
-		#region Constructors (1) 
+        #region Constructors (1) 
 
         public KListControl()
         {
 
-            LeftMenu.ItemWasClicked+=new SideMenu.delClearMe(delegate{SnapBack();});
-            RightMenu.ItemWasClicked += new SideMenu.delClearMe(delegate { SnapBack(); });
+            LeftMenu.ItemWasClicked+=new SideMenu.DelClearMe(delegate{SnapBack();});
+            RightMenu.ItemWasClicked += new SideMenu.DelClearMe(delegate { SnapBack(); });
 
-            LeftMenu.AnimateMe += new SideMenu.delAnimateMe(this.startAnimation);
-            RightMenu.AnimateMe+=new SideMenu.delAnimateMe(this.startAnimation);
+            LeftMenu.AnimateMe += new SideMenu.DelAnimateMe(this.startAnimation);
+            RightMenu.AnimateMe+=new SideMenu.DelAnimateMe(this.startAnimation);
 
-            LeftMenu.NeedRedraw+=new SideMenu.delClearMe(delegate{Repaint();});
-            RightMenu.NeedRedraw += new SideMenu.delClearMe(delegate { Repaint(); });
+            LeftMenu.NeedRedraw+=new SideMenu.DelClearMe(delegate{Repaint();});
+            RightMenu.NeedRedraw += new SideMenu.DelClearMe(delegate { Repaint(); });
 
             ClickablesControl.NeedRedraw += new ClickablesMenu.delNoArgs(delegate { Repaint();});
             ClickablesControl.Dismissed += new ClickablesMenu.delNoArgs(delegate {HideClickablesControl();});
@@ -274,9 +276,9 @@ namespace FingerUI
         }
 
 
-		#endregion Constructors 
+        #endregion Constructors 
 
-		#region Properties (19) 
+        #region Properties (19) 
         
         private Point OldSize;
         private bool _FirstView = true;
@@ -489,17 +491,17 @@ namespace FingerUI
             }
         }
 
-		#endregion Properties 
+        #endregion Properties 
 
-		#region Delegates and Events (9) 
+        #region Delegates and Events (9) 
 
 
-		// Delegates (4) 
+        // Delegates (4) 
 
         public delegate void delAddItem(StatusItem item);
         public delegate void delClearMe();
         
-		// Events (5) 
+        // Events (5) 
 
         //public event delMenuItemSelected MenuItemSelected;
 
@@ -510,9 +512,9 @@ namespace FingerUI
         public event StatusItem.ClickedWordDelegate WordClicked;
 
 
-		#endregion Delegates and Events 
+        #endregion Delegates and Events 
 
-		#region Methods (49) 
+        #region Methods (49) 
         
         void animationTimer_Tick(object o)
         {
@@ -543,7 +545,7 @@ namespace FingerUI
             }
         }
          */
-		// Public Methods (16) 
+        // Public Methods (16) 
 
         private string _CurrentList = null;
         public string CurrentList()
@@ -802,7 +804,7 @@ namespace FingerUI
             this.Parent.KeyPress -= new KeyPressEventHandler(OnKeyPress);
         }
 
-		// Protected Methods (11) 
+        // Protected Methods (11) 
 
         protected override void Dispose(bool disposing)
         {
@@ -1441,7 +1443,7 @@ namespace FingerUI
 
 
 
-		// Private Methods (22) 
+        // Private Methods (22) 
 
         private void CheckForClicks(Point point)
         {
@@ -1612,7 +1614,7 @@ namespace FingerUI
             return index;
         }
 
-        private FingerUI.SideMenuItem GetMenuItemForPoint(MouseEventArgs e)
+        private global::PockeTwit.FingerUI.Menu.SideMenuItem GetMenuItemForPoint(MouseEventArgs e)
         {
             int LeftOfItem = this.Width - Math.Abs(XOffset);
             SideMenu MenuToCheck = null;
@@ -1878,13 +1880,13 @@ namespace FingerUI
         }
 
 
-		#endregion Methods 
+        #endregion Methods 
 
-		#region Nested Classes (1) 
+        #region Nested Classes (1) 
         public class ItemList : Dictionary<int, StatusItem>
         {
         }
-		#endregion Nested Classes 
+        #endregion Nested Classes 
         
     }
 }

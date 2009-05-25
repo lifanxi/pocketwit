@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using PockeTwit.TimeLines;
 
-namespace FingerUI
+namespace PockeTwit.FingerUI.Menu
 {
     public delegate void delMenuClicked();
 
