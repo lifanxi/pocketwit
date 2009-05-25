@@ -1687,7 +1687,7 @@ namespace PockeTwit
 
                 statList.Visible = true;
 
-                ShowSearchResults(SearchString, SavedSearch!=null);
+                ShowSearchResults(SearchString, (SavedSearch!=null && SavedSearch.autoUpdate));
             }
         }
 

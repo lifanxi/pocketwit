@@ -5,6 +5,8 @@ namespace PockeTwit.SpecialTimelines
     [Serializable]
     public class SavedSearchTimeLine : ISpecialTimeLine
     {
+        public bool autoUpdate { get; set; }
+
         public string ListName
         {
             get
