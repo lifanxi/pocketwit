@@ -294,9 +294,33 @@ namespace PockeTwit
             TimeLineType timeLineType = TimeLineType.Friends;
             if(t is SavedSearchTimeLine)
             {
+                var savedLine = (SavedSearchTimeLine) t;
+                if(!savedLine.autoUpdate)
+                {
+                    return GetRegularSavedSearchTimeLine(savedLine);
+                }
                 timeLineType = TimeLineType.Searches;
             }
             return LocalStorage.DataBaseUtility.GetList(timeLineType, ClientSettings.MaxTweets, t.GetConstraints()).ToArray();
+        }
+
+        private Library.status[] GetRegularSavedSearchTimeLine(SavedSearchTimeLine searchLine)
+        {
+            var TwitterConn = new Twitter
+            {
+                AccountInfo =
+                {
+                    ServerURL = ClientSettings.DefaultAccount.ServerURL,
+                    UserName = ClientSettings.DefaultAccount.UserName,
+                    Password = ClientSettings.DefaultAccount.Password,
+                    Enabled = ClientSettings.DefaultAccount.Enabled
+                }
+            };
+
+
+            status[] items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
+            
+            return items;
         }
 
         private void GetMessagesTimeLine(object o)
@@ -550,11 +574,14 @@ namespace PockeTwit
             foreach (var specialTimeLine in specialTimeLines)
             {
                 SavedSearchTimeLine searchLine = (SavedSearchTimeLine) specialTimeLine;
-                //Need a way to specify "since_id" here too.
-                status[] Items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
-                if (Items != null)
+                if (searchLine.autoUpdate)
                 {
-                    tempLine.AddRange(Items);
+                    //Need a way to specify "since_id" here too.
+                    status[] Items = SearchTwitter(TwitterConn, searchLine.SearchPhrase);
+                    if (Items != null)
+                    {
+                        tempLine.AddRange(Items);
+                    }
                 }
             }
 
@@ -569,6 +596,7 @@ namespace PockeTwit
             updateTimer.Enabled = true;
         }
 
+        
 
         private string FetchSpecificFromTwitter(Yedda.Twitter t, Yedda.Twitter.ActionType TimelineType)
         {

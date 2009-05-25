@@ -174,15 +174,16 @@ namespace PockeTwit.SpecialTimelines
                     }
 
                     comm.CommandText =
-                        "SELECT searchName, searchTerm from savedSearches;";
+                        "SELECT searchName, searchTerm, autoUpdate from savedSearches;";
                     using(var r = comm.ExecuteReader())
                     {
                         while(r.Read())
                         {
                             var searchName = r.GetString(0);
                             var searchTerm = r.GetString(1);
+                            var autoUpdate = r.GetBoolean(2);
 
-                            var savedLine = new SavedSearchTimeLine {name = searchName, SearchPhrase = searchTerm};
+                            var savedLine = new SavedSearchTimeLine {name = searchName, SearchPhrase = searchTerm, autoUpdate = autoUpdate};
                             Add(savedLine);
                         }
                     }
@@ -243,10 +244,11 @@ namespace PockeTwit.SpecialTimelines
                                 {
                                     var searchLine = (SavedSearchTimeLine) item;
                                     comm.CommandText =
-                                        "INSERT INTO savedSearches (searchName, searchTerm) VALUES (@searchName, @searchTerm);";
+                                        "INSERT INTO savedSearches (searchName, searchTerm, autoUpdate) VALUES (@searchName, @searchTerm, @autoUpdate);";
                                     comm.Parameters.Clear();
                                     comm.Parameters.Add(new SQLiteParameter("@searchName", searchLine.name));
                                     comm.Parameters.Add(new SQLiteParameter("@searchTerm", searchLine.SearchPhrase));
+                                    comm.Parameters.Add(new SQLiteParameter("@autoUpdate", searchLine.autoUpdate));
                                     comm.ExecuteNonQuery();
                                 }
                             }

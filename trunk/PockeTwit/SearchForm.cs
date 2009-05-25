@@ -197,6 +197,7 @@ namespace PockeTwit
                     SavedSearch = new SavedSearchTimeLine();
                     SavedSearch.name = txtGroupName.Text;
                     SavedSearch.SearchPhrase = this.SearchText;
+                    SavedSearch.autoUpdate = chkAutoUpdate.Checked;
                     SpecialTimeLinesRepository.Add(SavedSearch);
                     SpecialTimeLinesRepository.Save();
                 }
@@ -213,6 +214,11 @@ namespace PockeTwit
 
         private bool SureTheyWantToSave()
         {
+            //We don't need to warn them about searches without auto-update
+            if(!chkAutoUpdate.Checked)
+            {
+                return true;
+            }
             return MessageBox.Show("Saved searches can affect battery life. Are you sure you want to add this?",
                                    "Saved Search", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                                    MessageBoxDefaultButton.Button2) == DialogResult.Yes;
@@ -276,6 +282,12 @@ namespace PockeTwit
         private void chkSaveSearch_Click(object sender, EventArgs e)
         {
             txtGroupName.Enabled = chkSaveSearch.Checked;
+            chkAutoUpdate.Enabled = chkSaveSearch.Checked;
+        }
+
+        private void chkSaveSearch_CheckStateChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

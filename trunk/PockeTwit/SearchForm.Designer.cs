@@ -58,6 +58,7 @@ namespace PockeTwit
             this.cmbLocation = new System.Windows.Forms.ComboBox();
             this.chkSaveSearch = new System.Windows.Forms.CheckBox();
             this.txtGroupName = new System.Windows.Forms.TextBox();
+            this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -151,11 +152,12 @@ namespace PockeTwit
             // chkSaveSearch
             // 
             this.chkSaveSearch.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkSaveSearch.Location = new System.Drawing.Point(4, 112);
+            this.chkSaveSearch.Location = new System.Drawing.Point(4, 133);
             this.chkSaveSearch.Name = "chkSaveSearch";
             this.chkSaveSearch.Size = new System.Drawing.Size(116, 26);
             this.chkSaveSearch.TabIndex = 7;
             this.chkSaveSearch.Text = "Save as Group";
+            this.chkSaveSearch.CheckStateChanged += new System.EventHandler(this.chkSaveSearch_CheckStateChanged);
             this.chkSaveSearch.Click += new System.EventHandler(this.chkSaveSearch_Click);
             // 
             // txtGroupName
@@ -163,10 +165,22 @@ namespace PockeTwit
             this.txtGroupName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGroupName.Enabled = false;
-            this.txtGroupName.Location = new System.Drawing.Point(126, 117);
+            this.txtGroupName.Location = new System.Drawing.Point(126, 138);
             this.txtGroupName.Name = "txtGroupName";
             this.txtGroupName.Size = new System.Drawing.Size(111, 21);
             this.txtGroupName.TabIndex = 8;
+            // 
+            // chkAutoUpdate
+            // 
+            this.chkAutoUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoUpdate.Enabled = false;
+            this.chkAutoUpdate.ForeColor = System.Drawing.SystemColors.Control;
+            this.chkAutoUpdate.Location = new System.Drawing.Point(126, 165);
+            this.chkAutoUpdate.Name = "chkAutoUpdate";
+            this.chkAutoUpdate.Size = new System.Drawing.Size(111, 26);
+            this.chkAutoUpdate.TabIndex = 13;
+            this.chkAutoUpdate.Text = "AutoUpdate";
             // 
             // SearchForm
             // 
@@ -175,6 +189,7 @@ namespace PockeTwit
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(240, 268);
+            this.Controls.Add(this.chkAutoUpdate);
             this.Controls.Add(this.txtGroupName);
             this.Controls.Add(this.chkSaveSearch);
             this.Controls.Add(this.cmbLocation);
@@ -203,5 +218,6 @@ namespace PockeTwit
         private System.Windows.Forms.ComboBox cmbLocation;
         private System.Windows.Forms.CheckBox chkSaveSearch;
         private System.Windows.Forms.TextBox txtGroupName;
+        private System.Windows.Forms.CheckBox chkAutoUpdate;
     }
 }
