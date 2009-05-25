@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 
-namespace FingerUI
+namespace PockeTwit.FingerUI
 {
     public class StatusItem : IDisposable, IComparable
     {
@@ -15,9 +15,9 @@ namespace FingerUI
 
         private static System.Text.RegularExpressions.Regex GetClickables =
             new System.Text.RegularExpressions.Regex(@"(http://([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)|(@\w+)|(#\w+)(http://([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?)|(@\w+)|(#\w+)", 
-                System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                                     System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-		#region�Fields�(15)�
+        #region�Fields�(15)�
 
         private Graphics _ParentGraphics;
         private PockeTwit.Library.status _Tweet;
@@ -33,7 +33,7 @@ namespace FingerUI
         private int m_y = -1;
         #endregion�Fields�
 
-		#region�Constructors�(2)�
+        #region�Constructors�(2)�
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KListItem"/> class.
@@ -52,9 +52,9 @@ namespace FingerUI
         {
         }
 
-		#endregion�Constructors�
+        #endregion�Constructors�
 
-		#region�Properties�(12)�
+        #region�Properties�(12)�
 
         /// <summary>
         /// The unscrolled bounds for this item.
@@ -192,21 +192,21 @@ namespace FingerUI
         public int XIndex { get { return m_x; } set { m_x = value; } }
 
         
-		#endregion�Properties�
+        #endregion�Properties�
 
-		#region�Delegates�and�Events�(1)�
+        #region�Delegates�and�Events�(1)�
 
 
-		//�Delegates�(1)�
+        //�Delegates�(1)�
 
         public delegate void ClickedWordDelegate(string TextClicked);
 
-		#endregion�Delegates�and�Events�
+        #endregion�Delegates�and�Events�
 
-		#region�Methods�(4)�
+        #region�Methods�(4)�
 
 
-		//�Public�Methods�(2)�
+        //�Public�Methods�(2)�
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -340,7 +340,7 @@ namespace FingerUI
                         System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
                         ia.SetColorKey(PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0), PockeTwit.ThrottledArtGrabber.FavoriteImage.GetPixel(0, 0));
                         g.DrawImage(PockeTwit.ThrottledArtGrabber.FavoriteImage,
-                            new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
+                                    new Rectangle(bounds.X + 5, bounds.Y + 5, 7, 7), 0, 0, 7, 7, GraphicsUnit.Pixel, ia);
                     }
 
                     //If it's a reply or direct message, overlay that on the avatar
@@ -420,7 +420,7 @@ namespace FingerUI
             return this.Tweet.text;
         }
 
-		//�Private�Methods�(2)�
+        //�Private�Methods�(2)�
 
         //texbounds is the area we're allowed to draw within
         //lineOffset is how many lines we've already drawn in these bounds
@@ -439,7 +439,7 @@ namespace FingerUI
                 Pen uPen = lPen;
                 if (c.Text.StartsWith("#")) { uPen = hPen; }
                 g.DrawLine(uPen, (int)c.Location.Left + textBounds.Left, (int)c.Location.Bottom + textBounds.Top,
-                    (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
+                           (int)c.Location.Right + textBounds.Left, (int)c.Location.Bottom + textBounds.Top);
             }
             lPen.Dispose();
             hPen.Dispose();
@@ -447,26 +447,26 @@ namespace FingerUI
         }
 
 
-		#endregion�Methods�
+        #endregion�Methods�
 
-		#region�Nested�Classes�(1)�
+        #region�Nested�Classes�(1)�
 
 
         [Serializable]
         public class Clickable
         {
 
-		#region�Fields�(2)�
+            #region�Fields�(2)�
 
             public RectangleF Location;
             public string Text;
 
-		#endregion�Fields�
+            #endregion�Fields�
 
-		#region�Methods�(2)�
+            #region�Methods�(2)�
 
 
-		//�Public�Methods�(2)�
+            //�Public�Methods�(2)�
 
             public override bool Equals(object obj)
             {
@@ -485,10 +485,10 @@ namespace FingerUI
             }
 
 
-		#endregion�Methods�
+            #endregion�Methods�
 
         }
-		#endregion�Nested�Classes�
+        #endregion�Nested�Classes�
 
 
         #region Parsing Routines

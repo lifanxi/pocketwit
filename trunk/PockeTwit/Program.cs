@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using FingerUI;
 using Microsoft.WindowsCE.Forms;
 
 namespace PockeTwit
@@ -60,7 +61,7 @@ namespace PockeTwit
             {
                 return;
             }
-            if (ex is FingerUI.LowMemoryException)
+            if (ex is LowMemoryException)
             {
                 MessageBox.Show("You do not currently have enough graphics memory to run PockeTwit.  Please close some applications or soft-reset and try again.", "Low Memory", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;

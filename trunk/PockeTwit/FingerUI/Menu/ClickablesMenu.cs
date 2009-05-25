@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using PockeTwit.FingerUI;
 
 namespace FingerUI
 {
@@ -32,13 +33,13 @@ namespace FingerUI
 
         public int Height { get; set; }
 
-        public List<FingerUI.StatusItem.Clickable> Items
+        public List<StatusItem.Clickable> Items
         {
             set
             {
                 TextItems = new List<string>();
                 TextItems.Add("Detailed View");
-                foreach (FingerUI.StatusItem.Clickable c in value)
+                foreach (StatusItem.Clickable c in value)
                 {
                     if (!TextItems.Contains(c.Text))
                     {
@@ -64,7 +65,7 @@ namespace FingerUI
         public delegate void delNoArgs();
         public event delNoArgs NeedRedraw = delegate { };
         public event delNoArgs Dismissed = delegate { };
-        public event FingerUI.StatusItem.ClickedWordDelegate WordClicked = delegate { };
+        public event StatusItem.ClickedWordDelegate WordClicked = delegate { };
         
 
         #endregion Delegates and Events

@@ -446,6 +446,7 @@
     <Compile Include="FingerUI\FullScreenTweet.Designer.cs">
       <DependentUpon>FullScreenTweet.cs</DependentUpon>
     </Compile>
+    <Compile Include="FingerUI\Menu\MenuManager.cs" />
     <Compile Include="FingerUI\Menu\SideMenuItem.cs" />
     <Compile Include="FingerUI\Portal.cs">
       <SubType>Component</SubType>

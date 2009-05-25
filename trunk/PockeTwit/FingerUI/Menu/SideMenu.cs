@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
-using System.Text;
 
-namespace FingerUI
+namespace PockeTwit.FingerUI.Menu
 {
     public class SideMenu : System.Windows.Forms.Control
     {
-        public delegate void delAnimateMe();
-        public event delAnimateMe AnimateMe = delegate { };
+        public delegate void DelAnimateMe();
+        public event DelAnimateMe AnimateMe = delegate { };
         public bool IsAnimating { get { return _animationStep >= 0; }}
 
-        public SideMenu(FingerUI.KListControl.SideShown Side)
+        public SideMenu(KListControl.SideShown side)
         {
-            _Side = Side;
-            _Height = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
-            _Width = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+            _side = side;
+            _height = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            _width = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
         }
-        public delegate void delClearMe();
-        public event delClearMe ItemWasClicked = delegate { };
-        public event delClearMe NeedRedraw = delegate { };
-        private int TopOfSubMenu;
+        public delegate void DelClearMe();
+        public event DelClearMe ItemWasClicked = delegate { };
+        public event DelClearMe NeedRedraw = delegate { };
+        private int _topOfSubMenu;
 
-        private SideMenuItem _ExpandedItem = null;
+        private SideMenuItem _expandedItem;
         private SideMenuItem ExpandedItem
         {
             get
             {
-                return _ExpandedItem;
+                return _expandedItem;
             }
             set
             {
                 
                 if (value == null)
                 {
-                    if (_ExpandedItem != null)
+                    if (_expandedItem != null)
                     {
                         ExpandedItem.Expanded = false;
                         IsDirty = true;
@@ -43,29 +42,29 @@ namespace FingerUI
 
                         _animationTextColor = ClientSettings.DimmedColor;
                         _animationLineColor = ClientSettings.DimmedLineColor;
-                        isFading = false;
+                        _isFading = false;
                         _animationStep = 6;
                         AnimateMe();
                     }
-                    //SelectedItem = _ExpandedItem;
+                    //SelectedItem = _expandedItem;
                 }
                 else
                 {
-                    if (_ExpandedItem != null)
+                    if (_expandedItem != null)
                     {
-                        _ExpandedItem.Expanded = false;
+                        _expandedItem.Expanded = false;
                         IsDirty = true;
                         NeedRedraw();
                     }
 
                     SelectedItem = value.SubMenuItems[0];
                     _animationStep = 6;
-                    isFading = true;
+                    _isFading = true;
                     _animationTextColor = ClientSettings.MenuTextColor;
                     _animationLineColor = ClientSettings.LineColor;
                     AnimateMe();
                 }
-                _ExpandedItem = value;
+                _expandedItem = value;
             }
         }
         public bool IsExpanded
@@ -75,7 +74,7 @@ namespace FingerUI
                 return ExpandedItem != null;
             }
         }
-        private Bitmap _Rendered = null;
+        private Bitmap _rendered;
         public Bitmap Rendered
         {
             get
@@ -84,105 +83,105 @@ namespace FingerUI
                 {
                     DrawMenu();
                 }
-                return _Rendered;
+                return _rendered;
             }
         }
 
         public bool IsDirty = true;
 
-        private FingerUI.KListControl.SideShown _Side;
-        private List<SideMenuItem> Items = new List<SideMenuItem>();
-        private SideMenuItem _SelectedItem = null;
+        private readonly KListControl.SideShown _side;
+        private readonly List<SideMenuItem> _items = new List<SideMenuItem>();
+        private SideMenuItem _selectedItem;
         
         public SideMenuItem SelectedItem
         {
             get 
             {
-                lock (Items)
+                lock (_items)
                 {
-                    if (Items.Count == 0)
+                    if (_items.Count == 0)
                     {
                         return null;
                     }
-                    if(_SelectedItem==null)
+                    if(_selectedItem==null)
                     {
-                        return Items[1];
+                        return _items[1];
                     }
-                    return _SelectedItem;
+                    return _selectedItem;
                 }
             }
             set
             {
-                _SelectedItem = value;
+                _selectedItem = value;
                 IsDirty = true;
             }
         }
         public int Count
         {
-            get { return Items.Count; }
+            get { return _items.Count; }
         }
-        private int _ItemHeight = 0;
-        private int _TopOfMenu = 0;
-        public int ItemHeight { get { return _ItemHeight; } }
-        public int TopOfMenu { get { return _TopOfMenu; } }
+        private int _itemHeight;
+        private int _topOfMenu;
+        public int ItemHeight { get { return _itemHeight; } }
+        public int TopOfMenu { get { return _topOfMenu; } }
 
-        private string _UserName;
+        private string _userName;
         public string UserName
         {
             get
             {
-                return _UserName;
+                return _userName;
             }
             set
             {
-                _UserName = value;
+                _userName = value;
                 IsDirty=true;
             }
         }
 
-        private int _Height;
+        private int _height;
         public new int Height
         {
-            get { return _Height; }
+            get { return _height; }
             set
             {
-                if (value != _Height)
+                if (value != _height)
                 {
-                    _Height = value;
+                    _height = value;
                     SetMenuHeight();
-                    if (_Width > 0 && _Height > 0)
+                    if (_width > 0 && _height > 0)
                     {
-                        if (_Rendered != null)
+                        if (_rendered != null)
                         {
-                            _Rendered.Dispose();
+                            _rendered.Dispose();
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
                         }
-                        _Rendered = new Bitmap(_Width, _Height);
+                        _rendered = new Bitmap(_width, _height);
                     }
                     IsDirty = true;
                 }
             }
         }
 
-        private int _Width;
+        private int _width;
         public new int Width
         {
-            get{return _Width;}
+            get{return _width;}
             set
             {
-                if (value != _Width)
+                if (value != _width)
                 {
-                    _Width = value;
-                    if (_Width > 0 && _Height > 0)
+                    _width = value;
+                    if (_width > 0 && _height > 0)
                     {
-                        if (_Rendered != null)
+                        if (_rendered != null)
                         {
-                            _Rendered.Dispose();
+                            _rendered.Dispose();
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
                         }
-                        _Rendered = new Bitmap(_Width, _Height);
+                        _rendered = new Bitmap(_width, _height);
                     }
                     IsDirty = true;
                 }
@@ -201,12 +200,12 @@ namespace FingerUI
         {
             if (InvokeRequired)
             {
-                delClearMe d = new delClearMe(SetMenuHeight);
-                this.Invoke(d, null);
+                DelClearMe d = SetMenuHeight;
+                Invoke(d, null);
             }
             else
             {
-                if (Items.Count > 0)
+                if (_items.Count > 0)
                 {
                     try
                     {
@@ -219,23 +218,23 @@ namespace FingerUI
                         }
 
                         int multiplyer = 4;
-                        if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard )
+                        if (DetectDevice.DeviceType == DeviceType.Standard )
                         {
                             multiplyer = 3;
                         }
-                        int Count = 0;
-                        foreach (SideMenuItem item in Items)
+                        int i = 0;
+                        foreach (SideMenuItem item in _items)
                         {
                             if (item.Visible)
                             {
-                                Count++;
+                                i++;
                             }
                         }
-                        _ItemHeight = (screenHeight - (ClientSettings.TextSize * multiplyer)) / (Count-1);
-                        _TopOfMenu = ((screenHeight / 2) - ((Count * ItemHeight) / 2));
+                        _itemHeight = (screenHeight - (ClientSettings.TextSize * multiplyer)) / (i-1);
+                        _topOfMenu = ((screenHeight / 2) - ((i * ItemHeight) / 2));
                         if (ClientSettings.IsMaximized)
                         {
-                            _TopOfMenu = _TopOfMenu + (_ItemHeight/2);
+                            _topOfMenu = _topOfMenu + (_itemHeight/2);
                         }
                     }
                     catch (ObjectDisposedException) { }
@@ -243,46 +242,46 @@ namespace FingerUI
             }
         }
 
-        public void InsertMenuItem(int index, SideMenuItem Item)
+        public void InsertMenuItem(int index, SideMenuItem item)
         {
-            lock (Items)
+            lock (_items)
             {
-                Items.Insert(index, Item);
+                _items.Insert(index, item);
                 SetMenuHeight();
             }
             IsDirty=true;
         }
 
-        public void ResetMenu(IEnumerable<SideMenuItem> NewItems)
+        public void ResetMenu(IEnumerable<SideMenuItem> newItems)
         {
-            lock (Items)
+            lock (_items)
             {
-                foreach (SideMenuItem item in Items)
+                foreach (SideMenuItem item in _items)
                 {
-                    item.DoneWithClick -= new delMenuClicked(item_DoneWithClick);
-                    item.MenuExpandedOrCollapsed -= new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                    item.DoneWithClick -= ItemDoneWithClick;
+                    item.MenuExpandedOrCollapsed -= ItemMenuExpandedOrCollapsed;
                     if (item.HasChildren)
                     {
                         foreach (SideMenuItem subItem in item.SubMenuItems)
                         {
-                            subItem.DoneWithClick -= new delMenuClicked(item_DoneWithClick);
-                            subItem.MenuExpandedOrCollapsed -= new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                            subItem.DoneWithClick -= ItemDoneWithClick;
+                            subItem.MenuExpandedOrCollapsed -= ItemMenuExpandedOrCollapsed;
                         }
                     }
                 }
-                Items.Clear();
-                Items.AddRange(NewItems);
+                _items.Clear();
+                _items.AddRange(newItems);
                 SetMenuHeight();
-                foreach (SideMenuItem item in Items)
+                foreach (SideMenuItem item in _items)
                 {
-                    item.DoneWithClick += new delMenuClicked(item_DoneWithClick);
-                    item.MenuExpandedOrCollapsed += new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                    item.DoneWithClick += ItemDoneWithClick;
+                    item.MenuExpandedOrCollapsed += ItemMenuExpandedOrCollapsed;
                     if (item.HasChildren)
                     {
                         foreach (SideMenuItem subItem in item.SubMenuItems)
                         {
-                            subItem.DoneWithClick += new delMenuClicked(item_DoneWithClick);
-                            subItem.MenuExpandedOrCollapsed += new SideMenuItem.delItemExpanded(item_MenuExpandedOrCollapsed);
+                            subItem.DoneWithClick += ItemDoneWithClick;
+                            subItem.MenuExpandedOrCollapsed += ItemMenuExpandedOrCollapsed;
                         }
                     }
                 }
@@ -290,42 +289,42 @@ namespace FingerUI
             IsDirty=true;
         }
 
-        void item_MenuExpandedOrCollapsed(SideMenuItem sender, bool Opened)
+        void ItemMenuExpandedOrCollapsed(SideMenuItem sender, bool opened)
         {
             ExpandedItem = sender;
-            this.IsDirty = true;
+            IsDirty = true;
             NeedRedraw();
         }
 
-        void item_DoneWithClick()
+        void ItemDoneWithClick()
         {
             ExpandedItem = null;
             ItemWasClicked();
         }
 
-        public void AddItems(IEnumerable<SideMenuItem> NewItems)
+        public void AddItems(IEnumerable<SideMenuItem> newItems)
         {
-            lock (Items)
+            lock (_items)
             {
-                foreach (SideMenuItem Item in NewItems)
+                foreach (SideMenuItem item in newItems)
                 {
-                    if (!Items.Contains(Item))
+                    if (!_items.Contains(item))
                     {
-                        Items.Add(Item);
+                        _items.Add(item);
                     }
                 }
                 SetMenuHeight();
             }
             IsDirty=true;
         }
-        public void RemoveItem(SideMenuItem OldItem)
+        public void RemoveItem(SideMenuItem oldItem)
         {
-            lock (Items)
+            lock (_items)
             {
-                if (Items.Contains(OldItem))
+                if (_items.Contains(oldItem))
                 {
-                    OldItem.DoneWithClick -= new delMenuClicked(item_DoneWithClick);
-                    Items.Remove(OldItem);
+                    oldItem.DoneWithClick -= ItemDoneWithClick;
+                    _items.Remove(oldItem);
                 }
                 SetMenuHeight();
             }
@@ -333,27 +332,27 @@ namespace FingerUI
         }
         public SideMenuItem[] GetItems()
         {
-            lock (Items)
+            lock (_items)
             {
-                return Items.ToArray();
+                return _items.ToArray();
             }
         }
 
-        public bool Contains(SideMenuItem ItemToSeek)
+        public bool Contains(SideMenuItem itemToSeek)
         {
-            lock (Items)
+            lock (_items)
             {
-                return Items.Contains(ItemToSeek);
+                return _items.Contains(itemToSeek);
             }
         }
-        public bool Contains(string TextOfMenuItem)
+        public bool Contains(string textOfMenuItem)
         {
             bool bFound = false;
-            lock (Items)
+            lock (_items)
             {
-                foreach (SideMenuItem Item in Items)
+                foreach (SideMenuItem item in _items)
                 {
-                    if (Item.Text == TextOfMenuItem && Item.Visible)
+                    if (item.Text == textOfMenuItem && item.Visible)
                     {
                         bFound = true;
                         break;
@@ -365,24 +364,17 @@ namespace FingerUI
 
         public void SelectDown()
         {
-            List<SideMenuItem> ItemsToUse = Items;
+            List<SideMenuItem> itemsToUse = _items;
             if (ExpandedItem != null)
             {
-                ItemsToUse = ExpandedItem.SubMenuItems;
+                itemsToUse = ExpandedItem.SubMenuItems;
             }
-            lock (ItemsToUse)
+            int prevSelected = itemsToUse.IndexOf(SelectedItem);
+            lock (itemsToUse)
             {
-                int PrevSelected = ItemsToUse.IndexOf(SelectedItem);
-                if (PrevSelected < ItemsToUse.Count - 1)
-                {
-                    _SelectedItem = ItemsToUse[PrevSelected + 1];
-                }
-                else
-                {
-                    _SelectedItem = ItemsToUse[0];
-                }
+                _selectedItem = prevSelected < itemsToUse.Count - 1 ? itemsToUse[prevSelected + 1] : itemsToUse[0];
             }
-            if (!_SelectedItem.Visible)
+            if (!_selectedItem.Visible)
             {
                 SelectDown();
             }
@@ -390,44 +382,37 @@ namespace FingerUI
         }
         public void SelectUp()
         {
-            List<SideMenuItem> ItemsToUse = Items;
+            List<SideMenuItem> itemsToUse = _items;
             if (ExpandedItem != null)
             {
-                ItemsToUse = ExpandedItem.SubMenuItems;
+                itemsToUse = ExpandedItem.SubMenuItems;
             }
-            lock (ItemsToUse)
+            lock (itemsToUse)
             {
-                int PrevSelected = ItemsToUse.IndexOf(SelectedItem);
-                if (PrevSelected > 0)
-                {
-                    _SelectedItem = ItemsToUse[PrevSelected - 1];
-                }
-                else
-                {
-                    _SelectedItem = ItemsToUse[ItemsToUse.Count - 1];
-                }
+                int prevSelected = itemsToUse.IndexOf(SelectedItem);
+                _selectedItem = prevSelected > 0 ? itemsToUse[prevSelected - 1] : itemsToUse[itemsToUse.Count - 1];
             }
-            if (!_SelectedItem.Visible)
+            if (!_selectedItem.Visible)
             {
                 SelectUp();
             }
             IsDirty=true;
         }
 
-        public void SelectByText(string ItemToSelect)
+        public void SelectByText(string itemToSelect)
         {
-            List<SideMenuItem> ItemsToUse = Items;
+            List<SideMenuItem> itemsToUse = _items;
             if (ExpandedItem != null)
             {
-                ItemsToUse = ExpandedItem.SubMenuItems;
+                itemsToUse = ExpandedItem.SubMenuItems;
             }
-            lock (ItemsToUse)
+            lock (itemsToUse)
             {
-                foreach (SideMenuItem Item in ItemsToUse)
+                foreach (SideMenuItem item in itemsToUse)
                 {
-                    if (Item.Text == ItemToSelect)
+                    if (item.Text == itemToSelect)
                     {
-                        _SelectedItem = Item;
+                        _selectedItem = item;
                         IsDirty = true;
 
                         break;
@@ -441,66 +426,66 @@ namespace FingerUI
             SelectedItem.ClickMe();
         }
 
-        public void InvokeByText(string ItemToInvoke)
+        public void InvokeByText(string itemToInvoke)
         {
-            lock (Items)
+            lock (_items)
             {
-                foreach (SideMenuItem Item in Items)
+                foreach (SideMenuItem item in _items)
                 {
-                    if (Item.Text == ItemToInvoke)
+                    if (item.Text == itemToInvoke)
                     {
-                        Item.ClickMe();
+                        item.ClickMe();
                         break;
                     }
                 }
             }
         }
 
-        public void SelectByNumber(int Number)
+        public void SelectByNumber(int number)
         {
-            List<SideMenuItem> ItemsToUse = Items;
+            List<SideMenuItem> itemsToUse = _items;
             if (ExpandedItem != null)
             {
-                ItemsToUse = ExpandedItem.SubMenuItems;
+                itemsToUse = ExpandedItem.SubMenuItems;
             }
-            lock (ItemsToUse)
+            lock (itemsToUse)
             {
                 int realNum = 0;
-                if (ItemsToUse[0].Visible)
+                if (itemsToUse[0].Visible)
                 {
                     realNum = -1;
                 }
-                for (int i = 0; i < ItemsToUse.Count; i++)
+                for (int i = 0; i < itemsToUse.Count; i++)
                 {
-                    if (ItemsToUse[i].Visible)
+                    if (itemsToUse[i].Visible)
                     {
                         realNum++;
                     }
-                    if (realNum == Number)
+                    if (realNum == number)
                     {
-                        _SelectedItem = ItemsToUse[i];
+                        _selectedItem = itemsToUse[i];
                         break;
                     }
                 }
             }
             IsDirty = true;
         }
-        public void ReplaceItem(SideMenuItem Original, SideMenuItem New)
+        public void ReplaceItem(SideMenuItem original, SideMenuItem @new)
         {
-            lock (Items)
+            lock (_items)
             {
-                for (int i = 0; i < Items.Count; i++)
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    if (Items[i] == Original)
+                    if (_items[i] == original)
                     {
-                        Items[i] = New;
+                        _items[i] = @new;
                     }
                 }
             }
             IsDirty=true;
         }
 
-        public void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
+        public new void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             SideMenuItem i = GetMenuItemForTransposedPoint(new Point(e.X, e.Y));
             if (i != null)
@@ -511,7 +496,7 @@ namespace FingerUI
             }
         }
 
-        public void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
+        public new void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             SideMenuItem i = GetMenuItemForTransposedPoint(new Point(e.X, e.Y));
             if (i != null)
@@ -539,55 +524,55 @@ namespace FingerUI
 
         private void DrawMenu()
         {
-            Rectangle ExpandedRect = new Rectangle();
-            lock (Items)
+            var expandedRect = new Rectangle();
+            lock (_items)
             {
-                System.Drawing.Color MenuTextColor = animationTextColor;
-                System.Drawing.Color MenuLineColor = animationLineColor;
+                var menuTextColor = AnimationTextColor;
+                var menuLineColor = AnimationLineColor;
                 
                 int i = 1;
-                if (this.Items[0].CanHide && this.Items[0].Visible)
+                if (_items[0].CanHide && _items[0].Visible)
                 {
                     i = 0;
                 }
-                if (_Rendered == null)
+                if (_rendered == null)
                 {
-                    _Rendered = new Bitmap(_Width, _Height);
+                    _rendered = new Bitmap(_width, _height);
                 }
-                using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
+                using (Graphics mBackBuffer = Graphics.FromImage(_rendered))
                 {
-                    m_backBuffer.Clear(ClientSettings.BackColor);
-                    int CurrentTop = TopOfMenu;
+                    mBackBuffer.Clear(ClientSettings.BackColor);
+                    int currentTop = TopOfMenu;
 
-                    SideMenuItem[] ItemList = this.GetItems();
-                    foreach (SideMenuItem Item in ItemList)
+                    SideMenuItem[] itemList = GetItems();
+                    foreach (SideMenuItem item in itemList)
                     {
-                        if (Item.Visible)
+                        if (item.Visible)
                         {
-                            DrawSingleItem(i, m_backBuffer, 0, CurrentTop, Item, MenuLineColor, MenuTextColor);
+                            DrawSingleItem(i, mBackBuffer, 0, currentTop, item, menuLineColor, menuTextColor);
 
                             i++;
 
-                            if (Item.Expanded)
+                            if (item.Expanded)
                             {
-                                ExpandedRect = new Rectangle(0, CurrentTop, _Width, ItemHeight);
+                                expandedRect = new Rectangle(0, currentTop, _width, ItemHeight);
                             }
-                            CurrentTop = CurrentTop + ItemHeight;
+                            currentTop = currentTop + ItemHeight;
                         }
                     }
                     if (ExpandedItem != null)
                     {
-                        DrawSubMenu(ExpandedItem, ExpandedRect);
+                        DrawSubMenu(ExpandedItem, expandedRect);
                     }
-                    using (Pen whitePen = new Pen(ClientSettings.LineColor))
+                    using (var whitePen = new Pen(ClientSettings.LineColor))
                     {
-                        if (_Side == FingerUI.KListControl.SideShown.Right)
+                        if (_side == KListControl.SideShown.Right)
                         {
-                            m_backBuffer.DrawLine(whitePen, 0, 0, 0, this.Height);
+                            mBackBuffer.DrawLine(whitePen, 0, 0, 0, Height);
                         }
                         else
                         {
-                            m_backBuffer.DrawLine(whitePen, _Width-1, 0, _Width- 1, this.Height);
+                            mBackBuffer.DrawLine(whitePen, _width-1, 0, _width- 1, Height);
                         }
                     }
                     if (_animationStep == 0) 
@@ -605,41 +590,34 @@ namespace FingerUI
 
         }
 
-        private void DrawSingleItem(int i, Graphics m_backBuffer, int Offset, int CurrentTop, SideMenuItem Item, Color MenuLineColor, Color MenuTextColor)
+        private void DrawSingleItem(int i, Graphics mBackBuffer, int offset, int currentTop, SideMenuItem item, Color menuLineColor, Color menuTextColor)
         {
-            int LeftPos = 0;
-            string DisplayItem = Item.Text;
+            int leftPos = 0;
+            string displayItem = item.Text;
             
-            if (PockeTwit.DetectDevice.DeviceType == PockeTwit.DeviceType.Standard)
+            if (DetectDevice.DeviceType == DeviceType.Standard)
             {
-                DisplayItem = i.ToString() + ". " + DisplayItem;
+                displayItem = i + ". " + displayItem;
             }
 
-            if (_Side == FingerUI.KListControl.SideShown.Left)
+            if (_side == KListControl.SideShown.Left)
             {
-                int TextWidth = (int)m_backBuffer.MeasureString(DisplayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
-                LeftPos = _Width - (TextWidth + 5 + Offset);
+                int textWidth = (int)mBackBuffer.MeasureString(displayItem, ClientSettings.MenuFont).Width + ClientSettings.Margin;
+                leftPos = _width - (textWidth + 5 + offset);
             }
             else
             {
-                LeftPos = LeftPos + ClientSettings.Margin + 5 + Offset;
+                leftPos = leftPos + ClientSettings.Margin + 5 + offset;
             }
-            using (Pen whitePen = new Pen(MenuLineColor))
+            using (var whitePen = new Pen(menuLineColor))
             {
                 Rectangle menuRect;
-                if (_Side == KListControl.SideShown.Left)
-                {
-                    menuRect = new Rectangle(0, CurrentTop, _Width - Offset, ItemHeight);
-                }
-                else
-                {
-                    menuRect = new Rectangle(Offset, CurrentTop, _Width, ItemHeight);
-                }
+                menuRect = _side == KListControl.SideShown.Left ? new Rectangle(0, currentTop, _width - offset, ItemHeight) : new Rectangle(offset, currentTop, _width, ItemHeight);
 
                 Color BackColor;
                 Color GradColor;
                 Color TextColor;
-                if (Item == SelectedItem)
+                if (item == SelectedItem)
                 {
                     BackColor = ClientSettings.SelectedBackColor;
                     GradColor = ClientSettings.SelectedBackGradColor;
@@ -649,57 +627,56 @@ namespace FingerUI
                 {
                     BackColor = ClientSettings.BackColor;
                     GradColor = ClientSettings.BackGradColor;
-                    TextColor = MenuTextColor;
+                    TextColor = menuTextColor;
                 }
                 try
                 {
-                    Gradient.GradientFill.Fill(m_backBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
+                    Gradient.GradientFill.Fill(mBackBuffer, menuRect, BackColor, GradColor, Gradient.GradientFill.FillDirection.TopToBottom);
                 }
                 catch
                 {
-                    using (Brush BackBrush = new SolidBrush(ClientSettings.SelectedBackColor))
+                    using (Brush backBrush = new SolidBrush(ClientSettings.SelectedBackColor))
                     {
-                        m_backBuffer.FillRectangle(BackBrush, menuRect);
+                        mBackBuffer.FillRectangle(backBrush, menuRect);
                     }
                 }
-                m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
+                mBackBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Top, menuRect.Right, menuRect.Top);
                 using (Brush sBrush = new SolidBrush(TextColor))
                 {
-                    StringFormat sFormat = new StringFormat();
-                    sFormat.LineAlignment = StringAlignment.Center;
-                    int TextTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
-                    DisplayItem = DisplayItem.Replace("@User", "@" + _UserName);
-                    m_backBuffer.DrawString(DisplayItem, ClientSettings.MenuFont, sBrush, LeftPos, TextTop, sFormat);
+                    var sFormat = new StringFormat {LineAlignment = StringAlignment.Center};
+                    int textTop = ((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top;
+                    displayItem = displayItem.Replace("@User", "@" + _userName);
+                    mBackBuffer.DrawString(displayItem, ClientSettings.MenuFont, sBrush, leftPos, textTop, sFormat);
                 }
-                m_backBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
+                mBackBuffer.DrawLine(whitePen, menuRect.Left, menuRect.Bottom, menuRect.Right, menuRect.Bottom);
             }
         }
 
         
 
         private int _animationStep = -1;
-        private int _animationDelta
+        private static int _animationDelta
         {
             get
             {
                 return ClientSettings.TextSize / 3;
             }
         }
-        private int rTextColorDelta
+        private static int rTextColorDelta
         {
             get
             {
                 return (ClientSettings.DimmedColor.R - ClientSettings.MenuTextColor.R) / 3;
             }
         }
-        private int gTextColorDelta
+        private static int gTextColorDelta
         {
             get
             {
                 return (ClientSettings.DimmedColor.G - ClientSettings.MenuTextColor.G) / 3;
             }
         }
-        private int bTextColorDelta
+        private static int bTextColorDelta
         {
             get
             {
@@ -707,21 +684,21 @@ namespace FingerUI
             }
         }
 
-        private int rLineColorDelta
+        private static int rLineColorDelta
         {
             get
             {
                 return (ClientSettings.DimmedLineColor.R - ClientSettings.LineColor.R) / 3;
             }
         }
-        private int gLineColorDelta
+        private static int gLineColorDelta
         {
             get
             {
                 return (ClientSettings.DimmedLineColor.G - ClientSettings.LineColor.G) / 3;
             }
         }
-        private int bLineColorDelta
+        private static int bLineColorDelta
         {
             get
             {
@@ -729,9 +706,9 @@ namespace FingerUI
             }
         }
 
-        private bool isFading = true;
+        private bool _isFading = true;
         private Color _animationLineColor = ClientSettings.LineColor;
-        private Color animationLineColor
+        private Color AnimationLineColor
         {
             get
             {
@@ -740,7 +717,7 @@ namespace FingerUI
                     Color newColor;
                     try
                     {
-                        if (isFading)
+                        if (_isFading)
                         {
                             newColor = Color.FromArgb(_animationLineColor.R + rLineColorDelta,
                                                       _animationLineColor.G + gLineColorDelta,
@@ -760,14 +737,11 @@ namespace FingerUI
                     _animationLineColor = newColor;
                     return newColor;
                 }
-                else
-                {
-                    return _animationLineColor;
-                }
+                return _animationLineColor;
             }
         }
         private Color _animationTextColor = ClientSettings.MenuTextColor;
-        private Color animationTextColor
+        private Color AnimationTextColor
         {
             get
             {
@@ -776,7 +750,7 @@ namespace FingerUI
                     Color newColor;
                     try
                     {
-                        if (isFading)
+                        if (_isFading)
                         {
                             newColor = Color.FromArgb(_animationTextColor.R + rTextColorDelta,
                                                       _animationTextColor.G + gTextColorDelta,
@@ -796,120 +770,110 @@ namespace FingerUI
                     _animationTextColor = newColor;
                     return newColor;
                 }
-                else
-                {
-                    return _animationTextColor;
-                }
+                return _animationTextColor;
             }
         }
         
-        private void DrawSubMenu(SideMenuItem Item, Rectangle menuRect)
+        private void DrawSubMenu(SideMenuItem item, Rectangle menuRect)
         {
             int i = 0;
-            int OffSet = 0;
+            int offSet;
             if (_animationStep >= 0)
             {
-                OffSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
+                offSet = ClientSettings.TextSize - (_animationStep * _animationDelta);
             }
             else
             {
-                OffSet = ClientSettings.TextSize;
+                offSet = ClientSettings.TextSize;
             }
-            int ItemsCount = Item.SubMenuItems.Count;
+            int itemsCount = item.SubMenuItems.Count;
             if (menuRect.Height > 0)
             {
-                TopOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (ItemsCount * ItemHeight / 2);
+                _topOfSubMenu = (((menuRect.Bottom - menuRect.Top) / 2) + menuRect.Top) - (itemsCount * ItemHeight / 2);
             }
             else
             {
-                TopOfSubMenu = this.Height/2 - (ItemsCount * ItemHeight / 2);
+                _topOfSubMenu = Height/2 - (itemsCount * ItemHeight / 2);
             }
-            if (TopOfSubMenu < 0) { TopOfSubMenu = 0; }
-            int backPedal = this.Height - (TopOfSubMenu + (Item.SubMenuItems.Count * ItemHeight));
+            if (_topOfSubMenu < 0) { _topOfSubMenu = 0; }
+            int backPedal = Height - (_topOfSubMenu + (item.SubMenuItems.Count * ItemHeight));
             if(backPedal<0)
             {
-                TopOfSubMenu = TopOfSubMenu + backPedal;
+                _topOfSubMenu = _topOfSubMenu + backPedal;
             }
-            int CurrentTop = TopOfSubMenu;
-            int CurrentBottom = CurrentTop + ItemHeight;
-            using (Graphics m_backBuffer = Graphics.FromImage(_Rendered))
+            int currentTop = _topOfSubMenu;
+            int currentBottom = currentTop + ItemHeight;
+            using (Graphics mBackBuffer = Graphics.FromImage(_rendered))
             {
-                foreach (SideMenuItem subItem in Item.SubMenuItems)
+                foreach (SideMenuItem subItem in item.SubMenuItems)
                 {
                     
                     if (subItem.Visible)
                     {
-                        DrawSingleItem(i, m_backBuffer, OffSet, CurrentTop, subItem, ClientSettings.LineColor, ClientSettings.MenuTextColor);
+                        DrawSingleItem(i, mBackBuffer, offSet, currentTop, subItem, ClientSettings.LineColor, ClientSettings.MenuTextColor);
                         i++;
-                        CurrentBottom = CurrentTop + ItemHeight;
-                        CurrentTop = CurrentTop + ItemHeight;
+                        currentBottom = currentTop + ItemHeight;
+                        currentTop = currentTop + ItemHeight;
                         
                     }
                 }
-                using (Pen whitePen = new Pen(ClientSettings.LineColor))
+                using (var whitePen = new Pen(ClientSettings.LineColor))
                 {
-                    if (_Side == KListControl.SideShown.Left)
+                    if (_side == KListControl.SideShown.Left)
                     {
-                        m_backBuffer.DrawLine(whitePen, _Width - OffSet, TopOfSubMenu, _Width - OffSet, CurrentBottom);
+                        mBackBuffer.DrawLine(whitePen, _width - offSet, _topOfSubMenu, _width - offSet, currentBottom);
                     }
                     else
                     {
-                        m_backBuffer.DrawLine(whitePen, OffSet, TopOfSubMenu, OffSet, CurrentBottom);
+                        mBackBuffer.DrawLine(whitePen, offSet, _topOfSubMenu, offSet, currentBottom);
                     }
                 }
             }
         }
 
-        public FingerUI.SideMenuItem GetMenuItemForTransposedPoint(Point X)
+        public SideMenuItem GetMenuItemForTransposedPoint(Point x)
         {
-            List<SideMenuItem> ListOfItems = Items;
+            List<SideMenuItem> listOfItems = _items;
             int TopOfItem = TopOfMenu;
-            int Offset = 0;
+            int offset = 0;
             if (ExpandedItem != null)
             {
-                ListOfItems = ExpandedItem.SubMenuItems;
-                TopOfItem = TopOfSubMenu;
-                Offset = ClientSettings.TextSize; 
+                listOfItems = ExpandedItem.SubMenuItems;
+                TopOfItem = _topOfSubMenu;
+                offset = ClientSettings.TextSize; 
             }
             
 
-            foreach (SideMenuItem MenuItem in ListOfItems)
+            foreach (SideMenuItem menuItem in listOfItems)
             {
-                if (MenuItem.Visible)
+                if (menuItem.Visible)
                 {
 
                     Rectangle menuRect;
-                    if (_Side == KListControl.SideShown.Left)
-                    {
-                        menuRect = new Rectangle(0, TopOfItem, Width-Offset, ItemHeight);
-                    }
-                    else
-                    {
-                        menuRect = new Rectangle(Offset, TopOfItem, Width, ItemHeight);
-                    }
+                    menuRect = _side == KListControl.SideShown.Left ? new Rectangle(0, TopOfItem, Width-offset, ItemHeight) : new Rectangle(offset, TopOfItem, Width, ItemHeight);
                     TopOfItem = TopOfItem + ItemHeight;
-                    if (menuRect.Contains(X))
+                    if (menuRect.Contains(x))
                     {
-                        return MenuItem;
+                        return menuItem;
                     }
                 }
             }
             return null;
         }
 
-        public FingerUI.SideMenuItem GetMenuItemForPoint(Point X, int LeftOfItem)
+        public SideMenuItem GetMenuItemForPoint(Point x, int leftOfItem)
         {
-            int TopOfItem = TopOfMenu;
+            int topOfItem = TopOfMenu;
             
-            foreach (SideMenuItem MenuItem in Items)
+            foreach (SideMenuItem menuItem in _items)
             {
-                if (MenuItem.Visible)
+                if (menuItem.Visible)
                 {
-                    Rectangle menuRect = new Rectangle(LeftOfItem, TopOfItem, Width, ItemHeight);
-                    TopOfItem = TopOfItem + ItemHeight;
-                    if (menuRect.Contains(X))
+                    var menuRect = new Rectangle(leftOfItem, topOfItem, Width, ItemHeight);
+                    topOfItem = topOfItem + ItemHeight;
+                    if (menuRect.Contains(x))
                     {
-                        return MenuItem;
+                        return menuItem;
                     }
                 }
             }
