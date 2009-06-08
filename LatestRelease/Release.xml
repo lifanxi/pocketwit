@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.74</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv74.CAB</url>
-  <notes>Fix existing image post
-Fix 3 common crash reports
+  <version>.75</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv75a.CAB</url>
+  <notes>Save searches as groups
+New media services including TweetPhoto
+Improved today screen plugin
+Shorten tweets with 140it
+Choose account to follow from
+Fix issue updating users
+Fix crash in notification
 </notes>
 </LatestRelease>
