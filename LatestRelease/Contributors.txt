@@ -1,7 +1,7 @@
 @jakes:Lead Developer
 @roelvandenbrand:Team Member
 @marclandis:Team Member
-@@theMark_S:Team Member
+@theMark_S:Team Member
 @markandey:Code
 @kjhughes:Code
 @thelovebug:Sponsor
