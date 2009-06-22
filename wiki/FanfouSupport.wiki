@@ -20,6 +20,28 @@ http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.CAB
 
 * 注意：这只是一个预览版本的软件，仅用于体验和试验，我们不对其功能和可能出现的问题做任何保证 *
 
+= Usage 使用方法 =
+
+Get the CAB installation package and send it to your Windows Mobile. Install it.
+
+After that you will have three component on your device:
+
+PockeTwit: The main program of PockeTwit. 
+PockeTwit QuickPost: The Quick Post program which can be used to send message directly.
+PockeTwit Today Plugin: Put PockeTwit on the Today screen. 
+
+When you start PoweTwit for the first time, it will ask you to configure the account. You can select from multiple service provider and set up several accounts together. For Fanfou account, select "Fanfou" from the service provider list. 
+
+下载CAB文件并上传到Windows Mobile设备上，安装。
+
+安装完成后，设备上会多出三项功能：
+
+PockeTwit: PockeTwit的主程序，包含完整的功能。
+PockeTwit QuickPost: 用于快速发布消息（更新状态）的小程序。
+PockeTwit今日插件: PockeTwit在“今日”上的插件。位于“设置->个人->今日->项目”。
+
+在第一次启动PockeTwit时，它会要求你设置帐号。你可以设置多个来自不同服务商的帐号。对于饭否用户，请在服务商列表中选择“Fanfou”。
+
 = Known Issues 已知问题 =
 
   # Direct Message is not working. It will be posted as a normal status update. Because Fanfou use different way of sending Direct Message compared to Twitter.
