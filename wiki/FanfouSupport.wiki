@@ -1,0 +1,53 @@
+# This page describes the support for Fanfou in PockeTwit 
+
+= Introduction 简介 =
+
+Fanfou (www.fanfou.com) is one of the most famous Twitter like micro blog service provider in China. This page will summarize the current status of Fanfou support in PockeTwit. 
+
+饭否 (www.fanfou.com) 是中国知名的微博客服务提供商之一，本页面上介绍PockeTwit对饭否的支持情况。
+
+= Download 下载 = 
+
+Currently, we have only released a preview version of PockeTwit with Fanfou support. You can download it at the Downloads section in this project, or get it directly from the following URL:
+
+http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.CAB
+
+* CAUTION: This is a preview version of the software, use at your own risk. *
+
+目前，我们只发布了一个支持饭否的PockeTwit的预览版本。您可以在本项目的下载页面上下载到它，也可以直接从下面的URL上下载。
+
+http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.CAB
+
+* 注意：这只是一个预览版本的软件，仅用于体验和试验，我们不对其功能和可能出现的问题做任何保证 *
+
+= Known Issues 已知问题 =
+
+  # Direct Message is not working. It will be posted as a normal status update. Because Fanfou use different way of sending Direct Message compared to Twitter.
+  # Click on @ link in status will not work. Because Fanfou use screen name instead of ID for @ syntax and there is no way to find out one's ID via his screen name.
+  # Some UI or message has not been localized. 
+  # Upload photo is not supported.
+
+  # 发私信的功能不能正常工作。如果选择发私信，它的内容会以普通的状态更新方式出现。因为Twitter使用“d ID 内容”的方式发私信，而饭否不支持这样的语法。
+  # 在主界面的上@链接不能正常打开。因为饭否＠后面跟的是昵称而不是用户ID，并且饭否API中无法通过昵称查到ID，所以点击@链接不能正常的找到对应用户的页面。
+  # 有些界面和提示仍然是英文的，没有完全汉化。
+  # 暂时还不支持上传照片
+
+= Development Status 开发情况 =
+
+The development of Fanfou support started since June 18, 2009. The major developer of this feature is Li Fanxi (Website: http://www.freemindworld.com, Fanfou: http://fanfou.com/lifanxi, Twitter: http://twitter.com/lifanxi)
+
+Currently, the development is performed on a separated tree in PockeTwit Subversion repository. The development focuses on two aspects: 
+
+  * Fanfou support
+  * Localized version for Chinese user
+
+These changes will be merged to the main trunk after they become stable and maintainable. 
+
+PockeTwit对饭否支持的开发工作开始于2009年6月18日。目前主要的开发人员是李凡希 (网站：http://www.freemindworld.com，饭否页面：http://fanfou.com/lifanxi，Twitter页面：http://twitter.com/lifanxi）
+
+目前，PockeTwit对饭否的支持开发在PockeTwit的Subversion中的一个分支上进行，开发主要包括两个方面的内容：
+
+  * 饭否功能的支持
+  * 软件的汉化
+
+这些改动在基本稳定并适合做进一步维护后，最终会合并到PockeTwit的主干上，作为官方PockeTwit的一部分一起发布。
