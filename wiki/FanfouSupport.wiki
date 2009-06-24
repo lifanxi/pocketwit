@@ -64,12 +64,25 @@ PockeTwit今日插件: PockeTwit在“今日”上的插件。位于“设置->�
   # 部分支持发私信的功能，通过在发布状态更新时使用“d 用户ID 消息内容”的方式，就可以发送私信。注意与@功能用法的不同，d后面有一个空格，并且是使用用户ID而不是用户的昵称来发送。
   # 暂时不支持搜索消息的功能
 
+= FAQ 常见问题 =
+
+*Q:* Why GPS position seems to be inaccurate on Google map.
+
+*A:* For some reason, the map provided by Google in China is not accurate according to GPS position. You can switch to English version of Google and use satellite map to see your position, the result will be much better. 
+
+*Q:* 为什么GPS定位看上去很不准确？
+
+*A:* 由于众所周知的原因，Google在中国国内提供的地图的坐标跟GPS实际坐标是有一些误差的。解决的方法是切换到英文版的Google地图，并查看卫星视图。在那上面，位置是相当准确的。
+
+
 = Change History 更新历史 =
 
 2009-06-22 First preview release. 
+
 2009-06-24 Second preview release. Add support for Direct Message and photo uploading.
 
 2009-06-22 第一个预览版本发布。
+
 2009-06-24 第二个预览版本(r1761)发布。增加对私信和照片上传的支持。
 
 = Development Status 开发情况 =
