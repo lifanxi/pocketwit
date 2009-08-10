@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.75</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv75b.CAB</url>
-  <notes>Save searches as groups
-New media services including TweetPhoto
-Improved today screen plugin
-Shorten tweets with 140it
-Choose account to follow from
-Fix issue updating users
-Fix crash in notification
+  <version>.76</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv76.CAB</url>
+  <notes>Delete your own tweets
+Follow a user by name
+Support for proxies
+Support for CF.NET 3.7
+Improved battery/CPU usage
+Improved backup/restore of groups
 </notes>
 </LatestRelease>
