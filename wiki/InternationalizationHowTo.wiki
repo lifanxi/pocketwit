@@ -17,6 +17,7 @@ You will notice that some texts have numbers within curly braces like this:
 `"about {0} {1} ago."`
 
 These numbers will be substituted with the appropriate values by the program, so be sure to keep them intact within your translation like this:
+
 `"vor ca. {0} {1}."`
 
 To test the file, you must use the latest dev build of PockeTwit and save the file to the "Localization" subfolder in the application folder.  You can switch languages using Settings >> UI in the application.
