@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.76</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv76.CAB</url>
-  <notes>Delete your own tweets
-Follow a user by name
-Support for proxies
-Support for CF.NET 3.7
-Improved battery/CPU usage
-Improved backup/restore of groups
+  <version>.77</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitv77.CAB</url>
+  <notes>Fix tweetphoto
+Remove public timeline
 </notes>
 </LatestRelease>
