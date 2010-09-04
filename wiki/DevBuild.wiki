@@ -5,7 +5,7 @@ As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter c
 
 Please see the notes below if you are happy to run this version.
 
-*Things to note:* you will have to re-activate your accounts in PockeTwit. Go to Settings | Accounts, then select each of your Twitter accounts in turn and press "Edit Selected".
+*Things to note:* You may have to re-activate or re-add your accounts in PockeTwit. Go to Settings | Accounts, then either select each of your Twitter accounts in turn and press "Edit Selected", or "Add New".
 
 Select the link "Verify with Twitter" and a web browser will open in a few seconds. You can use this to approve PockeTwit. *Make sure you are signed in as the correct Twitter account*. Once done you will be given a pin code to enter. Enter this in the "Pin" box in PockeTwit and select "Accept". When you have completed this for all of your accounts, select Accept again on the list of accounts, and it should start working.
 
