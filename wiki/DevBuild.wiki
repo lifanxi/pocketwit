@@ -1,6 +1,8 @@
 #summary Download the latest unstable development build.
 
 = "OAuth" Support =
+*Updated 4th Sep 2010 14:52: TwitPic and Posterous support now working*
+
 As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter changed the way they handle user logins. The development build supports the new method, "OAuth", but is not yet complete.
 
 Please see the notes below if you are happy to run this version.
@@ -15,7 +17,7 @@ Sorry for the nastiness of this, but it seemed better to get something out to yo
 
 *Known problems:*
 - You might get "Communication Error" coming up if there are no new tweets since the last update. Please ignore it.
-- Picture uploading does not currently work.
+- Picture uploading is currently limited to TwitPic and Posterous.
 
 ^AB
 
