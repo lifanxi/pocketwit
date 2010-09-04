@@ -1,5 +1,24 @@
 #summary Download the latest unstable development build.
 
+= "OAuth" Support =
+As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter changed the way they handle user logins. The development build supports the new method, "OAuth", but is not yet complete.
+
+Please see the notes below if you are happy to run this version.
+
+*Things to note:* you will have to re-activate your accounts in PockeTwit. Go to Settings | Accounts, then select each of your Twitter accounts in turn and press "Edit Selected".
+
+Select the link "Verify with Twitter" and a web browser will open in a few seconds. You can use this to approve PockeTwit. *Make sure you are signed in as the correct Twitter account*. Once done you will be given a pin code to enter. Enter this in the "Pin" box in PockeTwit and select "Accept". When you have completed this for all of your accounts, select Accept again on the list of accounts, and it should start working.
+
+*During the verification process PockeTwit might seem to vanish - it is still running, just launch it again and you should go back to it*
+
+Sorry for the nastiness of this, but it seemed better to get something out to you now, rather than wait a few days until it is all working. 
+
+*Known problems:*
+- You might get "Communication Error" coming up if there are no new tweets since the last update. Please ignore it.
+- Picture uploading does not currently work.
+
+^AB
+
 = Introduction =
 
 This is a link to the latest unstable development testing build.  I use it to test out code before I feel it's ready for release to general users.  It usually runs ok, but is much more likely to have bugs or crash than a "release" version.
