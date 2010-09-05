@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.77</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv77.CAB</url>
-  <notes>Fix tweetphoto
-Remove public timeline
+  <version>.81</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitV81.CAB</url>
+  <notes>OAuth release.
 </notes>
 </LatestRelease>
