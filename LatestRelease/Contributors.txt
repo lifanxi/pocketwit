@@ -1,5 +1,6 @@
-@jakes:Lead Developer
-@roelvandenbrand:Team Member
+@jakes:Founder
+@roelvandenbrand:Lead Developer
+@ashley_brown:Team Member
 @marclandis:Team Member
 @theMark_S:Team Member
 @lifanxi:Team Member
