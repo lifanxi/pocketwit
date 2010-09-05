@@ -3,6 +3,8 @@
 = "OAuth" Support =
 *This is not a Beta. This is pre-Beta. We are running it on our phones, but that doesn't mean it will work for you. Please bear with us while we get it all working correctly. *
 
+*You may need to upgrade the .NET Compact Framework on your device, get the Desktop download [http://www.microsoft.com/downloads/details.aspx?FamilyID=e3821449-3c6b-42f1-9fd9-0041345b3385&displaylang=en here].*
+
 As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter changed the way they handle user logins. The development build supports the new method, "OAuth", but is not yet complete.
 
 Please see the notes below if you are happy to run this version.
