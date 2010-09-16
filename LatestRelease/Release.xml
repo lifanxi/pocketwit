@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.82</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitv82a.cab</url>
-  <notes>
-  Upgrade supporting OAuth integration with Twitter.
-  You may need to upgrade the .NET Framework or your phone.
-  Please see http://tiny.cc/ptupgrade for instructions - you will need to check your account settings after upgrading.
+  <version>.83</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitV83.CAB</url>
+  <notes>User Interface, Mediaservices and bugfixes. See http://pocketwit.posterous.com/new-release-83
 </notes>
 </LatestRelease>
