@@ -1,30 +1,28 @@
 #summary Download the latest unstable development build.
 #labels Featured
 
-= Version 0.83 Preview =
+= Version 0.84 DevBuild =
 *This is not a Beta. This is pre-Beta. We are running it on our phones, but that doesn't mean it will work for you. Please bear with us while we get it all working correctly. *
 
-*You may need to upgrade the .NET Compact Framework on your device, get the Desktop download [http://www.microsoft.com/downloads/details.aspx?FamilyID=e3821449-3c6b-42f1-9fd9-0041345b3385&displaylang=en here], or direct to your phone [http://code.google.com/p/pocketwit/downloads/detail?name=NETCFv35.wm.armv4i.cab&can=2&q= here].*
+*The installer will automatically download the .NET Compact Framework if you need it.*
 
-As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter changed the way they handle user logins. We released v0.82, then v0.82a, with support for OAuth and have been working to resolve problems in those releases.
+As of 31st August 2010, version 0.77 of PockeTwit stopped working when Twitter changed the way they handle user logins. We released v0.82, then v0.82a, with support for OAuth and have been working to resolve problems in those releases. v0.83 has been used successfully by thousands of people and this development build includes part of the additional changes we aim to add for v0.84.
 
-The development build includes a number of fixes which we need testing, particularly by those on non-touch-screen phones:
-- notifications on saved searches should now work correctly
-- we hope we have fixed the unreliability verifying Pin numbers by increasing timeouts from Twitter
-- the interface for the post update form has had a refresh, pending a more complete overhaul later
-- we have taken steps to reduce memory use in the TwitPic uploader - these changes will be rolled out to other services in time
-- we have taken to steps to remove a number of common (but not reproducible) crashes
-- some strange window behaviour, such as PockeTwit disappearing or flashing to the desktop between windows, has been resolved
+The development build includes a number of changes:
+- fixes to some common crashes
+- the first step in the transition to [http://pocketwit.posterous.com/a-better-experience the new style of uploading].
 
 Please see the notes below if you are happy to run this version.
 
-*Things to note:* You may have to re-activate or re-add your accounts in PockeTwit. Go to Settings | Accounts, then either select each of your Twitter accounts in turn and press "Edit Selected", or "Add New".
+*Limitations/potential problems/needs testing:*
+- Much of the code behind attachment uploading has been rewritten & extended, so is in need of testing
+- Uploading of videos is limited to YFrog, Moby and Posterous
+- Uploading of audio is limited to Moby and Posterous
+- Uploading of documents is limited to Posterous
+- Later versions will allow selection of different services to provide full coverage, while using your favourite photo uploader
+- The caption title of the uploaded media will be set to whatever is in the current contents of the update box. Later versions will allow this to be changed.
 
-Select the link "Verify with Twitter" and a web browser will open in a few seconds. You can use this to approve PockeTwit. *Make sure you are signed in as the correct Twitter account*. Once done you will be given a pin code to enter. Enter this in the "Pin" box in PockeTwit and select "Accept". When you have completed this for all of your accounts, select Accept again on the list of accounts, and it should start working.
-
-*Known problems:*
-- Picture uploading is currently limited to TwitPic, Posterous, YFrog and TweetPhoto/Plixi.
-- The About screen is nasty.
+Note that if you use [http://www.mobypicture.com/ Moby] or [http://posterous.com/ Posterous], you can configure your account to automatically upload to Flickr, YouTube and blogs whenever you upload an attachment. 
 
 ^AB
 
