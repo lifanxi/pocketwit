@@ -17,7 +17,7 @@ Please see the notes below if you are happy to run this version.
 *Limitations/potential problems/needs testing:*
 - Much of the code behind attachment uploading has been rewritten & extended, so is in need of testing
 - Uploading of videos is limited to YFrog, Moby and Posterous
-- Uploading of audio is limited to Moby and Posterous
+- Uploading of audio is limited to Moby and Posterous. There is no built-in recorder, so you'll have to use one built-in to your phone, or download one. Posterous supports AMR files which can be recorded using the "Voice Recorder" app on HTC phones.
 - Uploading of documents is limited to Posterous
 - Later versions will allow selection of different services to provide full coverage, while using your favourite photo uploader
 - The caption title of the uploaded media will be set to whatever is in the current contents of the update box. Later versions will allow this to be changed.
