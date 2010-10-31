@@ -6,6 +6,7 @@
 @lifanxi:Team Member
 @markandey:Code
 @kjhughes:Code
+@pabloantonelli:Translation
 @malinin1991:Translation
 @thelovebug:Sponsor
 @timwoolsey:Sponsor
