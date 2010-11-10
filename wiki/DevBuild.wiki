@@ -60,4 +60,6 @@ Installing it might overwrite and/or affect an installed "release" build.  It cr
 
 There is no upgrade checker built into the dev build.  However you can always get the latest build by going to the "About" page and choosing "Upgrade".
 
+*Use at your own risk!*
+
 *Get it [http://pocketwit.googlecode.com/svn/trunk/PockeTwit%20Dev%20Install/DevBuild/PockeTwit%20Dev%20Install.CAB here].*
