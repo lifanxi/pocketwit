@@ -17,3 +17,6 @@ If you have a ping.fm account, they will provide you with a unique "application 
 
   *  *I can't type with my slide-out keyboard*
 Some devices with a slide out keyboard suffered from a bug with the .NET framework. An update from the manufacturer should fix the issue.  Try looking at http://www.phonenews.com/verizon-xv6800-gets-keyboard-fix-2714/
+
+ *  *I keep getting "Communication Error" popups? What does that mean?*
+This means exactly what it says -- PockeTwit is having trouble communicating with the twitter server. This could be due to any number of things, such as poor cellular service or even twitter's server's being temporarily offline. There's little more PockeTwit can do to diagnose the problem.
