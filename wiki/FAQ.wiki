@@ -20,3 +20,5 @@ Some devices with a slide out keyboard suffered from a bug with the .NET framewo
 
  *  *I keep getting "Communication Error" popups? What does that mean?*
 This means exactly what it says -- PockeTwit is having trouble communicating with the twitter server. This could be due to any number of things, such as poor cellular service or even twitter's server's being temporarily offline. There's little more PockeTwit can do to diagnose the problem.
+
+Firstly make sure that you have the latest version of PockeTwit installed, as Twitter have improved their security. To check your version select Other then About/Feedback. Choose the "Check Upgrade" option to confirm your version."Communication Error" can also happen if you have not allowed PockeTwit as an application with Twitter. To set this choose Settings then Accounts. Assuming that you have already set up your Twitter account then choose it, then "Edit Selected" and then "Verify with Twitter". The verification process involves matching PIN numbers between PockeTwit and selecting "Allow" in your mobile browser.
