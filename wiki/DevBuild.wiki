@@ -7,9 +7,9 @@
 
 Changes in this version
 
- - TypeLoad error, given all compiled dll's sticky version numbers
- - Changed registry a bit for the sent DM's
- - xAuth implemented (beta) instead of authorising through a browser.
+ * TypeLoad error, given all compiled dll's sticky version numbers
+ * Changed registry a bit for the sent DM's
+ * xAuth implemented (beta) instead of authorising through a browser. Now you can login with your username and password.
 
 PockeTwit Dev-team
 
