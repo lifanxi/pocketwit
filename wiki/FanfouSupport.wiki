@@ -2,9 +2,9 @@
 
 = Important Notice 重要说明 =
 
-Fanfou had stopped service during July 8, 2009 to Nov. 25, 2010, so the development of PockeTwit Fanfou support has been suspended for a long time. Currently, Fanfou has come back, but the API service has not recovered. The development of PockeTwit Fanfou support will continue after API service recovers. The old release of PockeTwit with Fanfou support should still work before the new release, once the API recovers.
+Fanfou had stopped service during July 8, 2009 to Nov. 25, 2010, so the development of PockeTwit Fanfou support has been suspended for a long time. Currently, Fanfou has come back and the development of PockeTwit Fanfou support will continue. The old release of PockeTwit with Fanfou support can still work before the new release.
 
-饭否在2009年7月8日至2010年11月25日期间停止服务，所以PockeTwit的饭否支持也一度停止。当前，饭否的服务已经恢复，但API任无法使用。在API恢复正常后，PockeTwit的饭否支持将继续开发。在新版本发布前，一旦饭否API恢复，老版本的软件应该可以继续工作。
+饭否在2009年7月8日至2010年11月25日期间停止服务，所以PockeTwit的饭否支持也一度停止。当前，饭否的服务已经恢复，PockeTwit的饭否支持将继续开发。在新版本发布前，老版本的软件可以继续工作。
 
 = Introduction 简介 =
 
