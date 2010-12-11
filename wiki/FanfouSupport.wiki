@@ -28,7 +28,7 @@ You can also use bar code reader software to read the following bar code to down
 
 你可以用手机上的条码识别软件读取下面的二维条码直接下载文件：
 
-http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r2016.CAB&chld=L|1&choe=UTF-8
+http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r2016.CAB&chld=L|1&choe=UTF-8&nouse=barcode.png
 
 = Usage 使用方法 =
 
