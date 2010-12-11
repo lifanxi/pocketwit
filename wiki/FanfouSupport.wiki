@@ -1,11 +1,5 @@
 #summary This page describes the support for Fanfou in PockeTwit
 
-= Important Notice 重要说明 =
-
-Fanfou had stopped service during July 8, 2009 to Nov. 25, 2010, so the development of PockeTwit Fanfou support has been suspended for a long time. Currently, Fanfou has come back and the development of PockeTwit Fanfou support will continue. The old release of PockeTwit with Fanfou support can still work before the new release.
-
-饭否在2009年7月8日至2010年11月25日期间停止服务，所以PockeTwit的饭否支持也一度停止。当前，饭否的服务已经恢复，PockeTwit的饭否支持将继续开发。在新版本发布前，老版本的软件可以继续工作。
-
 = Introduction 简介 =
 
 Fanfou (www.fanfou.com) is one of the most famous Twitter like micro blog service provider in China. This page will summarize the current status of Fanfou support in PockeTwit. 
@@ -16,17 +10,17 @@ Fanfou (www.fanfou.com) is one of the most famous Twitter like micro blog servic
 
 Currently, we have only released a preview version of PockeTwit with Fanfou support. You can download it at the Downloads section in this project, or get it directly from the following URL:
 
-http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r1761.CAB
+http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r2016.CAB
 
 * CAUTION: This is a preview version of the software, use at your own risk. *
 
 目前，我们只发布了一个支持饭否的PockeTwit的预览版本。您可以在本项目的下载页面上下载到它，也可以直接从下面的URL上下载。
 
-http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r1761.CAB
+http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r2016.CAB
 
 同时提供国内镜像服务器上文件的下载，如果上面的链接无法使用，请从下面的链接下载：
 
-http://www.freemindworld.com/PockeTwitFanfou.Preview.r1761.CAB
+http://www.freemindworld.com/PockeTwitFanfou.Preview.r2016.CAB
 
 * 注意：这只是一个预览版本的软件，仅用于体验和试验，我们不对其功能和可能出现的问题做任何保证 *
 
@@ -34,7 +28,7 @@ You can also use bar code reader software to read the following bar code to down
 
 你可以用手机上的条码识别软件读取下面的二维条码直接下载文件：
 
-http://encode.i-nigma.com/QRCode/img.php?d=URL%3Ahttp%3A%2F%2Fpocketwit.googlecode.com%2Ffiles%2FPockeTwitFanfou.Preview.r1761.CAB&c=&s=4&nouse=barcode.png
+http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=http://pocketwit.googlecode.com/files/PockeTwitFanfou.Preview.r2016.CAB&chld=L|1&choe=UTF-8
 
 = Usage 使用方法 =
 
@@ -46,17 +40,19 @@ PockeTwit: The main program of PockeTwit.
 PockeTwit QuickPost: The Quick Post program which can be used to send message directly.
 PockeTwit Today Plugin: Put PockeTwit on the Today screen. 
 
-When you start PoweTwit for the first time, it will ask you to configure the account. You can select from multiple service provider and set up several accounts together. For Fanfou account, select "Fanfou" from the service provider list. 
+When you start PoweTwit for the first time, it will ask you to configure the account. You can select from multiple service provider and set up several accounts together. For Fanfou account, select "Fanfou" from the service provider list. The login account should be your Fanfou ID (which appears in your personal web address as postfix, it can be set on Fanfou web site "Settings" page), please do not use register email address or your Fanfou nick name as the login account name.
 
 下载CAB文件并上传到Windows Mobile设备上，安装。
 
 安装完成后，设备上会多出三项功能：
 
 PockeTwit: PockeTwit的主程序，包含完整的功能。
+
 PockeTwit QuickPost: 用于快速发布消息（更新状态）的小程序。
+
 PockeTwit今日插件: PockeTwit在“今日”上的插件。位于“设置->个人->今日->项目”。
 
-在第一次启动PockeTwit时，它会要求你设置帐号。你可以设置多个来自不同服务商的帐号。对于饭否用户，请在服务商列表中选择“Fanfou”。
+在第一次启动PockeTwit时，它会要求你设置帐号。你可以设置多个来自不同服务商的帐号。对于饭否用户，请在服务商列表中选择“Fanfou”。输入的帐号名应当是你的用户ID（出现在你的个人网站中做为后缀，可以在饭否的“设置”功能中设置”），请勿输入注册邮箱地址或呢称。
 
 = Known Issues 已知问题 =
 
@@ -87,26 +83,24 @@ PockeTwit今日插件: PockeTwit在“今日”上的插件。位于“设置->�
 
 2009-06-24 Second preview release. Add support for Direct Message and photo uploading.
 
+2010-12-11 Third preview release. Sync the code to the latest Dev build of PockeTwit. No new features has been added.
+
 2009-06-22 第一个预览版本发布。
 
 2009-06-24 第二个预览版本(r1761)发布。增加对私信和照片上传的支持。
+
+2010-12-11 第三个预览版本(r2016)发布。这个版本主要为了把饭否支持开发树上的代码与PockeTwit主干代码重新同步。没有新的功能增加。
 
 = Development Status 开发情况 =
 
 The development of Fanfou support started since June 18, 2009. The major developer of this feature is Li Fanxi (Website: http://www.freemindworld.com, Fanfou: http://fanfou.com/lifanxi, Twitter: http://twitter.com/lifanxi)
 
-Currently, the development is performed on a separated tree in PockeTwit Subversion repository. The development focuses on two aspects: 
+Currently, the development is performed on a separated tree in PockeTwit Subversion repository. These changes will be merged to the main trunk after they become stable and maintainable. 
 
-  * Fanfou support
-  * Localized version for Chinese user
-
-These changes will be merged to the main trunk after they become stable and maintainable. 
+Fanfou had stopped service during July 8, 2009 to Nov. 25, 2010, so the development of PockeTwit Fanfou support has been suspended for a long time. Currently, Fanfou has come back and the development of PockeTwit Fanfou support is going on.
 
 PockeTwit对饭否支持的开发工作开始于2009年6月18日。目前主要的开发人员是李凡希 (网站：http://www.freemindworld.com 饭否页面：http://fanfou.com/lifanxi Twitter页面：http://twitter.com/lifanxi )
 
-目前，PockeTwit对饭否的支持在PockeTwit的Subversion中的一个分支上进行开发，开发主要包括两个方面的内容：
+目前，PockeTwit对饭否的支持在PockeTwit的Subversion中的一个分支上进行开发，这些改动在基本稳定并适合做进一步维护后，最终会合并到PockeTwit的主干上，作为官方PockeTwit的一部分一起发布。
 
-  * 饭否功能的支持
-  * 软件的汉化
-
-这些改动在基本稳定并适合做进一步维护后，最终会合并到PockeTwit的主干上，作为官方PockeTwit的一部分一起发布。
+饭否在2009年7月8日至2010年11月25日期间停止服务，所以PockeTwit的饭否支持也一度停止。当前，饭否的服务已经恢复，PockeTwit的饭否支持正在继续开发。
