@@ -74,10 +74,17 @@ PockeTwit今日插件: PockeTwit在“今日”上的插件。位于“设置->�
 
 *A:* For some reason, the map provided by Google in China is not accurate according to GPS position. You can switch to English version of Google and use satellite map to see your position, the result will be much better. 
 
+*Q:* How to upload pictures?
+
+*A:* Unlike Twitter, Fanfou support direct picture uploading with messages, the pictures will be sent to Fanfou server along with the text message, you no longer need to upload the picture first and insert the picture URL link to the text message. When you post your message with Fanfou account, the Media Service you selected will be ignored, all the picture will go to Fanfou server directly when posting your message. 
+
 *Q:* 为什么GPS定位看上去很不准确？
 
 *A:* 由于众所周知的原因，Google在中国国内提供的地图的坐标跟GPS实际坐标是有一些误差的。解决的方法是切换到英文版的Google地图，并查看卫星视图。在那上面，位置是相当准确的。
 
+*Q:* 如何上传图片？
+
+*A:* 与Twitter不同，饭否支持直接将图片和消息同送发送到饭否服务器，所以在使用饭否帐号时，不需要先上传图片再把图片的链接插入到文字消息中。当你选择了饭否帐号做为你的消息发送帐号，在“媒体服务”中的图片上传服务将被忽略，你的图片和消息将同时直接发到饭否服务器上。
 
 = Change History 更新历史 =
 
