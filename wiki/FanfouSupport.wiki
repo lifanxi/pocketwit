@@ -37,7 +37,9 @@ Get the CAB installation package and send it to your Windows Mobile. Install it.
 After that you will have three component on your device:
 
 PockeTwit: The main program of PockeTwit. 
+
 PockeTwit QuickPost: The Quick Post program which can be used to send message directly.
+
 PockeTwit Today Plugin: Put PockeTwit on the Today screen. 
 
 When you start PoweTwit for the first time, it will ask you to configure the account. You can select from multiple service provider and set up several accounts together. For Fanfou account, select "Fanfou" from the service provider list. The login account should be your Fanfou ID (which appears in your personal web address as postfix, it can be set on Fanfou web site "Settings" page), please do not use register email address or your Fanfou nick name as the login account name.
