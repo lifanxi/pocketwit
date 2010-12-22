@@ -1,15 +1,16 @@
 #summary Download the latest unstable development build.
 #labels Featured
 
-= Version 0.85 DevBuild - Updated December 2nd =
+= Version 0.86 DevBuild - Updated December 22nd =
 
 *This is not a Beta. This is pre-Beta. We are running it on our phones, but that doesn't mean it will work for you. Please bear with us while we get it all working correctly. *
 
 Changes in this version
 
- * TypeLoad error, given all compiled dll's sticky version numbers
- * Changed registry a bit for the sent DM's
- * xAuth implemented (beta) instead of authorising through a browser. Now you can login with your username and password.
+ * Today plugin numbering
+ * More version info set correctly. Related to startup problems.
+
+There is more to come ;-)
 
 PockeTwit Dev-team
 
