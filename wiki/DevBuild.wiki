@@ -1,7 +1,7 @@
 #summary Download the latest unstable development build.
 #labels Featured
 
-= Version 0.86 DevBuild - Updated December 30th =
+= Version 0.86 DevBuild - Updated Januari 3rd =
 
 *This is not a Beta. This is pre-Beta. We are running it on our phones, but that doesn't mean it will work for you. Please bear with us while we get it all working correctly. *
 
@@ -10,6 +10,8 @@ Changes in this version
  * Today plugin numbering
  * Today plugin starting up PockeTwit
  * More version info set correctly. Related to startup problems.
+ * Today plugin inserted into regular installation
+ * Changed avatar size, little smaller looks better and longer tweets will fit.
 
 There is more to come ;-)
 
