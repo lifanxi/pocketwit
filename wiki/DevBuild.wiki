@@ -14,6 +14,8 @@ Changes in this version
  * Changed avatar size, little smaller looks better and longer tweets will fit.
  * Fix for startup problems regarding saved searches.
  * Cleanup corrupt data from registry and database.
+ * Size of tweet changed in display
+ * Changed api calls for replies to mentions.
 
 There is more to come ;-)
 
