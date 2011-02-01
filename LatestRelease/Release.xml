@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LatestRelease>
-  <version>.85</version>
-  <url>http://pocketwit.googlecode.com/files/PockeTwitV85.CAB</url>
-  <notes>Bugfixes and xAuth.</notes>
+  <version>.86</version>
+  <url>http://pocketwit.googlecode.com/files/PockeTwitV86.CAB</url>
+  <notes>Startup issues and avatar size.</notes>
 </LatestRelease>
