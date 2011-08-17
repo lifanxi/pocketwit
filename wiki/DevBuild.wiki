@@ -1,23 +1,15 @@
 #summary Download the latest unstable development build.
 #labels Featured
 
-= Version 0.86 DevBuild - Updated January 22th =
+= Version 0.87 DevBuild - Updated August 17th =
 
 *This is not a Beta. This is pre-Beta. We are running it on our phones, but that doesn't mean it will work for you. Please bear with us while we get it all working correctly. *
 
 Changes in this version
 
- * Today plugin numbering
- * Today plugin starting up PockeTwit
- * More version info set correctly. Related to startup problems.
- * Today plugin inserted into regular installation (2nd attempt)
- * Changed avatar size, little smaller looks better and longer tweets will fit.
- * Fix for startup problems regarding saved searches.
- * Cleanup corrupt data from registry and database.
- * Size of tweet changed in display
- * Changed api calls for replies to mentions.
-
-There is more to come ;-)
+* Less communication errors.
+* Re-authentication for existing users
+* At least one End-Point error fixed.
 
 PockeTwit Dev-team
 
