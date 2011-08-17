@@ -7,9 +7,9 @@
 
 Changes in this version
 
-* Less communication errors.
-* Re-authentication for existing users
-* At least one End-Point error fixed.
+- Less communication errors.
+- Re-authentication for existing users
+- At least one End-Point error fixed.
 
 PockeTwit Dev-team
 
